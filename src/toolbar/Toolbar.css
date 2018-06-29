@@ -1,0 +1,6 @@
+.toolbar-container {
+  display: flex;
+  height: 4em;
+
+  background: lightblue;
+}
