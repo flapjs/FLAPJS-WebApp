@@ -2,3 +2,11 @@
   height: 100%;
   overflow-y: scroll;
 }
+.panel-title {
+  /*
+  position: sticky;
+  top: 0px;
+
+  background: #FAFAFA;
+  */
+}

@@ -47,23 +47,24 @@
 .drawer-content {
   position: absolute;
 
-  padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
 
   width: calc(300px - 2em - 5px - 20px);/* Drawer height - Height of tabs - border - padding */
-  height: calc(100% - 4em - 10px);/* Parent height - toolbar - padding */
+  height: calc(100% - 4em);/* Parent height - toolbar - padding */
+
+  /* DEBUG: border: 1px solid black; */
 }
 
 @media only screen and (max-height: 350px) {
   .drawer-container {
     padding-top: calc(2em + 5px);/* Height of tabs */
-    height: calc(100% - 4em - 2em);
+    height: calc(100% - 4em - 2em);/* Parent height - toolbar - Height of tabs */
 
     transition: padding-top 0.2s;
   }
   .drawer-content {
-    height: calc(100% - 4em - 2em - 10px);
+    height: calc(100% - 4em - 2em);/* Parent height - toolbar - Height of tabs */
   }
   .tab-list {
     padding-left: 5px;
