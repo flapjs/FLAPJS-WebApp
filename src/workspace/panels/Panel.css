@@ -1,3 +1,4 @@
 .panel-container {
-  background: yellow;
+  height: 100%;
+  overflow-y: scroll;
 }

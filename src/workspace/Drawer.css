@@ -1,0 +1,77 @@
+.drawer-container {
+  padding-left: 2em;/* Height of tabs */
+  width: calc(300px - 2em - 5px);/* Drawer width - padding - border*/
+  height: calc(100% - 4em);/* Height of drawer - padding */
+
+  background: #FAFAFA;
+
+  transition: padding-top 0.2s;
+  border-left: 5px solid lightgray;
+}
+.tab-list {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: calc(100vh - 4em);/* Height of drawer */
+  height: calc(2em + 5px);/* Height of tabs */
+  transform-origin: top left;
+  transform: rotate(-90deg) translateX(-100%);
+
+  /* border-bottom: 1px solid lightgray; */
+}
+.tab-list button {
+  background: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  float: right;
+
+  height: 100%;
+  transition: color 0.3s;
+
+  color: lightgray;
+}
+.tab-list button:hover {
+  color: gray;
+}
+.tab-list button.active {
+  transition: border-width 0.3s;
+
+  border-bottom: 4px solid #FE847A !important;
+  color: #FE847A;
+}
+.drawer-content h1 {
+  margin: 0;
+}
+.drawer-content {
+  position: absolute;
+
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  width: calc(300px - 2em - 5px - 20px);/* Drawer height - Height of tabs - border - padding */
+  height: calc(100% - 4em - 10px);/* Parent height - toolbar - padding */
+}
+
+@media only screen and (max-height: 350px) {
+  .drawer-container {
+    padding-top: calc(2em + 5px);/* Height of tabs */
+    height: calc(100% - 4em - 2em);
+
+    transition: padding-top 0.2s;
+  }
+  .drawer-content {
+    height: calc(100% - 4em - 2em - 10px);
+  }
+  .tab-list {
+    padding-left: 5px;
+    width: 295px;/* Drawer width - border*/
+    height: calc(2em + 5px);/* Height of tabs */
+    transform: none;
+  }
+  .tab-list button {
+    float: left;
+  }
+}

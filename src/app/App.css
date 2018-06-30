@@ -42,21 +42,20 @@
 }
 
 .workspace-drawer {
-  background: lightgray;
   position: fixed;
-  width: 300px;
+  width: 300px;/* Drawer width */
   height: 100%;
 
   transition: right 0.3s ease;
 
-  right: -300px;
+  right: -300px;/* -(Drawer width) */
 }
 
 .workspace-main.open {
-  right: 150px;
+  right: 150px;/* (Drawer width) / 2 */
 }
 .workspace-viewport.open {
-  width: calc(100% - 300px);
+  width: calc(100% - 300px);/* width - (Drawer width) */
 }
 .workspace-drawer.open {
   right: 0px;

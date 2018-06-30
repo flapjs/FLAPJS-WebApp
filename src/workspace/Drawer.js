@@ -1,6 +1,9 @@
 import React from 'react';
 
 import OverviewPanel from './panels/OverviewPanel.js';
+import TestingPanel from './panels/TestingPanel.js';
+import FormattingPanel from './panels/FormattingPanel.js';
+import ExportingPanel from './panels/ExportingPanel.js';
 
 import './Drawer.css';
 
@@ -22,18 +25,25 @@ class Drawer extends React.Component
     };
   }
 
-  getTab(tabIndex)
+  setTab(index)
   {
-    switch(tabIndex)
+    this.setState((prev, props) => {
+      return { tabIndex: index };
+    });
+  }
+
+  getTab(index)
+  {
+    switch(index)
     {
       case OVERVIEW:
         return <OverviewPanel />;
       case TESTING:
         return <TestingPanel />;
       case FORMATTING:
-        return <OverviewPanel />;
+        return <FormattingPanel />;
       case EXPORTING:
-        return <OverviewPanel />;
+        return <ExportingPanel />;
       default:
         throw new Error("Unknown tab index \'" + tabIndex + "\'.");
     }
@@ -42,8 +52,28 @@ class Drawer extends React.Component
   render()
   {
     return <div className="drawer-container">
-      {this.getTab(this.state.tabIndex)}
-      <h1>I drawer, therefore I slide.</h1>
+      <div className="drawer-content">
+        {this.getTab(this.state.tabIndex)}
+      </div>
+
+      <div className="tab-list">
+        <button className={"tab-link" + (this.state.tabIndex == OVERVIEW ? " active" : "")}
+          onClick={this.setTab.bind(this, OVERVIEW)}>
+          <span>Overview</span>
+        </button>
+        <button className={"tab-link" + (this.state.tabIndex == TESTING ? " active" : "")}
+          onClick={this.setTab.bind(this, TESTING)}>
+          Testing
+        </button>
+        <button className={"tab-link" + (this.state.tabIndex == FORMATTING ? " active" : "")}
+          onClick={this.setTab.bind(this, FORMATTING)}>
+          Formatting
+        </button>
+        <button className={"tab-link" + (this.state.tabIndex == EXPORTING ? " active" : "")}
+          onClick={this.setTab.bind(this, EXPORTING)}>
+          Exporting
+        </button>
+      </div>
     </div>;
   }
 }

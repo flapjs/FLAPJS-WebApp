@@ -8,8 +8,35 @@ class OverviewPanel extends React.Component
   {
     return <div className="panel-container" id="overview">
       <h1>Overview</h1>
-      <hr />
-      <h2>Buttons</h2>
+      <hr/>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
+      <p>I drawer, therefore I slide.</p>
     </div>;
   }
 }
