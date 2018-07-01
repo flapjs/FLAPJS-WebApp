@@ -51,7 +51,7 @@ class Drawer extends React.Component
 
   render()
   {
-    return <div className="drawer-container">
+    return <div className={"drawer-container" + (this.state.isFullscreen ? " fullscreen" : "")}>
       <div className="drawer-content">
         {this.getTab(this.state.tabIndex)}
       </div>
@@ -73,6 +73,14 @@ class Drawer extends React.Component
           onClick={this.setTab.bind(this, EXPORTING)}>
           Exporting
         </button>
+      </div>
+
+      <div className="drawer-border">
+        <div className="drawer-full">
+          <svg width="16" height="16" viewBox="4 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.67 0l2.83 2.829-9.339 9.175 9.339 9.167-2.83 2.829-12.17-11.996z"/>
+          </svg>
+        </div>
       </div>
     </div>;
   }

@@ -15,14 +15,15 @@ class App extends React.Component
     super(props)
 
     this.state = {
-      isOpen: false
+      isOpen: false,
+      isFullscreen: false
     };
   }
 
-  openDrawer()
+  openDrawer(full=false)
   {
     this.setState((prev, props) => {
-      return { isOpen: true };
+      return { isOpen: true, isFullscreen: full };
     });
   }
 
@@ -45,14 +46,23 @@ class App extends React.Component
         <Toolbar app={this}/>
 
         <div className="workspace-container">
-          <div className={"workspace-main" + (this.state.isOpen ? " open" : "")}>
+          <div className={"workspace-main" +
+            (this.state.isOpen ? " open" : "")}>
+
             <Workspace />
           </div>
-          <div className={"workspace-viewport" + (this.state.isOpen ? " open" : "")}>
+
+          <div className={"workspace-viewport" +
+            (this.state.isOpen ? " open" : "")}>
+
             <Viewport />
           </div>
-          <div className={"workspace-drawer" + (this.state.isOpen ? " open" : "")}>
-            <Drawer />
+
+          <div className={"workspace-drawer" +
+            (this.state.isOpen ? " open" : "") +
+            (this.state.isFullscreen ? " fullscreen" : "")}>
+
+            <Drawer app={this}/>
           </div>
         </div>
       </div>

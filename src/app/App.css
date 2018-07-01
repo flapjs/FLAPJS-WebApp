@@ -111,3 +111,7 @@
     bottom: 0px;
   }
 }
+
+@media screen and (max-height: 300px) {
+  /* TODO: it should be auto fullscreen mode */
+}
