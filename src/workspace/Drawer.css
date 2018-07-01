@@ -2,7 +2,8 @@
   padding-left: calc(2em + 10px);/* Height of tabs + border */
   height: 100%;
 
-  background: #FAFAFA;
+  background: #575757;
+  color: #FFFFFF;
 
   transition: padding-top 0.2s;
 
@@ -42,10 +43,10 @@
   height: 100%;
   transition: color 0.3s;
 
-  color: lightgray;
+  color: #909090;
 }
 .tab-list button:hover {
-  color: gray;
+  color: #FFFFFF;
 }
 .tab-list button.active {
   transition: border-width 0.3s;
@@ -70,7 +71,7 @@
   width: 10px;/* border */
   height: 100%;
 
-  background: lightgray;
+  background: #3D3D3D;
 }
 .drawer-border > * {
   position: absolute;
