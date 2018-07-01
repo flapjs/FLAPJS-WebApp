@@ -50,8 +50,8 @@
 }
 .tab-list button.active {
   transition: border-width 0.3s;
-  border-bottom: 4px solid #FE847A !important;
-  color: #FE847A;
+  border-bottom: 4px solid #DEFFBD !important;
+  color: #DEFFBD;
 }
 .drawer-content {
   padding-left: 10px;
@@ -117,18 +117,12 @@
     width: 100%;/* Parent width */
   }
   .drawer-border {
-    position: absolute;
-    top: 0px;
-    left: 0px;
     width: 100%;
     height: 10px;/* border */
-
-    background: lightgray;
   }
   .drawer-border > * {
-    position: absolute;
     left: 50%;
-    top: 0;
+    top: -2px;/* Fix offset positioning */
 
     transform: rotate(90deg);
   }

@@ -1,4 +1,6 @@
 import React from 'react';
+import HamburgerIcon from './HamburgerIcon.js';
+
 import './Toolbar.css';
 
 class Toolbar extends React.Component
@@ -9,8 +11,12 @@ class Toolbar extends React.Component
     const drawer = document.getElementsByTagName('Drawer')[0];
     return <div className="toolbar-container">
         <h1>Deterministic Finite Automata</h1>
-        <button onClick={app.openDrawer.bind(app)}>OPEN</button>
-        <button onClick={app.closeDrawer.bind(app)}>CLOSE</button>
+        <div
+          onClick={app.state.isOpen ?
+            app.closeDrawer.bind(app) :
+            app.openDrawer.bind(app)}>
+          <HamburgerIcon active={app.state.isOpen}/>
+        </div>
     </div>;
   }
 }
