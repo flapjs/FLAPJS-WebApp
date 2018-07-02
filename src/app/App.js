@@ -3,10 +3,10 @@ import { hot } from 'react-hot-loader';
 
 import './App.css';
 
-import Toolbar from 'toolbar/Toolbar.js';
-import Workspace from 'workspace/Workspace.js';
-import Drawer from 'workspace/Drawer.js';
-import Viewport from 'workspace/Viewport.js';
+import Toolbar from './toolbar/Toolbar.js';
+import Workspace from './workspace/Workspace.js';
+import Drawer from './workspace/Drawer.js';
+import Viewport from './workspace/Viewport.js';
 
 class App extends React.Component
 {

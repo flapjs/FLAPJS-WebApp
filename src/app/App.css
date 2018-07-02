@@ -39,10 +39,15 @@
   position: fixed;
   left: 0;
   height: inherit;
+  pointer-events: none;
+  background: none;
 
   transition: width 0.3s ease;
 
   width: 100%;
+}
+.workspace-viewport>* {
+  pointer-events: auto;
 }
 
 .workspace-drawer {

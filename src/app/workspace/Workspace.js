@@ -1,6 +1,9 @@
 import React from 'react';
-
+import ReactDOM from 'react-dom';
 import './Workspace.css';
+
+import GraphNode from './graph/GraphNode.js';
+import './graph/Graph.css';
 
 class Workspace extends React.Component
 {
@@ -12,9 +15,9 @@ class Workspace extends React.Component
   render()
   {
     return <svg id="workspace-content"
-      viewBox="0 0 100 10"
+      viewBox="-150 -150 300 300"
       xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="5" r="10"/>
+      <GraphNode radius="16" />
     </svg>;
   }
 }
