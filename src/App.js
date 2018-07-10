@@ -1,11 +1,20 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
 
+import Homepage from './Components/Homepage';
 class App extends React.Component
 {
   render()
   {
-    return <h1>Hello CSE105!</h1>;
+    return(
+
+        <div className = "homepage-container">
+
+            < Homepage/>
+
+        </div>
+
+    );
   }
 }
 
