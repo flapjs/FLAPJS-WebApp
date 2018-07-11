@@ -1,5 +1,8 @@
 import React from 'react';
 
+import GraphEdge from './GraphEdge.js';
+
+//TODO: Maybe change oncontextmenu to custom hold?
 class GraphNode extends React.Component
 {
   constructor(props)
@@ -18,6 +21,7 @@ class GraphNode extends React.Component
         _mouseup: null,
         _edge: null
       },
+      pointer: {x: 0, y: 0},
       proxyEdge: null
     };
   }
@@ -93,9 +97,13 @@ class GraphNode extends React.Component
 
   onMouseMove(e)
   {
+    //'coord' should be immutable, do not pass it anywhere (except in pointer)
     const coord = getMousePosition(e);
+    this.setState({pointer: coord});
+
     const x = coord.x - this.state.cursor.offset.x;
     const y = coord.y - this.state.cursor.offset.y;
+
     if (this.state.cursor.move)
     {
       this.setState({x: x, y: y});
@@ -165,7 +173,7 @@ class GraphNode extends React.Component
     const innerRadius = (radius * 3.0) / 4.0;
 
     return <g className="graph-node"
-      style={{pointerEvents: "bounding-box"}}
+      style={{pointerEvents: "bounding-box", color: (this.state.proxyEdge ? "blue" : "white")}}
       onMouseDown={this.onMouseDown.bind(this)}
       onContextMenu={this.onContextMenu.bind(this)}>
 
@@ -182,6 +190,11 @@ class GraphNode extends React.Component
           cy={y}
           r={innerRadius}
           fill="none"/>}
+
+      {
+        this.state.proxyEdge &&
+        <GraphEdge from={this} proxy={true}/>
+      }
 
       //Label
       <text

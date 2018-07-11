@@ -1,6 +1,6 @@
 import React from 'react';
 
-class GraphEdgeHead extends React.Component
+class GraphEdgeArrow extends React.Component
 {
   constructor(props)
   {
@@ -13,4 +13,4 @@ class GraphEdgeHead extends React.Component
   }
 }
 
-export default GraphEdgeHead;
+export default GraphEdgeArrow;

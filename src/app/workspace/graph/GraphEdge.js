@@ -7,201 +7,268 @@ class GraphEdge extends React.Component
     super(props);
 
     this.state = {
-      x: 0,
-      y: 0,
-      accept: false,
+      to: null,
+      quad: {x: 0, y: 0},
       label: "q0",
       cursor: {
         move: false,
-        offset: {x: 0, y: 0},
         _mousemove: null,
         _mouseup: null,
-        _edge: null
-      },
-      proxyEdge: null
+      }
     };
   }
 
-  onContextMenu(e)
+  getStartPoint()
   {
-    const offset = getMousePosition(e);
-    offset.x -= this.state.x;
-    offset.y -= this.state.y;
+    const from = this.props.from;
+    const to = this.state.to;
+    const quadx = this.state.quad.x;
+    const quady = this.state.quad.y;
+    const radius = from.props.radius;
 
-    //If the previous move was interrupted, make sure to disconnect it.
-    if (this.state.cursor._mousemove)
+    if (!from) throw new Error("Source of edge cannot be null.");
+    if (!to)
     {
-      document.removeEventListener('mousemove', this.state.cursor._mousemove);
-    }
-    if (this.state.cursor._mouseup)
-    {
-      document.removeEventListener('mouseup', this.state.cursor._mouseup);
-    }
-
-    const mousemove = this.onMouseMove.bind(this);
-    const mouseup = this.onMouseUp.bind(this);
-
-    this.setState({
-      cursor: {
-        offset: offset,
-        move: true,
-        _mousemove: mousemove,
-        _mouseup: mouseup
-      }
-    });
-
-    document.addEventListener('mousemove', mousemove);
-    document.addEventListener('mouseup', mouseup);
-    e.stopPropagation();
-    e.preventDefault();
-  }
-
-  onMouseDown(e)
-  {
-    //Left click only
-    if (e.button != 0) return;
-
-    //If the previous move was interrupted, make sure to disconnect it.
-    if (this.state.cursor._mousemove)
-    {
-      document.removeEventListener('mousemove', this.state.cursor._mousemove);
-    }
-    if (this.state.cursor._mouseup)
-    {
-      document.removeEventListener('mouseup', this.state.cursor._mouseup);
-    }
-
-    const mousemove = this.onMouseMove.bind(this);
-    const mouseup = this.onMouseUp.bind(this);
-
-    this.setState((prev, props) => {
-      return {
-        cursor: {
-          offset: prev.cursor.offset,
-          move: false,
-          _mousemove: mousemove,
-          _mouseup: mouseup
-        }
-      };
-    });
-
-    document.addEventListener('mousemove', mousemove);
-    document.addEventListener('mouseup', mouseup);
-    e.stopPropagation();
-    e.preventDefault();
-  }
-
-  onMouseMove(e)
-  {
-    const coord = getMousePosition(e);
-    const x = coord.x - this.state.cursor.offset.x;
-    const y = coord.y - this.state.cursor.offset.y;
-    if (this.state.cursor.move)
-    {
-      this.setState({x: x, y: y});
-    }
-    else if (!this.state.proxyEdge)
-    {
-      //Check if out of border...if so, start creating edges...
-      if (x * x + y *  y > this.props.radius * this.props.radius)
+      if (this.props.proxy)
       {
-        this.setState({proxyEdge: true});
+        const dir = getDirectionalVector(from.state.x, from.state.y,
+          from.state.pointer.x, from.state.pointer.y, radius, 0);
+
+        //Reuse created object for result...
+        dir.x = from.state.x + dir.x;
+        dir.y = from.state.y + dir.y;
+        return dir;
+      }
+      else
+      {
+        //TODO: Make sure to use quad for placeholder direction (not magnitude)
+        return {
+          x: from.state.x + quadx * radius,
+          y: from.state.y + quady * radius
+        };
       }
     }
-    e.stopPropagation();
-    e.preventDefault();
+
+    const fromx = from.state.x;
+    const fromy = from.state.y;
+    const tox = to.state.x;
+    const toy = to.state.y;
+
+    const selfLoop = from == to;
+
+    if (quadx == 0 && quady == 0)
+    {
+      const dir = getDirectionalVector(fromx, fromy, tox, toy, radius, 0);
+
+      //Reuse created object for result...
+      dir.x = fromx + dir.x;
+      dir.y = fromy + dir.y;
+      return dir;
+    }
+    else
+    {
+      const midpoint = getMidPoint(fromx, fromy, tox, toy);
+      const qx = midpoint.x + (quadx * 2);
+      const qy = midpoint.y + (quady * 2);
+
+      const dir = getDirectionalVector(fromx, fromy, qx, qy, radius,
+        selfLoop ? (Math.PI / 4) : 0);
+
+      //Reuse created object for result...
+      dir.x = fromx + dir.x;
+      dir.y = fromy + dir.y;
+      return dir;
+    }
   }
 
-  onMouseUp(e)
+  getEndPoint()
   {
-    //Finish creating the edge...
-    if (this.state.proxyEdge)
+    const from = this.props.from;
+    const to = this.state.to;
+    const quadx = this.state.quad.x;
+    const quady = this.state.quad.y;
+    const radius = from.props.radius;
+    const placeholderLength = 1;
+
+    if (!from) throw new Error("Source of edge cannot be null.");
+    if (!to)
     {
-    }
-    //Do this only if not creating an edge... nor moving...
-    else if (!this.state.cursor.move)
-    {
-      this.setState((prev, props) => {
+      if (from.state.proxyEdge == this)
+      {
+        //If proxyEdge, follow the cursor instead
+        return from.state.pointer;
+      }
+      else
+      {
+        //TODO: Make sure to use quad for placeholder direction (not magnitude)
         return {
-          accept: !prev.accept
+          x: from.state.x + quadx * (radius + placeholderLength),
+          y: from.state.y + quady * (radius + placeholderLength)
         };
-      });
+      }
     }
 
-    //Clean up
-    if (this.state.cursor._mousemove)
+    const fromx = from.state.x;
+    const fromy = from.state.y;
+    const tox = to.state.x;
+    const toy = to.state.y;
+
+    const selfLoop = from == to;
+
+    //Get end point for straight edges...
+    if (quadx == 0 && quady == 0)
     {
-      document.removeEventListener('mousemove', this.state.cursor._mousemove);
+      const dir = getDirectionalVector(fromx, fromy, tox, toy, radius, 0);
+
+      //Reuse created object for result...
+      dir.x = tox - dir.x;
+      dir.y = toy - dir.y;
+      return dir;
     }
-    if (this.state.cursor._mouseup)
+    //Get end point for quadratics...
+    else
     {
-      document.removeEventListener('mouseup', this.state.cursor._mouseup);
+      const midpoint = getMidPoint(fromx, fromy, tox, toy);
+      const qx = midpoint.x + (quadx * 2);
+      const qy = midpoint.y + (quady * 2);
+
+      const dir = getDirectionalVector(qx, qy, tox, toy, radius,
+        selfLoop ? -(Math.PI / 4) : 0);
+
+      //Reuse created object for result...
+      dir.x = tox - dir.x;
+      dir.y = toy - dir.y;
+      return dir;
+    }
+  }
+
+  getCenterPoint()
+  {
+    const from = this.props.from;
+    const to = this.state.to;
+    const quadx = this.state.quad.x;
+    const quady = this.state.quad.y;
+    const radius = from.props.radius;
+    const placeholderLength = 1;
+
+    if (!from) throw new Error("Source of edge cannot be null.");
+    if (!to)
+    {
+      if (from.state.proxyEdge == this)
+      {
+        //If proxyEdge, follow the cursor instead
+        const midpoint = getMidPoint(from.state.x, from.state.y, from.state.pointer.x, from.state.pointer.y);
+        if (quadx != 0 || quady != 0)
+        {
+          midpoint.x += quadx;
+          midpoint.y += quady;
+        }
+        return midpoint;
+      }
+      else
+      {
+        //TODO: Make sure to use quad for placeholder direction (not magnitude)
+        return {
+          x: from.state.x + quadx * (radius + placeholderLength / 2),
+          y: from.state.y + quady * (radius + placeholderLength / 2)
+        };
+      }
     }
 
-    //Restore to default state
-    this.setState((prev, props) => {
-        return {
-          cursor: {
-            offset: prev.cursor.offset,
-            move: false,
-            _mousemove: null,
-            _mouseup: null
-          },
-          proxyEdge: null
-        };
-    });
-    e.stopPropagation();
-    e.preventDefault();
+    const fromx = from.state.x;
+    const fromy = from.state.y;
+    const tox = to.state.x;
+    const toy = to.state.y;
+
+    const midpoint = getMidPoint(fromx, fromy, tox, toy);
+    if (quadx != 0 || quady != 0)
+    {
+      midpoint.x += quadx;
+      midpoint.y += quady;
+    }
+    return midpoint;
   }
 
   render()
   {
-    const x = this.state.x;
-    const y = this.state.y;
-    const accept = this.state.accept;
+    const from = this.props.from;
+    const start = this.getStartPoint();
+    const end = this.getEndPoint();
+    return <g className="graph-edge">
+      {this.renderLine(start, from.state.pointer, null)}
+    </g>;
+    /*
+    const from = this.props.from;
+    const to = this.state.to;
+    const quad = this.state.quad;
+    const radius = from.props.radius;
+
+    if (!from) throw new Error("Source of edge cannot be null.");
+
     const label = this.state.label;
 
-    const radius = this.props.radius;// * (this.state.cursor.move ? 1.3 : 1.0);
-    const innerRadius = (radius * 3.0) / 4.0;
+    const start = this.getStartPoint();
+    const end = this.getEndPoint();
 
-    return <g className="graph-node"
-      style={{pointerEvents: "bounding-box"}}
-      onMouseDown={this.onMouseDown.bind(this)}
-      onContextMenu={this.onContextMenu.bind(this)}>
-
-      //Outer circle
-      <circle
-        cx={x}
-        cy={y}
-        r={radius}/>
-
-      //Inner circle
-      {accept &&
-        <circle
-          cx={x}
-          cy={y}
-          r={innerRadius}
-          fill="none"/>}
+    return <g className="graph-edge">
+      {this.renderLine(start, end, quad)}
 
       //Label
       <text
-        x={x}
-        y={y}
+        x={start.x}
+        y={start.y}
         dy="0.3em"
         textAnchor="middle">
         {label}
       </text>
     </g>;
+    */
+  }
+
+  renderLine(start, end, quad)
+  {
+    //TODO: this should be calculated in GraphEdgeArrow
+    let arrowAngle = 0;
+
+    //Calculate curved lines...
+    let quadLine = null;
+    if (!quad || (quad.x == 0 && quad.y == 0))
+    {
+      //Straight line
+      arrowAngle = Math.atan2(start.x - end.x, start.y - end.y) + Math.PI;
+      quadLine = "L " + end.x + " " + end.y;
+    }
+    else
+    {
+      //Quadratic curve
+      const centerQuad = this.getCenterPoint();
+      centerQuad.x += quad.x;
+      centerQuad.y += quad.y;
+      arrowAngle = Math.atan2(centerQuad.x - end.x, centerQuad.y - end.y) + Math.PI;
+      quadLine = "Q " + centerQuad.x + " " + centerQuad.y + " " + end.x + " " + end.y;
+    }
+    return <path d={"M " + start.x + " " + start.y + " " + quadLine}
+      fill="none"/>
   }
 }
 
-function getMousePosition(ev)
+
+function getDirectionalVector(x1, y1, x2, y2, dist, angleOffset=0)
 {
-  const svg = document.getElementById('workspace-content');
-  const ctm = svg.getScreenCTM();
+  const dx = x1 - x2;
+  const dy = y1 - y2;
+  const angle = -Math.atan2(dy, dx) - (Math.PI / 2) + angleOffset;
   return {
-    x: (ev.clientX - ctm.e) / ctm.a,
-    y: (ev.clientY - ctm.f) / ctm.d
+    x: Math.sin(angle) * dist,
+    y: Math.cos(angle) * dist
+  };
+}
+
+function getMidPoint(x1, y1, x2, y2)
+{
+  return {
+    x: x1 + (x2 - x1) / 2,
+    y: y1 + (y2 - y1) / 2
   };
 }
 

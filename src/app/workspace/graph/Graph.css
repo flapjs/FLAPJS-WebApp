@@ -9,3 +9,8 @@
   fill: black;
   stroke: none;
 }
+
+.graph-edge {
+  cursor: move;
+  stroke: black;
+}

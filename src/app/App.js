@@ -49,7 +49,7 @@ class App extends React.Component
           <div className={"workspace-main" +
             (this.state.isOpen ? " open" : "")}>
 
-            <Workspace />
+            <Workspace graph={this.props.graph} />
           </div>
 
           <div className={"workspace-viewport" +
