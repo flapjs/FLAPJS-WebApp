@@ -42,15 +42,20 @@ class GraphPointer
 
   updateTarget()
   {
-    if (this.target = this.getNodeAt())
+    if (this.target = this.getNodeByInitialMarkerAt())
     {
-      //Clicked on node
-      this.targetType = "node";
+      //Clicked on initial marker
+      this.targetType = "initial";
     }
     else if (this.target = this.getEdgeByEndPointAt())
     {
       //Clicked on endpoint
       this.targetType = "endpoint";
+    }
+    else if (this.target = this.getNodeAt())
+    {
+      //Clicked on node
+      this.targetType = "node";
     }
     else if (this.target = this.getEdgeAt())
     {
@@ -86,6 +91,28 @@ class GraphPointer
         return node;
       }
     }
+    return null;
+  }
+
+  getNodeByInitialMarkerAt(x, y)
+  {
+    //If no arguments, then use pointer position
+    if (arguments.length == 0)
+    {
+      x = this.x;
+      y = this.y;
+    }
+
+    const startNode = this.graph.getStartNode();
+    if (!startNode) return null;
+    
+    const dx = x - (startNode.x + Config.INITIAL_MARKER_OFFSET_X);
+    const dy = y - startNode.y;
+    if (dx * dx + dy * dy < Config.CURSOR_RADIUS_SQU)
+    {
+      return startNode;
+    }
+
     return null;
   }
 

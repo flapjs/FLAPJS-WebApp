@@ -17,6 +17,7 @@ class GraphInputController extends InputController
     this.prevQuad = {x: 0, y: 0};
     this.firstEmptyClick = false;
     this.firstEmptyTime = 0;
+    this.ghostInitialMarker = null;
 
     this.selector = new SelectionBox(this.graph);
 
@@ -126,11 +127,11 @@ class GraphInputController extends InputController
   {
     const pointer = this.pointer;
 
-    //Enabled move mode
+    //If is in move mode...
     if (pointer.moveMode)
     {
       //Makes sure that placeholders are not quadratics!
-      if (targetType === '' && target.isPlaceholder())
+      if (targetType === 'edge' && target.isPlaceholder())
       {
         pointer.moveMode = false;
 
@@ -175,14 +176,24 @@ class GraphInputController extends InputController
         this.prevQuad.y = target.quad.y;
 
         //Ready to move the edge endpoint to pointer...
+        return true;
+      }
+      //Moving initial marker
+      else if (targetType === 'initial')
+      {
+        this.ghostInitialMarker = pointer;
+
+        //Ready to move the initial marker to another state...
+        return true;
       }
       //Moving nothing
       else if (targetType === 'none')
       {
-        this.pointer.initial.targetType = "graph";
+        pointer.initial.targetType = "graph";
         //TODO: offset graph by x and y
 
         //Ready to move the graph to pointer...
+        return true;
       }
       else
       {
@@ -192,7 +203,7 @@ class GraphInputController extends InputController
 
       return true;
     }
-    //Disabled move mode
+    //If is NOT in move mode...
     else
     {
       //If action dragged a node...
@@ -236,7 +247,7 @@ class GraphInputController extends InputController
   {
     const pointer = this.pointer;
 
-    //Enabled move mode
+    //If is in move mode...
     if (pointer.moveMode)
     {
       //Continue to move node(s)
@@ -265,6 +276,14 @@ class GraphInputController extends InputController
         this.moveEndpointTo(pointer, target, x, y);
         return true;
       }
+      //Continue to move initial
+      else if (targetType === 'initial')
+      {
+        //Move initial marker to node or pointer
+        const dst = pointer.getNodeAt(x, y) || pointer;
+        this.ghostInitialMarker = dst;
+        return true;
+      }
       //Continue to move graph
       else if (targetType === 'graph')
       {
@@ -277,7 +296,7 @@ class GraphInputController extends InputController
         throw new Error("Unknown target type \'" + targetType + "\'.");
       }
     }
-    //Disabled move mode
+    //If is NOT in move mode...
     else
     {
       const selector = this.selector;
@@ -299,7 +318,7 @@ class GraphInputController extends InputController
   {
     const pointer = this.pointer;
 
-    //Enabled move mode
+    //If is in move mode...
     if (pointer.moveMode)
     {
       //If stopped dragging a node...
@@ -389,9 +408,23 @@ class GraphInputController extends InputController
           }
         }
       }
+      else if (targetType === 'initial')
+      {
+        //If valid initial object to mark...
+        if (this.ghostInitialMarker instanceof Node)
+        {
+          //Set the new object as the initial node
+          this.graph.setStartNode(this.ghostInitialMarker);
+        }
+
+        //Reset ghost initial marker
+        this.ghostInitialMarker = null;
+        return true;
+      }
       else if (targetType === 'graph')
       {
         //Do nothing. It should already be moved.
+        return true;
       }
       else
       {
@@ -399,7 +432,7 @@ class GraphInputController extends InputController
         throw new Error("Unknown target type \'" + targetType + "\'.");
       }
     }
-    //Disabled move mode
+    //If is NOT in move mode...
     else
     {
       //If was trying to select...
@@ -464,7 +497,8 @@ class GraphInputController extends InputController
 
   moveEndpointTo(pointer, edge, x, y)
   {
-    const dst = pointer.targetType === 'node' ? pointer.target : this.pointer;
+    //Get ONLY node at x and y (cannot use hover target, since it is not ONLY nodes)
+    const dst = pointer.getNodeAt(x, y) || pointer;
     edge.to = dst;
 
     //If the cursor returns to the state after leaving it...

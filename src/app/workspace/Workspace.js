@@ -5,6 +5,8 @@ import './Workspace.css';
 import * as Config from 'config.js';
 import GraphRenderer from './renderer/GraphRenderer.js';
 import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
+import InitialMarkerRenderer from './renderer/InitialMarkerRenderer.js';
+
 import GraphInputController from './controller/GraphInputController.js';
 
 let hoverAngle = 0;
@@ -36,13 +38,22 @@ class Workspace extends React.Component
 
   render()
   {
+    const graph = this.props.graph;
     const controller = this.state.controller;
+
     return <svg id="workspace-content" ref={ref => this.viewport = ref}
       viewBox="-150 -150 300 300"
       xmlns="http://www.w3.org/2000/svg">
       <GraphRenderer graph={this.props.graph}/>
+
       { controller != null &&
         <g>
+          //Initial marker (and ghost)
+          { graph.getStartNode() != null &&
+            controller.ghostInitialMarker == null ?
+            <InitialMarkerRenderer node={graph.getStartNode()}/> :
+            <InitialMarkerRenderer node={controller.ghostInitialMarker}/> }
+            
           //Selected Elements
           { controller.selector.hasSelection() &&
             controller.selector.getSelection().map((e, i) =>
@@ -58,6 +69,7 @@ class Workspace extends React.Component
           //Edges
           { this.props.graph.edges.map((e, i) =>
             <Select key={i} target={e} type={"edge"}/>) }
+
           //Edges
           { this.props.graph.edges.map((e, i) =>
             <Select key={i} target={e} type={"endpoint"}/>) }
@@ -65,7 +77,7 @@ class Workspace extends React.Component
           //Hover Element
           { controller.pointer.target != null &&
             !controller.selector.targets.includes(controller.pointer.target) &&
-            <Select key={-1} target={controller.pointer.target} type={controller.pointer.targetType}/> }
+            <Select target={controller.pointer.target} type={controller.pointer.targetType}/> }
 
           //TrashArea
           <TrashArea trashArea={controller.trashArea} />
@@ -102,9 +114,11 @@ function Select(props)
       y = endpoint.y;
       r = Config.ENDPOINT_RADIUS;
       break;
-    default:
-      x = x;
-      y = y;
+    case "initial":
+      x = target.x - Config.NODE_RADIUS;
+      y = target.y;
+      r = Config.CURSOR_RADIUS;
+      break;
   }
 
   return <g>
