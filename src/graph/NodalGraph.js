@@ -21,7 +21,6 @@ class NodalGraph
     this.nodes = [];
     this.edges = [];
 
-    this.pointer = {x: 0, y: 0};
     this.proxyEdge = null;
   }
 
@@ -68,7 +67,6 @@ class NodalGraph
   newEdge(from, to, label)
   {
     const result = new Edge(this, from, to, label);
-    if (result.isSelfLoop()) result.y = from.y - SELF_LOOP_HEIGHT;
     this.edges.push(result);
     this.emit("edgeCreate", result);
     return result;

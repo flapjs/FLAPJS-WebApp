@@ -1,4 +1,5 @@
-import { NODE_RADIUS, PLACEHOLDER_LENGTH } from 'config.js';
+import { NODE_RADIUS, PLACEHOLDER_LENGTH, SELF_LOOP_HEIGHT,  } from 'config.js';
+import Node from './Node.js';
 
 class Edge
 {
@@ -21,24 +22,20 @@ class Edge
     if (!from) throw new Error("Source of edge cannot be null.");
     if (!to)
     {
-      if (this.props.proxy)
-      {
-        const dir = getDirectionalVector(from.x, from.y,
-          this.graph.pointer.x, this.graph.pointer.y, radius, 0);
+      //TODO: Make sure to use quad for placeholder direction (not magnitude)
+      return {
+        x: from.x + quad.x * NODE_RADIUS,
+        y: from.y + quad.y * NODE_RADIUS
+      };
+    }
+    else if (!(to instanceof Node))
+    {
+      const dir = getDirectionalVector(from.x, from.y, to.x, to.y, NODE_RADIUS, 0);
 
-        //Reuse created object for result...
-        dir.x = from.x + dir.x;
-        dir.y = from.y + dir.y;
-        return dir;
-      }
-      else
-      {
-        //TODO: Make sure to use quad for placeholder direction (not magnitude)
-        return {
-          x: from.x + quad.x * NODE_RADIUS,
-          y: from.y + quad.y * NODE_RADIUS
-        };
-      }
+      //Reuse created object for result...
+      dir.x = from.x + dir.x;
+      dir.y = from.y + dir.y;
+      return dir;
     }
 
     const fromx = from.x;
@@ -48,9 +45,7 @@ class Edge
     const quadx = quad.x;
     const quady = quad.y;
 
-    const selfLoop = (from == to);
-
-    if (quadx == 0 && quady == 0)
+    if (!this.isQuadratic())
     {
       const dir = getDirectionalVector(fromx, fromy, tox, toy, NODE_RADIUS, 0);
 
@@ -66,7 +61,7 @@ class Edge
       const qy = midpoint.y + (quady * 2);
 
       const dir = getDirectionalVector(fromx, fromy, qx, qy, NODE_RADIUS,
-        selfLoop ? (Math.PI / 4) : 0);
+        this.isSelfLoop() ? (Math.PI / 4) : 0);
 
       //Reuse created object for result...
       dir.x = fromx + dir.x;
@@ -84,19 +79,15 @@ class Edge
     if (!from) throw new Error("Source of edge cannot be null.");
     if (!to)
     {
-      if (this.graph.proxyEdge === this)
-      {
-        //If proxyEdge, follow the cursor instead
-        return this.graph.pointer;
-      }
-      else
-      {
-        //TODO: Make sure to use quad for placeholder direction (not magnitude)
-        return {
-          x: from.x + quad.x * (NODE_RADIUS + PLACEHOLDER_LENGTH),
-          y: from.y + quad.y * (NODE_RADIUS + PLACEHOLDER_LENGTH)
-        };
-      }
+      //TODO: Make sure to use quad for placeholder direction (not magnitude)
+      return {
+        x: from.x + quad.x * (NODE_RADIUS + PLACEHOLDER_LENGTH),
+        y: from.y + quad.y * (NODE_RADIUS + PLACEHOLDER_LENGTH)
+      };
+    }
+    else if (!(to instanceof Node))
+    {
+      return to;
     }
 
     const fromx = from.x;
@@ -106,10 +97,8 @@ class Edge
     const quadx = quad.x;
     const quady = quad.y;
 
-    const selfLoop = (from == to);
-
     //Get end point for straight edges...
-    if (quadx == 0 && quady == 0)
+    if (!this.isQuadratic())
     {
       const dir = getDirectionalVector(fromx, fromy, tox, toy, NODE_RADIUS, 0);
 
@@ -126,7 +115,7 @@ class Edge
       const qy = midpoint.y + (quady * 2);
 
       const dir = getDirectionalVector(qx, qy, tox, toy, NODE_RADIUS,
-        selfLoop ? -(Math.PI / 4) : 0);
+        this.isSelfLoop() ? -(Math.PI / 4.0) : 0);
 
       //Reuse created object for result...
       dir.x = tox - dir.x;
@@ -144,27 +133,22 @@ class Edge
     if (!from) throw new Error("Source of edge cannot be null.");
     if (!to)
     {
-      if (this.graph.proxyEdge == this)
-      {
-        //If proxyEdge, follow the cursor instead
-        const midpoint = getMidPoint(from.x, from.y,
-          this.graph.pointer.x, this.graph.pointer.y);
+      //TODO: Make sure to use quad for placeholder direction (not magnitude)
+      return {
+        x: from.x + quad.x * (NODE_RADIUS + PLACEHOLDER_LENGTH / 2),
+        y: from.y + quad.y * (NODE_RADIUS + PLACEHOLDER_LENGTH / 2)
+      };
+    }
+    else if (!(to instanceof Node))
+    {
+      const midpoint = getMidPoint(from.x, from.y, to.x, to.y);
 
-        if (quadx != 0 || quady != 0)
-        {
-          midpoint.x += quadx;
-          midpoint.y += quady;
-        }
-        return midpoint;
-      }
-      else
+      if (this.isQuadratic())
       {
-        //TODO: Make sure to use quad for placeholder direction (not magnitude)
-        return {
-          x: from.x + quad.x * (NODE_RADIUS + PLACEHOLDER_LENGTH / 2),
-          y: from.y + quad.y * (NODE_RADIUS + PLACEHOLDER_LENGTH / 2)
-        };
+        midpoint.x += quad.x;
+        midpoint.y += quad.y;
       }
+      return midpoint;
     }
 
     const fromx = from.x;
@@ -175,7 +159,7 @@ class Edge
     const quady = quad.y;
 
     const midpoint = getMidPoint(fromx, fromy, tox, toy);
-    if (quadx != 0 || quady != 0)
+    if (this.isQuadratic())
     {
       midpoint.x += quadx;
       midpoint.y += quady;
@@ -184,21 +168,24 @@ class Edge
   }
 
   get x() {
-    return this.quad.x + this.centerX;
+    return this.getCenterPoint().x;
   }
   get y() {
-    return this.quad.y + this.centerY;
+    return this.getCenterPoint().y;
   }
 
-  set x(value) {
-    this.quad.x = value - this.centerX;
-    if (Math.abs(this.quad.x) < 8) this.quad.x = 0;
-    if (this.quad.x == 0 && this.quad.y == 0) this.quad = null;
+  setQuadraticByAbsolute(x, y)
+  {
+    const midpoint = getMidPoint(this.from.x, this.from.y, this.to.x, this.to.y);
+    this.setQuadraticByRelative(x - midpoint.x, y - midpoint.y);
   }
-  set y(value) {
-    this.quad.y = value - this.centerY;
+
+  setQuadraticByRelative(dx, dy)
+  {
+    this.quad.x = dx;
+    this.quad.y = dy;
+    if (Math.abs(this.quad.x) < 8) this.quad.x = 0;
     if (Math.abs(this.quad.y) < 8) this.quad.y = 0;
-    if (this.quad.x == 0 && this.quad.y == 0) this.quad = null;
   }
 
   get label() { return this._label; }
@@ -212,7 +199,22 @@ class Edge
   set to(value) {
     let prevDst = this._to;
     this._to = value;
+
+    //Reset quad coords
+    this.quad.x = 0;
+    this.quad.y = 0;//this.from.y - SELF_LOOP_HEIGHT;
+
     this.graph.emit("edgeDestination", this, this._to, prevDst);
+  }
+
+  makeSelfLoop(angle)
+  {
+    const from = this.from;
+    this.to = from;
+    //TODO: apparently quad is not DIRECTLY the center point...
+    //TODO: Try removing SELF_LOOP_HEIGHT...
+    this.setQuadraticByRelative(-Math.cos(angle) * (NODE_RADIUS + SELF_LOOP_HEIGHT),
+      -Math.sin(angle) * (NODE_RADIUS + SELF_LOOP_HEIGHT));
   }
 
   makePlaceholder()
@@ -221,6 +223,7 @@ class Edge
     const dy = this.to ? this.from.y - this.to.y : 0;
     const angle = -Math.atan2(dx, dy) - (Math.PI / 2);
 
+    //Quad is re-used to determine edge angle for placeholder
     this.quad.x = Math.cos(angle);
     this.quad.y = Math.sin(angle);
     this.to = null;
@@ -233,7 +236,12 @@ class Edge
 
   isSelfLoop()
   {
-    return this.from == this.to;
+    return this.from === this.to;
+  }
+
+  isQuadratic()
+  {
+    return !this.isPlaceholder() && (this.quad.x != 0 || this.quad.y != 0);
   }
 }
 

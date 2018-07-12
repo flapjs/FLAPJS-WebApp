@@ -124,8 +124,8 @@ class GraphPointer
     for(const edge of this.graph.edges)
     {
       const point = edge.getEndPoint();
-      const dx = x - point[0];
-      const dy = y - point[1];
+      const dx = x - point.x;
+      const dy = y - point.y;
       if (dx * dx + dy * dy < Config.ENDPOINT_RADIUS_SQU)
       {
         return edge;

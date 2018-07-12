@@ -14,22 +14,17 @@ class GraphEdge extends React.Component
   render()
   {
     const SIXTH_PI = Math.PI / 6;
-    const edge = this.props.edge;
-
-    const from = edge.from;
-    const to = edge.to;
-    const quad = edge.quad;
-    const label = edge.label;
 
     let arrowAngle = 0;
-
-    const start = edge.getStartPoint();
-    const end = edge.getEndPoint();
-    const center = edge.getCenterPoint();
+    const edge = this.props.edge;
+    const start = this.props.start;
+    const end = this.props.end;
+    const center = this.props.center;
+    const label = this.props.label;
 
     //Calculate curved lines...
     let quadLine = null;
-    if (quad == null)
+    if (!edge.isQuadratic())
     {
       //Straight line
       arrowAngle = Math.atan2(start.x - end.x, start.y - end.y) + Math.PI;
@@ -38,8 +33,10 @@ class GraphEdge extends React.Component
     else
     {
       //Quadratic curve
-      arrowAngle = Math.atan2(center.x - end.x, center.y - end.y) + Math.PI;
-      quadLine = "Q " + center.x + " " + center.y + " " + end.x + " " + end.y;
+      const cx = center.x + edge.quad.x;//midpoint + the quadratic offset * 2
+      const cy = center.y + edge.quad.y;//midpoint + the quadratic offset * 2
+      arrowAngle = Math.atan2(cx - end.x, cy - end.y) + Math.PI;
+      quadLine = "Q " + cx + " " + cy + " " + end.x + " " + end.y;
     }
 
     //Draw multiple labels
@@ -63,16 +60,17 @@ class GraphEdge extends React.Component
 
       //Draw labels
       { labels.length > 0 && labels.map((str, i) => {
-          const sign = Math.sign(quad.y);
-          const xx = center.x;
-          const yy = center.y + (8 * Math.sign(quad.y)) + dy * (-sign || 1);
-          dy -= 12;
+          const cx = (center && center.x || 0);
+          const cy = (center && center.y || 0);
+          const sign = Math.sign(edge.quad.y) || -1;
+          const yy = cy + sign * 15;
 
           //TODO: ctx.clearRect(xx - cx - 2, yy - 5, (cx * 2) + 4, 10);
           return <text
             key={i}
-            x={xx} y={yy + 4}
+            x={cx} y={yy}
             font={Config.EDGE_FONT}
+            alignmentBaseline="central"
             textAnchor={Config.EDGE_TEXT_ANCHOR}>
             {str}
           </text>;
@@ -80,5 +78,8 @@ class GraphEdge extends React.Component
     </g>;
   }
 }
+/*
+
+*/
 
 export default GraphEdge;

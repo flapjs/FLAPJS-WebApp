@@ -4,8 +4,10 @@ import './Workspace.css';
 
 import * as Config from 'config.js';
 import GraphRenderer from './renderer/GraphRenderer.js';
-import GraphInputController from './controller/input/GraphInputController.js';
+import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
+import GraphInputController from './controller/GraphInputController.js';
 
+let hoverAngle = 0;
 class Workspace extends React.Component
 {
   constructor(props)
@@ -26,6 +28,12 @@ class Workspace extends React.Component
     });
   }
 
+  componentDidUpdate()
+  {
+    //TODO: Not used to animate hovering circles...
+    hoverAngle = (hoverAngle + Config.HOVER_ANGLE_SPEED) % Config.PI2;
+  }
+
   render()
   {
     const controller = this.state.controller;
@@ -36,45 +44,34 @@ class Workspace extends React.Component
       { controller != null &&
         <g>
           //Selected Elements
-          { controller.hasSelection() &&
-            controller.getSelection().map((e, i) =>
+          { controller.selector.hasSelection() &&
+            controller.selector.getSelection().map((e, i) =>
               <Select key={i} target={e} type="node" />) }
 
           //SelectionBox
-          { controller.isSelecting &&
-            <SelectionBox selectBox={controller.selectBox} /> }
+          <SelectionBoxRenderer src={controller.selector}/>
+
+          //States
+          { this.props.graph.nodes.map((e, i) =>
+            <Select key={i} target={e} type={"node"}/>) }
+
+          //Edges
+          { this.props.graph.edges.map((e, i) =>
+            <Select key={i} target={e} type={"edge"}/>) }
+          //Edges
+          { this.props.graph.edges.map((e, i) =>
+            <Select key={i} target={e} type={"endpoint"}/>) }
 
           //Hover Element
-          { controller.hoverTarget != null &&
-            !controller.selectBox.targets.includes(controller.hoverTarget) &&
-            <Select key={-1} target={controller.hoverTarget} type={controller.hoverType} /> }
+          { controller.pointer.target != null &&
+            !controller.selector.targets.includes(controller.pointer.target) &&
+            <Select key={-1} target={controller.pointer.target} type={controller.pointer.targetType}/> }
 
           //TrashArea
           <TrashArea trashArea={controller.trashArea} />
         </g> }
     </svg>;
   }
-}
-
-function SelectionBox(props)
-{
-  const selectBox = props.selectBox;
-  const dx = selectBox.mx - selectBox.x;
-  const dy = selectBox.my - selectBox.y;
-  /*
-    //Shadows
-    ctx.shadowColor = Config.SELECTION_BOX_SHADOW_COLOR;
-    ctx.shadowBlur = Config.SELECTION_BOX_SHADOW_SIZE;
-    ctx.shadowOffsetX = Config.SELECTION_BOX_SHADOW_OFFSETX;
-    ctx.shadowOffsetY = Config.SELECTION_BOX_SHADOW_OFFSETY;
-  */
-  return <g>
-    <rect
-      x={dx < 0 ? selectBox.mx : selectBox.x} y={dy < 0 ? selectBox.my : selectBox.y}
-      width={dx < 0 ? -dx : dx} height={dy < 0 ? -dy : dy}
-      fill={Config.SELECTION_BOX_FILL_STYLE}
-      stroke={Config.SELECTION_BOX_STROKE_STYLE} />
-  </g>;
 }
 
 function Select(props)
@@ -94,14 +91,15 @@ function Select(props)
       r = Config.NODE_RADIUS;
       break;
     case "edge":
-      x = target.x;
-      y = target.y;
+      const center = target.getCenterPoint();
+      x = center.x;
+      y = center.y;
       r = Config.EDGE_RADIUS;
       break;
     case "endpoint":
       const endpoint = target.getEndPoint();
-      x = endpoint[0];
-      y = endpoint[1];
+      x = endpoint.x;
+      y = endpoint.y;
       r = Config.ENDPOINT_RADIUS;
       break;
     default:

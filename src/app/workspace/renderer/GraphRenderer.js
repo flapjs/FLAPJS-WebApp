@@ -2,7 +2,6 @@ import React from 'react';
 
 import GraphNode from './GraphNode.js';
 import GraphEdge from './GraphEdge.js';
-import GraphInputController from '../controller/input/GraphInputController.js';
 
 import * as Config from 'config.js';
 
@@ -17,21 +16,23 @@ class GraphRenderer extends React.Component
   render()
   {
     const graph = this.props.graph;
-
-    //TODO: Not used to animate hovering circles...
-    hoverAngle = (hoverAngle + Config.HOVER_ANGLE_SPEED) % Config.PI2;
+    const pointer = this.props.pointer;
 
     return (
       <g>
+        //States
+        { graph.nodes.map((e, i) => <GraphNode key={i} node={e} />) }
         //Edges
-        { graph.edges.map((e, i) => <GraphEdge key={i} edge={e} />) }
+        { graph.edges.map((e, i) =>
+            <GraphEdge key={i} edge={e}
+              start={e.getStartPoint()}
+              end={e.getEndPoint()}
+              center={e.getCenterPoint()}
+              label={e.label}/>) }
 
         //Initial marker
         { graph.getStartNode() != null &&
           <InitialMarker node={graph.getStartNode()} />}
-
-        //States
-        { graph.nodes.map((e, i) => <GraphNode key={i} node={e} />) }
       </g>
     );
   }
