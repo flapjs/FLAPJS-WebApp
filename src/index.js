@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import App from 'app/App.js';
 import NodalGraph from 'graph/NodalGraph.js';
-import GraphInputController from 'app/workspace/controller/GraphInputController.js';
+import GraphInputController from 'controller/GraphInputController.js';
 
 const FRAMES_PER_SECOND = 60;
 

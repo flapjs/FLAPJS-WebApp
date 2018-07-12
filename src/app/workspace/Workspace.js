@@ -3,6 +3,7 @@ import React from 'react';
 import './Workspace.css';
 
 import * as Config from 'config.js';
+
 import NodeRenderer from './renderer/NodeRenderer.js';
 import EdgeRenderer from './renderer/EdgeRenderer.js';
 import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
@@ -78,7 +79,7 @@ class Workspace extends React.Component
           <BorderRenderer mode={
             controller.pointer.isTrashMode() ? 2 :
             controller.pointer.isMoveMode() ? 1 : 0}/>
-          
+
         </g> }
     </svg>;
   }
