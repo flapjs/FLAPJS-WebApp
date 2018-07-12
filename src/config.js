@@ -57,6 +57,10 @@ export const EDGE_TEXT_ANCHOR = "middle";
 export const EDGE_STROKE_STYLE = TRANSITION_COLOR;
 export const EDGE_TEXT_STROKE_STYLE = TRANSITION_TEXT_COLOR;
 
+export const BORDER_STROKE_STYLE = "rgba(0,0,0,0.02)";
+export const BORDER_LINE_WIDTH = "0.5em";
+export const BORDER_LINE_DASH = [20, 24];
+
 export const HOVER_STROKE_STYLE = "rgba(0,0,0,0.6)";
 export const HOVER_LINE_WIDTH = 2;
 export const HOVER_LINE_DASH = [6, 4];

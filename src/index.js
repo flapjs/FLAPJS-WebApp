@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import App from 'app/App.js';
 import NodalGraph from 'graph/NodalGraph.js';
+import GraphInputController from 'app/workspace/controller/GraphInputController.js';
 
 const FRAMES_PER_SECOND = 60;
 
@@ -16,6 +17,9 @@ window.addEventListener('load', (event) => {
 let prevtime = 0;
 let root = null;
 let graph = new NodalGraph();
+
+//Must be initialized (will be called in Workspace.componentDidMount)
+let controller = new GraphInputController(graph);
 
 //Load application
 function loadApplication()
@@ -33,7 +37,7 @@ function updateApplication(time)
 {
   const dt = (time - prevtime) / FRAMES_PER_SECOND;
   {
-    ReactDOM.render(React.createElement(App, { graph: graph }, null), root);
+    ReactDOM.render(React.createElement(App, { graph: graph, controller: controller }, null), root);
   }
   prevtime = time;
   window.requestAnimationFrame(updateApplication);

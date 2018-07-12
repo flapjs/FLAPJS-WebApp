@@ -18,6 +18,7 @@ class GraphPointer
     this.targetType = null;
 
     this.moveMode = false;
+    this.trashMode = false;
     this.dragging = false;
   }
 
@@ -105,7 +106,7 @@ class GraphPointer
 
     const startNode = this.graph.getStartNode();
     if (!startNode) return null;
-    
+
     const dx = x - (startNode.x + Config.INITIAL_MARKER_OFFSET_X);
     const dy = y - startNode.y;
     if (dx * dx + dy * dy < Config.CURSOR_RADIUS_SQU)
@@ -204,6 +205,16 @@ class GraphPointer
   getElapsedTimeSinceInitial()
   {
     return Date.now() - this.initial.time;
+  }
+
+  isMoveMode()
+  {
+    return this.moveMode;
+  }
+
+  isTrashMode(x, y)
+  {
+    return this.trashMode;
   }
 }
 

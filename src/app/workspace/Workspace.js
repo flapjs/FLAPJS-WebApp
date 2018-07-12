@@ -7,8 +7,7 @@ import NodeRenderer from './renderer/NodeRenderer.js';
 import EdgeRenderer from './renderer/EdgeRenderer.js';
 import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
 import InitialMarkerRenderer from './renderer/InitialMarkerRenderer.js';
-
-import GraphInputController from './controller/GraphInputController.js';
+import BorderRenderer from './renderer/BorderRenderer.js';
 
 class Workspace extends React.Component
 {
@@ -16,34 +15,26 @@ class Workspace extends React.Component
   {
     super(props);
     this.viewpowrt = React.createRef();
-    this.state = {
-      controller: null
-    };
   }
 
   componentDidMount()
   {
-    this.setState((prev, props) => {
-      const controller = new GraphInputController(props.graph);
-      controller.initialize(this.viewport);
-      return {controller: controller};
-    });
+    //Initialize the controller to graph components
+    this.props.controller.initialize(this.viewport);
   }
 
   componentDidUpdate()
   {
-    //Update hover circles
-    //TODO: hoverAngle = (hoverAngle + Config.HOVER_ANGLE_SPEED) % (Math.PI * 2);
-
-    //Update hover target
-    this.state.controller.pointer.updateTarget();
+    //Update input controller (usually mouse position for hover info)
+    this.props.controller.onUpdate();
   }
 
   render()
   {
     const graph = this.props.graph;
-    const controller = this.state.controller;
+    const controller = this.props.controller;
 
+    //Must not be a block content (must inline)
     return <svg id="workspace-content" ref={ref => this.viewport = ref}
       viewBox="-150 -150 300 300"
       xmlns="http://www.w3.org/2000/svg">
@@ -66,10 +57,9 @@ class Workspace extends React.Component
       { controller != null &&
         <g>
           //Initial marker (and ghost)
-          { graph.getStartNode() != null &&
-            controller.ghostInitialMarker == null ?
+          { graph.getStartNode() && (controller.ghostInitialMarker == null ?
             <InitialMarkerRenderer node={graph.getStartNode()}/> :
-            <InitialMarkerRenderer node={controller.ghostInitialMarker}/> }
+            <InitialMarkerRenderer node={controller.ghostInitialMarker}/>) }
 
           //Selected Elements
           { controller.selector.hasSelection() &&
@@ -82,10 +72,12 @@ class Workspace extends React.Component
           //Hover Element
           { controller.pointer.target &&
             !controller.selector.isTargetSelected(controller.pointer.target) &&
-            <Select target={controller.pointer.target} type={controller.pointer.targetType} angle={this.state.hoverAngle}/> }
+            <Select target={controller.pointer.target} type={controller.pointer.targetType}/> }
 
-          //TrashArea
-          <TrashArea trashArea={controller.trashArea} />
+          //Border Element
+          <BorderRenderer mode={
+            controller.pointer.isTrashMode() ? 2 :
+            controller.pointer.isMoveMode() ? 1 : 0}/>
         </g> }
     </svg>;
   }

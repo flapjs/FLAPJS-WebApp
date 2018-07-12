@@ -21,34 +21,15 @@ class GraphInputController extends InputController
 
     this.selector = new SelectionBox(this.graph);
 
-    this.hoverTarget = null;
-    this.hoverType = null;
-
     this.shouldDestroyPointlessEdges = Config.DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
     //TODO: Trash area should NOT show up on exported image!
     this.trashArea = { x: Config.TRASH_AREA_POSX, y: Config.TRASH_AREA_POSY,
                         width: Config.TRASH_AREA_WIDTH, height: Config.TRASH_AREA_HEIGHT };
   }
 
-  onUpdate(dt)
+  onUpdate()
   {
-    const x = this.pointer.x;
-    const y = this.pointer.y;
-
-    //Get hover target
-    this.hoverTarget = null;
-    if (this.hoverTarget = this.pointer.getNodeAt(x, y))
-    {
-      this.hoverType = "node";
-    }
-    else if (this.hoverTarget = this.pointer.getEdgeAt(x, y))
-    {
-      this.hoverType = "edge";
-    }
-    else if (this.hoverTarget = this.pointer.getEdgeByEndPointAt(x, y))
-    {
-      this.hoverType = "endpoint";
-    }
+    this.pointer.updateTarget();
   }
 
   onInputDown(x, y, target, targetType)
@@ -71,7 +52,7 @@ class GraphInputController extends InputController
     const pointer = this.pointer;
 
     //If is in move mode...
-    if (pointer.moveMode)
+    if (pointer.isMoveMode())
     {
       return false;
     }
@@ -129,7 +110,7 @@ class GraphInputController extends InputController
     const pointer = this.pointer;
 
     //If is in move mode...
-    if (pointer.moveMode)
+    if (pointer.isMoveMode())
     {
       //Makes sure that placeholders are not quadratics!
       if (targetType === 'edge' && target.isPlaceholder())
@@ -249,7 +230,7 @@ class GraphInputController extends InputController
     const pointer = this.pointer;
 
     //If is in move mode...
-    if (pointer.moveMode)
+    if (pointer.isMoveMode())
     {
       //Continue to move node(s)
       if (targetType === 'node')
@@ -320,13 +301,13 @@ class GraphInputController extends InputController
     const pointer = this.pointer;
 
     //If is in move mode...
-    if (pointer.moveMode)
+    if (pointer.isMoveMode())
     {
       //If stopped dragging a node...
       if (targetType === 'node')
       {
         //Delete it if withing trash area...
-        if (this.isWithinTrash(x, y))
+        if (this.pointer.isTrashMode(x, y))
         {
           //If there exists selected states, delete them all!
           const selector = this.selector;
@@ -366,7 +347,7 @@ class GraphInputController extends InputController
       else if (targetType === 'endpoint')
       {
         //Delete it if withing trash area...
-        if (this.isWithinTrash(x, y))
+        if (this.pointer.isTrashMode(x, y))
         {
           this.graph.deleteEdge(target);
           return true;
