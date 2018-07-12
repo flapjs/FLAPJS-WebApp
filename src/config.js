@@ -11,6 +11,7 @@ export const NODE_RADIUS = 16;
 export const NODE_RADIUS_SQU = NODE_RADIUS * NODE_RADIUS;
 export const NODE_DIAMETER = NODE_RADIUS * 2;
 export const NODE_RADIUS_INNER = 12;
+
 export const INITIAL_MARKER_OFFSET_X = -(NODE_RADIUS + (NODE_RADIUS / 3));//Not centered, but a little closer to tip
 
 export const EDGE_RADIUS = 12;

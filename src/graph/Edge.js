@@ -1,4 +1,4 @@
-import { NODE_RADIUS, PLACEHOLDER_LENGTH, SELF_LOOP_HEIGHT,  } from 'config.js';
+import { NODE_RADIUS, PLACEHOLDER_LENGTH, SELF_LOOP_HEIGHT } from 'config.js';
 import Node from './Node.js';
 
 class Edge
@@ -211,10 +211,8 @@ class Edge
   {
     const from = this.from;
     this.to = from;
-    //TODO: apparently quad is not DIRECTLY the center point...
-    //TODO: Try removing SELF_LOOP_HEIGHT...
-    this.setQuadraticByRelative(-Math.cos(angle) * (NODE_RADIUS + SELF_LOOP_HEIGHT),
-      -Math.sin(angle) * (NODE_RADIUS + SELF_LOOP_HEIGHT));
+    this.setQuadraticByRelative(-Math.cos(angle) * SELF_LOOP_HEIGHT,
+      -Math.sin(angle) * SELF_LOOP_HEIGHT);
   }
 
   makePlaceholder()

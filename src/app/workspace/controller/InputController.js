@@ -22,11 +22,18 @@ class InputController
     this.viewport = viewport;
     this.viewport.addEventListener('mousedown', this.onMouseDown.bind(this));
     this.viewport.addEventListener('contextmenu', this.onContextMenu.bind(this));
+    this.viewport.addEventListener('mousemove', this.onMouseMove.bind(this));
   }
 
   onUpdate(dt)
   {
 
+  }
+
+  onMouseMove(e)
+  {
+    const mouse = getMousePosition(this.viewport, e);
+    this.pointer.setPosition(mouse.x, mouse.y);
   }
 
   onContextMenu(e)
@@ -56,8 +63,8 @@ class InputController
     const mouse = getMousePosition(this.viewport, e);
     pointer.setInitialPosition(mouse.x, mouse.y);
 
-    this.cursor._mousemove = this.onMouseMove.bind(this);
-    this.cursor._mouseup = this.onMouseUp.bind(this);
+    this.cursor._mousemove = this.onMouseDownAndMove.bind(this);
+    this.cursor._mouseup = this.onMouseDownAndUp.bind(this);
 
     document.addEventListener('mousemove', this.cursor._mousemove);
     document.addEventListener('mouseup', this.cursor._mouseup);
@@ -66,7 +73,7 @@ class InputController
       pointer.initial.target, pointer.initial.targetType);
   }
 
-  onMouseMove(e)
+  onMouseDownAndMove(e)
   {
     e.stopPropagation();
     e.preventDefault();
@@ -103,7 +110,7 @@ class InputController
       pointer.initial.target, pointer.initial.targetType);
   }
 
-  onMouseUp(e)
+  onMouseDownAndUp(e)
   {
     e.stopPropagation();
     e.preventDefault();

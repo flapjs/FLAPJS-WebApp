@@ -20,8 +20,6 @@ class NodalGraph
   {
     this.nodes = [];
     this.edges = [];
-
-    this.proxyEdge = null;
   }
 
   newNode(x, y, label)

@@ -34,6 +34,7 @@ class Workspace extends React.Component
   {
     //TODO: Not used to animate hovering circles...
     hoverAngle = (hoverAngle + Config.HOVER_ANGLE_SPEED) % Config.PI2;
+    this.state.controller.pointer.updateTarget();
   }
 
   render()
@@ -53,7 +54,7 @@ class Workspace extends React.Component
             controller.ghostInitialMarker == null ?
             <InitialMarkerRenderer node={graph.getStartNode()}/> :
             <InitialMarkerRenderer node={controller.ghostInitialMarker}/> }
-            
+
           //Selected Elements
           { controller.selector.hasSelection() &&
             controller.selector.getSelection().map((e, i) =>
@@ -62,20 +63,8 @@ class Workspace extends React.Component
           //SelectionBox
           <SelectionBoxRenderer src={controller.selector}/>
 
-          //States
-          { this.props.graph.nodes.map((e, i) =>
-            <Select key={i} target={e} type={"node"}/>) }
-
-          //Edges
-          { this.props.graph.edges.map((e, i) =>
-            <Select key={i} target={e} type={"edge"}/>) }
-
-          //Edges
-          { this.props.graph.edges.map((e, i) =>
-            <Select key={i} target={e} type={"endpoint"}/>) }
-
           //Hover Element
-          { controller.pointer.target != null &&
+          { controller.pointer.target &&
             !controller.selector.targets.includes(controller.pointer.target) &&
             <Select target={controller.pointer.target} type={controller.pointer.targetType}/> }
 
