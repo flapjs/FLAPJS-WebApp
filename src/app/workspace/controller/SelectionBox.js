@@ -43,10 +43,10 @@ class SelectionBox
   {
     if (forceUpdate)
     {
-      const mx = Math.max(this.toX, this.fromX);
-      const my = Math.max(this.toY, this.fromY);
-      const lx = Math.min(this.toX, this.fromX);
-      const ly = Math.min(this.toY, this.fromY);
+      const mx = Math.max(this.endX, this.beginX);
+      const my = Math.max(this.endY, this.beginY);
+      const lx = Math.min(this.endX, this.beginX);
+      const ly = Math.min(this.endY, this.beginY);
       this.clearSelection();
       getNodesWithin(this.graph, lx, ly, mx, my, this.targets);
     }

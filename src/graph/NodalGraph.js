@@ -57,7 +57,7 @@ class NodalGraph
     this.nodes.splice(nodeIndex, 1);
     if (nodeIndex == 0)
     {
-      this.emit("newInitial", this.getInitialState(), node);
+      this.emit("newInitial", this.getStartNode(), node);
     }
     this.emit("nodeDestroy", node);
   }

@@ -81,7 +81,7 @@ class Workspace extends React.Component
 
           //Hover Element
           { controller.pointer.target &&
-            !controller.selector.targets.includes(controller.pointer.target) &&
+            !controller.selector.isTargetSelected(controller.pointer.target) &&
             <Select target={controller.pointer.target} type={controller.pointer.targetType} angle={this.state.hoverAngle}/> }
 
           //TrashArea
