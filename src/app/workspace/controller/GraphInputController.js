@@ -22,9 +22,6 @@ class GraphInputController extends InputController
     this.selector = new SelectionBox(this.graph);
 
     this.shouldDestroyPointlessEdges = Config.DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
-    //TODO: Trash area should NOT show up on exported image!
-    this.trashArea = { x: Config.TRASH_AREA_POSX, y: Config.TRASH_AREA_POSY,
-                        width: Config.TRASH_AREA_WIDTH, height: Config.TRASH_AREA_HEIGHT };
   }
 
   onUpdate()
@@ -440,14 +437,6 @@ class GraphInputController extends InputController
   openLabelEditor(target, placeholder=null)
   {
     //this.labelEditor.open(target, placeholder);
-  }
-
-  isWithinTrash(x, y)
-  {
-    const dx = x - this.trashArea.x;
-    const dy = y - this.trashArea.y;
-    return dx > 0 && dx < this.trashArea.width &&
-            dy > 0 && dy < this.trashArea.height;
   }
 
   moveNodeTo(pointer, node, x, y)

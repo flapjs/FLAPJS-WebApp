@@ -73,16 +73,5 @@ export const SELECTION_BOX_SHADOW_OFFSETY = 2;
 export const SELECTION_BOX_FILL_STYLE = "rgba(0, 0, 0, 0.1)";
 export const SELECTION_BOX_STROKE_STYLE = "black";
 
-export const TRASH_AREA_WIDTH = 64;
-export const TRASH_AREA_HEIGHT = 64;
-export const TRASH_AREA_POSX = 0;
-export const TRASH_AREA_POSY = TRASH_AREA_HEIGHT;
-export const TRASH_AREA_SHADOW_COLOR = "red";
-export const TRASH_AREA_SHADOW_SIZE = 5;
-export const TRASH_AREA_SHADOW_OFFSETX = 2;
-export const TRASH_AREA_SHADOW_OFFSETY = 2;
-export const TRASH_AREA_FILL_STYLE = "rgba(255, 0, 0, 0.2)";
-export const TRASH_AREA_STROKE_STYLE = "red";
-
 //IO
 export const EXPORT_FILE_NAME = "flap-machine.png";
