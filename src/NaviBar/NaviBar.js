@@ -12,10 +12,10 @@ import {
   DropdownMenu,
   DropdownItem } from 'reactstrap';
 import './NaviBar.css';
-import SaveIcon from './SaveIcon';
-import UndoIcon from './UndoIcon';
-import RedoIcon from './RedoIcon';
-import NewIcon from './NewIcon';
+import SaveIcon from '../app/toolbar/SaveIcon';
+import UndoIcon from '../app/toolbar/UndoIcon';
+import RedoIcon from '../app/toolbar/RedoIcon';
+import NewIcon from '../app/toolbar/NewIcon';
 
 export default class Example extends React.Component {
 
