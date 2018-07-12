@@ -3,7 +3,7 @@ export const SUBMIT_KEY = 13; //ENTER
 export const CLEAR_KEY = 27; //ESCAPE
 
 export const STR_TRANSITION_DEFAULT_LABEL = "0";
-export const STR_TRANSITION_PROXY_LABEL = "#";
+export const STR_TRANSITION_PROXY_LABEL = "?";
 export const STR_STATE_LABEL = "q";
 
 //Geometry
@@ -28,7 +28,7 @@ export const CURSOR_RADIUS_SQU = CURSOR_RADIUS * CURSOR_RADIUS;
 export const SELF_LOOP_HEIGHT = 32;
 
 //Interface
-export const DOUBLE_TAP_TICKS = 250;
+export const DOUBLE_TAP_TICKS = 350;
 export const SPAWN_RADIUS = 64;
 export const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
 

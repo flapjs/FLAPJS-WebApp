@@ -47,6 +47,7 @@ class Workspace extends React.Component
     return <svg id="workspace-content" ref={ref => this.viewport = ref}
       viewBox="-150 -150 300 300"
       xmlns="http://www.w3.org/2000/svg">
+      //Graph objects
       <g>
         //Nodes
         { graph.nodes.map((e, i) =>
@@ -60,6 +61,8 @@ class Workspace extends React.Component
             center={e.getCenterPoint()}
             label={e.label}/>) }
       </g>
+
+      //Graph guis
       { controller != null &&
         <g>
           //Initial marker (and ghost)

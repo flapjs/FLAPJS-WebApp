@@ -68,8 +68,10 @@ class GraphInputController extends InputController
 
   onInputAction(x, y, target, targetType)
   {
+    const pointer = this.pointer;
+
     //If is in move mode...
-    if (this.pointer.moveMode)
+    if (pointer.moveMode)
     {
       return false;
     }
@@ -90,14 +92,13 @@ class GraphInputController extends InputController
         return true;
       }
       //If hovered target is none...
-      else if (this.pointer.targetType === 'none')
+      else if (pointer.targetType === 'none')
       {
         //TODO: this may have a bug in where you must triple click
-        const initTime = this.pointer.initial.time;
         if (this.firstEmptyClick)
         {
           //If within the time to double tap...
-          if (Date.now() - initTime < Config.DOUBLE_TAP_TICKS)
+          if (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS)
           {
             //Create state at position
             this.createNode(x, y);
@@ -111,7 +112,7 @@ class GraphInputController extends InputController
         {
           //This is the first empty click, should wait for another...
           this.firstEmptyClick = true;
-          this.firstEmptyTime = initTime;
+          this.firstEmptyTime = pointer.initial.time;
         }
 
         return true;
