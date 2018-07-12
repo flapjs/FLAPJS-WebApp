@@ -139,23 +139,4 @@ function Select(props)
   */
 }
 
-function TrashArea(props)
-{
-  const trashArea = props.trashArea;
-  /*
-    //Shadows
-    ctx.shadowColor = Config.TRASH_AREA_SHADOW_COLOR;
-    ctx.shadowBlur = Config.TRASH_AREA_SHADOW_SIZE;
-    ctx.shadowOffsetX = Config.TRASH_AREA_SHADOW_OFFSETX;
-    ctx.shadowOffsetY = Config.TRASH_AREA_SHADOW_OFFSETY;
-  */
-  return <g>
-    <rect
-      x={trashArea.x} y={trashArea.y}
-      width={trashArea.width} height={trashArea.height}
-      fill={Config.TRASH_AREA_FILL_STYLE}
-      stroke={Config.TRASH_AREA_STROKE_STYLE} />
-  </g>;
-}
-
 export default Workspace;
