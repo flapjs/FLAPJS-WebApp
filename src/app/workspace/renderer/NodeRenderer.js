@@ -2,7 +2,7 @@ import React from 'react';
 
 import * as Config from 'config.js';
 
-class GraphNode extends React.Component
+class NodeRenderer extends React.Component
 {
   constructor(props)
   {
@@ -43,4 +43,4 @@ class GraphNode extends React.Component
   }
 }
 
-export default GraphNode;
+export default NodeRenderer;

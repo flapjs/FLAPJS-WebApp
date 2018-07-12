@@ -3,13 +3,13 @@ import React from 'react';
 import './Workspace.css';
 
 import * as Config from 'config.js';
-import GraphRenderer from './renderer/GraphRenderer.js';
+import NodeRenderer from './renderer/NodeRenderer.js';
+import EdgeRenderer from './renderer/EdgeRenderer.js';
 import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
 import InitialMarkerRenderer from './renderer/InitialMarkerRenderer.js';
 
 import GraphInputController from './controller/GraphInputController.js';
 
-let hoverAngle = 0;
 class Workspace extends React.Component
 {
   constructor(props)
@@ -32,8 +32,10 @@ class Workspace extends React.Component
 
   componentDidUpdate()
   {
-    //TODO: Not used to animate hovering circles...
-    hoverAngle = (hoverAngle + Config.HOVER_ANGLE_SPEED) % Config.PI2;
+    //Update hover circles
+    //TODO: hoverAngle = (hoverAngle + Config.HOVER_ANGLE_SPEED) % (Math.PI * 2);
+
+    //Update hover target
     this.state.controller.pointer.updateTarget();
   }
 
@@ -45,8 +47,19 @@ class Workspace extends React.Component
     return <svg id="workspace-content" ref={ref => this.viewport = ref}
       viewBox="-150 -150 300 300"
       xmlns="http://www.w3.org/2000/svg">
-      <GraphRenderer graph={this.props.graph}/>
+      <g>
+        //Nodes
+        { graph.nodes.map((e, i) =>
+          <NodeRenderer key={i} node={e}/>) }
 
+        //Edges
+        { graph.edges.map((e, i) =>
+          <EdgeRenderer key={i} edge={e}
+            start={e.getStartPoint()}
+            end={e.getEndPoint()}
+            center={e.getCenterPoint()}
+            label={e.label}/>) }
+      </g>
       { controller != null &&
         <g>
           //Initial marker (and ghost)
@@ -58,7 +71,7 @@ class Workspace extends React.Component
           //Selected Elements
           { controller.selector.hasSelection() &&
             controller.selector.getSelection().map((e, i) =>
-              <Select key={i} target={e} type="node" />) }
+              <Select key={i} target={e} type="node"/>) }
 
           //SelectionBox
           <SelectionBoxRenderer src={controller.selector}/>
@@ -66,7 +79,7 @@ class Workspace extends React.Component
           //Hover Element
           { controller.pointer.target &&
             !controller.selector.targets.includes(controller.pointer.target) &&
-            <Select target={controller.pointer.target} type={controller.pointer.targetType}/> }
+            <Select target={controller.pointer.target} type={controller.pointer.targetType} angle={this.state.hoverAngle}/> }
 
           //TrashArea
           <TrashArea trashArea={controller.trashArea} />
@@ -79,7 +92,6 @@ function Select(props)
 {
   const target = props.target;
   const type = props.type;
-  const angle = hoverAngle;
 
   let x = 0;
   let y = 0;

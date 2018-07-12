@@ -4,7 +4,7 @@ import * as Config from 'config.js';
 
 import Node from 'graph/Node.js';
 
-class GraphEdge extends React.Component
+class EdgeRenderer extends React.Component
 {
   constructor(props)
   {
@@ -78,8 +78,5 @@ class GraphEdge extends React.Component
     </g>;
   }
 }
-/*
 
-*/
-
-export default GraphEdge;
+export default EdgeRenderer;
