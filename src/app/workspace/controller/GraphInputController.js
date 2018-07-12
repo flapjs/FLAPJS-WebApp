@@ -56,6 +56,49 @@ class GraphInputController extends InputController
     //If is NOT in move mode...
     else
     {
+      //If is in trash mode... capture all events!
+      if (pointer.isTrashMode(x, y))
+      {
+        //Click to delete node
+        if (targetType === 'node')
+        {
+          //If there exists selected states, delete them all!
+          const selector = this.selector;
+          if (selector.hasSelection())
+          {
+            //Remove from graph
+            for(const node of selector.getSelection())
+            {
+              this.graph.deleteNode(node);
+            }
+
+            //Remove from selection
+            selector.clearSelection();
+          }
+          else
+          {
+            //Delete a single node
+            this.graph.deleteNode(target);
+          }
+
+          return true;
+        }
+        else if (targetType === 'edge' || targetType === 'endpoint')
+        {
+          //Delete a single edge
+          this.graph.deleteEdge(target);
+          return true;
+        }
+        else
+        {
+          //Clicked on something you cannot delete
+          return false;
+        }
+      }
+
+      //If not in Trash Mode, then events should pass through to here...
+      //Otherwise, ALL events are captured to prevent ALL default behavior.
+
       //If selected target...
       if (targetType === 'node')
       {

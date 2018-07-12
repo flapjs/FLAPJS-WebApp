@@ -78,6 +78,7 @@ class Workspace extends React.Component
           <BorderRenderer mode={
             controller.pointer.isTrashMode() ? 2 :
             controller.pointer.isMoveMode() ? 1 : 0}/>
+          
         </g> }
     </svg>;
   }
