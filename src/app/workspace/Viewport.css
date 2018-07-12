@@ -1,0 +1,19 @@
+.viewport-container {
+
+}
+.anchor-bottom-right{
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+#trash-btn {
+  width: 3em;
+  height: 3em;
+  padding: 10px;
+
+  fill: #6E6E6E;
+  transition: fill 0.3s ease;
+}
+#trash-btn:hover {
+  fill: #B05454;
+}

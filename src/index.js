@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import App from 'App.js';
+import App from 'app/App.js';
 
-const fps = 60;
+const FRAMES_PER_SECOND = 60;
 
 //Setup viewport
 window.addEventListener('load', (event) => {
@@ -13,18 +13,19 @@ window.addEventListener('load', (event) => {
 });
 
 //Setup application
-const root = document.getElementById("root");
+let prevtime = 0;
+let root = null;
 
 //Load application
 function loadApplication()
 {
-
+  root = document.getElementById("root");
 }
 
-let prevtime = 0;
+//Update application
 function updateApplication(time)
 {
-  const dt = (time - prevtime) / fps;
+  const dt = (time - prevtime) / FRAMES_PER_SECOND;
   {
     ReactDOM.render(React.createElement(App, {/*arguments*/}, null), root);
   }
