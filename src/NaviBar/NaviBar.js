@@ -92,7 +92,6 @@ export default class Example extends React.Component {
                 </NavLink>
               </NavItem>
             </Nav>
-            <NavbarToggler onClick={this.toggle} className="navToggler" />
           </Navbar>
         </div>
     );

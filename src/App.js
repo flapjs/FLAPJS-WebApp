@@ -1,11 +1,12 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
+import NaviBar from './NaviBar/NaviBar';
 
 class App extends React.Component
 {
   render()
   {
-    return <h1>Hello CSE105!</h1>;
+    return(<NaviBar/>);
   }
 }
 

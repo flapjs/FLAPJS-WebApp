@@ -9,14 +9,14 @@
 
 .navType {
     text-decoration: none;
-    color: #C69214;
+    color: #FFCD00;
     float: left;
     margin-left: 0px;
     font-size: 30px;
 }
 
 .navType:hover {
-    color: #C69214;
+    color: #F3E500;
 }
 
 .navOption {
