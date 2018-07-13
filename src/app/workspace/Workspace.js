@@ -8,7 +8,6 @@ import NodeRenderer from './renderer/NodeRenderer.js';
 import EdgeRenderer from './renderer/EdgeRenderer.js';
 import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
 import InitialMarkerRenderer from './renderer/InitialMarkerRenderer.js';
-import BorderRenderer from './renderer/BorderRenderer.js';
 
 class Workspace extends React.Component
 {
@@ -74,12 +73,6 @@ class Workspace extends React.Component
           { controller.pointer.target &&
             !controller.selector.isTargetSelected(controller.pointer.target) &&
             <Select target={controller.pointer.target} type={controller.pointer.targetType}/> }
-
-          //Border Element
-          <BorderRenderer mode={
-            controller.pointer.isTrashMode() ? 2 :
-            controller.pointer.isMoveMode() ? 1 : 0}/>
-
         </g> }
     </svg>;
   }

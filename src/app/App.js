@@ -16,6 +16,7 @@ class App extends React.Component
 
     this.state = {
       isOpen: false,
+      isDangerous: false,
       isFullscreen: false
     };
   }
@@ -53,9 +54,10 @@ class App extends React.Component
           </div>
 
           <div className={"workspace-viewport" +
-            (this.state.isOpen ? " open" : "")}>
+            (this.state.isOpen ? " open" : "") +
+            (this.state.isDangerous ? " danger" : "")}>
 
-            <Viewport controller={this.props.controller}/>
+            <Viewport app={this} controller={this.props.controller}/>
           </div>
 
           <div className={"workspace-drawer" +

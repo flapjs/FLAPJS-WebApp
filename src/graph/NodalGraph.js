@@ -1,6 +1,8 @@
 import Eventable from 'util/Eventable.js';
-
 import { NODE_RADIUS, SELF_LOOP_HEIGHT, PLACEHOLDER_LENGTH } from 'config.js';
+
+import DFA from 'machine/DFA.js';
+import NFA from 'machine/NFA.js';
 
 import Node from './Node.js';
 import Edge from './Edge.js';
@@ -105,9 +107,82 @@ class NodalGraph
   {
     return this.nodes.length > 0 ? this.nodes[0] : null;
   }
+
+  toFSA()
+  {
+    let result = this.toDFA();
+    if (result.validate())
+    {
+      return result;
+    }
+    else
+    {
+      result = this.toNFA();
+      return result;
+    }
+  }
+
+  toDFA()
+  {
+    const result = new DFA();
+    fillFSA(this, result);
+    return result;
+  }
+
+  toNFA()
+  {
+    const result = new NFA();
+    fillFSA(this, result);
+    return result;
+  }
 }
 //Mixin Eventable
 Object.assign(NodalGraph.prototype, Eventable);
+
+function fillFSA(graph, fsa)
+{
+  //Create all the nodes
+  for(const node of graph.nodes)
+  {
+    try
+    {
+      let state = node.label;
+      fsa.newState(state);
+
+      //Set final state
+      if (node.accept)
+      {
+        fsa.setFinalState(state, true);
+      }
+    }
+    catch(e)
+    {
+      throw e;
+    }
+  }
+
+  //Create all the edges
+  for(const edge of graph.edges)
+  {
+    //Ignore any incomplete edges
+    if (edge.isPlaceholder()) continue;
+
+    try
+    {
+      fsa.newTransition(edge.from, edge.to, edge.label);
+    }
+    catch(e)
+    {
+      throw e;
+    }
+  }
+
+  //Set start state
+  let startState = graph.getStartNode().label;
+  fsa.setStartState(startState);
+
+  return fsa;
+}
 
 function lerp(a, b, dt)
 {

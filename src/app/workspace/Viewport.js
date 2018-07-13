@@ -17,12 +17,22 @@ class Viewport extends React.Component
   {
     if (this.state.fullTrashMode) return;
     this.props.controller.pointer.trashMode = true;
+
+    //Enable danger mode for app
+    this.props.app.setState((prev, props) => {
+      return {isDangerous: true};
+    });
   }
 
   onTrashLeave(e)
   {
     if (this.state.fullTrashMode) return;
     this.props.controller.pointer.trashMode = false;
+
+    //Disable danger mode for app
+    this.props.app.setState((prev, props) => {
+      return {isDangerous: false};
+    });
   }
 
   onTrashClick(e)
@@ -33,9 +43,13 @@ class Viewport extends React.Component
     this.setState((prev, props) => {
       const result = !prev.fullTrashMode;
       this.props.controller.pointer.trashMode = result;
-      return {
-        fullTrashMode: result
-      };
+
+      //Toggle danger mode for app
+      this.props.app.setState((prev, props) => {
+        return {isDangerous: result};
+      });
+
+      return {fullTrashMode: result};
     });
   }
 
