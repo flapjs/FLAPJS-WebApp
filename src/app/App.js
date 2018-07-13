@@ -49,13 +49,13 @@ class App extends React.Component
           <div className={"workspace-main" +
             (this.state.isOpen ? " open" : "")}>
 
-            <Workspace />
+            <Workspace graph={this.props.graph} controller={this.props.controller}/>
           </div>
 
           <div className={"workspace-viewport" +
             (this.state.isOpen ? " open" : "")}>
 
-            <Viewport />
+            <Viewport controller={this.props.controller}/>
           </div>
 
           <div className={"workspace-drawer" +
