@@ -7,7 +7,7 @@ class InputController
   constructor(graph)
   {
     this.graph = graph;
-    this.viewport = null;
+    this.workspace = null;
 
     this.pointer = new GraphPointer(this.graph);
 
@@ -17,12 +17,12 @@ class InputController
     }
   }
 
-  initialize(viewport)
+  initialize(app, workspace)
   {
-    this.viewport = viewport;
-    this.viewport.addEventListener('mousedown', this.onMouseDown.bind(this));
-    this.viewport.addEventListener('contextmenu', this.onContextMenu.bind(this));
-    this.viewport.addEventListener('mousemove', this.onMouseMove.bind(this));
+    this.workspace = workspace;
+    this.workspace.addEventListener('mousedown', this.onMouseDown.bind(this));
+    this.workspace.addEventListener('contextmenu', this.onContextMenu.bind(this));
+    this.workspace.addEventListener('mousemove', this.onMouseMove.bind(this));
   }
 
   onUpdate(dt)
@@ -32,7 +32,7 @@ class InputController
 
   onMouseMove(e)
   {
-    const mouse = getMousePosition(this.viewport, e);
+    const mouse = getMousePosition(this.workspace, e);
     this.pointer.setPosition(mouse.x, mouse.y);
   }
 
@@ -60,17 +60,19 @@ class InputController
 
     const pointer = this.pointer;
     pointer.moveMode = (e.button == 2);//If right click
-    const mouse = getMousePosition(this.viewport, e);
+    const mouse = getMousePosition(this.workspace, e);
     pointer.setInitialPosition(mouse.x, mouse.y);
 
-    this.cursor._mousemove = this.onMouseDownAndMove.bind(this);
-    this.cursor._mouseup = this.onMouseDownAndUp.bind(this);
+    //Check whether to accept the start of input...
+    if (this.onInputDown(pointer.x, pointer.y,
+      pointer.initial.target, pointer.initial.targetType))
+    {
+      this.cursor._mousemove = this.onMouseDownAndMove.bind(this);
+      this.cursor._mouseup = this.onMouseDownAndUp.bind(this);
 
-    document.addEventListener('mousemove', this.cursor._mousemove);
-    document.addEventListener('mouseup', this.cursor._mouseup);
-
-    this.onInputDown(pointer.x, pointer.y,
-      pointer.initial.target, pointer.initial.targetType);
+      document.addEventListener('mousemove', this.cursor._mousemove);
+      document.addEventListener('mouseup', this.cursor._mouseup);
+    }
   }
 
   onMouseDownAndMove(e)
@@ -81,7 +83,7 @@ class InputController
     const pointer = this.pointer;
     pointer.updateTarget();
 
-    const mouse = getMousePosition(this.viewport, e);
+    const mouse = getMousePosition(this.workspace, e);
     pointer.setPosition(mouse.x, mouse.y);
 
     if (!pointer.dragging)
@@ -146,7 +148,12 @@ class InputController
       pointer.initial.target, pointer.initial.targetType);
   }
 
-  onInputDown(x, y, target, targetType) {}
+  //Returns true if should act on input, false to ignore remaining click events
+  onInputDown(x, y, target, targetType)
+  {
+    return true;
+  }
+
   onInputMove(x, y, target, targetType) {}
   onInputUp(x, y, target, targetType) {}
   onInputAction(x, y, target, targetType) {}

@@ -12,6 +12,7 @@ class NodeRenderer extends React.Component
   render()
   {
     const node = this.props.node;
+    //TODO: style={{cursor: "crosshair"}}
     return <g>
       //Outer circle
       <circle

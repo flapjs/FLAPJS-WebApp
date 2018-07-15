@@ -63,7 +63,7 @@ class EdgeRenderer extends React.Component
           const cx = (center && center.x || 0);
           const cy = (center && center.y || 0);
           const sign = Math.sign(edge.quad.y) || -1;
-          const yy = cy + sign * 15;
+          const yy = cy + (i * sign * 15);
 
           //TODO: ctx.clearRect(xx - cx - 2, yy - 5, (cx * 2) + 4, 10);
           return <text

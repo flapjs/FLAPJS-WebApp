@@ -12,7 +12,10 @@ class App extends React.Component
 {
   constructor(props)
   {
-    super(props)
+    super(props);
+
+    this.workspace = React.createRef();
+    this.viewport = React.createRef();
 
     this.state = {
       isOpen: false,
@@ -40,6 +43,18 @@ class App extends React.Component
     return this.state.isOpen;
   }
 
+  componentDidMount()
+  {
+    //Initialize the controller to graph components
+    this.props.controller.initialize(this, this.workspace.ref);
+  }
+
+  componentDidUpdate()
+  {
+    //Update input controller (usually mouse position for hover info)
+    this.props.controller.onUpdate();
+  }
+
   render()
   {
     return (
@@ -50,14 +65,14 @@ class App extends React.Component
           <div className={"workspace-main" +
             (this.state.isOpen ? " open" : "")}>
 
-            <Workspace graph={this.props.graph} controller={this.props.controller}/>
+            <Workspace ref={ref=>this.workspace=ref} graph={this.props.graph} controller={this.props.controller}/>
           </div>
 
           <div className={"workspace-viewport" +
             (this.state.isOpen ? " open" : "") +
             (this.state.isDangerous ? " danger" : "")}>
 
-            <Viewport app={this} controller={this.props.controller}/>
+            <Viewport ref={ref=>this.viewport=ref} app={this} controller={this.props.controller}/>
           </div>
 
           <div className={"workspace-drawer" +

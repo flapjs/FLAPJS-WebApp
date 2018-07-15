@@ -2,11 +2,16 @@ import React from 'react';
 
 import './Viewport.css';
 
+import LabelEditor from './LabelEditor.js';
+
 class Viewport extends React.Component
 {
   constructor(props)
   {
     super(props);
+
+    this.ref = React.createRef();
+    this.labelEditor = React.createRef();
 
     this.state = {
       fullTrashMode: false
@@ -55,7 +60,9 @@ class Viewport extends React.Component
 
   render()
   {
-    return <div className="viewport-container">
+    return <div className="viewport-container" ref={ref=>this.ref=ref}>
+      <LabelEditor workspace={this.props.app.workspace.ref} viewport={this.ref} ref={ref=>this.labelEditor=ref}/>
+
       <svg id="trash-btn" className="anchor-bottom-right"
         width="24" height="24"
         viewBox="0 0 24 24"
