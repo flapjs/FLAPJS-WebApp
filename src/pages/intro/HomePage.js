@@ -1,9 +1,7 @@
 import React from 'react';
 
-import Title from "./Title";
-import Circles from "./Circles";
-import Arrow from "./Arrow";
-import Footer from "./Footer"
+import Footer from "./Footer";
+import Header from "./Header";
 
 class HomePage extends React.Component{
 
@@ -12,22 +10,19 @@ class HomePage extends React.Component{
 
     }
 
-    render(){
-        return(
+    render() {
 
-            <div className = "title-container" >
+        return (
 
-                < Title/>
-                <Circles/>
-                <Arrow/>
+            <div className="container">
+                <Header/>
                 <Footer/>
-
-
-
             </div>
 
         );
+
     }
+
 }
 
 export default HomePage;

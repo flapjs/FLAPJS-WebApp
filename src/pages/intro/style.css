@@ -1,92 +1,46 @@
+.title {
 
-h1 {
-
-    font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
-
-    font-size: 4em;
-
-
+    width: 100%;
+    background-color: white;
+    border-bottom-style: solid;
+    margin-left: 0px;
 }
 
-body {
-    background-color: lightgray;
-}
+.title h1 {
 
 
-.title{
-
-    text-align: center;
+    font-family: 'Arvo', serif;
     color: black;
-
+    font-size: 50px;
+    text-align: left;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 10px;
 
 }
 
-.circles{
-    text-align: center;
+body{
+
+    background-color: #29FFF1;
 }
 
-/* Styling the green circles with text of homepage */
-.bcircle {
+.title img{
 
-    vertical-align: top;
-
-    background-color: #4CAF50;
-
-
-    width: 15em;
-    height: 15em;
-    margin: 20px 40px 20px;
-
-    border: 5px white dashed;
-    border-radius: 50%;
-
-    color: white;
-    padding: 4em 4em 4em 4em;
-    display: inline-block;
-    font-size: 1em;
-    cursor: pointer;
-
-
-    text-align: center;
-    text-decoration: none;
-    font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
-}
-
-/* circles have shade when you hover over them */
-.bcircle:hover{
-    background-color: #3e8e41;
-    box-shadow: 0 5px #666;
-    transform: translateY(20px);
-}
-
-.arrow {
-
-    margin-top: 3em;
-    margin-right: 6em;
-    text-align: right;
-    font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
-
-
+    height: 40px;
+    width: 60px;
 }
 
 .footer {
 
-    text-align: left;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    background-color: darkgray;
+    font-family: "Arvo", Serif;
+    position: absolute;
     width: 100%;
-
-
-}
-
-.ucsdlogo {
-
-    height: 75px;
-    width: 300px;
+    bottom: 0px;
+    border-top: solid;
+    background-color: white;
 
 }
+
 
 
 

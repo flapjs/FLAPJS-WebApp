@@ -5,10 +5,10 @@ import HomePage from 'pages/intro/HomePage.js';
 import WorkPage from 'pages/content/WorkPage.js';
 import Page404 from 'pages/Page404.js';
 
-const PAGES  {
+const PAGES = {
   '/': HomePage,
   '/content': WorkPage
-}
+};
 
 class App extends React.Component
 {
