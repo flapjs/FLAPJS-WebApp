@@ -51,10 +51,16 @@ class Drawer extends React.Component
 
   onMouseDown(ev)
   {
+    ev.stopPropagation();
+    ev.preventDefault();
+
     const app = this.props.app;
 
     const onMouseMove = function(ev)
     {
+      ev.stopPropagation();
+      ev.preventDefault();
+
       let size = 0;
       //This is the same criteria as in App.css
       if (window.matchMedia("(max-width: 400px)").matches)
@@ -70,6 +76,9 @@ class Drawer extends React.Component
 
     const onMouseUp = function(ev)
     {
+      ev.stopPropagation();
+      ev.preventDefault();
+      
       let size = 0;
       //This is the same criteria as in App.css
       if (window.matchMedia("(max-width: 400px)").matches)
