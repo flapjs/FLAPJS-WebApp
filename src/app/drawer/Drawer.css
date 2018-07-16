@@ -76,15 +76,6 @@
 .drawer-border > * {
   position: absolute;
   left: 0;
-  top: 50%;
-}
-.drawer-full {
-  cursor: pointer;
-  fill: #909090;
-  transition: fill 0.3s ease;
-}
-.drawer-full:hover {
-  fill: #FFFFFF;
 }
 
 @media screen and (max-width: 400px), screen and (max-height: 400px) {

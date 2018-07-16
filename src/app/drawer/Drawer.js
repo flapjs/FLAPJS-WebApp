@@ -5,6 +5,8 @@ import TestingPanel from './panels/TestingPanel.js';
 import FormattingPanel from './panels/FormattingPanel.js';
 import ExportingPanel from './panels/ExportingPanel.js';
 
+import ExpandButton from './ExpandButton.js';
+
 import './Drawer.css';
 
 const TESTING = 0;
@@ -86,12 +88,13 @@ class Drawer extends React.Component
 
   render()
   {
-    return <div className={"drawer-container" + (this.state.isFullscreen ? " fullscreen" : "")}>
+    return <div className={"drawer-container"}>
       <div className="drawer-content">
         {this.getTab(this.state.tabIndex)}
       </div>
 
       <div className="tab-list">
+        <ExpandButton open={this.props.app.state.isOpen}/>
         <button className={"tab-link" + (this.state.tabIndex == TESTING ? " active" : "")}
           onClick={this.setTab.bind(this, TESTING)}>
           Testing
@@ -112,11 +115,6 @@ class Drawer extends React.Component
 
       <div className="drawer-border"
         onMouseDown={this.onStartDraggingDrawerBorder.bind(this)}>
-        <div className="drawer-full">
-          <svg width="16" height="16" viewBox="4 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16.67 0l2.83 2.829-9.339 9.175 9.339 9.167-2.83 2.829-12.17-11.996z"/>
-          </svg>
-        </div>
       </div>
     </div>;
   }

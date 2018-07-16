@@ -5,8 +5,8 @@ import './App.css';
 
 import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
-import Drawer from './workspace/Drawer.js';
-import Viewport from './workspace/Viewport.js';
+import Drawer from './drawer/Drawer.js';
+import Viewport from './viewport/Viewport.js';
 
 class App extends React.Component
 {
