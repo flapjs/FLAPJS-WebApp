@@ -42,17 +42,14 @@ class Toolbar extends React.Component
     const app = this.props.app;
     const drawer = document.getElementsByTagName('Drawer')[0];
     return(
-        <div
-          onClick={app.state.isOpen ?
-            app.closeDrawer.bind(app) :
-            app.openDrawer.bind(app)}>
+        <div>
           <Navbar className="navBar" dark expand="md">
             <NavbarBrand className="navTitle single-line" href="/" contenteditable="true">Untitled</NavbarBrand>
             <UncontrolledDropdown>
               <DropdownToggle className="navType" nav caret>
                 {this.state.type}
               </DropdownToggle>
-              <DropdownMenu left>
+              <DropdownMenu left="true">
                 <DropdownItem onClick={() => { this.setType("DFA"); }}>
                   DFA
                 </DropdownItem>
@@ -61,17 +58,18 @@ class Toolbar extends React.Component
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-            <Nav className="navOption" navbar>
-              <NavItem className="navOption">
+            <ul>
+              <li className="navOption">
                 <NavLink href="#">
                   <SaveIcon/>
                 </NavLink>
-              </NavItem>
+              </li>
+              <li className="navOption">
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
                   <NewIcon/>
                 </DropdownToggle>
-                <DropdownMenu left>
+                <DropdownMenu left="true">
                   <DropdownItem>
                     Unload File
                   </DropdownItem>
@@ -80,20 +78,21 @@ class Toolbar extends React.Component
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
-            </Nav>
-            <Nav className="navOption" navbar>
-              <NavItem className="navOption">
+              </li>
+              <li className="navOption">
                 <NavLink href="#">
                   <UndoIcon/>
                 </NavLink>
-              </NavItem>
-              <NavItem className="navOption">
+              </li>
+              <li className="navOption">
                 <NavLink href="#">
                   <RedoIcon/>
                 </NavLink>
-              </NavItem>
-            </Nav>
-            <HamburgerIcon active={app.state.isOpen}/>
+              </li>
+              <div onClick={app.state.isOpen ? app.closeDrawer.bind(app) : app.openDrawer.bind(app)}>
+                <HamburgerIcon active={app.state.isOpen}/>
+              </div>
+            </ul>
           </Navbar>
         </div>
     );

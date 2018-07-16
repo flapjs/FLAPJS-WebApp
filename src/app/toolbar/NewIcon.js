@@ -7,7 +7,7 @@ export default class NewIcon extends React.Component{
 
   render() {
     return(
-        <svg className="navIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="36px" height="36px" viewBox="0 0 24 24" enable-background="new 0 0 24 24">
+        <svg className="navIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" width="36px" height="36px" viewBox="0 0 24 24" enableBackground="new 0 0 24 24">
           <g id="Bounding_Boxes">
             <g id="ui_x5F_spec_x5F_header_copy_3" display="none">
             </g>
