@@ -1,0 +1,17 @@
+.drawer-expand {
+  cursor: pointer;
+  fill: #909090;
+  transition: fill 0.3s ease, transform 0.3s ease;
+  transform: rotate(90deg);
+  margin: 4px;
+}
+.drawer-expand:hover {
+  fill: #FFFFFF;
+  transform: rotate(-90deg);
+}
+.drawer-expand.open {
+  transform: rotate(-90deg);
+}
+.drawer-expand.open:hover {
+  transform: rotate(90deg);
+}

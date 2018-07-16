@@ -5,14 +5,19 @@ import './App.css';
 
 import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
-import Drawer from './workspace/Drawer.js';
-import Viewport from './workspace/Viewport.js';
+import Drawer from './drawer/Drawer.js';
+import Viewport from './viewport/Viewport.js';
 
 class App extends React.Component
 {
   constructor(props)
   {
-    super(props)
+    super(props);
+
+    this.container = React.createRef();
+    this.workspace = React.createRef();
+    this.viewport = React.createRef();
+    this.drawer = React.createRef();
 
     this.state = {
       isOpen: false,
@@ -40,35 +45,49 @@ class App extends React.Component
     return this.state.isOpen;
   }
 
+  componentDidMount()
+  {
+    //Initialize the controller to graph components
+    this.props.controller.initialize(this, this.workspace.ref);
+  }
+
+  componentDidUpdate()
+  {
+    //Update input controller (usually mouse position for hover info)
+    this.props.controller.onUpdate();
+  }
+
   render()
   {
-    return (
-      <div className="app-container">
-        <Toolbar app={this}/>
+    const panelWidth = this.state.panelWidth;
 
-        <div className="workspace-container">
-          <div className={"workspace-main" +
-            (this.state.isOpen ? " open" : "")}>
+    return <div className="app-container" ref={ref=>this.container=ref}>
+      <Toolbar app={this}/>
 
-            <Workspace graph={this.props.graph} controller={this.props.controller}/>
-          </div>
+      <div className="workspace-container">
+        <div className={"workspace-main" +
+          (this.state.isOpen ? " open" : "")}
+          style={{visibility: this.state.isFullscreen ? "hidden" : "visible"}}>
 
-          <div className={"workspace-viewport" +
-            (this.state.isOpen ? " open" : "") +
-            (this.state.isDangerous ? " danger" : "")}>
+          <Workspace ref={ref=>this.workspace=ref} graph={this.props.graph} controller={this.props.controller}/>
+        </div>
 
-            <Viewport app={this} controller={this.props.controller}/>
-          </div>
+        <div className={"workspace-viewport" +
+          (this.state.isOpen ? " open" : "") +
+          (this.state.isDangerous ? " danger" : "")}
+          style={{visibility: this.state.isFullscreen ? "hidden" : "visible"}}>
 
-          <div className={"workspace-drawer" +
-            (this.state.isOpen ? " open" : "") +
-            (this.state.isFullscreen ? " fullscreen" : "")}>
+          <Viewport ref={ref=>this.viewport=ref} app={this} controller={this.props.controller}/>
+        </div>
 
-            <Drawer app={this}/>
-          </div>
+        <div className={"workspace-drawer" +
+          (this.state.isOpen ? " open" : "") +
+          (this.state.isFullscreen ? " fullscreen" : "")}>
+
+          <Drawer ref={ref=>this.drawer=ref} app={this}/>
         </div>
       </div>
-    );
+    </div>;
   }
 }
 

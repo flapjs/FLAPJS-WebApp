@@ -1,23 +1,10 @@
 import React from 'react';
-import HamburgerIcon from './HamburgerIcon.js';
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem } from 'reactstrap';
 
 import './Toolbar.css';
-import SaveIcon from './SaveIcon';
-import UndoIcon from './UndoIcon';
-import RedoIcon from './RedoIcon';
-import NewIcon from './NewIcon';
+import NewButton from './button/NewButton.js';
+import SaveButton from './button/SaveButton.js';
+import UndoButton from './button/UndoButton.js';
+import RedoButton from './button/RedoButton.js';
 
 class Toolbar extends React.Component
 {
@@ -40,62 +27,17 @@ class Toolbar extends React.Component
   render()
   {
     const app = this.props.app;
-    const drawer = document.getElementsByTagName('Drawer')[0];
-    return(
-        <div>
-          <Navbar className="navBar" dark expand="md">
-            <NavbarBrand className="navTitle single-line" href="/" contenteditable="true">Untitled</NavbarBrand>
-            <UncontrolledDropdown>
-              <DropdownToggle className="navType" nav caret>
-                {this.state.type}
-              </DropdownToggle>
-              <DropdownMenu left="true">
-                <DropdownItem onClick={() => { this.setType("DFA"); }}>
-                  DFA
-                </DropdownItem>
-                <DropdownItem onClick={() => { this.setType("NFA"); }}>
-                  NFA
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-            <ul>
-              <li className="navOption">
-                <NavLink href="#">
-                  <SaveIcon/>
-                </NavLink>
-              </li>
-              <li className="navOption">
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  <NewIcon/>
-                </DropdownToggle>
-                <DropdownMenu left="true">
-                  <DropdownItem>
-                    Unload File
-                  </DropdownItem>
-                  <DropdownItem>
-                    Start From Scratch
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-              </li>
-              <li className="navOption">
-                <NavLink href="#">
-                  <UndoIcon/>
-                </NavLink>
-              </li>
-              <li className="navOption">
-                <NavLink href="#">
-                  <RedoIcon/>
-                </NavLink>
-              </li>
-              <div onClick={app.state.isOpen ? app.closeDrawer.bind(app) : app.openDrawer.bind(app)}>
-                <HamburgerIcon active={app.state.isOpen}/>
-              </div>
-            </ul>
-          </Navbar>
-        </div>
-    );
+
+    return <div className="toolbar-container">
+      <div className="toolbar-title">
+        <input id="machine-name" type="text" defaultValue="Untitled"></input>
+        <label id="machine-type" for="machine-name">DFA</label>
+      </div>
+      <NewButton />
+      <SaveButton />
+      <UndoButton />
+      <RedoButton />
+    </div>;
   }
 }
 

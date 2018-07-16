@@ -14,19 +14,8 @@ class Workspace extends React.Component
   constructor(props)
   {
     super(props);
-    this.viewpowrt = React.createRef();
-  }
 
-  componentDidMount()
-  {
-    //Initialize the controller to graph components
-    this.props.controller.initialize(this.viewport);
-  }
-
-  componentDidUpdate()
-  {
-    //Update input controller (usually mouse position for hover info)
-    this.props.controller.onUpdate();
+    this.ref = React.createRef();
   }
 
   render()
@@ -35,7 +24,7 @@ class Workspace extends React.Component
     const controller = this.props.controller;
 
     //Must not be a block content (must inline)
-    return <svg id="workspace-content" ref={ref => this.viewport = ref}
+    return <svg id="workspace-content" ref={ref=>this.ref=ref}
       viewBox="-150 -150 300 300"
       xmlns="http://www.w3.org/2000/svg">
       //Graph objects
@@ -54,26 +43,26 @@ class Workspace extends React.Component
       </g>
 
       //Graph guis
-      { controller != null &&
-        <g>
-          //Initial marker (and ghost)
-          { graph.getStartNode() && (controller.ghostInitialMarker == null ?
-            <InitialMarkerRenderer node={graph.getStartNode()}/> :
-            <InitialMarkerRenderer node={controller.ghostInitialMarker}/>) }
+      <g>
+        //Initial marker (and ghost)
+        { graph.getStartNode() && (controller.ghostInitialMarker == null ?
+          <InitialMarkerRenderer node={graph.getStartNode()}/> :
+          <InitialMarkerRenderer node={controller.ghostInitialMarker}/>) }
 
-          //Selected Elements
-          { controller.selector.hasSelection() &&
-            controller.selector.getSelection().map((e, i) =>
-              <Select key={i} target={e} type="node"/>) }
+        //Selected Elements
+        { controller.selector.hasSelection() &&
+          controller.selector.getSelection().map((e, i) =>
+            <Select key={i} target={e} type="node"/>) }
 
-          //SelectionBox
-          <SelectionBoxRenderer src={controller.selector}/>
+        //SelectionBox
+        <SelectionBoxRenderer src={controller.selector}/>
 
-          //Hover Element
-          { controller.pointer.target &&
-            !controller.selector.isTargetSelected(controller.pointer.target) &&
-            <Select target={controller.pointer.target} type={controller.pointer.targetType}/> }
-        </g> }
+        //Hover Element
+        { controller.pointer.target &&
+          !controller.selector.isTargetSelected(controller.pointer.target) &&
+          <Select target={controller.pointer.target} type={controller.pointer.targetType}/> }
+
+        </g>
     </svg>;
   }
 }

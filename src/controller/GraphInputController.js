@@ -1,6 +1,5 @@
 import InputController from './InputController.js';
 import SelectionBox from './SelectionBox.js';
-//import LabelEditor from './LabelEditor.js';
 import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
 
@@ -12,7 +11,7 @@ class GraphInputController extends InputController
   {
     super(graph);
 
-    //this.labelEditor = new LabelEditor();
+    this.labelEditor = null;
 
     this.prevQuad = {x: 0, y: 0};
     this.firstEmptyClick = false;
@@ -24,6 +23,13 @@ class GraphInputController extends InputController
     this.shouldDestroyPointlessEdges = Config.DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
   }
 
+  initialize(app, workspace)
+  {
+    super.initialize(app, workspace);
+
+    this.labelEditor = app.viewport.labelEditor;
+  }
+
   onUpdate()
   {
     this.pointer.updateTarget();
@@ -31,6 +37,13 @@ class GraphInputController extends InputController
 
   onInputDown(x, y, target, targetType)
   {
+    //Make sure to lose focus on label editors
+    if (this.labelEditor.inputElement === document.activeElement)
+    {
+      this.labelEditor.inputElement.blur();
+      return false;
+    }
+
     if (this.selector.hasSelection())
     {
       //Unselect everything is clicked on something other than nodes...
@@ -39,6 +52,8 @@ class GraphInputController extends InputController
         this.selector.clearSelection();
       }
     }
+
+    return true;
   }
 
   onInputMove(x, y, target, targetType) {}
@@ -109,7 +124,7 @@ class GraphInputController extends InputController
       else if (targetType === 'edge')
       {
         //Edit label for selected edge
-        this.openLabelEditor(target);
+        this.openLabelEditor(target, x, y);
         return true;
       }
       //If hovered target is none...
@@ -402,7 +417,7 @@ class GraphInputController extends InputController
           if (target.label === Config.STR_TRANSITION_PROXY_LABEL)
           {
             target.label = Config.STR_TRANSITION_DEFAULT_LABEL;
-            this.openLabelEditor(target);
+            this.openLabelEditor(target, x, y);
           }
           return true;
         }
@@ -424,7 +439,7 @@ class GraphInputController extends InputController
             if (target.label === Config.STR_TRANSITION_PROXY_LABEL)
             {
               target.label = Config.STR_TRANSITION_DEFAULT_LABEL;
-              this.openLabelEditor(target);
+              this.openLabelEditor(target, x, y);
             }
             return true;
           }
@@ -477,11 +492,6 @@ class GraphInputController extends InputController
     return node;
   }
 
-  openLabelEditor(target, placeholder=null)
-  {
-    //this.labelEditor.open(target, placeholder);
-  }
-
   moveNodeTo(pointer, node, x, y)
   {
     node.x = x;
@@ -530,6 +540,11 @@ class GraphInputController extends InputController
       edge.quad.x = this.prevQuad.x;
       edge.quad.y = this.prevQuad.y;
     }
+  }
+
+  openLabelEditor(target, x, y, placeholder=null)
+  {
+    this.labelEditor.openEditor(target, placeholder);
   }
 }
 
