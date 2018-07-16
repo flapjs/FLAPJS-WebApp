@@ -19,6 +19,11 @@
 
 }
 
+body{
+
+    background-color: #29FFF1;
+}
+
 .title img{
 
     height: 40px;
@@ -30,8 +35,9 @@
     font-family: "Arvo", Serif;
     position: absolute;
     width: 100%;
-    bottom: 5px;
+    bottom: 0px;
     border-top: solid;
+    background-color: white;
 
 }
 

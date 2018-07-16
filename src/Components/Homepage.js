@@ -1,6 +1,7 @@
 import React from 'react';
 
-import pic from './Pictures/jflaplogo.png';
+import Footer from "./Footer";
+import Header from "./Header";
 
 class Homepage extends React.Component{
 
@@ -13,9 +14,11 @@ class Homepage extends React.Component{
 
         return (
 
-            <div className="title">
-                <h1>JFLAP <img src={pic} /> </h1>
+            <div className="container">
+                <Header/>
+                <Footer/>
             </div>
+
         );
 
     }
