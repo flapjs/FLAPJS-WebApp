@@ -20,7 +20,7 @@ class Toolbar extends React.Component
 
     return <div className="toolbar-container">
       <div className="toolbar-title">
-        <input id="machine-name" type="text" defaultValue="Untitled"></input>
+        <input id="machine-name" type="text" defaultValue="Untitled" />
       </div>
       <div>
       <label id="machine-type" for="machine-name">DFA</label>
