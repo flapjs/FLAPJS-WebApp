@@ -66,14 +66,16 @@ class App extends React.Component
 
       <div className="workspace-container">
         <div className={"workspace-main" +
-          (this.state.isOpen ? " open" : "")}>
+          (this.state.isOpen ? " open" : "")}
+          style={{visibility: this.state.isFullscreen ? "hidden" : "visible"}}>
 
           <Workspace ref={ref=>this.workspace=ref} graph={this.props.graph} controller={this.props.controller}/>
         </div>
 
         <div className={"workspace-viewport" +
           (this.state.isOpen ? " open" : "") +
-          (this.state.isDangerous ? " danger" : "")}>
+          (this.state.isDangerous ? " danger" : "")}
+          style={{visibility: this.state.isFullscreen ? "hidden" : "visible"}}>
 
           <Viewport ref={ref=>this.viewport=ref} app={this} controller={this.props.controller}/>
         </div>

@@ -14,7 +14,7 @@ class DrawerExpander extends React.Component
     const app = this.props.app;
     const open = app.state.isOpen;
     return <div className={"drawer-expand" + (open ? " open" : "")}
-      onClick={open ? app.closeDrawer.bind(app) : app.openDrawer.bind(app)}>
+      onClick={open ? app.closeDrawer.bind(app) : app.openDrawer.bind(app, false)}>
       <svg width="24" height="24"
         viewBox="0 0 18 24"
         xmlns="http://www.w3.org/2000/svg">

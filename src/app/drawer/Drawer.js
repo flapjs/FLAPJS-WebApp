@@ -32,6 +32,22 @@ class Drawer extends React.Component
 
   setTab(index)
   {
+    //Open drawer if it is closed
+    if (!this.props.app.state.isOpen)
+    {
+      this.props.app.openDrawer(false);
+    }
+    /*
+    //Close drawer if clicked on same one
+    else
+    {
+      if (this.state.tabIndex === index)
+      {
+        this.props.app.closeDrawer();
+      }
+    }
+    */
+
     this.setState((prev, props) => {
       return { tabIndex: index };
     });
@@ -61,13 +77,24 @@ class Drawer extends React.Component
 
     const app = this.props.app.container;
 
-    /*
-    //Opens the drawer if dragging, but closed
+    //Ignore drag move if closed
     if (!this.props.app.state.isOpen)
     {
+      /*
+      //Opens the drawer if dragging, but closed
       this.props.app.openDrawer();
+      */
+      return;
     }
-    */
+
+    //Disable fullscreen if dragging off of it
+    if (this.props.app.state.isFullscreen)
+    {
+      this.props.app.openDrawer(false);
+    }
+
+    //Update panel to current click position
+    updatePanelSize(app, ev);
 
     const onMouseMove = function(ev)
     {
@@ -96,13 +123,19 @@ class Drawer extends React.Component
 
   render()
   {
+    const app = this.props.app;
+
+    /*
+    //Double click to expand to fullscreen and normal
+    onDoubleClick={app.state.isOpen ? app.openDrawer.bind(app, true) : app.openDrawer.bind(app, false)}
+    */
     return <div className={"drawer-container"}>
       <div className="drawer-content">
         {this.getTab(this.state.tabIndex)}
       </div>
 
       <div className="tab-list">
-        <DrawerExpander app={this.props.app}/>
+        <DrawerExpander app={app}/>
         <button className={"tab-link" + (this.state.tabIndex == TESTING ? " active" : "")}
           onClick={this.setTab.bind(this, TESTING)}>
           Testing
