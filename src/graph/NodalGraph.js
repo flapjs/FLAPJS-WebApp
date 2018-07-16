@@ -18,10 +18,10 @@ import Edge from './Edge.js';
 //newInitial(node, oldNode) - Whenever a node becomes the initial state; oldNode could be null
 class NodalGraph
 {
-  constructor()
+  constructor(nodes=[], edges=[])
   {
-    this.nodes = [];
-    this.edges = [];
+    this.nodes = nodes;
+    this.edges = edges;
   }
 
   newNode(x, y, label)
@@ -106,6 +106,77 @@ class NodalGraph
   getStartNode()
   {
     return this.nodes.length > 0 ? this.nodes[0] : null;
+  }
+
+  static parseJSON(data)
+  {
+    const nodeLength = data.nodeCount;
+    const edgeLength = data.edgeCount;
+
+    if (nodeLength < 0) throw new Error("Invalid graph data: negative number of nodes.");
+    if (edgeLength < 0) throw new Error("Invalid graph data: negative number of edges.");
+
+    const dst = new NodalGraph(new Array(nodeLength), new Array(edgeLength));
+
+    //The initial node is always saved/loaded first!
+    for(let i = 0; i < nodeLength; ++i)
+    {
+      const node = data.nodes[i];
+      const newNode = new Node(dst, node.x || 0, node.y || 0, node.label || "q?");
+      newNode.accept = node.accept;
+      dst.nodes[i] = newNode;
+    }
+
+    for(let i = 0; i < edgeLength; ++i)
+    {
+      const edge = data.edges[i];
+
+      if (edge.from >= nodeLength || edge.from < 0) throw new Error("Invalid edge from data: node index \'" + edge.from + "\' out of bounds.");
+
+      const newEdge = new Edge(dst, dst.nodes[edge.from], edge.to < 0 ? null : dst.nodes[edge.to], edge.label || "0");
+      newEdge.quad.x = edge.quadx || 0;
+      newEdge.quad.y = edge.quady || 0;
+    }
+
+    return dst;
+  }
+
+  toJSON()
+  {
+    const nodeLength = this.nodes.length;
+    const edgeLength = this.edges.length;
+
+    const data = {
+      nodeCount: nodeLength,
+      nodes: new Array(nodeLength),
+      edgeCount: edgeLength,
+      edges: new Array(edgeLength)
+    };
+
+    for(let i = 0; i < nodeLength; ++i)
+    {
+      const node = this.nodes[i];
+      data.nodes[i] = {
+        x: node.x,
+        y: node.y,
+        label: node.label,
+        accept: node.accept
+      };
+    }
+
+    for(let i = 0; i < edgeLength; ++i)
+    {
+      const edge = this.edges[i];
+      data.edges[i] = {
+        from: this.nodes.indexOf(edge.from),
+        to: this.nodes.indexOf(edge.to),
+        quadx: edge.quad.x,
+        quady: edge.quad.y,
+        label: edge.label
+      };
+    }
+
+    return data;
   }
 
   toFSA()

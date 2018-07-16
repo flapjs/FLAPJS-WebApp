@@ -1,5 +1,7 @@
 import React from 'react';
 
+import download from 'util/Download.js';
+
 class SaveButton extends React.Component
 {
   constructor(props)
@@ -9,7 +11,8 @@ class SaveButton extends React.Component
 
   onClick(ev)
   {
-
+    const data = this.props.graph.toJSON();
+    download('flappyMachine.json', JSON.stringify(data));
   }
 
   render()

@@ -8,25 +8,15 @@ import RedoButton from './button/RedoButton.js';
 
 class Toolbar extends React.Component
 {
-  constructor(props) {
+  constructor(props)
+  {
     super(props);
-
-    this.setType = this.setType.bind(this);
-    this.state = {
-      isOpen: false,
-      type: "DFA"
-    };
-  }
-
-  setType(curType) {
-    this.setState({
-      type: curType
-    });
   }
 
   render()
   {
     const app = this.props.app;
+    const graph = this.props.graph;
 
     return <div className="toolbar-container">
       <div className="toolbar-title">
@@ -35,7 +25,7 @@ class Toolbar extends React.Component
       <div>
       <label id="machine-type" for="machine-name">DFA</label>
       <NewButton />
-      <SaveButton />
+      <SaveButton graph={graph}/>
       <UndoButton />
       <RedoButton />
       </div>
