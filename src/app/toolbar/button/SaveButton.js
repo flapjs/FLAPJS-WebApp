@@ -1,6 +1,6 @@
 import React from 'react';
 
-import download from 'util/Download.js';
+import Downloader from 'util/Downloader.js';
 
 class SaveButton extends React.Component
 {
@@ -12,7 +12,7 @@ class SaveButton extends React.Component
   onClick(ev)
   {
     const data = this.props.graph.toJSON();
-    download(this.props.getFileName() + '.json', JSON.stringify(data));
+    Downloader.downloadText(this.props.getFileName() + '.json', JSON.stringify(data));
   }
 
   render()

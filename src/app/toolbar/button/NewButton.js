@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Downloader from 'util/Downloader.js';
+
 class NewButton extends React.Component
 {
   constructor(props)
@@ -9,7 +11,8 @@ class NewButton extends React.Component
 
   onClick(ev)
   {
-
+    const workspace = this.props.workspace;
+    Downloader.downloadSVG(this.props.getFileName() + '.png', workspace.ref);
   }
 
   render()
