@@ -1,6 +1,6 @@
 .toolbar-container {
   display: flex;
-  height: 4em;
+  height: var(--toolbar-height);
   overflow: hidden;
 
   background: lightblue;

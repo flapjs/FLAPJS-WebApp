@@ -7,6 +7,8 @@
   flex-direction: column;
   height: 100%;
 
+  --toolbar-height: 4em;
+
   --panel-size: 300px;
   --panel-tab-size: 2em;
   --panel-border-size: 10px;
@@ -21,7 +23,7 @@
 .workspace-container {
   flex-grow: 1;
 
-  height: calc(100% - 4em);
+  height: calc(100% - var(--toolbar-height));
 }
 
 #workspace-content {
@@ -85,7 +87,7 @@
 @media screen and (max-width: 400px) {
   .workspace-main {
     right: 0px;/* Overwrite changes */
-    height: calc(100% - 4em - var(--panel-tab-border));/* Overwrite changes */
+    height: calc(100% - var(--toolbar-height) - var(--panel-tab-border));/* Overwrite changes */
 
     transition: bottom 0.3s ease;
 
@@ -95,7 +97,7 @@
     transition: height 0.3s ease;
 
     width: 100%;/* Overwrite changes */
-    height: calc(100% - 4em - var(--panel-tab-border));
+    height: calc(100% - var(--toolbar-height) - var(--panel-tab-border));
   }
   .workspace-drawer {
     right: -1 * var(--panel-size) + var(--panel-tab-border); /* Overwrite changes */
@@ -119,7 +121,7 @@
   .workspace-viewport.open {
     width: 100%; /* Overwrite changes */
 
-    height: calc(100% - 4em - var(--panel-size));/* Height - Drawer height - toolbar*/
+    height: calc(100% - var(--toolbar-height) - var(--panel-size));/* Height - Drawer height - toolbar*/
   }
   .workspace-drawer.open {
     right: 0px; /* Overwrite changes */
