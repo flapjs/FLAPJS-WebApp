@@ -31,12 +31,14 @@ class Toolbar extends React.Component
     return <div className="toolbar-container">
       <div className="toolbar-title">
         <input id="machine-name" type="text" defaultValue="Untitled"></input>
-        <label id="machine-type" for="machine-name">DFA</label>
       </div>
+      <div>
+      <label id="machine-type" for="machine-name">DFA</label>
       <NewButton />
       <SaveButton />
       <UndoButton />
       <RedoButton />
+      </div>
     </div>;
   }
 }

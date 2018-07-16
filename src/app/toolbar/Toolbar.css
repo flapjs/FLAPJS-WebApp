@@ -4,11 +4,21 @@
   margin: 0;
   border: none;
   font-size: 30px;
+  color: #B6B1A9;
+  border-bottom: 1px solid #182B49;
+  width: 6em;
+}
+#machine-name:focus {
+  outline: none;
 }
 
 #machine-type {
   color: #FFCD00;
-  font-size: 30px;
+  font-size: 25px;
+  position: absolute;
+  top: 35px;
+  left: 10px;
+  font-family: sans-serif;
 }
 
 .toolbar-container {
@@ -17,18 +27,18 @@
   height: var(--toolbar-height);
   overflow: hidden;
 
-  background: lightblue;
+  background-color: #006A96;
   box-shadow: 0px 0px 4px #000;
 }
 
-.toolbar-container {
-  background-color: #006A96;
-}
 .toolbar-button {
   background: none;/*Disable normal button style*/
   border: none;/*Disable normal button style*/
   padding: 0;/*Disable normal button style*/
   fill: white;
+
+  margin-left: 10px;
+  margin-right: 10px;
 
   width: 4em;
   height: 100%;
@@ -37,6 +47,9 @@
 }
 .toolbar-button:hover {
   fill: silver;
+}
+.toolbar-button:focus {
+  outline: none;
 }
 .navicons {
   width: 100%;
