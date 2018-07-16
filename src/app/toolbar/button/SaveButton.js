@@ -12,7 +12,7 @@ class SaveButton extends React.Component
   onClick(ev)
   {
     const data = this.props.graph.toJSON();
-    download('flappyMachine.json', JSON.stringify(data));
+    download(this.props.getFileName() + '.json', JSON.stringify(data));
   }
 
   render()

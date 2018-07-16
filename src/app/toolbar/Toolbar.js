@@ -11,6 +11,13 @@ class Toolbar extends React.Component
   constructor(props)
   {
     super(props);
+
+    this.machineName = React.createRef();
+  }
+
+  getMachineName()
+  {
+    return this.machineName.value;
   }
 
   render()
@@ -20,11 +27,11 @@ class Toolbar extends React.Component
 
     return <div className="toolbar-container">
       <div className="toolbar-title">
-        <input id="machine-name" type="text" defaultValue="Untitled"></input>
+        <input id="machine-name" type="text" defaultValue="Untitled" ref={ref=>this.machineName=ref}></input>
         <label id="machine-type" for="machine-name">DFA</label>
       </div>
       <NewButton />
-      <SaveButton graph={graph}/>
+      <SaveButton graph={graph} getFileName={this.getMachineName.bind(this)}/>
       <UndoButton />
       <RedoButton />
     </div>;
