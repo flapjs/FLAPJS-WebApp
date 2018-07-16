@@ -1,22 +1,20 @@
 import React from 'react';
 
-import './ExpandButton.css';
+import './DrawerExpander.css';
 
-class ExpandButton extends React.Component
+class DrawerExpander extends React.Component
 {
   constructor(props)
   {
     super(props);
-
-    this.state = {
-      isOpen: false
-    }
   }
 
   render()
   {
-    return <div className={"drawer-expand" +
-      (this.props.open ? " open" : "")}>
+    const app = this.props.app;
+    const open = app.state.isOpen;
+    return <div className={"drawer-expand" + (open ? " open" : "")}
+      onClick={open ? app.closeDrawer.bind(app) : app.openDrawer.bind(app)}>
       <svg width="24" height="24"
         viewBox="0 0 18 24"
         xmlns="http://www.w3.org/2000/svg">
@@ -26,4 +24,4 @@ class ExpandButton extends React.Component
   }
 }
 
-export default ExpandButton;
+export default DrawerExpander;

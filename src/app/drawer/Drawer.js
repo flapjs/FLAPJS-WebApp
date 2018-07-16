@@ -5,7 +5,7 @@ import TestingPanel from './panels/TestingPanel.js';
 import FormattingPanel from './panels/FormattingPanel.js';
 import ExportingPanel from './panels/ExportingPanel.js';
 
-import ExpandButton from './ExpandButton.js';
+import DrawerExpander from './DrawerExpander.js';
 
 import './Drawer.css';
 
@@ -61,6 +61,14 @@ class Drawer extends React.Component
 
     const app = this.props.app.container;
 
+    /*
+    //Opens the drawer if dragging, but closed
+    if (!this.props.app.state.isOpen)
+    {
+      this.props.app.openDrawer();
+    }
+    */
+
     const onMouseMove = function(ev)
     {
       ev.stopPropagation();
@@ -94,7 +102,7 @@ class Drawer extends React.Component
       </div>
 
       <div className="tab-list">
-        <ExpandButton open={this.props.app.state.isOpen}/>
+        <DrawerExpander app={this.props.app}/>
         <button className={"tab-link" + (this.state.tabIndex == TESTING ? " active" : "")}
           onClick={this.setTab.bind(this, TESTING)}>
           Testing
