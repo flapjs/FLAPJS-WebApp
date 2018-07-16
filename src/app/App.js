@@ -17,6 +17,7 @@ class App extends React.Component
     this.container = React.createRef();
     this.workspace = React.createRef();
     this.viewport = React.createRef();
+    this.drawer = React.createRef();
 
     this.state = {
       isOpen: false,
@@ -65,26 +66,23 @@ class App extends React.Component
 
       <div className="workspace-container">
         <div className={"workspace-main" +
-          (this.state.isOpen ? " open" : "")}
-          style={{}}>
+          (this.state.isOpen ? " open" : "")}>
 
           <Workspace ref={ref=>this.workspace=ref} graph={this.props.graph} controller={this.props.controller}/>
         </div>
 
         <div className={"workspace-viewport" +
           (this.state.isOpen ? " open" : "") +
-          (this.state.isDangerous ? " danger" : "")}
-          style={{}}>
+          (this.state.isDangerous ? " danger" : "")}>
 
           <Viewport ref={ref=>this.viewport=ref} app={this} controller={this.props.controller}/>
         </div>
 
         <div className={"workspace-drawer" +
           (this.state.isOpen ? " open" : "") +
-          (this.state.isFullscreen ? " fullscreen" : "")}
-          style={{}}>
+          (this.state.isFullscreen ? " fullscreen" : "")}>
 
-          <Drawer app={this.container}/>
+          <Drawer ref={ref=>this.drawer=ref} app={this}/>
         </div>
       </div>
     </div>;
