@@ -6,6 +6,8 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  --panel-size: 400px;
 }
 
 .toolbar-container{
@@ -58,22 +60,22 @@
 .workspace-drawer {
   z-index: 999;
   position: fixed;
-  width: 300px;/* Drawer width */
+  width: var(--panel-size);/* Drawer width */
   height: inherit;
 
   transition: right 0.3s ease;
 
-  right: -300px;/* -(Drawer width) */
+  right: calc(-1 * var(--panel-size));/* -(Drawer width) */
 }
 
 .workspace-main.open {
-  right: 150px;/* (Drawer width) / 2 */
+  right: calc(var(--panel-size) / 2);/* (Drawer width) / 2 */
 }
 .workspace-viewport.open {
-  width: calc(100% - 300px);/* width - (Drawer width) */
+  width: calc(100% - var(--panel-size));/* width - (Drawer width) */
 }
 .workspace-drawer.open {
-  right: 0px;
+  right: 0px;/* At edge */
 }
 
 @media screen and (max-width: 400px) {
@@ -90,28 +92,28 @@
     height: inherit;
   }
   .workspace-drawer {
-    right: -300px; /* Overwrite changes */
+    right: calc(-1 * var(--panel-size)); /* Overwrite changes */
 
     width: 100%;
-    height: 300px;/* Drawer height */
+    height: var(--panel-size);/* Drawer height */
 
     /* BUGFIX: when expands, it will not translate the right property*/
     transition:
       right 0.3s step-end,
       bottom 0.3s ease;
 
-    bottom: -300px;/* -(Drawer width) */
+    bottom: calc(-1 * var(--panel-size));/* -(Drawer width) */
   }
 
   .workspace-main.open {
     right: 0px; /* Overwrite changes */
 
-    bottom: 150px;/* (Drawer width) / 2 */
+    bottom: calc(var(--panel-size) / 2);/* (Drawer width) / 2 */
   }
   .workspace-viewport.open {
     width: 100%; /* Overwrite changes */
 
-    height: calc(100% - 300px - 4em);/* Height - Drawer height - toolbar*/
+    height: calc(100% - var(--panel-size) - 4em);/* Height - Drawer height - toolbar*/
   }
   .workspace-drawer.open {
     right: 0px; /* Overwrite changes */

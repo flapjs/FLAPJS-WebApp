@@ -14,6 +14,7 @@ class App extends React.Component
   {
     super(props);
 
+    this.container = React.createRef();
     this.workspace = React.createRef();
     this.viewport = React.createRef();
 
@@ -57,33 +58,36 @@ class App extends React.Component
 
   render()
   {
-    return (
-      <div className="app-container">
-        <Toolbar app={this}/>
+    const panelWidth = this.state.panelWidth;
 
-        <div className="workspace-container">
-          <div className={"workspace-main" +
-            (this.state.isOpen ? " open" : "")}>
+    return <div className="app-container" ref={ref=>this.container=ref}>
+      <Toolbar app={this}/>
 
-            <Workspace ref={ref=>this.workspace=ref} graph={this.props.graph} controller={this.props.controller}/>
-          </div>
+      <div className="workspace-container">
+        <div className={"workspace-main" +
+          (this.state.isOpen ? " open" : "")}
+          style={{}}>
 
-          <div className={"workspace-viewport" +
-            (this.state.isOpen ? " open" : "") +
-            (this.state.isDangerous ? " danger" : "")}>
+          <Workspace ref={ref=>this.workspace=ref} graph={this.props.graph} controller={this.props.controller}/>
+        </div>
 
-            <Viewport ref={ref=>this.viewport=ref} app={this} controller={this.props.controller}/>
-          </div>
+        <div className={"workspace-viewport" +
+          (this.state.isOpen ? " open" : "") +
+          (this.state.isDangerous ? " danger" : "")}
+          style={{}}>
 
-          <div className={"workspace-drawer" +
-            (this.state.isOpen ? " open" : "") +
-            (this.state.isFullscreen ? " fullscreen" : "")}>
+          <Viewport ref={ref=>this.viewport=ref} app={this} controller={this.props.controller}/>
+        </div>
 
-            <Drawer app={this}/>
-          </div>
+        <div className={"workspace-drawer" +
+          (this.state.isOpen ? " open" : "") +
+          (this.state.isFullscreen ? " fullscreen" : "")}
+          style={{}}>
+
+          <Drawer app={this.container}/>
         </div>
       </div>
-    );
+    </div>;
   }
 }
 

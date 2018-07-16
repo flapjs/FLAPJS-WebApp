@@ -49,6 +49,49 @@ class Drawer extends React.Component
     }
   }
 
+  onMouseDown(ev)
+  {
+    const app = this.props.app;
+
+    const onMouseMove = function(ev)
+    {
+      let size = 0;
+      //This is the same criteria as in App.css
+      if (window.matchMedia("(max-width: 400px)").matches)
+      {
+        size = app.offsetHeight - ev.clientY;
+      }
+      else
+      {
+        size = app.offsetWidth - ev.clientX;
+      }
+      app.style.setProperty("--panel-size", size + "px");
+    };
+
+    const onMouseUp = function(ev)
+    {
+      let size = 0;
+      //This is the same criteria as in App.css
+      if (window.matchMedia("(max-width: 400px)").matches)
+      {
+        size = app.offsetHeight - ev.clientY;
+      }
+      else
+      {
+        size = app.offsetWidth - ev.clientX;
+      }
+      app.style.setProperty("--panel-size", size + "px");
+
+      //Remove listeners that are no longer needed
+      document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("mousemove", onMouseMove);
+    };
+
+    //Start listening to move and release events
+    document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener("mousemove", onMouseMove);
+  }
+
   render()
   {
     return <div className={"drawer-container" + (this.state.isFullscreen ? " fullscreen" : "")}>
@@ -75,7 +118,8 @@ class Drawer extends React.Component
         </button>
       </div>
 
-      <div className="drawer-border">
+      <div className="drawer-border"
+        onMouseDown={this.onMouseDown.bind(this)}>
         <div className="drawer-full">
           <svg width="16" height="16" viewBox="4 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M16.67 0l2.83 2.829-9.339 9.175 9.339 9.167-2.83 2.829-12.17-11.996z"/>
