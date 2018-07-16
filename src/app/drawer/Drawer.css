@@ -1,5 +1,5 @@
 .drawer-container {
-  padding-left: calc(2em + 10px);/* Height of tabs + border */
+  padding-left: var(--panel-tab-border);/* Height of tabs + border */
   height: 100%;
 
   background: #575757;
@@ -18,10 +18,10 @@
 
   position: absolute;
   top: 0;
-  left: 10px;/* border */
+  left: var(--panel-border-size);/* border */
 
   width: calc(100vh - 4em);/* Parent width - toolbar */
-  height: 2em;/* Height of tabs */
+  height: var(--panel-tab-size);/* Height of tabs */
   transform-origin: top left;
   transform: rotate(-90deg) translateX(-100%);
 
@@ -68,7 +68,7 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 10px;/* border */
+  width: var(--panel-border-size);/* border */
   height: 100%;
 
   background: #3D3D3D;
@@ -80,14 +80,14 @@
 
 @media screen and (max-width: 400px), screen and (max-height: 400px) {
   .drawer-container {
-    padding-top: 2em;/* Height of tabs */
-    height: calc(100% - 2em);/* Parent height - Height of tabs */
+    padding-top: var(--panel-tab-size);/* Height of tabs */
+    height: calc(100% - var(--panel-tab-size));/* Parent height - Height of tabs */
 
     transition: padding-top 0.2s;
   }
   .tab-list {
     flex-direction: row;
-    width: calc(100% - 10px);/* Parent width - border */
+    width: calc(100% - var(--panel-border-size));/* Parent width - border */
 
     transform: none;
   }
@@ -98,18 +98,18 @@
 
 @media screen and (max-width: 400px) {
   .drawer-container {
-    padding-left: 2em;/* Height of tabs */
-    padding-top: calc(2em + 10px);/* Height of tabs + border */
+    padding-left: var(--panel-tab-size);/* Height of tabs */
+    padding-top: var(--panel-tab-border);/* Height of tabs + border */
   }
   .tab-list {
-    top: 10px;
-    left: 0px;/* border */
+    top: var(--panel-border-size);/* border */
+    left: 0px;
 
     width: 100%;/* Parent width */
   }
   .drawer-border {
     width: 100%;
-    height: 10px;/* border */
+    height: var(--panel-border-size);/* border */
   }
   .drawer-border > * {
     left: 50%;
