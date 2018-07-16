@@ -7,12 +7,12 @@ import ExportingPanel from './panels/ExportingPanel.js';
 
 import './Drawer.css';
 
-const OVERVIEW = 0;
-const TESTING = 1;
+const TESTING = 0;
+const OVERVIEW = 1;
 const FORMATTING = 2;
 const EXPORTING = 3;
 
-const DEFAULT_TAB_INDEX = OVERVIEW;
+const DEFAULT_TAB_INDEX = TESTING;
 
 class Drawer extends React.Component
 {
@@ -57,13 +57,13 @@ class Drawer extends React.Component
       </div>
 
       <div className="tab-list">
-        <button className={"tab-link" + (this.state.tabIndex == OVERVIEW ? " active" : "")}
-          onClick={this.setTab.bind(this, OVERVIEW)}>
-          <span>Overview</span>
-        </button>
         <button className={"tab-link" + (this.state.tabIndex == TESTING ? " active" : "")}
           onClick={this.setTab.bind(this, TESTING)}>
           Testing
+        </button>
+        <button className={"tab-link" + (this.state.tabIndex == OVERVIEW ? " active" : "")}
+          onClick={this.setTab.bind(this, OVERVIEW)}>
+          <span>Definition</span>
         </button>
         <button className={"tab-link" + (this.state.tabIndex == FORMATTING ? " active" : "")}
           onClick={this.setTab.bind(this, FORMATTING)}>
