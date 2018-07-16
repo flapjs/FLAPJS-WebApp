@@ -1,20 +1,21 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
 
-import Homepage from './Components/Homepage';
+import HomePage from 'pages/intro/HomePage.js';
+import WorkPage from 'pages/content/WorkPage.js';
+import Page404 from 'pages/Page404.js';
+
+const PAGES  {
+  '/': HomePage,
+  '/content': WorkPage
+}
+
 class App extends React.Component
 {
   render()
   {
-    return(
-
-        <div className = "homepage-container">
-
-            < Homepage/>
-
-        </div>
-
-    );
+    const PageHandler = PAGES[this.props.pathname] || Page404;
+    return <PageHandler><PageHandler/>;
   }
 }
 

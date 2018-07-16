@@ -7,10 +7,15 @@ class Arrow extends React.Component{
 
     }
 
+    onClick(ev)
+    {
+      alert("GO TO OTHER PAGE!");
+    }
+
     render(){
         return(
 
-            <div className = "arrow">
+            <div className = "arrow" onClick={this.onClick.bind(this)}>
 
                 <h2> Let's Get Started</h2>
 

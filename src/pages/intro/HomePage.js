@@ -1,10 +1,11 @@
 import React from 'react';
+
 import Title from "./Title";
 import Circles from "./Circles";
 import Arrow from "./Arrow";
 import Footer from "./Footer"
 
-class Homepage extends React.Component{
+class HomePage extends React.Component{
 
     constructor(props){
         super(props)
@@ -29,4 +30,4 @@ class Homepage extends React.Component{
     }
 }
 
-export default Homepage;
+export default HomePage;
