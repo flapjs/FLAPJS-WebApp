@@ -21,19 +21,13 @@ module.exports = {
         use: [ 'style-loader', 'css-loader' ]
       },
         {
-            test: /\.(jpg|png|svg)$/,
-            loader: 'url-loader',
-            options: {
-                limit: 25000,
-            },
+            test: /\.(gif|jpe?g|png|ico)$/,
+            loader: 'url-loader?limit=10000'
         },
         {
-            test: /\.(jpg|png|svg)$/,
-            loader: 'file-loader',
-            options: {
-                name: '[path][name].[hash].[ext]',
-            },
-        }
+            test: /\.(otf|eot|svg|ttf|woff|woff2).*$/,
+            loader: 'url-loader?limit=10000'
+        },
     ]
   },
   resolve: {
