@@ -59,17 +59,18 @@ class App extends React.Component
 
   render()
   {
-    const panelWidth = this.state.panelWidth;
+    const controller = this.props.controller;
+    const graph = this.props.graph;
 
     return <div className="app-container" ref={ref=>this.container=ref}>
-      <Toolbar app={this}/>
+      <Toolbar app={this} graph={graph}/>
 
       <div className="workspace-container">
         <div className={"workspace-main" +
           (this.state.isOpen ? " open" : "")}
           style={{visibility: this.state.isFullscreen ? "hidden" : "visible"}}>
 
-          <Workspace ref={ref=>this.workspace=ref} graph={this.props.graph} controller={this.props.controller}/>
+          <Workspace ref={ref=>this.workspace=ref} graph={graph} controller={controller}/>
         </div>
 
         <div className={"workspace-viewport" +
@@ -77,7 +78,7 @@ class App extends React.Component
           (this.state.isDangerous ? " danger" : "")}
           style={{visibility: this.state.isFullscreen ? "hidden" : "visible"}}>
 
-          <Viewport ref={ref=>this.viewport=ref} app={this} controller={this.props.controller}/>
+          <Viewport ref={ref=>this.viewport=ref} app={this} controller={controller}/>
         </div>
 
         <div className={"workspace-drawer" +
