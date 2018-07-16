@@ -1,12 +1,12 @@
 #machine-name {
   background: none;
   padding: 0;
-  margin: 0;
   border: none;
   font-size: 30px;
   color: #B6B1A9;
   border-bottom: 1px solid #182B49;
   width: 6em;
+  margin: 0 15px 0 0;
 }
 #machine-name:focus {
   outline: none;
@@ -24,6 +24,7 @@
 .toolbar-container {
   padding-left: 10px;
   display: flex;
+
   height: var(--toolbar-height);
   overflow: hidden;
 
@@ -36,11 +37,11 @@
   border: none;/*Disable normal button style*/
   padding: 0;/*Disable normal button style*/
   fill: white;
+  justify-content: flex-end;
+  margin-right: 15px;
 
-  margin-left: 10px;
-  margin-right: 10px;
 
-  width: 4em;
+  width: 3.5em;
   height: 100%;
 
   transition: fill 0.3s ease;
@@ -54,4 +55,14 @@
 .navicons {
   width: 100%;
   height: 100%;
+}
+
+#toolbar-help {
+  margin-left: auto;
+
+  fill: #FFCD00;
+  width: 3em;
+}
+#toolbar-help:hover {
+  fill: #C69214
 }
