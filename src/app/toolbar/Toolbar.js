@@ -5,6 +5,7 @@ import NewButton from './button/NewButton.js';
 import SaveButton from './button/SaveButton.js';
 import UndoButton from './button/UndoButton.js';
 import RedoButton from './button/RedoButton.js';
+import ExportButton from "./button/ExportButton";
 
 class Toolbar extends React.Component
 {
@@ -30,13 +31,11 @@ class Toolbar extends React.Component
         <input id="machine-name" type="text" defaultValue="Untitled" ref={ref=>this.machineName=ref}/>
         <label id="machine-type" for="machine-name">DFA</label>
       </div>
-      <div>
-      <label id="machine-type" for="machine-name">DFA</label>
       <NewButton />
       <SaveButton graph={graph} getFileName={this.getMachineName.bind(this)}/>
       <UndoButton />
       <RedoButton />
-      </div>
+      <ExportButton/>
     </div>;
   }
 }
