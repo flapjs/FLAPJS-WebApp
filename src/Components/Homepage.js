@@ -1,8 +1,6 @@
 import React from 'react';
-import Title from "./Title";
-import Circles from "./Circles";
-import Arrow from "./Arrow";
-import Footer from "./Footer"
+
+import logo from './Pictures/jflaplogo.png';
 
 class Homepage extends React.Component{
 
@@ -12,20 +10,13 @@ class Homepage extends React.Component{
     }
 
     render(){
-        return(
 
-            <div className = "title-container" >
-
-                < Title/>
-                <Circles/>
-                <Arrow/>
-                <Footer/>
-
-
-
+        return (
+            <div className = "title">
+                <h1>JFLAP <img src={logo} /> </h1>
             </div>
-
         );
+
     }
 }
 
