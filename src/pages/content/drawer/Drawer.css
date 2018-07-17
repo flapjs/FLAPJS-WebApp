@@ -1,0 +1,120 @@
+.drawer-container {
+  padding-left: var(--panel-tab-border);/* Height of tabs + border */
+  height: 100%;
+
+  background: #575757;
+  color: #FFFFFF;
+
+  transition: padding-top 0.2s;
+
+  /* DEBUG */
+  /*
+  background: red;
+  */
+}
+.tab-list {
+  display: flex;
+  flex-direction: row-reverse;
+
+  position: absolute;
+  top: 0;
+  left: var(--panel-border-size);/* border */
+
+  width: calc(100vh - 4em);/* Parent width - toolbar */
+  height: var(--panel-tab-size);/* Height of tabs */
+  transform-origin: top left;
+  transform: rotate(-90deg) translateX(-100%);
+
+  /* border-bottom: 1px solid lightgray; */
+
+  /* DEBUG */
+  /*
+  background: black;
+  */
+}
+.tab-list button {
+  flex: 1;
+
+  background: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  height: 100%;
+  transition: color 0.3s;
+
+  color: #909090;
+}
+.tab-list button:hover {
+  color: #FFFFFF;
+}
+.tab-list button.active {
+  transition: border-width 0.3s;
+  border-bottom: 4px solid #DEFFBD !important;
+  color: #DEFFBD;
+}
+.drawer-content {
+  padding-left: 10px;
+  padding-right: 10px;
+
+  height: 100%;
+
+  /* DEBUG */
+  /*
+  background: blue;
+  */
+}
+.drawer-border {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: var(--panel-border-size);/* border */
+  height: 100%;
+
+  background: #3D3D3D;
+}
+.drawer-border > * {
+  position: absolute;
+  left: 0;
+}
+
+@media screen and (max-width: 400px), screen and (max-height: 400px) {
+  .drawer-container {
+    padding-top: var(--panel-tab-size);/* Height of tabs */
+    height: calc(100% - var(--panel-tab-size));/* Parent height - Height of tabs */
+
+    transition: padding-top 0.2s;
+  }
+  .tab-list {
+    flex-direction: row;
+    width: calc(100% - var(--panel-border-size));/* Parent width - border */
+
+    transform: none;
+  }
+  .drawer-content {
+    height: 100%;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .drawer-container {
+    padding-left: var(--panel-tab-size);/* Height of tabs */
+    padding-top: var(--panel-tab-border);/* Height of tabs + border */
+  }
+  .tab-list {
+    top: var(--panel-border-size);/* border */
+    left: 0px;
+
+    width: 100%;/* Parent width */
+  }
+  .drawer-border {
+    width: 100%;
+    height: var(--panel-border-size);/* border */
+  }
+  .drawer-border > * {
+    left: 50%;
+    top: -2px;/* Fix offset positioning */
+
+    transform: rotate(90deg);
+  }
+}

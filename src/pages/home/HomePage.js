@@ -3,6 +3,8 @@ import React from 'react';
 import Footer from "./Footer";
 import Header from "./Header";
 
+import './HomePage.css';
+
 class HomePage extends React.Component{
 
     constructor(props){
@@ -14,7 +16,7 @@ class HomePage extends React.Component{
 
         return (
 
-            <div className="container">
+            <div className="homepage-container">
                 <Header/>
                 <Footer/>
             </div>
