@@ -13,7 +13,7 @@ const PAGES = {
   '/app': App
 };
 const ROUTER = {
-  pathname: "/"
+  pathname: "/app"
 };
 
 const FRAMES_PER_SECOND = 60;

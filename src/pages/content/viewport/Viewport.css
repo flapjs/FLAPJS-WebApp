@@ -1,9 +1,7 @@
 .viewport-container {
-  width: 100%;
-  height: 100%;
-
-  pointer-events: none;
+  /*TODO: this should be 100% width and height, but it blocks the trash can :3*/
 }
+
 .anchor-bottom-right{
   position: absolute;
   bottom: 0px;
