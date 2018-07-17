@@ -7,6 +7,8 @@ import UndoButton from './button/UndoButton.js';
 import RedoButton from './button/RedoButton.js';
 import ExportButton from "./button/ExportButton";
 import HelpButton from "./button/HelpButton";
+import UploadButton from "./button/UploadButton";
+import DownloadButton from "./button/DownloadButton";
 
 class Toolbar extends React.Component
 {
@@ -33,10 +35,11 @@ class Toolbar extends React.Component
         <label id="machine-type" for="machine-name">DFA</label>
       </div>
       <NewButton />
+      <UploadButton/>
       <SaveButton graph={graph} getFileName={this.getMachineName.bind(this)}/>
       <UndoButton />
       <RedoButton />
-      <ExportButton/>
+      <DownloadButton/>
       <HelpButton/>
     </div>;
   }
