@@ -12,6 +12,9 @@ const PAGES = {
   '/': HomePage,
   '/app': App
 };
+const ROUTER = {
+  pathname: "/"
+};
 
 const FRAMES_PER_SECOND = 60;
 
@@ -45,8 +48,8 @@ function updateApplication(time)
 {
   const dt = (time - prevtime) / FRAMES_PER_SECOND;
   {
-    const PageHandler = PAGES['/'] || Page404;
-    ReactDOM.render(React.createElement(PageHandler, { graph: graph, controller: controller }, null), root);
+    const PageHandler = PAGES[ROUTER.pathname] || Page404;
+    ReactDOM.render(React.createElement(PageHandler, { router: ROUTER, graph: graph, controller: controller }, null), root);
   }
   prevtime = time;
   window.requestAnimationFrame(updateApplication);
