@@ -1,6 +1,5 @@
 //https://material.io/tools/icons/?icon=cloud_download&style=outline
 import React from 'react';
-import download from "../../../util/Download";
 
 class DownloadButton extends React.Component
 {
