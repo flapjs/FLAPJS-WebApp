@@ -12,6 +12,8 @@ const PAGES = {
   '/': HomePage,
   '/app': App
 };
+
+//TODO: this should be set by the server! initially it should be '/'.
 const ROUTER = {
   pathname: "/app"
 };
