@@ -1,15 +1,15 @@
 import React from 'react';
+import { hot } from 'react-hot-loader';
+
+import './HomePage.css';
 
 import Footer from "./Footer";
 import Header from "./Header";
 
-import './HomePage.css';
+class HomePage extends React.Component {
 
-class HomePage extends React.Component{
-
-    constructor(props){
-        super(props)
-
+    constructor(props) {
+        super(props);
     }
 
     render() {
@@ -27,4 +27,5 @@ class HomePage extends React.Component{
 
 }
 
-export default HomePage;
+//For hotloading this class
+export default hot(module)(HomePage);
