@@ -20,7 +20,7 @@ class NewButton extends React.Component
     return <button className="toolbar-button" id="toolbar-new"
       onClick={this.onClick.bind(this)}>
       <svg className="navicons"
-        viewBox="0 0 24 24"
+        viewBox="0 0 24 24" enableBackground="new 0 0 24 24"
         xmlns="http://www.w3.org/2000/svg">
         <g id="Rounded" display="none">
           <path display="inline" d="M14.59,2.59C14.21,2.21,13.7,2,13.17,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.89,2,1.99,2H18c1.1,0,2-0.9,2-2 V8.83c0-0.53-0.21-1.04-0.59-1.41L14.59,2.59z M15,16h-2v2c0,0.55-0.45,1-1,1h0c-0.55,0-1-0.45-1-1v-2H9c-0.55,0-1-0.45-1-1v0 c0-0.55,0.45-1,1-1h2v-2c0-0.55,0.45-1,1-1h0c0.55,0,1,0.45,1,1v2h2c0.55,0,1,0.45,1,1v0C16,15.55,15.55,16,15,16z M13,8V3.5 L18.5,9H14C13.45,9,13,8.55,13,8z"/>

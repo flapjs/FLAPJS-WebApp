@@ -17,7 +17,6 @@ class UndoButton extends React.Component
     return <button className="toolbar-button" id="toolbar-undo"
       onClick={this.onClick.bind(this)}>
       <svg className="navicons"
-        width="36px" height="36px"
         viewBox="0 0 24 24"
         enableBackground="new 0 0 24 24"
         xmlns="http://www.w3.org/2000/svg">
