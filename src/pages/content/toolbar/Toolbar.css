@@ -35,6 +35,7 @@
 .toolbar-button {
   background: none;/*Disable normal button style*/
   border: none;/*Disable normal button style*/
+  outline: none;/*Disable normal button style*/
   padding: 0;/*Disable normal button style*/
   fill: white;
   justify-content: flex-end;
@@ -47,10 +48,7 @@
   transition: fill 0.3s ease;
 }
 .toolbar-button:hover {
-  fill: silver;
-}
-.toolbar-button:focus {
-  outline: none;
+  fill: #FFCD00;
 }
 .toolbar-button:disabled {
   fill: #005C82;
@@ -67,7 +65,7 @@
   width: 3em;
 }
 #toolbar-help:hover {
-  fill: #C69214
+  fill: #C69214;
 }
 
 #import-file {

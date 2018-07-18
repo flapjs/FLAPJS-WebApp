@@ -99,6 +99,10 @@ class GraphInputController extends InputController
         //Click to delete node
         if (targetType === 'node')
         {
+          //So that the emitted 'delete' events can use this
+          this.prevX = x;
+          this.prevY = y;
+
           //If there exists selected states, delete them all!
           const selector = this.selector;
           if (selector.hasSelection())
