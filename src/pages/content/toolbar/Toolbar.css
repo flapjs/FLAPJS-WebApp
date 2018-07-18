@@ -52,6 +52,9 @@
 .toolbar-button:focus {
   outline: none;
 }
+.toolbar-button:disabled {
+  fill: #005C82;
+}
 .navicons {
   width: 100%;
   height: 100%;

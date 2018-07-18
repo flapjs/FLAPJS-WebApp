@@ -9,12 +9,14 @@ class UndoButton extends React.Component
 
   onClick(ev)
   {
-    this.props.eventHistory.undo();
+    const eventHistory = this.props.eventHistory;
+    eventHistory.undo();
   }
 
   render()
   {
     return <button className="toolbar-button" id="toolbar-undo"
+      disabled={!this.props.eventHistory.canUndo()}
       onClick={this.onClick.bind(this)}>
       <svg className="navicons"
         viewBox="0 0 24 24"

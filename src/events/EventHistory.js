@@ -28,7 +28,7 @@ class EventHistory
 
   undo()
   {
-    if (this.canUndo())
+    if (!this.canUndo())
     {
       //Already the oldeset recorded event!
       return;
@@ -42,7 +42,7 @@ class EventHistory
 
   redo()
   {
-    if (this.canRedo())
+    if (!this.canRedo())
     {
       //Already the most recent event!
       return;
@@ -56,12 +56,12 @@ class EventHistory
 
   canUndo()
   {
-    return this.offsetIndex >= this.history.length;
+    return this.offsetIndex < this.history.length;
   }
 
   canRedo()
   {
-    return this.offsetIndex <= 0;
+    return this.offsetIndex > 0;
   }
 }
 

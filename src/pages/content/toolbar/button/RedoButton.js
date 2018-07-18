@@ -9,12 +9,14 @@ class RedoButton extends React.Component
 
   onClick(ev)
   {
-    this.props.eventHistory.redo();
+    const eventHistory = this.props.eventHistory;
+    eventHistory.redo();
   }
 
   render()
   {
     return <button className="toolbar-button" id="toolbar-redo"
+      disabled={!this.props.eventHistory.canRedo()}
       onClick={this.onClick.bind(this)}>
       <svg className="navicons"
         viewBox="0 0 24 24"
