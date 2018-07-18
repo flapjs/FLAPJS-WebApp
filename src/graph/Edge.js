@@ -200,7 +200,7 @@ class Edge
     let prevDst = this._to;
     this._to = value;
 
-    //Reset quad coords
+    //Default
     this.quad.x = 0;
     this.quad.y = 0;//this.from.y - SELF_LOOP_HEIGHT;
 
@@ -223,14 +223,16 @@ class Edge
 
   makePlaceholder()
   {
+    const prev = this.to;
+
     //If not already a placeholder, make it so.
     if (this.to !== null)
     {
       this.to = null;
     }
 
-    const dx = this.to ? this.from.x - this.to.x : 1;
-    const dy = this.to ? this.from.y - this.to.y : 0;
+    const dx = prev ? this.from.x - prev.x : -1;
+    const dy = prev ? this.from.y - prev.y : 0;
     const angle = -Math.atan2(dx, dy) - (Math.PI / 2);
 
     //Quad is re-used to determine edge angle for placeholder

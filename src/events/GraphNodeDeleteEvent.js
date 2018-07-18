@@ -33,6 +33,7 @@ class GraphNodeDeleteEvent extends Event
       }
       else if (edge.to === this.node)
       {
+        //Save quad information for placeholders
         this.inEdges.push(edge);
       }
     }
@@ -91,7 +92,6 @@ class GraphNodeDeleteEvent extends Event
     //In edges
     for(const edge of this.inEdges)
     {
-      edge.to = null;
       edge.makePlaceholder();
     }
 
