@@ -17,6 +17,7 @@ import GraphEdgeLabelEvent from 'events/GraphEdgeLabelEvent.js';
 import GraphEdgeMoveEvent from 'events/GraphEdgeMoveEvent.js';
 
 import GraphNodeAcceptEvent from 'events/GraphNodeAcceptEvent.js';
+import GraphNodeInitialEvent from 'events/GraphNodeInitialEvent.js';
 import GraphNodeCreateEvent from 'events/GraphNodeCreateEvent.js';
 import GraphNodeDeleteAllEvent from 'events/GraphNodeDeleteAllEvent.js';
 import GraphNodeDeleteEvent from 'events/GraphNodeDeleteEvent.js';
@@ -88,6 +89,8 @@ class App extends React.Component
       eventHistory.handleEvent(new GraphNodeMoveAllEvent(graph, targetNodes, dx, dy)));
     controller.on("nodeAccept", (targetNode, nextAccept, prevAccept) =>
       eventHistory.handleEvent(new GraphNodeAcceptEvent(graph, targetNode, nextAccept, prevAccept)));
+    controller.on("nodeInitial", (nextInitial, prevInitial) =>
+      eventHistory.handleEvent(new GraphNodeInitialEvent(graph, nextInitial, prevInitial)));
     controller.on("nodeLabel", (targetNode, nextLabel, prevLabel) =>
       eventHistory.handleEvent(new GraphNodeLabelEvent(graph, targetNode, nextLabel, prevLabel)));
 

@@ -12,6 +12,7 @@ nodeDeleteAll(targetNodes, selectedNode, prevX, prevY)
 nodeMove(targetNode, nextX, nextY, prevX, prevY)
 nodeMoveAll(targetNodes, dx, dy)
 nodeAccept(targetNode, nextAccept, prevAccept)
+nodeInitial(nextInitial, prevInitial)
 nodeLabel(targetNode, nextLabel, prevLabel)//Not used
 
 edgeCreate(targetEdge)
@@ -526,8 +527,13 @@ class GraphInputController extends InputController
         //If valid initial object to mark...
         if (this.ghostInitialMarker instanceof Node)
         {
+          const prevInitial = this.graph.getStartNode();
+
           //Set the new object as the initial node
           this.graph.setStartNode(this.ghostInitialMarker);
+
+          //Emit event
+          this.emit("nodeInitial", this.ghostInitialMarker, prevInitial);
         }
 
         //Reset ghost initial marker
