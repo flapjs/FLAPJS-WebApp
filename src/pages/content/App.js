@@ -15,8 +15,9 @@ import GraphEdgeDeleteEvent from 'events/GraphEdgeDeleteEvent.js';
 import GraphEdgeDestinationEvent from 'events/GraphEdgeDestinationEvent.js';
 import GraphEdgeLabelEvent from 'events/GraphEdgeLabelEvent.js';
 import GraphEdgeMoveEvent from 'events/GraphEdgeMoveEvent.js';
+
 import GraphNodeAcceptEvent from 'events/GraphNodeAcceptEvent.js';
-import GraphNodeCreateEvent from 'events/GraphEdgeCreateEvent.js';
+import GraphNodeCreateEvent from 'events/GraphNodeCreateEvent.js';
 import GraphNodeDeleteAllEvent from 'events/GraphNodeDeleteAllEvent.js';
 import GraphNodeDeleteEvent from 'events/GraphNodeDeleteEvent.js';
 import GraphNodeLabelEvent from 'events/GraphNodeLabelEvent.js';
@@ -72,7 +73,7 @@ class App extends React.Component
     //Insert event listeners
     const eventHistory = this.eventHistory;
     const graph = this.props.graph;
-    
+
     controller.on("nodeCreate", targetNode =>
       eventHistory.handleEvent(new GraphNodeCreateEvent(graph, targetNode)));
     controller.on("nodeDelete", targetNode =>
