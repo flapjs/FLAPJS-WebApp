@@ -10,6 +10,19 @@ import Viewport from './viewport/Viewport.js';
 
 import EventHistory from 'events/EventHistory.js';
 
+import GraphEdgeCreateEvent from 'events/GraphEdgeCreateEvent.js';
+import GraphEdgeDeleteEvent from 'events/GraphEdgeDeleteEvent.js';
+import GraphEdgeDestinationEvent from 'events/GraphEdgeDestinationEvent.js';
+import GraphEdgeLabelEvent from 'events/GraphEdgeLabelEvent.js';
+import GraphEdgeMoveEvent from 'events/GraphEdgeMoveEvent.js';
+import GraphNodeAcceptEvent from 'events/GraphNodeAcceptEvent.js';
+import GraphNodeCreateEvent from 'events/GraphEdgeCreateEvent.js';
+import GraphNodeDeleteAllEvent from 'events/GraphNodeDeleteAllEvent.js';
+import GraphNodeDeleteEvent from 'events/GraphNodeDeleteEvent.js';
+import GraphNodeLabelEvent from 'events/GraphNodeLabelEvent.js';
+import GraphNodeMoveEvent from 'events/GraphNodeMoveEvent.js';
+import GraphNodeMoveAllEvent from 'events/GraphNodeMoveAllEvent.js';
+
 class App extends React.Component
 {
   constructor(props)
@@ -57,20 +70,34 @@ class App extends React.Component
     controller.initialize(this, this.workspace.ref);
 
     //Insert event listeners
+    const eventHistory = this.eventHistory;
     const graph = this.props.graph;
-    controller.on("nodeCreate", targetNode => console.log("create"));
-    controller.on("nodeDelete", targetNode => console.log("delete"));
-    controller.on("nodeDeleteAll", targetNodes => console.log("deleteall"));
-    controller.on("nodeMove", (targetNode, nextX, nextY, prevX, prevY) => console.log("move"));
-    controller.on("nodeMoveAll", (targetNodes, dx, dy) => console.log("moveall"));
-    controller.on("nodeAccept", (targetNode, nextAccept, prevAccept) => console.log("accept"));
-    controller.on("nodeLabel", (targetNode, nextLabel, prevLabel) => console.log("label"));
+    
+    controller.on("nodeCreate", targetNode =>
+      eventHistory.handleEvent(new GraphNodeCreateEvent(graph, targetNode)));
+    controller.on("nodeDelete", targetNode =>
+      eventHistory.handleEvent(new GraphNodeDeleteEvent(graph, targetNode)));
+    controller.on("nodeDeleteAll", targetNodes =>
+      eventHistory.handleEvent(new GraphNodeDeleteAllEvent(graph, targetNodes)));
+    controller.on("nodeMove", (targetNode, nextX, nextY, prevX, prevY) =>
+      eventHistory.handleEvent(new GraphNodeMoveEvent(graph, targetNode, nextX, nextY, prevX, prevY)));
+    controller.on("nodeMoveAll", (targetNodes, dx, dy) =>
+      eventHistory.handleEvent(new GraphNodeMoveAllEvent(graph, targetNodes, dx, dy)));
+    controller.on("nodeAccept", (targetNode, nextAccept, prevAccept) =>
+      eventHistory.handleEvent(new GraphNodeAcceptEvent(graph, targetNode, nextAccept, prevAccept)));
+    controller.on("nodeLabel", (targetNode, nextLabel, prevLabel) =>
+      eventHistory.handleEvent(new GraphNodeLabelEvent(graph, targetNode, nextLabel, prevLabel)));
 
-    controller.on("edgeCreate", targetNode => console.log("edgecreate"));
-    controller.on("edgeDelete", targetNode => console.log("edgedelete"));
-    controller.on("edgeDestination", (targetNode, nextDestination, prevDestination) => console.log("edgedest"));
-    controller.on("edgeMove", (targetNode, nextX, nextY, prevX, prevY) => console.log("edgemove"));
-    controller.on("edgeLabel", (targetNode, nextLabel, prevLabel) => console.log("edgelabel"));
+    controller.on("edgeCreate", targetEdge =>
+      eventHistory.handleEvent(new GraphEdgeCreateEvent(graph, targetEdge)));
+    controller.on("edgeDelete", targetEdge =>
+      eventHistory.handleEvent(new GraphEdgeDeleteEvent(graph, targetEdge)));
+    controller.on("edgeDestination", (targetEdge, nextDestination, prevDestination) =>
+      eventHistory.handleEvent(new GraphEdgeDestinationEvent(graph, targetEdge, nextDestination, prevDestination)));
+    controller.on("edgeMove", (targetEdge, nextX, nextY, prevX, prevY) =>
+      eventHistory.handleEvent(new GraphEdgeMoveEvent(graph, targetEdge, nextX, nextY, prevX, prevY)));
+    controller.on("edgeLabel", (targetEdge, nextLabel, prevLabel) =>
+      eventHistory.handleEvent(new GraphEdgeLabelEvent(graph, targetEdge, nextLabel, prevLabel)));
   }
 
   componentDidUpdate()
