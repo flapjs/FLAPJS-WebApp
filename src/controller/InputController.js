@@ -1,3 +1,4 @@
+import Eventable from 'util/Eventable.js';
 import * as Config from 'config.js';
 
 import GraphPointer from './GraphPointer.js';
@@ -162,6 +163,8 @@ class InputController
   onDragMove(x, y, target, targetType) {}
   onDragStop(x, y, target, targetType) {}
 }
+//Mixin Eventable
+Object.assign(InputController.prototype, Eventable);
 
 function getMousePosition(svg, ev)
 {

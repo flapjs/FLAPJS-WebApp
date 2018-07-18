@@ -9,7 +9,7 @@ class UndoButton extends React.Component
 
   onClick(ev)
   {
-
+    this.props.eventHistory.undo();
   }
 
   render()

@@ -33,6 +33,7 @@ class Toolbar extends React.Component
   {
     const app = this.props.app;
     const graph = this.props.graph;
+    const eventHistory = this.props.eventHistory;
     const getMachineName = this.getMachineName.bind(this);
 
     return <div className="toolbar-container">
@@ -43,8 +44,8 @@ class Toolbar extends React.Component
       <NewButton workspace={app.workspace} getFileName={getMachineName}/>
       <UploadButton/>
       <SaveButton graph={graph} getFileName={getMachineName}/>
-      <UndoButton />
-      <RedoButton />
+      <UndoButton eventHistory={eventHistory}/>
+      <RedoButton eventHistory={eventHistory}/>
       <DownloadButton/>
       <HelpButton/>
     </div>;

@@ -192,7 +192,7 @@ class Edge
   set label(value) {
     let prevLabel = this._label;
     this._label = value;
-    this.graph.emit("edgeLabel", this, this._label, prevLabel);
+    //this.graph.emit("edgeLabel", this, this._label, prevLabel);
   }
 
   get to() { return this._to; }
@@ -204,19 +204,31 @@ class Edge
     this.quad.x = 0;
     this.quad.y = 0;//this.from.y - SELF_LOOP_HEIGHT;
 
-    this.graph.emit("edgeDestination", this, this._to, prevDst);
+    if (prevDst !== this._to)
+    {
+      //this.graph.emit("edgeDestination", this, this._to, prevDst);
+    }
   }
 
   makeSelfLoop(angle)
   {
-    const from = this.from;
-    this.to = from;
+    //If not already a self loop, make it so.
+    if (this.from !== this.to)
+    {
+      this.to = this.from;
+    }
     this.setQuadraticByRelative(-Math.cos(angle) * SELF_LOOP_HEIGHT,
       -Math.sin(angle) * SELF_LOOP_HEIGHT);
   }
 
   makePlaceholder()
   {
+    //If not already a placeholder, make it so.
+    if (this.to !== null)
+    {
+      this.to = null;
+    }
+
     const dx = this.to ? this.from.x - this.to.x : 1;
     const dy = this.to ? this.from.y - this.to.y : 0;
     const angle = -Math.atan2(dx, dy) - (Math.PI / 2);
@@ -224,7 +236,6 @@ class Edge
     //Quad is re-used to determine edge angle for placeholder
     this.quad.x = Math.cos(angle);
     this.quad.y = Math.sin(angle);
-    this.to = null;
   }
 
   isPlaceholder()

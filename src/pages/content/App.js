@@ -8,6 +8,8 @@ import Workspace from './workspace/Workspace.js';
 import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
 
+import EventHistory from 'events/EventHistory.js';
+
 class App extends React.Component
 {
   constructor(props)
@@ -18,6 +20,8 @@ class App extends React.Component
     this.workspace = React.createRef();
     this.viewport = React.createRef();
     this.drawer = React.createRef();
+
+    this.eventHistory = new EventHistory();
 
     this.state = {
       isOpen: false,
@@ -47,8 +51,26 @@ class App extends React.Component
 
   componentDidMount()
   {
+    const controller = this.props.controller;
+
     //Initialize the controller to graph components
-    this.props.controller.initialize(this, this.workspace.ref);
+    controller.initialize(this, this.workspace.ref);
+
+    //Insert event listeners
+    const graph = this.props.graph;
+    controller.on("nodeCreate", targetNode => console.log("create"));
+    controller.on("nodeDelete", targetNode => console.log("delete"));
+    controller.on("nodeDeleteAll", targetNodes => console.log("deleteall"));
+    controller.on("nodeMove", (targetNode, nextX, nextY, prevX, prevY) => console.log("move"));
+    controller.on("nodeMoveAll", (targetNodes, dx, dy) => console.log("moveall"));
+    controller.on("nodeAccept", (targetNode, nextAccept, prevAccept) => console.log("accept"));
+    controller.on("nodeLabel", (targetNode, nextLabel, prevLabel) => console.log("label"));
+
+    controller.on("edgeCreate", targetNode => console.log("edgecreate"));
+    controller.on("edgeDelete", targetNode => console.log("edgedelete"));
+    controller.on("edgeDestination", (targetNode, nextDestination, prevDestination) => console.log("edgedest"));
+    controller.on("edgeMove", (targetNode, nextX, nextY, prevX, prevY) => console.log("edgemove"));
+    controller.on("edgeLabel", (targetNode, nextLabel, prevLabel) => console.log("edgelabel"));
   }
 
   componentDidUpdate()
@@ -63,7 +85,7 @@ class App extends React.Component
     const graph = this.props.graph;
 
     return <div className="app-container" ref={ref=>this.container=ref}>
-      <Toolbar app={this} graph={graph}/>
+      <Toolbar app={this} graph={graph} eventHistory={this.eventHistory}/>
 
       <div className="workspace-container">
         <div className={"workspace-main" +

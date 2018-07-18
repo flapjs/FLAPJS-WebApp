@@ -9,7 +9,7 @@ class RedoButton extends React.Component
 
   onClick(ev)
   {
-
+    this.props.eventHistory.redo();
   }
 
   render()

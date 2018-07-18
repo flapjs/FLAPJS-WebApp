@@ -17,15 +17,17 @@ class LabelEditor extends React.Component
     this.inputElement = React.createRef();
 
     this.state = {
-      target: null
+      target: null,
+      callback: null
     };
   }
 
-  openEditor(targetEdge, defaultText=null)
+  openEditor(targetEdge, defaultText=null, callback=null)
   {
     this.setState((prev, props) => {
       return {
-        target: targetEdge
+        target: targetEdge,
+        callback: callback
       };
     });
 
@@ -41,6 +43,8 @@ class LabelEditor extends React.Component
     {
       if (saveOnExit) this.state.target.label = this.inputElement.value;
       this.state.target = null;
+
+      if (this.state.callback) this.state.callback();
     }
 
     //Reset label editor

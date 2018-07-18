@@ -8,14 +8,8 @@ class EventHistory
     this.offsetIndex = 0;
   }
 
-  handleEvent(undoFunc, redoFunc)
+  handleEvent(event)
   {
-    //Create the undo/redo event for the future
-    const result = {
-      applyUndo: undoFunc,
-      applyRedo: redoFunc
-    };
-
     //Pop it all until current event
     while(this.offsetIndex > 0)
     {
@@ -24,7 +18,7 @@ class EventHistory
     }
 
     //Push the current event to the stack
-    this.history.push(result);
+    this.history.push(event);
 
     while(this.history.length > MAX_HISTORY_LENGTH)
     {
