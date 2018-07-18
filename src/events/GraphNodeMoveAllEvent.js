@@ -16,13 +16,21 @@ class GraphNodeMoveAllEvent extends Event
   //Override
   applyUndo()
   {
-    console.log("undo move all nodes");
+    for(const node of this.nodes)
+    {
+      node.x -= this.dx;
+      node.y -= this.dy;
+    }
   }
 
   //Override
   applyRedo()
   {
-    console.log("redo move all nodes");
+    for(const node of this.nodes)
+    {
+      node.x += this.dx;
+      node.y += this.dy;
+    }
   }
 }
 

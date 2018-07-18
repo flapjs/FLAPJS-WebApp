@@ -16,13 +16,13 @@ class GraphNodeAcceptEvent extends Event
   //Override
   applyUndo()
   {
-    console.log("undo accept node");
+    this.node.accept = this.prevAccept;
   }
 
   //Override
   applyRedo()
   {
-    console.log("redo accept node");
+    this.node.accept = this.nextAccept;
   }
 }
 

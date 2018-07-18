@@ -13,13 +13,16 @@ class GraphEdgeCreateEvent extends Event
   //Override
   applyUndo()
   {
-    console.log("undo create an edge");
+    const index = this.graph.edges.indexOf(this.edge);
+    if (index < 0) throw new Error("Unable to find target in graph");
+
+    this.graph.edges.splice(index, 1);
   }
 
   //Override
   applyRedo()
   {
-    console.log("redo create an edge");
+    this.graph.edges.push(this.edge);
   }
 }
 

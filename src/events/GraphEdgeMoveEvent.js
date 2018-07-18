@@ -18,13 +18,15 @@ class GraphEdgeMoveEvent extends Event
   //Override
   applyUndo()
   {
-    console.log("undo move edge");
+    this.edge.quad.x = this.prevX;
+    this.edge.quad.y = this.prevY;
   }
 
   //Override
   applyRedo()
   {
-    console.log("redo move edge");
+    this.edge.quad.x = this.nextX;
+    this.edge.quad.y = this.nextY;
   }
 }
 

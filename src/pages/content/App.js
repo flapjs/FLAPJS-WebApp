@@ -76,10 +76,12 @@ class App extends React.Component
 
     controller.on("nodeCreate", targetNode =>
       eventHistory.handleEvent(new GraphNodeCreateEvent(graph, targetNode)));
-    controller.on("nodeDelete", targetNode =>
-      eventHistory.handleEvent(new GraphNodeDeleteEvent(graph, targetNode)));
-    controller.on("nodeDeleteAll", targetNodes =>
-      eventHistory.handleEvent(new GraphNodeDeleteAllEvent(graph, targetNodes)));
+    controller.on("nodeDelete", (targetNode, prevX, prevY) =>
+      eventHistory.handleEvent(new GraphNodeDeleteEvent(graph, targetNode, prevX, prevY)));
+
+    controller.on("nodeDeleteAll", (targetNodes, selectedNode, prevX, prevY) =>
+      eventHistory.handleEvent(new GraphNodeDeleteAllEvent(graph, targetNodes, selectedNode, prevX, prevY)));
+
     controller.on("nodeMove", (targetNode, nextX, nextY, prevX, prevY) =>
       eventHistory.handleEvent(new GraphNodeMoveEvent(graph, targetNode, nextX, nextY, prevX, prevY)));
     controller.on("nodeMoveAll", (targetNodes, dx, dy) =>
@@ -93,8 +95,8 @@ class App extends React.Component
       eventHistory.handleEvent(new GraphEdgeCreateEvent(graph, targetEdge)));
     controller.on("edgeDelete", targetEdge =>
       eventHistory.handleEvent(new GraphEdgeDeleteEvent(graph, targetEdge)));
-    controller.on("edgeDestination", (targetEdge, nextDestination, prevDestination) =>
-      eventHistory.handleEvent(new GraphEdgeDestinationEvent(graph, targetEdge, nextDestination, prevDestination)));
+    controller.on("edgeDestination", (targetEdge, nextDestination, prevDestination, prevQuad) =>
+      eventHistory.handleEvent(new GraphEdgeDestinationEvent(graph, targetEdge, nextDestination, prevDestination, prevQuad)));
     controller.on("edgeMove", (targetEdge, nextX, nextY, prevX, prevY) =>
       eventHistory.handleEvent(new GraphEdgeMoveEvent(graph, targetEdge, nextX, nextY, prevX, prevY)));
     controller.on("edgeLabel", (targetEdge, nextLabel, prevLabel) =>

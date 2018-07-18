@@ -18,13 +18,15 @@ class GraphNodeMoveEvent extends Event
   //Override
   applyUndo()
   {
-    console.log("undo move node");
+    this.node.x = this.prevX;
+    this.node.y = this.prevY;
   }
 
   //Override
   applyRedo()
   {
-    console.log("redo move node");
+    this.node.x = this.nextX;
+    this.node.y = this.nextY;
   }
 }
 

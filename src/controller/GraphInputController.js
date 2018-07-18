@@ -7,8 +7,8 @@ import * as Config from 'config.js';
 
 /*
 nodeCreate(targetNode)
-nodeDelete(targetNode)
-nodeDeleteAll(targetNodes)
+nodeDelete(targetNode, prevX, prevY)
+nodeDeleteAll(targetNodes, selectedNode, prevX, prevY)
 nodeMove(targetNode, nextX, nextY, prevX, prevY)
 nodeMoveAll(targetNodes, dx, dy)
 nodeAccept(targetNode, nextAccept, prevAccept)
@@ -16,7 +16,7 @@ nodeLabel(targetNode, nextLabel, prevLabel)//Not used
 
 edgeCreate(targetEdge)
 edgeDelete(targetEdge)
-edgeDestination(targetEdge, nextDestination, prevDestination)
+edgeDestination(targetEdge, nextDestination, prevDestination, prevQuad)
 edgeMove(targetEdge, nextX, nextY, prevX, prevY)
 edgeLabel(targetEdge, nextLabel, prevLabel)
 */
@@ -104,7 +104,7 @@ class GraphInputController extends InputController
           if (selector.hasSelection())
           {
             //Delete all selected nodes
-            this.deleteSelectedNodes();
+            this.deleteSelectedNodes(target);
           }
           else
           {
@@ -133,12 +133,13 @@ class GraphInputController extends InputController
       //If selected target...
       if (targetType === 'node')
       {
+        const prev = target.accept;
         const result = !target.accept;
         //Toggle accept for selected node
         target.accept = result;
 
         //Emit event
-        this.emit("nodeAccept", target, result, target.accept);
+        this.emit("nodeAccept", target, result, prev);
         return true;
       }
       else if (targetType === 'edge')
@@ -400,7 +401,7 @@ class GraphInputController extends InputController
           const selector = this.selector;
           if (selector.hasSelection())
           {
-            this.deleteSelectedNodes();
+            this.deleteSelectedNodes(target);
           }
           else
           {
@@ -453,17 +454,6 @@ class GraphInputController extends InputController
             target._to = this.prevEdgeTo;
             //Finalize the edge (trigger the event)
             target.to = pointer.target;
-
-            //Emit event
-            this.emit("edgeDestination", target, target.to, this.prevEdgeTo);
-          }
-
-          if (this.isNewEdge)
-          {
-            this.isNewEdge = false;
-
-            //Emit event
-            this.emit("edgeCreate", target);
           }
 
           //If the cursor returns to the state after leaving it...
@@ -480,6 +470,19 @@ class GraphInputController extends InputController
           {
             target.quad.x = this.prevQuad.x;
             target.quad.y = this.prevQuad.y;
+          }
+
+          if (this.isNewEdge)
+          {
+            this.isNewEdge = false;
+
+            //Emit event
+            this.emit("edgeCreate", target);
+          }
+          else if (this.prevEdgeTo !== null)
+          {
+            //Emit event
+            this.emit("edgeDestination", target, target.to, this.prevEdgeTo, this.prevQuad);
           }
 
           //Open label editor if default edge...
@@ -561,19 +564,19 @@ class GraphInputController extends InputController
     return node;
   }
 
-  deleteSelectedNodes()
+  deleteSelectedNodes(selectedNode)
   {
     const selector = this.selector;
-    const deletedNodes = [];
+    const selection = selector.getSelection().slice();
+
+    //Emit event
+    this.emit("nodeDeleteAll", selection, selectedNode, this.prevX, this.prevY);
 
     //Remove from graph
-    for(const node of selector.getSelection())
+    for(const node of selection)
     {
       this.graph.deleteNode(node);
     }
-
-    //Emit event
-    this.emit("nodeDeleteAll", deletedNodes);
 
     //Remove from selection
     selector.clearSelection();
@@ -581,18 +584,18 @@ class GraphInputController extends InputController
 
   deleteTargetNode(target)
   {
-    this.graph.deleteNode(target);
-
     //Emit event
-    this.emit("nodeDelete", target);
+    this.emit("nodeDelete", target, this.prevX, this.prevY);
+
+    this.graph.deleteNode(target);
   }
 
   deleteTargetEdge(target)
   {
-    this.graph.deleteEdge(target);
-
     //Emit event
     this.emit("edgeDelete", target);
+
+    this.graph.deleteEdge(target);
   }
 
   moveNodeTo(pointer, node, x, y)
@@ -648,8 +651,13 @@ class GraphInputController extends InputController
   openLabelEditor(target, x, y, placeholder=null)
   {
     const prevLabel = placeholder || target.label;
-    this.labelEditor.openEditor(target, placeholder, () =>
-      this.emit("edgeLabel", target, target.label, prevLabel));
+    this.labelEditor.openEditor(target, placeholder, () => {
+      const label = target.label;
+      if (label != prevLabel)
+      {
+        this.emit("edgeLabel", target, label, prevLabel);
+      }
+    });
   }
 }
 

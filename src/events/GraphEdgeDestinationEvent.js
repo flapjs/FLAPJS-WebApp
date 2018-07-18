@@ -2,7 +2,7 @@ import Event from './Event.js';
 
 class GraphEdgeDestinationEvent extends Event
 {
-  constructor(graph, edge, nextDestination, prevDestination)
+  constructor(graph, edge, nextDestination, prevDestination, prevQuad)
   {
     super();
 
@@ -11,18 +11,26 @@ class GraphEdgeDestinationEvent extends Event
 
     this.nextDestination = nextDestination;
     this.prevDestination = prevDestination;
+    this.prevQuadX = prevQuad.x;
+    this.prevQuadY = prevQuad.y;
+    this.nextQuadX = edge.quad.x;
+    this.nextQuadY = edge.quad.y;
   }
 
   //Override
   applyUndo()
   {
-    console.log("undo set dest for edge");
+    this.edge.to = this.prevDestination;
+    this.edge.quad.x = this.prevQuadX;
+    this.edge.quad.y = this.prevQuadY;
   }
 
   //Override
   applyRedo()
   {
-    console.log("redo set dest for edge");
+    this.edge.to = this.nextDestination;
+    this.edge.quad.x = this.nextQuadX;
+    this.edge.quad.y = this.nextQuadY;
   }
 }
 

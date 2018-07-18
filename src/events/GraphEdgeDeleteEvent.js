@@ -13,13 +13,18 @@ class GraphEdgeDeleteEvent extends Event
   //Override
   applyUndo()
   {
-    console.log("undo delete an edge");
+    const index = this.graph.edges.indexOf(this.edge);
+    if (index < 0) throw new Error("Unable to find target in graph");
+
+    //Remove edge from graph
+    this.graph.edges.slice(index, 1);
   }
 
   //Override
   applyRedo()
   {
-    console.log("redo delete an edge");
+    //Add edge back to the graph
+    this.graph.edges.push(this.edge);
   }
 }
 

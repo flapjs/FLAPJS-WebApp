@@ -28,7 +28,7 @@ class EventHistory
 
   undo()
   {
-    if (this.offsetIndex >= this.history.length)
+    if (this.canUndo())
     {
       //Already the oldeset recorded event!
       return;
@@ -42,7 +42,7 @@ class EventHistory
 
   redo()
   {
-    if (this.offsetIndex <= 0)
+    if (this.canRedo())
     {
       //Already the most recent event!
       return;
@@ -52,6 +52,16 @@ class EventHistory
     const event = this.history[this.history.length - this.offsetIndex - 1];
 
     event.applyRedo();
+  }
+
+  canUndo()
+  {
+    return this.offsetIndex >= this.history.length;
+  }
+
+  canRedo()
+  {
+    return this.offsetIndex <= 0;
   }
 }
 
