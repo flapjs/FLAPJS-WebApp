@@ -5,7 +5,6 @@ import NewButton from './button/NewButton.js';
 import SaveButton from './button/SaveButton.js';
 import UndoButton from './button/UndoButton.js';
 import RedoButton from './button/RedoButton.js';
-import ExportButton from "./button/ExportButton";
 import HelpButton from "./button/HelpButton";
 import UploadButton from "./button/UploadButton";
 import DownloadButton from "./button/DownloadButton";
