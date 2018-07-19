@@ -17,7 +17,13 @@ class Arrow extends React.Component{
 
             <div className = "arrow" onClick={this.onClick.bind(this)}>
 
-                <h2> Let's Get Started</h2>
+                <h2> Let's Get Started ! </h2>
+
+                <div className="circle arrowbutton">
+
+                    <h1> &#9654; </h1>
+
+                </div>
 
             </div>
 

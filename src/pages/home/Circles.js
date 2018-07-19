@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './style.css';
+import './HomePage.css';
 
 class Circles extends React.Component{
 
