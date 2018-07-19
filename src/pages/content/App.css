@@ -62,10 +62,14 @@
   position: fixed;
   width: var(--panel-size);/* Drawer width */
   height: inherit;
+  max-width: 100%;
 
   transition: right 0.3s ease;
 
   right: calc(-1 * var(--panel-size) + var(--panel-tab-border));/* -(Drawer width) */
+}
+.workspace-drawer.open.fullscreen {
+  width: 100%;
 }
 
 .workspace-main.open {
@@ -98,12 +102,16 @@
 
     width: 100%;
     height: var(--panel-size);/* Drawer height */
+    max-height: calc(100% - var(--toolbar-height));
 
     /* BUGFIX: when expands, it will not translate the right property*/
     transition:
       bottom 0.3s ease;
 
     bottom: calc(-1 * var(--panel-size) + var(--panel-tab-border));/* -(Drawer width) */
+  }
+  .workspace-drawer.open.fullscreen {
+    height: calc(100% - var(--toolbar-height));
   }
 
   .workspace-main.open {

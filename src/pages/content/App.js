@@ -45,11 +45,20 @@ class App extends React.Component
     };
   }
 
-  openDrawer(full=false)
+  openDrawer(full=null)
   {
-    this.setState((prev, props) => {
-      return { isOpen: true, isFullscreen: full };
-    });
+    if (typeof full === 'boolean')
+    {
+      this.setState((prev, props) => {
+        return { isOpen: true, isFullscreen: full };
+      });
+    }
+    else
+    {
+      this.setState((prev, props) => {
+        return { isOpen: true };
+      });
+    }
   }
 
   closeDrawer()
@@ -62,6 +71,11 @@ class App extends React.Component
   isDrawerOpen()
   {
     return this.state.isOpen;
+  }
+
+  shouldHideContent()
+  {
+    return this.state.isFullscreen && this.state.isOpen;
   }
 
   componentDidMount()
@@ -123,14 +137,14 @@ class App extends React.Component
       <div className="workspace-container">
         <div className={"workspace-main" +
           (this.state.isOpen ? " open" : "")}
-          style={{visibility: this.state.isFullscreen ? "hidden" : "visible"}}>
+          style={{visibility: this.shouldHideContent() ? "hidden" : "visible"}}>
 
           <Workspace ref={ref=>this.workspace=ref} graph={graph} controller={controller}/>
         </div>
 
         <div className={"workspace-viewport" +
           (this.state.isOpen ? " open" : "")}
-          style={{visibility: this.state.isFullscreen ? "hidden" : "visible"}}>
+          style={{visibility: this.shouldHideContent() ? "hidden" : "visible"}}>
 
           <Viewport ref={ref=>this.viewport=ref} app={this} controller={controller}/>
         </div>

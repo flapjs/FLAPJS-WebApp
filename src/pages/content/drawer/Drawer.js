@@ -35,15 +35,15 @@ class Drawer extends React.Component
     //Open drawer if it is closed
     if (!this.props.app.state.isOpen)
     {
-      this.props.app.openDrawer(false);
+      this.props.app.openDrawer();
     }
+    //Full drawer if clicked on same one
     /*
-    //Close drawer if clicked on same one
     else
     {
       if (this.state.tabIndex === index)
       {
-        this.props.app.closeDrawer();
+        this.props.app.openDrawer(!this.props.app.state.isFullscreen);
       }
     }
     */
@@ -75,10 +75,10 @@ class Drawer extends React.Component
     ev.stopPropagation();
     ev.preventDefault();
 
-    const app = this.props.app.container;
+    const app = this.props.app;
 
     //Ignore drag move if closed
-    if (!this.props.app.state.isOpen)
+    if (!app.state.isOpen)
     {
       /*
       //Opens the drawer if dragging, but closed
@@ -88,9 +88,9 @@ class Drawer extends React.Component
     }
 
     //Disable fullscreen if dragging off of it
-    if (this.props.app.state.isFullscreen)
+    if (app.state.isFullscreen)
     {
-      this.props.app.openDrawer(false);
+      app.openDrawer(false);
     }
 
     //Update panel to current click position
@@ -163,24 +163,71 @@ class Drawer extends React.Component
 
 function updatePanelSize(app, ev)
 {
+  const container = app.container;
+  let fullscreen = false;
   let size = 0;
   //This is the same criteria as in App.css
   if (window.matchMedia("(max-width: 400px)").matches)
   {
     //Vertical slide
-    size = app.offsetHeight - ev.clientY;
+    const viewportOffsetY = app.viewport.ref.getBoundingClientRect().y;
+    if (ev.clientY - viewportOffsetY < MAX_PANEL_THRESHOLD)
+    {
+      //Enable fullscreen
+      app.setState((prev, props) => {
+        return {
+          isFullscreen: true
+        };
+      });
+    }
+    else
+    {
+      size = container.offsetHeight - ev.clientY;
+
+      //Disable fullscreen
+      if (app.state.isFullscreen)
+      {
+        app.setState((prev, props) => {
+          return {
+            isFullscreen: false
+          };
+        });
+      }
+    }
   }
   else
   {
     //Horizontal slide
-    size = app.offsetWidth - ev.clientX;
+    if (ev.clientX < MAX_PANEL_THRESHOLD)
+    {
+      //Enable fullscreen
+      app.setState((prev, props) => {
+        return {
+          isFullscreen: true
+        };
+      });
+    }
+    else
+    {
+      size = container.offsetWidth - ev.clientX;
+
+      //Disable fullscreen
+      if (app.state.isFullscreen)
+      {
+        app.setState((prev, props) => {
+          return {
+            isFullscreen: false
+          };
+        });
+      }
+    }
   }
 
   //Make sure is greater than minimum size and vice versa
   if (size < MIN_PANEL_SIZE) size = MIN_PANEL_SIZE;
 
   //Set panel size
-  app.style.setProperty("--panel-size", size + "px");
+  container.style.setProperty("--panel-size", size + "px");
 }
 
 export default Drawer;
