@@ -44,7 +44,7 @@ class Toolbar extends React.Component
           DFA
           </label>
       </div>
-      <NewButton/>
+      <NewButton graph={graph}/>
       <UploadButton app={app}/>
       <SaveButton graph={graph} getFileName={getMachineName}/>
       <UndoButton eventHistory={eventHistory}/>

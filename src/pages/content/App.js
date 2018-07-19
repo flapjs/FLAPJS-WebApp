@@ -36,12 +36,9 @@ class App extends React.Component
 
     this.graph = new NodalGraph();
 
-    //Initial graph setup
-    const q0 = this.graph.newNode(-32, 0, "q0");
-    const q1 = this.graph.newNode(32, 0, "q1");
-    this.graph.newEdge(q0, q1, "0");
-
-    if(Autosave.supportLocalStorage()){
+    //Start autosaving
+    if(Autosave.supportLocalStorage())
+    {
       Autosave.restoreGraph(this.graph);
       Autosave.initAutosave(this.graph);
     }
