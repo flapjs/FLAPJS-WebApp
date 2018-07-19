@@ -1,15 +1,16 @@
+import Eventable from 'util/Eventable.js';
 import * as Config from 'config.js';
 
 import GraphPointer from './GraphPointer.js';
 
 class InputController
 {
-  constructor(graph)
+  constructor()
   {
-    this.graph = graph;
+    this.graph = null;
     this.workspace = null;
 
-    this.pointer = new GraphPointer(this.graph);
+    this.pointer = new GraphPointer();
 
     this.cursor = {
       _mousemove: null,
@@ -19,6 +20,11 @@ class InputController
 
   initialize(app, workspace)
   {
+    //Set the graph
+    this.graph = app.graph;
+    this.pointer.graph = this.graph;
+
+    //Prepare the workspace
     this.workspace = workspace;
     this.workspace.addEventListener('mousedown', this.onMouseDown.bind(this));
     this.workspace.addEventListener('contextmenu', this.onContextMenu.bind(this));
@@ -40,12 +46,41 @@ class InputController
   {
     e.stopPropagation();
     e.preventDefault();
+
+    if (this.cursor._mousemove)
+    {
+      document.removeEventListener('mousemove', this.cursor._mousemove);
+      this.cursor._mousemove = null;
+    }
+    if (this.cursor._mouseup)
+    {
+      document.removeEventListener('mouseup', this.cursor._mouseup);
+      this.cursor._mouseup = null;
+    }
+
+    const pointer = this.pointer;
+    pointer.moveMode = true;
+    const mouse = getMousePosition(this.workspace, e);
+    pointer.setInitialPosition(mouse.x, mouse.y);
+
+    //Check whether to accept the start of input...
+    if (this.onInputDown(pointer.x, pointer.y,
+      pointer.initial.target, pointer.initial.targetType))
+    {
+      this.cursor._mousemove = this.onMouseDownAndMove.bind(this);
+      this.cursor._mouseup = this.onMouseDownAndUp.bind(this);
+
+      document.addEventListener('mousemove', this.cursor._mousemove);
+      document.addEventListener('mouseup', this.cursor._mouseup);
+    }
   }
 
   onMouseDown(e)
   {
     e.stopPropagation();
     e.preventDefault();
+
+    if (e.button && e.button !== 1) return;
 
     if (this.cursor._mousemove)
     {
@@ -162,6 +197,8 @@ class InputController
   onDragMove(x, y, target, targetType) {}
   onDragStop(x, y, target, targetType) {}
 }
+//Mixin Eventable
+Object.assign(InputController.prototype, Eventable);
 
 function getMousePosition(svg, ev)
 {

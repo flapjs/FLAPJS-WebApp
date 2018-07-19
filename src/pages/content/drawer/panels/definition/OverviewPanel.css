@@ -1,0 +1,43 @@
+
+/* STATS */
+.graphinfo {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.0em;
+  border-bottom: 1px solid black;
+}
+.statblock {
+  display: flex;
+  flex-direction: column;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.statblock li {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+li:hover {
+  font-weight: bold;
+}
+.statblock>label {
+  font-style: italic;
+  font-weight: bold;
+  font-size: 1.4em;
+}
+.statlist {
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+}
+.statset {
+  display: flex;
+  flex-direction: row;
+}
+.statset-open, .statset-close{
+  font-size: 2em;
+}
+.statset-close {
+  align-self: flex-end;
+}
