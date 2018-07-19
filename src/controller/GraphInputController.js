@@ -41,7 +41,7 @@ class GraphInputController extends InputController
     this.firstEmptyTime = 0;
     this.ghostInitialMarker = null;
 
-    this.selector = new SelectionBox(this.graph);
+    this.selector = new SelectionBox(null);
 
     this.shouldDestroyPointlessEdges = Config.DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
   }
@@ -50,6 +50,7 @@ class GraphInputController extends InputController
   {
     super.initialize(app, workspace);
 
+    this.selector.graph = this.graph;
     this.labelEditor = app.viewport.labelEditor;
   }
 
