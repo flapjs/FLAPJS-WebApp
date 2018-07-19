@@ -10,7 +10,6 @@ class OverviewPanel extends React.Component
     return <div className="panel-container" id="overview">
       <div className="panel-title">
         <h1>Definition</h1>
-        <hr />
       </div>
       <div className="panel-content">
         <GraphDefinition />

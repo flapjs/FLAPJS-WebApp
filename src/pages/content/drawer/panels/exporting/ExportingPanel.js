@@ -8,8 +8,9 @@ class ExportingPanel extends React.Component
   render()
   {
     return <div className="panel-container" id="exporting">
-      <h1>Exporting</h1>
-      <hr />
+      <div className="panel-title">
+        <h1>Exporting</h1>
+      </div>
       <input className="panel-button" defaultValue="MachineName"/>
 
       <button className="panel-button">Save As Machine File</button>

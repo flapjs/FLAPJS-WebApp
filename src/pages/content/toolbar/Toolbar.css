@@ -7,9 +7,12 @@
   border-bottom: 1px solid #182B49;
   width: 6em;
   margin: 0 15px 0 0;
+
+  transition: color 0.3s ease;
 }
 #machine-name:focus {
   outline: none;
+  color: #FFFFFF;
 }
 
 #machine-type {

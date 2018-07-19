@@ -1,24 +1,49 @@
 #label-editor {
-    visibility: hidden;
-    position: absolute;
-    z-index: 2;
+  visibility: hidden;
+  position: absolute;
+  z-index: 2;
 
-    font-size: 1.5em;
-    background: lightgray;
-    padding: 3px;
-    display: inline-block;
-    border-radius: 9999em;
+  background: lightgray;
+  display: inline-block;
+
+  padding: 4px;
 }
-#label-editor>input {
+
+.label-editor-input {
   position: relative;
   display: inherit;
-  width: 64px;
-  border-radius: inherit;
+  width: 100%;
   margin: 0;
+  padding: 0;
+  background: none;
   border: none;
   outline: none;
-  padding: 0 .325em;
   z-index: 1;
 
+  font-size: 24px;
   text-align: center;
+  border-bottom: 1px solid black;
+}
+.label-editor-tray {
+  height: 20px;
+}
+.label-editor-tray>* {
+  height: 100%;
+}
+
+.bubble {
+  border-radius: 0.4em;
+}
+
+/*the bubble triangle*/
+.bubble:after {
+  content: "";
+  position: absolute;
+  bottom: -10px; /* value = - border-top-width - border-bottom-width */
+  left: calc(50% - 10px); /* controls horizontal position */
+  border-width: 10px 10px 0; /* vary these values to change the angle of the vertex */
+  border-style: solid;
+  border-color: lightgray transparent;
+  display: block;
+  width: 0;
 }

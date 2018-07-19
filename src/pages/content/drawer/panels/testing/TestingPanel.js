@@ -8,8 +8,9 @@ class TestingPanel extends React.Component
   render()
   {
     return <div className="panel-container" id="testing">
-      <h1>Testing</h1>
-      <hr />
+      <div className="panel-title">
+        <h1>Testing</h1>
+      </div>
       <button className="panel-button test-import">Import Test</button>
       <TestInputList />
       <button className="panel-button test-run">Run All Tests</button>

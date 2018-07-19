@@ -3,6 +3,8 @@ import { hot } from 'react-hot-loader';
 
 import './App.css';
 
+import NodalGraph from 'graph/NodalGraph.js';
+
 import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
 import Drawer from './drawer/Drawer.js';
@@ -31,6 +33,14 @@ class App extends React.Component
   {
     super(props);
 
+    this.graph = new NodalGraph();
+
+    //Initial graph setup
+    const q0 = this.graph.newNode(-32, 0, "q0");
+    const q1 = this.graph.newNode(32, 0, "q1");
+    this.graph.newEdge(q0, q1, "0");
+
+    //Create references
     this.container = React.createRef();
     this.workspace = React.createRef();
     this.viewport = React.createRef();
@@ -87,7 +97,7 @@ class App extends React.Component
 
     //Insert event listeners
     const eventHistory = this.eventHistory;
-    const graph = this.props.graph;
+    const graph = this.graph;
 
     controller.on("nodeCreate", targetNode =>
       eventHistory.handleEvent(new GraphNodeCreateEvent(graph, targetNode)));
@@ -129,7 +139,7 @@ class App extends React.Component
   render()
   {
     const controller = this.props.controller;
-    const graph = this.props.graph;
+    const graph = this.graph;
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar app={this} graph={graph} eventHistory={this.eventHistory}/>

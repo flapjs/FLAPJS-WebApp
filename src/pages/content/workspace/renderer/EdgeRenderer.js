@@ -40,7 +40,7 @@ class EdgeRenderer extends React.Component
     }
 
     //Draw multiple labels
-    const labels = label.split(" ");
+    const labels = label.split(",");
     let dy = 0;
 
     return <g>

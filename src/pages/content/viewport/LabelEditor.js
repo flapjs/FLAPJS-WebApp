@@ -4,8 +4,9 @@ import * as Config from 'config.js';
 
 import './LabelEditor.css';
 
-//TODO: Figure out why this is negative sixty five...
-const LABEL_OFFSET_Y = -65;
+//TODO: This is equivalent to 4em for toolbar height
+const LABEL_OFFSET_Y = -64;
+const EDITOR_OFFSET_Y = -36;
 
 class LabelEditor extends React.Component
 {
@@ -85,7 +86,7 @@ class LabelEditor extends React.Component
       targetStyle.visibility = "visible";
       const screen = getScreenPosition(this.props.screen, target.x, target.y);
       const x = screen.x;
-      const y = screen.y + LABEL_OFFSET_Y;//HACK: WHERE IS THIS OFFSET FROM???
+      const y = screen.y + LABEL_OFFSET_Y + EDITOR_OFFSET_Y;
       const offsetX = -(this.parentElement.offsetWidth / 2);
       const offsetY = -(this.parentElement.offsetHeight / 2);
 
@@ -93,11 +94,19 @@ class LabelEditor extends React.Component
       targetStyle.left = (x + offsetX) + "px";
     }
 
-    return <span id="label-editor" ref={ref=>this.parentElement=ref}
+    return <span className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
       style={targetStyle}>
-      <input type="text" ref={ref=>this.inputElement=ref}
+      <input className="label-editor-input" type="text" ref={ref=>this.inputElement=ref}
         onKeyUp={this.onKeyUp.bind(this)}
         onBlur={this.onBlur.bind(this)}/>
+      <div className="label-editor-tray">
+        <button>BUTTON</button>
+        <button>BUTTON</button>
+        <button>BUTTON</button>
+        <button>BUTTON</button>
+        <button>BUTTON</button>
+        <button>BUTTON</button>
+      </div>
     </span>;
   }
 }

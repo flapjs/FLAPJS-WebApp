@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import NodalGraph from 'graph/NodalGraph.js';
 import GraphInputController from 'controller/GraphInputController.js';
 
 import HomePage from 'pages/home/HomePage.js';
@@ -29,20 +28,14 @@ window.addEventListener('load', (event) => {
 //Setup application
 let prevtime = 0;
 let root = null;
-let graph = new NodalGraph();
 
 //Must be initialized (will be called in Workspace.componentDidMount)
-let controller = new GraphInputController(graph);
+let controller = new GraphInputController();
 
 //Load application
 function loadApplication()
 {
   root = document.getElementById("root");
-
-  //Initial graph setup
-  const q0 = graph.newNode(-32, 0, "q0");
-  const q1 = graph.newNode(32, 0, "q1");
-  graph.newEdge(q0, q1, "0");
 }
 
 //Update application
@@ -51,7 +44,7 @@ function updateApplication(time)
   const dt = (time - prevtime) / FRAMES_PER_SECOND;
   {
     const PageHandler = PAGES[ROUTER.pathname] || Page404;
-    ReactDOM.render(React.createElement(PageHandler, { router: ROUTER, graph: graph, controller: controller }, null), root);
+    ReactDOM.render(React.createElement(PageHandler, { router: ROUTER, controller: controller }, null), root);
   }
   prevtime = time;
   window.requestAnimationFrame(updateApplication);
