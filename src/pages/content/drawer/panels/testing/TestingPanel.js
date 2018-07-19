@@ -10,17 +10,17 @@ class TestingPanel extends React.Component
     return <div className="panel-container" id="testing">
       <h1>Testing</h1>
       <hr />
-      <button className="test-import">Import Test</button>
+      <button className="panel-button test-import">Import Test</button>
       <TestInputList />
-      <button className="test-run">Run All Tests</button>
+      <button className="panel-button test-run">Run All Tests</button>
       <hr />
       <div>
         <input id="test-step" type="checkbox"/>
-        <label forHTML="test-step">Simulate Step-by-step</label>
+        <label htmlFor="test-step">Simulate Step-by-step</label>
       </div>
       <div>
         <input id="test-closure" type="checkbox"/>
-        <label forHTML="test-closure">Transition By Closure</label>
+        <label htmlFor="test-closure">Transition By Closure</label>
       </div>
     </div>;
   }

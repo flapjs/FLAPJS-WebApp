@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OverviewPanel from './panels/OverviewPanel.js';
+import OverviewPanel from './panels/definition/OverviewPanel.js';
 import TestingPanel from './panels/testing/TestingPanel.js';
 import FormattingPanel from './panels/FormattingPanel.js';
 import ExportingPanel from './panels/ExportingPanel.js';
