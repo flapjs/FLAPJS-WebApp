@@ -5,12 +5,12 @@ import GraphPointer from './GraphPointer.js';
 
 class InputController
 {
-  constructor(graph)
+  constructor()
   {
-    this.graph = graph;
+    this.graph = null;
     this.workspace = null;
 
-    this.pointer = new GraphPointer(this.graph);
+    this.pointer = new GraphPointer();
 
     this.cursor = {
       _mousemove: null,
@@ -20,6 +20,11 @@ class InputController
 
   initialize(app, workspace)
   {
+    //Set the graph
+    this.graph = app.graph;
+    this.pointer.graph = this.graph;
+
+    //Prepare the workspace
     this.workspace = workspace;
     this.workspace.addEventListener('mousedown', this.onMouseDown.bind(this));
     this.workspace.addEventListener('contextmenu', this.onContextMenu.bind(this));

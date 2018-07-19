@@ -23,9 +23,9 @@ edgeLabel(targetEdge, nextLabel, prevLabel)
 */
 class GraphInputController extends InputController
 {
-  constructor(graph)
+  constructor()
   {
-    super(graph);
+    super();
 
     this.labelEditor = null;
 
