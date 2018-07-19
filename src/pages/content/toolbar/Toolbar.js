@@ -44,12 +44,12 @@ class Toolbar extends React.Component
           DFA
           </label>
       </div>
-      <NewButton workspace={app.workspace} getFileName={getMachineName}/>
-      <UploadButton/>
+      <NewButton/>
+      <UploadButton />
       <SaveButton graph={graph} getFileName={getMachineName}/>
       <UndoButton eventHistory={eventHistory}/>
       <RedoButton eventHistory={eventHistory}/>
-      <DownloadButton/>
+      <DownloadButton workspace={app.workspace} getFileName={getMachineName}/>
       <HelpButton/>
     </div>;
   }
