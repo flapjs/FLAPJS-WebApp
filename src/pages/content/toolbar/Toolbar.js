@@ -39,7 +39,10 @@ class Toolbar extends React.Component
     return <div className="toolbar-container">
       <div className="toolbar-title">
         <input id="machine-name" type="text" defaultValue="Untitled" ref={ref=>this.machineName=ref}/>
-        <label id="machine-type">DFA</label>
+        <label id="machine-type"
+          onClick={()=>app.drawer.setTab(1)}>
+          DFA
+          </label>
       </div>
       <NewButton/>
       <UploadButton />

@@ -49,18 +49,12 @@
   height: inherit;
   pointer-events: none;
 
-  outline: 0.8em dashed rgba(0, 0, 0, 0.02);
-  outline-offset: -2.5em;
-
-  transition: width 0.3s ease, outline-color 0.1s ease;
+  transition: width 0.3s ease;
 
   width: calc(100% - var(--panel-tab-border));
 }
 .workspace-viewport>* {
   pointer-events: auto;
-}
-.workspace-viewport.danger {
-  outline-color: #E35B5B;
 }
 
 .workspace-drawer {
@@ -68,10 +62,14 @@
   position: fixed;
   width: var(--panel-size);/* Drawer width */
   height: inherit;
+  max-width: 100%;
 
   transition: right 0.3s ease;
 
   right: calc(-1 * var(--panel-size) + var(--panel-tab-border));/* -(Drawer width) */
+}
+.workspace-drawer.open.fullscreen {
+  width: 100%;
 }
 
 .workspace-main.open {
@@ -104,12 +102,16 @@
 
     width: 100%;
     height: var(--panel-size);/* Drawer height */
+    max-height: calc(100% - var(--toolbar-height));
 
     /* BUGFIX: when expands, it will not translate the right property*/
     transition:
       bottom 0.3s ease;
 
     bottom: calc(-1 * var(--panel-size) + var(--panel-tab-border));/* -(Drawer width) */
+  }
+  .workspace-drawer.open.fullscreen {
+    height: calc(100% - var(--toolbar-height));
   }
 
   .workspace-main.open {

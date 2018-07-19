@@ -19,6 +19,12 @@
   top: 35px;
   left: 10px;
   font-family: sans-serif;
+
+  transition: color 0.3s ease;
+}
+
+#machine-type:hover {
+  color: #C69214;
 }
 
 .toolbar-container {
@@ -35,11 +41,11 @@
 .toolbar-button {
   background: none;/*Disable normal button style*/
   border: none;/*Disable normal button style*/
+  outline: none;/*Disable normal button style*/
   padding: 0;/*Disable normal button style*/
   fill: white;
   justify-content: flex-end;
   margin-right: 15px;
-
 
   width: 3em;
   height: 100%;
@@ -47,10 +53,7 @@
   transition: fill 0.3s ease;
 }
 .toolbar-button:hover {
-  fill: silver;
-}
-.toolbar-button:focus {
-  outline: none;
+  fill: #FFCD00;
 }
 .toolbar-button:disabled {
   fill: #005C82;
@@ -67,7 +70,7 @@
   width: 3em;
 }
 #toolbar-help:hover {
-  fill: #C69214
+  fill: #C69214;
 }
 
 #import-file {

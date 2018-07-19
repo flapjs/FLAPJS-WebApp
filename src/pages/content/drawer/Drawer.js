@@ -1,9 +1,9 @@
 import React from 'react';
 
-import OverviewPanel from './panels/OverviewPanel.js';
-import TestingPanel from './panels/TestingPanel.js';
-import FormattingPanel from './panels/FormattingPanel.js';
-import ExportingPanel from './panels/ExportingPanel.js';
+import OverviewPanel from './panels/definition/OverviewPanel.js';
+import TestingPanel from './panels/testing/TestingPanel.js';
+import ExportingPanel from './panels/exporting/ExportingPanel.js';
+import OptionsPanel from './panels/options/OptionsPanel.js';
 
 import DrawerExpander from './DrawerExpander.js';
 
@@ -11,8 +11,8 @@ import './Drawer.css';
 
 const TESTING = 0;
 const OVERVIEW = 1;
-const FORMATTING = 2;
-const EXPORTING = 3;
+const EXPORTING = 2;
+const OPTIONS = 3;
 
 const DEFAULT_TAB_INDEX = TESTING;
 
@@ -35,15 +35,15 @@ class Drawer extends React.Component
     //Open drawer if it is closed
     if (!this.props.app.state.isOpen)
     {
-      this.props.app.openDrawer(false);
+      this.props.app.openDrawer();
     }
+    //Full drawer if clicked on same one
     /*
-    //Close drawer if clicked on same one
     else
     {
       if (this.state.tabIndex === index)
       {
-        this.props.app.closeDrawer();
+        this.props.app.openDrawer(!this.props.app.state.isFullscreen);
       }
     }
     */
@@ -61,10 +61,10 @@ class Drawer extends React.Component
         return <OverviewPanel />;
       case TESTING:
         return <TestingPanel />;
-      case FORMATTING:
-        return <FormattingPanel />;
       case EXPORTING:
         return <ExportingPanel />;
+      case OPTIONS:
+        return <OptionsPanel />;
       default:
         throw new Error("Unknown tab index \'" + tabIndex + "\'.");
     }
@@ -75,10 +75,10 @@ class Drawer extends React.Component
     ev.stopPropagation();
     ev.preventDefault();
 
-    const app = this.props.app.container;
+    const app = this.props.app;
 
     //Ignore drag move if closed
-    if (!this.props.app.state.isOpen)
+    if (!app.state.isOpen)
     {
       /*
       //Opens the drawer if dragging, but closed
@@ -88,9 +88,9 @@ class Drawer extends React.Component
     }
 
     //Disable fullscreen if dragging off of it
-    if (this.props.app.state.isFullscreen)
+    if (app.state.isFullscreen)
     {
-      this.props.app.openDrawer(false);
+      app.openDrawer(false);
     }
 
     //Update panel to current click position
@@ -144,13 +144,13 @@ class Drawer extends React.Component
           onClick={this.setTab.bind(this, OVERVIEW)}>
           <span>Definition</span>
         </button>
-        <button className={"tab-link" + (this.state.tabIndex == FORMATTING ? " active" : "")}
-          onClick={this.setTab.bind(this, FORMATTING)}>
-          Formatting
-        </button>
         <button className={"tab-link" + (this.state.tabIndex == EXPORTING ? " active" : "")}
           onClick={this.setTab.bind(this, EXPORTING)}>
           Exporting
+        </button>
+        <button className={"tab-link" + (this.state.tabIndex == OPTIONS ? " active" : "")}
+          onClick={this.setTab.bind(this, OPTIONS)}>
+          Options
         </button>
       </div>
 
@@ -163,24 +163,71 @@ class Drawer extends React.Component
 
 function updatePanelSize(app, ev)
 {
+  const container = app.container;
+  let fullscreen = false;
   let size = 0;
   //This is the same criteria as in App.css
   if (window.matchMedia("(max-width: 400px)").matches)
   {
     //Vertical slide
-    size = app.offsetHeight - ev.clientY;
+    const viewportOffsetY = app.viewport.ref.getBoundingClientRect().y;
+    if (ev.clientY - viewportOffsetY < MAX_PANEL_THRESHOLD)
+    {
+      //Enable fullscreen
+      app.setState((prev, props) => {
+        return {
+          isFullscreen: true
+        };
+      });
+    }
+    else
+    {
+      size = container.offsetHeight - ev.clientY;
+
+      //Disable fullscreen
+      if (app.state.isFullscreen)
+      {
+        app.setState((prev, props) => {
+          return {
+            isFullscreen: false
+          };
+        });
+      }
+    }
   }
   else
   {
     //Horizontal slide
-    size = app.offsetWidth - ev.clientX;
+    if (ev.clientX < MAX_PANEL_THRESHOLD)
+    {
+      //Enable fullscreen
+      app.setState((prev, props) => {
+        return {
+          isFullscreen: true
+        };
+      });
+    }
+    else
+    {
+      size = container.offsetWidth - ev.clientX;
+
+      //Disable fullscreen
+      if (app.state.isFullscreen)
+      {
+        app.setState((prev, props) => {
+          return {
+            isFullscreen: false
+          };
+        });
+      }
+    }
   }
 
   //Make sure is greater than minimum size and vice versa
   if (size < MIN_PANEL_SIZE) size = MIN_PANEL_SIZE;
 
   //Set panel size
-  app.style.setProperty("--panel-size", size + "px");
+  container.style.setProperty("--panel-size", size + "px");
 }
 
 export default Drawer;
