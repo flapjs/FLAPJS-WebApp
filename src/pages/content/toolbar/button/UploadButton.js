@@ -1,6 +1,7 @@
 //https://material.io/tools/icons/?icon=cloud_upload&style=outline
 import React from 'react';
 import NodalGraph from 'graph/NodalGraph';
+import Toolbar from '../Toolbar';
 
 class UploadButton extends React.Component
 {
@@ -11,6 +12,9 @@ class UploadButton extends React.Component
   }
 
   handleChange(file) {
+    const name = file[0].name.slice(0,-5);
+    Toolbar.setMachineName(name);
+
     var reader = new FileReader();
     reader.onload = (event) => {
       var contents = event.target.result;

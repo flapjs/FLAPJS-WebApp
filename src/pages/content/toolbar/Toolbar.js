@@ -24,6 +24,10 @@ class Toolbar extends React.Component
     return this.machineName.value;
   }
 
+  static setMachineName(name) {
+    document.getElementById("machine-name").value = name;
+  }
+
   getMachineType()
   {
     return "DFA";
