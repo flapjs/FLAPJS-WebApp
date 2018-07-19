@@ -11,9 +11,6 @@
 .viewport-container>* {
   pointer-events: auto;
 }
-.viewport-container.danger {
-  outline-color: #E35B5B;
-}
 
 .anchor-bottom-right{
   position: absolute;

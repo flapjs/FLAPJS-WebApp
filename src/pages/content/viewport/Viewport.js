@@ -19,6 +19,43 @@ class Viewport extends React.Component
     };
   }
 
+  onFileDrop(ev)
+  {
+    //Prevent file from being opened
+    ev.preventDefault();
+
+    if (ev.dataTransfer.items)
+    {
+      const length = ev.dataTransfer.items.length;
+      for(let i = 0; i < length; ++i)
+      {
+        let file = ev.dataTransfer.items[i];
+        if (file.kind === 'file')
+        {
+          alert(file.name);
+        }
+      }
+    }
+    else
+    {
+      const length = ev.dataTransfer.files.length;
+      for(let i = 0; i < length; ++i)
+      {
+        let file = ev.dataTransfer.files[i];
+        alert(file.name);
+      }
+    }
+
+    if (ev.dataTransfer.items)
+    {
+      ev.dataTransfer.items.clear();
+    }
+    else
+    {
+      ev.dataTransfer.clearData();
+    }
+  }
+
   render()
   {
     return <div className="viewport-container" ref={ref=>this.ref=ref}

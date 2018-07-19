@@ -53,6 +53,9 @@
 
   width: calc(100% - var(--panel-tab-border));
 }
+.workspace-viewport>* {
+  pointer-events: auto;
+}
 
 .workspace-drawer {
   z-index: 999;
