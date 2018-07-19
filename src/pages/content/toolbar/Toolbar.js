@@ -41,12 +41,12 @@ class Toolbar extends React.Component
         <input id="machine-name" type="text" defaultValue="Untitled" ref={ref=>this.machineName=ref}/>
         <label id="machine-type">DFA</label>
       </div>
-      <NewButton workspace={app.workspace} getFileName={getMachineName}/>
+      <NewButton/>
       <UploadButton/>
       <SaveButton graph={graph} getFileName={getMachineName}/>
       <UndoButton eventHistory={eventHistory}/>
       <RedoButton eventHistory={eventHistory}/>
-      <DownloadButton/>
+      <DownloadButton workspace={app.workspace} getFileName={getMachineName}/>
       <HelpButton/>
     </div>;
   }

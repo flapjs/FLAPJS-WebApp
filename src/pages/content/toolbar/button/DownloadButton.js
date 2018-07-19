@@ -1,5 +1,6 @@
 //https://material.io/tools/icons/?icon=cloud_download&style=outline
 import React from 'react';
+import Downloader from 'util/Downloader.js';
 
 class DownloadButton extends React.Component
 {
@@ -10,7 +11,8 @@ class DownloadButton extends React.Component
 
   onClick(ev)
   {
-
+    const workspace = this.props.workspace;
+    Downloader.downloadSVG(this.props.getFileName() + '.png', workspace.ref);
   }
 
   render()
