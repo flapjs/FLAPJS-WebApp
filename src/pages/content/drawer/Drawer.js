@@ -2,8 +2,8 @@ import React from 'react';
 
 import OverviewPanel from './panels/definition/OverviewPanel.js';
 import TestingPanel from './panels/testing/TestingPanel.js';
-import FormattingPanel from './panels/FormattingPanel.js';
 import ExportingPanel from './panels/exporting/ExportingPanel.js';
+import OptionsPanel from './panels/options/OptionsPanel.js';
 
 import DrawerExpander from './DrawerExpander.js';
 
@@ -11,8 +11,8 @@ import './Drawer.css';
 
 const TESTING = 0;
 const OVERVIEW = 1;
-const FORMATTING = 2;
-const EXPORTING = 3;
+const EXPORTING = 2;
+const OPTIONS = 3;
 
 const DEFAULT_TAB_INDEX = TESTING;
 
@@ -61,10 +61,10 @@ class Drawer extends React.Component
         return <OverviewPanel />;
       case TESTING:
         return <TestingPanel />;
-      case FORMATTING:
-        return <FormattingPanel />;
       case EXPORTING:
         return <ExportingPanel />;
+      case OPTIONS:
+        return <OptionsPanel />;
       default:
         throw new Error("Unknown tab index \'" + tabIndex + "\'.");
     }
@@ -144,13 +144,13 @@ class Drawer extends React.Component
           onClick={this.setTab.bind(this, OVERVIEW)}>
           <span>Definition</span>
         </button>
-        <button className={"tab-link" + (this.state.tabIndex == FORMATTING ? " active" : "")}
-          onClick={this.setTab.bind(this, FORMATTING)}>
-          Formatting
-        </button>
         <button className={"tab-link" + (this.state.tabIndex == EXPORTING ? " active" : "")}
           onClick={this.setTab.bind(this, EXPORTING)}>
           Exporting
+        </button>
+        <button className={"tab-link" + (this.state.tabIndex == OPTIONS ? " active" : "")}
+          onClick={this.setTab.bind(this, OPTIONS)}>
+          Options
         </button>
       </div>
 
