@@ -12,10 +12,11 @@ class UploadButton extends React.Component
 
   handleChange(file) {
     var reader = new FileReader();
-    reader.onload = function(event) {
+    reader.onload = (event) => {
       var contents = event.target.result;
       const dst = NodalGraph.parseJSON(JSON.parse(contents));
-      console.log(dst);
+      const graph = this.props.app.graph;
+      graph.copyGraph(dst);
     };
 
     reader.onerror = function(event) {

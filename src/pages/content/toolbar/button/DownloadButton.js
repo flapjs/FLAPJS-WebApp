@@ -19,8 +19,8 @@ class DownloadButton extends React.Component
   {
     return <button className="toolbar-button" id="toolbar-undo"
                    onClick={this.onClick.bind(this)}>
-      <svg className="navicons" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24">
-        <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+      <svg className="navicons" viewBox="0 0 24 24">
+        <path d="M23,12L19,8V11H10V13H19V16M1,18V6C1,4.89 1.9,4 3,4H15A2,2 0 0,1 17,6V9H15V6H3V18H15V15H17V18A2,2 0 0,1 15,20H3A2,2 0 0,1 1,18Z" />
       </svg>
     </button>;
   }
