@@ -42,7 +42,7 @@ class Toolbar extends React.Component
         <label id="machine-type">DFA</label>
       </div>
       <NewButton/>
-      <UploadButton/>
+      <UploadButton />
       <SaveButton graph={graph} getFileName={getMachineName}/>
       <UndoButton eventHistory={eventHistory}/>
       <RedoButton eventHistory={eventHistory}/>
