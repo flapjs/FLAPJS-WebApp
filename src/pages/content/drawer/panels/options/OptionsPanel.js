@@ -10,7 +10,6 @@ class OptionsPanel extends React.Component
     return <div className="panel-container" id="option">
       <div className="panel-title">
         <h1>Option</h1>
-        <hr />
       </div>
       <div className="panel-content">
         <button className="panel-button">Change Theme...</button>
