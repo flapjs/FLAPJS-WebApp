@@ -1,29 +1,35 @@
+import NodalGraph from 'graph/NodalGraph.js';
 
-const TIMEPERSAVE = 10000 //unit is ms
+const TIMEPERSAVE = 1000 //unit is ms
 
 //check if browser support local storage
 export function supportLocalStorage(){
     return typeof(Storage)!== 'undefined';
 }
 
-export function autosave(){
 
-  var workspace = document.getElementById("workspace-content");
+export function initAutosave(graph){
   try{
+    //start save the workspace per second
     setInterval(function(){
-      localStorage.setItem("workspace", workspace.innerHTML);
+      const dst = JSON.stringify(graph.toJSON());
+      localStorage.setItem('graph', dst);
     },TIMEPERSAVE);
   }
   catch(e){
-
-    if(localStorage.getItem('workspace')){
-      workspace.innerHTML = localStorage.getItem('workspace');
-    }
+    throw e;
   }
 }
 
-export function restoreWorkspace(){
-
-  var workspace = document.getElementById("workspace-content");
-  workspace.innerHTML = localStorage.getItem('workspace');
+//retrieve the graph when reload
+export function restoreGraph(graph){
+  const json = localStorage.getItem('graph');
+  if (!json) return;
+  try {
+    const graphJSON = JSON.parse(json);
+    const newGraph = NodalGraph.parseJSON(graphJSON);
+    graph.copyGraph(newGraph);
+  } catch (e) {
+    //Ignore any errors, the graph should remain the same :)
+  }
 }

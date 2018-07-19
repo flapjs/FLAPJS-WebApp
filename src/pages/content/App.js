@@ -11,6 +11,7 @@ import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
 
 import EventHistory from 'events/EventHistory.js';
+import * as Autosave from 'util/autosave.js';
 
 import GraphEdgeCreateEvent from 'events/GraphEdgeCreateEvent.js';
 import GraphEdgeDeleteEvent from 'events/GraphEdgeDeleteEvent.js';
@@ -39,6 +40,11 @@ class App extends React.Component
     const q0 = this.graph.newNode(-32, 0, "q0");
     const q1 = this.graph.newNode(32, 0, "q1");
     this.graph.newEdge(q0, q1, "0");
+
+    if(Autosave.supportLocalStorage()){
+      Autosave.restoreGraph(this.graph);
+      Autosave.initAutosave(this.graph);
+    }
 
     //Create references
     this.container = React.createRef();
@@ -90,6 +96,7 @@ class App extends React.Component
 
   componentDidMount()
   {
+    const graph = this.graph;
     const controller = this.props.controller;
 
     //Initialize the controller to graph components
@@ -97,7 +104,6 @@ class App extends React.Component
 
     //Insert event listeners
     const eventHistory = this.eventHistory;
-    const graph = this.graph;
 
     controller.on("nodeCreate", targetNode =>
       eventHistory.handleEvent(new GraphNodeCreateEvent(graph, targetNode)));
