@@ -45,7 +45,7 @@ class Toolbar extends React.Component
           </label>
       </div>
       <NewButton/>
-      <UploadButton />
+      <UploadButton app={app}/>
       <SaveButton graph={graph} getFileName={getMachineName}/>
       <UndoButton eventHistory={eventHistory}/>
       <RedoButton eventHistory={eventHistory}/>

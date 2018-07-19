@@ -108,6 +108,13 @@ class NodalGraph
     return this.nodes.length > 0 ? this.nodes[0] : null;
   }
 
+  copyGraph(graph)
+  {
+    this.deleteAll();
+    this.nodes = this.nodes.concat(graph.nodes);
+    this.edges = this.edges.concat(graph.edges);
+  }
+
   static parseJSON(data)
   {
     const nodeLength = data.nodeCount;
@@ -136,6 +143,7 @@ class NodalGraph
       const newEdge = new Edge(dst, dst.nodes[edge.from], edge.to < 0 ? null : dst.nodes[edge.to], edge.label || "0");
       newEdge.quad.x = edge.quadx || 0;
       newEdge.quad.y = edge.quady || 0;
+      dst.edges[i] = newEdge;
     }
 
     return dst;
