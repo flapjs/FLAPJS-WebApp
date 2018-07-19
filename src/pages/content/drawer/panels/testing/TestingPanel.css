@@ -1,0 +1,41 @@
+.test-input {
+  margin-bottom: 5px;
+  width: 100%;
+  height: 1.5em;
+  border-bottom: 1px solid gray;
+}
+.test-input-label {
+  height: inherit;
+  border: none;
+  background: none;
+  color: white;
+}
+.test-input-result {
+  width: 30px;
+  float: left;
+}
+.test-input-delete {
+  width: 30px;
+  float: right;
+}
+
+
+.test-inputlist {
+  border: 1px solid black;
+  padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.test-inputlist-new {
+  width: 100%;
+}
+.test-inputlist-clear {
+  width: 100%;
+}
+
+.test-import {
+  width: 100%;
+}
+.test-run {
+  width: 100%;
+}
