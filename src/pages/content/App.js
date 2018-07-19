@@ -129,8 +129,7 @@ class App extends React.Component
         </div>
 
         <div className={"workspace-viewport" +
-          (this.state.isOpen ? " open" : "") +
-          (this.state.isDangerous ? " danger" : "")}
+          (this.state.isOpen ? " open" : "")}
           style={{visibility: this.state.isFullscreen ? "hidden" : "visible"}}>
 
           <Viewport ref={ref=>this.viewport=ref} app={this} controller={controller}/>

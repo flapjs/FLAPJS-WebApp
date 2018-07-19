@@ -83,7 +83,7 @@ class LabelEditor extends React.Component
     if (target)
     {
       targetStyle.visibility = "visible";
-      const screen = getScreenPosition(this.props.workspace, target.x, target.y);
+      const screen = getScreenPosition(this.props.screen, target.x, target.y);
       const x = screen.x;
       const y = screen.y + LABEL_OFFSET_Y;//HACK: WHERE IS THIS OFFSET FROM???
       const offsetX = -(this.parentElement.offsetWidth / 2);

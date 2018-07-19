@@ -49,18 +49,9 @@
   height: inherit;
   pointer-events: none;
 
-  outline: 0.8em dashed rgba(0, 0, 0, 0.02);
-  outline-offset: -2.5em;
-
-  transition: width 0.3s ease, outline-color 0.1s ease;
+  transition: width 0.3s ease;
 
   width: calc(100% - var(--panel-tab-border));
-}
-.workspace-viewport>* {
-  pointer-events: auto;
-}
-.workspace-viewport.danger {
-  outline-color: #E35B5B;
 }
 
 .workspace-drawer {
