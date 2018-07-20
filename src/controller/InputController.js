@@ -80,6 +80,8 @@ class InputController
     e.stopPropagation();
     e.preventDefault();
 
+    alert("DOWN");
+
     if (e.button && e.button !== 1) return;
 
     if (this.cursor._mousemove)
