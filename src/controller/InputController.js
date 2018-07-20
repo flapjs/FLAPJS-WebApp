@@ -42,47 +42,12 @@ class InputController
     this.pointer.setPosition(mouse.x, mouse.y);
   }
 
-  onContextMenu(e)
-  {
-    e.stopPropagation();
-    e.preventDefault();
-
-    if (this.cursor._mousemove)
-    {
-      document.removeEventListener('mousemove', this.cursor._mousemove);
-      this.cursor._mousemove = null;
-    }
-    if (this.cursor._mouseup)
-    {
-      document.removeEventListener('mouseup', this.cursor._mouseup);
-      this.cursor._mouseup = null;
-    }
-
-    const pointer = this.pointer;
-    pointer.moveMode = true;
-    const mouse = getMousePosition(this.workspace, e);
-    pointer.setInitialPosition(mouse.x, mouse.y);
-
-    //Check whether to accept the start of input...
-    if (this.onInputDown(pointer.x, pointer.y,
-      pointer.initial.target, pointer.initial.targetType))
-    {
-      this.cursor._mousemove = this.onMouseDownAndMove.bind(this);
-      this.cursor._mouseup = this.onMouseDownAndUp.bind(this);
-
-      document.addEventListener('mousemove', this.cursor._mousemove);
-      document.addEventListener('mouseup', this.cursor._mouseup);
-    }
-  }
-
   onMouseDown(e)
   {
     e.stopPropagation();
     e.preventDefault();
 
-    alert("DOWN");
-
-    if (e.button && e.button !== 1) return;
+    if (!e.button) return;
 
     if (this.cursor._mousemove)
     {
