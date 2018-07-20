@@ -20,7 +20,7 @@ class HomePage extends React.Component {
 
             <div className="homepage-container">
                 <Header/>
-                <Arrow/>
+                <Arrow router={this.props.router}/>
                 <Footer/>
             </div>
 

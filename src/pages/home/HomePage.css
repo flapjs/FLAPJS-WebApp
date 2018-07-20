@@ -19,7 +19,9 @@
 
 }
 
-body {
+.homepage-container{
+    width: 100%;
+    height: 100%;
     background-color: #b3fffa;
 }
 
@@ -59,7 +61,7 @@ body {
 .arrowbutton {
 
     background-color: #FFC82C;
-    color: #7E55F3;
+    color: white;
     position: center;
     margin-left: 50%;
 

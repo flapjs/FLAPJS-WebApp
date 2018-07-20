@@ -9,7 +9,7 @@ class Arrow extends React.Component{
 
     onClick(ev)
     {
-      alert("GO TO OTHER PAGE!");
+        this.props.router.pathname = "/app";
     }
 
     render(){
