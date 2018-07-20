@@ -9,6 +9,7 @@ class NewButton extends React.Component
 
   onClick(ev)
   {
+    this.props.graph.deleteAll();
   }
 
   render()
