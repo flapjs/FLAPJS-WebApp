@@ -3,16 +3,19 @@ import React from 'react';
 import '../Panel.css';
 import './TestingPanel.css';
 
+import TestInputElement from './TestInputElement.js';
+
 class TestingPanel extends React.Component
 {
   render()
   {
+    const graph = this.props.graph;
     return <div className="panel-container" id="testing">
       <div className="panel-title">
         <h1>Testing</h1>
       </div>
       <button className="panel-button test-import">Import Test</button>
-      <TestInputList />
+      <TestInputList graph={graph}/>
       <button className="panel-button test-run">Run All Tests</button>
       <hr />
       <div>
@@ -45,23 +48,13 @@ class TestInputList extends React.Component
 
   render()
   {
+    const graph = this.props.graph;
+
     return <div className="test-inputlist">
       { this.inputs.map((e, i) =>
-        <TestInput key={i} value={e}/>) }
+        <TestInputElement key={i} graph={graph} value={e}/>) }
       <button className="test-inputlist-new">New Test</button>
       <button className="test-inputlist-clear">Clear</button>
-    </div>;
-  }
-}
-
-class TestInput extends React.Component
-{
-  render()
-  {
-    return <div className="test-input">
-      <button className="test-input-result">(x)</button>
-      <input className="test-input-label" contentEditable="true" defaultValue={this.props.value}/>
-      <button className="test-input-delete">(-)</button>
     </div>;
   }
 }

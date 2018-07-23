@@ -6,9 +6,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  font-size: 1.5em;
+  font-size: 1em;
 
-  --toolbar-height: 100pt;
+  --toolbar-height: 4em;
 
   --panel-size: 300px;
   --panel-tab-size: 2.2em;
