@@ -6,12 +6,12 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  font-size: 1.2em;
+  font-size: 1.5em;
 
   --toolbar-height: 4em;
 
   --panel-size: 300px;
-  --panel-tab-size: 2em;
+  --panel-tab-size: 2.2em;
   --panel-border-size: 0.6em;
 
   --panel-tab-border: calc(var(--panel-tab-size) + var(--panel-border-size));
