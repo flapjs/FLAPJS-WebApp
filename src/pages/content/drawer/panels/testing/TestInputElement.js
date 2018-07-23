@@ -31,7 +31,7 @@ class TestInputElement extends React.Component
 
     const graph = this.props.graph;
     const nfa = graph.toNFA();
-    result = solveNFA(nfa, this.props.value) ? 1 : -1;
+    result = solveNFA(nfa, this.state.value) ? 1 : -1;
 
     this.setState((prev, props) => {
       return {
@@ -57,13 +57,12 @@ class TestInputElement extends React.Component
 
   onValueChange(e)
   {
-    /*
+    const value = e.target.value;
     this.setState((prev, props) => {
       return {
-        value: e.target.value
+        value: value
       };
     });
-    */
   }
 
   render()
