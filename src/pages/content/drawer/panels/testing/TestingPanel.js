@@ -42,6 +42,24 @@ class TestInputList extends React.Component
     this.inputs.push("1*0*");
     this.inputs.push("001011");
     this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
+    this.inputs.push("1");
     this.inputs.push("1*0*U1*01*");
     this.inputs.push("E*");
   }

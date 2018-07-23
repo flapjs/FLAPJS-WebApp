@@ -3,6 +3,10 @@
   padding: 5px;
   margin-top: 5px;
   margin-bottom: 5px;
+
+  max-height: 60vh;
+
+  overflow-y: scroll;
 }
 .test-inputlist-new {
   width: 100%;
