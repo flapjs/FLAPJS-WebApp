@@ -5,7 +5,7 @@ import GraphInputController from 'controller/GraphInputController.js';
 
 import HomePage from 'pages/home/HomePage.js';
 import App from 'pages/content/App.js';
-import Page404 from 'pages/Page404.js';
+import Page404 from 'pages/404/Page404.js';
 
 const PAGES = {
   '/': HomePage,
@@ -14,7 +14,7 @@ const PAGES = {
 
 //TODO: this should be set by the server! initially it should be '/'.
 const ROUTER = {
-  pathname: "/app"
+  pathname: "/appf"
 };
 
 const FRAMES_PER_SECOND = 60;

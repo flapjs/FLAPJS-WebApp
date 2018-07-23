@@ -1,0 +1,18 @@
+.four04-container {
+  margin: auto;
+  padding: 90px 0;
+  width: 50%;
+  height: 200px;
+  position: relative;
+  text-align: center;
+}
+
+.four04-text {
+  font-family: sans-serif;
+  font-size: 20px;
+  color: #747678;
+}
+
+a {
+  cursor: pointer;
+}
