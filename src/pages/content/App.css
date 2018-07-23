@@ -7,7 +7,7 @@
   flex-direction: column;
   height: 100%;
 
-  --toolbar-height: 4em;
+  --toolbar-height: 100pt;
 
   --panel-size: 300px;
   --panel-tab-size: 2em;
