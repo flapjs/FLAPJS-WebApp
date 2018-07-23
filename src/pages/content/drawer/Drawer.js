@@ -60,7 +60,7 @@ class Drawer extends React.Component
       case OVERVIEW:
         return <OverviewPanel />;
       case TESTING:
-        return <TestingPanel />;
+        return <TestingPanel graph={this.props.app.graph}/>;
       case EXPORTING:
         return <ExportingPanel />;
       case OPTIONS:
