@@ -70,11 +70,8 @@ class Drawer extends React.Component
     }
   }
 
-  onStartDraggingDrawerBorder(ev)
+  onStartDraggingDrawerBorder(x, y)
   {
-    ev.stopPropagation();
-    ev.preventDefault();
-
     const app = this.props.app;
 
     //Ignore drag move if closed
@@ -94,14 +91,47 @@ class Drawer extends React.Component
     }
 
     //Update panel to current click position
-    updatePanelSize(app, ev);
+    updatePanelSize(app, x, y);
+  }
+
+  onTouchStart(e)
+  {
+    const app = this.props.app;
+    const touch = e.changedTouches[0];
+    this.onStartDraggingDrawerBorder(touch.clientX, touch.clientY);
+
+    const onTouchMove = function(ev)
+    {
+      const touch = ev.changedTouches[0];
+      updatePanelSize(app, touch.clientX, touch.clientY);
+    };
+
+    const onTouchEnd = function(ev)
+    {
+      const touch = ev.changedTouches[0];
+      updatePanelSize(app, touch.clientX, touch.clientY);
+
+      //Remove listeners that are no longer needed
+      document.removeEventListener("touchend", onTouchEnd);
+      document.removeEventListener("touchmove", onTouchMove);
+    };
+
+    //Start listening to move and release events
+    document.addEventListener("touchend", onTouchEnd);
+    document.addEventListener("touchmove", onTouchMove);
+  }
+
+  onMouseDown(e)
+  {
+    const app = this.props.app;
+    this.onStartDraggingDrawerBorder(e.clientX, e.clientY);
 
     const onMouseMove = function(ev)
     {
       ev.stopPropagation();
       ev.preventDefault();
 
-      updatePanelSize(app, ev);
+      updatePanelSize(app, ev.clientX, ev.clientY);
     };
 
     const onMouseUp = function(ev)
@@ -109,7 +139,7 @@ class Drawer extends React.Component
       ev.stopPropagation();
       ev.preventDefault();
 
-      updatePanelSize(app, ev);
+      updatePanelSize(app, ev.clientX, ev.clientY);
 
       //Remove listeners that are no longer needed
       document.removeEventListener("mouseup", onMouseUp);
@@ -155,13 +185,14 @@ class Drawer extends React.Component
       </div>
 
       <div className="drawer-border"
-        onMouseDown={this.onStartDraggingDrawerBorder.bind(this)}>
+        onTouchStart={this.onTouchStart.bind(this)}
+        onMouseDown={this.onMouseDown.bind(this)}>
       </div>
     </div>;
   }
 }
 
-function updatePanelSize(app, ev)
+function updatePanelSize(app, x, y)
 {
   const container = app.container;
   let fullscreen = false;
@@ -171,7 +202,7 @@ function updatePanelSize(app, ev)
   {
     //Vertical slide
     const viewportOffsetY = app.viewport.ref.getBoundingClientRect().y;
-    if (ev.clientY - viewportOffsetY < MAX_PANEL_THRESHOLD)
+    if (y - viewportOffsetY < MAX_PANEL_THRESHOLD)
     {
       //Enable fullscreen
       app.setState((prev, props) => {
@@ -182,7 +213,7 @@ function updatePanelSize(app, ev)
     }
     else
     {
-      size = container.offsetHeight - ev.clientY;
+      size = container.offsetHeight - y;
 
       //Disable fullscreen
       if (app.state.isFullscreen)
@@ -198,7 +229,7 @@ function updatePanelSize(app, ev)
   else
   {
     //Horizontal slide
-    if (ev.clientX < MAX_PANEL_THRESHOLD)
+    if (x < MAX_PANEL_THRESHOLD)
     {
       //Enable fullscreen
       app.setState((prev, props) => {
@@ -209,7 +240,7 @@ function updatePanelSize(app, ev)
     }
     else
     {
-      size = container.offsetWidth - ev.clientX;
+      size = container.offsetWidth - x;
 
       //Disable fullscreen
       if (app.state.isFullscreen)
