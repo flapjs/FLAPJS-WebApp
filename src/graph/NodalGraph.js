@@ -22,6 +22,8 @@ class NodalGraph
   {
     this.nodes = nodes;
     this.edges = edges;
+
+    this._machine = null;
   }
 
   newNode(x, y, label)
@@ -248,7 +250,7 @@ function fillFSA(graph, fsa)
 
     try
     {
-      fsa.newTransition(edge.from, edge.to, edge.label);
+      fsa.newTransition(edge.from.label, edge.to.label, edge.label);
     }
     catch(e)
     {

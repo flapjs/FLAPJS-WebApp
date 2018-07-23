@@ -10,6 +10,8 @@ class NewButton extends React.Component
   onClick(ev)
   {
     this.props.graph.deleteAll();
+    
+    if (this.props.onExecute) this.props.onExecute();
   }
 
   render()

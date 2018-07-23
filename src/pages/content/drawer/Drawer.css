@@ -20,7 +20,7 @@
   top: 0;
   left: var(--panel-border-size);/* border */
 
-  width: calc(100vh - 4em);/* Parent width - toolbar */
+  width: calc(100vh - var(--toolbar-height));/* Parent width - toolbar */
   height: var(--panel-tab-size);/* Height of tabs */
   transform-origin: top left;
   transform: rotate(-90deg) translateX(-100%);
@@ -35,6 +35,7 @@
 .tab-list button {
   flex: 1;
 
+  font-size: inherit;
   background: inherit;
   border: none;
   outline: none;
