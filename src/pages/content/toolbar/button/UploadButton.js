@@ -21,6 +21,8 @@ class UploadButton extends React.Component
       const dst = NodalGraph.parseJSON(JSON.parse(contents));
       const graph = this.props.app.graph;
       graph.copyGraph(dst);
+
+      if (this.props.onExecute) this.props.onExecute();
     };
 
     reader.onerror = function(event) {

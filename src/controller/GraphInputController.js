@@ -264,7 +264,6 @@ class GraphInputController extends InputController
       //Moving nothing
       else if (targetType === 'none')
       {
-        pointer.initial.targetType = "graph";
         //TODO: offset graph by x and y
 
         //Ready to move the graph to pointer...
@@ -299,6 +298,24 @@ class GraphInputController extends InputController
         this.pointer.moveMode = true;
         return true;
       }
+      else if (targetType === 'endpoint')
+      {
+        //This is the same as dragging with moveMode endpoint
+
+        //target MUST be an instance of Edge...
+        if (!(target instanceof Edge))
+          throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Edge.");
+
+        this.prevQuad.x = target.quad.x;
+        this.prevQuad.y = target.quad.y;
+        this.prevEdgeTo = target.to;
+        this.isNewEdge = false;
+
+        this.pointer.moveMode = true;
+
+        //Ready to move the edge endpoint to pointer...
+        return true;
+      }
       //If action dragged nothing...
       else if (targetType === 'none')
       {
@@ -310,7 +327,6 @@ class GraphInputController extends InputController
       {
         //Other action drags are ignored, such as:
         // - Edges
-        // - Endpoints
         // - Graphs
         return false;
       }
@@ -361,10 +377,10 @@ class GraphInputController extends InputController
         return true;
       }
       //Continue to move graph
-      else if (targetType === 'graph')
+      else if (targetType === 'none')
       {
         //Move graph
-        return true;
+        return false;
       }
       else
       {
@@ -541,7 +557,7 @@ class GraphInputController extends InputController
         this.ghostInitialMarker = null;
         return true;
       }
-      else if (targetType === 'graph')
+      else if (targetType === 'none')
       {
         //Do nothing. It should already be moved.
         return true;

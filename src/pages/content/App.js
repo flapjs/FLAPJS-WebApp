@@ -4,6 +4,7 @@ import { hot } from 'react-hot-loader';
 import './App.css';
 
 import NodalGraph from 'graph/NodalGraph.js';
+import AutoSaver from 'util/AutoSaver.js';
 
 import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
@@ -11,7 +12,6 @@ import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
 
 import EventHistory from 'events/EventHistory.js';
-import * as Autosave from 'util/autosave.js';
 
 import GraphEdgeCreateEvent from 'events/GraphEdgeCreateEvent.js';
 import GraphEdgeDeleteEvent from 'events/GraphEdgeDeleteEvent.js';
@@ -36,11 +36,13 @@ class App extends React.Component
 
     this.graph = new NodalGraph();
 
-    //Start autosaving
-    if(Autosave.supportLocalStorage())
+    //Does the browser support autosaving?
+    if(AutoSaver.doesSupportLocalStorage())
     {
-      Autosave.restoreGraph(this.graph);
-      Autosave.initAutosave(this.graph);
+      AutoSaver.loadAutoSave(this.graph);
+
+      //Start auto-saving
+      AutoSaver.initAutoSave(this.graph);
     }
 
     //Create references
