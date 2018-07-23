@@ -81,7 +81,7 @@ class Drawer extends React.Component
       //Opens the drawer if dragging, but closed
       this.props.app.openDrawer();
       */
-      return;
+      return false;
     }
 
     //Disable fullscreen if dragging off of it
@@ -92,63 +92,69 @@ class Drawer extends React.Component
 
     //Update panel to current click position
     updatePanelSize(app, x, y);
+
+    return true;
   }
 
   onTouchStart(e)
   {
     const app = this.props.app;
     const touch = e.changedTouches[0];
-    this.onStartDraggingDrawerBorder(touch.clientX, touch.clientY);
 
-    const onTouchMove = function(ev)
+    if (this.onStartDraggingDrawerBorder(touch.clientX, touch.clientY))
     {
-      const touch = ev.changedTouches[0];
-      updatePanelSize(app, touch.clientX, touch.clientY);
-    };
+      const onTouchMove = function(ev)
+      {
+        const touch = ev.changedTouches[0];
+        updatePanelSize(app, touch.clientX, touch.clientY);
+      };
 
-    const onTouchEnd = function(ev)
-    {
-      const touch = ev.changedTouches[0];
-      updatePanelSize(app, touch.clientX, touch.clientY);
+      const onTouchEnd = function(ev)
+      {
+        const touch = ev.changedTouches[0];
+        updatePanelSize(app, touch.clientX, touch.clientY);
 
-      //Remove listeners that are no longer needed
-      document.removeEventListener("touchend", onTouchEnd);
-      document.removeEventListener("touchmove", onTouchMove);
-    };
+        //Remove listeners that are no longer needed
+        document.removeEventListener("touchend", onTouchEnd);
+        document.removeEventListener("touchmove", onTouchMove);
+      };
 
-    //Start listening to move and release events
-    document.addEventListener("touchend", onTouchEnd);
-    document.addEventListener("touchmove", onTouchMove);
+      //Start listening to move and release events
+      document.addEventListener("touchend", onTouchEnd);
+      document.addEventListener("touchmove", onTouchMove);
+    }
   }
 
   onMouseDown(e)
   {
     const app = this.props.app;
-    this.onStartDraggingDrawerBorder(e.clientX, e.clientY);
 
-    const onMouseMove = function(ev)
+    if (this.onStartDraggingDrawerBorder(touch.clientX, touch.clientY))
     {
-      ev.stopPropagation();
-      ev.preventDefault();
+      const onMouseMove = function(ev)
+      {
+        ev.stopPropagation();
+        ev.preventDefault();
 
-      updatePanelSize(app, ev.clientX, ev.clientY);
-    };
+        updatePanelSize(app, ev.clientX, ev.clientY);
+      };
 
-    const onMouseUp = function(ev)
-    {
-      ev.stopPropagation();
-      ev.preventDefault();
+      const onMouseUp = function(ev)
+      {
+        ev.stopPropagation();
+        ev.preventDefault();
 
-      updatePanelSize(app, ev.clientX, ev.clientY);
+        updatePanelSize(app, ev.clientX, ev.clientY);
 
-      //Remove listeners that are no longer needed
-      document.removeEventListener("mouseup", onMouseUp);
-      document.removeEventListener("mousemove", onMouseMove);
-    };
+        //Remove listeners that are no longer needed
+        document.removeEventListener("mouseup", onMouseUp);
+        document.removeEventListener("mousemove", onMouseMove);
+      };
 
-    //Start listening to move and release events
-    document.addEventListener("mouseup", onMouseUp);
-    document.addEventListener("mousemove", onMouseMove);
+      //Start listening to move and release events
+      document.addEventListener("mouseup", onMouseUp);
+      document.addEventListener("mousemove", onMouseMove);
+    }
   }
 
   render()

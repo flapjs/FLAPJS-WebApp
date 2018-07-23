@@ -19,7 +19,7 @@ class TestInputElement extends React.Component
     super(props);
 
     this.state = {
-      value: '',
+      value: this.props.value,
       result: 0,
       dirty: true
     };
@@ -87,7 +87,6 @@ class TestInputElement extends React.Component
       <button className="test-input-result" onClick={this.test.bind(this)}>{icon}</button>
       <input className="test-input-label" contentEditable="true"
         value={this.state.value}
-        defaultValue={this.props.value}
         onChange={e=>{
           this.onValueChange(e);
         }}/>
