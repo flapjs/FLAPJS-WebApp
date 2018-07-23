@@ -13,6 +13,7 @@ class Page404 extends React.Component
   {
     return(
         <div className="four04-container">
+          <h1 className="four04-heading">Page Not Found</h1>
           <a href="https://www.google.com">
             <img src={logo404} alt="logo404" height="100px" />
           </a>

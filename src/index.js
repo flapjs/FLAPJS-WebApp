@@ -14,7 +14,7 @@ const PAGES = {
 
 //TODO: this should be set by the server! initially it should be '/'.
 const ROUTER = {
-  pathname: "/appf"
+  pathname: "/app"
 };
 
 const FRAMES_PER_SECOND = 60;
