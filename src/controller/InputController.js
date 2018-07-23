@@ -29,6 +29,9 @@ class InputController
 
     //Prepare the workspace
     this.workspace = workspace;
+    this.workspace.addEventListener('contextmenu', this.onContextMenu.bind(this));
+
+    //Process mouse handlers
     this.workspace.addEventListener('mousedown', this.onMouseDown.bind(this));
     this.workspace.addEventListener('mousemove', this.onMouseMove.bind(this));
 
@@ -40,6 +43,12 @@ class InputController
   onUpdate(dt)
   {
 
+  }
+
+  onContextMenu(e)
+  {
+    e.stopPropagation();
+    e.preventDefault();
   }
 
   onTouchMove(e)

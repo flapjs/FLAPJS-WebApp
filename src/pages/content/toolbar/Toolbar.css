@@ -2,11 +2,11 @@
   background: none;
   padding: 0;
   border: none;
-  font-size: 30px;
   color: #B6B1A9;
   border-bottom: 1px solid #182B49;
   width: 6em;
   margin: 0 15px 0 0;
+  font-size: 2em;
 
   transition: color 0.3s ease;
 }
@@ -17,9 +17,9 @@
 
 #machine-type {
   color: #FFCD00;
-  font-size: 25px;
+  font-size: 1em;
   position: absolute;
-  top: 35px;
+  top: 2.6em;
   left: 10px;
   font-family: sans-serif;
 
@@ -48,9 +48,10 @@
   padding: 0;/*Disable normal button style*/
   fill: white;
   justify-content: flex-end;
-  margin-right: 15px;
 
-  width: 3em;
+  margin-right: 1.5em;
+  margin-bottom: 5px;
+  width: 6em;
   height: 100%;
 
   transition: fill 0.3s ease;

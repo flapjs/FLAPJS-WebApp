@@ -177,19 +177,19 @@ class GraphPointer
 
     if (targetType == "node")
     {
-      return Config.NODE_RADIUS_SQU;
+      return Config.NODE_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
     }
     else if (targetType == "edge")
     {
-      return Config.EDGE_RADIUS_SQU;
+      return Config.EDGE_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
     }
     else if (targetType == "endpoint")
     {
-      return Config.ENDPOINT_RADIUS_SQU;
+      return Config.ENDPOINT_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
     }
     else
     {
-      return Config.CURSOR_RADIUS_SQU;
+      return Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
     }
   }
 
