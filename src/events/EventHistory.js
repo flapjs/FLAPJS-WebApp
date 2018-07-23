@@ -26,6 +26,12 @@ class EventHistory
     }
   }
 
+  clear()
+  {
+    this.history.length = 0;
+    this.offsetIndex = 0;
+  }
+
   undo()
   {
     if (!this.canUndo())
