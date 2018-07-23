@@ -22,6 +22,11 @@ class GraphPointer
     this.dragging = false;
   }
 
+  isWaitingForMoveMode()
+  {
+    return !this.moveMode && !this.dragging && this.target;
+  }
+
   setInitialPosition(x, y)
   {
     this.initial.x = this.x = x;

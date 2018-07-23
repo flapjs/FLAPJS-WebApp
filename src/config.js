@@ -28,7 +28,8 @@ export const CURSOR_RADIUS_SQU = CURSOR_RADIUS * CURSOR_RADIUS;
 export const SELF_LOOP_HEIGHT = 32;
 
 //Interface
-export const DOUBLE_TAP_TICKS = 350;
+export const DOUBLE_TAP_TICKS = 600;
+export const LONG_TAP_TICKS = 600;
 export const SPAWN_RADIUS = 64;
 export const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
 
