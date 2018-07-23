@@ -74,16 +74,6 @@ class Drawer extends React.Component
   {
     const app = this.props.app;
 
-    //Ignore drag move if closed
-    if (!app.state.isOpen)
-    {
-      /*
-      //Opens the drawer if dragging, but closed
-      this.props.app.openDrawer();
-      */
-      return false;
-    }
-
     //Disable fullscreen if dragging off of it
     if (app.state.isFullscreen)
     {
@@ -92,69 +82,89 @@ class Drawer extends React.Component
 
     //Update panel to current click position
     updatePanelSize(app, x, y);
-
-    return true;
   }
 
   onTouchStart(e)
   {
+    e.stopPropagation();
+    e.preventDefault();
+
     const app = this.props.app;
-    const touch = e.changedTouches[0];
-
-    if (this.onStartDraggingDrawerBorder(touch.clientX, touch.clientY))
+    //Ignore drag move if closed
+    if (!app.state.isOpen)
     {
-      const onTouchMove = function(ev)
-      {
-        const touch = ev.changedTouches[0];
-        updatePanelSize(app, touch.clientX, touch.clientY);
-      };
-
-      const onTouchEnd = function(ev)
-      {
-        const touch = ev.changedTouches[0];
-        updatePanelSize(app, touch.clientX, touch.clientY);
-
-        //Remove listeners that are no longer needed
-        document.removeEventListener("touchend", onTouchEnd);
-        document.removeEventListener("touchmove", onTouchMove);
-      };
-
-      //Start listening to move and release events
-      document.addEventListener("touchend", onTouchEnd);
-      document.addEventListener("touchmove", onTouchMove);
+      /*
+      //Opens the drawer if dragging, but closed
+      this.props.app.openDrawer();
+      */
+      return;
     }
+
+    const touch = e.changedTouches[0];
+    this.onStartDraggingDrawerBorder(touch.clientX, touch.clientY);
+
+    const onTouchMove = function(ev)
+    {
+      const touch = ev.changedTouches[0];
+      updatePanelSize(app, touch.clientX, touch.clientY);
+    };
+
+    const onTouchEnd = function(ev)
+    {
+      const touch = ev.changedTouches[0];
+      updatePanelSize(app, touch.clientX, touch.clientY);
+
+      //Remove listeners that are no longer needed
+      document.removeEventListener("touchend", onTouchEnd);
+      document.removeEventListener("touchmove", onTouchMove);
+    };
+
+    //Start listening to move and release events
+    document.addEventListener("touchend", onTouchEnd);
+    document.addEventListener("touchmove", onTouchMove);
   }
 
   onMouseDown(e)
   {
+    e.stopPropagation();
+    e.preventDefault();
+
     const app = this.props.app;
-
-    if (this.onStartDraggingDrawerBorder(touch.clientX, touch.clientY))
+    //Ignore drag move if closed
+    if (!app.state.isOpen)
     {
-      const onMouseMove = function(ev)
-      {
-        ev.stopPropagation();
-        ev.preventDefault();
-
-        updatePanelSize(app, ev.clientX, ev.clientY);
-      };
-
-      const onMouseUp = function(ev)
-      {
-        ev.stopPropagation();
-        ev.preventDefault();
-
-        updatePanelSize(app, ev.clientX, ev.clientY);
-
-        //Remove listeners that are no longer needed
-        document.removeEventListener("mouseup", onMouseUp);
-        document.removeEventListener("mousemove", onMouseMove);
-      };
-
-      //Start listening to move and release events
-      document.addEventListener("mouseup", onMouseUp);
-      document.addEventListener("mousemove", onMouseMove);
+      /*
+      //Opens the drawer if dragging, but closed
+      this.props.app.openDrawer();
+      */
+      return;
     }
+
+    this.onStartDraggingDrawerBorder(e.clientX, e.clientY);
+
+    const onMouseMove = function(ev)
+    {
+      ev.stopPropagation();
+      ev.preventDefault();
+
+      updatePanelSize(app, ev.clientX, ev.clientY);
+    };
+
+    const onMouseUp = function(ev)
+    {
+      ev.stopPropagation();
+      ev.preventDefault();
+
+      updatePanelSize(app, ev.clientX, ev.clientY);
+
+      //Remove listeners that are no longer needed
+      document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("mousemove", onMouseMove);
+    };
+
+    //Start listening to move and release events
+    document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener("mousemove", onMouseMove);
   }
 
   render()
