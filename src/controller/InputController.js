@@ -61,6 +61,8 @@ class InputController
 
   onTouchStart(e)
   {
+    if (e.changedTouches.length > 1) return;
+
     e.stopPropagation();
     e.preventDefault();
     document.activeElement.blur();
