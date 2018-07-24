@@ -53,13 +53,12 @@ class App extends React.Component
     this.drawer = React.createRef();
 
     this.eventHistory = new EventHistory();
-    document.addEventListener("drop", this.onFileDrop.bind(this));
-    document.addEventListener("dragover", this.onDragOver.bind(this));
 
     this.state = {
       isOpen: false,
       isDangerous: false,
-      isFullscreen: false
+      isFullscreen: false,
+      isWaitingForFile: false
     };
   }
 
@@ -69,10 +68,47 @@ class App extends React.Component
     ev.preventDefault();
   }
 
+  onDragEnter(ev)
+  {
+    ev.preventDefault();
+
+    //Change state
+    this.setState({ isWaitingForFile: true });
+    this.viewport.setState((prev, props) => {
+      return {
+        prevMode: prev.mode,
+        mode: Viewport.DANGEROUS
+      };
+    });
+  }
+
+  onDragLeave(ev)
+  {
+    ev.preventDefault();
+
+    //Revert state
+    this.setState({ isWaitingForFile: false });
+    this.viewport.setState((prev, props) => {
+      return {
+        prevMode: prev.mode,
+        mode: prev.prevMode
+      };
+    });
+  }
+
   onFileDrop(ev)
   {
     //Prevent file from being opened
     ev.preventDefault();
+
+    //Revert state
+    this.setState({ isWaitingForFile: false });
+    this.viewport.setState((prev, props) => {
+      return {
+        prevMode: prev.mode,
+        mode: prev.prevMode
+      };
+    });
 
     if (ev.dataTransfer.items)
     {
@@ -83,7 +119,7 @@ class App extends React.Component
         if (file.kind === 'file')
         {
           const data = file.getAsFile();
-          GraphUploader.uploadFileToGraph(data, this.graph);
+          GraphUploader.uploadFileToGraph(data, this.graph, null, null);
         }
       }
     }
@@ -93,7 +129,7 @@ class App extends React.Component
       for(let i = 0; i < length; ++i)
       {
         const data = ev.dataTransfer.files[i];
-        GraphUploader.uploadFileToGraph(data, this.graph);
+        GraphUploader.uploadFileToGraph(data, this.graph, null, null);
       }
     }
 
@@ -148,6 +184,13 @@ class App extends React.Component
     //Initialize the controller to graph components
     controller.initialize(this, this.workspace.ref);
 
+    //Upload drop zone
+    const workspaceDOM = this.workspace.ref;
+    workspaceDOM.addEventListener("drop", this.onFileDrop.bind(this));
+    workspaceDOM.addEventListener("dragover", this.onDragOver.bind(this));
+    workspaceDOM.addEventListener("dragenter", this.onDragEnter.bind(this));
+    workspaceDOM.addEventListener("dragleave", this.onDragLeave.bind(this));
+
     //Insert event listeners
     const eventHistory = this.eventHistory;
 
@@ -199,14 +242,19 @@ class App extends React.Component
       <div className="workspace-container">
         <div className={"workspace-main" +
           (this.state.isOpen ? " open" : "")}
-          style={{visibility: this.shouldHideContent() ? "hidden" : "visible"}}>
+          style={{
+            visibility: this.shouldHideContent() ? "hidden" : "visible",
+            opacity: this.state.isWaitingForFile ? "0.1" : "1"
+          }}>
 
           <Workspace ref={ref=>this.workspace=ref} graph={graph} controller={controller}/>
         </div>
 
         <div className={"workspace-viewport" +
           (this.state.isOpen ? " open" : "")}
-          style={{visibility: this.shouldHideContent() ? "hidden" : "visible"}}>
+          style={{
+            visibility: this.shouldHideContent() ? "hidden" : "visible"
+          }}>
 
           <Viewport ref={ref=>this.viewport=ref} app={this} controller={controller}/>
         </div>

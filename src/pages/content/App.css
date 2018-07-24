@@ -38,7 +38,7 @@
   width: calc(100% - var(--panel-tab-border));
   height: inherit;
 
-  transition: right 0.3s ease;
+  transition: opacity 0.1s ease, right 0.3s ease;
 
   right: var(--panel-tab-border);
 }

@@ -2,18 +2,28 @@ import NodalGraph from './NodalGraph.js';
 
 class GraphUploader
 {
-  static uploadFileToGraph(fileBlob, graph, callback)
+  static uploadFileToGraph(fileBlob, graph, callback=null, errorCallback=null)
   {
     const reader = new FileReader();
     reader.onload = (event) => {
       const data = event.target.result;
-      const dst = NodalGraph.parseJSON(JSON.parse(data));
-      graph.copyGraph(dst);
+      try
+      {
+        const dataJSON = JSON.parse(data);
+        const dst = NodalGraph.parseJSON(dataJSON);
+        graph.copyGraph(dst);
 
-      if (callback) callback();
+        if (callback) callback();
+      }
+      catch(e)
+      {
+        reader.abort();
+
+        if (errorCallback) errorCallback();
+      }
     };
     reader.onerror = (event) => {
-      console.error("File could not be read! Code " + event.target.error.code);
+      if (errorCallback) errorCallback(event.target.error.code);
     };
     reader.readAsText(fileBlob);
   }

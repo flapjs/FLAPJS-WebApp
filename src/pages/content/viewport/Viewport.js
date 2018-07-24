@@ -15,6 +15,7 @@ class Viewport extends React.Component
     this.labelEditor = React.createRef();
 
     this.state = {
+      prevMode: Viewport.NORMAL,
       mode: Viewport.NORMAL
     };
   }
