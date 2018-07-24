@@ -22,6 +22,8 @@ class NodalGraph
   {
     this.nodes = nodes;
     this.edges = edges;
+
+    this._machine = null;
   }
 
   newNode(x, y, label)
@@ -33,6 +35,8 @@ class NodalGraph
     }
     this.nodes.push(result);
     //this.emit("nodeCreate", result);
+
+    this.markDirty();
     return result;
   }
 
@@ -62,6 +66,8 @@ class NodalGraph
       //this.emit("newInitial", this.getStartNode(), node);
     }
     //this.emit("nodeDestroy", node);
+
+    this.markDirty();
   }
 
   newEdge(from, to, label)
@@ -69,6 +75,7 @@ class NodalGraph
     const result = new Edge(this, from, to, label);
     this.edges.push(result);
     //this.emit("edgeCreate", result);
+    this.markDirty();
     return result;
   }
 
@@ -76,6 +83,7 @@ class NodalGraph
   {
     this.edges.splice(this.edges.indexOf(edge), 1);
     //this.emit("edgeDestroy", edge);
+    this.markDirty();
   }
 
   deleteAll()
@@ -91,6 +99,8 @@ class NodalGraph
       //this.emit("edgeDestroy", edge);
     }
     this.edges.length = 0;
+
+    this.markDirty();
   }
 
   setStartNode(node)
@@ -101,6 +111,8 @@ class NodalGraph
     const prevNode = this.nodes[0];
     this.nodes.unshift(node);
     //this.emit("newInitial", node, prevNode);
+
+    this.markDirty();
   }
 
   getStartNode()
@@ -113,6 +125,18 @@ class NodalGraph
     this.deleteAll();
     this.nodes = this.nodes.concat(graph.nodes);
     this.edges = this.edges.concat(graph.edges);
+    
+    this.markDirty();
+  }
+
+  markDirty()
+  {
+    this._machine = null;
+  }
+
+  isDirty()
+  {
+    return !this._machine;
   }
 
   static parseJSON(data)
@@ -189,30 +213,38 @@ class NodalGraph
 
   toFSA()
   {
-    let result = this.toDFA();
-    if (result.validate())
+    if (this.isDirty())
     {
-      return result;
+      let result = this.toDFA();
+      if (!result.validate())
+      {
+        result = this.toNFA();
+      }
+      this._machine = result;
     }
-    else
-    {
-      result = this.toNFA();
-      return result;
-    }
+    return this._machine;
   }
 
   toDFA()
   {
-    const result = new DFA();
-    fillFSA(this, result);
+    if (this.isDirty())
+    {
+      const result = new DFA();
+      fillFSA(this, result);
+      this._machine = result;
+    }
     return result;
   }
 
   toNFA()
   {
-    const result = new NFA();
-    fillFSA(this, result);
-    return result;
+    if (this.isDirty())
+    {
+      const result = new NFA();
+      fillFSA(this, result);
+      this._machine = result;
+    }
+    return this._machine;
   }
 }
 //Mixin Eventable

@@ -63,6 +63,7 @@ class App extends React.Component
     };
   }
 
+  //Called to prevent default file open
   onDragOver(ev)
   {
     ev.preventDefault();
