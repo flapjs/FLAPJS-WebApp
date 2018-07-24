@@ -42,7 +42,10 @@ class LabelEditor extends React.Component
     //Save data
     if (this.state.target !== null)
     {
-      if (saveOnExit) this.state.target.label = this.inputElement.value;
+      if (saveOnExit)
+      {
+        this.state.target.setLabel(this.inputElement.value);
+      }
       this.state.target = null;
 
       if (this.state.callback) this.state.callback();

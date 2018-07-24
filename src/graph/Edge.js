@@ -188,10 +188,18 @@ class Edge
     if (Math.abs(this.quad.y) < 8) this.quad.y = 0;
   }
 
+  setLabel(label)
+  {
+    this._label = label;
+
+    this.graph.markDirty();
+  }
+
   get label() { return this._label; }
   set label(value) {
     let prevLabel = this._label;
     this._label = value;
+
     //this.graph.emit("edgeLabel", this, this._label, prevLabel);
   }
 

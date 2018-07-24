@@ -125,7 +125,7 @@ class NodalGraph
     this.deleteAll();
     this.nodes = this.nodes.concat(graph.nodes);
     this.edges = this.edges.concat(graph.edges);
-    
+
     this.markDirty();
   }
 
@@ -252,6 +252,8 @@ Object.assign(NodalGraph.prototype, Eventable);
 
 function fillFSA(graph, fsa)
 {
+  if (graph.nodes.length <= 0) return fsa;
+
   //Create all the nodes
   for(const node of graph.nodes)
   {
@@ -277,14 +279,18 @@ function fillFSA(graph, fsa)
   {
     //Ignore any incomplete edges
     if (edge.isPlaceholder()) continue;
-
-    try
+    const from = edge.from;
+    const to = edge.to;
+    if (from instanceof Node && to instanceof Node)
     {
-      fsa.newTransition(edge.from.label, edge.to.label, edge.label);
-    }
-    catch(e)
-    {
-      throw e;
+      try
+      {
+        fsa.newTransition(from.label, to.label, edge.label);
+      }
+      catch(e)
+      {
+        throw e;
+      }
     }
   }
 

@@ -58,7 +58,7 @@ class Drawer extends React.Component
     switch(index)
     {
       case OVERVIEW:
-        return <OverviewPanel />;
+        return <OverviewPanel graph={this.props.app.graph}/>;
       case TESTING:
         return <TestingPanel graph={this.props.app.graph}/>;
       case EXPORTING:
