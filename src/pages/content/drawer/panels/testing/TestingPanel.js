@@ -70,9 +70,22 @@ class TestInputList extends React.Component
 
     return <div className="test-inputlist">
       { this.inputs.map((e, i) =>
-        <TestInputElement key={i} graph={graph} value={e}/>) }
-      <button className="test-inputlist-new">New Test</button>
-      <button className="test-inputlist-clear">Clear</button>
+        {
+          if (!e) return null;
+          return <TestInputElement key={i} graph={graph} value={e}
+            onDelete={()=>{
+              this.inputs[i] = null;
+              //this.inputs.splice(this.inputs.indexOf(e), 1);
+            }}/>;
+        }) }
+      <button className="test-inputlist-new"
+        onClick={()=>{
+          this.inputs.push("0");
+        }}>New Test</button>
+      <button className="test-inputlist-clear"
+        onClick={()=>{
+          this.inputs.length = 0;
+        }}>Clear</button>
     </div>;
   }
 }

@@ -90,7 +90,7 @@ class TestInputElement extends React.Component
         onChange={e=>{
           this.onValueChange(e);
         }}/>
-      <button className="test-input-delete">
+      <button className="test-input-delete" onClick={this.props.onDelete}>
         <RemoveIcon />
       </button>
     </div>;
