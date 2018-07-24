@@ -49,6 +49,8 @@ class InputController
   {
     e.stopPropagation();
     e.preventDefault();
+    document.activeElement.blur();
+    this.workspace.focus();
   }
 
   onTouchMove(e)
@@ -61,6 +63,8 @@ class InputController
   {
     e.stopPropagation();
     e.preventDefault();
+    document.activeElement.blur();
+    this.workspace.focus();
 
     const touch = e.changedTouches[0];
 
@@ -119,6 +123,8 @@ class InputController
   {
     e.stopPropagation();
     e.preventDefault();
+    document.activeElement.blur();
+    this.workspace.focus();
 
     if (this.cursor._mousemove)
     {
@@ -180,7 +186,7 @@ class InputController
         pointer.moveMode = true;
       }
     }, Config.LONG_TAP_TICKS);
-    
+
     return true;
   }
 

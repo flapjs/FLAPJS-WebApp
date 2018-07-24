@@ -1,10 +1,8 @@
 import React from 'react';
 import './TestInputElement.css';
 
-import SuccessIcon from './SuccessIcon.js';
-import FailureIcon from './FailureIcon.js';
-import PendingIcon from './PendingIcon.js';
-import RemoveIcon from './RemoveIcon.js';
+import AddRemoveIcon from './AddRemoveIcon.js';
+import StatusIcon from './StatusIcon.js';
 
 import { solveNFA } from 'machine/util/solveNFA.js';
 
@@ -23,6 +21,10 @@ class TestInputElement extends React.Component
       result: 0,
       dirty: true
     };
+
+    this.inputElement = React.createRef();
+
+    this.onValueChange = this.onValueChange.bind(this);
   }
 
   test()
@@ -41,6 +43,15 @@ class TestInputElement extends React.Component
     });
   }
 
+  clear()
+  {
+    this.setState({
+      value: "",
+      result: 0,
+      dirty: true
+    });
+  }
+
   invalidate()
   {
     this.setState((prev, props) => {
@@ -50,48 +61,40 @@ class TestInputElement extends React.Component
     });
   }
 
-  onExecute(e)
+  getValue()
   {
-    this.test();
+    return this.state.value;
   }
 
   onValueChange(e)
   {
-    const value = e.target.value;
-    this.setState((prev, props) => {
-      return {
-        value: value
-      };
-    });
+    this.setState({value: e.target.value});
   }
 
   render()
   {
     const result = this.state.result;
-    let icon = null;
-    switch (result)
-    {
-      case PENDING:
-        icon = <PendingIcon active={!this.state.dirty}/>;
-        break;
-      case SUCCESS:
-        icon = <SuccessIcon active={!this.state.dirty} />;
-        break;
-      case FAILURE:
-        icon = <FailureIcon active={!this.state.dirty} />;
-        break;
-      default:
-        throw new Error("Unknown test result: \'" + result + "\'.");
-    }
+    const placeholder = this.props.placeholder;
+
     return <div className="test-input">
-      <button className="test-input-result" onClick={this.test.bind(this)}>{icon}</button>
-      <input className="test-input-label" contentEditable="true"
+      <button className="test-input-result" onClick={this.test.bind(this)}>
+        <StatusIcon active={!this.state.dirty} mode={this.state.result}/>
+      </button>
+      <input type="text" className="test-input-label"
         value={this.state.value}
-        onChange={e=>{
-          this.onValueChange(e);
-        }}/>
-      <button className="test-input-delete" onClick={this.props.onDelete}>
-        <RemoveIcon />
+        onChange={this.onValueChange}/>
+      <button className="test-input-delete"
+        onClick={(e) => {
+          if (this.props.placeholder)
+          {
+            this.props.onAdd(this);
+          }
+          else
+          {
+            this.props.onDelete(this);
+          }
+        }}>
+        <AddRemoveIcon add={placeholder}/>
       </button>
     </div>;
   }

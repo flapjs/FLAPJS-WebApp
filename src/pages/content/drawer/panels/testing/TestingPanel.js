@@ -7,6 +7,13 @@ import TestInputElement from './TestInputElement.js';
 
 class TestingPanel extends React.Component
 {
+  constructor(props)
+  {
+    super(props);
+
+    this.testInputList = React.createRef();
+  }
+
   render()
   {
     const graph = this.props.graph;
@@ -15,8 +22,13 @@ class TestingPanel extends React.Component
         <h1>Testing</h1>
       </div>
       <button className="panel-button test-import">Import Test</button>
-      <TestInputList graph={graph}/>
-      <button className="panel-button test-run">Run All Tests</button>
+      <TestInputList graph={graph} ref={ref=>this.testInputList=ref}/>
+      <button className="panel-button test-run"
+        onClick={()=>{
+          //TODO: test all
+        }}>
+        Run All Tests
+        </button>
       <hr />
       <div>
         <input id="test-step" type="checkbox"/>
@@ -36,32 +48,14 @@ class TestInputList extends React.Component
   {
     super(props);
 
-    this.inputs = [];
+    this.state = {
+      inputs: TestInputList.INPUTS
+    };
+  }
 
-    this.inputs.push("0101010001001");
-    this.inputs.push("1*0*");
-    this.inputs.push("001011");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1");
-    this.inputs.push("1*0*U1*01*");
-    this.inputs.push("E*");
+  addTestInput(inputString)
+  {
+    this.state.inputs.push(inputString);
   }
 
   render()
@@ -69,25 +63,30 @@ class TestInputList extends React.Component
     const graph = this.props.graph;
 
     return <div className="test-inputlist">
-      { this.inputs.map((e, i) =>
+      { this.state.inputs.map((e, i) =>
         {
           if (!e) return null;
           return <TestInputElement key={i} graph={graph} value={e}
-            onDelete={()=>{
-              this.inputs[i] = null;
-              //this.inputs.splice(this.inputs.indexOf(e), 1);
+            onDelete={(e)=>{
+              this.state.inputs.splice(i, 1);
             }}/>;
         }) }
-      <button className="test-inputlist-new"
-        onClick={()=>{
-          this.inputs.push("0");
-        }}>New Test</button>
+      <TestInputElement graph={graph} value="" placeholder={true}
+        onAdd={(e) => {
+          const value = e.getValue();
+          if (value)
+          {
+            this.addTestInput(value);
+          }
+          e.clear();
+        }}/>
       <button className="test-inputlist-clear"
         onClick={()=>{
-          this.inputs.length = 0;
+          this.state.inputs.length = 0;
         }}>Clear</button>
     </div>;
   }
 }
+TestInputList.INPUTS = [];
 
 export default TestingPanel;

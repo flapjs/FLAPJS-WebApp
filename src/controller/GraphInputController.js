@@ -83,7 +83,37 @@ class GraphInputController extends InputController
   }
 
   onInputMove(x, y, target, targetType) {}
-  onInputUp(x, y, target, targetType) {}
+  onInputUp(x, y, target, targetType)
+  {
+    if (targetType === 'none')
+    {
+      //TODO: this may have a bug in where you must triple click
+      if (this.firstEmptyClick)
+      {
+        //If within the time to double tap...
+        if (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS)
+        {
+          //Create state at position
+          const node = this.createNode(x, y);
+
+          //Emit event
+          this.emit("nodeCreate", node);
+        }
+
+        //Reset empty click
+        this.firstEmptyClick = false;
+        this.firstEmptyTime = 0;
+      }
+      else
+      {
+        //This is the first empty click, should wait for another...
+        this.firstEmptyClick = true;
+        this.firstEmptyTime = this.pointer.initial.time;
+      }
+
+      return true;
+    }
+  }
 
   onInputAction(x, y, target, targetType)
   {
@@ -154,35 +184,6 @@ class GraphInputController extends InputController
       {
         //Edit label for selected edge
         this.openLabelEditor(target, x, y);
-        return true;
-      }
-      //If hovered target is none...
-      else if (pointer.targetType === 'none')
-      {
-        //TODO: this may have a bug in where you must triple click
-        if (this.firstEmptyClick)
-        {
-          //If within the time to double tap...
-          if (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS)
-          {
-            //Create state at position
-            const node = this.createNode(x, y);
-
-            //Emit event
-            this.emit("nodeCreate", node);
-          }
-
-          //Reset empty click
-          this.firstEmptyClick = false;
-          this.firstEmptyTime = 0;
-        }
-        else
-        {
-          //This is the first empty click, should wait for another...
-          this.firstEmptyClick = true;
-          this.firstEmptyTime = pointer.initial.time;
-        }
-
         return true;
       }
       else

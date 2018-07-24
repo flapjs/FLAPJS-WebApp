@@ -35,24 +35,14 @@ class App extends React.Component
   {
     super(props);
 
-    this.graph = new NodalGraph();
-
-    //Does the browser support autosaving?
-    if(AutoSaver.doesSupportLocalStorage())
-    {
-      AutoSaver.loadAutoSave(this.graph);
-
-      //Start auto-saving
-      AutoSaver.initAutoSave(this.graph);
-    }
+    this.graph = App.GRAPH;
+    this.eventHistory = App.HISTORY;
 
     //Create references
     this.container = React.createRef();
     this.workspace = React.createRef();
     this.viewport = React.createRef();
     this.drawer = React.createRef();
-
-    this.eventHistory = new EventHistory();
 
     this.state = {
       isOpen: false,
@@ -178,6 +168,15 @@ class App extends React.Component
 
   componentDidMount()
   {
+    //Does the browser support autosaving?
+    if(AutoSaver.doesSupportLocalStorage())
+    {
+      AutoSaver.loadAutoSave(this.graph);
+
+      //Start auto-saving
+      AutoSaver.initAutoSave(this.graph);
+    }
+
     const graph = this.graph;
     const controller = this.props.controller;
 
@@ -269,6 +268,8 @@ class App extends React.Component
     </div>;
   }
 }
+App.GRAPH = new NodalGraph();
+App.HISTORY = new EventHistory();
 
 //For hotloading this class
 export default hot(module)(App);
