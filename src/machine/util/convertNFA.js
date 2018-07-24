@@ -29,6 +29,21 @@ export function convertToDFA(nfa)
     }
   }
 
+  //Check for the new alphabet...
+  const newAlphabet = result.getAlphabet();
+  for(const state of result.getStates())
+  {
+    for(const symbol of newAlphabet)
+    {
+      //If transition for this symbol does not exist...
+      if (!result.doTransition(state, symbol))
+      {
+        //Create it
+        result.newTransition(state, state, symbol);
+      }
+    }
+  }
+
   return result;
 }
 

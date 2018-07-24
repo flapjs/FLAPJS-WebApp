@@ -1,0 +1,84 @@
+#machine-name {
+  background: none;
+  padding: 0;
+  border: none;
+  color: #B6B1A9;
+  border-bottom: 1px solid #182B49;
+  width: 6em;
+  margin: 0 15px 0 0;
+  font-size: 2em;
+
+  transition: color 0.3s ease;
+}
+#machine-name:focus {
+  outline: none;
+  color: #FFFFFF;
+}
+
+#machine-type {
+  color: #FFCD00;
+  font-size: 1em;
+  position: absolute;
+  top: 2.6em;
+  left: 10px;
+  font-family: sans-serif;
+
+  transition: color 0.3s ease;
+}
+
+#machine-type:hover {
+  color: #C69214;
+}
+
+.toolbar-container {
+  padding-left: 10px;
+  display: flex;
+
+  height: var(--toolbar-height);
+  overflow: hidden;
+
+  background-color: #006A96;
+  box-shadow: 0 0.16em 0 #FFCD00;
+}
+
+.toolbar-button {
+  background: none;/*Disable normal button style*/
+  border: none;/*Disable normal button style*/
+  outline: none;/*Disable normal button style*/
+  padding: 0;/*Disable normal button style*/
+  fill: white;
+  justify-content: flex-end;
+
+  margin-right: 1.5em;
+  margin-bottom: 5px;
+  width: 6em;
+  height: 100%;
+
+  transition: fill 0.3s ease;
+}
+.toolbar-button:hover {
+  fill: #FFCD00;
+}
+.toolbar-button:disabled {
+  fill: #005C82;
+}
+.navicons {
+  width: 100%;
+  height: 100%;
+}
+
+#toolbar-help {
+  margin-left: auto;
+
+  fill: #FFCD00;
+  width: 3em;
+}
+#toolbar-help:hover {
+  fill: #C69214;
+}
+
+#import-file {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+}

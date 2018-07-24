@@ -28,9 +28,12 @@ export const CURSOR_RADIUS_SQU = CURSOR_RADIUS * CURSOR_RADIUS;
 export const SELF_LOOP_HEIGHT = 32;
 
 //Interface
-export const DOUBLE_TAP_TICKS = 350;
+export const DOUBLE_TAP_TICKS = 600;
+export const LONG_TAP_TICKS = 600;
 export const SPAWN_RADIUS = 64;
 export const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
+export const DRAGGING_BUFFER = 18;
+export const DRAGGING_BUFFER_SQU = DRAGGING_BUFFER * DRAGGING_BUFFER;
 
 //Graph sorting
 export const PADDING_RADIUS_SQU = 2304;
@@ -57,6 +60,10 @@ export const EDGE_TEXT_ANCHOR = "middle";
 export const EDGE_STROKE_STYLE = TRANSITION_COLOR;
 export const EDGE_TEXT_STROKE_STYLE = TRANSITION_TEXT_COLOR;
 
+export const BORDER_STROKE_STYLE = "rgba(0,0,0,0.02)";
+export const BORDER_LINE_WIDTH = "0.5em";
+export const BORDER_LINE_DASH = [20, 24];
+
 export const HOVER_STROKE_STYLE = "rgba(0,0,0,0.6)";
 export const HOVER_LINE_WIDTH = 2;
 export const HOVER_LINE_DASH = [6, 4];
@@ -68,17 +75,6 @@ export const SELECTION_BOX_SHADOW_OFFSETX = 2;
 export const SELECTION_BOX_SHADOW_OFFSETY = 2;
 export const SELECTION_BOX_FILL_STYLE = "rgba(0, 0, 0, 0.1)";
 export const SELECTION_BOX_STROKE_STYLE = "black";
-
-export const TRASH_AREA_WIDTH = 64;
-export const TRASH_AREA_HEIGHT = 64;
-export const TRASH_AREA_POSX = 0;
-export const TRASH_AREA_POSY = TRASH_AREA_HEIGHT;
-export const TRASH_AREA_SHADOW_COLOR = "red";
-export const TRASH_AREA_SHADOW_SIZE = 5;
-export const TRASH_AREA_SHADOW_OFFSETX = 2;
-export const TRASH_AREA_SHADOW_OFFSETY = 2;
-export const TRASH_AREA_FILL_STYLE = "rgba(255, 0, 0, 0.2)";
-export const TRASH_AREA_STROKE_STYLE = "red";
 
 //IO
 export const EXPORT_FILE_NAME = "flap-machine.png";

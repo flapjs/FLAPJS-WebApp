@@ -1,0 +1,41 @@
+.title {
+
+    width: 100%;
+    background-color: white;
+    border-bottom-style: solid;
+    margin-left: 0px;
+}
+
+.title h1 {
+
+
+    font-family: 'Arvo', serif;
+    color: black;
+    font-size: 50px;
+    text-align: left;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 10px;
+
+}
+
+.homepage-container{
+    background-color: #29FFF1;
+}
+
+.title img{
+
+    height: 40px;
+    width: 60px;
+}
+
+.footer {
+
+    font-family: "Arvo", Serif;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    border-top: solid;
+    background-color: white;
+
+}

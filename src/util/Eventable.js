@@ -35,22 +35,11 @@ const Eventable = {
 
     //Can pass additional args to listeners here...
     const args = Array.prototype.splice.call(arguments, 1);
-    const listeners = this.__events.get(eventName);
-    const length = listeners.length;
-    let i = 0;
-    while(i < length)
+    const listeners = this.__events.get(eventName).slice();
+    for(let listener of listeners)
     {
-      const listener = listeners[i];
       const result = listener.apply(null, args);
-      if (result)
-      {
-        listeners.splice(i, 1);
-        --i;
-      }
-      else
-      {
-        ++i;
-      }
+      if (result) break;
     }
 
     this.onEventProcessed(eventName, args);
@@ -61,10 +50,11 @@ const Eventable = {
   },
   once(eventName, listener)
   {
-    this.addListener(eventName, () => {
-      listener();
-      return true;
-    });
+    const f = () => {
+      listener.apply(null, arguments);
+      this.removeEventListener(f);
+    };
+    this.addListener(eventName, f);
   },
   onEventProcessed(eventName, args)
   {
