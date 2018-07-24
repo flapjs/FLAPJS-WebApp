@@ -12,6 +12,7 @@ import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
 
 import EventHistory from 'events/EventHistory.js';
+import GraphUploader from 'graph/GraphUploader.js';
 
 import GraphEdgeCreateEvent from 'events/GraphEdgeCreateEvent.js';
 import GraphEdgeDeleteEvent from 'events/GraphEdgeDeleteEvent.js';
@@ -52,12 +53,57 @@ class App extends React.Component
     this.drawer = React.createRef();
 
     this.eventHistory = new EventHistory();
+    document.addEventListener("drop", this.onFileDrop.bind(this));
+    document.addEventListener("dragover", this.onDragOver.bind(this));
 
     this.state = {
       isOpen: false,
       isDangerous: false,
       isFullscreen: false
     };
+  }
+
+  onDragOver(ev)
+  {
+    ev.preventDefault();
+  }
+
+  onFileDrop(ev)
+  {
+    //Prevent file from being opened
+    ev.preventDefault();
+
+    if (ev.dataTransfer.items)
+    {
+      const length = ev.dataTransfer.items.length;
+      for(let i = 0; i < length; ++i)
+      {
+        let file = ev.dataTransfer.items[i];
+        if (file.kind === 'file')
+        {
+          const data = file.getAsFile();
+          GraphUploader.uploadFileToGraph(data, this.graph);
+        }
+      }
+    }
+    else
+    {
+      const length = ev.dataTransfer.files.length;
+      for(let i = 0; i < length; ++i)
+      {
+        const data = ev.dataTransfer.files[i];
+        GraphUploader.uploadFileToGraph(data, this.graph);
+      }
+    }
+
+    if (ev.dataTransfer.items)
+    {
+      ev.dataTransfer.items.clear();
+    }
+    else
+    {
+      ev.dataTransfer.clearData();
+    }
   }
 
   openDrawer(full=null)
