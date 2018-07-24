@@ -171,18 +171,17 @@ class InputController
     pointer.setInitialPosition(mouse.x, mouse.y);
 
     //Check whether to accept the start of input...
-    const result = this.onInputDown(pointer.x, pointer.y,
+    this.onInputDown(pointer.x, pointer.y,
       pointer.initial.target, pointer.initial.targetType);
-    if (result)
-    {
-      this.cursor._timer = setTimeout(() => {
-        if (pointer.isWaitingForMoveMode())
-        {
-          pointer.moveMode = true;
-        }
-      }, Config.LONG_TAP_TICKS);
-    }
-    return result;
+
+    this.cursor._timer = setTimeout(() => {
+      if (pointer.isWaitingForMoveMode())
+      {
+        pointer.moveMode = true;
+      }
+    }, Config.LONG_TAP_TICKS);
+    
+    return true;
   }
 
   doInputDownAndMove(x, y)

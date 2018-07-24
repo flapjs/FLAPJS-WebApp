@@ -33,6 +33,8 @@ class GraphInputController extends InputController
     this.prevEdgeTo = null;
     this.prevX = 0;
     this.prevY = 0;
+    this.prevOffsetX = 0;
+    this.prevOffsetY = 0;
 
     //Make sure this is always false when moving endpoints
     this.isNewEdge = false;
@@ -56,7 +58,7 @@ class GraphInputController extends InputController
 
   onUpdate()
   {
-    this.pointer.updateTarget();
+    //this.pointer.updateTarget();
   }
 
   onInputDown(x, y, target, targetType)
@@ -264,7 +266,11 @@ class GraphInputController extends InputController
       //Moving nothing
       else if (targetType === 'none')
       {
-        //TODO: offset graph by x and y
+        //Reuse nodal prev pos for graph prev pos
+        this.prevX = x;
+        this.prevY = y;
+        this.prevOffsetX = this.pointer.offsetX;
+        this.prevOffsetY = this.pointer.offsetY;
 
         //Ready to move the graph to pointer...
         return true;
@@ -380,7 +386,11 @@ class GraphInputController extends InputController
       else if (targetType === 'none')
       {
         //Move graph
-        return false;
+        const dx = x - this.prevX;
+        const dy = y - this.prevY;
+        this.pointer.offsetX += dx;
+        this.pointer.offsetY += dy;
+        return true;
       }
       else
       {

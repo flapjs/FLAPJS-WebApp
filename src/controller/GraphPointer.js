@@ -14,6 +14,9 @@ class GraphPointer
     this.x = 0;
     this.y = 0;
 
+    this.offsetX = 0;
+    this.offsetY = 0;
+
     this.target = null;
     this.targetType = null;
 
@@ -24,13 +27,13 @@ class GraphPointer
 
   isWaitingForMoveMode()
   {
-    return !this.moveMode && !this.dragging && this.target;
+    return !this.moveMode && !this.dragging;
   }
 
   setInitialPosition(x, y)
   {
-    this.initial.x = this.x = x;
-    this.initial.y = this.y = y;
+    this.initial.x = this.x = x - this.offsetX;
+    this.initial.y = this.y = y - this.offsetY;
     this.initial.time = Date.now();
 
     this.updateTarget();
@@ -42,8 +45,8 @@ class GraphPointer
 
   setPosition(x, y)
   {
-    this.x = x;
-    this.y = y;
+    this.x = x - this.offsetX;
+    this.y = y - this.offsetY;
   }
 
   updateTarget()
@@ -187,9 +190,13 @@ class GraphPointer
     {
       return Config.ENDPOINT_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
     }
-    else
+    else if (targetType === 'initial')
     {
       return Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
+    }
+    else
+    {
+      return 0;
     }
   }
 

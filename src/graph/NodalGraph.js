@@ -22,8 +22,6 @@ class NodalGraph
   {
     this.nodes = nodes;
     this.edges = edges;
-
-    this._machine = null;
   }
 
   newNode(x, y, label)

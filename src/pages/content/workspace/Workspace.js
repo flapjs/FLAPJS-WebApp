@@ -27,41 +27,43 @@ class Workspace extends React.Component
     return <svg id="workspace-content" ref={ref=>this.ref=ref}
       viewBox="-150 -150 300 300"
       xmlns="http://www.w3.org/2000/svg">
-      //Graph objects
-      <g>
-        //Nodes
-        { graph.nodes.map((e, i) =>
-          <NodeRenderer key={i} node={e}/>) }
+      <g transform={"translate(" + controller.pointer.offsetX + " " + controller.pointer.offsetY + ")"}>
+        //Graph objects
+        <g>
+          //Nodes
+          { graph.nodes.map((e, i) =>
+            <NodeRenderer key={i} node={e}/>) }
 
-        //Edges
-        { graph.edges.map((e, i) =>
-          <EdgeRenderer key={i} edge={e}
-            start={e.getStartPoint()}
-            end={e.getEndPoint()}
-            center={e.getCenterPoint()}
-            label={e.label}/>) }
-      </g>
+          //Edges
+          { graph.edges.map((e, i) =>
+            <EdgeRenderer key={i} edge={e}
+              start={e.getStartPoint()}
+              end={e.getEndPoint()}
+              center={e.getCenterPoint()}
+              label={e.label}/>) }
+        </g>
 
-      //Graph guis
-      <g>
-        //Initial marker (and ghost)
-        { graph.getStartNode() && (controller.ghostInitialMarker == null ?
-          <InitialMarkerRenderer node={graph.getStartNode()}/> :
-          <InitialMarkerRenderer node={controller.ghostInitialMarker}/>) }
+        //Graph guis
+        <g>
+          //Initial marker (and ghost)
+          { graph.getStartNode() && (controller.ghostInitialMarker == null ?
+            <InitialMarkerRenderer node={graph.getStartNode()}/> :
+            <InitialMarkerRenderer node={controller.ghostInitialMarker}/>) }
 
-        //Selected Elements
-        { controller.selector.hasSelection() &&
-          controller.selector.getSelection().map((e, i) =>
-            <Select key={i} target={e} type="node"/>) }
+          //Selected Elements
+          { controller.selector.hasSelection() &&
+            controller.selector.getSelection().map((e, i) =>
+              <Select key={i} target={e} type="node"/>) }
 
-        //SelectionBox
-        <SelectionBoxRenderer src={controller.selector}/>
+          //SelectionBox
+          <SelectionBoxRenderer src={controller.selector}/>
 
-        //Hover Element
-        { controller.pointer.target &&
-          !controller.selector.isTargetSelected(controller.pointer.target) &&
-          <Select target={controller.pointer.target} type={controller.pointer.targetType}/> }
+          //Hover Element
+          { /*controller.pointer.target &&
+            !controller.selector.isTargetSelected(controller.pointer.target) &&
+            <Select target={controller.pointer.target} type={controller.pointer.targetType}/>*/ }
 
+          </g>
         </g>
     </svg>;
   }
@@ -78,25 +80,25 @@ function Select(props)
   switch(type)
   {
     case "node":
-      x = target.x;
-      y = target.y;
+      x = target.x || 0;
+      y = target.y || 0;
       r = Config.NODE_RADIUS;
       break;
     case "edge":
       const center = target.getCenterPoint();
-      x = center.x;
-      y = center.y;
+      x = center.x || 0;
+      y = center.y || 0;
       r = Config.EDGE_RADIUS;
       break;
     case "endpoint":
       const endpoint = target.getEndPoint();
-      x = endpoint.x;
-      y = endpoint.y;
+      x = endpoint.x || 0;
+      y = endpoint.y || 0;
       r = Config.ENDPOINT_RADIUS;
       break;
     case "initial":
-      x = target.x - Config.NODE_RADIUS;
-      y = target.y;
+      x = target.x - Config.NODE_RADIUS || 0;
+      y = target.y || 0;
       r = Config.CURSOR_RADIUS;
       break;
   }
