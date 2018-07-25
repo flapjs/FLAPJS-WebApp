@@ -63,7 +63,6 @@
   position: fixed;
   width: var(--panel-size);/* Drawer width */
   height: inherit;
-  max-width: 100%;
 
   transition: right 0.3s ease;
 
@@ -81,6 +80,7 @@
 }
 .workspace-drawer.open {
   right: 0px;/* At edge */
+  max-width: 100%;
 }
 
 @media screen and (max-width: 400px) {
@@ -103,7 +103,6 @@
 
     width: 100%;
     height: var(--panel-size);/* Drawer height */
-    max-height: calc(100% - var(--toolbar-height));
 
     /* BUGFIX: when expands, it will not translate the right property*/
     transition:
@@ -128,6 +127,7 @@
   }
   .workspace-drawer.open {
     right: 0px; /* Overwrite changes */
+    max-height: calc(100% - var(--toolbar-height));
 
     transition: bottom 0.3s ease;
 
