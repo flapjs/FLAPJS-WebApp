@@ -1,8 +1,6 @@
 import React from 'react';
 import './NotificationSystem.css';
 
-import CloseIcon from './CloseIcon.js';
-
 class NotificationSystem extends React.Component
 {
   constructor(props)
