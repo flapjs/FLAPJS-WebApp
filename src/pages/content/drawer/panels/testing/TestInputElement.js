@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Config from 'config.js';
 import './TestInputElement.css';
 
 import AddRemoveIcon from './AddRemoveIcon.js';
@@ -25,6 +26,7 @@ class TestInputElement extends React.Component
     this.inputElement = React.createRef();
 
     this.onValueChange = this.onValueChange.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
   }
 
   test()
@@ -68,7 +70,18 @@ class TestInputElement extends React.Component
 
   onValueChange(e)
   {
-    this.setState({value: e.target.value});
+    this.setState({
+      value: e.target.value,
+      dirty: true
+    });
+  }
+
+  onKeyUp(e)
+  {
+    if (e.keyCode === Config.SUBMIT_KEY)
+    {
+      this.test();
+    }
   }
 
   render()
@@ -80,9 +93,10 @@ class TestInputElement extends React.Component
       <button className="test-input-result" onClick={this.test.bind(this)}>
         <StatusIcon active={!this.state.dirty} mode={this.state.result}/>
       </button>
-      <input type="text" className="test-input-label"
+      <input type="text" className="test-input-label" ref={ref=>this.inputElement=ref}
         value={this.state.value}
-        onChange={this.onValueChange}/>
+        onChange={this.onValueChange}
+        onKeyUp={this.onKeyUp}/>
       <button className="test-input-delete"
         onClick={(e) => {
           if (this.props.placeholder)

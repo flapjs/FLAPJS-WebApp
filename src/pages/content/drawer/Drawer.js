@@ -179,7 +179,6 @@ class Drawer extends React.Component
       <div className="drawer-content">
         {this.getTab(this.state.tabIndex)}
       </div>
-
       <div className="tab-list">
         <DrawerExpander app={app}/>
         <button className={"tab-link" + (this.state.tabIndex == TESTING ? " active" : "")}

@@ -48,6 +48,8 @@ class TestInputList extends React.Component
   {
     super(props);
 
+    this.placeholderInput = React.createRef();
+
     this.state = {
       inputs: TestInputList.INPUTS
     };
@@ -71,14 +73,16 @@ class TestInputList extends React.Component
               this.state.inputs.splice(i, 1);
             }}/>;
         }) }
-      <TestInputElement graph={graph} value="" placeholder={true}
+      <TestInputElement ref={ref=>this.placeholderInput=ref} graph={graph} value="" placeholder={true}
         onAdd={(e) => {
           const value = e.getValue();
           if (value)
           {
             this.addTestInput(value);
           }
-          e.clear();
+
+          this.placeholderInput.inputElement.focus();
+          this.placeholderInput.inputElement.select();
         }}/>
       <button className="test-inputlist-clear"
         onClick={()=>{

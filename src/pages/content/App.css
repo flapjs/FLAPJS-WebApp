@@ -12,7 +12,7 @@
 
   --panel-size: 300px;
   --panel-tab-size: 2.2em;
-  --panel-border-size: 0.6em;
+  --panel-border-size: 0.8em;
 
   --panel-tab-border: calc(var(--panel-tab-size) + var(--panel-border-size));
 }
