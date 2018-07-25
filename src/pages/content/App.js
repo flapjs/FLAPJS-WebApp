@@ -13,6 +13,7 @@ import Viewport from './viewport/Viewport.js';
 
 import EventHistory from 'events/EventHistory.js';
 import GraphUploader from 'graph/GraphUploader.js';
+import TestingManager from './drawer/panels/testing/TestingManager.js';
 
 import GraphEdgeCreateEvent from 'events/GraphEdgeCreateEvent.js';
 import GraphEdgeDeleteEvent from 'events/GraphEdgeDeleteEvent.js';
@@ -35,8 +36,9 @@ class App extends React.Component
   {
     super(props);
 
-    this.graph = App.GRAPH;
-    this.eventHistory = App.HISTORY;
+    this.graph = new NodalGraph();
+    this.eventHistory = new EventHistory();
+    this.testingManager = new TestingManager(this.graph);
 
     //Create references
     this.container = React.createRef();
@@ -262,8 +264,6 @@ class App extends React.Component
     </div>;
   }
 }
-App.GRAPH = new NodalGraph();
-App.HISTORY = new EventHistory();
 
 //For hotloading this class
 export default hot(module)(App);

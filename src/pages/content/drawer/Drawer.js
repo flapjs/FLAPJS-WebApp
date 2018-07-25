@@ -55,12 +55,13 @@ class Drawer extends React.Component
 
   getTab(index)
   {
+    const app = this.props.app;
     switch(index)
     {
       case OVERVIEW:
-        return <OverviewPanel graph={this.props.app.graph}/>;
+        return <OverviewPanel graph={app.graph}/>;
       case TESTING:
-        return <TestingPanel graph={this.props.app.graph}/>;
+        return <TestingPanel graph={app.graph} tester={app.testingManager}/>;
       case EXPORTING:
         return <ExportingPanel />;
       case OPTIONS:

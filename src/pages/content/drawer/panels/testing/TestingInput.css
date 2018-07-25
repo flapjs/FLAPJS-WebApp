@@ -1,5 +1,7 @@
-.test-input {
-  position: relative;
+.test-input-container {
+  display: flex;
+  flex-direction: row;
+
   padding-bottom: 5px;
   width: 100%;
   height: 1.5em;
@@ -7,26 +9,35 @@
 
   white-space: nowrap;
 }
-.test-input-label {
+
+.test-input-placeholder {
+  border-bottom: 4px solid gray;
+}
+
+.test-input-field {
+  flex-grow: 1;
+  font-size: 16px;
+  min-width: 0;
+
   background: none;
   outline: none;
   border: none;
 
   color: white;
 }
-.test-input-result {
+
+.test-input-container .status-icon {
   background: none;
   outline: none;
   border: none;
 
   cursor: pointer;
 }
-.test-input-result:hover {
+.test-input-container .status-icon:hover {
   fill: white;
 }
-.test-input-delete {
-  position: absolute;
-  right: 0px;
+
+.test-input-container .addremove-icon {
   background: none;
   outline: none;
   border: none;
@@ -35,6 +46,7 @@
   fill: gray;
   float: right;
 }
-.test-input-delete:hover {
+
+.test-input-container .addremove-icon:hover {
   fill: white;
 }
