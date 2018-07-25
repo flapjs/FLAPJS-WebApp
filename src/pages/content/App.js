@@ -47,7 +47,7 @@ class App extends React.Component
     this.drawer = React.createRef();
 
     this.state = {
-      isOpen: false,
+      isOpen: true,
       isDangerous: false,
       isFullscreen: false,
       isWaitingForFile: false

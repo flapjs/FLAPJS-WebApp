@@ -75,6 +75,7 @@ class NodalGraph
     const result = new Edge(this, from, to, label);
     this.edges.push(result);
     this.emit("edgeCreate", result);
+
     this.markDirty();
     return result;
   }
@@ -83,6 +84,7 @@ class NodalGraph
   {
     this.edges.splice(this.edges.indexOf(edge), 1);
     this.emit("edgeDestroy", edge);
+
     this.markDirty();
   }
 
@@ -211,23 +213,23 @@ class NodalGraph
     return data;
   }
 
+  /*
+  //This should be deprecated, since you should know which machine you are working with
   toFSA()
   {
-    if (this.isDirty())
+    let result = this.toDFA();
+    if (!result.validate())
     {
-      let result = this.toDFA();
-      if (!result.validate())
-      {
-        result = this.toNFA();
-      }
-      this._machine = result;
+      result = this.toNFA();
     }
-    return this._machine;
+    return result;
   }
+  */
 
   toDFA()
   {
-    if (this.isDirty())
+    //TODO: this should be only called once and stored somewhere...
+    //if (this.isDirty() || !(this._machine instanceof DFA))
     {
       const result = new DFA();
       fillFSA(this, result);
@@ -238,7 +240,8 @@ class NodalGraph
 
   toNFA()
   {
-    if (this.isDirty())
+    //TODO: this should be only called once and stored somewhere...
+    //if (this.isDirty() || !(this._machine instanceof NFA))
     {
       const result = new NFA();
       fillFSA(this, result);

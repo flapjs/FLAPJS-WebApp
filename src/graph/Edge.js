@@ -191,7 +191,7 @@ class Edge
   setLabel(label)
   {
     this._label = label;
-
+    
     this.graph.markDirty();
   }
 
@@ -203,6 +203,7 @@ class Edge
     if (prevLabel != value)
     {
       this.graph.emit("edgeLabel", this, this._label, prevLabel);
+
       this.graph.markDirty();
     }
   }

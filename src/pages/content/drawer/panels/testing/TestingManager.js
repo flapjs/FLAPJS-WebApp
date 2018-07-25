@@ -11,7 +11,7 @@ class TestingManager
     this.graph = graph;
     this.inputs = [];
 
-    this.placeholder = new TestingInput("");
+    this.placeholder = new TestingInput();
   }
 
   addTestInput(input)
@@ -64,7 +64,7 @@ class TestingManager
 
 class TestingInput
 {
-  constructor(value)
+  constructor(value="")
   {
     this.value = value;
     this.result = 0;
