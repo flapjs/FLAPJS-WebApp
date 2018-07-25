@@ -87,28 +87,22 @@ class GraphInputController extends InputController
   {
     if (targetType === 'none')
     {
-      //TODO: this may have a bug in where you must triple click
-      if (this.firstEmptyClick)
+      //If within the time to double tap...
+      if (this.firstEmptyClick && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
       {
-        //If within the time to double tap...
-        if (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS)
-        {
-          //Create state at position
-          const node = this.createNode(x, y);
+        //Create state at position
+        const node = this.createNode(x, y);
 
-          //Emit event
-          this.emit("nodeCreate", node);
-        }
+        //Emit event
+        this.emit("nodeCreate", node);
 
-        //Reset empty click
         this.firstEmptyClick = false;
-        this.firstEmptyTime = 0;
       }
       else
       {
         //This is the first empty click, should wait for another...
         this.firstEmptyClick = true;
-        this.firstEmptyTime = this.pointer.initial.time;
+        this.firstEmptyTime = Date.now();
       }
 
       return true;

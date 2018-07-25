@@ -174,8 +174,8 @@ class InputController
   doInputDown(x, y, moveMode)
   {
     const pointer = this.pointer;
-    pointer.moveMode = moveMode;//If right click
     const mouse = getMousePosition(this.workspace, x, y);
+    pointer.moveMode = moveMode;//If right click
     pointer.setInitialPosition(mouse.x, mouse.y);
 
     //Check whether to accept the start of input...
