@@ -283,13 +283,17 @@ function fillFSA(graph, fsa)
     const to = edge.to;
     if (from instanceof Node && to instanceof Node)
     {
-      try
+      const labels = edge.label.split(",");
+      for(const label of labels)
       {
-        fsa.newTransition(from.label, to.label, edge.label);
-      }
-      catch(e)
-      {
-        throw e;
+        try
+        {
+          fsa.newTransition(from.label, to.label, label);
+        }
+        catch(e)
+        {
+          throw e;
+        }
       }
     }
   }
