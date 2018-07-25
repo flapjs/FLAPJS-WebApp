@@ -14,28 +14,35 @@ class NotificationSystem extends React.Component
     };
   }
 
-  notify(message, level)
+  addMessage(message)
   {
     this.state.messages.push(message);
   }
 
+  hasMessages()
+  {
+    return this.state.messages.length > 0;
+  }
+
   render()
   {
-    return <div className="notification-stack">
-    {
-      this.state.messages.map((e, i) => {
-        return <div key={i} className="notification-message">
-          {e}
-          <div className="notification-message-response">
-            <button onClick={(e) => {
-              this.state.messages.splice(i, 1);
-            }}>
-              Get out of my way
-            </button>
-          </div>
-        </div>;
-      })
-    }
+    return <div className="notification-container">
+      <div className="notification-stack">
+      {
+        this.state.messages.map((e, i) => {
+          return <div key={i} className="notification-message">
+            {e}
+            <div className="notification-message-response">
+              <button onClick={(e) => {
+                this.state.messages.splice(i, 1);
+              }}>
+                Get out of my way
+              </button>
+            </div>
+          </div>;
+        })
+      }
+      </div>
     </div>;
   }
 }

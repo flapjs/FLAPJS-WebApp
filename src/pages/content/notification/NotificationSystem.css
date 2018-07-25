@@ -2,6 +2,9 @@
   position: fixed;
   top: var(--toolbar-height);
   z-index: 999;
+
+  max-height: calc(100vh - var(--toolbar-height));
+  overflow-y: scroll;
 }
 
 .notification-message {

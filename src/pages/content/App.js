@@ -46,6 +46,7 @@ class App extends React.Component
     this.workspace = React.createRef();
     this.viewport = React.createRef();
     this.drawer = React.createRef();
+    this.notification = React.createRef();
 
     this.state = {
       isOpen: true,
@@ -234,7 +235,7 @@ class App extends React.Component
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar app={this} graph={graph} eventHistory={this.eventHistory}/>
-      <NotificationSystem />
+      <NotificationSystem ref={ref=>this.notification=ref}/>
 
       <div className="workspace-container">
         <div className={"workspace-main" +
