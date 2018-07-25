@@ -73,7 +73,8 @@ class EdgeRenderer extends React.Component
             font={Config.EDGE_FONT}
             alignmentBaseline="central"
             textAnchor={Config.EDGE_TEXT_ANCHOR}
-            fill={Config.EDGE_TEXT_FILL_STYLE}>
+            fill={Config.EDGE_TEXT_FILL_STYLE}
+            pointerEvents="none">
             {str}
           </text>;
       })}
