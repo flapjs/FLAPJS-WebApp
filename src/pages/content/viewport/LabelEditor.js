@@ -79,6 +79,20 @@ class LabelEditor extends React.Component
     }
   }
 
+  appendSymbol(symbol)
+  {
+    let str = this.inputElement.value.trim();
+    if (str && str[str.length - 1] !== ',')
+    {
+      str += ",";
+    }
+    str += symbol;
+    this.inputElement.value = str;
+
+    //Redirect user to input field after button click
+    this.inputElement.focus();
+  }
+
   render()
   {
     const controller = this.props.controller;
@@ -102,6 +116,8 @@ class LabelEditor extends React.Component
       targetStyle.left = (x + offsetX) + "px";
     }
 
+    const usedAlphabet = this.props.graph.toFSA().getAlphabet();
+
     return <div className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
       style={targetStyle}
 
@@ -117,28 +133,24 @@ class LabelEditor extends React.Component
         onKeyUp={this.onKeyUp.bind(this)}/>
       <div className="label-editor-tray">
         <span className="label-editor-tray-used">
-          <button>0</button>
-        </span>
-        <span className="label-editor-tray-default">
           {
-            DEFAULT_SYMBOLS.map((e, i) => {
-              return <button key={i} onClick={(ev) => {
-                let str = this.inputElement.value.trim();
-                if (str && str[str.length - 1] !== ',')
-                {
-                  str += ",";
-                }
-                str += e;
-                this.inputElement.value = str;
-
-                //Redirect user to input field after button click
-                this.inputElement.focus();
-              }}>
-              {e}
-              </button>;
+            usedAlphabet.map((e, i) => {
+              return <button key={i} onClick={ev=>this.appendSymbol(e)}>{e}</button>
             })
           }
         </span>
+        {
+          usedAlphabet.length <= 1 &&
+          <span className="label-editor-tray-default">
+            {
+              DEFAULT_SYMBOLS.map((e, i) => {
+                return <button key={i} onClick={ev=>this.appendSymbol(e)}>
+                {e}
+                </button>;
+              })
+            }
+          </span>
+        }
       </div>
     </div>;
   }

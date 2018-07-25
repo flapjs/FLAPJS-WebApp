@@ -251,7 +251,7 @@ class App extends React.Component
             visibility: this.shouldHideContent() ? "hidden" : "visible"
           }}>
 
-          <Viewport ref={ref=>this.viewport=ref} app={this} controller={controller}/>
+          <Viewport ref={ref=>this.viewport=ref} app={this} graph={graph} controller={controller}/>
         </div>
 
         <div className={"workspace-drawer" +

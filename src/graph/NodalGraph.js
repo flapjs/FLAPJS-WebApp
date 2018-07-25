@@ -233,7 +233,7 @@ class NodalGraph
       fillFSA(this, result);
       this._machine = result;
     }
-    return result;
+    return this._machine;
   }
 
   toNFA()
