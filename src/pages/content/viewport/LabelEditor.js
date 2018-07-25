@@ -81,13 +81,27 @@ class LabelEditor extends React.Component
 
   appendSymbol(symbol)
   {
-    let str = this.inputElement.value.trim();
-    if (str && str[str.length - 1] !== ',')
+    const string = this.inputElement.value;
+    let result = "";
+
+    const selectStart = this.inputElement.selectionStart;
+    const selectEnd = this.inputElement.selectionEnd;
+    //Replace the selected text
+    if (selectStart === 0 && selectEnd === string.length)
     {
-      str += ",";
+      result = symbol;
     }
-    str += symbol;
-    this.inputElement.value = str;
+    else
+    {
+      result = string.trim();
+      if (result.length > 0 && result[result.length - 1] !== ',')
+      {
+        result += ",";
+      }
+      result += symbol;
+    }
+
+    this.inputElement.value = result;
 
     //Redirect user to input field after button click
     this.inputElement.focus();
