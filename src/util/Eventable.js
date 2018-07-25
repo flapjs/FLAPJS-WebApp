@@ -1,5 +1,10 @@
 const Eventable = {
-  __events: new Map(),
+  __events: null,
+  mixin(targetClass)
+  {
+    Object.assign(targetClass.prototype, Eventable);
+    targetClass.prototype.__events = new Map();
+  },
   addListener(eventName, listener)
   {
     if (!this.__events.has(eventName)) this.__events.set(eventName, []);

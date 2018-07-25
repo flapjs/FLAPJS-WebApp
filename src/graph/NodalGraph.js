@@ -31,10 +31,10 @@ class NodalGraph
     const result = new Node(this, x, y, label);
     if (this.nodes.length == 0)
     {
-      //this.emit("newInitial", result, null);
+      this.emit("newInitial", result, null);
     }
     this.nodes.push(result);
-    //this.emit("nodeCreate", result);
+    this.emit("nodeCreate", result);
 
     this.markDirty();
     return result;
@@ -51,7 +51,7 @@ class NodalGraph
       {
         //Delete any edges that have this node as a source
         this.edges.splice(i, 1);
-        //this.emit("edgeDestroy", edge);
+        this.emit("edgeDestroy", edge);
       }
       else if (edge.to == node)
       {
@@ -63,9 +63,9 @@ class NodalGraph
     this.nodes.splice(nodeIndex, 1);
     if (nodeIndex == 0)
     {
-      //this.emit("newInitial", this.getStartNode(), node);
+      this.emit("newInitial", this.getStartNode(), node);
     }
-    //this.emit("nodeDestroy", node);
+    this.emit("nodeDestroy", node);
 
     this.markDirty();
   }
@@ -74,7 +74,7 @@ class NodalGraph
   {
     const result = new Edge(this, from, to, label);
     this.edges.push(result);
-    //this.emit("edgeCreate", result);
+    this.emit("edgeCreate", result);
     this.markDirty();
     return result;
   }
@@ -82,7 +82,7 @@ class NodalGraph
   deleteEdge(edge)
   {
     this.edges.splice(this.edges.indexOf(edge), 1);
-    //this.emit("edgeDestroy", edge);
+    this.emit("edgeDestroy", edge);
     this.markDirty();
   }
 
@@ -90,13 +90,13 @@ class NodalGraph
   {
     for(let node of this.nodes)
     {
-      //this.emit("nodeDestroy", node);
+      this.emit("nodeDestroy", node);
     }
     this.nodes.length = 0;
 
     for(let edge of this.edges)
     {
-      //this.emit("edgeDestroy", edge);
+      this.emit("edgeDestroy", edge);
     }
     this.edges.length = 0;
 
@@ -110,7 +110,7 @@ class NodalGraph
     this.nodes.splice(this.nodes.indexOf(node), 1);
     const prevNode = this.nodes[0];
     this.nodes.unshift(node);
-    //this.emit("newInitial", node, prevNode);
+    this.emit("newInitial", node, prevNode);
 
     this.markDirty();
   }
@@ -248,7 +248,7 @@ class NodalGraph
   }
 }
 //Mixin Eventable
-Object.assign(NodalGraph.prototype, Eventable);
+Eventable.mixin(NodalGraph);
 
 function fillFSA(graph, fsa)
 {

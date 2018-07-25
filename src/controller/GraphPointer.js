@@ -178,7 +178,7 @@ class GraphPointer
       targetType = this.targetType;
     }
 
-    if (targetType == "node")
+    if (targetType === 'node')
     {
       return Config.NODE_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
     }

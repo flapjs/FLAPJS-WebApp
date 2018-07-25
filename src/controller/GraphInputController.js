@@ -334,7 +334,6 @@ class GraphInputController extends InputController
       {
         //Other action drags are ignored, such as:
         // - Edges
-        // - Graphs
         return false;
       }
     }

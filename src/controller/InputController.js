@@ -195,8 +195,6 @@ class InputController
   doInputDownAndMove(x, y)
   {
     const pointer = this.pointer;
-    pointer.updateTarget();
-
     const mouse = getMousePosition(this.workspace, x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
@@ -269,7 +267,7 @@ class InputController
   onDragStop(x, y, target, targetType) {}
 }
 //Mixin Eventable
-Object.assign(InputController.prototype, Eventable);
+Eventable.mixin(InputController);
 
 function getMousePosition(svg, x, y)
 {
