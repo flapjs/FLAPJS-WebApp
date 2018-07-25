@@ -56,11 +56,6 @@ class GraphInputController extends InputController
     this.labelEditor = app.viewport.labelEditor;
   }
 
-  onUpdate()
-  {
-    //this.pointer.updateTarget();
-  }
-
   onInputDown(x, y, target, targetType)
   {
     //Make sure to lose focus on label editors

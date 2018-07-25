@@ -18,6 +18,12 @@ class Workspace extends React.Component
     this.ref = React.createRef();
   }
 
+  componentWillUpdate()
+  {
+    //Update input controller (usually mouse position for hover info)
+    //this.props.controller.pointer.updateTarget();
+  }
+
   render()
   {
     const graph = this.props.graph;
@@ -28,6 +34,10 @@ class Workspace extends React.Component
       viewBox="-150 -150 300 300"
       xmlns="http://www.w3.org/2000/svg">
       <g transform={"translate(" + controller.pointer.offsetX + " " + controller.pointer.offsetY + ")"}>
+      
+        <line x1="0" y1="-5" x2="0" y2="5" stroke="rgba(0,0,0,0.04)"/>
+        <line x1="-5" y1="0" x2="5" y2="0" stroke="rgba(0,0,0,0.04)"/>
+
         //Graph objects
         <g>
           //Nodes

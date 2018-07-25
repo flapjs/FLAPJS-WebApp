@@ -40,11 +40,6 @@ class InputController
     this.workspace.addEventListener('touchmove', this.onTouchMove.bind(this));
   }
 
-  onUpdate(dt)
-  {
-
-  }
-
   onContextMenu(e)
   {
     e.stopPropagation();

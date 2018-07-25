@@ -224,12 +224,6 @@ class App extends React.Component
       eventHistory.handleEvent(new GraphEdgeLabelEvent(graph, targetEdge, nextLabel, prevLabel)));
   }
 
-  componentDidUpdate()
-  {
-    //Update input controller (usually mouse position for hover info)
-    this.props.controller.onUpdate();
-  }
-
   render()
   {
     const controller = this.props.controller;
