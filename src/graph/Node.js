@@ -15,7 +15,12 @@ class Node
   set label(value) {
     let prevLabel = this._label;
     this._label = value;
-    this.graph.emit("nodeLabel", this, this._label, prevLabel);
+
+    if (prevLabel != value)
+    {
+      this.graph.emit("nodeLabel", this, this._label, prevLabel);
+      this.graph.markDirty();
+    }
   }
 
   get accept() { return this._accept; }
@@ -25,6 +30,7 @@ class Node
     if (prevAccept != value)
     {
       this.graph.emit("toggleAccept", this, this._accept, prevAccept);
+      this.graph.markDirty();
     }
   }
 }

@@ -200,7 +200,11 @@ class Edge
     let prevLabel = this._label;
     this._label = value;
 
-    //this.graph.emit("edgeLabel", this, this._label, prevLabel);
+    if (prevLabel != value)
+    {
+      this.graph.emit("edgeLabel", this, this._label, prevLabel);
+      this.graph.markDirty();
+    }
   }
 
   get to() { return this._to; }
@@ -214,7 +218,8 @@ class Edge
 
     if (prevDst !== this._to)
     {
-      //this.graph.emit("edgeDestination", this, this._to, prevDst);
+      this.graph.emit("edgeDestination", this, this._to, prevDst);
+      this.graph.markDirty();
     }
   }
 
