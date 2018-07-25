@@ -47,7 +47,10 @@ class TestingInput extends React.Component
           }
         }}/>
 
-      <input ref={ref=>this.inputElement=ref} className="test-input-field" value={this.state.src.value} onChange={this.onValueChange}/>
+      <input ref={ref=>this.inputElement=ref} className="test-input-field"
+        value={this.state.src.value}
+        onChange={this.onValueChange}
+        onFocus={(e)=>e.target.select()}/>
 
       {
         this.props.placeholder ?

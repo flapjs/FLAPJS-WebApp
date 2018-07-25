@@ -1,0 +1,30 @@
+.notification-stack {
+  position: fixed;
+  top: var(--toolbar-height);
+  z-index: 999;
+}
+
+.notification-message {
+  padding: 10px;
+  margin: 10px;
+
+  width: 12em;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+
+  border-top: 4px solid #3D3D3D;
+  background: #A1A1A1;
+  color: black;
+}
+
+.notification-message-response {
+  display: flex;
+  flex-direction: row;
+
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.notification-message-response>* {
+  flex-grow: 1;
+}

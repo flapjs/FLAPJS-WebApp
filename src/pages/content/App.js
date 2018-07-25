@@ -10,6 +10,7 @@ import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
 import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
+import NotificationSystem from './notification/NotificationSystem.js';
 
 import EventHistory from 'events/EventHistory.js';
 import GraphUploader from 'graph/GraphUploader.js';
@@ -233,6 +234,7 @@ class App extends React.Component
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar app={this} graph={graph} eventHistory={this.eventHistory}/>
+      <NotificationSystem />
 
       <div className="workspace-container">
         <div className={"workspace-main" +

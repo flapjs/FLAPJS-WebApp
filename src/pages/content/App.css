@@ -59,7 +59,7 @@
 }
 
 .workspace-drawer {
-  z-index: 999;
+  z-index: 800;
   position: fixed;
   width: var(--panel-size);/* Drawer width */
   height: inherit;
