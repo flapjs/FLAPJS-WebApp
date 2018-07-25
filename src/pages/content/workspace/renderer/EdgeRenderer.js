@@ -62,16 +62,18 @@ class EdgeRenderer extends React.Component
       { labels.length > 0 && labels.map((str, i) => {
           const cx = (center && center.x || 0);
           const cy = (center && center.y || 0);
-          const sign = Math.sign(edge.quad.y) || -1;
-          const yy = cy + (i * sign * 15);
+          const signy = Math.sign(edge.quad.y) || -1;
+          const xx = cx;
+          const yy = cy + ((i + 1) * signy * 15);
 
           //TODO: ctx.clearRect(xx - cx - 2, yy - 5, (cx * 2) + 4, 10);
           return <text
             key={i}
-            x={cx} y={yy}
+            x={xx} y={yy}
             font={Config.EDGE_FONT}
             alignmentBaseline="central"
-            textAnchor={Config.EDGE_TEXT_ANCHOR}>
+            textAnchor={Config.EDGE_TEXT_ANCHOR}
+            fill={Config.EDGE_TEXT_FILL_STYLE}>
             {str}
           </text>;
       })}

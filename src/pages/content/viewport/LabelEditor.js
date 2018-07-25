@@ -8,6 +8,10 @@ import './LabelEditor.css';
 const LABEL_OFFSET_Y = -64;
 const EDITOR_OFFSET_Y = -36;
 
+const DEFAULT_SYMBOLS = ["0", "1",
+  "\u03B5",//epsilon
+  "\u03BB"];//lambda
+
 class LabelEditor extends React.Component
 {
   constructor(props)
@@ -16,6 +20,9 @@ class LabelEditor extends React.Component
 
     this.parentElement = React.createRef();
     this.inputElement = React.createRef();
+
+    //HACK: this is so if the click is focused back to the label editor, then it will NOT close
+    this._timer = null;
 
     this.state = {
       target: null,
@@ -33,7 +40,7 @@ class LabelEditor extends React.Component
     });
 
     this.inputElement.value = defaultText || targetEdge.label;
-    this.inputElement.focus();
+    this.parentElement.focus();
     this.inputElement.select();
   }
 
@@ -72,13 +79,9 @@ class LabelEditor extends React.Component
     }
   }
 
-  onBlur(e)
-  {
-    this.closeEditor(false);
-  }
-
   render()
   {
+    const controller = this.props.controller;
     const targetStyle = {
       visibility: "hidden"
     };
@@ -87,7 +90,9 @@ class LabelEditor extends React.Component
     if (target)
     {
       targetStyle.visibility = "visible";
-      const screen = getScreenPosition(this.props.screen, target.x, target.y);
+      const screen = getScreenPosition(this.props.screen,
+        target.x + controller.pointer.offsetX,
+        target.y + controller.pointer.offsetY);
       const x = screen.x;
       const y = screen.y + LABEL_OFFSET_Y + EDITOR_OFFSET_Y;
       const offsetX = -(this.parentElement.offsetWidth / 2);
@@ -97,20 +102,45 @@ class LabelEditor extends React.Component
       targetStyle.left = (x + offsetX) + "px";
     }
 
-    return <span className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
-      style={targetStyle}>
+    return <div className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
+      style={targetStyle}
+
+      onFocus={(e)=>{
+        //HACK: delete the timer that will exit labelEditor
+        clearTimeout(this._timer);
+      }}
+      onBlur={(e)=>{
+        //HACK: start the timer that will exit labelEditor if not return focus
+        this._timer = setTimeout(() => this.closeEditor(false), 10);
+      }}>
       <input className="label-editor-input" type="text" ref={ref=>this.inputElement=ref}
-        onKeyUp={this.onKeyUp.bind(this)}
-        onBlur={this.onBlur.bind(this)}/>
+        onKeyUp={this.onKeyUp.bind(this)}/>
       <div className="label-editor-tray">
-        <button>BUTTON</button>
-        <button>BUTTON</button>
-        <button>BUTTON</button>
-        <button>BUTTON</button>
-        <button>BUTTON</button>
-        <button>BUTTON</button>
+        <span className="label-editor-tray-used">
+          <button>0</button>
+        </span>
+        <span className="label-editor-tray-default">
+          {
+            DEFAULT_SYMBOLS.map((e, i) => {
+              return <button key={i} onClick={(ev) => {
+                let str = this.inputElement.value.trim();
+                if (str && str[str.length - 1] !== ',')
+                {
+                  str += ",";
+                }
+                str += e;
+                this.inputElement.value = str;
+
+                //Redirect user to input field after button click
+                this.inputElement.focus();
+              }}>
+              {e}
+              </button>;
+            })
+          }
+        </span>
       </div>
-    </span>;
+    </div>;
   }
 }
 
