@@ -548,6 +548,9 @@ class GraphInputController extends InputController
           //Set the new object as the initial node
           this.graph.setStartNode(this.ghostInitialMarker);
 
+          //Make sure the naming is consistent
+          this.sortGraphNodes();
+
           //Emit event
           this.emit("nodeInitial", this.ghostInitialMarker, prevInitial);
         }
@@ -604,6 +607,9 @@ class GraphInputController extends InputController
       this.graph.deleteNode(node);
     }
 
+    //Make sure the naming is consistent
+    this.sortGraphNodes();
+
     //Remove from selection
     selector.clearSelection();
   }
@@ -614,6 +620,9 @@ class GraphInputController extends InputController
     this.emit("nodeDelete", target, this.prevX, this.prevY);
 
     this.graph.deleteNode(target);
+
+    //Make sure the naming is consistent
+    this.sortGraphNodes();
   }
 
   deleteTargetEdge(target)
@@ -622,6 +631,15 @@ class GraphInputController extends InputController
     this.emit("edgeDelete", target);
 
     this.graph.deleteEdge(target);
+  }
+
+  sortGraphNodes()
+  {
+    const length = this.graph.nodes.length;
+    for(let i = 0; i < length; ++i)
+    {
+      this.graph.nodes[i].label = Config.STR_STATE_LABEL + (i);
+    }
   }
 
   moveNodeTo(pointer, node, x, y)
