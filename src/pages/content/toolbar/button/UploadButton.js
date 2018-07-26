@@ -1,36 +1,14 @@
 //https://material.io/tools/icons/?icon=cloud_upload&style=outline
 import React from 'react';
-<<<<<<< HEAD
-import NodalGraph from 'graph/NodalGraph';
-import Toolbar from '../Toolbar';
-=======
 
 import NodalGraph from 'graph/NodalGraph.js';
 import GraphUploader from 'graph/GraphUploader.js';
->>>>>>> origin/burger
 
 class UploadButton extends React.Component
 {
   constructor(props)
   {
     super(props);
-<<<<<<< HEAD
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(file) {
-    const name = file[0].name.slice(0,-5);
-    Toolbar.setMachineName(name);
-
-    var reader = new FileReader();
-    reader.onload = (event) => {
-      var contents = event.target.result;
-      const dst = NodalGraph.parseJSON(JSON.parse(contents));
-      const graph = this.props.app.graph;
-      graph.copyGraph(dst);
-=======
->>>>>>> origin/burger
-
     this.onChange = this.onChange.bind(this);
   }
 

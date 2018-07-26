@@ -123,6 +123,51 @@ class NodalGraph
     return this.nodes.length > 0 ? this.nodes[0] : null;
   }
 
+  getBoundingRect() {
+    var minNX = Number.MAX_VALUE;
+    var minNY = Number.MAX_VALUE;
+    var maxNX = 0;
+    var maxNY = 0;
+    this.nodes.forEach(function (node) {
+      if(node.x < minNX) minNX = node.x;
+      if(node.x > maxNX) maxNX = node.x;
+      if(node.y < minNY) minNY = node.y;
+      if(node.y > maxNY) maxNY = node.y;
+    });
+    minNX -= NODE_RADIUS;
+    minNY -= NODE_RADIUS;
+    maxNX += NODE_RADIUS;
+    maxNY += NODE_RADIUS;
+
+    var minEX = Number.MAX_VALUE;
+    var minEY = Number.MAX_VALUE;
+    var maxEX = 0;
+    var maxEY = 0;
+    this.edges.forEach(function (edge) {
+      const startpoint = edge.getStartPoint();
+      const endpoint = edge.getEndPoint();
+      const center = edge.getCenterPoint();
+
+      minEX = Math.min(minEX, startpoint.x, endpoint.x, center.x);
+      minEY = Math.min(minEY, startpoint.y, endpoint.y, center.y);
+      maxEX = Math.max(maxEX, startpoint.x, endpoint.x, center.y);
+      maxEY = Math.max(maxEY, startpoint.y, endpoint.y, center.y);
+    });
+
+    const result = {
+      minX: minNX < minEX ? minNX : minEX,
+      minY: minNY < minEY ? minNY : minEY,
+      maxX: maxNX > maxEX ? maxNX : maxEX,
+      maxY: maxNY > maxEY ? maxNY : maxEY,
+      width: 0,
+      height: 0
+    };
+    result.width = result.maxX - result.minX;
+    result.height = result.maxY - result.minY;
+    return result;
+  }
+
+
   copyGraph(graph)
   {
     this.deleteAll();
