@@ -16,6 +16,7 @@ import Edge from './Edge.js';
 //edgeDestination(edge, newDestination, oldDestination) - Whenever a node changes destination
 //toggleAccept(node) - Whenever a node changes to an accept state, or vice versa
 //newInitial(node, oldNode) - Whenever a node becomes the initial state; oldNode could be null
+//markDirty(graph) - Whenever the graph is marked dirty
 class NodalGraph
 {
   constructor(nodes=[], edges=[])
@@ -133,7 +134,13 @@ class NodalGraph
 
   markDirty()
   {
+    const prevMachine = this._machine;
     this._machine = null;
+
+    if (prevMachine !== this._machine)
+    {
+      this.emit("markDirty", this);
+    }
   }
 
   isDirty()

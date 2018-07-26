@@ -13,7 +13,8 @@ class NodeRenderer extends React.Component
   {
     const node = this.props.node;
     //TODO: style={{cursor: "crosshair"}}
-    return <g>
+    //TODO: style={{filter:"url(#error-highlight)"}}
+    return <g className="graph-node">
       //Outer circle
       <circle
         cx={node.x}

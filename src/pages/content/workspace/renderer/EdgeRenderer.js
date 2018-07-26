@@ -43,7 +43,8 @@ class EdgeRenderer extends React.Component
     const labels = label.split(",");
     let dy = 0;
 
-    return <g>
+    //TODO: style={{filter:"url(#error-highlight)"}}
+    return <g className="graph-edge">
       //Draw lines
       <path d={
         "M " + start.x + " " + start.y + " " +

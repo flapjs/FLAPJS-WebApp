@@ -184,6 +184,7 @@ class GraphInputController extends InputController
 
   onDragStart(x, y, target, targetType)
   {
+    //TODO: sometimes, pointer.target is null when it should not be...
     const pointer = this.pointer;
 
     //If is in move mode...

@@ -10,8 +10,16 @@ class TestingManager
   {
     this.graph = graph;
     this.inputs = [];
-
+    
     this.placeholder = new TestingInput();
+
+    this.graph.on("markDirty", (g) => {
+      this.placeholder.dirty = true;
+      for(const input of this.inputs)
+      {
+        input.dirty = true;
+      }
+    });
   }
 
   addTestInput(input)

@@ -76,9 +76,3 @@
 #toolbar-help:hover {
   fill: #C69214;
 }
-
-#import-file {
-  opacity: 0;
-  position: absolute;
-  z-index: -1;
-}

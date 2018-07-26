@@ -8,6 +8,32 @@ class TestingInputList extends React.Component
   constructor(props)
   {
     super(props);
+
+    this.onUploadFileChange = this.onUploadFileChange.bind(this);
+  }
+
+  onUploadFileChange(e)
+  {
+    const fileBlob = e.target.files[0];
+    if (!fileBlob) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const data = event.target.result;
+      try
+      {
+        const testInputs = data.replace(/\n/g, ",").split(",");
+        for(const testInput of testInputs)
+        {
+          this.props.tester.addTestInput(testInput.trim());
+        }
+      }
+      catch(e)
+      {
+        reader.abort();
+      }
+    };
+    reader.readAsText(fileBlob);
   }
 
   render()
@@ -35,7 +61,11 @@ class TestingInputList extends React.Component
       </div>
 
       <button className="panel-button">
-        Import Test
+        <input id="test-upload-input" type="file" style={{display: "none"}}
+          onChange={this.onUploadFileChange} accept=".txt"/>
+        <label htmlFor="test-upload-input">
+          Import Tests
+        </label>
       </button>
     </div>;
   }

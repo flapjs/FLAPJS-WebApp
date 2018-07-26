@@ -33,8 +33,25 @@ class Workspace extends React.Component
     return <svg id="workspace-content" ref={ref=>this.ref=ref}
       viewBox="-150 -150 300 300"
       xmlns="http://www.w3.org/2000/svg">
+
+      <filter id="error-highlight" height="300%" width="300%" x="-75%" y="-75%">
+        <feColorMatrix type="matrix"
+          result="color"
+          values={
+            "1 0 0 0 1 " +
+            "0 0 0 0 0 " +
+            "0 0 0 0 0 " +
+            "0 0 0 1 0"
+          }/>
+        <feGaussianBlur in="color" stdDeviation="1" result="blur"/>
+        <feMerge>
+          <feMergeNode in="blur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+
       <g transform={"translate(" + controller.pointer.offsetX + " " + controller.pointer.offsetY + ")"}>
-      
+
         <line x1="0" y1="-5" x2="0" y2="5" stroke="rgba(0,0,0,0.04)"/>
         <line x1="-5" y1="0" x2="5" y2="0" stroke="rgba(0,0,0,0.04)"/>
 
@@ -123,16 +140,6 @@ function Select(props)
       stroke={Config.HOVER_STROKE_STYLE}
       fill="none" />
   </g>;
-
-  /*
-    const angle = hoverAngle;
-    ctx.strokeStyle = Config.HOVER_STROKE_STYLE;
-    ctx.lineWidth = Config.HOVER_LINE_WIDTH;
-    ctx.beginPath();
-    ctx.setLineDash(Config.HOVER_LINE_DASH);
-    ctx.arc(x, y, r + Config.HOVER_RADIUS_OFFSET, 0 + angle, Config.PI2 + angle);
-    ctx.stroke();
-  */
 }
 
 export default Workspace;
