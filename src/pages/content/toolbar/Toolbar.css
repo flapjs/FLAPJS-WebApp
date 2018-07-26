@@ -3,11 +3,32 @@
   --color-main-dark: #005C82;
   --color-accent: #FFCD00;
   --color-accent-dark: #C69214;
+
+  padding-left: 10px;
+  display: flex;
+  flex-direction: row;
+
+  height: var(--toolbar-height);
+  overflow-x: scroll;
+  overflow-y: hidden;
+
+  background-color: var(--color-main);
+  box-shadow: 0 0.16em 0 var(--color-accent);
 }
 
 .toolbar-title {
   display: flex;
   flex-direction: column;
+
+  width: 12em;
+  min-width: 12em;
+}
+
+.toolbar-tray {
+  display: flex;
+  flex-direction: row;
+
+  width: calc(100% - 12em);/* full width - width of title */
 }
 
 #machine-name {
@@ -16,7 +37,7 @@
   border: none;
   color: darkgray;
   border-bottom: 1px solid black;
-  width: 6em;
+  width: 100%;
   margin: 0 15px 0 0;
   font-size: 2em;
 
@@ -40,18 +61,6 @@
   color: var(--color-accent-dark);
 }
 
-.toolbar-container {
-  padding-left: 10px;
-  display: flex;
-
-  height: var(--toolbar-height);
-  overflow-x: scroll;
-  overflow-y: hidden;
-
-  background-color: var(--color-main);
-  box-shadow: 0 0.16em 0 var(--color-accent);
-}
-
 .toolbar-button {
   background: none;/*Disable normal button style*/
   border: none;/*Disable normal button style*/
@@ -60,7 +69,6 @@
   fill: white;
   justify-content: flex-end;
 
-  margin-right: auto;
   margin-bottom: 5px;
   width: 6em;
   height: 100%;
@@ -82,7 +90,7 @@
 
 #toolbar-help {
   margin-left: auto;
-
+  margin-right: 10px;
   fill: var(--color-accent);
   width: 3em;
 }

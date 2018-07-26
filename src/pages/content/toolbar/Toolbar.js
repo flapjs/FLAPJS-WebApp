@@ -44,16 +44,18 @@ class Toolbar extends React.Component
           DFA
         </label>
       </div>
-      <NewButton graph={graph} onExecute={()=>{
-        eventHistory.clear();
-      }}/>
-      <UploadButton app={app} onExecute={()=>{
-        eventHistory.clear();
-      }}/>
-      <SaveButton graph={graph} getFileName={getMachineName}/>
-      <UndoButton eventHistory={eventHistory}/>
-      <RedoButton eventHistory={eventHistory}/>
-      <DownloadButton workspace={app.workspace} getFileName={getMachineName}/>
+      <div className="toolbar-tray">
+        <NewButton graph={graph} onExecute={()=>{
+          eventHistory.clear();
+        }}/>
+        <UploadButton app={app} onExecute={()=>{
+          eventHistory.clear();
+        }}/>
+        <SaveButton graph={graph} getFileName={getMachineName}/>
+        <UndoButton eventHistory={eventHistory}/>
+        <RedoButton eventHistory={eventHistory}/>
+        <DownloadButton workspace={app.workspace} getFileName={getMachineName}/>
+      </div>
       <HelpButton app={app}/>
     </div>;
   }
