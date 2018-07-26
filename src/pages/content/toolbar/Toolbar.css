@@ -1,3 +1,10 @@
+.toolbar-container {
+  --color-main: #006A96;
+  --color-main-dark: #005C82;
+  --color-accent: #FFCD00;
+  --color-accent-dark: #C69214;
+}
+
 .toolbar-title {
   display: flex;
   flex-direction: column;
@@ -7,8 +14,8 @@
   background: none;
   padding: 0;
   border: none;
-  color: #B6B1A9;
-  border-bottom: 1px solid #182B49;
+  color: darkgray;
+  border-bottom: 1px solid black;
   width: 6em;
   margin: 0 15px 0 0;
   font-size: 2em;
@@ -21,7 +28,7 @@
 }
 
 #machine-type {
-  color: #FFCD00;
+  color: var(--color-accent);
   font-size: 1em;
   margin-top: 2px;
   font-family: sans-serif;
@@ -30,7 +37,7 @@
   transition: color 0.3s ease;
 }
 #machine-type:hover {
-  color: #C69214;
+  color: var(--color-accent-dark);
 }
 
 .toolbar-container {
@@ -41,8 +48,8 @@
   overflow-x: scroll;
   overflow-y: hidden;
 
-  background-color: #006A96;
-  box-shadow: 0 0.16em 0 #FFCD00;
+  background-color: var(--color-main);
+  box-shadow: 0 0.16em 0 var(--color-accent);
 }
 
 .toolbar-button {
@@ -61,10 +68,10 @@
   transition: fill 0.3s ease;
 }
 .toolbar-button:hover {
-  fill: #FFCD00;
+  fill: var(--color-accent);
 }
 .toolbar-button:disabled {
-  fill: #005C82;
+  fill: var(--color-main-dark);
 }
 .navicons {
   width: 100%;
@@ -76,9 +83,9 @@
 #toolbar-help {
   margin-left: auto;
 
-  fill: #FFCD00;
+  fill: var(--color-accent);
   width: 3em;
 }
 #toolbar-help:hover {
-  fill: #C69214;
+  fill: var(--color-accent-dark);
 }

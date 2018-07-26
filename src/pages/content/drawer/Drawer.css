@@ -2,7 +2,11 @@
   padding-left: var(--panel-tab-border);/* Height of tabs + border */
   height: 100%;
 
-  background: #575757;
+  --color-main: #575757;
+  --color-main-dark: #3D3D3D;
+  --color-accent: #DEFFBD;
+
+  background: var(--color-main);
   color: #FFFFFF;
 
   transition: padding-top 0.2s;
@@ -53,8 +57,8 @@
 }
 .tab-list button.active {
   transition: border-width 0.3s;
-  border-bottom: 4px solid #DEFFBD !important;
-  color: #DEFFBD;
+  border-bottom: 4px solid var(--color-accent) !important;
+  color: var(--color-accent);
 }
 .drawer-content {
   padding-left: 10px;
@@ -74,7 +78,7 @@
   width: var(--panel-border-size);/* border */
   height: 100%;
 
-  background: #3D3D3D;
+  background: var(--color-main-dark);
 }
 .drawer-border > * {
   position: absolute;
