@@ -3,20 +3,22 @@ import React from 'react';
 import '../Panel.css';
 import './TestingPanel.css';
 
-import TestInputElement from './TestInputElement.js';
+import TestingInputList from './TestingInputList.js';
 
 class TestingPanel extends React.Component
 {
+  constructor(props)
+  {
+    super(props);
+  }
+
   render()
   {
-    const graph = this.props.graph;
     return <div className="panel-container" id="testing">
       <div className="panel-title">
         <h1>Testing</h1>
       </div>
-      <button className="panel-button test-import">Import Test</button>
-      <TestInputList graph={graph}/>
-      <button className="panel-button test-run">Run All Tests</button>
+      <TestingInputList tester={this.props.tester}/>
       <hr />
       <div>
         <input id="test-step" type="checkbox"/>
@@ -26,35 +28,6 @@ class TestingPanel extends React.Component
         <input id="test-closure" type="checkbox"/>
         <label htmlFor="test-closure">Transition By Closure</label>
       </div>
-    </div>;
-  }
-}
-
-class TestInputList extends React.Component
-{
-  constructor(props)
-  {
-    super(props);
-
-    this.inputs = [];
-
-    this.inputs.push("0101010001001");
-    this.inputs.push("1*0*");
-    this.inputs.push("001011");
-    this.inputs.push("1");
-    this.inputs.push("1*0*U1*01*");
-    this.inputs.push("E*");
-  }
-
-  render()
-  {
-    const graph = this.props.graph;
-
-    return <div className="test-inputlist">
-      { this.inputs.map((e, i) =>
-        <TestInputElement key={i} graph={graph} value={e}/>) }
-      <button className="test-inputlist-new">New Test</button>
-      <button className="test-inputlist-clear">Clear</button>
     </div>;
   }
 }

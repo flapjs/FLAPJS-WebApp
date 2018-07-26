@@ -15,52 +15,16 @@ class Viewport extends React.Component
     this.labelEditor = React.createRef();
 
     this.state = {
+      prevMode: Viewport.NORMAL,
       mode: Viewport.NORMAL
     };
-  }
-
-  onFileDrop(ev)
-  {
-    //Prevent file from being opened
-    ev.preventDefault();
-
-    if (ev.dataTransfer.items)
-    {
-      const length = ev.dataTransfer.items.length;
-      for(let i = 0; i < length; ++i)
-      {
-        let file = ev.dataTransfer.items[i];
-        if (file.kind === 'file')
-        {
-          alert(file.name);
-        }
-      }
-    }
-    else
-    {
-      const length = ev.dataTransfer.files.length;
-      for(let i = 0; i < length; ++i)
-      {
-        let file = ev.dataTransfer.files[i];
-        alert(file.name);
-      }
-    }
-
-    if (ev.dataTransfer.items)
-    {
-      ev.dataTransfer.items.clear();
-    }
-    else
-    {
-      ev.dataTransfer.clearData();
-    }
   }
 
   render()
   {
     return <div className="viewport-container" ref={ref=>this.ref=ref}
       style={{outlineColor: getModeColor(this.state.mode)}}>
-      <LabelEditor screen={this.props.app.workspace.ref} ref={ref=>this.labelEditor=ref}/>
+      <LabelEditor controller={this.props.controller} graph={this.props.graph} screen={this.props.app.workspace.ref} ref={ref=>this.labelEditor=ref}/>
       <TrashCan controller={this.props.controller} viewport={this}/>
     </div>;
   }

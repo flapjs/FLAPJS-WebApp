@@ -10,7 +10,15 @@ class HelpButton extends React.Component
 
   onClick(ev)
   {
-
+    if (this.props.app.notification.hasMessages())
+    {
+      this.props.app.notification.addMessage("You need help. Unfortunately, I am not qualified to provide such assistance. Please refer to your local tutor/developer for more information.");
+      this.props.app.notification.addMessage("Thank you for being awesome :3");
+    }
+    else
+    {
+      this.props.app.notification.addMessage("I see you want help. I'm not sure I want to help you after you so rudely got rid of all my other messages.");
+    }
   }
 
   render()

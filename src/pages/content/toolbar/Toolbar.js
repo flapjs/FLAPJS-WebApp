@@ -45,7 +45,7 @@ class Toolbar extends React.Component
         <label id="machine-type"
           onClick={()=>app.drawer.setTab(1)}>
           DFA
-          </label>
+        </label>
       </div>
       <NewButton graph={graph} onExecute={()=>{
         eventHistory.clear();
@@ -57,7 +57,7 @@ class Toolbar extends React.Component
       <UndoButton eventHistory={eventHistory}/>
       <RedoButton eventHistory={eventHistory}/>
       <DownloadButton workspace={app.workspace} getFileName={getMachineName}/>
-      <HelpButton/>
+      <HelpButton app={app}/>
     </div>;
   }
 }

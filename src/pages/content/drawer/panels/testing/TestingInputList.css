@@ -1,4 +1,4 @@
-.test-inputlist {
+.test-inputlist-content {
   border: 1px solid black;
   padding: 5px;
   margin-top: 5px;
@@ -7,10 +7,4 @@
   max-height: 60vh;
 
   overflow-y: scroll;
-}
-.test-inputlist-new {
-  width: 100%;
-}
-.test-inputlist-clear {
-  width: 100%;
 }

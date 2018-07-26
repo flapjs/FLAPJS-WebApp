@@ -1,8 +1,9 @@
 import { EMPTY } from 'machine/Symbols.js';
 
+//This ASSUMES that the passed-in machine is an NFA! (and not a DFA)
 export function solveNFA(nfa, input)
 {
-  if (typeof input == 'string') input = input[Symbol.iterator]();
+  if (typeof input === 'string') input = input[Symbol.iterator]();
 
   let cachedStates = [];
   let cachedSymbols = [];
