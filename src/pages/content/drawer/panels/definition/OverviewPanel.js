@@ -12,7 +12,7 @@ class OverviewPanel extends React.Component
         <h1>Definition</h1>
       </div>
       <div className="panel-content">
-        <GraphDefinition graph={this.props.graph}/>
+        <GraphDefinition machineBuilder={this.props.machineBuilder}/>
       </div>
       <hr />
       <button className="panel-button">Convert To NFA</button>
@@ -33,7 +33,7 @@ class GraphDefinition extends React.Component
 
   render()
   {
-    const machine = this.props.graph.toNFA();
+    const machine = this.props.machineBuilder.getMachine();
     return <div className="graphinfo">
       <div className="statblock">
         <label>Q :</label>

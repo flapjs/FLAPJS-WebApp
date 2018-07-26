@@ -6,14 +6,15 @@ const FAILURE = -1;
 
 class TestingManager
 {
-  constructor(graph)
+  constructor(machineBuilder)
   {
-    this.graph = graph;
+    this.machineBuilder = machineBuilder;
     this.inputs = [];
-    
+
     this.placeholder = new TestingInput();
 
-    this.graph.on("markDirty", (g) => {
+    //HACK: this should be a listener to FSABuilder, should not access graph
+    this.machineBuilder.graph.on("markDirty", (g) => {
       this.placeholder.dirty = true;
       for(const input of this.inputs)
       {
@@ -44,7 +45,7 @@ class TestingManager
 
   testByInput(input, machine=null)
   {
-    if (!machine) machine = this.graph.toNFA();
+    if (!machine) machine = this.machineBuilder.getMachine();
     input.result = PENDING;
     const result = solveNFA(machine, input.value);
     input.result = result ? SUCCESS : FAILURE;
@@ -54,14 +55,14 @@ class TestingManager
 
   testByIndex(index, machine=null)
   {
-    if (!machine) machine = this.graph.toNFA();
+    if (!machine) machine = this.machineBuilder.getMachine();
     if (index < 0 || index >= this.inputs.length) return false;
     return this.testByInput(this.inputs[index], machine);
   }
 
   testAll(machine=null)
   {
-    if (!machine) machine = this.graph.toNFA();
+    if (!machine) machine = this.machineBuilder.getMachine();
 
     for(const input of this.inputs)
     {

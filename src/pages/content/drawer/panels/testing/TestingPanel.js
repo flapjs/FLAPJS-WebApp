@@ -14,7 +14,6 @@ class TestingPanel extends React.Component
 
   render()
   {
-    const graph = this.props.graph;
     return <div className="panel-container" id="testing">
       <div className="panel-title">
         <h1>Testing</h1>

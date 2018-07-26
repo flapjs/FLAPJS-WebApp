@@ -42,7 +42,7 @@ class Toolbar extends React.Component
         <label id="machine-type"
           onClick={()=>app.drawer.setTab(1)}>
           DFA
-          </label>
+        </label>
       </div>
       <NewButton graph={graph} onExecute={()=>{
         eventHistory.clear();

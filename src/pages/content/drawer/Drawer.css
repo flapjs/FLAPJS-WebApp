@@ -15,6 +15,8 @@
 .tab-list {
   display: flex;
   flex-direction: row-reverse;
+  overflow: hidden;
+  /*overflow-x: scroll;*/
 
   position: absolute;
   top: 0;
@@ -79,7 +81,8 @@
   left: 0;
 }
 
-@media screen and (max-width: 400px), screen and (max-height: 400px) {
+/*Refer to App.css*/
+@media screen and (max-width: 420px), screen and (max-height: 420px) {
   .drawer-container {
     padding-top: var(--panel-tab-size);/* Height of tabs */
     height: calc(100% - var(--panel-tab-size));/* Parent height - Height of tabs */
@@ -97,7 +100,7 @@
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 420px) {
   .drawer-container {
     padding-left: var(--panel-tab-size);/* Height of tabs */
     padding-top: var(--panel-tab-border);/* Height of tabs + border */

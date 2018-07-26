@@ -12,6 +12,7 @@ import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
 import NotificationSystem from './notification/NotificationSystem.js';
 
+import FSABuilder from 'builder/FSABuilder.js';
 import EventHistory from 'events/EventHistory.js';
 import GraphUploader from 'graph/GraphUploader.js';
 import TestingManager from './drawer/panels/testing/TestingManager.js';
@@ -38,8 +39,9 @@ class App extends React.Component
     super(props);
 
     this.graph = new NodalGraph();
+    this.machineBuilder = new FSABuilder(this.graph);
+    this.testingManager = new TestingManager(this.machineBuilder);
     this.eventHistory = new EventHistory();
-    this.testingManager = new TestingManager(this.graph);
 
     //Create references
     this.container = React.createRef();

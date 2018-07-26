@@ -136,11 +136,7 @@ class NodalGraph
   {
     const prevMachine = this._machine;
     this._machine = null;
-
-    if (prevMachine !== this._machine)
-    {
-      this.emit("markDirty", this);
-    }
+    this.emit("markDirty", this);
   }
 
   isDirty()
@@ -220,41 +216,29 @@ class NodalGraph
     return data;
   }
 
-  /*
-  //This should be deprecated, since you should know which machine you are working with
-  toFSA()
+  toDFA(dst=null)
   {
-    let result = this.toDFA();
-    if (!result.validate())
-    {
-      result = this.toNFA();
-    }
+    const result = dst || new DFA();
+    if (!(result instanceof DFA))
+      throw new Error("Trying to parse graph mismatched machine type.");
+    fillFSA(this, result);
     return result;
   }
-  */
 
-  toDFA()
+  toNFA(dst=null)
   {
-    //TODO: this should be only called once and stored somewhere...
-    //if (this.isDirty() || !(this._machine instanceof DFA))
-    {
-      const result = new DFA();
-      fillFSA(this, result);
-      this._machine = result;
-    }
-    return this._machine;
+    console.error("RAWR! I am a T-Rex!");
+    return this._toNFA(dst);
   }
 
-  toNFA()
+  //TODO: NEVER CALL THIS DIRECTLY (Only FSABuilder is allowed.) Will be deprecated later.
+  _toNFA(dst=null)
   {
-    //TODO: this should be only called once and stored somewhere...
-    //if (this.isDirty() || !(this._machine instanceof NFA))
-    {
-      const result = new NFA();
-      fillFSA(this, result);
-      this._machine = result;
-    }
-    return this._machine;
+    const result = dst || new NFA();
+    if (!(result instanceof NFA))
+      throw new Error("Trying to parse graph mismatched machine type.");
+    fillFSA(this, result);
+    return result;
   }
 }
 //Mixin Eventable

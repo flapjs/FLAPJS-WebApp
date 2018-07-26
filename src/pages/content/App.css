@@ -83,7 +83,8 @@
   max-width: 100%;
 }
 
-@media screen and (max-width: 400px) {
+/*Refer to Drawer.css*/
+@media screen and (max-width: 420px) {
   .workspace-main {
     right: 0px;/* Overwrite changes */
     height: calc(100% - var(--toolbar-height) - var(--panel-tab-border));/* Overwrite changes */
@@ -133,8 +134,4 @@
 
     bottom: 0px;
   }
-}
-
-@media screen and (max-height: 300px) {
-  /* TODO: it should be auto fullscreen mode */
 }

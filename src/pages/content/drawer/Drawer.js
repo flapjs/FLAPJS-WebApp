@@ -28,6 +28,9 @@ class Drawer extends React.Component
     this.state = {
       tabIndex: DEFAULT_TAB_INDEX
     };
+
+    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
   }
 
   setTab(index)
@@ -59,9 +62,9 @@ class Drawer extends React.Component
     switch(index)
     {
       case OVERVIEW:
-        return <OverviewPanel graph={app.graph}/>;
+        return <OverviewPanel machineBuilder={app.machineBuilder}/>;
       case TESTING:
-        return <TestingPanel graph={app.graph} tester={app.testingManager}/>;
+        return <TestingPanel tester={app.testingManager}/>;
       case EXPORTING:
         return <ExportingPanel />;
       case OPTIONS:
@@ -183,26 +186,26 @@ class Drawer extends React.Component
       <div className="tab-list">
         <DrawerExpander app={app}/>
         <button className={"tab-link" + (this.state.tabIndex == TESTING ? " active" : "")}
-          onClick={this.setTab.bind(this, TESTING)}>
+          onClick={ev=>this.setTab(TESTING)}>
           Testing
         </button>
         <button className={"tab-link" + (this.state.tabIndex == OVERVIEW ? " active" : "")}
-          onClick={this.setTab.bind(this, OVERVIEW)}>
+          onClick={ev=>this.setTab(OVERVIEW)}>
           <span>Definition</span>
         </button>
         <button className={"tab-link" + (this.state.tabIndex == EXPORTING ? " active" : "")}
-          onClick={this.setTab.bind(this, EXPORTING)}>
+          onClick={ev=>this.setTab(EXPORTING)}>
           Exporting
         </button>
         <button className={"tab-link" + (this.state.tabIndex == OPTIONS ? " active" : "")}
-          onClick={this.setTab.bind(this, OPTIONS)}>
+          onClick={ev=>this.setTab(OPTIONS)}>
           Options
         </button>
       </div>
 
       <div className="drawer-border"
-        onTouchStart={this.onTouchStart.bind(this)}
-        onMouseDown={this.onMouseDown.bind(this)}>
+        onTouchStart={this.onTouchStart}
+        onMouseDown={this.onMouseDown}>
       </div>
     </div>;
   }
