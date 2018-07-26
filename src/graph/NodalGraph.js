@@ -126,8 +126,8 @@ class NodalGraph
   getBoundingRect() {
     var minNX = Number.MAX_VALUE;
     var minNY = Number.MAX_VALUE;
-    var maxNX = 0;
-    var maxNY = 0;
+    var maxNX = Number.MIN_VALUE;
+    var maxNY = Number.MIN_VALUE;
     this.nodes.forEach(function (node) {
       if(node.x < minNX) minNX = node.x;
       if(node.x > maxNX) maxNX = node.x;
@@ -141,8 +141,8 @@ class NodalGraph
 
     var minEX = Number.MAX_VALUE;
     var minEY = Number.MAX_VALUE;
-    var maxEX = 0;
-    var maxEY = 0;
+    var maxEX = Number.MIN_VALUE;
+    var maxEY = Number.MIN_VALUE;
     this.edges.forEach(function (edge) {
       const startpoint = edge.getStartPoint();
       const endpoint = edge.getEndPoint();
@@ -164,6 +164,7 @@ class NodalGraph
     };
     result.width = result.maxX - result.minX;
     result.height = result.maxY - result.minY;
+    console.log(result);
     return result;
   }
 

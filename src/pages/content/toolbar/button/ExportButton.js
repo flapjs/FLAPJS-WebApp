@@ -1,5 +1,6 @@
-//https://material.io/tools/icons/?search=save&icon=save_alt&style=outline
+//https://material.io/tools/icons/?icon=cloud_download&style=outline
 import React from 'react';
+import Downloader from 'util/Downloader.js';
 
 class ExportButton extends React.Component
 {
@@ -10,17 +11,16 @@ class ExportButton extends React.Component
 
   onClick(ev)
   {
-
+    const workspace = this.props.workspace;
+    Downloader.downloadSVG(this.props.getFileName() + '.png', workspace.ref);
   }
 
   render()
   {
-    return <button className="toolbar-button" id="toolbar-export"
-      onClick={this.onClick.bind(this)}>
-      <svg className="navicons" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <g id="Outline">
-          <path d="M19,12v7H5v-7H3v7c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-7H19z M13,12.67l2.59-2.58L17,11.5l-5,5l-5-5l1.41-1.41L11,12.67V3 h2V12.67z"/>
-        </g>
+    return <button className="toolbar-button" id="toolbar-undo"
+                   onClick={this.onClick.bind(this)}>
+      <svg className="navicons" viewBox="0 0 24 24">
+        <path d="M23,12L19,8V11H10V13H19V16M1,18V6C1,4.89 1.9,4 3,4H15A2,2 0 0,1 17,6V9H15V6H3V18H15V15H17V18A2,2 0 0,1 15,20H3A2,2 0 0,1 1,18Z" />
       </svg>
     </button>;
   }
