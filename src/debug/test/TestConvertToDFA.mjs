@@ -6,6 +6,7 @@ import { EMPTY } from 'machine/Symbols.js';
 import { solveDFA } from 'machine/util/solveDFA.js';
 import { convertToDFA } from 'machine/util/convertNFA.js';
 
+
 let nfa = new NFA();
 let result = convertToDFA(nfa);
 TEST.assert(result && result.validate(), "Empty machine is valid DFA.");
@@ -95,13 +96,13 @@ TEST.assert(solveDFA(result, "10000000001"));
 TEST.assert(solveDFA(result, "0000000001"));
 TEST.assert(solveDFA(result, "101010010010100101"));
 
-
 /**NEW TEST*/
 {
   let machine = new NFA();
   machine.newState("q0");
   machine.newState("q1");
   machine.newTransition("q0", "q1", "1");
+  machine.newTransition("q1", "q0", "0");
   machine.setStartState("q0");
   machine.setFinalState("q0");
   let result = convertToDFA(machine);
