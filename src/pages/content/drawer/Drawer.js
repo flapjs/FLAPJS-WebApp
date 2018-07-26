@@ -28,6 +28,9 @@ class Drawer extends React.Component
     this.state = {
       tabIndex: DEFAULT_TAB_INDEX
     };
+
+    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
   }
 
   setTab(index)
@@ -55,12 +58,13 @@ class Drawer extends React.Component
 
   getTab(index)
   {
+    const app = this.props.app;
     switch(index)
     {
       case OVERVIEW:
-        return <OverviewPanel />;
+        return <OverviewPanel machineBuilder={app.machineBuilder}/>;
       case TESTING:
-        return <TestingPanel graph={this.props.app.graph}/>;
+        return <TestingPanel tester={app.testingManager}/>;
       case EXPORTING:
         return <ExportingPanel />;
       case OPTIONS:
@@ -74,16 +78,6 @@ class Drawer extends React.Component
   {
     const app = this.props.app;
 
-    //Ignore drag move if closed
-    if (!app.state.isOpen)
-    {
-      /*
-      //Opens the drawer if dragging, but closed
-      this.props.app.openDrawer();
-      */
-      return;
-    }
-
     //Disable fullscreen if dragging off of it
     if (app.state.isFullscreen)
     {
@@ -96,7 +90,20 @@ class Drawer extends React.Component
 
   onTouchStart(e)
   {
+    e.stopPropagation();
+    e.preventDefault();
+
     const app = this.props.app;
+    //Ignore drag move if closed
+    if (!app.state.isOpen)
+    {
+      /*
+      //Opens the drawer if dragging, but closed
+      this.props.app.openDrawer();
+      */
+      return;
+    }
+
     const touch = e.changedTouches[0];
     this.onStartDraggingDrawerBorder(touch.clientX, touch.clientY);
 
@@ -123,7 +130,20 @@ class Drawer extends React.Component
 
   onMouseDown(e)
   {
+    e.stopPropagation();
+    e.preventDefault();
+
     const app = this.props.app;
+    //Ignore drag move if closed
+    if (!app.state.isOpen)
+    {
+      /*
+      //Opens the drawer if dragging, but closed
+      this.props.app.openDrawer();
+      */
+      return;
+    }
+
     this.onStartDraggingDrawerBorder(e.clientX, e.clientY);
 
     const onMouseMove = function(ev)
@@ -163,30 +183,29 @@ class Drawer extends React.Component
       <div className="drawer-content">
         {this.getTab(this.state.tabIndex)}
       </div>
-
       <div className="tab-list">
         <DrawerExpander app={app}/>
         <button className={"tab-link" + (this.state.tabIndex == TESTING ? " active" : "")}
-          onClick={this.setTab.bind(this, TESTING)}>
+          onClick={ev=>this.setTab(TESTING)}>
           Testing
         </button>
         <button className={"tab-link" + (this.state.tabIndex == OVERVIEW ? " active" : "")}
-          onClick={this.setTab.bind(this, OVERVIEW)}>
+          onClick={ev=>this.setTab(OVERVIEW)}>
           <span>Definition</span>
         </button>
         <button className={"tab-link" + (this.state.tabIndex == EXPORTING ? " active" : "")}
-          onClick={this.setTab.bind(this, EXPORTING)}>
+          onClick={ev=>this.setTab(EXPORTING)}>
           Exporting
         </button>
         <button className={"tab-link" + (this.state.tabIndex == OPTIONS ? " active" : "")}
-          onClick={this.setTab.bind(this, OPTIONS)}>
+          onClick={ev=>this.setTab(OPTIONS)}>
           Options
         </button>
       </div>
 
       <div className="drawer-border"
-        onTouchStart={this.onTouchStart.bind(this)}
-        onMouseDown={this.onMouseDown.bind(this)}>
+        onTouchStart={this.onTouchStart}
+        onMouseDown={this.onMouseDown}>
       </div>
     </div>;
   }

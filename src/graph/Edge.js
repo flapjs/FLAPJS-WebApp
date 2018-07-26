@@ -188,11 +188,24 @@ class Edge
     if (Math.abs(this.quad.y) < 8) this.quad.y = 0;
   }
 
+  setLabel(label)
+  {
+    this._label = label;
+    
+    this.graph.markDirty();
+  }
+
   get label() { return this._label; }
   set label(value) {
     let prevLabel = this._label;
     this._label = value;
-    //this.graph.emit("edgeLabel", this, this._label, prevLabel);
+
+    if (prevLabel != value)
+    {
+      this.graph.emit("edgeLabel", this, this._label, prevLabel);
+
+      this.graph.markDirty();
+    }
   }
 
   get to() { return this._to; }
@@ -206,7 +219,8 @@ class Edge
 
     if (prevDst !== this._to)
     {
-      //this.graph.emit("edgeDestination", this, this._to, prevDst);
+      this.graph.emit("edgeDestination", this, this._to, prevDst);
+      this.graph.markDirty();
     }
   }
 

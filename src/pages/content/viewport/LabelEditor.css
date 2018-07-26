@@ -3,6 +3,8 @@
   position: absolute;
   z-index: 2;
 
+  max-width: 8em;
+
   background: lightgray;
   display: inline-block;
 
@@ -25,10 +27,17 @@
   border-bottom: 1px solid black;
 }
 .label-editor-tray {
-  height: 20px;
+  width: 100%;
+  min-height: 20px;
 }
 .label-editor-tray>* {
   height: 100%;
+}
+.label-editor-tray-used {
+  margin-right: 5px;
+}
+.label-editor-tray-default {
+  opacity: 0.5;
 }
 
 .bubble {
@@ -46,4 +55,5 @@
   border-color: lightgray transparent;
   display: block;
   width: 0;
+  z-index: -1;
 }

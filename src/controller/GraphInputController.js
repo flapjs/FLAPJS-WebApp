@@ -33,6 +33,8 @@ class GraphInputController extends InputController
     this.prevEdgeTo = null;
     this.prevX = 0;
     this.prevY = 0;
+    this.prevOffsetX = 0;
+    this.prevOffsetY = 0;
 
     //Make sure this is always false when moving endpoints
     this.isNewEdge = false;
@@ -52,11 +54,6 @@ class GraphInputController extends InputController
 
     this.selector.graph = this.graph;
     this.labelEditor = app.viewport.labelEditor;
-  }
-
-  onUpdate()
-  {
-    this.pointer.updateTarget();
   }
 
   onInputDown(x, y, target, targetType)
@@ -81,7 +78,31 @@ class GraphInputController extends InputController
   }
 
   onInputMove(x, y, target, targetType) {}
-  onInputUp(x, y, target, targetType) {}
+  onInputUp(x, y, target, targetType)
+  {
+    if (targetType === 'none')
+    {
+      //If within the time to double tap...
+      if (this.firstEmptyClick && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
+      {
+        //Create state at position
+        const node = this.createNode(x, y);
+
+        //Emit event
+        this.emit("nodeCreate", node);
+
+        this.firstEmptyClick = false;
+      }
+      else
+      {
+        //This is the first empty click, should wait for another...
+        this.firstEmptyClick = true;
+        this.firstEmptyTime = Date.now();
+      }
+
+      return true;
+    }
+  }
 
   onInputAction(x, y, target, targetType)
   {
@@ -154,35 +175,6 @@ class GraphInputController extends InputController
         this.openLabelEditor(target, x, y);
         return true;
       }
-      //If hovered target is none...
-      else if (pointer.targetType === 'none')
-      {
-        //TODO: this may have a bug in where you must triple click
-        if (this.firstEmptyClick)
-        {
-          //If within the time to double tap...
-          if (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS)
-          {
-            //Create state at position
-            const node = this.createNode(x, y);
-
-            //Emit event
-            this.emit("nodeCreate", node);
-          }
-
-          //Reset empty click
-          this.firstEmptyClick = false;
-          this.firstEmptyTime = 0;
-        }
-        else
-        {
-          //This is the first empty click, should wait for another...
-          this.firstEmptyClick = true;
-          this.firstEmptyTime = pointer.initial.time;
-        }
-
-        return true;
-      }
       else
       {
         return false;
@@ -192,6 +184,7 @@ class GraphInputController extends InputController
 
   onDragStart(x, y, target, targetType)
   {
+    //TODO: sometimes, pointer.target is null when it should not be...
     const pointer = this.pointer;
 
     //If is in move mode...
@@ -264,7 +257,11 @@ class GraphInputController extends InputController
       //Moving nothing
       else if (targetType === 'none')
       {
-        //TODO: offset graph by x and y
+        //Reuse nodal prev pos for graph prev pos
+        this.prevX = x;
+        this.prevY = y;
+        this.prevOffsetX = this.pointer.offsetX;
+        this.prevOffsetY = this.pointer.offsetY;
 
         //Ready to move the graph to pointer...
         return true;
@@ -327,7 +324,6 @@ class GraphInputController extends InputController
       {
         //Other action drags are ignored, such as:
         // - Edges
-        // - Graphs
         return false;
       }
     }
@@ -380,7 +376,11 @@ class GraphInputController extends InputController
       else if (targetType === 'none')
       {
         //Move graph
-        return false;
+        const dx = x - this.prevX;
+        const dy = y - this.prevY;
+        this.pointer.offsetX += dx;
+        this.pointer.offsetY += dy;
+        return true;
       }
       else
       {
@@ -549,6 +549,9 @@ class GraphInputController extends InputController
           //Set the new object as the initial node
           this.graph.setStartNode(this.ghostInitialMarker);
 
+          //Make sure the naming is consistent
+          this.sortGraphNodes();
+
           //Emit event
           this.emit("nodeInitial", this.ghostInitialMarker, prevInitial);
         }
@@ -605,6 +608,9 @@ class GraphInputController extends InputController
       this.graph.deleteNode(node);
     }
 
+    //Make sure the naming is consistent
+    this.sortGraphNodes();
+
     //Remove from selection
     selector.clearSelection();
   }
@@ -615,6 +621,9 @@ class GraphInputController extends InputController
     this.emit("nodeDelete", target, this.prevX, this.prevY);
 
     this.graph.deleteNode(target);
+
+    //Make sure the naming is consistent
+    this.sortGraphNodes();
   }
 
   deleteTargetEdge(target)
@@ -623,6 +632,15 @@ class GraphInputController extends InputController
     this.emit("edgeDelete", target);
 
     this.graph.deleteEdge(target);
+  }
+
+  sortGraphNodes()
+  {
+    const length = this.graph.nodes.length;
+    for(let i = 0; i < length; ++i)
+    {
+      this.graph.nodes[i].label = Config.STR_STATE_LABEL + (i);
+    }
   }
 
   moveNodeTo(pointer, node, x, y)

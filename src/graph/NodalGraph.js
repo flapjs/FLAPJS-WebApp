@@ -16,6 +16,7 @@ import Edge from './Edge.js';
 //edgeDestination(edge, newDestination, oldDestination) - Whenever a node changes destination
 //toggleAccept(node) - Whenever a node changes to an accept state, or vice versa
 //newInitial(node, oldNode) - Whenever a node becomes the initial state; oldNode could be null
+//markDirty(graph) - Whenever the graph is marked dirty
 class NodalGraph
 {
   constructor(nodes=[], edges=[])
@@ -31,10 +32,12 @@ class NodalGraph
     const result = new Node(this, x, y, label);
     if (this.nodes.length == 0)
     {
-      //this.emit("newInitial", result, null);
+      this.emit("newInitial", result, null);
     }
     this.nodes.push(result);
-    //this.emit("nodeCreate", result);
+    this.emit("nodeCreate", result);
+
+    this.markDirty();
     return result;
   }
 
@@ -49,7 +52,7 @@ class NodalGraph
       {
         //Delete any edges that have this node as a source
         this.edges.splice(i, 1);
-        //this.emit("edgeDestroy", edge);
+        this.emit("edgeDestroy", edge);
       }
       else if (edge.to == node)
       {
@@ -61,38 +64,46 @@ class NodalGraph
     this.nodes.splice(nodeIndex, 1);
     if (nodeIndex == 0)
     {
-      //this.emit("newInitial", this.getStartNode(), node);
+      this.emit("newInitial", this.getStartNode(), node);
     }
-    //this.emit("nodeDestroy", node);
+    this.emit("nodeDestroy", node);
+
+    this.markDirty();
   }
 
   newEdge(from, to, label)
   {
     const result = new Edge(this, from, to, label);
     this.edges.push(result);
-    //this.emit("edgeCreate", result);
+    this.emit("edgeCreate", result);
+
+    this.markDirty();
     return result;
   }
 
   deleteEdge(edge)
   {
     this.edges.splice(this.edges.indexOf(edge), 1);
-    //this.emit("edgeDestroy", edge);
+    this.emit("edgeDestroy", edge);
+
+    this.markDirty();
   }
 
   deleteAll()
   {
     for(let node of this.nodes)
     {
-      //this.emit("nodeDestroy", node);
+      this.emit("nodeDestroy", node);
     }
     this.nodes.length = 0;
 
     for(let edge of this.edges)
     {
-      //this.emit("edgeDestroy", edge);
+      this.emit("edgeDestroy", edge);
     }
     this.edges.length = 0;
+
+    this.markDirty();
   }
 
   setStartNode(node)
@@ -102,7 +113,9 @@ class NodalGraph
     this.nodes.splice(this.nodes.indexOf(node), 1);
     const prevNode = this.nodes[0];
     this.nodes.unshift(node);
-    //this.emit("newInitial", node, prevNode);
+    this.emit("newInitial", node, prevNode);
+
+    this.markDirty();
   }
 
   getStartNode()
@@ -115,6 +128,20 @@ class NodalGraph
     this.deleteAll();
     this.nodes = this.nodes.concat(graph.nodes);
     this.edges = this.edges.concat(graph.edges);
+
+    this.markDirty();
+  }
+
+  markDirty()
+  {
+    const prevMachine = this._machine;
+    this._machine = null;
+    this.emit("markDirty", this);
+  }
+
+  isDirty()
+  {
+    return !this._machine;
   }
 
   static parseJSON(data)
@@ -189,39 +216,38 @@ class NodalGraph
     return data;
   }
 
-  toFSA()
+  toDFA(dst=null)
   {
-    let result = this.toDFA();
-    if (result.validate())
-    {
-      return result;
-    }
-    else
-    {
-      result = this.toNFA();
-      return result;
-    }
-  }
-
-  toDFA()
-  {
-    const result = new DFA();
+    const result = dst || new DFA();
+    if (!(result instanceof DFA))
+      throw new Error("Trying to parse graph mismatched machine type.");
     fillFSA(this, result);
     return result;
   }
 
-  toNFA()
+  toNFA(dst=null)
   {
-    const result = new NFA();
+    console.error("RAWR! I am a T-Rex!");
+    return this._toNFA(dst);
+  }
+
+  //TODO: NEVER CALL THIS DIRECTLY (Only FSABuilder is allowed.) Will be deprecated later.
+  _toNFA(dst=null)
+  {
+    const result = dst || new NFA();
+    if (!(result instanceof NFA))
+      throw new Error("Trying to parse graph mismatched machine type.");
     fillFSA(this, result);
     return result;
   }
 }
 //Mixin Eventable
-Object.assign(NodalGraph.prototype, Eventable);
+Eventable.mixin(NodalGraph);
 
 function fillFSA(graph, fsa)
 {
+  if (graph.nodes.length <= 0) return fsa;
+
   //Create all the nodes
   for(const node of graph.nodes)
   {
@@ -247,14 +273,22 @@ function fillFSA(graph, fsa)
   {
     //Ignore any incomplete edges
     if (edge.isPlaceholder()) continue;
-
-    try
+    const from = edge.from;
+    const to = edge.to;
+    if (from instanceof Node && to instanceof Node)
     {
-      fsa.newTransition(edge.from.label, edge.to.label, edge.label);
-    }
-    catch(e)
-    {
-      throw e;
+      const labels = edge.label.split(",");
+      for(const label of labels)
+      {
+        try
+        {
+          fsa.newTransition(from.label, to.label, label);
+        }
+        catch(e)
+        {
+          throw e;
+        }
+      }
     }
   }
 

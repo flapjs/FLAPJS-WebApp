@@ -13,7 +13,8 @@ class NodeRenderer extends React.Component
   {
     const node = this.props.node;
     //TODO: style={{cursor: "crosshair"}}
-    return <g>
+    //TODO: style={{filter:"url(#error-highlight)"}}
+    return <g className="graph-node">
       //Outer circle
       <circle
         cx={node.x}
@@ -36,7 +37,6 @@ class NodeRenderer extends React.Component
         x={node.x} y={node.y + 4}
         textAnchor={Config.NODE_TEXT_ANCHOR}
         font={Config.NODE_FONT}
-        stroke={Config.NODE_STROKE_STYLE}
         fill={Config.NODE_TEXT_FILL_STYLE}
         pointerEvents="none">
         {node.label}

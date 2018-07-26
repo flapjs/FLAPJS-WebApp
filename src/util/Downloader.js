@@ -1,3 +1,6 @@
+const WIDTH = 640;
+const HEIGHT = 480;
+
 class Downloader
 {
   static downloadText(filename, data)
@@ -16,7 +19,9 @@ class Downloader
     const ctx = canvas.getContext("2d");
     const image = new Image();
     image.onload = function() {
-      ctx.drawImage(image, 0, 0);
+      ctx.canvas.width = WIDTH;
+      ctx.canvas.height = HEIGHT;
+      ctx.drawImage(image, 0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT);
       URL.revokeObjectURL(url);
 
       const imageURI = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');

@@ -12,7 +12,7 @@
 
   --panel-size: 300px;
   --panel-tab-size: 2.2em;
-  --panel-border-size: 0.6em;
+  --panel-border-size: 0.8em;
 
   --panel-tab-border: calc(var(--panel-tab-size) + var(--panel-border-size));
 }
@@ -38,7 +38,7 @@
   width: calc(100% - var(--panel-tab-border));
   height: inherit;
 
-  transition: right 0.3s ease;
+  transition: opacity 0.1s ease, right 0.3s ease;
 
   right: var(--panel-tab-border);
 }
@@ -59,11 +59,10 @@
 }
 
 .workspace-drawer {
-  z-index: 999;
+  z-index: 800;
   position: fixed;
   width: var(--panel-size);/* Drawer width */
   height: inherit;
-  max-width: 100%;
 
   transition: right 0.3s ease;
 
@@ -81,9 +80,11 @@
 }
 .workspace-drawer.open {
   right: 0px;/* At edge */
+  max-width: 100%;
 }
 
-@media screen and (max-width: 400px) {
+/*Refer to Drawer.css*/
+@media screen and (max-width: 420px) {
   .workspace-main {
     right: 0px;/* Overwrite changes */
     height: calc(100% - var(--toolbar-height) - var(--panel-tab-border));/* Overwrite changes */
@@ -103,7 +104,6 @@
 
     width: 100%;
     height: var(--panel-size);/* Drawer height */
-    max-height: calc(100% - var(--toolbar-height));
 
     /* BUGFIX: when expands, it will not translate the right property*/
     transition:
@@ -128,13 +128,10 @@
   }
   .workspace-drawer.open {
     right: 0px; /* Overwrite changes */
+    max-height: calc(100% - var(--toolbar-height));
 
     transition: bottom 0.3s ease;
 
     bottom: 0px;
   }
-}
-
-@media screen and (max-height: 300px) {
-  /* TODO: it should be auto fullscreen mode */
 }

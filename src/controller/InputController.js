@@ -40,15 +40,12 @@ class InputController
     this.workspace.addEventListener('touchmove', this.onTouchMove.bind(this));
   }
 
-  onUpdate(dt)
-  {
-
-  }
-
   onContextMenu(e)
   {
     e.stopPropagation();
     e.preventDefault();
+    document.activeElement.blur();
+    this.workspace.focus();
   }
 
   onTouchMove(e)
@@ -59,8 +56,12 @@ class InputController
 
   onTouchStart(e)
   {
+    if (e.changedTouches.length > 1) return;
+
     e.stopPropagation();
     e.preventDefault();
+    document.activeElement.blur();
+    this.workspace.focus();
 
     const touch = e.changedTouches[0];
 
@@ -119,6 +120,8 @@ class InputController
   {
     e.stopPropagation();
     e.preventDefault();
+    document.activeElement.blur();
+    this.workspace.focus();
 
     if (this.cursor._mousemove)
     {
@@ -166,30 +169,27 @@ class InputController
   doInputDown(x, y, moveMode)
   {
     const pointer = this.pointer;
-    pointer.moveMode = moveMode;//If right click
     const mouse = getMousePosition(this.workspace, x, y);
+    pointer.moveMode = moveMode;//If right click
     pointer.setInitialPosition(mouse.x, mouse.y);
 
     //Check whether to accept the start of input...
-    const result = this.onInputDown(pointer.x, pointer.y,
+    this.onInputDown(pointer.x, pointer.y,
       pointer.initial.target, pointer.initial.targetType);
-    if (result)
-    {
-      this.cursor._timer = setTimeout(() => {
-        if (pointer.isWaitingForMoveMode())
-        {
-          pointer.moveMode = true;
-        }
-      }, Config.LONG_TAP_TICKS);
-    }
-    return result;
+
+    this.cursor._timer = setTimeout(() => {
+      if (pointer.isWaitingForMoveMode())
+      {
+        pointer.moveMode = true;
+      }
+    }, Config.LONG_TAP_TICKS);
+
+    return true;
   }
 
   doInputDownAndMove(x, y)
   {
     const pointer = this.pointer;
-    pointer.updateTarget();
-
     const mouse = getMousePosition(this.workspace, x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
@@ -262,7 +262,7 @@ class InputController
   onDragStop(x, y, target, targetType) {}
 }
 //Mixin Eventable
-Object.assign(InputController.prototype, Eventable);
+Eventable.mixin(InputController);
 
 function getMousePosition(svg, x, y)
 {

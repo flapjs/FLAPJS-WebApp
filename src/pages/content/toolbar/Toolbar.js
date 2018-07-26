@@ -42,19 +42,21 @@ class Toolbar extends React.Component
         <label id="machine-type"
           onClick={()=>app.drawer.setTab(1)}>
           DFA
-          </label>
+        </label>
       </div>
-      <NewButton graph={graph} onExecute={()=>{
-        eventHistory.clear();
-      }}/>
-      <UploadButton app={app} onExecute={()=>{
-        eventHistory.clear();
-      }}/>
-      <SaveButton graph={graph} getFileName={getMachineName}/>
-      <UndoButton eventHistory={eventHistory}/>
-      <RedoButton eventHistory={eventHistory}/>
-      <DownloadButton workspace={app.workspace} getFileName={getMachineName}/>
-      <HelpButton/>
+      <div className="toolbar-tray">
+        <NewButton graph={graph} onExecute={()=>{
+          eventHistory.clear();
+        }}/>
+        <UploadButton app={app} onExecute={()=>{
+          eventHistory.clear();
+        }}/>
+        <SaveButton graph={graph} getFileName={getMachineName}/>
+        <UndoButton eventHistory={eventHistory}/>
+        <RedoButton eventHistory={eventHistory}/>
+        <DownloadButton workspace={app.workspace} getFileName={getMachineName}/>
+      </div>
+      <HelpButton app={app}/>
     </div>;
   }
 }
