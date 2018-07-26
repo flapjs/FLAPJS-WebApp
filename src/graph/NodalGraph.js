@@ -164,7 +164,6 @@ class NodalGraph
     };
     result.width = result.maxX - result.minX;
     result.height = result.maxY - result.minY;
-    console.log(result);
     return result;
   }
 
