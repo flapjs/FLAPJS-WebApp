@@ -24,9 +24,6 @@ class LabelEditor extends React.Component
     //HACK: this is so if the click is focused back to the label editor, then it will NOT close
     this._timer = null;
 
-    //HACK: to stop calling toNFA every update
-    this._machine = null;
-
     this.state = {
       target: null,
       callback: null
@@ -131,12 +128,9 @@ class LabelEditor extends React.Component
 
       targetStyle.top = (y + offsetY) + "px";
       targetStyle.left = (x + offsetX) + "px";
-
-      //HACK: to only call toNFA when needed
-      this._machine = this.props.graph.toNFA();
     }
 
-    const usedAlphabet = this._machine ? this._machine.getAlphabet() : null;
+    const usedAlphabet = this.props.machineBuilder.getMachine().getAlphabet();
 
     return <div className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
       style={targetStyle}

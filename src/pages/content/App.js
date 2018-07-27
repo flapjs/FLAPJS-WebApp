@@ -234,6 +234,7 @@ class App extends React.Component
   {
     const controller = this.props.controller;
     const graph = this.graph;
+    const machineBuilder = this.machineBuilder;
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar app={this} graph={graph} eventHistory={this.eventHistory}/>

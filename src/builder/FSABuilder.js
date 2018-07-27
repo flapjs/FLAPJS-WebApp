@@ -1,6 +1,9 @@
 import NFA from 'machine/NFA.js';
 import { EMPTY } from 'machine/Symbols.js';
 import NodalGraph from 'graph/NodalGraph';
+
+const ERROR_CHECK_INTERVAL = 2000;
+
 class FSABuilder
 {
   constructor(graph)
@@ -8,6 +11,22 @@ class FSABuilder
     this.graph = graph;
 
     this._machine = new NFA();
+
+    this.graph.on("markDirty", (g)=>{
+      if (this.errorChecker)
+      {
+        clearTimeout(this.errorChecker);
+        this.errorChecker = null;
+      }
+
+      this.errorChecker = setTimeout(()=>{
+        this.checkErrors();
+        for(const error of this.errorMessages.keys())
+        {
+          console.log(error);
+        }
+      }, ERROR_CHECK_INTERVAL);
+    });
 
     this.errorMessages = new Map();
     this.errorNodes = [];
