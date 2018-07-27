@@ -1,7 +1,6 @@
 //https://material.io/tools/icons/?icon=cloud_upload&style=outline
 import React from 'react';
 
-import NodalGraph from 'graph/NodalGraph.js';
 import GraphUploader from 'graph/GraphUploader.js';
 
 class UploadButton extends React.Component
@@ -9,10 +8,11 @@ class UploadButton extends React.Component
   constructor(props)
   {
     super(props);
-    this.onChange = this.onChange.bind(this);
+    this.onUploadFileChange = this.onUploadFileChange.bind(this);
+
   }
 
-  onChange(e)
+  onUploadFileChange(e)
   {
     GraphUploader.uploadFileToGraph(e.target.files[0], this.props.graph, this.props.onExecute);
   }
@@ -21,8 +21,8 @@ class UploadButton extends React.Component
   {
     return(
       <button className="toolbar-button" id="toolbar-upload">
-        <input id="toolbar-upload-input" type="file" style={{display: "none"}}
-          onChange={this.onChange} accept="application/json"/>
+        <input id="toolbar-upload-input" type="file" name="import" style={{display:"none"}}
+          onChange={this.onUploadFileChange} accept="application/json"/>
         <label htmlFor="toolbar-upload-input">
           <svg className="navicons" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24">
             <title>Upload</title>

@@ -52,7 +52,7 @@ class Toolbar extends React.Component
         <NewButton graph={graph} onExecute={()=>{
           eventHistory.clear();
         }}/>
-        <UploadButton app={app} onExecute={()=>{
+        <UploadButton graph={graph} onExecute={()=>{
           eventHistory.clear();
         }}/>
         <SaveButton graph={graph} getFileName={getMachineName}/>

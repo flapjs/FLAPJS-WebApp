@@ -27,6 +27,19 @@ class NodalGraph
     this._machine = null;
   }
 
+  getNodeByLabel(label)
+  {
+    for(const node of this.nodes)
+    {
+      if (node.label == label)
+      {
+        return node;
+      }
+    }
+    
+    return null;
+  }
+
   newNode(x, y, label)
   {
     const result = new Node(this, x, y, label);
