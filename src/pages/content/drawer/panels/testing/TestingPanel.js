@@ -18,8 +18,10 @@ class TestingPanel extends React.Component
       <div className="panel-title">
         <h1>Testing</h1>
       </div>
+
       <TestingInputList tester={this.props.tester}/>
       <hr />
+      
       <div>
         <input id="test-step" type="checkbox"/>
         <label htmlFor="test-step">Simulate Step-by-step</label>

@@ -1,1 +1,1 @@
-export const EMPTY = '#';
+export const EMPTY = '\u03B5';

@@ -40,7 +40,7 @@ class GraphDefinition extends React.Component
   saveCustomName(node)
   {
     const customLabel = this.state.customName;
-    if (!this.props.graph.getNodeByLabel(customLabel))
+    if (customLabel && !this.props.graph.getNodeByLabel(customLabel))
     {
       node.label = customLabel;
     }
@@ -70,7 +70,10 @@ class GraphDefinition extends React.Component
               graph.nodes.map((e, i) => {
                 return <span key={i}>
                   <input className="statinput" type="text"
-                  onFocus={ev=>this.setState({customName: ev.target.value, customNameIndex: i})}
+                  onFocus={ev=>{
+                    this.setState({customName: ev.target.value, customNameIndex: i});
+                    ev.target.select();
+                  }}
                   onChange={ev=>
                     this.setState({customName: ev.target.value})}
                   onKeyUp={ev=>{

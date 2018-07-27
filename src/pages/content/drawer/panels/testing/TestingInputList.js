@@ -39,7 +39,6 @@ class TestingInputList extends React.Component
   render()
   {
     const tester = this.props.tester;
-    //TODO: upload file button
     return <div className="test-inputlist-container">
       <button className="panel-button" onClick={()=>{
         this.props.tester.testPlaceholder();
@@ -48,6 +47,7 @@ class TestingInputList extends React.Component
         Run All Tests
       </button>
 
+      <div className="scrollbar-container">
       <div className="test-inputlist-content">
         <TestingInput placeholder={true} index={-1} tester={tester} src={this.props.tester.placeholder}/>
         {
@@ -60,6 +60,8 @@ class TestingInputList extends React.Component
           Clear
         </button>
       </div>
+      </div>
+
       <button className="panel-button" id="test-upload">
         <input id="test-upload-input" type="file" name="import" style={{display: "none"}}
           onChange={this.onUploadFileChange} accept=".txt"/>

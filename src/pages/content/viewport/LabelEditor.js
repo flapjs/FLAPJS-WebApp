@@ -1,6 +1,7 @@
 import React from 'react';
 
 import * as Config from 'config.js';
+import { EMPTY } from 'machine/Symbols.js';
 
 import './LabelEditor.css';
 
@@ -9,7 +10,7 @@ const LABEL_OFFSET_Y = -64;
 const EDITOR_OFFSET_Y = -36;
 
 const DEFAULT_SYMBOLS = ["0", "1",
-  "\u03B5",//epsilon
+  EMPTY,//epsilon
   "\u03BB"];//lambda
 
 class LabelEditor extends React.Component
