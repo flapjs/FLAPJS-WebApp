@@ -6,24 +6,31 @@ const ERROR_CHECK_INTERVAL = 2000;
 
 class FSABuilder
 {
-  constructor(graph)
+  //HACK: this should not take app
+  constructor(graph, app)
   {
     this.graph = graph;
 
     this._machine = new NFA();
 
+    //HACK: this is a quick and dirty way to error check notifications...
     this.graph.on("markDirty", (g)=>{
       if (this.errorChecker)
       {
         clearTimeout(this.errorChecker);
         this.errorChecker = null;
       }
-
       this.errorChecker = setTimeout(()=>{
         this.checkErrors();
-        for(const error of this.errorMessages.keys())
+        for(const [error, objects] of this.errorMessages)
         {
-          console.log(error);
+          //TODO: this should notify the user and highlight the error
+          let message = error + ": ";
+          for(const o of objects)
+          {
+            message += o.label + ", ";
+          }
+          app.notification.addMessage(message);
         }
       }, ERROR_CHECK_INTERVAL);
     });
@@ -32,7 +39,6 @@ class FSABuilder
     this.errorNodes = [];
     this.errorEdges = [];
   }
-
 
   checkErrors()
   {

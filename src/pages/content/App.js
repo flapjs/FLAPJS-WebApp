@@ -39,7 +39,8 @@ class App extends React.Component
     super(props);
 
     this.graph = new NodalGraph();
-    this.machineBuilder = new FSABuilder(this.graph);
+    //HACK: this should not be passed to FSA Builder
+    this.machineBuilder = new FSABuilder(this.graph, this);
     this.testingManager = new TestingManager(this.machineBuilder);
     this.eventHistory = new EventHistory();
 
