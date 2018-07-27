@@ -20,7 +20,9 @@
 }
 
 .homepage-container{
-    background-color: #29FFF1;
+    width: 100%;
+    height: 100%;
+    background-color: #b3fffa;
 }
 
 .title img{
@@ -37,5 +39,31 @@
     bottom: 0px;
     border-top: solid;
     background-color: white;
+    text-align: center;
+
+}
+
+.arrow {
+    position: absolute;
+    font-family: "Arvo", Serif;
+    bottom: 15%;
+    right: 5%;
+    cursor: pointer;
+}
+
+.circle {
+    border-radius: 50%;
+    display: inline-block;
+    padding: 2px 36px;
+    border-style: dashed;
+}
+
+.arrowbutton {
+
+    background-color: #FFC82C;
+    color: white;
+    position: center;
+    margin-left: 50%;
+
 
 }

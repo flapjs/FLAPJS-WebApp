@@ -5,6 +5,8 @@ import './HomePage.css';
 
 import Footer from "./Footer";
 import Header from "./Header";
+import Arrow from "./Arrow";
+import Circles from "./Circles";
 
 class HomePage extends React.Component {
 
@@ -18,6 +20,7 @@ class HomePage extends React.Component {
 
             <div className="homepage-container">
                 <Header/>
+                <Arrow router={this.props.router}/>
                 <Footer/>
             </div>
 

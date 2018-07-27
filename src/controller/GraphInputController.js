@@ -453,8 +453,16 @@ class GraphInputController extends InputController
       //If stopped dragging a edge...
       else if (targetType === 'edge')
       {
-        //Do nothing, since should have moved to position
-        this.emit("edgeMove", target, target.quad.x, target.quad.y, this.prevQuad.x, this.prevQuad.y);
+        //Delete it if withing trash area...
+        if (this.pointer.isTrashMode(x, y))
+        {
+          this.deleteTargetEdge(target);
+        }
+        else
+        {
+          //Do nothing, since should have moved to position
+          this.emit("edgeMove", target, target.quad.x, target.quad.y, this.prevQuad.x, this.prevQuad.y);
+        }
         return true;
       }
       //If stopped dragging a endpoint...
