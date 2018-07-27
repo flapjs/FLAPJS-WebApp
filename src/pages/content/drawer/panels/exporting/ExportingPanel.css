@@ -5,6 +5,7 @@
   color: white;
   text-align: left;
   margin-bottom: 5px;
+  cursor: pointer;
 }
 
 .export-button:hover {
