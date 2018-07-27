@@ -1,0 +1,23 @@
+.export-button {
+  width: 100%;
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.export-button:hover {
+  background: #676767;
+}
+
+.export-icon {
+  height: 4em;
+  vertical-align: middle;
+}
+
+.export-text {
+  margin-left: 5px;
+  font-size: 15px;
+}

@@ -5,10 +5,9 @@ import NewButton from './button/NewButton.js';
 import SaveButton from './button/SaveButton.js';
 import UndoButton from './button/UndoButton.js';
 import RedoButton from './button/RedoButton.js';
-import ExportButton from "./button/ExportButton";
 import HelpButton from "./button/HelpButton";
 import UploadButton from "./button/UploadButton";
-import DownloadButton from "./button/DownloadButton";
+import ExportButton from "./button/ExportButton";
 
 class Toolbar extends React.Component
 {
@@ -22,6 +21,10 @@ class Toolbar extends React.Component
   getMachineName()
   {
     return this.machineName.value;
+  }
+
+  static setMachineName(name) {
+    document.getElementById("machine-name").value = name;
   }
 
   getMachineType()
@@ -44,6 +47,7 @@ class Toolbar extends React.Component
           DFA
         </label>
       </div>
+
       <div className="toolbar-tray">
         <NewButton graph={graph} onExecute={()=>{
           eventHistory.clear();
@@ -54,8 +58,9 @@ class Toolbar extends React.Component
         <SaveButton graph={graph} getFileName={getMachineName}/>
         <UndoButton eventHistory={eventHistory}/>
         <RedoButton eventHistory={eventHistory}/>
-        <DownloadButton workspace={app.workspace} getFileName={getMachineName}/>
+        <ExportButton workspace={app.workspace} getFileName={getMachineName}/>
       </div>
+
       <HelpButton app={app}/>
     </div>;
   }

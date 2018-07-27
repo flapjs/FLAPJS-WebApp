@@ -175,7 +175,7 @@ class InputController
 
     //Check whether to accept the start of input...
     this.onInputDown(pointer.x, pointer.y,
-      pointer.initial.target, pointer.initial.targetType);
+        pointer.initial.target, pointer.initial.targetType);
 
     this.cursor._timer = setTimeout(() => {
       if (pointer.isWaitingForMoveMode())
@@ -200,7 +200,7 @@ class InputController
         //Start drag!
         pointer.dragging = true;
         this.onDragStart(pointer.x, pointer.y,
-          pointer.initial.target, pointer.initial.targetType);
+            pointer.initial.target, pointer.initial.targetType);
       }
       else
       {
@@ -212,11 +212,11 @@ class InputController
     {
       //Continue to drag...
       this.onDragMove(pointer.x, pointer.y,
-        pointer.initial.target, pointer.initial.targetType);
+          pointer.initial.target, pointer.initial.targetType);
     }
 
     this.onInputMove(pointer.x, pointer.y,
-      pointer.initial.target, pointer.initial.targetType);
+        pointer.initial.target, pointer.initial.targetType);
   }
 
   doInputDownAndUp(x, y)
@@ -234,17 +234,17 @@ class InputController
     {
       //Stop drag!
       this.onDragStop(pointer.x, pointer.y,
-        pointer.initial.target, pointer.initial.targetType);
+          pointer.initial.target, pointer.initial.targetType);
     }
     else
     {
       //Tap!
       this.onInputAction(pointer.x, pointer.y,
-        pointer.initial.target, pointer.initial.targetType);
+          pointer.initial.target, pointer.initial.targetType);
     }
 
     this.onInputUp(pointer.x, pointer.y,
-      pointer.initial.target, pointer.initial.targetType);
+        pointer.initial.target, pointer.initial.targetType);
   }
 
   //Returns true if should act on input, false to ignore remaining click events

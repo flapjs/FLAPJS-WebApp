@@ -26,6 +26,7 @@ class HelpButton extends React.Component
     return <button className="toolbar-button" id="toolbar-help"
                    onClick={this.onClick.bind(this)}>
       <svg className="navicons" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <title>Help</title>
         <g id="Bounding_Boxes">
           <path fill="none" d="M0,0h24v24H0V0z"/>
         </g>
