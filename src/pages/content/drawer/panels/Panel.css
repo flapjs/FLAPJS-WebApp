@@ -18,3 +18,7 @@
   width: 100%;
   font-size: 12px;
 }
+
+.panel-button-label {
+  display: block;
+}

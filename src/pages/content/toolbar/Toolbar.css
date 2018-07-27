@@ -81,6 +81,7 @@
 .toolbar-button:disabled {
   fill: var(--color-main-dark);
 }
+
 .navicons {
   width: 100%;
   height: 100%;
