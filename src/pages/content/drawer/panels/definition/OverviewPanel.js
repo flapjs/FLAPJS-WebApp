@@ -86,6 +86,10 @@ class GraphDefinition extends React.Component
                   </span>;
               })
             }
+            <button className="statinput-button" onClick={()=>{
+              //TODO: make this into a function
+              graph.newNode(0, 0, Config.STR_STATE_LABEL + (graph.nodes.length));
+            }}>+</button>
           </div>
         <span className="statset-close">{"}"}</span>
         </div>

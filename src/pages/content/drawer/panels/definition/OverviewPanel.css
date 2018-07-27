@@ -39,13 +39,17 @@ li:hover {
 .statset-close {
   align-self: flex-end;
 }
+.statinput-button {
+  margin-left: 10px;
+}
 .statinput {
   background: none;
   border: none;
-  padding-left: 10px;
+  margin: 0;
+  width: 1.8em;
 
   font-size: inherit;
   color: white;
   display: inline;
-  width: 10%;
+  text-align: right;
 }
