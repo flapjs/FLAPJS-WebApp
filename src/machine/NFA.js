@@ -13,9 +13,9 @@ class NFA extends FSA
   }
 
   //Override
-  getAlphabet()
+  getUsedAlphabet(dst=[])
   {
-    const result = [];
+    const result = dst;
     for(const transition of this._transitions)
     {
       const symbol = transition[SYMBOL];
