@@ -20,6 +20,9 @@ class InputController
       _timer: null
     }
 
+    //Swap left to right clicks and vice versa on anything else but Macs
+    this.swapButtons = !navigator.platform.startsWith("Mac");
+
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
@@ -151,7 +154,8 @@ class InputController
       this.cursor._mousemove = null;
     }
 
-    if (this.doInputDown(e.clientX, e.clientY, e.button == 2))
+    let moveMode = (e.button == 2);
+    if (this.doInputDown(e.clientX, e.clientY, this.swapButtons ? !moveMode : moveMode))
     {
       this.cursor._mousemove = this.onMouseDownAndMove.bind(this);
       this.cursor._mouseup = this.onMouseDownAndUp.bind(this);
