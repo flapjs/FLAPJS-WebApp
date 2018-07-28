@@ -5,6 +5,11 @@ import HomePage from 'pages/home/HomePage.js';
 import App from 'pages/content/App.js';
 import Page404 from 'pages/404/Page404.js';
 
+//HACK: to determine if this is first time use
+import AutoSaver from 'util/AutoSaver.js';
+
+const ALWAYS_OPEN_WELCOME_PAGE = false;
+
 const PAGES = {
   '/': HomePage,
   '/app': App
@@ -12,7 +17,7 @@ const PAGES = {
 
 //TODO: this should be set by the server! initially it should be '/'.
 const ROUTER = {
-  pathname: "/"
+  pathname: ALWAYS_OPEN_WELCOME_PAGE || !AutoSaver.hasAutoSave() ? "/" : "/app"
 };
 
 const FRAMES_PER_SECOND = 60;

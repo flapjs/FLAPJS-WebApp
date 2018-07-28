@@ -19,6 +19,12 @@ class InputController
       _touchend: null,
       _timer: null
     }
+
+    this.onContextMenu = this.onContextMenu.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
+    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onTouchMove = this.onTouchMove.bind(this);
   }
 
   initialize(app, workspace)
@@ -29,15 +35,31 @@ class InputController
 
     //Prepare the workspace
     this.workspace = workspace;
-    this.workspace.addEventListener('contextmenu', this.onContextMenu.bind(this));
+    this.workspace.addEventListener('contextmenu', this.onContextMenu);
 
     //Process mouse handlers
-    this.workspace.addEventListener('mousedown', this.onMouseDown.bind(this));
-    this.workspace.addEventListener('mousemove', this.onMouseMove.bind(this));
+    this.workspace.addEventListener('mousedown', this.onMouseDown);
+    this.workspace.addEventListener('mousemove', this.onMouseMove);
 
     //Process touch handlers
-    this.workspace.addEventListener('touchstart', this.onTouchStart.bind(this));
-    this.workspace.addEventListener('touchmove', this.onTouchMove.bind(this));
+    this.workspace.addEventListener('touchstart', this.onTouchStart);
+    this.workspace.addEventListener('touchmove', this.onTouchMove);
+  }
+
+  destroy()
+  {
+    this.clearListeners();
+
+    //Prepare the workspace
+    this.workspace.removeEventListener('contextmenu', this.onContextMenu);
+
+    //Process mouse handlers
+    this.workspace.removeEventListener('mousedown', this.onMouseDown);
+    this.workspace.removeEventListener('mousemove', this.onMouseMove);
+
+    //Process touch handlers
+    this.workspace.removeEventListener('touchstart', this.onTouchStart);
+    this.workspace.removeEventListener('touchmove', this.onTouchMove);
   }
 
   onContextMenu(e)

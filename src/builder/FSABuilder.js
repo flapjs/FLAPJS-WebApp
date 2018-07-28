@@ -43,6 +43,47 @@ class FSABuilder
     this.errorEdges = [];
   }
 
+  formatAlphabetString(string)
+  {
+    const symbols = string.split(",");
+    const result = new Set();
+
+    let symbol = "";
+    let symbolLength = 0;
+    const length = symbols.length;
+    for(let i = 0; i < length; ++i)
+    {
+      symbol = symbols[i].trim();
+      symbolLength = symbol.length;
+      //If the symbol has none or more than 1 char
+      if (symbolLength !== 1)
+      {
+        //Remove symbol (by not adding to result)
+
+        //Divide multi-char symbol into smaller single char symbols
+        if (symbolLength > 1)
+        {
+          for(let subsymbol of symbol.split(""))
+          {
+            subsymbol = subsymbol.trim();
+            if (!result.has(subsymbol))
+            {
+              result.add(subsymbol);
+            }
+          }
+        }
+      }
+      else
+      {
+        result.add(symbol);
+      }
+    }
+
+    //If it is an empty string...
+    if (result.size === 0) return EMPTY;
+    return Array.from(result).join(",");
+  }
+
   checkErrors()
   {
     this.errorMessages = new Map();

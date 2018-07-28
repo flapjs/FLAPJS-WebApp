@@ -19,12 +19,16 @@ const Eventable = {
     const listeners = this.__events.get(eventName);
     listeners.splice(listeners.indexOf(listener), 1);
   },
-  clearListeners(eventName)
+  removeAllListeners(eventName)
   {
     if (!this.__events.has(eventName)) return;
 
     const listeners = this.__events.get(eventName);
     listeners.length = 0;
+  },
+  clearListeners()
+  {
+    this.__events.clear();
   },
   countListeners(eventName)
   {
