@@ -21,6 +21,9 @@ class FSABuilder
         this.errorChecker = null;
       }
       this.errorChecker = setTimeout(()=>{
+        //HACK: this is to turn off error checking really quick
+        if (!app.testingManager.autoErrorCheck) return;
+
         this.checkErrors();
         for(const [error, objects] of this.errorMessages)
         {
