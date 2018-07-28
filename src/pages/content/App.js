@@ -3,6 +3,7 @@ import { hot } from 'react-hot-loader';
 
 import './App.css';
 
+import GraphInputController from 'controller/GraphInputController.js';
 import NodalGraph from 'graph/NodalGraph.js';
 import AutoSaver from 'util/AutoSaver.js';
 
@@ -38,6 +39,8 @@ class App extends React.Component
   {
     super(props);
 
+    //Must be initialized (will be called in Workspace.componentDidMount)
+    this.controller = new GraphInputController();
     this.graph = new NodalGraph();
     //HACK: this should not be passed to FSA Builder
     this.machineBuilder = new FSABuilder(this.graph, this);
@@ -185,7 +188,7 @@ class App extends React.Component
     }
 
     const graph = this.graph;
-    const controller = this.props.controller;
+    const controller = this.controller;
 
     //Initialize the controller to graph components
     controller.initialize(this, this.workspace.ref);
@@ -233,7 +236,7 @@ class App extends React.Component
 
   render()
   {
-    const controller = this.props.controller;
+    const controller = this.controller;
     const graph = this.graph;
     const machineBuilder = this.machineBuilder;
 

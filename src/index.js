@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import GraphInputController from 'controller/GraphInputController.js';
-
 import HomePage from 'pages/home/HomePage.js';
 import App from 'pages/content/App.js';
 import Page404 from 'pages/404/Page404.js';
@@ -29,9 +27,6 @@ window.addEventListener('load', (event) => {
 let prevtime = 0;
 let root = null;
 
-//Must be initialized (will be called in Workspace.componentDidMount)
-let controller = new GraphInputController();
-
 //Load application
 function loadApplication()
 {
@@ -44,7 +39,7 @@ function updateApplication(time)
   const dt = (time - prevtime) / FRAMES_PER_SECOND;
   {
     const PageHandler = PAGES[ROUTER.pathname] || Page404;
-    ReactDOM.render(React.createElement(PageHandler, { router: ROUTER, controller: controller }, null), root);
+    ReactDOM.render(React.createElement(PageHandler, { router: ROUTER }, null), root);
   }
   prevtime = time;
   window.requestAnimationFrame(updateApplication);
