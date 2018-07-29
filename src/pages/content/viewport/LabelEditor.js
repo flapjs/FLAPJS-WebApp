@@ -8,6 +8,7 @@ import './LabelEditor.css';
 const LABEL_OFFSET_Y = -64;
 const EDITOR_OFFSET_Y = -36;
 const DELETE_KEY = 8;
+const DELETE_FORWARD_KEY = 46;
 
 const DEFAULT_SYMBOLS = ["0", "1", EMPTY];
 
@@ -75,16 +76,27 @@ class LabelEditor extends React.Component
 
   onKeyDown(e)
   {
-    if (e.keyCode === DELETE_KEY)
+    if (e.keyCode === Config.DELETE_KEY)
     {
       const input = this.inputElement;
-      const value = input.value;
       const index = input.selectionStart - 1;
       //If delete commas, delete the associated element too
-      if (value.charAt(index) === ',')
+      if (input.value.charAt(index) === ',')
       {
         input.setSelectionRange(index, index);
       }
+      //Continue to processs delete event
+    }
+    else if (e.keyCode === Config.DELETE_FORWARD_KEY)
+    {
+      const input = this.inputElement;
+      const index = input.selectionStart;
+      //If delete commas, delete the associated element too
+      if (input.value.charAt(index) === ',')
+      {
+        input.setSelectionRange(index + 1, index + 1);
+      }
+      //Continue to processs delete event
     }
   }
 

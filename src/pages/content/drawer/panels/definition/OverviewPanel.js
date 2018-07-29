@@ -1,8 +1,10 @@
 import React from 'react';
-import * as Config from 'config.js';
-
 import '../Panel.css';
 import './OverviewPanel.css';
+
+import * as Config from 'config.js';
+
+import SetEditor from 'pages/content/components/SetEditor.js';
 
 class OverviewPanel extends React.Component
 {
@@ -31,69 +33,28 @@ class GraphDefinition extends React.Component
   {
     super(props);
 
-    this.state = {
-      customName: "",
-      customNameIndex: -1
-    };
-  }
-
-  saveCustomName(node)
-  {
-    const customLabel = this.state.customName;
-    if (customLabel && !this.props.graph.getNodeByLabel(customLabel))
-    {
-      node.label = customLabel;
-    }
-    else
-    {
-      //TODO: this is an invalid dupe name!
-    }
-
-    //Reset custom name
-    this.setState({
-      customName: node.label,
-      custonNameIndex: -1
-    });
+    this.stateSet = React.createRef();
+    this.alphabetSet = React.createRef();
   }
 
   render()
   {
     const graph = this.props.graph;
     const machine = this.props.machineBuilder.getMachine();
+    graph.on("markDirty", () => {
+      this.stateSet.updateValues();
+    });
     return <div className="graphinfo">
       <div className="statblock">
         <label>Q :</label>
         <div className="statset">
         <span className="statset-open">{"{"}</span>
-          <div className="statlist" id="states">
-            {
-              graph.nodes.map((e, i) => {
-                return <span key={i}>
-                  <input className="statinput" type="text"
-                  onFocus={ev=>{
-                    this.setState({customName: ev.target.value, customNameIndex: i});
-                    ev.target.select();
-                  }}
-                  onChange={ev=>
-                    this.setState({customName: ev.target.value})}
-                  onKeyUp={ev=>{
-                    if (ev.keyCode === Config.SUBMIT_KEY)
-                    {
-                      this.saveCustomName(e);
-                      ev.target.blur();
-                    }
-                  }}
-                  onBlur={ev=>this.saveCustomName(e)}
-                  value={this.state.customNameIndex === i ? this.state.customName : e.label}/>
-                    <span>,</span>
-                  </span>;
-              })
-            }
-            <button className="statinput-button" onClick={()=>{
-              //TODO: make this into a function
-              graph.newNode(0, 0, Config.STR_STATE_LABEL + (graph.nodes.length));
-            }}>+</button>
-          </div>
+          <SetEditor ref={ref=>this.stateSet=ref}
+            src={graph.nodes}
+            getElementID={e=>e.label}
+            onAdd={id=>graph.newNode(0, 0, id)}
+            onRemove={e=>graph.deleteNode(e)}
+            onRename={(e, id)=>e.label = id}/>
         <span className="statset-close">{"}"}</span>
         </div>
       </div>
@@ -101,11 +62,7 @@ class GraphDefinition extends React.Component
           <label>&Sigma; :</label>
           <div className="statset">
           <span className="statset-open">{"{"}</span>
-            <div className="statlist" id="symbols">
-              {
-                machine.getAlphabet().join(", ")
-              }
-            </div>
+            <AlphabetSet graph={graph} machineBuilder={this.props.machineBuilder}/>
           <span className="statset-close">{"}"}</span>
           </div>
         </div>
@@ -147,5 +104,91 @@ class GraphDefinition extends React.Component
   }
 }
 
+class StateSet extends React.Component
+{
+  constructor(props)
+  {
+    super(props);
+
+    this.state = {
+      customName: "",
+      customNameIndex: -1
+    };
+  }
+
+  saveCustomName(node)
+  {
+    const customLabel = this.state.customName;
+    if (customLabel && !this.props.graph.getNodeByLabel(customLabel))
+    {
+      node.label = customLabel;
+    }
+    else
+    {
+      //TODO: this is an invalid dupe name!
+    }
+
+    //Reset custom name
+    this.setState({
+      customName: node.label,
+      custonNameIndex: -1
+    });
+  }
+
+  render()
+  {
+    const graph = this.props.graph;
+    return <div className="statlist" id="states">
+      {
+        graph.nodes.map((e, i) => {
+          return <span key={i}>
+            <input className="statinput" type="text"
+            onFocus={ev=>{
+              this.setState({customName: ev.target.value, customNameIndex: i});
+              ev.target.select();
+            }}
+            onChange={ev=>
+              this.setState({customName: ev.target.value})}
+            onKeyUp={ev=>{
+              if (ev.keyCode === Config.SUBMIT_KEY)
+              {
+                this.saveCustomName(e);
+                ev.target.blur();
+              }
+            }}
+            onBlur={ev=>this.saveCustomName(e)}
+            value={this.state.customNameIndex === i ? this.state.customName : e.label}/>
+              <span>,</span>
+            </span>;
+        })
+      }
+      <button className="statinput-button" onClick={()=>{
+        //TODO: make this into a function
+        graph.newNode(0, 0, Config.STR_STATE_LABEL + (graph.nodes.length));
+      }}>+</button>
+    </div>;
+  }
+}
+
+class AlphabetSet extends React.Component
+{
+  constructor(props)
+  {
+    super(props);
+  }
+
+  render()
+  {
+    const graph = this.props.graph;
+    const machine = this.props.machineBuilder.getMachine();
+    return <div className="statlist" id="alphabet">
+      {
+        machine.getAlphabet().join(", ")
+      }
+      <button className="statinput-button" onClick={()=>{
+      }}>+</button>
+    </div>;
+  }
+}
 
 export default OverviewPanel;

@@ -12,6 +12,8 @@ class FSABuilder
     this.graph = graph;
 
     this._machine = new NFA();
+    this._alphabet = [];
+    this._symbols = [];
 
     //HACK: this is a quick and dirty way to error check notifications...
     this.graph.on("markDirty", (g)=>{
@@ -176,11 +178,33 @@ class FSABuilder
     }
   }
 
+  addSymbol(symbol)
+  {
+    this._symbols.push(symbol);
+  }
+
+  removeSymbol(symbol)
+  {
+    this._symbols.splice(this._symbols.indexOf(symbol), 1);
+  }
+
+  getAlphabet()
+  {
+    const machine = this.getMachine();
+    this._alphabet.length = 0;
+    machine.getAlphabet(this._alphabet);
+    return this._alphabet;
+  }
 
   getMachine()
   {
     this._machine.clear();
-    return this.graph._toNFA(this._machine);
+    const result = this.graph._toNFA(this._machine);
+    for(const s of this._symbols)
+    {
+      this._machine.newSymbol(s);
+    }
+    return result;
   }
 }
 
