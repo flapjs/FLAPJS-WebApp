@@ -53,6 +53,7 @@ class App extends React.Component
     this.viewport = React.createRef();
     this.drawer = React.createRef();
     this.notification = React.createRef();
+    this.toolbar = React.createRef();
 
     this.state = {
       isOpen: true,
@@ -258,7 +259,7 @@ class App extends React.Component
     const machineBuilder = this.machineBuilder;
 
     return <div className="app-container" ref={ref=>this.container=ref}>
-      <Toolbar app={this} graph={graph} eventHistory={this.eventHistory}/>
+      <Toolbar ref={ref=>this.toolbar=ref} app={this} graph={graph} eventHistory={this.eventHistory} />
       <NotificationSystem ref={ref=>this.notification=ref}/>
 
       <div className="workspace-container">
@@ -285,7 +286,7 @@ class App extends React.Component
           (this.state.isOpen ? " open" : "") +
           (this.state.isFullscreen ? " fullscreen" : "")}>
 
-          <Drawer ref={ref=>this.drawer=ref} app={this}/>
+          <Drawer ref={ref=>this.drawer=ref} app={this} graph={graph} toolbar={this.toolbar} />
         </div>
       </div>
     </div>;
