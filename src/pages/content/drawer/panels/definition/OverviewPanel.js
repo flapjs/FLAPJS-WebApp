@@ -309,16 +309,15 @@ class AlphabetSet extends React.Component
   {
     const graph = this.props.graph;
     const machine = this.props.machineBuilder.getMachine();
-    return <div className="statlist" id="alphabet">
-      <span className="setedit-container">
-        <input className="setedit-input" type="text" value={this.state.value}
-          onChange={this.onValueChange}
-          onKeyUp={this.onKeyUp}
-          onKeyDown={this.onKeyDown}
-          onFocus={this.onFocus}
-          onBlur={this.onBlur}/>
-      </span>
-    </div>;
+    return <span className="setedit-container">
+      <input className="setedit-input" type="text" value={this.state.value}
+        spellCheck="false"
+        onChange={this.onValueChange}
+        onKeyUp={this.onKeyUp}
+        onKeyDown={this.onKeyDown}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}/>
+    </span>;
   }
 }
 
