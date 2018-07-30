@@ -24,9 +24,11 @@
   margin: 0;
   list-style-type: none;
 }
+/*
 li:hover {
   font-weight: bold;
 }
+*/
 .statblock>label {
   font-style: italic;
   font-weight: bold;

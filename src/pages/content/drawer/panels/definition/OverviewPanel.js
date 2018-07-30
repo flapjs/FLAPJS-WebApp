@@ -221,6 +221,88 @@ class AlphabetSet extends React.Component
   constructor(props)
   {
     super(props);
+
+    this.state = {
+      value: this.props.machineBuilder.getMachine().getAlphabet().join(", ")
+    }
+
+    this.onValueChange = this.onValueChange.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+  }
+
+  onFocus()
+  {
+    this.setState({value: this.props.machineBuilder.getMachine().getAlphabet().join(", ")});
+  }
+
+  onBlur(e)
+  {
+    const usedAlphabet = this.props.machineBuilder.getMachine().getUsedAlphabet();
+    const values = this.state.value.split(", ");
+    const result = [];
+    for(const symbol of values)
+    {
+      if (!usedAlphabet.includes(symbol))
+      {
+        result.push(symbol);
+      }
+    }
+
+    //HACK: should not replace the entire array with a new one, should just alter it
+    this.props.machineBuilder._symbols = result;
+    this.setState({value: values.join(", ")});
+  }
+
+  onKeyUp(e)
+  {
+    if (e.keyCode === Config.SUBMIT_KEY)
+    {
+      e.target.blur();
+    }
+    else if (e.keyCode === Config.CLEAR_KEY)
+    {
+      const target = e.target;
+      this.setState({value: this.props.machineBuilder.getMachine().getUsedAlphabet().join(", ")}, () => target.blur());
+    }
+  }
+
+  onKeyDown(e)
+  {
+    if (e.keyCode === Config.SUBMIT_KEY || e.keyCode === Config.CLEAR_KEY)
+    {
+      e.preventDefault();
+    }
+  }
+
+  onValueChange(e)
+  {
+    const usedAlphabet = this.props.machineBuilder.getMachine().getUsedAlphabet();
+    const value = e.target.value.trim();
+
+    const result = new Set();
+    for(let v of value)
+    {
+      if (usedAlphabet.includes(v))
+      {
+        result.add(v);
+      }
+      else if (v === ' ' || v === ',')
+      {
+        continue;
+      }
+      else
+      {
+        result.add(v);
+      }
+    }
+
+    const prevStart = e.target.selectionStart;
+    const prevEnd = e.target.selectionEnd;
+    this.setState({value: Array.from(result).join(", ")});
+    e.target.setSelectionRange(prevStart, prevEnd);
   }
 
   render()
@@ -228,11 +310,14 @@ class AlphabetSet extends React.Component
     const graph = this.props.graph;
     const machine = this.props.machineBuilder.getMachine();
     return <div className="statlist" id="alphabet">
-      {
-        machine.getAlphabet().join(", ")
-      }
-      <button className="statinput-button" onClick={()=>{
-      }}>+</button>
+      <span className="setedit-container">
+        <input className="setedit-input" type="text" value={this.state.value}
+          onChange={this.onValueChange}
+          onKeyUp={this.onKeyUp}
+          onKeyDown={this.onKeyDown}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}/>
+      </span>
     </div>;
   }
 }
