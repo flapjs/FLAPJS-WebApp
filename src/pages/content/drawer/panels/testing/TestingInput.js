@@ -4,6 +4,8 @@ import './TestingInput.css';
 import AddRemoveIcon from './AddRemoveIcon.js';
 import StatusIcon from './StatusIcon.js';
 
+const PLACEHOLDER_TEXT = "Test string";
+
 class TestingInput extends React.Component
 {
   constructor(props)
@@ -49,6 +51,7 @@ class TestingInput extends React.Component
 
       <input ref={ref=>this.inputElement=ref} className="test-input-field"
         value={this.state.src.value}
+        placeholder={PLACEHOLDER_TEXT}
         onChange={this.onValueChange}
         onFocus={(e)=>e.target.select()}/>
 

@@ -3,6 +3,7 @@ import { hot } from 'react-hot-loader';
 
 import './App.css';
 
+import GraphInputController from 'controller/GraphInputController.js';
 import NodalGraph from 'graph/NodalGraph.js';
 import AutoSaver from 'util/AutoSaver.js';
 
@@ -38,8 +39,11 @@ class App extends React.Component
   {
     super(props);
 
+    //Must be initialized (will be called in Workspace.componentDidMount)
+    this.controller = new GraphInputController();
     this.graph = new NodalGraph();
-    this.machineBuilder = new FSABuilder(this.graph);
+    //HACK: this should not be passed to FSA Builder
+    this.machineBuilder = new FSABuilder(this.graph, this);
     this.testingManager = new TestingManager(this.machineBuilder);
     this.eventHistory = new EventHistory();
 
@@ -57,6 +61,11 @@ class App extends React.Component
       isFullscreen: false,
       isWaitingForFile: false
     };
+
+    this.onDragOver = this.onDragOver.bind(this);
+    this.onDragEnter = this.onDragEnter.bind(this);
+    this.onDragLeave = this.onDragLeave.bind(this);
+    this.onFileDrop = this.onFileDrop.bind(this);
   }
 
   //Called to prevent default file open
@@ -185,17 +194,17 @@ class App extends React.Component
     }
 
     const graph = this.graph;
-    const controller = this.props.controller;
+    const controller = this.controller;
 
     //Initialize the controller to graph components
     controller.initialize(this, this.workspace.ref);
 
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;
-    workspaceDOM.addEventListener("drop", this.onFileDrop.bind(this));
-    workspaceDOM.addEventListener("dragover", this.onDragOver.bind(this));
-    workspaceDOM.addEventListener("dragenter", this.onDragEnter.bind(this));
-    workspaceDOM.addEventListener("dragleave", this.onDragLeave.bind(this));
+    workspaceDOM.addEventListener("drop", this.onFileDrop);
+    workspaceDOM.addEventListener("dragover", this.onDragOver);
+    workspaceDOM.addEventListener("dragenter", this.onDragEnter);
+    workspaceDOM.addEventListener("dragleave", this.onDragLeave);
 
     //Insert event listeners
     const eventHistory = this.eventHistory;
@@ -231,10 +240,23 @@ class App extends React.Component
       eventHistory.handleEvent(new GraphEdgeLabelEvent(graph, targetEdge, nextLabel, prevLabel)));
   }
 
+  componentWillUnmount()
+  {
+    this.controller.destroy();
+
+    //Upload drop zone
+    const workspaceDOM = this.workspace.ref;
+    workspaceDOM.removeEventListener("drop", this.onFileDrop);
+    workspaceDOM.removeEventListener("dragover", this.onDragOver);
+    workspaceDOM.removeEventListener("dragenter", this.onDragEnter);
+    workspaceDOM.removeEventListener("dragleave", this.onDragLeave);
+  }
+
   render()
   {
-    const controller = this.props.controller;
+    const controller = this.controller;
     const graph = this.graph;
+    const machineBuilder = this.machineBuilder;
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar ref={ref=>this.toolbar=ref} app={this} graph={graph} eventHistory={this.eventHistory} />

@@ -1,6 +1,8 @@
 //Input
 export const SUBMIT_KEY = 13; //ENTER
 export const CLEAR_KEY = 27; //ESCAPE
+export const DELETE_KEY = 8; //DELETE
+export const DELETE_FORWARD_KEY = 46; //DELETE FORWARD
 
 export const STR_TRANSITION_DEFAULT_LABEL = "0";
 export const STR_TRANSITION_PROXY_LABEL = "?";

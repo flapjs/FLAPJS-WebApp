@@ -1,117 +1,139 @@
+import * as Config from 'config.js';
+
+import MachineBuilder from './MachineBuilder.js';
+import DFAErrorChecker from './DFAErrorChecker.js';
 import NFA from 'machine/NFA.js';
-import { EMPTY } from 'machine/Symbols.js';
 import NodalGraph from 'graph/NodalGraph';
-class FSABuilder
+
+const ERROR_CHECK_INTERVAL = 2000;
+
+class FSABuilder extends MachineBuilder
 {
-  constructor(graph)
+  //HACK: this should not take app
+  constructor(graph, app)
   {
-    this.graph = graph;
+    super(graph, app);
+
+    //HACK: this should not take app
+    this.app = app;
 
     this._machine = new NFA();
+    this._machineType = "DFA";
+    this._alphabet = [];
+    this._symbols = [];
 
-    this.errorMessages = new Map();
-    this.errorNodes = [];
-    this.errorEdges = [];
+    this._timer = null;
+
+    this.machineErrorChecker = new DFAErrorChecker(this, graph);
+
+    //HACK: this is a quick and dirty way to error check notifications...
+    this.graph.on("markDirty", this.onGraphChange.bind(this));
   }
 
-
-  checkErrors()
+  onGraphChange(graph)
   {
-    this.errorMessages = new Map();
-    let nodeTransitionMap = new Map();
-    let unReachedNode =this.graph.nodes.slice();
-    let startNode = this.graph.getStartNode();
-    unReachedNode.splice(unReachedNode.indexOf(startNode),1);
-    this.getMachine();//HACK: this is to sync the machine and graph
-    let alphabet = this._machine.getAlphabet();
-    for(const edge of this.graph.edges)
+    if (this._timer)
     {
-      //check incomplete edges
-      if (edge.isPlaceholder())
+      clearTimeout(this._timer);
+      this._timer = null;
+    }
+
+    this._timer = setTimeout(() => {
+      //HACK: this is to turn off error checking really quick
+      if (!this.app.testingManager.autoErrorCheck) return;
+
+      this.machineErrorChecker.checkErrors();
+      for(const [error, objects] of this.machineErrorChecker.errorMessages)
       {
-        this.errorEdges.push(edge);
-        this.addErrorMessage("Incomplete edges", edge);
-      }
-      else
-      {
-        const from = edge.from;
-        const to = edge.to;
-        const labels = edge.label.split(",");
-        for(const label of labels)
+        //TODO: this should notify the user and highlight the error
+        let message = error + ": ";
+        for(const o of objects)
         {
-          //remove to from unReachedNode list
-          if(unReachedNode.includes(to)) unReachedNode.splice(unReachedNode.indexOf(to),1);
-          //check for empty transitions
-          if(label == EMPTY)
+          message += o.label + ", ";
+        }
+        this.app.notification.addMessage(message);
+      }
+    }, ERROR_CHECK_INTERVAL);
+  }
+
+  formatAlphabetString(string)
+  {
+    const symbols = string.split(",");
+    const result = new Set();
+
+    let symbol = "";
+    let symbolLength = 0;
+    const length = symbols.length;
+    for(let i = 0; i < length; ++i)
+    {
+      symbol = symbols[i].trim();
+      symbolLength = symbol.length;
+      //If the symbol has none or more than 1 char
+      if (symbolLength !== 1)
+      {
+        //Remove symbol (by not adding to result)
+
+        //Divide multi-char symbol into smaller single char symbols
+        if (symbolLength > 1)
+        {
+          for(let subsymbol of symbol.split(""))
           {
-            this.errorEdges.push(edge);
-            this.addErrorMessage("Empty transitions", edge);
-          }
-          else
-          {
-            if(typeof nodeTransitionMap.get(from) === "undefined")
+            subsymbol = subsymbol.trim();
+            if (!result.has(subsymbol))
             {
-              nodeTransitionMap.set(from, [label]);
-            }
-            else
-            {
-              //check for duplicate transitions
-              let currentAlphabet = nodeTransitionMap.get(from);
-              if(currentAlphabet.includes(label))
-              {
-                this.errorEdges.push(edge);
-                this.addErrorMessage("Duplicate transitions", edge)
-              }
-              else
-              {
-                nodeTransitionMap.get(from).push(label);
-              }
+              result.add(subsymbol);
             }
           }
         }
       }
-    }
-    //check disconnect states
-    for (const node of unReachedNode)
-    {
-      this.errorNodes.push(node);
-      this.addErrorMessage("Unreachable node", node);
-    }
-    //Check for missing transitions
-    for(const node of this.graph.nodes)
-    {
-      let nodeTransitions = nodeTransitionMap.get(node);
-      if (typeof nodeTransitions === "undefined"&& alphabet.length != 0)
+      else
       {
-        this.errorNodes.push(node);
-        this.addErrorMessage("Missing transitions", node);
-      }
-      else if(typeof nodeTransitions != "undefined" && nodeTransitions.length < alphabet.length)
-      {
-        this.errorNodes.push(node);
-        this.addErrorMessage("Missing transitions", node);
+        result.add(symbol);
       }
     }
+
+    //If it is an empty string...
+    if (result.size === 0) return EMPTY;
+    return Array.from(result).join(",");
   }
 
-  //helper method for add into errorMessages map
-  addErrorMessage(error, object)
+  setMachineType(machineType)
   {
-    if(typeof this.errorMessages.get(error) === "undefined")
-    {
-      this.errorMessages.set(error, [object]);
-    }
-    else
-    {
-      this.errorMessages.get(error).push(object);
-    }
+    this._machineType = machineType;
   }
 
+  getMachineType()
+  {
+    return this._machineType;
+  }
+
+  addSymbol(symbol)
+  {
+    this._symbols.push(symbol);
+  }
+
+  removeSymbol(symbol)
+  {
+    this._symbols.splice(this._symbols.indexOf(symbol), 1);
+  }
+
+  getAlphabet()
+  {
+    const machine = this.getMachine();
+    this._alphabet.length = 0;
+    machine.getAlphabet(this._alphabet);
+    return this._alphabet;
+  }
 
   getMachine()
   {
     this._machine.clear();
-    return this.graph._toNFA(this._machine);
+    const result = this.graph._toNFA(this._machine);
+    for(const s of this._symbols)
+    {
+      this._machine.newSymbol(s);
+    }
+    return result;
   }
 }
 

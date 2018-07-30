@@ -11,6 +11,7 @@ class TestingManager
     this.machineBuilder = machineBuilder;
     this.inputs = [];
 
+    this.autoErrorCheck = false;
     this.placeholder = new TestingInput();
 
     //HACK: this should be a listener to FSABuilder, should not access graph

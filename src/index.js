@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import GraphInputController from 'controller/GraphInputController.js';
-
 import HomePage from 'pages/home/HomePage.js';
 import App from 'pages/content/App.js';
 import Page404 from 'pages/404/Page404.js';
+
+//HACK: to determine if this is first time use
+import AutoSaver from 'util/AutoSaver.js';
+
+const ALWAYS_OPEN_WELCOME_PAGE = false;
 
 const PAGES = {
   '/': HomePage,
@@ -14,7 +17,7 @@ const PAGES = {
 
 //TODO: this should be set by the server! initially it should be '/'.
 const ROUTER = {
-  pathname: "/"
+  pathname: ALWAYS_OPEN_WELCOME_PAGE || !AutoSaver.hasAutoSave() ? "/" : "/app"
 };
 
 const FRAMES_PER_SECOND = 60;
@@ -29,9 +32,6 @@ window.addEventListener('load', (event) => {
 let prevtime = 0;
 let root = null;
 
-//Must be initialized (will be called in Workspace.componentDidMount)
-let controller = new GraphInputController();
-
 //Load application
 function loadApplication()
 {
@@ -44,7 +44,7 @@ function updateApplication(time)
   const dt = (time - prevtime) / FRAMES_PER_SECOND;
   {
     const PageHandler = PAGES[ROUTER.pathname] || Page404;
-    ReactDOM.render(React.createElement(PageHandler, { router: ROUTER, controller: controller }, null), root);
+    ReactDOM.render(React.createElement(PageHandler, { router: ROUTER }, null), root);
   }
   prevtime = time;
   window.requestAnimationFrame(updateApplication);

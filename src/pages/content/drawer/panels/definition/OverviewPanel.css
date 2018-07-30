@@ -1,4 +1,10 @@
 
+.machine-type
+{
+  width: 100%;
+  margin-bottom: 5px;
+}
+
 /* STATS */
 .graphinfo {
   display: flex;
@@ -18,9 +24,11 @@
   margin: 0;
   list-style-type: none;
 }
+/*
 li:hover {
   font-weight: bold;
 }
+*/
 .statblock>label {
   font-style: italic;
   font-weight: bold;
@@ -39,13 +47,17 @@ li:hover {
 .statset-close {
   align-self: flex-end;
 }
+.statinput-button {
+  margin-left: 10px;
+}
 .statinput {
   background: none;
   border: none;
-  padding-left: 10px;
+  margin: 0;
+  width: 1.8em;
 
   font-size: inherit;
   color: white;
   display: inline;
-  width: 10%;
+  text-align: right;
 }

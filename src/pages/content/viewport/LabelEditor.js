@@ -1,16 +1,16 @@
 import React from 'react';
-
 import * as Config from 'config.js';
+import { EMPTY } from 'machine/Symbols.js';
 
 import './LabelEditor.css';
 
 //TODO: This is equivalent to 4em for toolbar height
 const LABEL_OFFSET_Y = -64;
 const EDITOR_OFFSET_Y = -36;
+const DELETE_KEY = 8;
+const DELETE_FORWARD_KEY = 46;
 
-const DEFAULT_SYMBOLS = ["0", "1",
-  "\u03B5",//epsilon
-  "\u03BB"];//lambda
+const DEFAULT_SYMBOLS = ["0", "1", EMPTY];
 
 class LabelEditor extends React.Component
 {
@@ -24,13 +24,14 @@ class LabelEditor extends React.Component
     //HACK: this is so if the click is focused back to the label editor, then it will NOT close
     this._timer = null;
 
-    //HACK: to stop calling toNFA every update
-    this._machine = null;
-
     this.state = {
       target: null,
       callback: null
     };
+
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
   }
 
   openEditor(targetEdge, defaultText=null, callback=null)
@@ -54,7 +55,10 @@ class LabelEditor extends React.Component
     {
       if (saveOnExit)
       {
-        this.state.target.setLabel(this.inputElement.value);
+        let value = this.inputElement.value;
+        if (!value) value = EMPTY;
+
+        this.state.target.setLabel(value);
       }
       this.state.target = null;
 
@@ -70,6 +74,32 @@ class LabelEditor extends React.Component
     return this.state.target !== null;
   }
 
+  onKeyDown(e)
+  {
+    if (e.keyCode === Config.DELETE_KEY)
+    {
+      const input = this.inputElement;
+      const index = input.selectionStart - 1;
+      //If delete commas, delete the associated element too
+      if (input.value.charAt(index) === ',')
+      {
+        input.setSelectionRange(index, index);
+      }
+      //Continue to processs delete event
+    }
+    else if (e.keyCode === Config.DELETE_FORWARD_KEY)
+    {
+      const input = this.inputElement;
+      const index = input.selectionStart;
+      //If delete commas, delete the associated element too
+      if (input.value.charAt(index) === ',')
+      {
+        input.setSelectionRange(index + 1, index + 1);
+      }
+      //Continue to processs delete event
+    }
+  }
+
   onKeyUp(e)
   {
     if (e.keyCode == Config.SUBMIT_KEY)
@@ -82,29 +112,48 @@ class LabelEditor extends React.Component
     }
   }
 
+  onInputChange(e)
+  {
+    //Maintain proper format
+    const target = e.target;
+    //Save cursor position for later
+    const prevStart = target.selectionStart;
+    const prevEnd = target.selectionEnd;
+    const prevLength = target.value.length;
+
+    target.value = this.props.machineBuilder.formatAlphabetString(target.value);
+
+    if (prevStart < prevLength)
+    {
+      //Set cursor back to where it was
+      target.setSelectionRange(prevStart, prevEnd);
+    }
+  }
+
   appendSymbol(symbol)
   {
     const string = this.inputElement.value;
     let result = "";
 
-    const selectStart = this.inputElement.selectionStart;
-    const selectEnd = this.inputElement.selectionEnd;
-    //Replace the selected text
-    if (selectStart === 0 && selectEnd === string.length)
+    //Make sure that the transition does not already have symbol
+    const symbols = string.split(",");
+    if (!symbols.includes(symbol))
     {
-      result = symbol;
-    }
-    else
-    {
-      result = string.trim();
-      if (result.length > 0 && result[result.length - 1] !== ',')
+      //Replace the selected text
+      if (this.inputElement.selectionStart === 0 &&
+        this.inputElement.selectionEnd === string.length)
       {
-        result += ",";
+        result = symbol;
       }
-      result += symbol;
-    }
+      else
+      {
+        symbols.push(symbol);
+        //symbols.sort();
+        result = symbols.join(",");
+      }
 
-    this.inputElement.value = result;
+      this.inputElement.value = result;
+    }
 
     //Redirect user to input field after button click
     this.inputElement.focus();
@@ -131,16 +180,12 @@ class LabelEditor extends React.Component
 
       targetStyle.top = (y + offsetY) + "px";
       targetStyle.left = (x + offsetX) + "px";
-
-      //HACK: to only call toNFA when needed
-      this._machine = this.props.graph.toNFA();
     }
 
-    const usedAlphabet = this._machine ? this._machine.getAlphabet() : null;
+    const usedAlphabet = this.props.machineBuilder.getMachine().getAlphabet();
 
     return <div className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
       style={targetStyle}
-
       onFocus={(e)=>{
         //HACK: delete the timer that will exit labelEditor
         clearTimeout(this._timer);
@@ -150,7 +195,9 @@ class LabelEditor extends React.Component
         this._timer = setTimeout(() => this.closeEditor(true), 10);
       }}>
       <input className="label-editor-input" type="text" ref={ref=>this.inputElement=ref}
-        onKeyUp={this.onKeyUp.bind(this)}/>
+        onKeyDown={this.onKeyDown}
+        onKeyUp={this.onKeyUp}
+        onChange={this.onInputChange}/>
       <div className="label-editor-tray">
         {
           usedAlphabet &&

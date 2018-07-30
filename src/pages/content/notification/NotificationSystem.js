@@ -14,7 +14,8 @@ class NotificationSystem extends React.Component
     };
   }
 
-  addMessage(message)
+  //TODO: allow add and delete by tag for messages
+  addMessage(message, tag=null)
   {
     this.state.messages.push(message);
   }

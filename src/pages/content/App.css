@@ -2,6 +2,16 @@
   height: 100%;
 }
 
+/*For hiding scrollbars*/
+::-webkit-scrollbar {
+  display: none;
+}
+/*
+* {
+  -ms-overflow-style: none;
+}
+*/
+
 .app-container {
   display: flex;
   flex-direction: column;

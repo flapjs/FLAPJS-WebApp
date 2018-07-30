@@ -3,7 +3,7 @@ import Node from './Node.js';
 
 class Edge
 {
-  constructor(graph, from, to, label="#")
+  constructor(graph, from, to, label)
   {
     this.graph = graph;
     this.from = from;
@@ -191,7 +191,7 @@ class Edge
   setLabel(label)
   {
     this._label = label;
-    
+
     this.graph.markDirty();
   }
 

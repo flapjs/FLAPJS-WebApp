@@ -26,6 +26,16 @@ class AutoSaver
     }
   }
 
+  static clearAutoSave()
+  {
+    localStorage.clear();
+  }
+
+  static hasAutoSave()
+  {
+    return localStorage.getItem('graph') !== null;
+  }
+
   static initAutoSave(graph)
   {
     try
