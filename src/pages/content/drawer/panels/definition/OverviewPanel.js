@@ -74,6 +74,7 @@ class GraphDefinition extends React.Component
   onMarkDirty()
   {
     this.stateSet.updateValues(true);
+    this.alphabetSet.updateValues();
   }
 
   componentWillMount()
@@ -108,7 +109,9 @@ class GraphDefinition extends React.Component
           <label>&Sigma; :</label>
           <div className="statset">
           <span className="statset-open">{"{"}</span>
-            <AlphabetSet graph={graph} machineBuilder={this.props.machineBuilder}/>
+            <AlphabetSet ref={ref=>this.alphabetSet=ref}
+              graph={graph}
+              machineBuilder={this.props.machineBuilder}/>
           <span className="statset-close">{"}"}</span>
           </div>
         </div>
@@ -233,9 +236,14 @@ class AlphabetSet extends React.Component
     this.onBlur = this.onBlur.bind(this);
   }
 
-  onFocus()
+  updateValues()
   {
     this.setState({value: this.props.machineBuilder.getMachine().getAlphabet().join(", ")});
+  }
+
+  onFocus()
+  {
+    this.updateValues();
   }
 
   onBlur(e)

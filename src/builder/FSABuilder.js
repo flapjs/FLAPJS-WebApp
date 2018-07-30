@@ -14,6 +14,9 @@ class FSABuilder extends MachineBuilder
   {
     super(graph, app);
 
+    //HACK: this should not take app
+    this.app = app;
+
     this._machine = new NFA();
     this._machineType = "DFA";
     this._alphabet = [];
@@ -37,7 +40,7 @@ class FSABuilder extends MachineBuilder
 
     this._timer = setTimeout(() => {
       //HACK: this is to turn off error checking really quick
-      if (!app.testingManager.autoErrorCheck) return;
+      if (!this.app.testingManager.autoErrorCheck) return;
 
       this.machineErrorChecker.checkErrors();
       for(const [error, objects] of this.machineErrorChecker.errorMessages)
@@ -48,7 +51,7 @@ class FSABuilder extends MachineBuilder
         {
           message += o.label + ", ";
         }
-        app.notification.addMessage(message);
+        this.app.notification.addMessage(message);
       }
     }, ERROR_CHECK_INTERVAL);
   }
