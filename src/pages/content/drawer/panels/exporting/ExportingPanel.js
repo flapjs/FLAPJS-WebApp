@@ -15,8 +15,8 @@ class ExportingPanel extends React.Component
       <div className="panel-title">
         <h1>Exporting</h1>
       </div>
-      <JSONIcon/>
-      <PNGIcon/>
+      <JSONIcon graph={this.props.graph} toolbar={this.props.toolbar} />
+      <PNGIcon workspace={this.props.app.workspace} toolbar={this.props.toolbar}/>
       <JPGIcon/>
       <XMLIcon/>
     </div>;

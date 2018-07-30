@@ -1,14 +1,20 @@
 //https://www.flaticon.com/free-icon/png_136523
 import React from 'react';
+import Downloader from "../../../../../../util/Downloader";
 
 class PNGIcon extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  onClick() {
+    const workspace = this.props.workspace;
+    Downloader.downloadSVG(this.props.toolbar.getMachineName() + '.png', workspace.ref);
+  }
+
   render() {
     return(
-      <button className="export-button">
+      <button className="export-button" onClick={this.onClick.bind(this)}>
         <svg className="export-icon" viewBox="0 0 56 56" >
           <title>Icons made by Smashicons from www.flaticon.com is licensed by CC 3.0 BY</title>
           <g>

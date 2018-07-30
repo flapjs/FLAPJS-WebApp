@@ -1,14 +1,20 @@
 //https://www.flaticon.com/free-icon/json-file_136525
 import React from 'react';
+import Downloader from "../../../../../../util/Downloader";
 
 class JSONIcon extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  onClick() {
+    const data=this.props.graph.toJSON();
+    Downloader.downloadText(this.props.toolbar.getMachineName() + '.json', JSON.stringify(data));
+  }
+
   render() {
     return(
-      <button className="export-button">
+      <button className="export-button" onClick={this.onClick.bind(this)}>
         <svg className="export-icon" viewBox="0 0 56 56">
           <title>Icons made by Smashicons from www.flaticon.com is licensed by CC 3.0 BY</title>
           <g>

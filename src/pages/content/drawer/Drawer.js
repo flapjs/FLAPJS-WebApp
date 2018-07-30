@@ -66,7 +66,7 @@ class Drawer extends React.Component
       case TESTING:
         return <TestingPanel tester={app.testingManager}/>;
       case EXPORTING:
-        return <ExportingPanel />;
+        return <ExportingPanel app={this.props.app} graph={this.props.graph} toolbar={this.props.toolbar} />;
       case OPTIONS:
         return <OptionsPanel />;
       default:
