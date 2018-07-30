@@ -479,6 +479,26 @@ class GraphInputController extends InputController
         //If hovering over a node...
         else if (pointer.targetType === 'node')
         {
+          //Look for an existing edge with similar from and to
+          for(const edge of this.graph.edges)
+          {
+            if (edge !== target && edge.from === target.from && edge.to === pointer.target)
+            {
+              let result = edge.label.split(",");
+              if (target.label !== Config.STR_TRANSITION_PROXY_LABEL)
+              {
+                result = result.concat(target.label.split(","));
+              }
+
+              //Allow the user to edit the merged labels
+              this.openLabelEditor(edge, x, y, result.join(","));
+
+              //Delete the merged label
+              this.graph.deleteEdge(target);
+              return true;
+            }
+          }
+
           //If the edge has changed...
           if (this.prevEdgeTo !== null)
           {
