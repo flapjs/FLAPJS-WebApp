@@ -75,7 +75,8 @@ class EdgeRenderer extends React.Component
             alignmentBaseline="central"
             textAnchor={Config.EDGE_TEXT_ANCHOR}
             fill={Config.EDGE_TEXT_FILL_STYLE}
-            pointerEvents="none">
+            pointerEvents="none"
+            style={{userSelect: "none"}}>
             {str}
           </text>;
       })}

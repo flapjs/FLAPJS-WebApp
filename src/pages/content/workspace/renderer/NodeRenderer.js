@@ -38,7 +38,8 @@ class NodeRenderer extends React.Component
         textAnchor={Config.NODE_TEXT_ANCHOR}
         font={Config.NODE_FONT}
         fill={Config.NODE_TEXT_FILL_STYLE}
-        pointerEvents="none">
+        pointerEvents="none"
+        style={{userSelect: "none"}}>
         {node.label}
       </text>
     </g>;
