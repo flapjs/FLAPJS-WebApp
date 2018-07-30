@@ -35,15 +35,29 @@ class GraphDefinition extends React.Component
 
     this.stateSet = React.createRef();
     this.alphabetSet = React.createRef();
+
+    this.onMarkDirty = this.onMarkDirty.bind(this);
+  }
+
+  onMarkDirty()
+  {
+    this.stateSet.updateValues(true);
+  }
+
+  componentWillMount()
+  {
+    this.props.graph.on("markDirty", this.onMarkDirty);
+  }
+
+  componentWillUnmount()
+  {
+    this.props.graph.removeListener("markDirty", this.onMarkDirty);
   }
 
   render()
   {
     const graph = this.props.graph;
     const machine = this.props.machineBuilder.getMachine();
-    graph.on("markDirty", () => {
-      this.stateSet.updateValues();
-    });
     return <div className="graphinfo">
       <div className="statblock">
         <label>Q :</label>
