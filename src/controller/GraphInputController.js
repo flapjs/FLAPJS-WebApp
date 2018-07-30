@@ -517,6 +517,18 @@ class GraphInputController extends InputController
             this.emit("edgeDestination", target, target.to, this.prevEdgeTo, this.prevQuad);
           }
 
+          //Bend away if there is another edge not bent with the same src/dst
+          for(const edge of this.graph.edges)
+          {
+            if (edge.isQuadratic()) continue;
+            if ((edge.to === target.from && edge.from === target.to))
+            {
+              //HACK: these should be values from CONFIG
+              target.quad.y = -10;
+              edge.quad.y = 10;
+            }
+          }
+
           //Open label editor if default edge...
           if (target.label === Config.STR_TRANSITION_PROXY_LABEL)
           {
