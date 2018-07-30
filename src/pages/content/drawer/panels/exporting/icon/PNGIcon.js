@@ -9,7 +9,7 @@ class PNGIcon extends React.Component {
 
   onClick() {
     const workspace = this.props.workspace;
-    Downloader.downloadSVG(this.props.toolbar.getMachineName() + '.png', workspace.ref);
+    Downloader.downloadSVG(this.props.toolbar.getMachineName(), 'png', workspace.ref);
   }
 
   render() {
