@@ -27,6 +27,7 @@ export const HOVER_RADIUS_OFFSET = 4;
 export const CURSOR_RADIUS = 4;
 export const CURSOR_RADIUS_SQU = CURSOR_RADIUS * CURSOR_RADIUS;
 
+export const PARALLEL_EDGE_HEIGHT = 10;
 export const SELF_LOOP_HEIGHT = 32;
 
 //Interface

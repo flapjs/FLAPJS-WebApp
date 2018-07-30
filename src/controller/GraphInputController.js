@@ -419,7 +419,7 @@ class GraphInputController extends InputController
       if (targetType === 'node')
       {
         //Delete it if withing trash area...
-        if (this.pointer.isTrashMode(x, y))
+        if (pointer.isTrashMode(x, y))
         {
           //If there exists selected states, delete them all!
           const selector = this.selector;
@@ -456,7 +456,7 @@ class GraphInputController extends InputController
       else if (targetType === 'edge')
       {
         //Delete it if withing trash area...
-        if (this.pointer.isTrashMode(x, y))
+        if (pointer.isTrashMode(x, y))
         {
           this.deleteTargetEdge(target);
         }
@@ -471,14 +471,16 @@ class GraphInputController extends InputController
       else if (targetType === 'endpoint')
       {
         //Delete it if withing trash area...
-        if (this.pointer.isTrashMode(x, y))
+        if (pointer.isTrashMode(x, y))
         {
           this.deleteTargetEdge(target);
           return true;
         }
         //If hovering over a node...
-        else if (pointer.targetType === 'node')
+        else if (target.to instanceof Node)
         {
+          const targetNode = target.to;
+
           //Look for an existing edge with similar from and to
           for(const edge of this.graph.edges)
           {
@@ -505,7 +507,7 @@ class GraphInputController extends InputController
             //Make sure that it's previous edge was not null
             target._to = this.prevEdgeTo;
             //Finalize the edge (trigger the event)
-            target.to = pointer.target;
+            target.to = targetNode;
           }
 
           //If the cursor returns to the state after leaving it...
@@ -543,9 +545,8 @@ class GraphInputController extends InputController
             if (edge.isQuadratic()) continue;
             if ((edge.to === target.from && edge.from === target.to))
             {
-              //HACK: these should be values from CONFIG
-              target.quad.y = -10;
-              edge.quad.y = 10;
+              target.quad.y = -Config.PARALLEL_EDGE_HEIGHT;
+              edge.quad.y = Config.PARALLEL_EDGE_HEIGHT;
             }
           }
 
