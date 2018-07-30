@@ -8,7 +8,7 @@ class Downloader
     Downloader.downloadURL(filename, 'data:text/plain; charset=utf-8,' + encodeURIComponent(data));
   }
 
-  static downloadSVG(filename, svg)
+  static downloadSVG(filename, filetype, svg)
   {
     const serializer = new XMLSerializer();
     const svgString = serializer.serializeToString(svg);
@@ -24,8 +24,8 @@ class Downloader
       ctx.drawImage(image, 0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT);
       URL.revokeObjectURL(url);
 
-      const imageURI = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
-      Downloader.downloadURL(filename, imageURI);
+      const imageURI = canvas.toDataURL('image/'+filetype).replace('image'+filetype, 'image/octet-stream');
+      Downloader.downloadURL(filename+'.'+filetype, imageURI);
     }
     image.src = url;
   }
