@@ -15,22 +15,10 @@ class ExportingPanel extends React.Component
       <div className="panel-title">
         <h1>Exporting</h1>
       </div>
-      <button className="export-button">
-        <JSONIcon/>
-        <span className="export-text">Save As Machine File</span>
-      </button>
-      <button className="export-button">
-        <PNGIcon/>
-        <span className="export-text">Export to PNG</span>
-      </button>
-      <button className="export-button">
-        <JPGIcon/>
-        <span className="export-text">Export to JPEG</span>
-      </button>
-      <button className="export-button">
-        <XMLIcon/>
-        <span className="export-text">Export to JFLAP</span>
-      </button>
+      <JSONIcon graph={this.props.graph} toolbar={this.props.toolbar} />
+      <PNGIcon workspace={this.props.app.workspace} toolbar={this.props.toolbar}/>
+      <JPGIcon workspace={this.props.app.workspace} toolbar={this.props.toolbar}/>
+      <XMLIcon/>
     </div>;
   }
 }

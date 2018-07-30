@@ -27,6 +27,7 @@ export const HOVER_RADIUS_OFFSET = 4;
 export const CURSOR_RADIUS = 4;
 export const CURSOR_RADIUS_SQU = CURSOR_RADIUS * CURSOR_RADIUS;
 
+export const PARALLEL_EDGE_HEIGHT = 10;
 export const SELF_LOOP_HEIGHT = 32;
 
 //Interface
@@ -41,7 +42,7 @@ export const DRAGGING_BUFFER_SQU = DRAGGING_BUFFER * DRAGGING_BUFFER;
 export const PADDING_RADIUS_SQU = 2304;
 
 //Colors
-export const STATE_BASE_COLOR = "#EDEBA6";
+export const STATE_BASE_COLOR = "#FEE781";
 export const STATE_LINE_COLOR = "black";
 export const STATE_TEXT_COLOR = "black";
 export const TRANSITION_COLOR = "black";
