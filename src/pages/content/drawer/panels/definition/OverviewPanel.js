@@ -8,20 +8,52 @@ import SetEditor from 'pages/content/components/SetEditor.js';
 
 class OverviewPanel extends React.Component
 {
+  constructor(props)
+  {
+    super(props);
+
+    this.state = {
+      autoNameStates: true,
+      machineType: this.props.machineBuilder.getMachineType()
+    };
+
+    this.onChangeMachineType = this.onChangeMachineType.bind(this);
+  }
+
+  onChangeMachineType(e)
+  {
+    const value = e.target.value;
+    this.props.machineBuilder.setMachineType(value);
+    this.setState({machineType: value});
+  }
+
   render()
   {
     return <div className="panel-container" id="overview">
       <div className="panel-title">
         <h1>Definition</h1>
+
+        <select className="machine-type"
+          value={this.state.machineType}
+          onChange={this.onChangeMachineType}>
+          <option value="DFA">DFA</option>
+          <option value="NFA">NFA</option>
+        </select>
+
       </div>
       <div className="panel-content">
         <GraphDefinition graph={this.props.graph} machineBuilder={this.props.machineBuilder}/>
       </div>
       <hr />
-      <button className="panel-button">Convert To NFA</button>
+      <button disabled="true" className="panel-button">Convert To...</button>
       <div>
-        <input type="checkbox"/>
-        <label>Auto-Layout</label>
+        <input type="checkbox" id="auto-statename" onChange={(e) => {
+          const checked = e.target.checked;
+          this.setState({autoNameStates: checked}, () => {
+            this.props.machineBuilder.shouldAutomaticallyRenameNodes = checked;
+          });
+        }} checked={this.state.autoNameStates}/>
+        <label htmlFor="auto-statename">Automatic State Labels</label>
       </div>
     </div>;
   }
@@ -68,7 +100,7 @@ class GraphDefinition extends React.Component
             getElementID={e=>e.label}
             onAdd={id=>graph.newNode(0, 0, id)}
             onRemove={e=>graph.deleteNode(e)}
-            onRename={(e, id)=>e.label = id}/>
+            onRename={(e, id)=>e.setCustomLabel(id)}/>
         <span className="statset-close">{"}"}</span>
         </div>
       </div>

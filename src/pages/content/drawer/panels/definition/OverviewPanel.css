@@ -1,4 +1,10 @@
 
+.machine-type
+{
+  width: 100%;
+  margin-bottom: 5px;
+}
+
 /* STATS */
 .graphinfo {
   display: flex;

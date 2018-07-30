@@ -36,7 +36,7 @@ class NodalGraph
         return node;
       }
     }
-    
+
     return null;
   }
 
@@ -218,6 +218,10 @@ class NodalGraph
       const node = data.nodes[i];
       const newNode = new Node(dst, node.x || 0, node.y || 0, node.label || "q?");
       newNode.accept = node.accept;
+      if (node.customLabel)
+      {
+        newNode.setCustomLabel(newNode.label);
+      }
       dst.nodes[i] = newNode;
     }
 
@@ -255,7 +259,8 @@ class NodalGraph
         x: node.x,
         y: node.y,
         label: node.label,
-        accept: node.accept
+        accept: node.accept,
+        customLabel: node.hasCustomLabel()
       };
     }
 

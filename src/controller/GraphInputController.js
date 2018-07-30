@@ -28,6 +28,7 @@ class GraphInputController extends InputController
     super();
 
     this.labelEditor = null;
+    this.machineBuilder = null;
 
     this.prevQuad = {x: 0, y: 0};
     this.prevEdgeTo = null;
@@ -54,6 +55,7 @@ class GraphInputController extends InputController
 
     this.selector.graph = this.graph;
     this.labelEditor = app.viewport.labelEditor;
+    this.machineBuilder = app.machineBuilder;
   }
 
   onInputDown(x, y, target, targetType)
@@ -557,9 +559,6 @@ class GraphInputController extends InputController
           //Set the new object as the initial node
           this.graph.setStartNode(this.ghostInitialMarker);
 
-          //Make sure the naming is consistent
-          this.sortGraphNodes();
-
           //Emit event
           this.emit("nodeInitial", this.ghostInitialMarker, prevInitial);
         }
@@ -596,7 +595,8 @@ class GraphInputController extends InputController
 
   createNode(x, y)
   {
-    const node = this.graph.newNode(x, y, Config.STR_STATE_LABEL + (this.graph.nodes.length));
+    const newNodeLabel = this.machineBuilder.getNextDefaultNodeLabel();
+    const node = this.graph.newNode(x, y, newNodeLabel);
     node.x = x || (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
     node.y = y || (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
     return node;
@@ -607,48 +607,33 @@ class GraphInputController extends InputController
     const selector = this.selector;
     const selection = selector.getSelection().slice();
 
-    //Emit event
-    this.emit("nodeDeleteAll", selection, selectedNode, this.prevX, this.prevY);
-
     //Remove from graph
     for(const node of selection)
     {
       this.graph.deleteNode(node);
     }
 
-    //Make sure the naming is consistent
-    this.sortGraphNodes();
-
     //Remove from selection
     selector.clearSelection();
+
+    //Emit event
+    this.emit("nodeDeleteAll", selection, selectedNode, this.prevX, this.prevY);
   }
 
   deleteTargetNode(target)
   {
-    //Emit event
-    this.emit("nodeDelete", target, this.prevX, this.prevY);
-
     this.graph.deleteNode(target);
 
-    //Make sure the naming is consistent
-    this.sortGraphNodes();
+    //Emit event
+    this.emit("nodeDelete", target, this.prevX, this.prevY);
   }
 
   deleteTargetEdge(target)
   {
+    this.graph.deleteEdge(target);
+
     //Emit event
     this.emit("edgeDelete", target);
-
-    this.graph.deleteEdge(target);
-  }
-
-  sortGraphNodes()
-  {
-    const length = this.graph.nodes.length;
-    for(let i = 0; i < length; ++i)
-    {
-      this.graph.nodes[i].label = Config.STR_STATE_LABEL + (i);
-    }
   }
 
   moveNodeTo(pointer, node, x, y)

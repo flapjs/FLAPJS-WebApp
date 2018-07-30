@@ -1,17 +1,21 @@
+import * as Config from 'config.js';
+
+import MachineBuilder from './MachineBuilder.js';
 import NFA from 'machine/NFA.js';
 import { EMPTY } from 'machine/Symbols.js';
 import NodalGraph from 'graph/NodalGraph';
 
 const ERROR_CHECK_INTERVAL = 2000;
 
-class FSABuilder
+class FSABuilder extends MachineBuilder
 {
   //HACK: this should not take app
   constructor(graph, app)
   {
-    this.graph = graph;
+    super(graph, app);
 
     this._machine = new NFA();
+    this._machineType = "DFA";
     this._alphabet = [];
     this._symbols = [];
 
@@ -88,6 +92,9 @@ class FSABuilder
 
   checkErrors()
   {
+    //HACK: This will only run for "DFA" machine types...
+    if (this._machineType !== "DFA") return;
+
     this.errorMessages = new Map();
     let nodeTransitionMap = new Map();
     let unReachedNode =this.graph.nodes.slice();
@@ -176,6 +183,16 @@ class FSABuilder
     {
       this.errorMessages.get(error).push(object);
     }
+  }
+
+  setMachineType(machineType)
+  {
+    this._machineType = machineType;
+  }
+
+  getMachineType()
+  {
+    return this._machineType;
   }
 
   addSymbol(symbol)

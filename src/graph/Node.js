@@ -6,9 +6,41 @@ class Node
     this.graph = graph;
     this.x = x;
     this.y = y;
+    this.customLabel = false;
 
     this._label = label;
     this._accept = false;
+  }
+
+  setLabel(label)
+  {
+    const prevLabel = this._label;
+    this._label = label;
+    this.customLabel = false;
+
+    if (prevLabel != label)
+    {
+      this.graph.emit("nodeLabel", this, this._label, prevLabel);
+      this.graph.markDirty();
+    }
+  }
+
+  setCustomLabel(label)
+  {
+    const prevLabel = this._label;
+    this._label = label;
+    this.customLabel = true;
+
+    if (prevLabel != label)
+    {
+      this.graph.emit("nodeLabel", this, this._label, prevLabel);
+      this.graph.markDirty();
+    }
+  }
+
+  hasCustomLabel()
+  {
+    return this.customLabel;
   }
 
   get label() { return this._label; }
