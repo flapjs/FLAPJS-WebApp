@@ -677,6 +677,26 @@ class GraphInputController extends InputController
 
   moveNodeTo(pointer, node, x, y)
   {
+    for(const other of this.graph.nodes)
+    {
+      //Update node collision
+      if (node === other) continue;
+
+      const dx = x - other.x;
+      const dy = y - other.y;
+      const angle = Math.atan2(dy, dx);
+
+      const diameter = (Config.NODE_RADIUS * 2);
+      const nextDX = other.x + (Math.cos(angle) * diameter) - x;
+      const nextDY = other.y + (Math.sin(angle) * diameter) - y;
+
+      if (dx * dx + dy * dy < Config.NODE_RADIUS_SQU * 4)
+      {
+        x += nextDX;
+        y += nextDY;
+      }
+    }
+
     node.x = x;
     node.y = y;
   }
