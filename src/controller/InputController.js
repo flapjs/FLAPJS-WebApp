@@ -21,7 +21,7 @@ class InputController
     }
 
     //Swap left to right clicks and vice versa on anything else but Macs
-    this.swapButtons = false;//TODO: !navigator.platform.startsWith("Mac");
+    this.swapButtons = !navigator.platform.startsWith("Mac");
 
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
@@ -73,42 +73,51 @@ class InputController
     this.workspace.focus();
   }
 
+  onTouchStart(e)
+  {
+    if (e.changedTouches.length == 2)
+    {
+      //2 touches...
+    }
+    else if (e.changedTouches.length == 1)
+    {
+      e.stopPropagation();
+      e.preventDefault();
+      document.activeElement.blur();
+      this.workspace.focus();
+
+      const touch = e.changedTouches[0];
+
+      if (this.cursor._touchmove)
+      {
+        document.removeEventListener('touchmove', this.cursor._touchmove);
+        this.cursor._touchmove = null;
+      }
+      if (this.cursor._touchend)
+      {
+        document.removeEventListener('touchend', this.cursor._touchend);
+        this.cursor._touchend = null;
+      }
+
+      if (this.doInputDown(touch.clientX, touch.clientY, false))
+      {
+        this.cursor._touchmove = this.onTouchStartAndMove.bind(this);
+        this.cursor._touchend = this.onTouchStartAndEnd.bind(this);
+
+        document.addEventListener('touchmove', this.cursor._touchmove);
+        document.addEventListener('touchend', this.cursor._touchend);
+      }
+    }
+    else
+    {
+      //Do nothin.
+    }
+  }
+
   onTouchMove(e)
   {
     const mouse = getMousePosition(this.workspace, e.touches[0]);
     this.pointer.setPosition(mouse.x, mouse.y);
-  }
-
-  onTouchStart(e)
-  {
-    if (e.changedTouches.length > 1) return;
-
-    e.stopPropagation();
-    e.preventDefault();
-    document.activeElement.blur();
-    this.workspace.focus();
-
-    const touch = e.changedTouches[0];
-
-    if (this.cursor._touchmove)
-    {
-      document.removeEventListener('touchmove', this.cursor._touchmove);
-      this.cursor._touchmove = null;
-    }
-    if (this.cursor._touchend)
-    {
-      document.removeEventListener('touchend', this.cursor._touchend);
-      this.cursor._touchend = null;
-    }
-
-    if (this.doInputDown(touch.clientX, touch.clientY, false))
-    {
-      this.cursor._touchmove = this.onTouchStartAndMove.bind(this);
-      this.cursor._touchend = this.onTouchStartAndEnd.bind(this);
-
-      document.addEventListener('touchmove', this.cursor._touchmove);
-      document.addEventListener('touchend', this.cursor._touchend);
-    }
   }
 
   onTouchStartAndEnd(e)
@@ -127,12 +136,16 @@ class InputController
     }
 
     this.doInputDownAndUp(touch.clientX, touch.clientY);
+
+    return false;
   }
 
   onTouchStartAndMove(e)
   {
     const touch = e.changedTouches[0];
     this.doInputDownAndMove(touch.clientX, touch.clientY);
+
+    return false;
   }
 
   onMouseMove(e)
@@ -171,6 +184,8 @@ class InputController
     e.preventDefault();
 
     this.doInputDownAndMove(e.clientX, e.clientY);
+
+    return false;
   }
 
   onMouseDownAndUp(e)
@@ -189,7 +204,9 @@ class InputController
       this.cursor._mouseup = null;
     }
 
-    this.doInputDownAndUp(e.clientX, e.clientY)
+    this.doInputDownAndUp(e.clientX, e.clientY);
+
+    return false;
   }
 
   doInputDown(x, y, moveMode)
