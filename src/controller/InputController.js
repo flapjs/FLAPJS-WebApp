@@ -71,6 +71,8 @@ class InputController
     e.preventDefault();
     document.activeElement.blur();
     this.workspace.focus();
+
+    return false;
   }
 
   onTouchStart(e)
