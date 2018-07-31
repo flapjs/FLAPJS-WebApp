@@ -25,7 +25,7 @@ class UploadButton extends React.Component
     }
     else if (fileType === FILETYPE_JFLAP)
     {
-      //GraphUploader.updateJFFToGraph(file, this.props.graph, this.props.onExecute);
+      GraphUploader.updateJFFToGraph(file, this.props.graph, this.props.onExecute);
     }
     else
     {
