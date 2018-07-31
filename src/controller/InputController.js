@@ -3,6 +3,9 @@ import * as Config from 'config.js';
 
 import GraphPointer from './GraphPointer.js';
 
+const SCROLL_SENSITIVITY = 1 / 300.0;
+const PINCH_SENSITIVITY = 1 / 300.0;
+
 class InputController
 {
   constructor()
@@ -11,7 +14,7 @@ class InputController
     this.workspace = null;
     this.labelEditor = null;
 
-    this.pointer = new GraphPointer();
+    this.pointer = new GraphPointer(null);
 
     this.cursor = {
       _mousemove: null,
@@ -23,12 +26,15 @@ class InputController
 
     //Swap left to right clicks and vice versa on anything else but Macs
     this.swapButtons = !navigator.platform.startsWith("Mac");
+    this.prevPinchDist = 0;
+    this.pinchDist = 0;
 
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onTouchStart = this.onTouchStart.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
+    this.onWheel = this.onWheel.bind(this);
   }
 
   initialize(app, workspace)
@@ -40,11 +46,12 @@ class InputController
 
     //Prepare the workspace
     this.workspace = workspace;
-    this.workspace.addEventListener('contextmenu', this.onContextMenu);
 
     //Process mouse handlers
     this.workspace.addEventListener('mousedown', this.onMouseDown);
     this.workspace.addEventListener('mousemove', this.onMouseMove);
+    this.workspace.addEventListener('contextmenu', this.onContextMenu);
+    this.workspace.addEventListener('wheel', this.onWheel);
 
     //Process touch handlers
     this.workspace.addEventListener('touchstart', this.onTouchStart);
@@ -55,12 +62,11 @@ class InputController
   {
     this.clearListeners();
 
-    //Prepare the workspace
-    this.workspace.removeEventListener('contextmenu', this.onContextMenu);
-
     //Process mouse handlers
     this.workspace.removeEventListener('mousedown', this.onMouseDown);
     this.workspace.removeEventListener('mousemove', this.onMouseMove);
+    this.workspace.removeEventListener('contextmenu', this.onContextMenu);
+    this.workspace.removeEventListener('wheel', this.onWheel);
 
     //Process touch handlers
     this.workspace.removeEventListener('touchstart', this.onTouchStart);
@@ -75,6 +81,15 @@ class InputController
     return false;
   }
 
+  onWheel(e)
+  {
+    e.stopPropagation();
+    e.preventDefault();
+
+    this.pinchDist = e.deltaY * SCROLL_SENSITIVITY;
+    this.pointer.setScale(this.pointer.scale + this.pinchDist);
+  }
+
   onTouchMove(e)
   {
     const mouse = getMousePosition(this.workspace, e.touches[0]);
@@ -85,7 +100,34 @@ class InputController
   {
     if (e.changedTouches.length == 2)
     {
-      //2 touches...
+      e.stopPropagation();
+      e.preventDefault();
+
+      document.activeElement.blur();
+      this.workspace.focus();
+
+      if (this.cursor._touchmove)
+      {
+        document.removeEventListener('touchmove', this.cursor._touchmove);
+        this.cursor._touchmove = null;
+      }
+      if (this.cursor._touchend)
+      {
+        document.removeEventListener('touchend', this.cursor._touchend);
+        this.cursor._touchend = null;
+      }
+
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      this.prevPinchDist = Math.hypot(
+        touch1.pageX - touch2.pageX,
+        touch1.pageY - touch2.pageY);
+
+      this.cursor._touchmove = this.onPinchMove.bind(this);
+      this.cursor._touchend = this.onPinchEnd.bind(this);
+
+      document.addEventListener('touchmove', this.cursor._touchmove);
+      document.addEventListener('touchend', this.cursor._touchend);
     }
     else if (e.changedTouches.length == 1)
     {
@@ -121,6 +163,35 @@ class InputController
     {
       //Do nothin.
     }
+  }
+
+  onPinchMove(e)
+  {
+    const touch1 = e.touches[0];
+    const touch2 = e.touches[1];
+    this.pinchDist = Math.hypot(
+      touch1.pageX - touch2.pageX,
+      touch1.pageY - touch2.pageY);
+
+    this.pointer.setScale(this.pinchDist * PINCH_SENSITIVITY);
+
+    return false;
+  }
+
+  onPinchEnd()
+  {
+    if (this.cursor._touchmove)
+    {
+      document.removeEventListener('touchmove', this.cursor._touchmove);
+      this.cursor._touchmove = null;
+    }
+    if (this.cursor._touchend)
+    {
+      document.removeEventListener('touchend', this.cursor._touchend);
+      this.cursor._touchend = null;
+    }
+
+    return false;
   }
 
   onTouchStartAndEnd(e)

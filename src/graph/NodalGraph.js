@@ -136,7 +136,8 @@ class NodalGraph
     return this.nodes.length > 0 ? this.nodes[0] : null;
   }
 
-  getBoundingRect() {
+  getBoundingRect()
+  {
     var minNX = Number.MAX_VALUE;
     var minNY = Number.MAX_VALUE;
     var maxNX = Number.MIN_VALUE;
