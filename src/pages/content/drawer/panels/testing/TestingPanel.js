@@ -32,7 +32,7 @@ class TestingPanel extends React.Component
       </div>
       <div>
         <input id="test-step" type="checkbox" disabled="true"/>
-        <label htmlFor="test-step">Simulate Step-by-step</label>
+        <label htmlFor="test-step">Step-by-Step Mode</label>
       </div>
       <div>
         <input id="test-closure" type="checkbox" disabled="true"/>

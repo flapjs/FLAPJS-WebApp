@@ -13,12 +13,42 @@ class OptionsPanel extends React.Component
       </div>
       <div className="panel-content">
         <button className="panel-button">Change Theme...</button>
-        <div>
-          <input type="checkbox"/>
-          <label>Auto-label states</label>
-        </div>
-        <div>
-          HotKeys!!!!
+        <div className="hotkey-list">
+          <div className="hotkey-category">Workspace</div>
+          <div className="hotkey-container">
+            <label className="hotkey-desc">Save Machine File</label>
+            <span className="hotkey-input">Ctrl + S</span>
+          </div>
+          <div className="hotkey-container">
+            <label className="hotkey-desc">Undo</label>
+            <span className="hotkey-input">Ctrl + Z</span>
+          </div>
+          <div className="hotkey-container">
+            <label className="hotkey-desc">Redo</label>
+            <span className="hotkey-input">Ctrl + Shift + Z</span>
+          </div>
+          <div className="hotkey-container">
+            <label className="hotkey-desc">Upload File</label>
+            <span className="hotkey-input">Ctrl + U</span>
+          </div>
+          <div className="hotkey-container">
+            <label className="hotkey-desc">Export to PNG</label>
+            <span className="hotkey-input">Ctrl + E</span>
+          </div>
+
+          <div className="hotkey-category">Testing Panel</div>
+          <div className="hotkey-container">
+            <label className="hotkey-desc">Add and Run Test</label>
+            <span className="hotkey-input">Enter</span>
+          </div>
+          <div className="hotkey-container">
+            <label className="hotkey-desc">Next Test</label>
+            <span className="hotkey-input">Down</span>
+          </div>
+          <div className="hotkey-container">
+            <label className="hotkey-desc">Previous Test</label>
+            <span className="hotkey-input">Up</span>
+          </div>
         </div>
       </div>
     </div>;
