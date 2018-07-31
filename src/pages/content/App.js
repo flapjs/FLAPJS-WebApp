@@ -259,7 +259,7 @@ class App extends React.Component
     const machineBuilder = this.machineBuilder;
 
     return <div className="app-container" ref={ref=>this.container=ref}>
-      <Toolbar ref={ref=>this.toolbar=ref} app={this} graph={graph} eventHistory={this.eventHistory} />
+      <Toolbar ref={ref=>this.toolbar=ref} app={this} graph={graph} machineBuilder={machineBuilder} eventHistory={this.eventHistory} />
       <NotificationSystem ref={ref=>this.notification=ref}/>
 
       <div className="workspace-container">
