@@ -42,6 +42,8 @@ class GraphInputController extends InputController
 
     this.firstEmptyClick = false;
     this.firstEmptyTime = 0;
+    this.firstEmptyX = 0;
+    this.firstEmptyY = 0;
     this.ghostInitialMarker = null;
 
     this.selector = new SelectionBox(null);
@@ -84,8 +86,10 @@ class GraphInputController extends InputController
   {
     if (targetType === 'none')
     {
+      const dx = x - this.firstEmptyX;
+      const dy = y - this.firstEmptyY;
       //If within the time to double tap...
-      if (this.firstEmptyClick && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
+      if (this.firstEmptyClick && (dx * dx + dy * dy) < Config.CURSOR_RADIUS_SQU && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
       {
         //Create state at position
         const node = this.createNode(x, y);
@@ -100,6 +104,8 @@ class GraphInputController extends InputController
         //This is the first empty click, should wait for another...
         this.firstEmptyClick = true;
         this.firstEmptyTime = Date.now();
+        this.firstEmptyX = x;
+        this.firstEmptyY = y;
       }
 
       return true;
