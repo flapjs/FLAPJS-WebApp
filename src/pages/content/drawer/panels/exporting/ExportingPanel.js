@@ -19,6 +19,8 @@ class ExportingPanel extends React.Component
       <PNGIcon workspace={this.props.app.workspace} toolbar={this.props.toolbar}/>
       <JPGIcon workspace={this.props.app.workspace} toolbar={this.props.toolbar}/>
       <XMLIcon/>
+
+      <div className="panel-bottom"></div>
     </div>;
   }
 }

@@ -9,6 +9,7 @@ class InputController
   {
     this.graph = null;
     this.workspace = null;
+    this.labelEditor = null;
 
     this.pointer = new GraphPointer();
 
@@ -35,6 +36,7 @@ class InputController
     //Set the graph
     this.graph = app.graph;
     this.pointer.graph = this.graph;
+    this.labelEditor = app.viewport.labelEditor;
 
     //Prepare the workspace
     this.workspace = workspace;
@@ -69,9 +71,6 @@ class InputController
   {
     e.stopPropagation();
     e.preventDefault();
-    document.activeElement.blur();
-    this.workspace.focus();
-  }
 
   onTouchMove(e)
   {
@@ -81,33 +80,43 @@ class InputController
 
   onTouchStart(e)
   {
-    if (e.changedTouches.length > 1) return;
-
-    e.stopPropagation();
-    e.preventDefault();
-    document.activeElement.blur();
-    this.workspace.focus();
-
-    const touch = e.changedTouches[0];
-
-    if (this.cursor._touchmove)
+    if (e.changedTouches.length == 2)
     {
-      document.removeEventListener('touchmove', this.cursor._touchmove);
-      this.cursor._touchmove = null;
+      //2 touches...
     }
-    if (this.cursor._touchend)
+    else if (e.changedTouches.length == 1)
     {
-      document.removeEventListener('touchend', this.cursor._touchend);
-      this.cursor._touchend = null;
+      e.stopPropagation();
+      e.preventDefault();
+
+      document.activeElement.blur();
+      this.workspace.focus();
+
+      const touch = e.changedTouches[0];
+
+      if (this.cursor._touchmove)
+      {
+        document.removeEventListener('touchmove', this.cursor._touchmove);
+        this.cursor._touchmove = null;
+      }
+      if (this.cursor._touchend)
+      {
+        document.removeEventListener('touchend', this.cursor._touchend);
+        this.cursor._touchend = null;
+      }
+
+      if (this.doInputDown(touch.clientX, touch.clientY, false))
+      {
+        this.cursor._touchmove = this.onTouchStartAndMove.bind(this);
+        this.cursor._touchend = this.onTouchStartAndEnd.bind(this);
+
+        document.addEventListener('touchmove', this.cursor._touchmove);
+        document.addEventListener('touchend', this.cursor._touchend);
+      }
     }
-
-    if (this.doInputDown(touch.clientX, touch.clientY, false))
+    else
     {
-      this.cursor._touchmove = this.onTouchStartAndMove.bind(this);
-      this.cursor._touchend = this.onTouchStartAndEnd.bind(this);
-
-      document.addEventListener('touchmove', this.cursor._touchmove);
-      document.addEventListener('touchend', this.cursor._touchend);
+      //Do nothin.
     }
   }
 
@@ -145,6 +154,7 @@ class InputController
   {
     e.stopPropagation();
     e.preventDefault();
+
     document.activeElement.blur();
     this.workspace.focus();
 
@@ -152,6 +162,11 @@ class InputController
     {
       document.removeEventListener('mousemove', this.cursor._mousemove);
       this.cursor._mousemove = null;
+    }
+    if (this.cursor._mouseup)
+    {
+      document.removeEventListener('mouseup', this.cursor._mouseup);
+      this.cursor._mouseup = null;
     }
 
     let moveMode = (e.button == 2);

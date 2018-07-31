@@ -51,6 +51,8 @@ class OptionsPanel extends React.Component
           </div>
         </div>
       </div>
+      
+      <div className="panel-bottom"></div>
     </div>;
   }
 }

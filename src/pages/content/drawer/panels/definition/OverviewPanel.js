@@ -55,6 +55,8 @@ class OverviewPanel extends React.Component
         }} checked={this.state.autoNameStates}/>
         <label htmlFor="auto-statename">Automatic State Labels</label>
       </div>
+
+      <div className="panel-bottom"></div>
     </div>;
   }
 }
