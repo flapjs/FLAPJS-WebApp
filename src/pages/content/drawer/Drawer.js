@@ -223,7 +223,7 @@ function updatePanelSize(app, x, y)
   let fullscreen = false;
   let size = 0;
   //This is the same criteria as in App.css
-  if (window.matchMedia("(max-width: 400px)").matches)
+  if (window.matchMedia("(max-width: 420px)").matches)
   {
     //Vertical slide
     const viewportOffsetY = app.viewport.ref.getBoundingClientRect().y;

@@ -38,6 +38,8 @@ class TestingPanel extends React.Component
         <input id="test-closure" type="checkbox" disabled="true"/>
         <label htmlFor="test-closure">Transition By Closure</label>
       </div>
+
+      <div className="panel-bottom"></div>
     </div>;
   }
 }

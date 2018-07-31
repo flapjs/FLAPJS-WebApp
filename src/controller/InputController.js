@@ -9,6 +9,7 @@ class InputController
   {
     this.graph = null;
     this.workspace = null;
+    this.labelEditor = null;
 
     this.pointer = new GraphPointer();
 
@@ -18,7 +19,7 @@ class InputController
       _touchmove: null,
       _touchend: null,
       _timer: null
-    }
+    };
 
     //Swap left to right clicks and vice versa on anything else but Macs
     this.swapButtons = !navigator.platform.startsWith("Mac");
@@ -35,6 +36,7 @@ class InputController
     //Set the graph
     this.graph = app.graph;
     this.pointer.graph = this.graph;
+    this.labelEditor = app.viewport.labelEditor;
 
     //Prepare the workspace
     this.workspace = workspace;
@@ -69,8 +71,6 @@ class InputController
   {
     e.stopPropagation();
     e.preventDefault();
-    document.activeElement.blur();
-    this.workspace.focus();
 
     return false;
   }
@@ -85,6 +85,7 @@ class InputController
     {
       e.stopPropagation();
       e.preventDefault();
+
       document.activeElement.blur();
       this.workspace.focus();
 
@@ -114,12 +115,6 @@ class InputController
     {
       //Do nothin.
     }
-  }
-
-  onTouchMove(e)
-  {
-    const mouse = getMousePosition(this.workspace, e.touches[0]);
-    this.pointer.setPosition(mouse.x, mouse.y);
   }
 
   onTouchStartAndEnd(e)
@@ -160,6 +155,7 @@ class InputController
   {
     e.stopPropagation();
     e.preventDefault();
+
     document.activeElement.blur();
     this.workspace.focus();
 
@@ -167,6 +163,11 @@ class InputController
     {
       document.removeEventListener('mousemove', this.cursor._mousemove);
       this.cursor._mousemove = null;
+    }
+    if (this.cursor._mouseup)
+    {
+      document.removeEventListener('mouseup', this.cursor._mouseup);
+      this.cursor._mouseup = null;
     }
 
     let moveMode = (e.button == 2);
