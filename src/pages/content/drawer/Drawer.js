@@ -109,12 +109,18 @@ class Drawer extends React.Component
 
     const onTouchMove = function(ev)
     {
+      e.stopPropagation();
+      e.preventDefault();
+
       const touch = ev.changedTouches[0];
       updatePanelSize(app, touch.clientX, touch.clientY);
     };
 
     const onTouchEnd = function(ev)
     {
+      e.stopPropagation();
+      e.preventDefault();
+
       const touch = ev.changedTouches[0];
       updatePanelSize(app, touch.clientX, touch.clientY);
 
