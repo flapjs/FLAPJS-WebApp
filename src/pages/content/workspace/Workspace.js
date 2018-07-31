@@ -28,10 +28,15 @@ class Workspace extends React.Component
   {
     const graph = this.props.graph;
     const controller = this.props.controller;
+    const pointer = controller.pointer;
+
+    let size = Config.DEFAULT_GRAPH_SIZE * pointer.scale;
+    if (size < 0) size = Config.DEFAULT_GRAPH_SIZE;
+    const halfSize = size / 2;
 
     //Must not be a block content (must inline)
     return <svg id="workspace-content" ref={ref=>this.ref=ref}
-      viewBox="-150 -150 300 300"
+      viewBox={-halfSize + " " + -halfSize + " " + size + " " + size}
       xmlns="http://www.w3.org/2000/svg">
 
       <filter id="error-highlight" height="300%" width="300%" x="-75%" y="-75%">
@@ -50,8 +55,7 @@ class Workspace extends React.Component
         </feMerge>
       </filter>
 
-      <g transform={
-        "translate(" + controller.pointer.offsetX + " " + controller.pointer.offsetY + ")"}>
+      <g transform={"translate(" + controller.pointer.offsetX + " " + controller.pointer.offsetY + ")"}>
 
         <line x1="0" y1="-5" x2="0" y2="5" stroke="rgba(0,0,0,0.04)"/>
         <line x1="-5" y1="0" x2="5" y2="0" stroke="rgba(0,0,0,0.04)"/>

@@ -10,11 +10,13 @@ class TestingPanel extends React.Component
   constructor(props)
   {
     super(props);
+
+    this.container = React.createRef();
   }
 
   render()
   {
-    return <div className="panel-container" id="testing">
+    return <div className="panel-container" id="testing" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>Testing</h1>
       </div>

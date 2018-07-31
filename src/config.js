@@ -9,6 +9,8 @@ export const STR_TRANSITION_PROXY_LABEL = "?";
 export const STR_STATE_LABEL = "q";
 
 //Geometry
+export const DEFAULT_GRAPH_SIZE = 300;
+
 export const NODE_RADIUS = 16;
 export const NODE_RADIUS_SQU = NODE_RADIUS * NODE_RADIUS;
 export const NODE_DIAMETER = NODE_RADIUS * 2;

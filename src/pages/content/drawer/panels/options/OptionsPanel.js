@@ -5,9 +5,15 @@ import './OptionsPanel.css';
 
 class OptionsPanel extends React.Component
 {
+  constructor(props)
+  {
+    super(props)
+
+    this.container = React.createRef();
+  }
   render()
   {
-    return <div className="panel-container" id="option">
+    return <div className="panel-container" id="option" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>Option</h1>
       </div>
@@ -51,7 +57,7 @@ class OptionsPanel extends React.Component
           </div>
         </div>
       </div>
-      
+
       <div className="panel-bottom"></div>
     </div>;
   }
