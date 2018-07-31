@@ -75,6 +75,12 @@ class InputController
     return false;
   }
 
+  onTouchMove(e)
+  {
+    const mouse = getMousePosition(this.workspace, e.touches[0]);
+    this.pointer.setPosition(mouse.x, mouse.y);
+  }
+
   onTouchStart(e)
   {
     if (e.changedTouches.length == 2)
