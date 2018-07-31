@@ -60,9 +60,9 @@ class Toolbar extends React.Component
         <UndoButton eventHistory={eventHistory}/>
         <RedoButton eventHistory={eventHistory}/>
         <ExportButton workspace={app.workspace} getFileName={getMachineName}/>
-      </div>
 
-      <HelpButton app={app}/>
+        <HelpButton app={app}/>
+      </div>
     </div>;
   }
 }
