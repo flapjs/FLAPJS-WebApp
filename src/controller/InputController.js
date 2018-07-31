@@ -21,7 +21,7 @@ class InputController
     }
 
     //Swap left to right clicks and vice versa on anything else but Macs
-    this.swapButtons = !navigator.platform.startsWith("Mac");
+    this.swapButtons = false;//TODO: !navigator.platform.startsWith("Mac");
 
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
