@@ -30,8 +30,7 @@ class Workspace extends React.Component
     const controller = this.props.controller;
     const pointer = controller.pointer;
 
-    let size = Config.DEFAULT_GRAPH_SIZE * pointer.scale;
-    if (size < 0) size = Config.DEFAULT_GRAPH_SIZE;
+    let size = Config.DEFAULT_GRAPH_SIZE * Math.max(Number.MIN_VALUE, pointer.scale);
     const halfSize = size / 2;
 
     //Must not be a block content (must inline)

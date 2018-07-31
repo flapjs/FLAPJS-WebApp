@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8"/>
-    <title>JFLAP WebApp</title>
+    <title id="project-version">Flap.js</title>
 		<link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -10,6 +10,34 @@
     <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
   </head>
   <body>
+    <script>
+      const httpGetAsync = function(url, callback)
+      {
+        const request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+          if (request.readyState == 4 && request.status == 200)
+          {
+            const data = JSON.parse(request.responseText);
+            callback(data);
+          }
+        };
+        request.open("GET", url, true);
+        request.send(null);
+      };
+
+      const MASTER_URL = "https://api.github.com/repos/JFLAP/JFLAP-WebApp/git/refs/heads/master";
+      httpGetAsync(MASTER_URL, (data) => {
+        const COMMIT_URL = data["object"]["url"];
+        httpGetAsync(COMMIT_URL, (data) => {
+          const dateString = data["committer"]["date"];
+          const dateData = dateString.substring(2, dateString.length - 1).split("T");
+          const date = dateData[0].replace(/-/g, '.');
+          const dateTime = dateData[1].replace(/:/g, '.');
+          const formattedDate = date + ":" + dateTime;
+          document.getElementById("project-version").innerHTML += " (Build " + formattedDate + ")";
+        });
+      });
+    </script>
     <div id="root"></div>
 
     <!-- Entry point -->
