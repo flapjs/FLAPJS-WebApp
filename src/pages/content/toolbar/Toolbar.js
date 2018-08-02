@@ -56,11 +56,9 @@ class Toolbar extends React.Component
         <UploadButton graph={graph} onExecute={()=>{
           eventHistory.clear();
         }}/>
-        <SaveButton graph={graph} getFileName={getMachineName}/>
+        <SaveButton app={app}/>
         <UndoButton eventHistory={eventHistory}/>
         <RedoButton eventHistory={eventHistory}/>
-        <ExportButton workspace={app.workspace} getFileName={getMachineName}/>
-
         <HelpButton app={app}/>
       </div>
     </div>;

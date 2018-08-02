@@ -11,8 +11,7 @@ class SaveButton extends React.Component
 
   onClick(ev)
   {
-    const data = this.props.graph.toJSON();
-    Downloader.downloadText(this.props.getFileName() + '.json', JSON.stringify(data));
+    this.props.app.drawer.setTab(2)
   }
 
   render()
