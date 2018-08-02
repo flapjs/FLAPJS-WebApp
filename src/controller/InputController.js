@@ -303,7 +303,7 @@ class InputController
     this.cursor._timer = setTimeout(() => {
       if (pointer.isWaitingForMoveMode())
       {
-        pointer.moveMode = !this.swapButtons;//default true
+        pointer.moveMode = !(this.swapButtons ? !moveMode : moveMode);//default true
       }
     }, Config.LONG_TAP_TICKS);
 
