@@ -50,7 +50,7 @@ class GraphPointer
 
   isWaitingForMoveMode()
   {
-    return !this.moveMode && !this.dragging;
+    return !this.dragging; //!this.moveMode
   }
 
   setInitialPosition(x, y)
@@ -219,7 +219,7 @@ class GraphPointer
     }
     else
     {
-      return Config.CURSOR_RADIUS_SQU;
+      return Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
     }
   }
 
