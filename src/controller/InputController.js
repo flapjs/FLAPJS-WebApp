@@ -100,6 +100,7 @@ class InputController
   {
     if (e.changedTouches.length == 2)
     {
+    /*
       e.stopPropagation();
       e.preventDefault();
 
@@ -128,6 +129,7 @@ class InputController
 
       document.addEventListener('touchmove', this.cursor._touchmove);
       document.addEventListener('touchend', this.cursor._touchend);
+      */
     }
     else if (e.changedTouches.length == 1)
     {
