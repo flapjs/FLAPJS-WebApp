@@ -20,7 +20,19 @@
   */
   border-top: 4px solid #3D3D3D;
   background: #7D7D7D;
-  color: white;
+  color: #F7F5E6;
+}
+
+#notification-message-error {
+  border-top: 4px solid #B54A4A;
+  background: #C77575;
+  color:  #F7F5E6;
+}
+
+#notification-message-warning {
+  border-top: 4px solid #DFBC20;
+  background: #E6CB53;
+  color:  #F7F5E6;
 }
 
 .notification-message-response {

@@ -50,13 +50,27 @@ class NotificationSystem extends React.Component
         <div className="notification-stack">
           {
             this.state.errorMessages.map((e, i) => {
-              return <div key={i} className="notification-message">
+              return <div key={i} className="notification-message" id="notification-message-error">
                 {e}
                 <div className="notification-message-response">
                   <button onClick={(e) => {
                     this.state.errorMessages.splice(i, 1);
                   }}>
                     Get out of my way
+                  </button>
+                </div>
+              </div>;
+            })
+          }
+          {
+            this.state.warningMessages.map((e, i) => {
+              return <div key={i} className="notification-message" id="notification-message-warning">
+                {e}
+                <div className="notification-message-response">
+                  <button onClick={(e) => {
+                    this.state.warningMessages.splice(i, 1);
+                  }}>
+                    I don't care
                   </button>
                 </div>
               </div>;
