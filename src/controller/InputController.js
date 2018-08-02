@@ -150,7 +150,7 @@ class InputController
         this.cursor._touchend = null;
       }
 
-      if (this.doInputDown(touch.clientX, touch.clientY, false))
+      if (this.doInputDown(touch.clientX, touch.clientY, this.swapButtons))//default false
       {
         this.cursor._touchmove = this.onTouchStartAndMove.bind(this);
         this.cursor._touchend = this.onTouchStartAndEnd.bind(this);
@@ -303,7 +303,7 @@ class InputController
     this.cursor._timer = setTimeout(() => {
       if (pointer.isWaitingForMoveMode())
       {
-        pointer.moveMode = true;
+        pointer.moveMode = !this.swapButtons;//default true
       }
     }, Config.LONG_TAP_TICKS);
 

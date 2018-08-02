@@ -218,6 +218,7 @@ class LabelEditor extends React.Component
           <span className="label-editor-tray-used">
             {
               usedAlphabet.map((e, i) => {
+                if (e.length < 1) return null;
                 return <button key={i} onClick={ev=>this.appendSymbol(e)}>{e}</button>
               })
             }
