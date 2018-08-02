@@ -6,7 +6,8 @@ import NFA from 'machine/NFA.js';
 
 import Node from './Node.js';
 import Edge from './Edge.js';
-
+import * as Config from 'config.js';
+import { EMPTY } from 'machine/Symbols.js';
 //nodeCreate(node) - Whenever a new node is created
 //nodeDestroy(node) - Whenever a node is destroyed (even on clear)
 //nodeLabel(node, newLabel, oldLabel) - Whenever a node label changes
@@ -142,12 +143,18 @@ class NodalGraph
     var minNY = Number.MAX_VALUE;
     var maxNX = Number.MIN_VALUE;
     var maxNY = Number.MIN_VALUE;
+
     this.nodes.forEach(function (node) {
-      if(node.x < minNX) minNX = node.x;
-      if(node.x > maxNX) maxNX = node.x;
-      if(node.y < minNY) minNY = node.y;
-      if(node.y > maxNY) maxNY = node.y;
+      const x = node.x;
+      const y = node.y;
+
+      minNX = Math.min(minNX, x);
+      maxNX = Math.max(maxNX, x);
+
+      minNY = Math.min(minNY, y);
+      maxNY = Math.max(maxNY, y);
     });
+
     minNX -= NODE_RADIUS;
     minNY -= NODE_RADIUS;
     maxNX += NODE_RADIUS;
@@ -162,17 +169,25 @@ class NodalGraph
       const endpoint = edge.getEndPoint();
       const center = edge.getCenterPoint();
 
-      minEX = Math.min(minEX, startpoint.x, endpoint.x, center.x);
-      minEY = Math.min(minEY, startpoint.y, endpoint.y, center.y);
-      maxEX = Math.max(maxEX, startpoint.x, endpoint.x, center.y);
-      maxEY = Math.max(maxEY, startpoint.y, endpoint.y, center.y);
+      const sx = startpoint.x;
+      const sy = startpoint.y;
+      const ex = endpoint.x;
+      const ey = endpoint.y;
+      const cx = center.x;
+      const cy = center.y;
+
+      minEX = Math.min(minEX, sx, ex, cx);
+      maxEX = Math.max(maxEX, sx, ex, cx);
+
+      minEY = Math.min(minEY, sy, ey, cy);
+      maxEY = Math.max(maxEY, sy, ey, cy);
     });
 
     const result = {
-      minX: minNX < minEX ? minNX : minEX,
-      minY: minNY < minEY ? minNY : minEY,
-      maxX: maxNX > maxEX ? maxNX : maxEX,
-      maxY: maxNY > maxEY ? maxNY : maxEY,
+      minX: Math.min(minNX, minEX),//minNX < minEX ? minNX : minEX,
+      minY: Math.min(minNY, minEY),//minNY < minEY ? minNY : minEY,
+      maxX: Math.max(maxNX, maxEX),//maxNX > maxEX ? maxNX : maxEX,
+      maxY: Math.max(maxNY, maxEY),//maxNY > maxEY ? maxNY : maxEY,
       width: 0,
       height: 0
     };
@@ -238,6 +253,90 @@ class NodalGraph
       dst.edges[i] = newEdge;
     }
 
+    return dst;
+  }
+
+  static parseXML(data)
+  {
+
+    let nodeList = data.getElementsByTagName("state");
+    let edgeList = data.getElementsByTagName("transition");
+    const nodeLength = nodeList.length;
+    const edgeLength = edgeList.length;
+
+    if (nodeLength < 0) throw new Error("Invalid graph data: negative number of nodes.");
+    if (edgeLength < 0) throw new Error("Invalid graph data: negative number of edges.");
+
+    const dst = new NodalGraph(new Array(nodeLength), new Array(edgeLength));
+    let nodeIDMap = new Map();
+    let startNodeID;
+    //create nodes list
+    for(let i = 0; i < nodeLength; ++i)
+    {
+      let node = nodeList[i];
+      let nodeLabel = node.attributes[1].nodeValue;
+      let nodeID = node.attributes[0].nodeValue;
+      let nodeX = node.childNodes[1].childNodes[0].nodeValue;
+      let nodeY = node.childNodes[3].childNodes[0].nodeValue;
+      let nodeAccept = node.getElementsByTagName("final").length;
+      let nodeStart = node.getElementsByTagName("initial").length;
+      if(nodeStart) startNodeID = nodeID;//TODO: allow JFLAP names to be id
+      let newNode = new Node(dst, nodeX , nodeY , Config.STR_STATE_LABEL + (nodeID));
+      newNode.accept = nodeAccept;
+      if(nodeStart)
+      {
+        if(dst.nodes[0])
+        {
+          dst.nodes[i] = dst.nodes[0];
+          nodeIDMap.set(nodeList[0].attributes[0].nodeValue, i);
+          dst.nodes[0] = newNode;
+          nodeIDMap.set(nodeID, 0);
+        }
+        else
+        {
+          dst.nodes[0] = newNode;
+          nodeIDMap.set(nodeID, 0);
+        }
+      }
+      dst.nodes[i] = newNode;
+      nodeIDMap.set(nodeID, i);
+    }
+    const boundingRect = dst.getBoundingRect();
+    const width = boundingRect.width;
+    const height = boundingRect.height;
+    for(var i = 0; i < dst.nodes.length; i++)
+    {
+      dst.nodes[i].x -= width/2;
+      dst.nodes[i].y -= height/2;
+    }
+
+    //create edge lists
+    for(let i = 0; i < edgeLength; ++i)
+    {
+      const edge = edgeList[i];
+      const edgeFrom = edge.childNodes[1].childNodes[0].nodeValue;
+      const edgeTo = edge.childNodes[3].childNodes[0].nodeValue;
+      let edgeLabel = edge.childNodes[5];
+      if(edgeLabel.childNodes[0]) edgeLabel = edgeLabel.childNodes[0].nodeValue;
+      else edgeLabel = EMPTY;
+      const indexOfEdgeFrom = nodeIDMap.get(edgeFrom);
+      const indexOfEdgeTo = nodeIDMap.get(edgeTo);
+
+      //check valid from and to node
+      if(dst.nodes[indexOfEdgeFrom] || (startNodeID == edgeFrom && dst.nodes[0]) || (edgeFrom == 0 && dst.nodes[startNodeID]) )
+      {
+        const newEdge = new Edge(dst, dst.nodes[indexOfEdgeFrom], edgeTo < 0 ? null : dst.nodes[indexOfEdgeTo], edgeLabel || "0");
+        dst.edges[i] = newEdge;
+        if (edgeFrom == edgeTo)
+        {
+          newEdge.makeSelfLoop(Math.PI / 2);
+        }
+      }
+      else
+      {
+         throw new Error("Invalid edge from data: node index \'" + edge.from + "\' out of bounds.");
+      }
+    }
     return dst;
   }
 
@@ -311,7 +410,6 @@ Eventable.mixin(NodalGraph);
 function fillFSA(graph, fsa)
 {
   if (graph.nodes.length <= 0) return fsa;
-
   //Create all the nodes
   for(const node of graph.nodes)
   {
