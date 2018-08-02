@@ -29,7 +29,7 @@ class NotificationSystem extends React.Component
 
   clearErrorMessage(tag=null) {
     for(let i = this.state.errorMessages.length-1; i >= 0; i--) {
-      if(this.state.errorMessages[i][1] === tag) {
+      if(this.state.errorMessages[i][1] == tag) {
         this.state.errorMessages.splice(i, 1);
       }
     }
