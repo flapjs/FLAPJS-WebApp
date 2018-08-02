@@ -219,7 +219,7 @@ class GraphPointer
     }
     else
     {
-      return 0;
+      return Config.CURSOR_RADIUS_SQU;
     }
   }
 
