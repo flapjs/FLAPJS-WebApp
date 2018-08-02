@@ -100,6 +100,7 @@ class InputController
   {
     if (e.changedTouches.length == 2)
     {
+    /*
       e.stopPropagation();
       e.preventDefault();
 
@@ -128,6 +129,7 @@ class InputController
 
       document.addEventListener('touchmove', this.cursor._touchmove);
       document.addEventListener('touchend', this.cursor._touchend);
+      */
     }
     else if (e.changedTouches.length == 1)
     {
@@ -150,7 +152,7 @@ class InputController
         this.cursor._touchend = null;
       }
 
-      if (this.doInputDown(touch.clientX, touch.clientY, false))
+      if (this.doInputDown(touch.clientX, touch.clientY, this.swapButtons))//default false
       {
         this.cursor._touchmove = this.onTouchStartAndMove.bind(this);
         this.cursor._touchend = this.onTouchStartAndEnd.bind(this);
@@ -303,7 +305,8 @@ class InputController
     this.cursor._timer = setTimeout(() => {
       if (pointer.isWaitingForMoveMode())
       {
-        pointer.moveMode = true;
+        alert("waiting for move");
+        pointer.moveMode = !(this.swapButtons ? !moveMode : moveMode);//default true
       }
     }, Config.LONG_TAP_TICKS);
 
