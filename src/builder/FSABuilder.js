@@ -42,6 +42,8 @@ class FSABuilder extends MachineBuilder
       //HACK: this is to turn off error checking really quick
       if (!this.app.testingManager.autoErrorCheck) return;
 
+      //clear previous error messages
+      this.app.notification.clearMessage("error");
       this.machineErrorChecker.checkErrors();
       for(const [error, objects] of this.machineErrorChecker.errorMessages)
       {
@@ -51,7 +53,7 @@ class FSABuilder extends MachineBuilder
         {
           message += o.label + ", ";
         }
-        this.app.notification.addMessage(message);
+        this.app.notification.addMessage(message, "error");
       }
     }, ERROR_CHECK_INTERVAL);
   }
