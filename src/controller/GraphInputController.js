@@ -42,6 +42,8 @@ class GraphInputController extends InputController
 
     this.firstEmptyClick = false;
     this.firstEmptyTime = 0;
+    this.firstEmptyX = 0;
+    this.firstEmptyY = 0;
     this.ghostInitialMarker = null;
 
     this.selector = new SelectionBox(null);
@@ -84,8 +86,10 @@ class GraphInputController extends InputController
   {
     if (targetType === 'none')
     {
+      const dx = x - this.firstEmptyX;
+      const dy = y - this.firstEmptyY;
       //If within the time to double tap...
-      if (this.firstEmptyClick && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
+      if (this.firstEmptyClick && (dx * dx + dy * dy) < Config.CURSOR_RADIUS_SQU && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
       {
         //Create state at position
         const node = this.createNode(x, y);
@@ -100,6 +104,8 @@ class GraphInputController extends InputController
         //This is the first empty click, should wait for another...
         this.firstEmptyClick = true;
         this.firstEmptyTime = Date.now();
+        this.firstEmptyX = x;
+        this.firstEmptyY = y;
       }
 
       return true;
@@ -419,7 +425,7 @@ class GraphInputController extends InputController
       if (targetType === 'node')
       {
         //Delete it if withing trash area...
-        if (this.pointer.isTrashMode(x, y))
+        if (pointer.isTrashMode(x, y))
         {
           //If there exists selected states, delete them all!
           const selector = this.selector;
@@ -456,7 +462,7 @@ class GraphInputController extends InputController
       else if (targetType === 'edge')
       {
         //Delete it if withing trash area...
-        if (this.pointer.isTrashMode(x, y))
+        if (pointer.isTrashMode(x, y))
         {
           this.deleteTargetEdge(target);
         }
@@ -471,14 +477,16 @@ class GraphInputController extends InputController
       else if (targetType === 'endpoint')
       {
         //Delete it if withing trash area...
-        if (this.pointer.isTrashMode(x, y))
+        if (pointer.isTrashMode(x, y))
         {
           this.deleteTargetEdge(target);
           return true;
         }
         //If hovering over a node...
-        else if (pointer.targetType === 'node')
+        else if (target.to instanceof Node)
         {
+          const targetNode = target.to;
+
           //Look for an existing edge with similar from and to
           for(const edge of this.graph.edges)
           {
@@ -505,7 +513,7 @@ class GraphInputController extends InputController
             //Make sure that it's previous edge was not null
             target._to = this.prevEdgeTo;
             //Finalize the edge (trigger the event)
-            target.to = pointer.target;
+            target.to = targetNode;
           }
 
           //If the cursor returns to the state after leaving it...
@@ -543,9 +551,8 @@ class GraphInputController extends InputController
             if (edge.isQuadratic()) continue;
             if ((edge.to === target.from && edge.from === target.to))
             {
-              //HACK: these should be values from CONFIG
-              target.quad.y = -10;
-              edge.quad.y = 10;
+              target.quad.y = -Config.PARALLEL_EDGE_HEIGHT;
+              edge.quad.y = Config.PARALLEL_EDGE_HEIGHT;
             }
           }
 
@@ -670,6 +677,26 @@ class GraphInputController extends InputController
 
   moveNodeTo(pointer, node, x, y)
   {
+    for(const other of this.graph.nodes)
+    {
+      //Update node collision
+      if (node === other) continue;
+
+      const dx = x - other.x;
+      const dy = y - other.y;
+      const angle = Math.atan2(dy, dx);
+
+      const diameter = (Config.NODE_RADIUS * 2);
+      const nextDX = other.x + (Math.cos(angle) * diameter) - x;
+      const nextDY = other.y + (Math.sin(angle) * diameter) - y;
+
+      if (dx * dx + dy * dy < Config.NODE_RADIUS_SQU * 4)
+      {
+        x += nextDX;
+        y += nextDY;
+      }
+    }
+
     node.x = x;
     node.y = y;
   }

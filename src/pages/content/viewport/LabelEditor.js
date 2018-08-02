@@ -10,7 +10,8 @@ const EDITOR_OFFSET_Y = -36;
 const DELETE_KEY = 8;
 const DELETE_FORWARD_KEY = 46;
 
-const DEFAULT_SYMBOLS = ["0", "1", EMPTY];
+const RECOMMENDED_SYMBOLS = ["0", "1"];
+const DEFAULT_SYMBOLS = [EMPTY];
 
 class LabelEditor extends React.Component
 {
@@ -32,6 +33,7 @@ class LabelEditor extends React.Component
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
+    this.onContextMenu = this.onContextMenu.bind(this);
   }
 
   openEditor(targetEdge, defaultText=null, callback=null)
@@ -45,7 +47,11 @@ class LabelEditor extends React.Component
 
     this.inputElement.value = defaultText || targetEdge.label;
     this.parentElement.focus();
-    this.inputElement.select();
+
+    //TODO: if (!window.matchMedia("(max-height: 420px)").matches)
+    {
+      this.inputElement.select();
+    }
   }
 
   closeEditor(saveOnExit=false)
@@ -72,6 +78,12 @@ class LabelEditor extends React.Component
   isEditorOpen()
   {
     return this.state.target !== null;
+  }
+
+  onContextMenu(e)
+  {
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   onKeyDown(e)
@@ -185,7 +197,9 @@ class LabelEditor extends React.Component
     const usedAlphabet = this.props.machineBuilder.getMachine().getAlphabet();
 
     return <div className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
+      tabIndex={"0"/*This is to allow div's to focus/blur*/}
       style={targetStyle}
+      onContextMenu={this.onContextMenu}
       onFocus={(e)=>{
         //HACK: delete the timer that will exit labelEditor
         clearTimeout(this._timer);
@@ -209,19 +223,24 @@ class LabelEditor extends React.Component
             }
           </span>
         }
-        {
-          usedAlphabet &&
-          usedAlphabet.length <= 1 &&
-          <span className="label-editor-tray-default">
-            {
-              DEFAULT_SYMBOLS.map((e, i) => {
-                return <button key={i} onClick={ev=>this.appendSymbol(e)}>
-                {e}
-                </button>;
-              })
-            }
-          </span>
-        }
+        <span className="label-editor-tray-default">
+          {
+            usedAlphabet &&
+            usedAlphabet.length <= 1 &&
+            RECOMMENDED_SYMBOLS.map((e, i) => {
+              return <button key={i} onClick={ev=>this.appendSymbol(e)}>
+              {e}
+              </button>;
+            })
+          }
+          {
+            DEFAULT_SYMBOLS.map((e, i) => {
+              return <button key={i} onClick={ev=>this.appendSymbol(e)}>
+              {e}
+              </button>;
+            })
+          }
+        </span>
       </div>
     </div>;
   }

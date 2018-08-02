@@ -28,10 +28,14 @@ class Workspace extends React.Component
   {
     const graph = this.props.graph;
     const controller = this.props.controller;
+    const pointer = controller.pointer;
+
+    let size = Config.DEFAULT_GRAPH_SIZE * Math.max(Number.MIN_VALUE, pointer.scale);
+    const halfSize = size / 2;
 
     //Must not be a block content (must inline)
     return <svg id="workspace-content" ref={ref=>this.ref=ref}
-      viewBox="-150 -150 300 300"
+      viewBox={-halfSize + " " + -halfSize + " " + size + " " + size}
       xmlns="http://www.w3.org/2000/svg">
 
       <filter id="error-highlight" height="300%" width="300%" x="-75%" y="-75%">

@@ -10,11 +10,13 @@ class TestingPanel extends React.Component
   constructor(props)
   {
     super(props);
+
+    this.container = React.createRef();
   }
 
   render()
   {
-    return <div className="panel-container" id="testing">
+    return <div className="panel-container" id="testing" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>Testing</h1>
       </div>
@@ -32,12 +34,14 @@ class TestingPanel extends React.Component
       </div>
       <div>
         <input id="test-step" type="checkbox" disabled="true"/>
-        <label htmlFor="test-step">Simulate Step-by-step</label>
+        <label htmlFor="test-step">Step-by-Step Mode</label>
       </div>
       <div>
         <input id="test-closure" type="checkbox" disabled="true"/>
         <label htmlFor="test-closure">Transition By Closure</label>
       </div>
+
+      <div className="panel-bottom"></div>
     </div>;
   }
 }

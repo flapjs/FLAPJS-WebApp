@@ -3,14 +3,18 @@ import * as Config from 'config.js';
 
 import GraphPointer from './GraphPointer.js';
 
+const SCROLL_SENSITIVITY = 1 / 300.0;
+const PINCH_SENSITIVITY = 1 / 300.0;
+
 class InputController
 {
   constructor()
   {
     this.graph = null;
     this.workspace = null;
+    this.labelEditor = null;
 
-    this.pointer = new GraphPointer();
+    this.pointer = new GraphPointer(null);
 
     this.cursor = {
       _mousemove: null,
@@ -18,16 +22,19 @@ class InputController
       _touchmove: null,
       _touchend: null,
       _timer: null
-    }
+    };
 
     //Swap left to right clicks and vice versa on anything else but Macs
     this.swapButtons = !navigator.platform.startsWith("Mac");
+    this.prevPinchDist = 0;
+    this.pinchDist = 0;
 
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onTouchStart = this.onTouchStart.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
+    this.onWheel = this.onWheel.bind(this);
   }
 
   initialize(app, workspace)
@@ -35,14 +42,16 @@ class InputController
     //Set the graph
     this.graph = app.graph;
     this.pointer.graph = this.graph;
+    this.labelEditor = app.viewport.labelEditor;
 
     //Prepare the workspace
     this.workspace = workspace;
-    this.workspace.addEventListener('contextmenu', this.onContextMenu);
 
     //Process mouse handlers
     this.workspace.addEventListener('mousedown', this.onMouseDown);
     this.workspace.addEventListener('mousemove', this.onMouseMove);
+    this.workspace.addEventListener('contextmenu', this.onContextMenu);
+    this.workspace.addEventListener('wheel', this.onWheel);
 
     //Process touch handlers
     this.workspace.addEventListener('touchstart', this.onTouchStart);
@@ -53,12 +62,11 @@ class InputController
   {
     this.clearListeners();
 
-    //Prepare the workspace
-    this.workspace.removeEventListener('contextmenu', this.onContextMenu);
-
     //Process mouse handlers
     this.workspace.removeEventListener('mousedown', this.onMouseDown);
     this.workspace.removeEventListener('mousemove', this.onMouseMove);
+    this.workspace.removeEventListener('contextmenu', this.onContextMenu);
+    this.workspace.removeEventListener('wheel', this.onWheel);
 
     //Process touch handlers
     this.workspace.removeEventListener('touchstart', this.onTouchStart);
@@ -69,8 +77,17 @@ class InputController
   {
     e.stopPropagation();
     e.preventDefault();
-    document.activeElement.blur();
-    this.workspace.focus();
+
+    return false;
+  }
+
+  onWheel(e)
+  {
+    e.stopPropagation();
+    e.preventDefault();
+
+    this.pinchDist = e.deltaY * SCROLL_SENSITIVITY;
+    this.pointer.setScale(this.pointer.scale + this.pinchDist);
   }
 
   onTouchMove(e)
@@ -81,15 +98,88 @@ class InputController
 
   onTouchStart(e)
   {
-    if (e.changedTouches.length > 1) return;
+    if (e.changedTouches.length == 2)
+    {
+      e.stopPropagation();
+      e.preventDefault();
 
-    e.stopPropagation();
-    e.preventDefault();
-    document.activeElement.blur();
-    this.workspace.focus();
+      document.activeElement.blur();
+      this.workspace.focus();
 
-    const touch = e.changedTouches[0];
+      if (this.cursor._touchmove)
+      {
+        document.removeEventListener('touchmove', this.cursor._touchmove);
+        this.cursor._touchmove = null;
+      }
+      if (this.cursor._touchend)
+      {
+        document.removeEventListener('touchend', this.cursor._touchend);
+        this.cursor._touchend = null;
+      }
 
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      this.prevPinchDist = Math.hypot(
+        touch1.pageX - touch2.pageX,
+        touch1.pageY - touch2.pageY);
+
+      this.cursor._touchmove = this.onPinchMove.bind(this);
+      this.cursor._touchend = this.onPinchEnd.bind(this);
+
+      document.addEventListener('touchmove', this.cursor._touchmove);
+      document.addEventListener('touchend', this.cursor._touchend);
+    }
+    else if (e.changedTouches.length == 1)
+    {
+      e.stopPropagation();
+      e.preventDefault();
+
+      document.activeElement.blur();
+      this.workspace.focus();
+
+      const touch = e.changedTouches[0];
+
+      if (this.cursor._touchmove)
+      {
+        document.removeEventListener('touchmove', this.cursor._touchmove);
+        this.cursor._touchmove = null;
+      }
+      if (this.cursor._touchend)
+      {
+        document.removeEventListener('touchend', this.cursor._touchend);
+        this.cursor._touchend = null;
+      }
+
+      if (this.doInputDown(touch.clientX, touch.clientY, false))
+      {
+        this.cursor._touchmove = this.onTouchStartAndMove.bind(this);
+        this.cursor._touchend = this.onTouchStartAndEnd.bind(this);
+
+        document.addEventListener('touchmove', this.cursor._touchmove);
+        document.addEventListener('touchend', this.cursor._touchend);
+      }
+    }
+    else
+    {
+      //Do nothin.
+    }
+  }
+
+  onPinchMove(e)
+  {
+    const touch1 = e.touches[0];
+    const touch2 = e.touches[1];
+    this.pinchDist = Math.hypot(
+      touch1.pageX - touch2.pageX,
+      touch1.pageY - touch2.pageY);
+
+    this.pointer.setScale(this.pinchDist * PINCH_SENSITIVITY);
+
+    return false;
+  }
+
+  onPinchEnd()
+  {
     if (this.cursor._touchmove)
     {
       document.removeEventListener('touchmove', this.cursor._touchmove);
@@ -101,14 +191,7 @@ class InputController
       this.cursor._touchend = null;
     }
 
-    if (this.doInputDown(touch.clientX, touch.clientY, false))
-    {
-      this.cursor._touchmove = this.onTouchStartAndMove.bind(this);
-      this.cursor._touchend = this.onTouchStartAndEnd.bind(this);
-
-      document.addEventListener('touchmove', this.cursor._touchmove);
-      document.addEventListener('touchend', this.cursor._touchend);
-    }
+    return false;
   }
 
   onTouchStartAndEnd(e)
@@ -127,12 +210,16 @@ class InputController
     }
 
     this.doInputDownAndUp(touch.clientX, touch.clientY);
+
+    return false;
   }
 
   onTouchStartAndMove(e)
   {
     const touch = e.changedTouches[0];
     this.doInputDownAndMove(touch.clientX, touch.clientY);
+
+    return false;
   }
 
   onMouseMove(e)
@@ -145,6 +232,7 @@ class InputController
   {
     e.stopPropagation();
     e.preventDefault();
+
     document.activeElement.blur();
     this.workspace.focus();
 
@@ -152,6 +240,11 @@ class InputController
     {
       document.removeEventListener('mousemove', this.cursor._mousemove);
       this.cursor._mousemove = null;
+    }
+    if (this.cursor._mouseup)
+    {
+      document.removeEventListener('mouseup', this.cursor._mouseup);
+      this.cursor._mouseup = null;
     }
 
     let moveMode = (e.button == 2);
@@ -171,6 +264,8 @@ class InputController
     e.preventDefault();
 
     this.doInputDownAndMove(e.clientX, e.clientY);
+
+    return false;
   }
 
   onMouseDownAndUp(e)
@@ -189,7 +284,9 @@ class InputController
       this.cursor._mouseup = null;
     }
 
-    this.doInputDownAndUp(e.clientX, e.clientY)
+    this.doInputDownAndUp(e.clientX, e.clientY);
+
+    return false;
   }
 
   doInputDown(x, y, moveMode)

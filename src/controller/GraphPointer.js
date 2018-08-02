@@ -1,5 +1,9 @@
 import * as Config from 'config.js';
 
+const MIN_SCALE = 0.1;
+const MAX_SCALE = 10;
+const BOUNDING_RECT_UPDATE_INTERVAL = 100;
+
 class GraphPointer
 {
   constructor(graph)
@@ -17,12 +21,31 @@ class GraphPointer
     this.offsetX = 0;
     this.offsetY = 0;
 
+    this._boundingRect = null;
+    this._boundingRectTime = 0;
+    this.scale = 1;
+
     this.target = null;
     this.targetType = null;
 
     this.moveMode = false;
     this.trashMode = false;
     this.dragging = false;
+  }
+
+  setScale(scale)
+  {
+    //Add delay to this so it is not called every frame
+    if (Date.now() - this._boundingRectTime > BOUNDING_RECT_UPDATE_INTERVAL)
+    {
+      this._boundingRect = this.graph.getBoundingRect();
+      this._boundingRectTime = Date.now();
+    }
+
+    const rect = this._boundingRect;
+    //const dw = (Math.max(Config.DEFAULT_GRAPH_SIZE, rect.width)) / Config.DEFAULT_GRAPH_SIZE;
+    //const dh = (Math.max(Config.DEFAULT_GRAPH_SIZE, rect.height)) / Config.DEFAULT_GRAPH_SIZE;
+    this.scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale));
   }
 
   isWaitingForMoveMode()

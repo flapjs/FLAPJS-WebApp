@@ -12,6 +12,8 @@ class OverviewPanel extends React.Component
   {
     super(props);
 
+    this.container = React.createRef();
+
     this.state = {
       autoNameStates: true,
       machineType: this.props.machineBuilder.getMachineType()
@@ -29,7 +31,7 @@ class OverviewPanel extends React.Component
 
   render()
   {
-    return <div className="panel-container" id="overview">
+    return <div className="panel-container" id="overview" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>Definition</h1>
 
@@ -55,6 +57,8 @@ class OverviewPanel extends React.Component
         }} checked={this.state.autoNameStates}/>
         <label htmlFor="auto-statename">Automatic State Labels</label>
       </div>
+
+      <div className="panel-bottom"></div>
     </div>;
   }
 }

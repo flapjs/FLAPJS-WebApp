@@ -25,12 +25,15 @@ class Drawer extends React.Component
   {
     super(props);
 
+    this.panel = React.createRef();
+
     this.state = {
       tabIndex: DEFAULT_TAB_INDEX
     };
 
     this.onTouchStart = this.onTouchStart.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
+    this.onScroll = this.onScroll.bind(this);
   }
 
   setTab(index)
@@ -62,13 +65,13 @@ class Drawer extends React.Component
     switch(index)
     {
       case OVERVIEW:
-        return <OverviewPanel graph={app.graph} machineBuilder={app.machineBuilder}/>;
+        return <OverviewPanel ref={ref=>this.panel=ref} graph={app.graph} machineBuilder={app.machineBuilder}/>;
       case TESTING:
-        return <TestingPanel tester={app.testingManager}/>;
+        return <TestingPanel ref={ref=>this.panel=ref} tester={app.testingManager}/>;
       case EXPORTING:
-        return <ExportingPanel app={this.props.app} graph={this.props.graph} toolbar={this.props.toolbar} />;
+        return <ExportingPanel ref={ref=>this.panel=ref} app={this.props.app} graph={this.props.graph} toolbar={this.props.toolbar} />;
       case OPTIONS:
-        return <OptionsPanel />;
+        return <OptionsPanel ref={ref=>this.panel=ref} />;
       default:
         throw new Error("Unknown tab index \'" + tabIndex + "\'.");
     }
@@ -109,12 +112,18 @@ class Drawer extends React.Component
 
     const onTouchMove = function(ev)
     {
+      e.stopPropagation();
+      e.preventDefault();
+
       const touch = ev.changedTouches[0];
       updatePanelSize(app, touch.clientX, touch.clientY);
     };
 
     const onTouchEnd = function(ev)
     {
+      e.stopPropagation();
+      e.preventDefault();
+
       const touch = ev.changedTouches[0];
       updatePanelSize(app, touch.clientX, touch.clientY);
 
@@ -171,6 +180,15 @@ class Drawer extends React.Component
     document.addEventListener("mousemove", onMouseMove);
   }
 
+  onScroll(e)
+  {
+    if (this.panel)
+    {
+      this.panel.container.scrollBy(0, e.deltaY);
+      return false;
+    }
+  }
+
   render()
   {
     const app = this.props.app;
@@ -179,7 +197,7 @@ class Drawer extends React.Component
     //Double click to expand to fullscreen and normal
     onDoubleClick={app.state.isOpen ? app.openDrawer.bind(app, true) : app.openDrawer.bind(app, false)}
     */
-    return <div className={"drawer-container"}>
+    return <div className={"drawer-container"} onWheel={this.onScroll}>
       <div className="drawer-content">
         {this.getTab(this.state.tabIndex)}
       </div>
@@ -217,7 +235,7 @@ function updatePanelSize(app, x, y)
   let fullscreen = false;
   let size = 0;
   //This is the same criteria as in App.css
-  if (window.matchMedia("(max-width: 400px)").matches)
+  if (window.matchMedia("(max-width: 420px)").matches)
   {
     //Vertical slide
     const viewportOffsetY = app.viewport.ref.getBoundingClientRect().y;

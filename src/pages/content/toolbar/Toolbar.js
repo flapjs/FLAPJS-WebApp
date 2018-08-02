@@ -35,6 +35,7 @@ class Toolbar extends React.Component
   render()
   {
     const app = this.props.app;
+    const machineBuilder = this.props.machineBuilder;
     const graph = this.props.graph;
     const eventHistory = this.props.eventHistory;
     const getMachineName = this.getMachineName.bind(this);
@@ -44,7 +45,7 @@ class Toolbar extends React.Component
         <input id="machine-name" type="text" defaultValue="Untitled" ref={ref=>this.machineName=ref}/>
         <label id="machine-type"
           onClick={()=>app.drawer.setTab(1)}>
-          DFA
+          {machineBuilder.getMachineType()}
         </label>
       </div>
 
@@ -59,9 +60,9 @@ class Toolbar extends React.Component
         <UndoButton eventHistory={eventHistory}/>
         <RedoButton eventHistory={eventHistory}/>
         <ExportButton workspace={app.workspace} getFileName={getMachineName}/>
-      </div>
 
-      <HelpButton app={app}/>
+        <HelpButton app={app}/>
+      </div>
     </div>;
   }
 }

@@ -9,9 +9,15 @@ import XMLIcon from "./icon/XMLIcon";
 
 class ExportingPanel extends React.Component
 {
+  constructor(props)
+  {
+    super(props);
+
+    this.container = React.createRef();
+  }
   render()
   {
-    return <div className="panel-container" id="exporting">
+    return <div className="panel-container" id="exporting" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>Exporting</h1>
       </div>
@@ -19,6 +25,8 @@ class ExportingPanel extends React.Component
       <PNGIcon workspace={this.props.app.workspace} toolbar={this.props.toolbar}/>
       <JPGIcon workspace={this.props.app.workspace} toolbar={this.props.toolbar}/>
       <XMLIcon/>
+
+      <div className="panel-bottom"></div>
     </div>;
   }
 }

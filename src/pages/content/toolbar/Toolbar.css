@@ -1,8 +1,8 @@
 .toolbar-container {
-  --color-main: #006A96;
-  --color-main-dark: #005C82;
-  --color-accent: #FFCD00;
-  --color-accent-dark: #C69214;
+  --color-main: #07889B;
+  --color-main-dark: #077787;
+  --color-accent: #FEE781;
+  --color-accent-dark: #FFCD00;
 
   padding-left: 10px;
   display: flex;
@@ -10,9 +10,10 @@
 
   height: var(--toolbar-height);
   overflow: hidden;
+  overflow-x: scroll;
 
   background-color: var(--color-main);
-  box-shadow: 0 0.16em 0 var(--color-accent);
+  box-shadow: 0 0.16em 0 var(--color-accent-dark);
 }
 
 .toolbar-title {
@@ -34,7 +35,7 @@
   background: none;
   padding: 0;
   border: none;
-  color: darkgray;
+  color: lightgray;
   border-bottom: 1px solid black;
   width: 100%;
   margin: 0 15px 0 0;
@@ -91,9 +92,9 @@
 #toolbar-help {
   margin-left: auto;
   margin-right: 10px;
-  fill: var(--color-accent);
+  fill: white;
   width: 3em;
 }
 #toolbar-help:hover {
-  fill: var(--color-accent-dark);
+  fill: var(--color-accent);
 }

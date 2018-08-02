@@ -27,6 +27,12 @@ class GraphUploader
     };
     reader.readAsText(fileBlob);
   }
+
+  static uploadJFFToGraph(fileBlob, graph, callback=null, errorCallback=null)
+  {
+    //TODO: Parse JSON
+    alert("Sorry, not yet implemented :)");
+  }
 }
 
 export default GraphUploader;
