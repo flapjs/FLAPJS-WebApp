@@ -43,7 +43,7 @@ class FSABuilder extends MachineBuilder
       if (!this.app.testingManager.autoErrorCheck) return;
 
       //clear previous error messages
-      this.app.notification.clearMessage("error");
+      this.app.notification.clearErrorMessage("machine");
       this.machineErrorChecker.checkErrors();
       for(const [error, objects] of this.machineErrorChecker.errorMessages)
       {
@@ -53,7 +53,7 @@ class FSABuilder extends MachineBuilder
         {
           message += o.label + ", ";
         }
-        this.app.notification.addMessage(message, "error");
+        this.app.notification.addErrorMessage(message, "machine");
       }
     }, ERROR_CHECK_INTERVAL);
   }
