@@ -130,6 +130,8 @@ class InputController
       document.addEventListener('touchmove', this.cursor._touchmove);
       document.addEventListener('touchend', this.cursor._touchend);
       */
+
+      return false;
     }
     else if (e.changedTouches.length == 1)
     {
