@@ -1,0 +1,26 @@
+.statelist-container .create-icon {
+  margin-bottom: 5px;
+  margin-right: 5px;
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.statelist .start-icon {
+  font-size: inherit;
+  margin-top: 0.3em;/* Same as vertical-align: middle; */
+  margin-right: -2px;
+}
+
+.statelist {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  margin-right: 24px;
+}
+
+.statelist>*:nth-child(2) {
+  outline: 2px dashed rgba(255, 255, 255, 0.1);
+}

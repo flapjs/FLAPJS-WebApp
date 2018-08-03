@@ -1,0 +1,35 @@
+.infoblock-container {
+  position: relative;
+  padding: 5px;
+
+  border: 1px solid black;
+}
+
+.infoblock-container .icon {
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  fill: white;
+}
+
+.infoblock-container .collapse-icon {
+  margin-top: 12px;
+  margin-right: 8px;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.infoblock-header {
+  margin-bottom: 2px;
+}
+
+.infoblock-header label {
+  font-size: 1.2em;
+}
+
+.infoblock-content {
+  font-size: 1em;
+}

@@ -4,7 +4,8 @@ import './OverviewPanel.css';
 
 import * as Config from 'config.js';
 
-import StateList from './StateList.js';
+import StateList from './statelist/StateList.js';
+import AlphabetList from './alphabetlist/AlphabetList.js';
 
 class OverviewPanel extends React.Component
 {
@@ -44,6 +45,7 @@ class OverviewPanel extends React.Component
         </select>
         <div className="graphinfo-important">
           <StateList machine={this.props.machineBuilder}/>
+          <AlphabetList machine={this.props.machineBuilder}/>
         </div>
         <div className="graphinfo">
           <div>
