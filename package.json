@@ -1,7 +1,7 @@
 {
-  "name": "jflap-webapp",
+  "name": "flapjs-webapp",
   "version": "1.0.0",
-  "description": "Repository for the JFLAP webapp project",
+  "description": "Repository for Flap.js webapp project",
   "main": "./dist/bundle.js",
   "scripts": {
     "start": "webpack-dev-server --mode development --config webpack.config.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JFLAP/JFLAP-WebApp.git"
+    "url": "git+https://github.com/flapjs/FLAPJS-WebApp.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JFLAP/JFLAP-WebApp/issues"
+    "url": "https://github.com/flapjs/FLAPJS-WebApp/issues"
   },
-  "homepage": "https://github.com/JFLAP/JFLAP-WebApp#readme",
+  "homepage": "https://github.com/flapjs/FLAPJS-WebApp#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
