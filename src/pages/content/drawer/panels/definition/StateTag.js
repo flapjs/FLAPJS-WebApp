@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './StateTag.css';
+
 class StateTag extends React.Component
 {
   constructor(props)
@@ -13,7 +15,9 @@ class StateTag extends React.Component
 
   render()
   {
+    const node = this.props.src;
     return <div className="statetag-container">
+      <label>{node.label}</label>
     </div>
   }
 }

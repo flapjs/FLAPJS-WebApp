@@ -1,0 +1,50 @@
+.statelist-container {
+  padding: 5px;
+
+  border: 1px solid black;
+}
+
+.statelist-container .icon {
+  background: none;
+  border: none;
+  fill: white;
+}
+
+.statelist-header {
+  position: relative;
+
+  margin-bottom: 5px;
+}
+
+.statelist-header label {
+  font-size: 1.2em;
+}
+
+.statelist-header button {
+  padding-top: 5px;
+
+  position: absolute;
+  right: 0;
+}
+
+.statelist-content-container {
+  font-size: 1em;
+}
+
+.statelist-content-container button {
+  font-size: inherit;
+}
+
+.statelist-content-container .start-icon {
+  vertical-align: middle;
+  margin-right: -8px;
+}
+
+.statelist-content {
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.statelist-content>*:first-child {
+  outline: 2px dashed rgba(255, 255, 255, 0.1);
+}
