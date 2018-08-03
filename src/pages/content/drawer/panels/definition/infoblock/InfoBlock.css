@@ -1,8 +1,6 @@
 .infoblock-container {
   position: relative;
   padding: 5px;
-
-  border: 1px solid black;
 }
 
 .infoblock-container .icon {
@@ -23,7 +21,7 @@
 }
 
 .infoblock-header {
-  margin-bottom: 2px;
+  margin-bottom: 5px;
 }
 
 .infoblock-header label {
@@ -32,4 +30,6 @@
 
 .infoblock-content {
   font-size: 1em;
+  border-left: 2px solid gray;
+  padding-left: 10px;
 }

@@ -6,6 +6,7 @@ import * as Config from 'config.js';
 
 import StateList from './statelist/StateList.js';
 import AlphabetList from './alphabetlist/AlphabetList.js';
+import TransitionTable from './transitiontable/TransitionTable.js';
 
 class OverviewPanel extends React.Component
 {
@@ -48,8 +49,7 @@ class OverviewPanel extends React.Component
           <AlphabetList machine={this.props.machineBuilder}/>
         </div>
         <div className="graphinfo">
-          <div>
-          </div>
+          <TransitionTable machine={this.props.machineBuilder}/>
         </div>
       </div>
       <hr />
