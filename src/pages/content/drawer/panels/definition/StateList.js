@@ -1,5 +1,6 @@
 import React from 'react';
 
+import CreateIcon from './CreateIcon.js';
 import CollapseIcon from './CollapseIcon.js';
 import StartIcon from './StartIcon.js';
 import StateTag from './StateTag.js';
@@ -25,16 +26,15 @@ class StateList extends React.Component
         <label>States</label>
         <CollapseIcon more={this.state.isCollapsed}/>
       </div>
-      <div className="statelist-content-container">
+      <div className="statelist-content">
         <StartIcon />
-        <div className="statelist-content">
         {
           nodes.map((e, i) => {
             return <StateTag key={i} src={e}/>
           })
         }
-        </div>
       </div>
+      <CreateIcon />
     </div>
   }
 }
