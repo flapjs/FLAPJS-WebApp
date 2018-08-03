@@ -31,6 +31,8 @@
   transform-origin: top left;
   transform: rotate(-90deg) translateX(-100%);
 
+  padding-right: 5px;
+
   /* border-bottom: 1px solid lightgray; */
 
   /* DEBUG */
@@ -97,6 +99,7 @@
     flex-direction: row;
     width: calc(100% - var(--panel-border-size));/* Parent width - border */
 
+    padding-left: 5px;
     transform: none;
   }
   .drawer-content {
@@ -113,6 +116,7 @@
     top: var(--panel-border-size);/* border */
     left: 0px;
 
+    padding-left: 5px;
     width: 100%;/* Parent width */
   }
   .drawer-border {
