@@ -1,18 +1,22 @@
 import React from 'react';
-
 import './Toolbar.css';
-import NewButton from './button/NewButton.js';
-import SaveButton from './button/SaveButton.js';
-import UndoButton from './button/UndoButton.js';
-import RedoButton from './button/RedoButton.js';
-import ExportButton from "./button/ExportButton";
 
 import UploadButton from "./UploadButton";
 import HelpButton from "./HelpButton";
 
 import IconButton from 'icons/IconButton.js';
-import IconToggle from 'icons/IconToggle.js';
 
+import UploadIcon from 'icons/MoreIcon.js';
+//import UploadIcon from 'icons/UploadIcon.js';
+import CreateIcon from 'icons/CreateIcon.js';
+//import CreateIcon from 'icons/PageAddIcon.js';
+import SaveIcon from 'icons/SaveIcon.js';
+//import SaveIcon from 'icons/DiskSaveIcon.js';
+import UndoIcon from 'icons/UndoIcon.js';
+import RedoIcon from 'icons/RedoIcon.js';
+import HelpIcon from 'icons/HelpIcon.js';
+
+/*
 import AddIcon from 'icons/AddIcon.js';
 import BoxAddIcon from 'icons/BoxAddIcon.js';
 import CreateIcon from 'icons/CreateIcon.js';
@@ -37,6 +41,7 @@ import UndoIcon from 'icons/UndoIcon.js';
 import UploadIcon from 'icons/UploadIcon.js';
 import WarningIcon from 'icons/WarningIcon.js';
 import WorkingIcon from 'icons/WorkingIcon.js';
+*/
 
 class Toolbar extends React.Component
 {
@@ -47,60 +52,31 @@ class Toolbar extends React.Component
     this.machineName = React.createRef();
   }
 
+  setMachineName(name)
+  {
+    this.machineName.value = name;
+  }
+
   getMachineName()
   {
     return this.machineName.value;
   }
 
-  static setMachineName(name) {
-    document.getElementById("machine-name").value = name;
-  }
-
-  getMachineType()
+  static setMachineName(name)
   {
-    return "DFA";
+    //TODO: this should be DEPRECATED!!!
+    document.getElementById("machine-name").value = name;
   }
 
   render()
   {
     const app = this.props.app;
+    const drawer = app.drawer;
     const notification = app.notification;
     const machineBuilder = this.props.machineBuilder;
     const graph = this.props.graph;
     const eventHistory = this.props.eventHistory;
-    const getMachineName = this.getMachineName.bind(this);
 
-    /*
-
-    <AddIcon/>
-    <BoxAddIcon/>
-    <CreateIcon/>
-    <DiskSaveIcon/>
-    <IconToggle>
-      <ExpandIcon/>
-    </IconToggle>
-    <IconToggle>
-      <DropDownIcon/>
-    </IconToggle>
-    <ErrorIcon/>
-    <FailureIcon/>
-    <MoreIcon/>
-    <HelpIcon/>
-    <InfoIcon/>
-    <OfflineIcon/>
-    <PageAddIcon/>
-    <PauseIcon/>
-    <PlayIcon/>
-    <RedoIcon/>
-    <SaveIcon/>
-    <SuccessIcon/>
-    <TrashIcon/>
-    <TriangleIcon/>
-    <UndoIcon/>
-    <UploadIcon/>
-    <WarningIcon/>
-    <WorkingIcon/>
-    */
     return <div className="toolbar-container">
       <div className="toolbar-title">
         <div className="toolbar-title-name">
@@ -110,12 +86,12 @@ class Toolbar extends React.Component
           <UploadButton id="toolbar-upload" title="Upload"
             graph={graph}
             onChange={(e)=>eventHistory.clear()}>
-            <MoreIcon/>
+            <UploadIcon/>
           </UploadButton>
         </div>
         {/*Machine Type*/}
         <label id="machine-type"
-          onClick={()=>app.drawer.setTab(1)}>
+          onClick={()=>drawer.setTab(1)}>
           {machineBuilder.getMachineType()}
         </label>
       </div>
@@ -143,7 +119,7 @@ class Toolbar extends React.Component
         </IconButton>
         {/*Save Button*/}
         <IconButton className="navicon" id="toolbar-save" title="Save"
-          onClick={()=>app.drawer.setTab(2)}>
+          onClick={()=>drawer.setTab(2)}>
           <SaveIcon/>
         </IconButton>
         {/*Help Button*/}
