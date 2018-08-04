@@ -23,78 +23,101 @@
   width: 12em;
   min-width: 12em;
 }
+.toolbar-title-name {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  border-bottom: 1px solid black;
+}
+#machine-name {
+  background: none;
+  border: none;
+  padding: 0;
+
+  width: 100%;
+  font-size: 2em;
+
+  color: rgba(255,255,255,0.3);/*old: lightgray*/
+  transition: color 0.3s ease;
+}
+#machine-name:hover {
+  color: rgba(255,255,255,0.5);
+}
+#machine-name:focus {
+  outline: none;
+
+  color: rgba(255,255,255,1);
+}
+#machine-type {
+  cursor: pointer;
+  margin-left: -5px;
+  margin-right: -5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 1em;
+
+  color: var(--color-accent);
+  border-radius: 10px;
+
+  background-color: rgba(255,255,255,0.1);
+  transition: background-color 0.3s ease;
+}
+#machine-type:hover {
+  background-color: rgba(255,255,255,0.2);
+}
+#toolbar-upload {
+  min-width: 3em;
+  margin-top: auto;
+
+  fill: var(--color-main-dark);
+  transition: fill 0.6s ease;
+}
+#toolbar-upload svg {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+#toolbar-upload:hover, #machine-name:focus ~#toolbar-upload {
+  fill: white;
+}
 
 .toolbar-tray {
   display: flex;
   flex-direction: row;
 
+  padding-left: 10px;
   width: calc(100% - 12em);/* full width - width of title */
 }
 
-#machine-name {
-  background: none;
-  padding: 0;
-  border: none;
-  color: lightgray;
-  border-bottom: 1px solid black;
-  width: 100%;
-  margin: 0 15px 0 0;
-  font-size: 2em;
-
-  transition: color 0.3s ease;
-}
-#machine-name:focus {
-  outline: none;
-  color: #FFFFFF;
-}
-
-#machine-type {
-  color: var(--color-accent);
-  font-size: 1em;
-  margin-top: 2px;
-  font-family: sans-serif;
-  cursor: pointer;
-
-  transition: color 0.3s ease;
-}
-#machine-type:hover {
-  color: var(--color-accent-dark);
-}
-
-.toolbar-button {
-  background: none;/*Disable normal button style*/
-  border: none;/*Disable normal button style*/
-  outline: none;/*Disable normal button style*/
-  padding: 0;/*Disable normal button style*/
+.navicon {
   fill: white;
   justify-content: flex-end;
 
   margin-bottom: 5px;
   width: 6em;
   height: 100%;
+  min-width: 30px;
 
   transition: fill 0.3s ease;
 }
-.toolbar-button:hover {
-  fill: var(--color-accent);
-}
-.toolbar-button:disabled {
-  fill: var(--color-main-dark);
-}
-
-.navicons {
+.navicon svg {
   width: 100%;
   height: 100%;
-
-  min-width: 30px;
+}
+.navicon:hover {
+  fill: var(--color-accent);
+}
+.navicon:disabled {
+  fill: var(--color-main-dark);
 }
 
 #toolbar-help {
   margin-left: auto;
-  margin-right: 10px;
-  fill: white;
-  width: 3em;
 }
-#toolbar-help:hover {
-  fill: var(--color-accent);
+#toolbar-help svg {
+  width: 3em;
+  height: 3em;
 }
