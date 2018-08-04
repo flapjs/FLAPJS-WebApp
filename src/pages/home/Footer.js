@@ -9,7 +9,7 @@ class Footer extends React.Component{
         return (
                     <div className="footer">
                         <footer>
-                            <p> <img src={ucsdlogo} /> © 2018 University of California, San Diego. All rights reserved. </p>
+                            <p> © 2018 University of California, San Diego. All rights reserved </p>
                         </footer>
                     </div>
         );

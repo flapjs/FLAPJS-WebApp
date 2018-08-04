@@ -1,13 +1,14 @@
 .homepage-container html, body{
     height: 100%;
     width: 100%;
-    background-image: url("./Pictures/jflapback.png");
+    /*background-image: url("./Pictures/jflapback.png");*/
 }
 
 .homepage-container {
-    min-height: 85%;
+    min-height: 100%;
     position: relative;
-    padding-bottom: 150px;
+    padding-bottom: 20px;
+    background-color: black;
 
 }
 
@@ -33,8 +34,8 @@
 
 .title img{
 
-    height: 60px;
-    width: 80px;
+    height: 88px;
+    width: 354px;
 }
 
 
@@ -43,7 +44,7 @@
     font-family: "Arvo", Serif;
     border-top: solid;
     background-color: white;
-    text-align: left;
+    text-align: center;
     display: block;
 
     position: absolute;
@@ -55,12 +56,67 @@
     display: block;
     font-size: 12px;
 }
+.squares ul{
+    list-style-type: none;
+    display: inline-block;
+}
 
-.footer img{
+.squares li{
+    float: left;
+}
 
-    height: 80px;
-    width: 260px;
-    display: block;
+.squares {
+
+    position: center;
+    font-family: 'Arvo', serif;
+}
+
+.btn-square{
+    border-radius: 25px;
+    background: #FEE781;
+    padding: 20px;
+    width: 320px;
+    height: 160px;
+    text-align: center;
+
+    vertical-align: 50%;
+    /* spacing */
+    margin: 20px 50px 20px;
+}
+
+.btn-square:hover{
+
+    background: white;
+
+}
+
+.btn-square span{
+
+    font-size: 40px;
+
+}
+
+.btn-square:hover span{
+
+    display: none;
+}
+
+.intro:hover:before {
+
+    content: "Flap.js is Web Wrapper Application developed by an undergraduate research student group at University of California, San Diego. This web application is meant to make JFLAP portable for students that are enrolled in CSE 105 : Theory Computability. ";
+}
+
+.class:hover:before {
+
+    content: "CSE 105 is an introduction to the mathematical theory of computability. Formal languages. Finite automata and regular expression. Push-down automata and context-free languages. Computable or recursive functions: Turing machines, the halting problem. Undecidability.";
+}
+
+.original:hover:before {
+    content: "JFLAP is software for experimenting with formal languages topics including nondeterministic finite automata, nondeterministic pushdown automata, multi-tape Turing machines, several types of grammars, parsing, and L-systems.";
+}
+
+@media screen and (max-width: 200px) {
+
 }
 
 .arrow {
@@ -72,12 +128,6 @@
     right: 5%;
     cursor: pointer;
 }
-
-
-@media (min-width:767px) {
-
-}
-
 
 /* Arrow adapted from https://codepen.io/nicoencarnacion/pen/XpaRQV */
 .the-arrow {
