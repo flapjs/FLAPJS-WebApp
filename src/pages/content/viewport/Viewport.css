@@ -12,8 +12,13 @@
   pointer-events: auto;
 }
 
-.anchor-bottom-right{
+.anchor-bottom-right {
   position: absolute;
   bottom: 0px;
   right: 0px;
+}
+
+.anchor-bottom {
+  position: absolute;
+  bottom: 0px;
 }

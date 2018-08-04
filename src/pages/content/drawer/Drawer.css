@@ -4,6 +4,7 @@
 
   --color-main: #575757;
   --color-main-dark: #3D3D3D;
+  --color-main-lite: #676767;
   --color-accent: #FFF2BA;
 
   background: var(--color-main);

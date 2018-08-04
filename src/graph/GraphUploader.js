@@ -13,13 +13,21 @@ class GraphUploader
         const dst = NodalGraph.parseJSON(dataJSON);
         graph.copyGraph(dst);
 
-        if (callback) callback();
+        //Callback will accepts an event object that contains:
+        //  file - file data,
+        //  name - file name,
+        //  graph - the changed graph object
+        if (callback) callback({
+          file: data,
+          name: fileBlob.name.substring(0, fileBlob.name.lastIndexOf('.')),
+          graph: graph
+        });
       }
       catch(e)
       {
         reader.abort();
 
-        if (errorCallback) errorCallback();
+        if (errorCallback) errorCallback(e);
       }
     };
     reader.onerror = (event) => {
@@ -41,7 +49,15 @@ class GraphUploader
 
         graph.copyGraph(dst);
 
-        if (callback) callback();
+        //Callback will accepts an event object that contains:
+        //  file - file data,
+        //  name - file name,
+        //  graph - the changed graph object
+        if (callback) callback({
+          file: data,
+          name: fileBlob.name.substring(0, fileBlob.name.lastIndexOf('.')),
+          graph: graph
+        });
       }
       catch(e)
       {

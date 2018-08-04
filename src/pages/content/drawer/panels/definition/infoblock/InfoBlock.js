@@ -1,8 +1,8 @@
 import React from 'react';
-
-import CollapseIcon from './CollapseIcon.js';
-
 import './InfoBlock.css';
+
+import IconToggle from 'icons/IconToggle.js';
+import DropDownIcon from 'icons/DropDownIcon.js';
 
 class InfoBlock extends React.Component
 {
@@ -10,31 +10,25 @@ class InfoBlock extends React.Component
   {
     super(props);
 
-    this.state = {
-      isCollapsed: false
-    };
-
-    this.onCollapse = this.onCollapse.bind(this);
+    this.dropdown = React.createRef();
   }
 
-  onCollapse(e)
+  isOpen()
   {
-    this.setState((prev, props) => {
-      return {isCollapsed: !prev.isCollapsed};
-    });
+    return this.dropdown.state ? this.dropdown.state.open : false;
   }
 
   render()
   {
-    const collapsed = this.state.isCollapsed;
     return <div className="infoblock-container">
       <div className="infoblock-header">
-        <label>{this.props.title}</label>
-        <CollapseIcon more={collapsed} onClick={this.onCollapse}/>
+        <label onClick={(e)=>this.dropdown.onClick(e)}>{this.props.title}</label>
+        <IconToggle id="collapse" ref={ref=>this.dropdown=ref}>
+          <DropDownIcon/>
+        </IconToggle>
       </div>
-      <div className="infoblock-content" style={{
-        display: collapsed ? "none" : "block"
-      }}>
+      <div className="infoblock-content"
+        style={{display: this.isOpen() ? "block" : "none"}}>
         {this.props.children}
       </div>
     </div>;

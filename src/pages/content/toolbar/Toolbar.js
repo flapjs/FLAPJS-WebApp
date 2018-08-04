@@ -61,13 +61,7 @@ class Toolbar extends React.Component
   {
     return this.machineName.value;
   }
-
-  static setMachineName(name)
-  {
-    //TODO: this should be DEPRECATED!!!
-    document.getElementById("machine-name").value = name;
-  }
-
+  
   render()
   {
     const app = this.props.app;
@@ -85,7 +79,10 @@ class Toolbar extends React.Component
           {/*Upload Button*/}
           <UploadButton id="toolbar-upload" title="Upload"
             graph={graph}
-            onChange={(e)=>eventHistory.clear()}>
+            onChange={(e)=>{
+              this.setMachineName(e.name);
+              eventHistory.clear();
+            }}>
             <UploadIcon/>
           </UploadButton>
         </div>

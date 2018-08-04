@@ -3,17 +3,9 @@
   padding: 5px;
 }
 
-.infoblock-container .icon {
-  background: none;
-  border: none;
-  outline: none;
-  padding: 0;
-  fill: white;
-}
-
-.infoblock-container .collapse-icon {
-  margin-top: 12px;
-  margin-right: 8px;
+.infoblock-container .icon-toggle {
+  margin-top: 4px;/* Make it vertically centered */
+  margin-right: 5px;/* Make it horizontally centered */
 
   position: absolute;
   top: 0;
@@ -26,6 +18,8 @@
 
 .infoblock-header label {
   font-size: 1.2em;
+  
+  cursor: pointer;
 }
 
 .infoblock-content {

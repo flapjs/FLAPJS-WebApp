@@ -1,5 +1,4 @@
-.statelist-container .create-icon {
-  margin-bottom: 5px;
+.statelist-container .boxadd-icon {
   margin-right: 5px;
 
   position: absolute;
@@ -7,20 +6,24 @@
   bottom: 0;
 }
 
-.statelist .start-icon {
-  font-size: inherit;
-  margin-top: 0.3em;/* Same as vertical-align: middle; */
-  margin-right: -2px;
-}
-
 .statelist {
   display: inline-flex;
   flex-direction: row;
   flex-wrap: wrap;
 
-  margin-right: 24px;
+  margin-right: 20px;/*the approx width of the box add button*/
 }
+.statelist .triangle-icon {
+  font-size: inherit;
+  margin-top: 0.45em;
+  margin-right: -2px;
+  fill: white;
 
+  width: 1em;
+  height: 1em;
+
+  transform: rotate(90deg);
+}
 .statelist>*:nth-child(2) {
   outline: 2px dashed rgba(255, 255, 255, 0.1);
 }

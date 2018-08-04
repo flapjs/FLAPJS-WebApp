@@ -1,24 +1,32 @@
-.export-button {
+.panel-content {
   width: 100%;
-  background: none;
-  border: none;
-  outline: none;
-  color: white;
+  text-overflow: ellipsis;
+}
+.export-button {
   text-align: left;
-  margin-bottom: 5px;
-  cursor: pointer;
-}
+  color: white;
 
-.export-button:hover {
-  background: #676767;
+  width: 100%;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
-
-.export-icon {
+.export-button svg {
   height: 4em;
   vertical-align: middle;
 }
-
-.export-text {
-  margin-left: 5px;
-  font-size: 15px;
+.export-button label {
+  font-size: 1.4em;
+  vertical-align: middle;
+  
+  cursor: pointer;
+}
+.export-button:hover {
+  background: var(--color-main-lite);
+}
+.export-button:disabled {
+  opacity: 0.2;
+}
+.export-button:disabled:hover {
+  background: none;
 }

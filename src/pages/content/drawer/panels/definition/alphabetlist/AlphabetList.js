@@ -2,7 +2,8 @@ import React from 'react';
 import './AlphabetList.css';
 
 import InfoBlock from '../infoblock/InfoBlock.js';
-import CreateIcon from '../icon/CreateIcon.js';
+import IconButton from 'icons/IconButton.js';
+import BoxAddIcon from 'icons/BoxAddIcon.js';
 
 import AlphabetTag from './AlphabetTag.js';
 
@@ -32,7 +33,9 @@ class AlphabetList extends React.Component
           })
         }
         </div>
-        <CreateIcon onClick={this.onCreate}/>
+        <IconButton onClick={this.onCreate}>
+          <BoxAddIcon/>
+        </IconButton>
       </div>
     </InfoBlock>;
   }

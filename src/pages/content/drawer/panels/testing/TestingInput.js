@@ -1,6 +1,10 @@
 import React from 'react';
 import './TestingInput.css';
 
+import IconButton from 'icons/IconButton.js';
+import AddIcon from 'icons/AddIcon.js';
+import RemoveIcon from 'icons/RemoveIcon.js';
+
 import AddRemoveIcon from './AddRemoveIcon.js';
 import StatusIcon from './StatusIcon.js';
 
@@ -22,7 +26,25 @@ class TestingInput extends React.Component
       }
     };
 
+    this.onClick = this.onClick.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
+  }
+
+  onClick(e)
+  {
+    if (this.props.placeholder)
+    {
+      //Add test input to list
+      this.props.tester.addTestInput(this.state.src.value);
+
+      this.inputElement.focus();
+      this.inputElement.select();
+    }
+    else
+    {
+      //Remove test input from list
+      this.props.tester.removeTestInputByIndex(this.props.index);
+    }
   }
 
   onValueChange(e)
@@ -55,19 +77,9 @@ class TestingInput extends React.Component
         onChange={this.onValueChange}
         onFocus={(e)=>e.target.select()}/>
 
-      {
-        this.props.placeholder ?
-        <AddRemoveIcon className="test-input-addremove" onAdd={()=>{
-          this.props.tester.addTestInput(this.state.src.value);
-
-          this.inputElement.focus();
-          this.inputElement.select();
-        }}/>
-        :
-        <AddRemoveIcon className="test-input-addremove" onRemove={()=>{
-          this.props.tester.removeTestInputByIndex(this.props.index);
-        }}/>
-      }
+      <IconButton className="test-input-addremove" onClick={this.onClick}>
+        {this.props.placeholder ? <AddIcon/> : <RemoveIcon/>}
+      </IconButton>
     </div>
   }
 }
