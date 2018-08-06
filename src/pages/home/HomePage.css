@@ -36,6 +36,9 @@
 
     height: 88px;
     width: 354px;
+    margin-left: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 
@@ -77,17 +80,24 @@
     background: #FEE781;
     padding: 20px;
     width: 320px;
-    height: 160px;
+    height: 400px;
     text-align: center;
 
-    vertical-align: 50%;
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     /* spacing */
     margin: 20px 50px 20px;
+
+
 }
 
 .btn-square:hover{
 
     background: white;
+    text-align: left;
 
 }
 
@@ -177,7 +187,7 @@
     transform: rotate(-40deg);
 }
 .the-arrow > .shaft {
-    background-color: black;
+    background-color: white;
     display: block;
     height: 1px;
     position: relative;
@@ -186,7 +196,7 @@
     will-change: transform;
 }
 .the-arrow > .shaft:before, .the-arrow > .shaft:after {
-    background-color: black;
+    background-color: white;
     content: '';
     display: block;
     height: 1px;
@@ -207,7 +217,7 @@
 
 .animated-arrow {
     display: inline-block;
-    color: black;
+    color: white;
     font-size: 1.25em;
     font-style: italic;
     text-decoration: none;
