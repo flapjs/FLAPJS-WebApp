@@ -8,7 +8,7 @@
     min-height: 100%;
     position: relative;
     padding-bottom: 20px;
-    background-color: black;
+    background-color: #006A96;
 
 }
 
@@ -225,17 +225,17 @@
     transition: all 0.2s;
 }
 .animated-arrow:hover {
-    color: purple;
+    color: lawngreen;
 }
 .animated-arrow:hover > .the-arrow.-left > .shaft {
     width: 64px;
     transition-delay: 0.1s;
-    background-color: purple;
+    background-color: lawngreen;
 }
 .animated-arrow:hover > .the-arrow.-left > .shaft:before, .animated-arrow:hover > .the-arrow.-left > .shaft:after {
     width: 8px;
     transition-delay: 0.1s;
-    background-color: purple;
+    background-color: lawngreen;
 }
 .animated-arrow:hover > .the-arrow.-left > .shaft:before {
     -webkit-transform: rotate(40deg);
