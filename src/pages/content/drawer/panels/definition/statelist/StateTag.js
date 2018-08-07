@@ -9,6 +9,7 @@ const EDIT_COLOR = "rgba(255,255,255,0.1)";
 const ERROR_COLOR = "rgba(255,0,0,0.7)";
 
 const DEFAULT_BACKGROUND = "#4D4D4D";
+const DEFAULT_CUSTOM_BACKGROUND = "#4D4D4D";
 const ERROR_BACKGROUND = "rgba(255,0,0,0.5)";
 
 class StateTag extends React.Component
@@ -34,6 +35,9 @@ class StateTag extends React.Component
     const target = e.target;
     this.setState({ value: this.props.label, error: false },
       ()=>target.select());
+
+    //Call any listening focus
+    if (this.props.onFocus) this.props.onFocus(e);
   }
 
   onBlur(e)
@@ -65,6 +69,9 @@ class StateTag extends React.Component
     }
 
     this.setState({ value: null, error: false });
+
+    //Call any listening blurs
+    if (this.props.onBlur) this.props.onBlur(e);
   }
 
   onKeyDown(e)
@@ -112,10 +119,13 @@ class StateTag extends React.Component
 
   render()
   {
+    const isCustom = this.props.src.hasCustomLabel();
     const value = this.state.value != null ? this.state.value : this.props.label;
     return <div className="statetag-container"
       style={{
-        background: value.length > 0 ? DEFAULT_BACKGROUND : ERROR_BACKGROUND
+        background: value.length > 0 ?
+          isCustom ? DEFAULT_CUSTOM_BACKGROUND : DEFAULT_BACKGROUND :
+          ERROR_BACKGROUND
       }}>
       <input type="text" className={"statetag-input" + (this.props.accept ? " accept" : "")} spellCheck="false"
         style={{
@@ -123,8 +133,7 @@ class StateTag extends React.Component
           color: this.state.value ?
             this.state.error ?
               ERROR_COLOR : EDIT_COLOR :
-              this.props.src.hasCustomLabel() ?
-                DEFAULT_CUSTOM_COLOR : DEFAULT_COLOR
+              isCustom ? DEFAULT_CUSTOM_COLOR : DEFAULT_COLOR
         }}
         value={value}
         onChange={this.onValueChange}

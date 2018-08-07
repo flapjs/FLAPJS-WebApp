@@ -20,6 +20,8 @@ class GraphPointer
 
     this.offsetX = 0;
     this.offsetY = 0;
+    //TODO: this.nextOffsetX = 0;
+    //TODO: this.nextOffsetY = 0;
 
     this._boundingRect = null;
     this._boundingRectTime = 0;

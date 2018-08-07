@@ -28,6 +28,7 @@ class StateList extends React.Component
 
   render()
   {
+    const pointer = this.props.controller.pointer;
     const graph = this.props.machine.graph;
     return <InfoBlock title="States" defaultValue="true">
       <div className="statelist-container">
@@ -35,7 +36,12 @@ class StateList extends React.Component
           <TriangleIcon/>
           {
             graph.nodes.map((e, i) => {
-              return <StateTag key={i} src={e} label={e.label} accept={e.accept} graph={graph}/>
+              return <StateTag key={i} src={e} label={e.label} accept={e.accept} graph={graph}
+                onFocus={(ev) => {
+                  //Center workspace at focused node; inverted due to graph-to-screen space
+                  pointer.offsetX = -e.x;
+                  pointer.offsetY = -e.y;
+                }}/>
             })
           }
         </div>
