@@ -56,7 +56,9 @@ class TestingInputList extends React.Component
           })
         }
         <button className="panel-button"
-          onClick={()=>this.props.tester.clear()}>
+          onClick={()=>{
+            this.props.tester.clear(true);
+          }}>
           Clear
         </button>
       </div>

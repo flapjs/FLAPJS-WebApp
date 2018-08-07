@@ -34,9 +34,14 @@ class TestingManager
     this.inputs.splice(index, 1);
   }
 
-  clear()
+  clear(clearPlaceholder=false)
   {
     this.inputs.length = 0;
+    if (clearPlaceholder)
+    {
+      //HACK: cannot access setState, so do it the old-fashion way
+      this.placeholder.value = "";
+    }
   }
 
   testPlaceholder()
