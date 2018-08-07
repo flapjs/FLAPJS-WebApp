@@ -1,7 +1,8 @@
 import * as TEST from '../Tester.js';
+import { EMPTY } from 'machine/Symbols.js';
+
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
-import { EMPTY } from 'machine/Symbols.js';
 
 import { solveDFA } from 'machine/util/solveDFA.js';
 import { convertToDFA } from 'machine/util/convertNFA.js';

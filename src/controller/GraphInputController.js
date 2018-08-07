@@ -1,9 +1,9 @@
+import Config from 'config.js';
+
 import InputController from './InputController.js';
 import SelectionBox from './SelectionBox.js';
 import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
-
-import Config from 'config.js';
 
 /*
 nodeCreate(targetNode)

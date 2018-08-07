@@ -1,5 +1,6 @@
-import Eventable from 'util/Eventable.js';
 import Config from 'config.js';
+
+import Eventable from 'util/Eventable.js';
 
 import GraphPointer from './GraphPointer.js';
 
