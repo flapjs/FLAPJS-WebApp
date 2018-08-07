@@ -24,6 +24,7 @@ class StateList extends React.Component
 
   render()
   {
+    const graph = this.props.machine.graph;
     const nodes = this.props.machine.graph.nodes;
     return <InfoBlock title="States">
       <div className="statelist-container">
@@ -31,7 +32,7 @@ class StateList extends React.Component
           <TriangleIcon/>
           {
             nodes.map((e, i) => {
-              return <StateTag key={i} src={e}/>
+              return <StateTag key={i} src={e} onRemove={e=>graph.deleteNode(e)} onRename={(e,id)=>e.setCustomLabel(id)}/>
             })
           }
         </div>
