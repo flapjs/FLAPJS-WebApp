@@ -32,7 +32,7 @@ class StateList extends React.Component
           <TriangleIcon/>
           {
             nodes.map((e, i) => {
-              return <StateTag key={i} src={e} onRemove={e=>graph.deleteNode(e)} onRename={(e,id)=>e.setCustomLabel(id)}/>
+              return <StateTag key={i} src={e} label={e.label} accept={e.accept} graph={graph}/>
             })
           }
         </div>

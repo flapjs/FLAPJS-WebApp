@@ -1,14 +1,25 @@
 .statetag-container {
   margin: 5px;
-  padding: 5px;
+  padding: 3px;
   background: #4D4D4D;
+
+  border-radius: 5px;
+}
+.statetag-container:nth-child(2) {
+  outline: 2px dashed rgba(255, 255, 255, 0.1);
+  outline-offset: 2px;
+  margin-left: -2px;
 }
 
 .statetag-input {
   background: none;
   border: none;
   outline: none;
+
   font-size: inherit;
-  color: white;
-  width: 100%;
+  font-family: 'Overpass Mono', monospace;
+}
+.statetag-input.accept {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
 }
