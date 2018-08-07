@@ -8,7 +8,7 @@ class IconToggle extends React.Component
     super(props);
 
     this.state = {
-      open: this.props.open || false
+      open: this.props.defaultValue || false
     };
 
     this.onClick = this.onClick.bind(this);

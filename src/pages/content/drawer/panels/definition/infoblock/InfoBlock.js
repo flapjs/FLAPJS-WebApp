@@ -23,7 +23,7 @@ class InfoBlock extends React.Component
     return <div className="infoblock-container">
       <div className="infoblock-header">
         <label onClick={(e)=>this.dropdown.onClick(e)}>{this.props.title}</label>
-        <IconToggle id="collapse" ref={ref=>this.dropdown=ref}>
+        <IconToggle id="collapse" ref={ref=>this.dropdown=ref} defaultValue={this.props.defaultValue}>
           <DropDownIcon/>
         </IconToggle>
       </div>

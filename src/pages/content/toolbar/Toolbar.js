@@ -8,8 +8,8 @@ import IconButton from 'icons/IconButton.js';
 
 import UploadIcon from 'icons/MoreIcon.js';
 //import UploadIcon from 'icons/UploadIcon.js';
-import CreateIcon from 'icons/CreateIcon.js';
-//import CreateIcon from 'icons/PageAddIcon.js';
+import CreateIcon from 'icons/PageAddIcon.js';
+//import CreateIcon from 'icons/CreateIcon.js';
 import SaveIcon from 'icons/SaveIcon.js';
 //import SaveIcon from 'icons/DiskSaveIcon.js';
 import UndoIcon from 'icons/UndoIcon.js';

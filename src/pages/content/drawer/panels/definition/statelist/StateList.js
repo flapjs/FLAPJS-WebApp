@@ -29,7 +29,7 @@ class StateList extends React.Component
   render()
   {
     const graph = this.props.machine.graph;
-    return <InfoBlock title="States">
+    return <InfoBlock title="States" defaultValue="true">
       <div className="statelist-container">
         <div className="statelist">
           <TriangleIcon/>
