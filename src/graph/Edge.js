@@ -1,4 +1,4 @@
-import { NODE_RADIUS, PLACEHOLDER_LENGTH, SELF_LOOP_HEIGHT } from 'config.js';
+import Config from 'config.js';
 import Node from './Node.js';
 
 class Edge
@@ -24,13 +24,13 @@ class Edge
     {
       //TODO: Make sure to use quad for placeholder direction (not magnitude)
       return {
-        x: from.x + quad.x * NODE_RADIUS,
-        y: from.y + quad.y * NODE_RADIUS
+        x: from.x + quad.x * Config.NODE_RADIUS,
+        y: from.y + quad.y * Config.NODE_RADIUS
       };
     }
     else if (!(to instanceof Node))
     {
-      const dir = getDirectionalVector(from.x, from.y, to.x, to.y, NODE_RADIUS, 0);
+      const dir = getDirectionalVector(from.x, from.y, to.x, to.y, Config.NODE_RADIUS, 0);
 
       //Reuse created object for result...
       dir.x = from.x + dir.x;
@@ -47,7 +47,7 @@ class Edge
 
     if (!this.isQuadratic())
     {
-      const dir = getDirectionalVector(fromx, fromy, tox, toy, NODE_RADIUS, 0);
+      const dir = getDirectionalVector(fromx, fromy, tox, toy, Config.NODE_RADIUS, 0);
 
       //Reuse created object for result...
       dir.x = fromx + dir.x;
@@ -60,7 +60,7 @@ class Edge
       const qx = midpoint.x + (quadx * 2);
       const qy = midpoint.y + (quady * 2);
 
-      const dir = getDirectionalVector(fromx, fromy, qx, qy, NODE_RADIUS,
+      const dir = getDirectionalVector(fromx, fromy, qx, qy, Config.NODE_RADIUS,
         this.isSelfLoop() ? (Math.PI / 4) : 0);
 
       //Reuse created object for result...
@@ -81,8 +81,8 @@ class Edge
     {
       //TODO: Make sure to use quad for placeholder direction (not magnitude)
       return {
-        x: from.x + quad.x * (NODE_RADIUS + PLACEHOLDER_LENGTH),
-        y: from.y + quad.y * (NODE_RADIUS + PLACEHOLDER_LENGTH)
+        x: from.x + quad.x * (Config.NODE_RADIUS + Config.PLACEHOLDER_LENGTH),
+        y: from.y + quad.y * (Config.NODE_RADIUS + Config.PLACEHOLDER_LENGTH)
       };
     }
     else if (!(to instanceof Node))
@@ -100,7 +100,7 @@ class Edge
     //Get end point for straight edges...
     if (!this.isQuadratic())
     {
-      const dir = getDirectionalVector(fromx, fromy, tox, toy, NODE_RADIUS, 0);
+      const dir = getDirectionalVector(fromx, fromy, tox, toy, Config.NODE_RADIUS, 0);
 
       //Reuse created object for result...
       dir.x = tox - dir.x;
@@ -114,7 +114,7 @@ class Edge
       const qx = midpoint.x + (quadx * 2);
       const qy = midpoint.y + (quady * 2);
 
-      const dir = getDirectionalVector(qx, qy, tox, toy, NODE_RADIUS,
+      const dir = getDirectionalVector(qx, qy, tox, toy, Config.NODE_RADIUS,
         this.isSelfLoop() ? -(Math.PI / 4.0) : 0);
 
       //Reuse created object for result...
@@ -135,8 +135,8 @@ class Edge
     {
       //TODO: Make sure to use quad for placeholder direction (not magnitude)
       return {
-        x: from.x + quad.x * (NODE_RADIUS + PLACEHOLDER_LENGTH / 2),
-        y: from.y + quad.y * (NODE_RADIUS + PLACEHOLDER_LENGTH / 2)
+        x: from.x + quad.x * (Config.NODE_RADIUS + Config.PLACEHOLDER_LENGTH / 2),
+        y: from.y + quad.y * (Config.NODE_RADIUS + Config.PLACEHOLDER_LENGTH / 2)
       };
     }
     else if (!(to instanceof Node))
@@ -231,8 +231,8 @@ class Edge
     {
       this.to = this.from;
     }
-    this.setQuadraticByRelative(-Math.cos(angle) * SELF_LOOP_HEIGHT,
-      -Math.sin(angle) * SELF_LOOP_HEIGHT);
+    this.setQuadraticByRelative(-Math.cos(angle) * Config.SELF_LOOP_HEIGHT,
+      -Math.sin(angle) * Config.SELF_LOOP_HEIGHT);
   }
 
   makePlaceholder()

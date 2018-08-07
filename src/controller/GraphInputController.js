@@ -3,7 +3,7 @@ import SelectionBox from './SelectionBox.js';
 import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
 
-import * as Config from 'config.js';
+import Config from 'config.js';
 
 /*
 nodeCreate(targetNode)

@@ -1,4 +1,4 @@
-import * as Config from 'config.js';
+import Config from 'config.js';
 
 import MachineBuilder from './MachineBuilder.js';
 import DFAErrorChecker from './DFAErrorChecker.js';

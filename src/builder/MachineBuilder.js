@@ -1,4 +1,4 @@
-import * as Config from 'config.js';
+import Config from 'config.js';
 
 class MachineBuilder
 {
@@ -20,7 +20,7 @@ class MachineBuilder
   sortDefaultNodeLabels()
   {
     if (!this.shouldAutomaticallyRenameNodes) return;
-    
+
     const startNode = this.graph.getStartNode();
     if (!startNode) return;
     const isDefaultInitial = !startNode.hasCustomLabel();

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import './Viewport.css';
 
 import LabelEditor from './LabelEditor.js';

@@ -2,7 +2,7 @@ import React from 'react';
 import '../Panel.css';
 import './OverviewPanel.css';
 
-import * as Config from 'config.js';
+import Config from 'config.js';
 
 import StateList from './statelist/StateList.js';
 import AlphabetList from './alphabetlist/AlphabetList.js';

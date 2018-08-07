@@ -1,7 +1,7 @@
 import React from 'react';
 import './SetEditor.css';
 
-import * as Config from 'config.js';
+import Config from 'config.js';
 
 const TARGET_PLACEHOLDER = ' ';//Must be whitespace in order to be trimmed on input
 const SEPARATOR = ',';

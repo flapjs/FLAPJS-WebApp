@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as Config from 'config.js';
+import Config from 'config.js';
 
 import Node from 'graph/Node.js';
 

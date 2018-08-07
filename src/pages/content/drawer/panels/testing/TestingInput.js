@@ -5,8 +5,7 @@ import IconButton from 'icons/IconButton.js';
 import AddIcon from 'icons/AddIcon.js';
 import RemoveIcon from 'icons/RemoveIcon.js';
 
-import AddRemoveIcon from './AddRemoveIcon.js';
-import StatusIcon from './StatusIcon.js';
+import StatusButton from './StatusButton.js';
 
 const PLACEHOLDER_TEXT = "Test string";
 
@@ -59,7 +58,7 @@ class TestingInput extends React.Component
     return <div className={"test-input-container" +
       (this.props.placeholder ? " test-input-placeholder" : "")}>
 
-      <StatusIcon active={!this.state.src.dirty} mode={this.state.src.result}
+      <StatusButton active={!this.state.src.dirty} mode={this.state.src.result}
         onClick={()=>{
           if (this.props.placeholder)
           {

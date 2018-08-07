@@ -1,8 +1,8 @@
 import React from 'react';
 import './Toolbar.css';
 
-import UploadButton from "./UploadButton";
-import HelpButton from "./HelpButton";
+import UploadButton from "./UploadButton.js";
+import HelpButton from "./HelpButton.js";
 
 import IconButton from 'icons/IconButton.js';
 
@@ -61,7 +61,7 @@ class Toolbar extends React.Component
   {
     return this.machineName.value;
   }
-  
+
   render()
   {
     const app = this.props.app;

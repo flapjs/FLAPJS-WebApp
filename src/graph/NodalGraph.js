@@ -1,12 +1,11 @@
 import Eventable from 'util/Eventable.js';
-import { NODE_RADIUS, SELF_LOOP_HEIGHT, PLACEHOLDER_LENGTH } from 'config.js';
+import Config from 'config.js';
 
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
 
 import Node from './Node.js';
 import Edge from './Edge.js';
-import * as Config from 'config.js';
 import { EMPTY } from 'machine/Symbols.js';
 //nodeCreate(node) - Whenever a new node is created
 //nodeDestroy(node) - Whenever a node is destroyed (even on clear)
@@ -155,10 +154,10 @@ class NodalGraph
       maxNY = Math.max(maxNY, y);
     });
 
-    minNX -= NODE_RADIUS;
-    minNY -= NODE_RADIUS;
-    maxNX += NODE_RADIUS;
-    maxNY += NODE_RADIUS;
+    minNX -= Config.NODE_RADIUS;
+    minNY -= Config.NODE_RADIUS;
+    maxNX += Config.NODE_RADIUS;
+    maxNY += Config.NODE_RADIUS;
 
     var minEX = Number.MAX_VALUE;
     var minEY = Number.MAX_VALUE;

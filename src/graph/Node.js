@@ -1,4 +1,3 @@
-
 class Node
 {
   constructor(graph, x=0, y=0, label="q")

@@ -1,8 +1,8 @@
 import React from 'react';
-import * as Config from 'config.js';
-import { EMPTY } from 'machine/Symbols.js';
-
 import './LabelEditor.css';
+
+import Config from 'config.js';
+import { EMPTY } from 'machine/Symbols.js';
 
 //TODO: This is equivalent to 4em for toolbar height
 const LABEL_OFFSET_Y = -64;

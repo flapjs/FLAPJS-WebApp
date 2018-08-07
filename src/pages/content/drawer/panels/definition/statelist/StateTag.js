@@ -1,7 +1,7 @@
 import React from 'react';
 import './StateTag.css';
 
-import * as Config from 'config.js';
+import Config from 'config.js';
 
 const DEFAULT_COLOR = "gray";
 const DEFAULT_CUSTOM_COLOR = "white";

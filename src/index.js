@@ -1,34 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Router from 'router.js';
+import { loadConfig, saveConfig } from 'config.js';
+
 import HomePage from 'pages/home/HomePage.js';
 import App from 'pages/content/App.js';
-import Page404 from 'pages/404/Page404.js';
+import NotFoundPage from 'pages/404/NotFoundPage.js';
 
 //HACK: to determine if this is first time use
 import AutoSaver from 'util/AutoSaver.js';
 
 const ALWAYS_OPEN_WELCOME_PAGE = false;
 
-const PAGES = {
-  '/': HomePage,
-  '/app': App
-};
+Router.registerPage('/', HomePage);
+Router.registerPage('/app', App);
+Router.registerPage(null, NotFoundPage);
 
-//TODO: this should be set by the server! initially it should be '/'.
-const ROUTER = {
-  pathname: ALWAYS_OPEN_WELCOME_PAGE || !AutoSaver.hasAutoSave() ? "/" : "/app"
-};
-
-const FRAMES_PER_SECOND = 60;
+//Skip welcome page if already seen it
+if (!ALWAYS_OPEN_WELCOME_PAGE && AutoSaver.hasAutoSave())
+{
+  Router.routeTo("/app");
+}
 
 //Setup viewport
 window.addEventListener('load', (event) => {
+  loadConfig();
   loadApplication();
   window.requestAnimationFrame(updateApplication);
 });
 
+//Warn user before exit
+window.addEventListener('beforeunload', (event) => {
+  saveConfig();
+
+  const message = "Any unsaved changes will be lost. Are you sure you want to leave?";
+  event = event || window.event;
+  // For IE and Firefox
+  if (e) {
+    e.returnValue = message;
+  }
+  //For Safari
+  return message;
+});
+
 //Setup application
+const FRAMES_PER_SECOND = 60;
 let prevtime = 0;
 let root = null;
 
@@ -43,8 +60,8 @@ function updateApplication(time)
 {
   const dt = (time - prevtime) / FRAMES_PER_SECOND;
   {
-    const PageHandler = PAGES[ROUTER.pathname] || Page404;
-    ReactDOM.render(React.createElement(PageHandler, { router: ROUTER }, null), root);
+    const page = Router.getPage();
+    ReactDOM.render(React.createElement(page, {router: Router}, null), root);
   }
   prevtime = time;
   window.requestAnimationFrame(updateApplication);

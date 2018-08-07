@@ -1,8 +1,7 @@
 import React from 'react';
+import './TrashCan.css';
 
 import Viewport from './Viewport.js';
-
-import './TrashCan.css';
 
 class TrashCan extends React.Component
 {

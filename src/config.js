@@ -1,85 +1,128 @@
-//Input
-export const SUBMIT_KEY = 13; //ENTER
-export const CLEAR_KEY = 27; //ESCAPE
-export const DELETE_KEY = 8; //DELETE
-export const DELETE_FORWARD_KEY = 46; //DELETE FORWARD
+const LOCAL_STORAGE_ID = "config";
+const CONFIG = {};
+export default CONFIG;
 
-export const STR_TRANSITION_DEFAULT_LABEL = "";
-export const STR_TRANSITION_PROXY_LABEL = "?";
-export const STR_STATE_LABEL = "q";
+//Input
+CONFIG.SUBMIT_KEY = 13; //ENTER
+CONFIG.CLEAR_KEY = 27; //ESCAPE
+CONFIG.DELETE_KEY = 8; //DELETE
+CONFIG.DELETE_FORWARD_KEY = 46; //DELETE FORWARD
+
+CONFIG.STR_TRANSITION_DEFAULT_LABEL = "";
+CONFIG.STR_TRANSITION_PROXY_LABEL = "?";
+CONFIG.STR_STATE_LABEL = "q";
 
 //Geometry
-export const DEFAULT_GRAPH_SIZE = 300;
+CONFIG.DEFAULT_GRAPH_SIZE = 300;
 
-export const NODE_RADIUS = 16;
-export const NODE_RADIUS_SQU = NODE_RADIUS * NODE_RADIUS;
-export const NODE_DIAMETER = NODE_RADIUS * 2;
-export const NODE_RADIUS_INNER = 12;
+CONFIG.NODE_RADIUS = 16;
+CONFIG.NODE_RADIUS_SQU = CONFIG.NODE_RADIUS * CONFIG.NODE_RADIUS;
+CONFIG.NODE_DIAMETER = CONFIG.NODE_RADIUS * 2;
+CONFIG.NODE_RADIUS_INNER = 12;
 
-export const INITIAL_MARKER_OFFSET_X = -(NODE_RADIUS + (NODE_RADIUS / 3));//Not centered, but a little closer to tip
+CONFIG.INITIAL_MARKER_OFFSET_X = -(CONFIG.NODE_RADIUS + (CONFIG.NODE_RADIUS / 3));//Not centered, but a little closer to tip
 
-export const EDGE_RADIUS = 12;
-export const EDGE_RADIUS_SQU = EDGE_RADIUS * EDGE_RADIUS;
-export const ARROW_WIDTH = 10;
-export const PLACEHOLDER_LENGTH = NODE_RADIUS * 3;
-export const ENDPOINT_RADIUS = 6;
-export const ENDPOINT_RADIUS_SQU = ENDPOINT_RADIUS * ENDPOINT_RADIUS;
+CONFIG.EDGE_RADIUS = 12;
+CONFIG.EDGE_RADIUS_SQU = CONFIG.EDGE_RADIUS * CONFIG.EDGE_RADIUS;
+CONFIG.ARROW_WIDTH = 10;
+CONFIG.PLACEHOLDER_LENGTH = CONFIG.NODE_RADIUS * 3;
+CONFIG.ENDPOINT_RADIUS = 6;
+CONFIG.ENDPOINT_RADIUS_SQU = CONFIG.ENDPOINT_RADIUS * CONFIG.ENDPOINT_RADIUS;
 
-export const HOVER_RADIUS_OFFSET = 4;
-export const CURSOR_RADIUS = 4;
-export const CURSOR_RADIUS_SQU = CURSOR_RADIUS * CURSOR_RADIUS;
+CONFIG.HOVER_RADIUS_OFFSET = 4;
+CONFIG.CURSOR_RADIUS = 4;
+CONFIG.CURSOR_RADIUS_SQU = CONFIG.CURSOR_RADIUS * CONFIG.CURSOR_RADIUS;
 
-export const PARALLEL_EDGE_HEIGHT = 10;
-export const SELF_LOOP_HEIGHT = 32;
+CONFIG.PARALLEL_EDGE_HEIGHT = 10;
+CONFIG.SELF_LOOP_HEIGHT = 32;
 
 //Interface
-export const DOUBLE_TAP_TICKS = 600;
-export const LONG_TAP_TICKS = 600;
-export const SPAWN_RADIUS = 64;
-export const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
-export const DRAGGING_BUFFER = 18;
-export const DRAGGING_BUFFER_SQU = DRAGGING_BUFFER * DRAGGING_BUFFER;
+CONFIG.DOUBLE_TAP_TICKS = 600;
+CONFIG.LONG_TAP_TICKS = 600;
+CONFIG.SPAWN_RADIUS = 64;
+CONFIG.DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
+CONFIG.DRAGGING_BUFFER = 18;
+CONFIG.DRAGGING_BUFFER_SQU = CONFIG.DRAGGING_BUFFER * CONFIG.DRAGGING_BUFFER;
 
 //Graph sorting
-export const PADDING_RADIUS_SQU = 2304;
+CONFIG.PADDING_RADIUS_SQU = 2304;
 
 //Colors
-export const STATE_BASE_COLOR = "#FEE781";
-export const STATE_LINE_COLOR = "black";
-export const STATE_TEXT_COLOR = "black";
-export const TRANSITION_COLOR = "black";
-export const TRANSITION_TEXT_COLOR = "black";
-export const GRAPH_INFO_COLOR = "lightgray";
+CONFIG.STATE_BASE_COLOR = "#FEE781";
+CONFIG.STATE_LINE_COLOR = "black";
+CONFIG.STATE_TEXT_COLOR = "black";
+CONFIG.TRANSITION_COLOR = "black";
+CONFIG.TRANSITION_TEXT_COLOR = "black";
+CONFIG.GRAPH_INFO_COLOR = "lightgray";
 
 //Styling
-export const NODE_FONT = "12px Arial";
-export const NODE_TEXT_ALIGN = "center";
-export const NODE_TEXT_ANCHOR = "middle";
-export const NODE_STROKE_STYLE = STATE_LINE_COLOR;
-export const NODE_FILL_STYLE = STATE_BASE_COLOR;
-export const NODE_TEXT_FILL_STYLE = STATE_TEXT_COLOR;
+CONFIG.NODE_FONT = "12px Arial";
+CONFIG.NODE_TEXT_ALIGN = "center";
+CONFIG.NODE_TEXT_ANCHOR = "middle";
+CONFIG.NODE_STROKE_STYLE = CONFIG.STATE_LINE_COLOR;
+CONFIG.NODE_FILL_STYLE = CONFIG.STATE_BASE_COLOR;
+CONFIG.NODE_TEXT_FILL_STYLE = CONFIG.STATE_TEXT_COLOR;
 
-export const EDGE_FONT = "12px Arial";
-export const EDGE_TEXT_ALIGN = "center";
-export const EDGE_TEXT_ANCHOR = "middle";
-export const EDGE_STROKE_STYLE = TRANSITION_COLOR;
-export const EDGE_TEXT_FILL_STYLE = TRANSITION_TEXT_COLOR;
+CONFIG.EDGE_FONT = "12px Arial";
+CONFIG.EDGE_TEXT_ALIGN = "center";
+CONFIG.EDGE_TEXT_ANCHOR = "middle";
+CONFIG.EDGE_STROKE_STYLE = CONFIG.TRANSITION_COLOR;
+CONFIG.EDGE_TEXT_FILL_STYLE = CONFIG.TRANSITION_TEXT_COLOR;
 
-export const BORDER_STROKE_STYLE = "rgba(0,0,0,0.02)";
-export const BORDER_LINE_WIDTH = "0.5em";
-export const BORDER_LINE_DASH = [20, 24];
+CONFIG.BORDER_STROKE_STYLE = "rgba(0,0,0,0.02)";
+CONFIG.BORDER_LINE_WIDTH = "0.5em";
+CONFIG.BORDER_LINE_DASH = [20, 24];
 
-export const HOVER_STROKE_STYLE = "rgba(0,0,0,0.6)";
-export const HOVER_LINE_WIDTH = 2;
-export const HOVER_LINE_DASH = [6, 4];
-export const HOVER_ANGLE_SPEED = 0.01;
+CONFIG.HOVER_STROKE_STYLE = "rgba(0,0,0,0.6)";
+CONFIG.HOVER_LINE_WIDTH = 2;
+CONFIG.HOVER_LINE_DASH = [6, 4];
+CONFIG.HOVER_ANGLE_SPEED = 0.01;
 
-export const SELECTION_BOX_SHADOW_COLOR = "black";
-export const SELECTION_BOX_SHADOW_SIZE = 5;
-export const SELECTION_BOX_SHADOW_OFFSETX = 2;
-export const SELECTION_BOX_SHADOW_OFFSETY = 2;
-export const SELECTION_BOX_FILL_STYLE = "rgba(0, 0, 0, 0.1)";
-export const SELECTION_BOX_STROKE_STYLE = "black";
+CONFIG.SELECTION_BOX_SHADOW_COLOR = "black";
+CONFIG.SELECTION_BOX_SHADOW_SIZE = 5;
+CONFIG.SELECTION_BOX_SHADOW_OFFSETX = 2;
+CONFIG.SELECTION_BOX_SHADOW_OFFSETY = 2;
+CONFIG.SELECTION_BOX_FILL_STYLE = "rgba(0, 0, 0, 0.1)";
+CONFIG.SELECTION_BOX_STROKE_STYLE = "black";
 
 //IO
-export const EXPORT_FILE_NAME = "flap-machine.png";
+CONFIG.EXPORT_FILE_NAME = "flap-machine.png";
+
+/** LOCAL STORAGE FUNCTIONS **/
+
+//check if browser support local storage
+export function doesSupportLocalStorage() {
+  return typeof(Storage) !== 'undefined';
+}
+
+export function loadConfig() {
+  const jsonString = localStorage.getItem(LOCAL_STORAGE_ID);
+  if (!jsonString) return null;
+  try
+  {
+    const jsonData = JSON.parse(jsonString);
+    Object.assign(CONFIG, jsonData);
+  }
+  catch (e)
+  {
+    //Reset the config
+    clearConfig();
+  }
+};
+
+export function saveConfig() {
+  try
+  {
+    const jsonString = JSON.stringify(CONFIG);
+    localStorage.setItem(LOCAL_STORAGE_ID, jsonString);
+  }
+  catch (e)
+  {
+    //Reset the config
+    clearConfig();
+  }
+};
+
+export function clearConfig() {
+  localStorage.clear();
+};

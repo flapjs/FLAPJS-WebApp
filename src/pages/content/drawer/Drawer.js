@@ -1,4 +1,5 @@
 import React from 'react';
+import './Drawer.css';
 
 import OverviewPanel from './panels/definition/OverviewPanel.js';
 import TestingPanel from './panels/testing/TestingPanel.js';
@@ -6,8 +7,6 @@ import ExportingPanel from './panels/exporting/ExportingPanel.js';
 import OptionsPanel from './panels/options/OptionsPanel.js';
 
 import DrawerExpander from './DrawerExpander.js';
-
-import './Drawer.css';
 
 const TESTING = 0;
 const OVERVIEW = 1;

@@ -1,4 +1,4 @@
-import * as Config from 'config.js';
+import Config from 'config.js';
 
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 10;

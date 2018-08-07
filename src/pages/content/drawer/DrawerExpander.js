@@ -1,5 +1,4 @@
 import React from 'react';
-
 import './DrawerExpander.css';
 
 class DrawerExpander extends React.Component
