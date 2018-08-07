@@ -3,15 +3,6 @@ import './StateTag.css';
 
 import Config from 'config.js';
 
-const DEFAULT_COLOR = "gray";
-const DEFAULT_CUSTOM_COLOR = "white";
-const EDIT_COLOR = "rgba(255,255,255,0.1)";
-const ERROR_COLOR = "rgba(255,0,0,0.7)";
-
-const DEFAULT_BACKGROUND = "#4D4D4D";
-const DEFAULT_CUSTOM_BACKGROUND = "#4D4D4D";
-const ERROR_BACKGROUND = "rgba(255,0,0,0.5)";
-
 class StateTag extends React.Component
 {
   constructor(props)
@@ -124,16 +115,16 @@ class StateTag extends React.Component
     return <div className="statetag-container"
       style={{
         background: value.length > 0 ?
-          isCustom ? DEFAULT_CUSTOM_BACKGROUND : DEFAULT_BACKGROUND :
-          ERROR_BACKGROUND
+          isCustom ? Config.DEFAULT_CUSTOM_BACKGROUND : Config.DEFAULT_BACKGROUND :
+          Config.ERROR_BACKGROUND
       }}>
       <input type="text" className={"statetag-input" + (this.props.accept ? " accept" : "")} spellCheck="false"
         style={{
           width: value.length + "ch",
           color: this.state.value ?
             this.state.error ?
-              ERROR_COLOR : EDIT_COLOR :
-              isCustom ? DEFAULT_CUSTOM_COLOR : DEFAULT_COLOR
+              Config.ERROR_COLOR : Config.EDIT_COLOR :
+              isCustom ? Config.DEFAULT_CUSTOM_COLOR : Config.DEFAULT_COLOR
         }}
         value={value}
         onChange={this.onValueChange}

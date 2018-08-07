@@ -4,7 +4,6 @@ import Eventable from 'util/Eventable.js';
 
 import GraphPointer from './GraphPointer.js';
 
-const SCROLL_SENSITIVITY = 1 / 300.0;
 const PINCH_SENSITIVITY = 1 / 300.0;
 
 class InputController
@@ -74,6 +73,12 @@ class InputController
     this.workspace.removeEventListener('touchmove', this.onTouchMove);
   }
 
+  update()
+  {
+    //Smooth transition offset
+    this.pointer.updateOffset();
+  }
+
   onContextMenu(e)
   {
     e.stopPropagation();
@@ -87,7 +92,7 @@ class InputController
     e.stopPropagation();
     e.preventDefault();
 
-    this.pinchDist = e.deltaY * SCROLL_SENSITIVITY;
+    this.pinchDist = e.deltaY * Config.SCROLL_SENSITIVITY;
     this.pointer.setScale(this.pointer.scale + this.pinchDist);
   }
 

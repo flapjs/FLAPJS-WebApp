@@ -1,7 +1,5 @@
 import Config from 'config.js';
 
-const MIN_SCALE = 0.1;
-const MAX_SCALE = 10;
 const BOUNDING_RECT_UPDATE_INTERVAL = 100;
 
 class GraphPointer
@@ -20,8 +18,8 @@ class GraphPointer
 
     this.offsetX = 0;
     this.offsetY = 0;
-    //TODO: this.nextOffsetX = 0;
-    //TODO: this.nextOffsetY = 0;
+    this.nextOffsetX = 0;
+    this.nextOffsetY = 0;
 
     this._boundingRect = null;
     this._boundingRectTime = 0;
@@ -33,6 +31,28 @@ class GraphPointer
     this.moveMode = false;
     this.trashMode = false;
     this.dragging = false;
+  }
+
+  setOffset(x, y, immediate=false)
+  {
+    if (immediate)
+    {
+      this.nextOffsetX = this.offsetX = x;
+      this.nextOffsetY = this.offsetY = y;
+    }
+    else
+    {
+      this.nextOffsetX = x;
+      this.nextOffsetY = y;
+    }
+  }
+
+  updateOffset()
+  {
+    const dx = this.nextOffsetX - this.offsetX;
+    this.offsetX += dx * Config.SMOOTH_OFFSET_DAMPING;
+    const dy = this.nextOffsetY - this.offsetY;
+    this.offsetY += dy * Config.SMOOTH_OFFSET_DAMPING;
   }
 
   setScale(scale)
@@ -47,7 +67,7 @@ class GraphPointer
     const rect = this._boundingRect;
     //const dw = (Math.max(Config.DEFAULT_GRAPH_SIZE, rect.width)) / Config.DEFAULT_GRAPH_SIZE;
     //const dh = (Math.max(Config.DEFAULT_GRAPH_SIZE, rect.height)) / Config.DEFAULT_GRAPH_SIZE;
-    this.scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale));
+    this.scale = Math.min(Config.MAX_SCALE, Math.max(Config.MIN_SCALE, scale));
   }
 
   isWaitingForMoveMode()

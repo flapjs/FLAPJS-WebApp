@@ -3,15 +3,48 @@ const LOCAL_STORAGE_ID = "config";
 const cfg = {};
 export default cfg;
 
+//Toolbar
+cfg.DEFAULT_MACHINE_NAME = "Untitled";
+
+//Status Button
+cfg.ACTIVE_PENDING_COLOR = "white";
+cfg.ACTIVE_SUCCESS_COLOR = "lime";
+cfg.ACTIVE_FAILURE_COLOR = "red";
+cfg.INACTIVE_COLOR = "gray";
+
+//Testing Panel
+cfg.PLACEHOLDER_TEXT = "Test string";
+
+//Overview Panel
+cfg.DEFAULT_COLOR = "gray";
+cfg.DEFAULT_CUSTOM_COLOR = "white";
+cfg.EDIT_COLOR = "rgba(255,255,255,0.1)";
+cfg.ERROR_COLOR = "rgba(255,0,0,0.7)";
+cfg.DEFAULT_BACKGROUND = "#4D4D4D";
+cfg.DEFAULT_CUSTOM_BACKGROUND = "#4D4D4D";
+cfg.ERROR_BACKGROUND = "rgba(255,0,0,0.5)";
+
+//Controller
+cfg.SMOOTH_OFFSET_DAMPING = 0.4;
+cfg.SCROLL_SENSITIVITY = 1.0 / 300.0;
+cfg.MIN_SCALE = 0.1;
+cfg.MAX_SCALE = 10;
+
+//NodalGraph
+cfg.STR_TRANSITION_DEFAULT_LABEL = "";
+cfg.STR_TRANSITION_PROXY_LABEL = "?";
+cfg.STR_STATE_LABEL = "q";
+cfg.PARALLEL_EDGE_HEIGHT = 10;
+cfg.SELF_LOOP_HEIGHT = 32;
+
+
+/** LEGACY CONFIG **/
+
 //Input
 cfg.SUBMIT_KEY = 13; //ENTER
 cfg.CLEAR_KEY = 27; //ESCAPE
 cfg.DELETE_KEY = 8; //DELETE
 cfg.DELETE_FORWARD_KEY = 46; //DELETE FORWARD
-
-cfg.STR_TRANSITION_DEFAULT_LABEL = "";
-cfg.STR_TRANSITION_PROXY_LABEL = "?";
-cfg.STR_STATE_LABEL = "q";
 
 //Geometry
 cfg.DEFAULT_GRAPH_SIZE = 300;
@@ -33,9 +66,6 @@ cfg.ENDPOINT_RADIUS_SQU = cfg.ENDPOINT_RADIUS * cfg.ENDPOINT_RADIUS;
 cfg.HOVER_RADIUS_OFFSET = 4;
 cfg.CURSOR_RADIUS = 4;
 cfg.CURSOR_RADIUS_SQU = cfg.CURSOR_RADIUS * cfg.CURSOR_RADIUS;
-
-cfg.PARALLEL_EDGE_HEIGHT = 10;
-cfg.SELF_LOOP_HEIGHT = 32;
 
 //Interface
 cfg.DOUBLE_TAP_TICKS = 600;
@@ -88,6 +118,7 @@ cfg.SELECTION_BOX_STROKE_STYLE = "black";
 
 //IO
 cfg.EXPORT_FILE_NAME = "flap-machine.png";
+
 
 /** LOCAL STORAGE FUNCTIONS **/
 

@@ -39,8 +39,7 @@ class StateList extends React.Component
               return <StateTag key={i} src={e} label={e.label} accept={e.accept} graph={graph}
                 onFocus={(ev) => {
                   //Center workspace at focused node; inverted due to graph-to-screen space
-                  pointer.offsetX = -e.x;
-                  pointer.offsetY = -e.y;
+                  pointer.setOffset(-e.x, -e.y);
                 }}/>
             })
           }

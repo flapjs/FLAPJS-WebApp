@@ -1,6 +1,8 @@
 import React from 'react';
 import './Toolbar.css';
 
+import Config from 'config.js';
+
 import UploadButton from "./UploadButton.js";
 import HelpButton from "./HelpButton.js";
 
@@ -75,7 +77,7 @@ class Toolbar extends React.Component
       <div className="toolbar-title">
         <div className="toolbar-title-name">
           {/*Machine Name*/}
-          <input id="machine-name" type="text" defaultValue="Untitled" ref={ref=>this.machineName=ref}/>
+          <input id="machine-name" type="text" defaultValue={Config.DEFAULT_MACHINE_NAME} ref={ref=>this.machineName=ref}/>
           {/*Upload Button*/}
           <UploadButton id="toolbar-upload" title="Upload"
             graph={graph}

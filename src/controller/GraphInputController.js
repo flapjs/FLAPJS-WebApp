@@ -386,8 +386,7 @@ class GraphInputController extends InputController
         //Move graph
         const dx = x - this.prevX;
         const dy = y - this.prevY;
-        this.pointer.offsetX += dx;
-        this.pointer.offsetY += dy;
+        this.pointer.setOffset(this.pointer.offsetX + dx, this.pointer.offsetY + dy, true);
         return true;
       }
       else

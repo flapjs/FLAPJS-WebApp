@@ -2,7 +2,7 @@ import React from 'react';
 import '../Panel.css';
 import './TestingPanel.css';
 
-import TestingInputList from './TestingInputList.js';
+import TestList from './components/TestList.js';
 
 class TestingPanel extends React.Component
 {
@@ -20,7 +20,7 @@ class TestingPanel extends React.Component
         <h1>Testing</h1>
       </div>
 
-      <TestingInputList tester={this.props.tester}/>
+      <TestList tester={this.props.tester}/>
       <hr />
 
       <div>
