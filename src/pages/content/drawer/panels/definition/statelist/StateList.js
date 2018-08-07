@@ -19,19 +19,22 @@ class StateList extends React.Component
 
   onCreate(e)
   {
-
+    const machine = this.props.machine;
+    const graph = machine.graph;
+    const x = -100 + (Math.random() * 100 * 2);
+    const y = -100 + (Math.random() * 100 * 2);
+    graph.newNode(x, y, machine.getNextDefaultNodeLabel());
   }
 
   render()
   {
     const graph = this.props.machine.graph;
-    const nodes = this.props.machine.graph.nodes;
     return <InfoBlock title="States">
       <div className="statelist-container">
         <div className="statelist">
           <TriangleIcon/>
           {
-            nodes.map((e, i) => {
+            graph.nodes.map((e, i) => {
               return <StateTag key={i} src={e} label={e.label} accept={e.accept} graph={graph}/>
             })
           }

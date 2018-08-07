@@ -8,6 +8,9 @@ const DEFAULT_CUSTOM_COLOR = "white";
 const EDIT_COLOR = "rgba(255,255,255,0.1)";
 const ERROR_COLOR = "rgba(255,0,0,0.7)";
 
+const DEFAULT_BACKGROUND = "#4D4D4D";
+const ERROR_BACKGROUND = "rgba(255,0,0,0.5)";
+
 class StateTag extends React.Component
 {
   constructor(props)
@@ -110,24 +113,25 @@ class StateTag extends React.Component
   render()
   {
     const value = this.state.value != null ? this.state.value : this.props.label;
-    return <div className="statetag-container">
-      <div className="statetag-subcontainer">
-        <input type="text" className={"statetag-input" + (this.props.accept ? " accept" : "")} spellCheck="false"
-          style={{
-            width: value.length + "ch",
-            color: this.state.value ?
-              this.state.error ?
-                ERROR_COLOR : EDIT_COLOR :
-                this.props.src.hasCustomLabel() ?
-                  DEFAULT_CUSTOM_COLOR : DEFAULT_COLOR
-          }}
-          value={value}
-          onChange={this.onValueChange}
-          onFocus={this.onFocus}
-          onBlur={this.onBlur}
-          onKeyUp={this.onKeyUp}
-          onKeyDown={this.onKeyDown}/>
-      </div>
+    return <div className="statetag-container"
+      style={{
+        background: value.length > 0 ? DEFAULT_BACKGROUND : ERROR_BACKGROUND
+      }}>
+      <input type="text" className={"statetag-input" + (this.props.accept ? " accept" : "")} spellCheck="false"
+        style={{
+          width: value.length + "ch",
+          color: this.state.value ?
+            this.state.error ?
+              ERROR_COLOR : EDIT_COLOR :
+              this.props.src.hasCustomLabel() ?
+                DEFAULT_CUSTOM_COLOR : DEFAULT_COLOR
+        }}
+        value={value}
+        onChange={this.onValueChange}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
+        onKeyUp={this.onKeyUp}
+        onKeyDown={this.onKeyDown}/>
     </div>;
   }
 }
