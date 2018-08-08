@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Router from 'router.js';
+import Config from 'config.js';
 import { loadConfig, saveConfig } from 'config.js';
 
 import HomePage from 'pages/home/HomePage.js';
@@ -34,12 +35,11 @@ window.addEventListener('load', (event) => {
 window.addEventListener('beforeunload', (event) => {
   saveConfig();
 
-  const message = "Any unsaved changes will be lost. Are you sure you want to leave?";
+  const message = Config.EXIT_WINDOW_MESSAGE;
   event = event || window.event;
   // For IE and Firefox
-  if (e) {
-    e.returnValue = message;
-  }
+  if (e) e.returnValue = message;
+
   //For Safari
   return message;
 });

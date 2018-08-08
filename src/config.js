@@ -3,6 +3,10 @@ const LOCAL_STORAGE_ID = "config";
 const cfg = {};
 export default cfg;
 
+//General
+cfg.CLEAR_GRAPH_MESSAGE = "Any unsaved changes will be lost. Are you sure you want to continue?";
+cfg.EXIT_WINDOW_MESSAGE = "Any unsaved changes will be lost. Are you sure you want to leave?";
+
 //Toolbar
 cfg.DEFAULT_MACHINE_NAME = "Untitled";
 
@@ -29,6 +33,10 @@ cfg.SMOOTH_OFFSET_DAMPING = 0.4;
 cfg.SCROLL_SENSITIVITY = 1.0 / 300.0;
 cfg.MIN_SCALE = 0.1;
 cfg.MAX_SCALE = 10;
+
+//Workspace
+cfg.EMPTY_MESSAGE = "Double-tap to create a node";
+cfg.INIT_WAITTIME = 5000;
 
 //NodalGraph
 cfg.STR_TRANSITION_DEFAULT_LABEL = "";

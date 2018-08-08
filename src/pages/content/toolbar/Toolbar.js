@@ -99,8 +99,11 @@ class Toolbar extends React.Component
         {/*New Button*/}
         <IconButton className="navicon" id="toolbar-new" title="New"
           onClick={() => {
-            graph.deleteAll();
-            eventHistory.clear();
+            if (window.confirm(Config.CLEAR_GRAPH_MESSAGE))
+            {
+              graph.deleteAll();
+              eventHistory.clear();
+            }
           }}>
           <CreateIcon/>
         </IconButton>

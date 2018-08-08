@@ -24,6 +24,7 @@ class NodalGraph
     this.nodes = nodes;
     this.edges = edges;
 
+    //TODO: should remove this
     this._machine = null;
   }
 
@@ -117,6 +118,11 @@ class NodalGraph
     this.edges.length = 0;
 
     this.markDirty();
+  }
+
+  isEmpty()
+  {
+    return this.nodes.length <= 0;
   }
 
   setStartNode(node)

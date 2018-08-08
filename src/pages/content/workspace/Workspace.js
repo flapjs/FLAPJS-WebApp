@@ -1,8 +1,9 @@
 import React from 'react';
-
 import './Workspace.css';
 
 import Config from 'config.js';
+
+import Subtitle from './Subtitle.js';
 
 import NodeRenderer from './renderer/NodeRenderer.js';
 import EdgeRenderer from './renderer/EdgeRenderer.js';
@@ -37,6 +38,8 @@ class Workspace extends React.Component
     return <svg id="workspace-content" ref={ref=>this.ref=ref}
       viewBox={-halfSize + " " + -halfSize + " " + size + " " + size}
       xmlns="http://www.w3.org/2000/svg">
+      
+      <Subtitle visible={graph.isEmpty()}/>
 
       <filter id="error-highlight" height="300%" width="300%" x="-75%" y="-75%">
         <feColorMatrix type="matrix"
