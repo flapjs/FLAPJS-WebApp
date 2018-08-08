@@ -117,7 +117,7 @@ class StateTag extends React.Component
         background: value.length > 0 ?
           isCustom ? Config.DEFAULT_CUSTOM_BACKGROUND : Config.DEFAULT_BACKGROUND :
           Config.ERROR_BACKGROUND
-      }}>
+      }} draggable="true">
       <input type="text" className={"statetag-input" + (this.props.accept ? " accept" : "")} spellCheck="false"
         style={{
           width: value.length + "ch",
