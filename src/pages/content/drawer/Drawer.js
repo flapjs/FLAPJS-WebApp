@@ -183,8 +183,8 @@ class Drawer extends React.Component
   {
     if (this.panel)
     {
-      this.panel.container.scrollBy(0, e.deltaY);
-      return false;
+      //TODO: this.panel.container.scrollBy(0, e.deltaY);
+      //TODO: return false;
     }
   }
 
