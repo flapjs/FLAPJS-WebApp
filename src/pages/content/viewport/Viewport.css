@@ -18,7 +18,8 @@
   right: 0px;
 }
 
-.anchor-bottom {
+.anchor-bottom-left {
   position: absolute;
   bottom: 0px;
+  left: 0px;
 }

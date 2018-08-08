@@ -3,6 +3,7 @@ import './Viewport.css';
 
 import LabelEditor from './LabelEditor.js';
 import TrashCan from './TrashCan.js';
+import TestTray from './testmode/TestTray.js';
 
 class Viewport extends React.Component
 {
@@ -29,6 +30,7 @@ class Viewport extends React.Component
         ref={ref=>this.labelEditor=ref}/>
       <TrashCan controller={this.props.controller}
         viewport={this}/>
+      <TestTray/>
     </div>;
   }
 }
