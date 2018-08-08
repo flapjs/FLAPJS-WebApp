@@ -1,7 +1,7 @@
 import React from 'react';
 import './Drawer.css';
 
-import OverviewPanel from './panels/definition/OverviewPanel.js';
+import OverviewPanel from './panels/overview/OverviewPanel.js';
 import TestingPanel from './panels/testing/TestingPanel.js';
 import ExportingPanel from './panels/exporting/ExportingPanel.js';
 import OptionsPanel from './panels/options/OptionsPanel.js';

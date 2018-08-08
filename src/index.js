@@ -30,7 +30,6 @@ window.addEventListener('load', (event) => {
   loadApplication();
   window.requestAnimationFrame(updateApplication);
 });
-
 //Warn user before exit
 window.addEventListener('beforeunload', (event) => {
   saveConfig();
@@ -43,6 +42,17 @@ window.addEventListener('beforeunload', (event) => {
   //For Safari
   return message;
 });
+//Service Worker
+if ('serviceWorker' in navigator)
+{
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+      console.log("ServiceWorker registration successful: ", registration.scope);
+    }, function(err) {
+      console.log("ServiceWorker registration failed: ", err);
+    });
+  });
+}
 
 //Setup application
 const FRAMES_PER_SECOND = 60;
