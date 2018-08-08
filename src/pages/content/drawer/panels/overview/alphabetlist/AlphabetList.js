@@ -23,7 +23,7 @@ class AlphabetList extends React.Component
 
   render()
   {
-    const alphabet = this.props.machine.getAlphabet();
+    const alphabet = this.props.machine.getAlphabet().sort();
     return <InfoBlock title="Alphabet">
       <div className="alphalist-container">
         <div className="alphalist">
