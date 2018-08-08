@@ -25,11 +25,14 @@ class TestInput extends React.Component
       }
     };
 
-    this.onClick = this.onClick.bind(this);
+    this.onSubmitClick = this.onSubmitClick.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
+
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
   }
 
-  onClick(e)
+  onSubmitClick(e)
   {
     if (this.props.placeholder)
     {
@@ -53,6 +56,47 @@ class TestInput extends React.Component
     this.state.src.dirty = true;
   }
 
+  onKeyDown(e)
+  {
+    if (e.keyCode === Config.SUBMIT_KEY || e.keyCode === Config.CLEAR_KEY)
+    {
+      e.preventDefault();
+    }
+  }
+
+  onKeyUp(e)
+  {
+    if (e.keyCode === Config.SUBMIT_KEY)
+    {
+      //Add input if placeholder and Run
+      if (this.props.placeholder)
+      {
+        const tester = this.props.tester;
+        tester.testPlaceholder();
+        //Add test input to list
+        const newTest = tester.addTestInput(this.state.src.value);
+        //Save result to new test
+        newTest.result = tester.placeholder.result;
+        newTest.dirty = false;
+
+        //Select everything again
+        this.inputElement.select();
+      }
+      //Otherwise just run it
+      else
+      {
+        this.props.tester.testByIndex(this.props.index);
+
+        //Select everything again
+        this.inputElement.select();
+      }
+    }
+    else if (e.keyCode === Config.CLEAR_KEY)
+    {
+      e.target.blur();
+    }
+  }
+
   render()
   {
     return <div className={"test-input-container" +
@@ -74,9 +118,11 @@ class TestInput extends React.Component
         value={this.state.src.value}
         placeholder={Config.PLACEHOLDER_TEXT}
         onChange={this.onValueChange}
+        onKeyDown={this.onKeyDown}
+        onKeyUp={this.onKeyUp}
         onFocus={(e)=>e.target.select()}/>
 
-      <IconButton className="test-input-addremove" onClick={this.onClick}>
+      <IconButton className="test-input-addremove" onClick={this.onSubmitClick}>
         {this.props.placeholder ? <AddIcon/> : <RemoveIcon/>}
       </IconButton>
     </div>

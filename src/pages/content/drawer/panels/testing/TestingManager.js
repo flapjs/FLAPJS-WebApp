@@ -12,7 +12,7 @@ class TestingManager
     this.inputs = [];
 
     this.autoErrorCheck = false;
-    this.placeholder = new TestingInput();
+    this.placeholder = new Test();
 
     //HACK: this should be a listener to FSABuilder, should not access graph
     this.machineBuilder.graph.on("markDirty", (g) => {
@@ -26,12 +26,16 @@ class TestingManager
 
   addTestInput(input)
   {
-    this.inputs.push(new TestingInput(input));
+    const result = new Test(input);
+    this.inputs.push(result);
+    return result;
   }
 
   removeTestInputByIndex(index)
   {
-    this.inputs.splice(index, 1);
+    this.inputs[index] = null;
+    //HACK: this.inputs.splice(index, 1);
+    //TODO: This is so that the 'key' is unique AND consistent
   }
 
   clear(clearPlaceholder=false)
@@ -39,7 +43,7 @@ class TestingManager
     this.inputs.length = 0;
     if (clearPlaceholder)
     {
-      //HACK: cannot access setState, so do it the old-fashion way
+      //This is not a hack, because it is NOT a React.Component
       this.placeholder.value = "";
     }
   }
@@ -77,7 +81,7 @@ class TestingManager
   }
 }
 
-class TestingInput
+class Test
 {
   constructor(value="")
   {

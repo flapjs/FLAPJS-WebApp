@@ -52,7 +52,9 @@ class TestList extends React.Component
         <TestInput placeholder={true} index={-1} tester={tester} src={this.props.tester.placeholder}/>
         {
           this.props.tester.inputs.map((e, i) => {
-            return <TestInput key={i} index={i} tester={tester} src={e}/>
+            if (!e) return null;
+            
+            return <TestInput key={i} index={i} tester={tester} src={e}/>;
           })
         }
         <button className="panel-button"
