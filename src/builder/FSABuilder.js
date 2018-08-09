@@ -10,12 +10,14 @@ const ERROR_CHECK_INTERVAL = 2000;
 class FSABuilder extends MachineBuilder
 {
   //HACK: this should not take app
-  constructor(graph, app)
+  constructor(graph, tester, app)
   {
-    super(graph, app);
+    super(graph);
 
     //HACK: this should not take app
     this.app = app;
+
+    this.tester = tester;
 
     this._machine = new NFA();
     this._machineType = "DFA";
@@ -40,7 +42,7 @@ class FSABuilder extends MachineBuilder
 
     this._timer = setTimeout(() => {
       //HACK: this is to turn off error checking really quick
-      if (!this.app.testingManager.autoErrorCheck) return;
+      if (!this.tester.autoErrorCheck) return;
 
       //clear previous error messages
       this.app.notification.clearErrorMessage("machine");

@@ -13,6 +13,7 @@ import NotFoundPage from 'pages/404/NotFoundPage.js';
 import AutoSaver from 'util/AutoSaver.js';
 
 const ALWAYS_OPEN_WELCOME_PAGE = false;
+const USE_SERVICE_WORKER = false;
 
 Router.registerPage('/', HomePage);
 Router.registerPage('/app', App);
@@ -42,8 +43,9 @@ window.addEventListener('beforeunload', (event) => {
   //For Safari
   return message;
 });
+
 //Service Worker
-if ('serviceWorker' in navigator)
+if (USE_SERVICE_WORKER && 'serviceWorker' in navigator)
 {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/sw.js').then(function(registration) {

@@ -1,6 +1,7 @@
 var CACHE_NAME = "flapjs-cache-v1";
 var urlsToCache = [
   '/',
+  '/index.html',
   '/dist/bundle.js',
   '/style.css'
 ];
@@ -16,6 +17,8 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
+  console.log("Fetching..." + event.request.url);
+
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {

@@ -5,7 +5,7 @@
   border-radius: 5px;
 }
 .statetag-container:nth-child(2) {
-  outline: 2px dashed rgba(255, 255, 255, 0.1);
+  outline: 2px dashed var(--color-main-lite);
   outline-offset: 2px;
   margin-left: -2px;
 }
@@ -19,6 +19,7 @@
   font-family: 'Overpass Mono', monospace;
 }
 .statetag-input.accept {
+  margin: -1px;/*Remove border space*/
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 5px;
 }

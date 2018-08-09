@@ -1,5 +1,12 @@
 #root {
   height: 100%;
+
+  --color-toolbar-text: #FFFFFF;
+  --color-toolbar-text-invert: #000000;
+  --color-toolbar-main: #07889B;
+  --color-toolbar-main-dark: #077787;
+  --color-toolbar-accent: #FEE781;
+  --color-toolbar-accent-dark: #FFCD00;
 }
 
 /*For hiding scrollbars*/
