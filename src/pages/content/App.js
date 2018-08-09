@@ -208,6 +208,16 @@ class App extends React.Component
     controller.on("nodeInitial", relabel);
     controller.on("nodeLabel", relabel);
 
+    //Notify on create in delete mode
+    const tryCreateWhileTrash = () => {
+      if (controller.pointer.trashMode)
+      {
+        this.notification.addWarningMessage("Sorry, but you cannot create new states or edges while in delete mode.",
+          "tryCreateWhileTrash", true);
+      }
+    };
+    controller.on("tryCreateWhileTrash", tryCreateWhileTrash);
+
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;
     workspaceDOM.addEventListener("drop", this.onFileDrop);

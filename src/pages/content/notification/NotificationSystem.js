@@ -15,22 +15,56 @@ class NotificationSystem extends React.Component
       warningMessages: []
     };
   }
-
-  //TODO: allow add and delete by tag for messages
-  addMessage(message, tag=null)
+  
+  addMessage(message, tag=null, clearOnAdd=true)
   {
+    if (tag && clearOnAdd)
+    {
+      this.clearMessage(tag);
+    }
+
     this.state.messages.push([message, tag]);
   }
 
-  addErrorMessage(message, tag=null) {
-    this.state.errorMessages.push([message, tag]);
+  addWarningMessage(message, tag=null, clearOnAdd=true)
+  {
+    if (tag && clearOnAdd)
+    {
+      this.clearWarningMessage(tag);
+    }
+
+    this.state.warningMessages.push([message, tag]);
   }
 
+  addErrorMessage(message, tag=null, clearOnAdd=true) {
+    if (tag && clearOnAdd)
+    {
+      this.clearWarningMessage(tag);
+    }
+
+    this.state.errorMessages.push([message, tag]);
+  }
 
   clearErrorMessage(tag=null) {
     for(let i = this.state.errorMessages.length-1; i >= 0; i--) {
       if(this.state.errorMessages[i][1] == tag) {
         this.state.errorMessages.splice(i, 1);
+      }
+    }
+  }
+
+  clearWarningMessage(tag=null) {
+    for(let i = this.state.warningMessages.length-1; i >= 0; i--) {
+      if(this.state.warningMessages[i][1] == tag) {
+        this.state.warningMessages.splice(i, 1);
+      }
+    }
+  }
+
+  clearMessage(tag=null) {
+    for(let i = this.state.messages.length-1; i >= 0; i--) {
+      if(this.state.messages[i][1] == tag) {
+        this.state.messages.splice(i, 1);
       }
     }
   }
@@ -67,7 +101,7 @@ class NotificationSystem extends React.Component
                   <button onClick={(e) => {
                     this.state.warningMessages.splice(i, 1);
                   }}>
-                    I don't care
+                    I do not care
                   </button>
                 </div>
               </div>;
