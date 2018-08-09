@@ -9,6 +9,11 @@
   position: absolute;
   right: 5px;/*Same as statelist-container*/
   bottom: 0;
+
+  fill: gray;
+}
+.boxadd-icon:hover {
+  fill: white;
 }
 
 .statelist {
@@ -22,7 +27,7 @@
   font-size: inherit;
   margin-top: auto;
   margin-bottom: auto;
-  fill: white;
+  fill: gray;
 
   width: 1em;
   height: 1em;

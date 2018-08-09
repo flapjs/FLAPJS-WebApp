@@ -633,7 +633,7 @@ class GraphInputController extends InputController
 
   createNode(x, y)
   {
-    const newNodeLabel = this.machineBuilder.getNextDefaultNodeLabel();
+    const newNodeLabel = this.machineBuilder.getLabeler().getNextDefaultNodeLabel();
     const node = this.graph.newNode(x, y, newNodeLabel);
     node.x = x || (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
     node.y = y || (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;

@@ -23,7 +23,7 @@ class StateList extends React.Component
     const graph = machine.graph;
     const x = -100 + (Math.random() * 100 * 2);
     const y = -100 + (Math.random() * 100 * 2);
-    graph.newNode(x, y, machine.getNextDefaultNodeLabel());
+    graph.newNode(x, y, machine.getLabeler().getNextDefaultNodeLabel());
   }
 
   render()
