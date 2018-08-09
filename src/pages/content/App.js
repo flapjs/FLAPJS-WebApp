@@ -42,8 +42,9 @@ class App extends React.Component
     this.controller = new GraphInputController();
     this.graph = new NodalGraph();
     //HACK: this should not be passed to FSA Builder
-    this.machineBuilder = new FSABuilder(this.graph, this.testingManager, this);
+    this.machineBuilder = new FSABuilder(this.graph, null, this);
     this.testingManager = new TestingManager(this.machineBuilder);
+    this.machineBuilder.tester = this.testingManager;//HACK: let machine builder ref testing manager
     this.eventHistory = new EventHistory();
 
     //Create references
