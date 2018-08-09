@@ -42,7 +42,7 @@ class App extends React.Component
     this.controller = new GraphInputController();
     this.graph = new NodalGraph();
     //HACK: this should not be passed to FSA Builder
-    this.machineBuilder = new FSABuilder(this.graph, this);
+    this.machineBuilder = new FSABuilder(this.graph, this.testingManager, this);
     this.testingManager = new TestingManager(this.machineBuilder);
     this.eventHistory = new EventHistory();
 
@@ -198,6 +198,15 @@ class App extends React.Component
     //Initialize the controller to graph components
     controller.initialize(this, this.workspace.ref);
 
+    //Auto rename machine
+    const relabel = () => {
+      this.machineBuilder.getLabeler().sortDefaultNodeLabels();
+    };
+    controller.on("nodeDelete", relabel);
+    controller.on("nodeDeleteAll", relabel);
+    controller.on("nodeInitial", relabel);
+    controller.on("nodeLabel", relabel);
+
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;
     workspaceDOM.addEventListener("drop", this.onFileDrop);
@@ -207,15 +216,12 @@ class App extends React.Component
 
     //Insert event listeners
     const eventHistory = this.eventHistory;
-
     controller.on("nodeCreate", targetNode =>
       eventHistory.handleEvent(new GraphNodeCreateEvent(graph, targetNode)));
     controller.on("nodeDelete", (targetNode, prevX, prevY) =>
       eventHistory.handleEvent(new GraphNodeDeleteEvent(graph, targetNode, prevX, prevY)));
-
     controller.on("nodeDeleteAll", (targetNodes, selectedNode, prevX, prevY) =>
       eventHistory.handleEvent(new GraphNodeDeleteAllEvent(graph, targetNodes, selectedNode, prevX, prevY)));
-
     controller.on("nodeMove", (targetNode, nextX, nextY, prevX, prevY) =>
       eventHistory.handleEvent(new GraphNodeMoveEvent(graph, targetNode, nextX, nextY, prevX, prevY)));
     controller.on("nodeMoveAll", (targetNodes, dx, dy) =>
@@ -226,7 +232,6 @@ class App extends React.Component
       eventHistory.handleEvent(new GraphNodeInitialEvent(graph, nextInitial, prevInitial)));
     controller.on("nodeLabel", (targetNode, nextLabel, prevLabel) =>
       eventHistory.handleEvent(new GraphNodeLabelEvent(graph, targetNode, nextLabel, prevLabel)));
-
     controller.on("edgeCreate", targetEdge =>
       eventHistory.handleEvent(new GraphEdgeCreateEvent(graph, targetEdge)));
     controller.on("edgeDelete", targetEdge =>

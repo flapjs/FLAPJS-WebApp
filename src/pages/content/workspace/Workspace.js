@@ -10,6 +10,9 @@ import EdgeRenderer from './renderer/EdgeRenderer.js';
 import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
 import InitialMarkerRenderer from './renderer/InitialMarkerRenderer.js';
 
+const WORKSPACE_OFFSET_X = 15;
+const WORKSPACE_OFFSET_Y = 0;
+
 class Workspace extends React.Component
 {
   constructor(props)
@@ -36,9 +39,9 @@ class Workspace extends React.Component
 
     //Must not be a block content (must inline)
     return <svg id="workspace-content" ref={ref=>this.ref=ref}
-      viewBox={-halfSize + " " + -halfSize + " " + size + " " + size}
+      viewBox={(-halfSize + WORKSPACE_OFFSET_X) + " " + (-halfSize + WORKSPACE_OFFSET_Y) + " " + size + " " + size}
       xmlns="http://www.w3.org/2000/svg">
-      
+
       <Subtitle visible={graph.isEmpty()}/>
 
       <filter id="error-highlight" height="300%" width="300%" x="-75%" y="-75%">
