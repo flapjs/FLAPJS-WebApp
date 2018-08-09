@@ -19,6 +19,7 @@ class TestingManager
       this.placeholder.dirty = true;
       for(const input of this.inputs)
       {
+        if (input == null) return;
         input.dirty = true;
       }
     });
