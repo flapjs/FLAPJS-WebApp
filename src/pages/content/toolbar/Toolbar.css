@@ -1,9 +1,4 @@
 .toolbar-container {
-  --color-main: #07889B;
-  --color-main-dark: #077787;
-  --color-accent: #FEE781;
-  --color-accent-dark: #FFCD00;
-
   padding-left: 10px;
   display: flex;
   flex-direction: row;
@@ -12,8 +7,11 @@
   overflow: hidden;
   overflow-x: scroll;
 
-  background-color: var(--color-main);
-  box-shadow: 0 0.16em 0 var(--color-accent-dark);
+  background-color: var(--color-toolbar-main);
+  box-shadow: 0 0.16em 0 var(--color-toolbar-accent-dark);
+}
+.toolbar-container .icon-button {
+  fill: var(--color-toolbar-text);
 }
 
 .toolbar-title {
@@ -28,7 +26,7 @@
   flex-direction: row;
   width: 100%;
 
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--color-toolbar-text-invert);
 }
 #machine-name {
   background: none;
@@ -38,16 +36,17 @@
   width: 100%;
   font-size: 2em;
 
-  color: rgba(255,255,255,0.3);/*old: lightgray*/
-  transition: color 0.3s ease;
+  opacity: 0.3;
+  color: var(--color-toolbar-text);
+  transition: opacity 0.3s ease;
 }
 #machine-name:hover {
-  color: rgba(255,255,255,0.5);
+  opacity: 0.5;
 }
 #machine-name:focus {
   outline: none;
 
-  color: rgba(255,255,255,1);
+  opacity: 1;
 }
 #machine-type {
   cursor: pointer;
@@ -59,7 +58,7 @@
   padding-right: 5px;
   font-size: 1em;
 
-  color: var(--color-accent);
+  color: var(--color-toolbar-accent);
   border-radius: 10px;
 
   background-color: rgba(255,255,255,0.1);
@@ -72,7 +71,7 @@
   min-width: 3em;
   margin-top: auto;
 
-  fill: var(--color-main-dark);
+  fill: var(--color-toolbar-main-dark);
   transition: fill 0.6s ease;
 }
 #toolbar-upload svg {
@@ -108,10 +107,10 @@
   height: 100%;
 }
 .navicon:hover {
-  fill: var(--color-accent);
+  fill: var(--color-toolbar-accent);
 }
 .navicon:disabled {
-  fill: var(--color-main-dark);
+  fill: var(--color-toolbar-main-dark);
 }
 
 #toolbar-help {

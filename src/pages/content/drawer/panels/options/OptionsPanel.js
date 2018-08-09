@@ -12,6 +12,7 @@ class OptionsPanel extends React.Component
   }
   render()
   {
+    const root = document.getElementById("root");
     return <div className="panel-container" id="option" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>Option</h1>
@@ -54,6 +55,25 @@ class OptionsPanel extends React.Component
             <label className="hotkey-desc">Previous Test</label>
             <span className="hotkey-input">Up</span>
           </div>
+        </div>
+
+        <hr/>
+
+        <div className="panel-checkbox">
+          <input id="option-altinput" type="checkbox" disabled="true"/>
+          <label htmlFor="option-altinput">Swap Input Controls</label>
+        </div>
+        <div className="panel-checkbox">
+          <input id="option-color" type="color"
+            onChange={function(e) {
+              const value = e.target.value;
+              root.style.setProperty("--color-toolbar-main", value);
+            }}/>
+          <label htmlFor="option-color">Primary Color</label>
+        </div>
+        <div className="panel-checkbox">
+          <input id="option-color2" type="color" defaultValue="#FF00FF"/>
+          <label htmlFor="option-color2">Accent Color</label>
         </div>
       </div>
 

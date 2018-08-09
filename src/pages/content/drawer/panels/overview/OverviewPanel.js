@@ -52,7 +52,9 @@ class OverviewPanel extends React.Component
           <TransitionTable machine={this.props.machineBuilder}/>
         </div>
       </div>
+
       <hr />
+      
       <button disabled="true" className="panel-button">Convert To...</button>
       <div>
         <input type="checkbox" id="auto-statename" onChange={(e) => {
