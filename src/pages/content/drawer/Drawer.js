@@ -218,6 +218,8 @@ class Drawer extends React.Component
           onClick={ev=>this.setTab(OPTIONS)}>
           Options
         </button>
+
+        <div className="tab-right"></div>
       </div>
 
       <div className="drawer-border"
