@@ -41,6 +41,33 @@ class NodalGraph
     return null;
   }
 
+  getNodeIndex(node)
+  {
+    for(let i = this.nodes.length - 1; i >= 0; --i)
+    {
+      const other = this.nodes[i];
+      if (node === other)
+      {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  getNodeIndexByLabel(label)
+  {
+    for(let i = this.nodes.length - 1; i >= 0; --i)
+    {
+      const node = this.nodes[i];
+      if (node.label == label)
+      {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
   newNode(x, y, label)
   {
     const result = new Node(this, x, y, label);

@@ -14,10 +14,10 @@ class StateList extends React.Component
   {
     super(props);
 
-    this.onCreate = this.onCreate.bind(this);
+    this.onStateCreate = this.onStateCreate.bind(this);
   }
 
-  onCreate(e)
+  onStateCreate(e)
   {
     const machine = this.props.machine;
     const graph = machine.graph;
@@ -36,7 +36,7 @@ class StateList extends React.Component
           <TriangleIcon/>
           {
             graph.nodes.map((e, i) => {
-              return <StateTag key={i} src={e} label={e.label} accept={e.accept} graph={graph}
+              return <StateTag key={e.label} src={e} label={e.label} accept={e.accept} graph={graph}
                 onFocus={(ev) => {
                   //Center workspace at focused node; inverted due to graph-to-screen space
                   pointer.setOffset(-e.x, -e.y);
@@ -44,7 +44,7 @@ class StateList extends React.Component
             })
           }
         </div>
-        <IconButton onClick={this.onCreate}>
+        <IconButton onClick={this.onStateCreate}>
           <BoxAddIcon/>
         </IconButton>
       </div>
