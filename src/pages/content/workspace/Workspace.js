@@ -48,7 +48,7 @@ class Workspace extends React.Component
       <Subtitle visible={graph.isEmpty()}/>
 
       {/* Graph elements */}
-      <g transform={"translate(" + controller.pointer.offsetX + " " + controller.pointer.offsetY + ")"}>
+      <g id="workspace-content-elements" transform={"translate(" + controller.pointer.offsetX + " " + controller.pointer.offsetY + ")"}>
         {/* Graph origin crosshair */}
         <line x1="0" y1="-5" x2="0" y2="5" stroke="rgba(0,0,0,0.04)"/>
         <line x1="-5" y1="0" x2="5" y2="0" stroke="rgba(0,0,0,0.04)"/>

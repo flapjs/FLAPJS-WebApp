@@ -8,6 +8,7 @@ import NodalGraph from 'graph/NodalGraph';
 const MESSAGE_NO_ERRORS = "Hooray! No more errors!";
 const MESSAGE_TAG_MACHINE_ERRORS = "machineError";
 const ERROR_CHECK_INTERVAL = 2000;
+const ERROR_CHECK_IMMEDIATE_INTERVAL = 50;
 
 class FSABuilder extends MachineBuilder
 {
@@ -57,14 +58,7 @@ class FSABuilder extends MachineBuilder
       }
     };
 
-    if (!this.tester.isImmediateErrorCheck)
-    {
-      this._timer = setTimeout(doErrorCheck, ERROR_CHECK_INTERVAL);
-    }
-    else
-    {
-      doErrorCheck();
-    }
+    this._timer = setTimeout(doErrorCheck, this.tester.isImmediateErrorCheck ? ERROR_CHECK_IMMEDIATE_INTERVAL : ERROR_CHECK_INTERVAL);
   }
 
   formatAlphabetString(string)
