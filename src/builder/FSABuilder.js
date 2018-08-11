@@ -5,11 +5,6 @@ import DFAErrorChecker from './DFAErrorChecker.js';
 import NFA from 'machine/NFA.js';
 import NodalGraph from 'graph/NodalGraph';
 
-const MESSAGE_NO_ERRORS = "Hooray! No more errors!";
-const MESSAGE_TAG_MACHINE_ERRORS = "machineError";
-const ERROR_CHECK_INTERVAL = 2000;
-const GRAPH_CHANGE_IMMEDIATE_INTERVAL = 50;
-
 class FSABuilder extends MachineBuilder
 {
   constructor(graph, tester, app)
@@ -78,9 +73,9 @@ class FSABuilder extends MachineBuilder
       this._errorTimer = null;
     }
 
-    this._timer = setTimeout(this.onDelayedGraphChange, GRAPH_CHANGE_IMMEDIATE_INTERVAL);
+    this._timer = setTimeout(this.onDelayedGraphChange, Config.GRAPH_IMMEDIATE_INTERVAL);
     this._errorTimer = setTimeout(this.onDelayedErrorCheck,
-      this.tester.isImmediateErrorCheck ? (GRAPH_CHANGE_IMMEDIATE_INTERVAL * 2) : ERROR_CHECK_INTERVAL);
+      this.tester.isImmediateErrorCheck ? (Config.GRAPH_IMMEDIATE_INTERVAL * 2) : Config.ERROR_CHECK_INTERVAL);
   }
 
   onDelayedGraphChange()
@@ -99,19 +94,19 @@ class FSABuilder extends MachineBuilder
 
     //clear previous error messages
     const notification = this.app.notification;
-    notification.clearErrorMessage(MESSAGE_TAG_MACHINE_ERRORS);
+    notification.clearErrorMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);
     const result = this.machineErrorChecker.checkErrors((error, targets) => {
-      notification.clearMessage(MESSAGE_TAG_MACHINE_ERRORS);
+      notification.clearMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);
       let message = error + ": ";
       message += targets.join(", ");
-      notification.addErrorMessage(message, MESSAGE_TAG_MACHINE_ERRORS);
+      notification.addErrorMessage(message, Config.MACHINE_ERRORS_MESSAGE_TAG);
     });
 
     //Output success if no errors were found
     if (!result)
     {
-      notification.clearErrorMessage(MESSAGE_TAG_MACHINE_ERRORS);
-      notification.addMessage(MESSAGE_NO_ERRORS, MESSAGE_TAG_MACHINE_ERRORS);
+      notification.clearErrorMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);
+      notification.addMessage(Config.NO_ERRORS_MESSAGE, Config.MACHINE_ERRORS_MESSAGE_TAG);
     }
   }
 

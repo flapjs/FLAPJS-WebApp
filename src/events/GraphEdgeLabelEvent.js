@@ -16,13 +16,13 @@ class GraphEdgeLabelEvent extends Event
   //Override
   applyUndo()
   {
-    this.edge.label = this.prevLabel;
+    this.edge.setLabel(this.prevLabel);
   }
 
   //Override
   applyRedo()
   {
-    this.edge.label = this.nextLabel;
+    this.edge.setLabel(this.nextLabel);
   }
 }
 

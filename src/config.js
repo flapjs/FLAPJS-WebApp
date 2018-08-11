@@ -6,6 +6,12 @@ export default cfg;
 //General
 cfg.CLEAR_GRAPH_MESSAGE = "Any unsaved changes will be lost. Are you sure you want to continue?";
 cfg.EXIT_WINDOW_MESSAGE = "Any unsaved changes will be lost. Are you sure you want to leave?";
+cfg.NO_ERRORS_MESSAGE = "Hooray! No more errors!";
+
+cfg.MACHINE_ERRORS_MESSAGE_TAG = "machineError";
+
+cfg.ERROR_CHECK_INTERVAL = 2000;
+cfg.GRAPH_IMMEDIATE_INTERVAL = 50;
 
 //Toolbar
 cfg.DEFAULT_MACHINE_NAME = "Untitled";
