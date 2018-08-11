@@ -31,15 +31,6 @@ cfg.INACTIVE_COLOR = "gray";
 //Testing Panel
 cfg.PLACEHOLDER_TEXT = "Test string";
 
-//Overview Panel
-cfg.DEFAULT_COLOR = "gray";
-cfg.DEFAULT_CUSTOM_COLOR = "white";
-cfg.EDIT_COLOR = "rgba(255,255,255,0.1)";
-cfg.ERROR_COLOR = "rgba(255,0,0,0.7)";
-cfg.DEFAULT_BACKGROUND = "#4D4D4D";
-cfg.DEFAULT_CUSTOM_BACKGROUND = "#4D4D4D";
-cfg.ERROR_BACKGROUND = "rgba(255,0,0,0.5)";
-
 //Controller
 cfg.SMOOTH_OFFSET_DAMPING = 0.4;
 cfg.SCROLL_SENSITIVITY = 1.0 / 300.0;

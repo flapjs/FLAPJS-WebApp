@@ -129,21 +129,14 @@ class StateTag extends React.Component
   {
     const isCustom = this.props.src.hasCustomLabel();
     const value = this.state.value != null ? this.state.value : this.props.label;
-    return <div className="statetag-container"
-      style={{
-        background: value.length > 0 ?
-          isCustom ? Config.DEFAULT_CUSTOM_BACKGROUND : Config.DEFAULT_BACKGROUND :
-          Config.ERROR_BACKGROUND
-      }}>
-      <input type="text" className={"statetag-input" + (this.props.accept ? " accept" : "")} spellCheck="false"
+    return <div className={"statetag-container" +
+      (isCustom ? " customtag" : "") +
+      (value.length == 0 ? " emptytag" : "") +
+      (this.state.value && this.state.error ? " errortag" : "")}>
+      <input type="text" className={(this.props.accept ? " accept" : "")}
+        spellCheck="false"
         draggable="true"
-        style={{
-          width: value.length + "ch",
-          color: this.state.value ?
-            this.state.error ?
-              Config.ERROR_COLOR : Config.EDIT_COLOR :
-              isCustom ? Config.DEFAULT_CUSTOM_COLOR : Config.DEFAULT_COLOR
-        }}
+        style={{width: value.length + "ch"}}
         value={value}
         onChange={this.onValueChange}
         onFocus={this.onFocus}

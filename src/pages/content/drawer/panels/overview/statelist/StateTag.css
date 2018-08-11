@@ -10,7 +10,28 @@
   margin-left: -2px;
 }
 
-.statetag-input {
+/*Backgrounds based on input type*/
+.statetag-container {
+  background: #4D4D4D;
+}
+.statetag-container.emptytag {
+  background: rgba(255,0,0,0.5);
+}
+.statetag-container.errortag {
+}
+
+/*Colors based on input type*/
+.statetag-container > input {
+  color: gray;
+}
+.statetag-container.customtag > input {
+  color: white;
+}
+.statetag-container.errortag > input {
+  color: rgba(255,0,0,0.7);
+}
+
+.statetag-container > input {
   background: none;
   border: none;
   outline: none;
@@ -18,7 +39,7 @@
   font-size: inherit;
   font-family: 'Overpass Mono', monospace;
 }
-.statetag-input.accept {
+.statetag-container > input.accept {
   margin: -1px;/*Remove border space*/
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 5px;
