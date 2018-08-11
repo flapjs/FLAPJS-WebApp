@@ -85,11 +85,11 @@ class Workspace extends React.Component
 
           {/* Node error targets */}
           { machineBuilder.machineErrorChecker.errorNodes.map((e, i) =>
-            <HighlightRenderer key={e.label} target={e} type="node" color="red" offset="6"/>) }
+            <HighlightRenderer key={e.label + "." + i} target={e} type="node" color="red" offset="6"/>) }
 
           {/* Edge error targets */}
           { machineBuilder.machineErrorChecker.errorEdges.map((e, i) =>
-            <HighlightRenderer key={e.label} target={e} type="edge" color="red" offset="6"/>) }
+            <HighlightRenderer key={e.label + "." + i} target={e} type="edge" color="red" offset="6"/>) }
 
           {/* Hover markers */}
           { /*controller.pointer.target &&

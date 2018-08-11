@@ -1,11 +1,6 @@
+import Config from 'config.js';
+
 import { EMPTY } from 'machine/Symbols.js';
-
-const MESSAGE_ERROR_EDGE_PLACEHOLDER = "Incomplete transitions";
-const MESSAGE_ERROR_EDGE_EMPTY = "Empty transitions";
-const MESSAGE_ERROR_EDGE_DUPE = "Duplicate transitions";
-
-const MESSAGE_ERROR_NODE_UNREACHABLE = "Unreachable node";
-const MESSAGE_ERROR_NODE_MISSING = "Missing transitions";
 
 class DFAErrorChecker
 {
@@ -124,11 +119,11 @@ class DFAErrorChecker
     //Callbacks for all collected errors
     if (callback)
     {
-      if (placeholderEdges.length > 0) callback(MESSAGE_ERROR_EDGE_PLACEHOLDER, placeholderEdges);
-      if (emptyEdges.length > 0) callback(MESSAGE_ERROR_EDGE_EMPTY, emptyEdges);
-      if (dupeEdges.length > 0) callback(MESSAGE_ERROR_EDGE_DUPE, dupeEdges);
-      if (unreachableNodes.length > 0) callback(MESSAGE_ERROR_NODE_UNREACHABLE, unreachableNodes);
-      if (missingNodes.length > 0) callback(MESSAGE_ERROR_NODE_MISSING, missingNodes);
+      if (placeholderEdges.length > 0) callback(Config.MACHINE_ERROR_EDGE_PLACEHOLDER_MESSAGE, placeholderEdges);
+      if (emptyEdges.length > 0) callback(Config.MACHINE_ERROR_EDGE_EMPTY_MESSAGE, emptyEdges);
+      if (dupeEdges.length > 0) callback(Config.MACHINE_ERROR_EDGE_DUPE_MESSAGE, dupeEdges);
+      if (unreachableNodes.length > 0) callback(Config.MACHINE_ERROR_NODE_UNREACHABLE_MESSAGE, unreachableNodes);
+      if (missingNodes.length > 0) callback(Config.MACHINE_ERROR_NODE_MISSING_MESSAGE, missingNodes);
     }
 
     return !(nodeTargets.length == 0 && edgeTargets.length == 0);

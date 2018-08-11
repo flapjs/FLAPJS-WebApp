@@ -5,6 +5,8 @@ import DFAErrorChecker from './DFAErrorChecker.js';
 import NFA from 'machine/NFA.js';
 import NodalGraph from 'graph/NodalGraph';
 
+import { EMPTY } from 'machine/Symbols.js';
+
 class FSABuilder extends MachineBuilder
 {
   constructor(graph, tester, app)

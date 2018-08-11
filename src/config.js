@@ -6,7 +6,13 @@ export default cfg;
 //General
 cfg.CLEAR_GRAPH_MESSAGE = "Any unsaved changes will be lost. Are you sure you want to continue?";
 cfg.EXIT_WINDOW_MESSAGE = "Any unsaved changes will be lost. Are you sure you want to leave?";
+
 cfg.NO_ERRORS_MESSAGE = "Hooray! No more errors!";
+cfg.MACHINE_ERROR_EDGE_PLACEHOLDER_MESSAGE = "Incomplete transitions";
+cfg.MACHINE_ERROR_EDGE_EMPTY_MESSAGE = "Empty transitions";
+cfg.MACHINE_ERROR_EDGE_DUPE_MESSAGE = "Duplicate transitions";
+cfg.MACHINE_ERROR_NODE_UNREACHABLE_MESSAGE = "Unreachable node";
+cfg.MACHINE_ERROR_NODE_MISSING_MESSAGE = "Missing transitions";
 
 cfg.MACHINE_ERRORS_MESSAGE_TAG = "machineError";
 
