@@ -57,8 +57,6 @@ class App extends React.Component
     this.graph.on("markDirty", (g) => {
       this.testingManager.markDirty();
     });
-    //HACK: this is a quick and dirty way to error check notifications...
-    this.graph.on("markDirty", this.machineBuilder.onGraphChange.bind(this.machineBuilder));
 
     this.state = {
       isOpen: true,
@@ -200,9 +198,11 @@ class App extends React.Component
 
     const graph = this.graph;
     const controller = this.controller;
+    const machineBuilder = this.machineBuilder;
 
     //Initialize the controller to graph components
     controller.initialize(this, this.workspace.ref);
+    machineBuilder.initialize();
 
     //Auto rename machine
     const relabel = () => {
@@ -262,6 +262,7 @@ class App extends React.Component
 
   componentWillUnmount()
   {
+    this.machineBuilder.destroy();
     this.controller.destroy();
 
     //Upload drop zone

@@ -574,7 +574,8 @@ class GraphInputController extends InputController
           //Open label editor if default edge...
           if (target.label === Config.STR_TRANSITION_PROXY_LABEL)
           {
-            target.label = Config.STR_TRANSITION_DEFAULT_LABEL;
+            //Silently set the label...
+            target._label = Config.STR_TRANSITION_DEFAULT_LABEL;
             this.openLabelEditor(target, x, y);
           }
           return true;

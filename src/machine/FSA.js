@@ -18,7 +18,7 @@ class FSA
     this._states.length = 0;
     this._transitions.length = 0;
     this._finalStates.length = 0;
-    
+
     this._customAlphabet.length = 0;
   }
 
@@ -199,7 +199,7 @@ class FSA
     for(const transition of this._transitions)
     {
       const symbol = transition[SYMBOL];
-      if (!result.includes(symbol))
+      if (symbol.length > 0 && !result.includes(symbol))
       {
         result.push(symbol);
       }

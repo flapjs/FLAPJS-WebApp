@@ -190,22 +190,21 @@ class Edge
 
   setLabel(label)
   {
+    const prevLabel = this._label;
     this._label = label;
 
-    this.graph.markDirty();
+    if (prevLabel != label)
+    {
+      this.graph.emit("edgeLabel", this, label, prevLabel);
+
+      this.graph.markDirty();
+    }
   }
 
   get label() { return this._label; }
   set label(value) {
-    let prevLabel = this._label;
-    this._label = value;
-
-    if (prevLabel != value)
-    {
-      this.graph.emit("edgeLabel", this, this._label, prevLabel);
-
-      this.graph.markDirty();
-    }
+    //TODO: Deprecate this
+    throw new Error("This is deprecated; please use setLabel!");
   }
 
   get to() { return this._to; }

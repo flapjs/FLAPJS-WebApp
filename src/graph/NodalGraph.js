@@ -23,9 +23,6 @@ class NodalGraph
   {
     this.nodes = nodes;
     this.edges = edges;
-
-    //TODO: should remove this
-    this._machine = null;
   }
 
   getNodeByLabel(label)
@@ -240,14 +237,7 @@ class NodalGraph
 
   markDirty()
   {
-    const prevMachine = this._machine;
-    this._machine = null;
     this.emit("markDirty", this);
-  }
-
-  isDirty()
-  {
-    return !this._machine;
   }
 
   static parseJSON(data)
