@@ -3,9 +3,13 @@
   height: 3em;
   padding: 10px;
 
+  opacity: 1.0;
   fill: #6E6E6E;
-  transition: fill 0.3s ease;
+  transition: fill 0.3s ease, opacity 0.1s ease;
 }
 #trash-btn.danger {
   fill: #B05454;
+}
+#trash-btn.hidden {
+  opacity: 0.0;
 }
