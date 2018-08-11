@@ -44,36 +44,22 @@ class Workspace extends React.Component
       viewBox={(-halfSize + WORKSPACE_OFFSET_X) + " " + (-halfSize + WORKSPACE_OFFSET_Y) + " " + size + " " + size}
       xmlns="http://www.w3.org/2000/svg">
 
+      {/* Graph subtitle */}
       <Subtitle visible={graph.isEmpty()}/>
 
-      <filter id="error-highlight" height="300%" width="300%" x="-75%" y="-75%">
-        <feColorMatrix type="matrix"
-          result="color"
-          values={
-            "1 0 0 0 1 " +
-            "0 0 0 0 0 " +
-            "0 0 0 0 0 " +
-            "0 0 0 1 0"
-          }/>
-        <feGaussianBlur in="color" stdDeviation="1" result="blur"/>
-        <feMerge>
-          <feMergeNode in="blur"/>
-          <feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-
+      {/* Graph elements */}
       <g transform={"translate(" + controller.pointer.offsetX + " " + controller.pointer.offsetY + ")"}>
-
+        {/* Graph origin crosshair */}
         <line x1="0" y1="-5" x2="0" y2="5" stroke="rgba(0,0,0,0.04)"/>
         <line x1="-5" y1="0" x2="5" y2="0" stroke="rgba(0,0,0,0.04)"/>
 
-        //Graph objects
+        {/* Graph objects */}
         <g>
-          //Nodes
+          {/* Nodes */}
           { graph.nodes.map((e, i) =>
             <NodeRenderer key={i} node={e}/>) }
 
-          //Edges
+          {/* Edges */}
           { graph.edges.map((e, i) =>
             <EdgeRenderer key={i} edge={e}
               start={e.getStartPoint()}
@@ -82,31 +68,36 @@ class Workspace extends React.Component
               label={e.label}/>) }
         </g>
 
-        //Graph guis
+        {/* Graph GUIs */}
         <g>
-          //Initial marker (and ghost)
+          {/* Initial marker and ghost */}
           { graph.getStartNode() && (controller.ghostInitialMarker == null ?
             <InitialMarkerRenderer node={graph.getStartNode()}/> :
             <InitialMarkerRenderer node={controller.ghostInitialMarker}/>) }
 
-          //Selected Elements
+          {/* Selected elements */}
           { controller.selector.hasSelection() &&
             controller.selector.getSelection().map((e, i) =>
               <HighlightRenderer key={e.label} target={e} type="node" color="gray"/>) }
 
-          //SelectionBox
+          {/* Selection box */}
           <SelectionBoxRenderer src={controller.selector}/>
 
+          {/* Node error targets */}
           { machineBuilder.machineErrorChecker.errorNodes.map((e, i) =>
             <HighlightRenderer key={e.label} target={e} type="node" color="red" offset="6"/>) }
 
-          //Hover Element
+          {/* Edge error targets */}
+          { machineBuilder.machineErrorChecker.errorEdges.map((e, i) =>
+            <HighlightRenderer key={e.label} target={e} type="edge" color="red" offset="6"/>) }
+
+          {/* Hover markers */}
           { /*controller.pointer.target &&
             !controller.selector.isTargetSelected(controller.pointer.target) &&
             <Select target={controller.pointer.target} type={controller.pointer.targetType}/>*/ }
 
-          </g>
         </g>
+      </g>
     </svg>;
   }
 }
