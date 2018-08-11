@@ -25,13 +25,8 @@ class HomePage extends React.Component {
             <div className="homepage-container">
                 <Header/>
                 <Content/>
-                <Button router={this.props.router}/>
-
+                <Button/>
             </div>
-
-
-
-
         );
 
     }
