@@ -5,19 +5,19 @@ import DFAErrorChecker from './DFAErrorChecker.js';
 import NFA from 'machine/NFA.js';
 import NodalGraph from 'graph/NodalGraph';
 
+const MESSAGE_NO_ERRORS = "Hooray! No more errors!";
+const MESSAGE_TAG_MACHINE_ERRORS = "machineError";
 const ERROR_CHECK_INTERVAL = 2000;
+const SHOULD_DELAY_ERROR_CHECKER = false;
 
 class FSABuilder extends MachineBuilder
 {
-  //HACK: this should not take app
   constructor(graph, tester, app)
   {
     super(graph);
 
-    //HACK: this should not take app
-    this.app = app;
-
     this.tester = tester;
+    this.app = app;
 
     this._machine = new NFA();
     this._machineType = "DFA";
@@ -27,9 +27,6 @@ class FSABuilder extends MachineBuilder
     this._timer = null;
 
     this.machineErrorChecker = new DFAErrorChecker(this, graph);
-
-    //HACK: this is a quick and dirty way to error check notifications...
-    this.graph.on("markDirty", this.onGraphChange.bind(this));
   }
 
   onGraphChange(graph)
@@ -40,24 +37,36 @@ class FSABuilder extends MachineBuilder
       this._timer = null;
     }
 
-    this._timer = setTimeout(() => {
+    const doErrorCheck = () => {
       //HACK: this is to turn off error checking really quick
       if (!this.tester.autoErrorCheck) return;
 
       //clear previous error messages
-      this.app.notification.clearErrorMessage("machine");
-      this.machineErrorChecker.checkErrors();
-      for(const [error, objects] of this.machineErrorChecker.errorMessages)
-      {
-        //TODO: this should notify the user and highlight the error
+      const notification = this.app.notification;
+      notification.clearErrorMessage(MESSAGE_TAG_MACHINE_ERRORS);
+      const result = this.machineErrorChecker.checkErrors((error, targets) => {
+        notification.clearMessage(MESSAGE_TAG_MACHINE_ERRORS);
         let message = error + ": ";
-        for(const o of objects)
-        {
-          message += o.label + ", ";
-        }
-        this.app.notification.addErrorMessage(message, "machine");
+        message += targets.join(", ");
+        notification.addErrorMessage(message, MESSAGE_TAG_MACHINE_ERRORS);
+      });
+      
+      //Output success if no errors were found
+      if (!result)
+      {
+        notification.clearErrorMessage(MESSAGE_TAG_MACHINE_ERRORS);
+        notification.addMessage(MESSAGE_NO_ERRORS, MESSAGE_TAG_MACHINE_ERRORS);
       }
-    }, ERROR_CHECK_INTERVAL);
+    };
+
+    if (SHOULD_DELAY_ERROR_CHECKER)
+    {
+      this._timer = setTimeout(doErrorCheck, ERROR_CHECK_INTERVAL);
+    }
+    else
+    {
+      doErrorCheck();
+    }
   }
 
   formatAlphabetString(string)

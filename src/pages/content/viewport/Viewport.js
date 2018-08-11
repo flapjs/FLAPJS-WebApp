@@ -25,6 +25,7 @@ class Viewport extends React.Component
     return <div className="viewport-container" ref={ref=>this.ref=ref}
       style={{outlineColor: getModeColor(this.state.mode)}}>
       <LabelEditor controller={this.props.controller}
+        graph={this.props.app.graph}
         machineBuilder={this.props.app.machineBuilder}
         screen={this.props.app.workspace.ref}
         ref={ref=>this.labelEditor=ref}/>

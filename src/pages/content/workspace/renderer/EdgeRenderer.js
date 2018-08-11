@@ -44,18 +44,19 @@ class EdgeRenderer extends React.Component
     let dy = 0;
 
     //TODO: style={{filter:"url(#error-highlight)"}}
-    return <g className="graph-edge">
+    return <g className="graph-edge-container">
       //Draw lines
-      <path d={
-        "M " + start.x + " " + start.y + " " +
-        quadLine + " " +
-        "M " +
-          (end.x - (Config.ARROW_WIDTH * Math.sin(arrowAngle - SIXTH_PI))) + " " +
-          (end.y - (Config.ARROW_WIDTH * Math.cos(arrowAngle - SIXTH_PI))) + " " +
-        "L " + end.x + " " + end.y + " " +
-        "L " +
-          (end.x - (Config.ARROW_WIDTH * Math.sin(arrowAngle + SIXTH_PI))) + " " +
-          (end.y - (Config.ARROW_WIDTH * Math.cos(arrowAngle + SIXTH_PI)))}
+      <path className="graph-edge"
+        d={
+          "M " + start.x + " " + start.y + " " +
+          quadLine + " " +
+          "M " +
+            (end.x - (Config.ARROW_WIDTH * Math.sin(arrowAngle - SIXTH_PI))) + " " +
+            (end.y - (Config.ARROW_WIDTH * Math.cos(arrowAngle - SIXTH_PI))) + " " +
+          "L " + end.x + " " + end.y + " " +
+          "L " +
+            (end.x - (Config.ARROW_WIDTH * Math.sin(arrowAngle + SIXTH_PI))) + " " +
+            (end.y - (Config.ARROW_WIDTH * Math.cos(arrowAngle + SIXTH_PI)))}
         stroke={Config.EDGE_STROKE_STYLE}
         fill="none" />
 

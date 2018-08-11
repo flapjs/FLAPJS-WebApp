@@ -38,15 +38,6 @@ class App extends React.Component
   {
     super(props);
 
-    //Must be initialized (will be called in Workspace.componentDidMount)
-    this.controller = new GraphInputController();
-    this.graph = new NodalGraph();
-    //HACK: this should not be passed to FSA Builder
-    this.machineBuilder = new FSABuilder(this.graph, null, this);
-    this.testingManager = new TestingManager(this.machineBuilder);
-    this.machineBuilder.tester = this.testingManager;//HACK: let machine builder ref testing manager
-    this.eventHistory = new EventHistory();
-
     //Create references
     this.container = React.createRef();
     this.workspace = React.createRef();
@@ -54,6 +45,20 @@ class App extends React.Component
     this.drawer = React.createRef();
     this.notification = React.createRef();
     this.toolbar = React.createRef();
+
+    //Must be initialized (will be called in Workspace.componentDidMount)
+    this.controller = new GraphInputController();
+    this.graph = new NodalGraph();
+    this.eventHistory = new EventHistory();
+    this.testingManager = new TestingManager();
+    this.machineBuilder = new FSABuilder(this.graph, this.testingManager, this);
+
+    //HACK: this should be a listener to FSABuilder, should not access graph
+    this.graph.on("markDirty", (g) => {
+      this.testingManager.markDirty();
+    });
+    //HACK: this is a quick and dirty way to error check notifications...
+    this.graph.on("markDirty", this.machineBuilder.onGraphChange.bind(this.machineBuilder));
 
     this.state = {
       isOpen: true,
@@ -287,7 +292,7 @@ class App extends React.Component
             opacity: this.state.isWaitingForFile ? "0.1" : "1"
           }}>
 
-          <Workspace ref={ref=>this.workspace=ref} graph={graph} controller={controller}/>
+          <Workspace ref={ref=>this.workspace=ref} graph={graph} machineBuilder={machineBuilder} controller={controller}/>
         </div>
 
         <div className={"workspace-viewport" +

@@ -9,6 +9,7 @@ import NodeRenderer from './renderer/NodeRenderer.js';
 import EdgeRenderer from './renderer/EdgeRenderer.js';
 import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
 import InitialMarkerRenderer from './renderer/InitialMarkerRenderer.js';
+import HighlightRenderer from './renderer/HighlightRenderer.js';
 
 const WORKSPACE_OFFSET_X = 15;
 const WORKSPACE_OFFSET_Y = 0;
@@ -33,6 +34,7 @@ class Workspace extends React.Component
     const graph = this.props.graph;
     const controller = this.props.controller;
     const pointer = controller.pointer;
+    const machineBuilder = this.props.machineBuilder;
 
     let size = Config.DEFAULT_GRAPH_SIZE * Math.max(Number.MIN_VALUE, pointer.scale);
     const halfSize = size / 2;
@@ -90,10 +92,13 @@ class Workspace extends React.Component
           //Selected Elements
           { controller.selector.hasSelection() &&
             controller.selector.getSelection().map((e, i) =>
-              <Select key={i} target={e} type="node"/>) }
+              <HighlightRenderer key={e.label} target={e} type="node" color="gray"/>) }
 
           //SelectionBox
           <SelectionBoxRenderer src={controller.selector}/>
+
+          { machineBuilder.machineErrorChecker.errorNodes.map((e, i) =>
+            <HighlightRenderer key={e.label} target={e} type="node" color="red" offset="6"/>) }
 
           //Hover Element
           { /*controller.pointer.target &&
@@ -104,52 +109,6 @@ class Workspace extends React.Component
         </g>
     </svg>;
   }
-}
-
-function Select(props)
-{
-  const target = props.target;
-  const type = props.type;
-
-  let x = 0;
-  let y = 0;
-  let r = Config.CURSOR_RADIUS;
-  switch(type)
-  {
-    case "node":
-      x = target.x || 0;
-      y = target.y || 0;
-      r = Config.NODE_RADIUS;
-      break;
-    case "edge":
-      const center = target.getCenterPoint();
-      x = center.x || 0;
-      y = center.y || 0;
-      r = Config.EDGE_RADIUS;
-      break;
-    case "endpoint":
-      const endpoint = target.getEndPoint();
-      x = endpoint.x || 0;
-      y = endpoint.y || 0;
-      r = Config.ENDPOINT_RADIUS;
-      break;
-    case "initial":
-      x = target.x - Config.NODE_RADIUS || 0;
-      y = target.y || 0;
-      r = Config.CURSOR_RADIUS;
-      break;
-  }
-
-  return <g>
-    <circle
-      cx={x}
-      cy={y}
-      r={r + Config.HOVER_RADIUS_OFFSET}
-      strokeDasharray={Config.HOVER_LINE_DASH}
-      strokeWidth={Config.HOVER_LINE_WIDTH}
-      stroke={Config.HOVER_STROKE_STYLE}
-      fill="none" />
-  </g>;
 }
 
 export default Workspace;

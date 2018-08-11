@@ -15,19 +15,22 @@ class TestingPanel extends React.Component
 
   render()
   {
+    const machineBuilder = this.props.machineBuilder;
+    const tester = this.props.tester;
+
     return <div className="panel-container" id="testing" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>Testing</h1>
       </div>
 
-      <TestList tester={this.props.tester}/>
+      <TestList machineBuilder={machineBuilder} tester={tester}/>
       <hr />
 
       <div>
         <input id="test-errorcheck" type="checkbox"
-          checked={this.props.tester.autoErrorCheck}
+          checked={tester.autoErrorCheck}
           onChange={(e)=>{
-            this.props.tester.autoErrorCheck = e.target.checked;
+            tester.autoErrorCheck = e.target.checked;
           }}/>
         <label htmlFor="test-errorcheck">Automatically Check Errors</label>
       </div>

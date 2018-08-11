@@ -6,23 +6,12 @@ const FAILURE = -1;
 
 class TestingManager
 {
-  constructor(machineBuilder)
+  constructor()
   {
-    this.machineBuilder = machineBuilder;
     this.inputs = [];
 
     this.autoErrorCheck = false;
     this.placeholder = new Test();
-
-    //HACK: this should be a listener to FSABuilder, should not access graph
-    this.machineBuilder.graph.on("markDirty", (g) => {
-      this.placeholder.dirty = true;
-      for(const input of this.inputs)
-      {
-        if (input == null) return;
-        input.dirty = true;
-      }
-    });
   }
 
   addTestInput(input)
@@ -49,14 +38,13 @@ class TestingManager
     }
   }
 
-  testPlaceholder()
+  testPlaceholder(machine)
   {
-    return this.testByInput(this.placeholder);
+    return this.testByInput(this.placeholder, machine);
   }
 
-  testByInput(input, machine=null)
+  testByInput(input, machine)
   {
-    if (!machine) machine = this.machineBuilder.getMachine();
     input.result = PENDING;
     const result = solveNFA(machine, input.value);
     input.result = result ? SUCCESS : FAILURE;
@@ -64,20 +52,27 @@ class TestingManager
     return result;
   }
 
-  testByIndex(index, machine=null)
+  testByIndex(index, machine)
   {
-    if (!machine) machine = this.machineBuilder.getMachine();
     if (index < 0 || index >= this.inputs.length) return false;
     return this.testByInput(this.inputs[index], machine);
   }
 
-  testAll(machine=null)
+  testAll(machine)
   {
-    if (!machine) machine = this.machineBuilder.getMachine();
-
     for(const input of this.inputs)
     {
       this.testByInput(input, machine);
+    }
+  }
+
+  markDirty()
+  {
+    this.placeholder.dirty = true;
+    for(const input of this.inputs)
+    {
+      if (input == null) continue;
+      input.dirty = true;
     }
   }
 }

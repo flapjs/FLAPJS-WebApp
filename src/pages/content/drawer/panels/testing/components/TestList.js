@@ -39,28 +39,29 @@ class TestList extends React.Component
   render()
   {
     const tester = this.props.tester;
+    const machineBuilder = this.props.machineBuilder;
+
     return <div className="test-inputlist-container">
       <button className="panel-button" onClick={()=>{
-        this.props.tester.testPlaceholder();
-        this.props.tester.testAll();
+        const machine = machineBuilder.getMachine();
+        tester.testPlaceholder(machine);
+        tester.testAll(machine);
       }}>
         Run All Tests
       </button>
 
       <div className="scrollbar-container">
       <div className="test-inputlist-content">
-        <TestInput placeholder={true} index={-1} tester={tester} src={this.props.tester.placeholder}/>
+        <TestInput placeholder={true} index={-1} machineBuilder={machineBuilder} tester={tester} src={tester.placeholder}/>
         {
-          this.props.tester.inputs.map((e, i) => {
+          tester.inputs.map((e, i) => {
             if (!e) return null;
-            
-            return <TestInput key={i} index={i} tester={tester} src={e}/>;
+
+            return <TestInput key={i} index={i} machineBuilder={machineBuilder} tester={tester} src={e}/>;
           })
         }
         <button className="panel-button"
-          onClick={()=>{
-            this.props.tester.clear(true);
-          }}>
+          onClick={()=>tester.clear(true)}>
           Clear
         </button>
       </div>

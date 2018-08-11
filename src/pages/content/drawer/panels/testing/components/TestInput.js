@@ -68,11 +68,13 @@ class TestInput extends React.Component
   {
     if (e.keyCode === Config.SUBMIT_KEY)
     {
+      const tester = this.props.tester;
+      const machineBuilder = this.props.machineBuilder;
+
       //Add input if placeholder and Run
       if (this.props.placeholder)
       {
-        const tester = this.props.tester;
-        tester.testPlaceholder();
+        tester.testPlaceholder(machineBuilder.getMachine());
         //Add test input to list
         const newTest = tester.addTestInput(this.state.src.value);
         //Save result to new test
@@ -85,7 +87,7 @@ class TestInput extends React.Component
       //Otherwise just run it
       else
       {
-        this.props.tester.testByIndex(this.props.index);
+        tester.testByIndex(this.props.index, machineBuilder.getMachine());
 
         //Select everything again
         this.inputElement.select();
@@ -99,6 +101,9 @@ class TestInput extends React.Component
 
   render()
   {
+    const tester = this.props.tester;
+    const machineBuilder = this.props.machineBuilder;
+
     return <div className={"test-input-container" +
       (this.props.placeholder ? " test-input-placeholder" : "")}>
 
@@ -106,11 +111,11 @@ class TestInput extends React.Component
         onClick={()=>{
           if (this.props.placeholder)
           {
-            this.props.tester.testPlaceholder();
+            tester.testPlaceholder(machineBuilder.getMachine());
           }
           else
           {
-            this.props.tester.testByIndex(this.props.index);
+            tester.testByIndex(this.props.index, machineBuilder.getMachine());
           }
         }}/>
 

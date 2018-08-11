@@ -14,9 +14,9 @@ class NodeRenderer extends React.Component
     const node = this.props.node;
     //TODO: style={{cursor: "crosshair"}}
     //TODO: style={{filter:"url(#error-highlight)"}}
-    return <g className="graph-node">
+    return <g className="graph-node-container">
       //Outer circle
-      <circle
+      <circle className="graph-node"
         cx={node.x}
         cy={node.y}
         r={Config.NODE_RADIUS}

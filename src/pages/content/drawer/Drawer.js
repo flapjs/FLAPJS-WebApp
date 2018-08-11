@@ -66,7 +66,7 @@ class Drawer extends React.Component
       case OVERVIEW:
         return <OverviewPanel ref={ref=>this.panel=ref} graph={app.graph} machineBuilder={app.machineBuilder} controller={app.controller}/>;
       case TESTING:
-        return <TestingPanel ref={ref=>this.panel=ref} tester={app.testingManager}/>;
+        return <TestingPanel ref={ref=>this.panel=ref} machineBuilder={app.machineBuilder} tester={app.testingManager}/>;
       case EXPORTING:
         return <ExportingPanel ref={ref=>this.panel=ref} workspace={app.workspace} graph={this.props.graph} toolbar={this.props.toolbar} />;
       case OPTIONS:
