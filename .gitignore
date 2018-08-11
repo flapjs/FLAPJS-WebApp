@@ -1,6 +1,4 @@
 /node_modules/
-/dist/
-.idea
 .DS_Store
 
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839

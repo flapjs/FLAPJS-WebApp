@@ -3,7 +3,11 @@
   fill: #909090;
   transition: fill 0.3s ease, transform 0.3s ease;
   transform: rotate(90deg);
-  margin: 4px;
+  width: 1.5em;
+  min-width: 1.5em;
+  min-height: 1.5em;
+  height: 1.5em;
+  margin: 0.4em;
 }
 .drawer-expand:hover {
   fill: #FFFFFF;

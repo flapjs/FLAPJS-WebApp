@@ -1,7 +1,8 @@
 import * as TEST from '../Tester.js';
+import { EMPTY } from 'machine/Symbols.js';
+
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
-import { EMPTY } from 'machine/Symbols.js';
 
 import { solveDFA } from 'machine/util/solveDFA.js';
 import { convertToDFA } from 'machine/util/convertNFA.js';
@@ -94,3 +95,16 @@ TEST.assert(solveDFA(result, "111111111111"));
 TEST.assert(solveDFA(result, "10000000001"));
 TEST.assert(solveDFA(result, "0000000001"));
 TEST.assert(solveDFA(result, "101010010010100101"));
+
+
+/**NEW TEST*/
+{
+  let machine = new NFA();
+  machine.newState("q0");
+  machine.newState("q1");
+  machine.newTransition("q0", "q1", "1");
+  machine.setStartState("q0");
+  machine.setFinalState("q0");
+  let result = convertToDFA(machine);
+  TEST.assert(result.validate());
+}

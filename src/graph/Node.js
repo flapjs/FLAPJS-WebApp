@@ -1,4 +1,3 @@
-
 class Node
 {
   constructor(graph, x=0, y=0, label="q")
@@ -6,16 +5,53 @@ class Node
     this.graph = graph;
     this.x = x;
     this.y = y;
+    this.customLabel = false;
 
     this._label = label;
     this._accept = false;
+  }
+
+  setLabel(label)
+  {
+    const prevLabel = this._label;
+    this._label = label;
+    this.customLabel = false;
+
+    if (prevLabel != label)
+    {
+      this.graph.emit("nodeLabel", this, this._label, prevLabel);
+      this.graph.markDirty();
+    }
+  }
+
+  setCustomLabel(label)
+  {
+    const prevLabel = this._label;
+    this._label = label;
+    this.customLabel = true;
+
+    if (prevLabel != label)
+    {
+      this.graph.emit("nodeLabel", this, this._label, prevLabel);
+      this.graph.markDirty();
+    }
+  }
+
+  hasCustomLabel()
+  {
+    return this.customLabel;
   }
 
   get label() { return this._label; }
   set label(value) {
     let prevLabel = this._label;
     this._label = value;
-    this.graph.emit("nodeLabel", this, this._label, prevLabel);
+
+    if (prevLabel != value)
+    {
+      this.graph.emit("nodeLabel", this, this._label, prevLabel);
+      this.graph.markDirty();
+    }
   }
 
   get accept() { return this._accept; }
@@ -25,6 +61,7 @@ class Node
     if (prevAccept != value)
     {
       this.graph.emit("toggleAccept", this, this._accept, prevAccept);
+      this.graph.markDirty();
     }
   }
 }

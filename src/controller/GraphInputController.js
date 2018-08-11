@@ -1,24 +1,52 @@
+import Config from 'config.js';
+
 import InputController from './InputController.js';
 import SelectionBox from './SelectionBox.js';
 import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
 
-import * as Config from 'config.js';
+/*
+nodeCreate(targetNode)
+nodeDelete(targetNode, prevX, prevY)
+nodeDeleteAll(targetNodes, selectedNode, prevX, prevY)
+nodeMove(targetNode, nextX, nextY, prevX, prevY)
+nodeMoveAll(targetNodes, dx, dy)
+nodeAccept(targetNode, nextAccept, prevAccept)
+nodeInitial(nextInitial, prevInitial)
+nodeLabel(targetNode, nextLabel, prevLabel)//Not used
 
+edgeCreate(targetEdge)
+edgeDelete(targetEdge)
+edgeDestination(targetEdge, nextDestination, prevDestination, prevQuad)
+edgeMove(targetEdge, nextX, nextY, prevX, prevY)
+edgeLabel(targetEdge, nextLabel, prevLabel)
+*/
 class GraphInputController extends InputController
 {
-  constructor(graph)
+  constructor()
   {
-    super(graph);
+    super();
 
     this.labelEditor = null;
+    this.machineBuilder = null;
 
     this.prevQuad = {x: 0, y: 0};
+    this.prevEdgeTo = null;
+    this.prevX = 0;
+    this.prevY = 0;
+    this.prevOffsetX = 0;
+    this.prevOffsetY = 0;
+
+    //Make sure this is always false when moving endpoints
+    this.isNewEdge = false;
+
     this.firstEmptyClick = false;
     this.firstEmptyTime = 0;
+    this.firstEmptyX = 0;
+    this.firstEmptyY = 0;
     this.ghostInitialMarker = null;
 
-    this.selector = new SelectionBox(this.graph);
+    this.selector = new SelectionBox(null);
 
     this.shouldDestroyPointlessEdges = Config.DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
   }
@@ -27,12 +55,9 @@ class GraphInputController extends InputController
   {
     super.initialize(app, workspace);
 
+    this.selector.graph = this.graph;
     this.labelEditor = app.viewport.labelEditor;
-  }
-
-  onUpdate()
-  {
-    this.pointer.updateTarget();
+    this.machineBuilder = app.machineBuilder;
   }
 
   onInputDown(x, y, target, targetType)
@@ -57,7 +82,35 @@ class GraphInputController extends InputController
   }
 
   onInputMove(x, y, target, targetType) {}
-  onInputUp(x, y, target, targetType) {}
+  onInputUp(x, y, target, targetType)
+  {
+    if (targetType === 'none')
+    {
+      const dx = x - this.firstEmptyX;
+      const dy = y - this.firstEmptyY;
+      //If within the time to double tap...
+      if (this.firstEmptyClick && (dx * dx + dy * dy) < Config.CURSOR_RADIUS_SQU && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
+      {
+        //Create state at position
+        const node = this.createNode(x, y);
+
+        //Emit event
+        this.emit("nodeCreate", node);
+
+        this.firstEmptyClick = false;
+      }
+      else
+      {
+        //This is the first empty click, should wait for another...
+        this.firstEmptyClick = true;
+        this.firstEmptyTime = Date.now();
+        this.firstEmptyX = x;
+        this.firstEmptyY = y;
+      }
+
+      return true;
+    }
+  }
 
   onInputAction(x, y, target, targetType)
   {
@@ -77,23 +130,21 @@ class GraphInputController extends InputController
         //Click to delete node
         if (targetType === 'node')
         {
+          //So that the emitted 'delete' events can use this
+          this.prevX = x;
+          this.prevY = y;
+
           //If there exists selected states, delete them all!
           const selector = this.selector;
           if (selector.hasSelection())
           {
-            //Remove from graph
-            for(const node of selector.getSelection())
-            {
-              this.graph.deleteNode(node);
-            }
-
-            //Remove from selection
-            selector.clearSelection();
+            //Delete all selected nodes
+            this.deleteSelectedNodes(target);
           }
           else
           {
             //Delete a single node
-            this.graph.deleteNode(target);
+            this.deleteTargetNode(target);
           }
 
           return true;
@@ -101,7 +152,7 @@ class GraphInputController extends InputController
         else if (targetType === 'edge' || targetType === 'endpoint')
         {
           //Delete a single edge
-          this.graph.deleteEdge(target);
+          this.deleteTargetEdge(target);
           return true;
         }
         else
@@ -117,40 +168,19 @@ class GraphInputController extends InputController
       //If selected target...
       if (targetType === 'node')
       {
+        const prev = target.accept;
+        const result = !target.accept;
         //Toggle accept for selected node
-        target.accept = !target.accept;
+        target.accept = result;
+
+        //Emit event
+        this.emit("nodeAccept", target, result, prev);
         return true;
       }
       else if (targetType === 'edge')
       {
         //Edit label for selected edge
         this.openLabelEditor(target, x, y);
-        return true;
-      }
-      //If hovered target is none...
-      else if (pointer.targetType === 'none')
-      {
-        //TODO: this may have a bug in where you must triple click
-        if (this.firstEmptyClick)
-        {
-          //If within the time to double tap...
-          if (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS)
-          {
-            //Create state at position
-            this.createNode(x, y);
-          }
-
-          //Reset empty click
-          this.firstEmptyClick = false;
-          this.firstEmptyTime = 0;
-        }
-        else
-        {
-          //This is the first empty click, should wait for another...
-          this.firstEmptyClick = true;
-          this.firstEmptyTime = pointer.initial.time;
-        }
-
         return true;
       }
       else
@@ -162,6 +192,7 @@ class GraphInputController extends InputController
 
   onDragStart(x, y, target, targetType)
   {
+    //TODO: sometimes, pointer.target is null when it should not be...
     const pointer = this.pointer;
 
     //If is in move mode...
@@ -183,6 +214,8 @@ class GraphInputController extends InputController
           throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Node.");
 
         //Ready to move node(s)...
+        this.prevX = x;
+        this.prevY = y;
         return true;
       }
       //Moving edge center point
@@ -199,6 +232,10 @@ class GraphInputController extends InputController
           return false;
         }
 
+        //Save previous quadratics
+        this.prevQuad.x = target.quad.x;
+        this.prevQuad.y = target.quad.y;
+
         //Ready to move the edge vertex to pointer...
         return true;
       }
@@ -211,6 +248,8 @@ class GraphInputController extends InputController
 
         this.prevQuad.x = target.quad.x;
         this.prevQuad.y = target.quad.y;
+        this.prevEdgeTo = target.to;
+        this.isNewEdge = false;
 
         //Ready to move the edge endpoint to pointer...
         return true;
@@ -226,8 +265,11 @@ class GraphInputController extends InputController
       //Moving nothing
       else if (targetType === 'none')
       {
-        pointer.initial.targetType = "graph";
-        //TODO: offset graph by x and y
+        //Reuse nodal prev pos for graph prev pos
+        this.prevX = x;
+        this.prevY = y;
+        this.prevOffsetX = this.pointer.offsetX;
+        this.prevOffsetY = this.pointer.offsetY;
 
         //Ready to move the graph to pointer...
         return true;
@@ -251,6 +293,7 @@ class GraphInputController extends InputController
         //Redirect pointer to refer to the edge as the new target
         this.pointer.initial.target = edge;
         this.pointer.initial.targetType = "endpoint";
+        this.isNewEdge = true;
 
         //Reset previous quad values for new proxy edge
         this.prevQuad.x = 0;
@@ -258,6 +301,24 @@ class GraphInputController extends InputController
 
         //Ready to move proxy edge to pointer...
         this.pointer.moveMode = true;
+        return true;
+      }
+      else if (targetType === 'endpoint')
+      {
+        //This is the same as dragging with moveMode endpoint
+
+        //target MUST be an instance of Edge...
+        if (!(target instanceof Edge))
+          throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Edge.");
+
+        this.prevQuad.x = target.quad.x;
+        this.prevQuad.y = target.quad.y;
+        this.prevEdgeTo = target.to;
+        this.isNewEdge = false;
+
+        this.pointer.moveMode = true;
+
+        //Ready to move the edge endpoint to pointer...
         return true;
       }
       //If action dragged nothing...
@@ -271,8 +332,6 @@ class GraphInputController extends InputController
       {
         //Other action drags are ignored, such as:
         // - Edges
-        // - Endpoints
-        // - Graphs
         return false;
       }
     }
@@ -322,9 +381,12 @@ class GraphInputController extends InputController
         return true;
       }
       //Continue to move graph
-      else if (targetType === 'graph')
+      else if (targetType === 'none')
       {
         //Move graph
+        const dx = x - this.prevX;
+        const dy = y - this.prevY;
+        this.pointer.setOffset(this.pointer.offsetX + dx, this.pointer.offsetY + dy, true);
         return true;
       }
       else
@@ -362,25 +424,18 @@ class GraphInputController extends InputController
       if (targetType === 'node')
       {
         //Delete it if withing trash area...
-        if (this.pointer.isTrashMode(x, y))
+        if (pointer.isTrashMode(x, y))
         {
           //If there exists selected states, delete them all!
           const selector = this.selector;
           if (selector.hasSelection())
           {
-            //Remove from graph
-            for(const node of selector.getSelection())
-            {
-              this.graph.deleteNode(node);
-            }
-
-            //Remove from selection
-            selector.clearSelection();
+            this.deleteSelectedNodes(target);
           }
           else
           {
             //Delete a single node
-            this.graph.deleteNode(target);
+            this.deleteTargetNode(target);
           }
 
           return true;
@@ -389,29 +444,116 @@ class GraphInputController extends InputController
         else
         {
           //Do nothing, since should have moved to position
+          if (this.selector.hasSelection())
+          {
+            const dx = x - this.prevX;
+            const dy = y - this.prevY;
+            this.emit("nodeMoveAll", this.selector.getSelection(), dx, dy);
+          }
+          else
+          {
+            this.emit("nodeMove", target, x, y, this.prevX, this.prevY);
+          }
           return true;
         }
       }
       //If stopped dragging a edge...
       else if (targetType === 'edge')
       {
-        //Do nothing, since should have moved to position
+        //Delete it if withing trash area...
+        if (pointer.isTrashMode(x, y))
+        {
+          this.deleteTargetEdge(target);
+        }
+        else
+        {
+          //Do nothing, since should have moved to position
+          this.emit("edgeMove", target, target.quad.x, target.quad.y, this.prevQuad.x, this.prevQuad.y);
+        }
         return true;
       }
       //If stopped dragging a endpoint...
       else if (targetType === 'endpoint')
       {
         //Delete it if withing trash area...
-        if (this.pointer.isTrashMode(x, y))
+        if (pointer.isTrashMode(x, y))
         {
-          this.graph.deleteEdge(target);
+          this.deleteTargetEdge(target);
           return true;
         }
         //If hovering over a node...
-        else if (pointer.targetType === 'node')
+        else if (target.to instanceof Node)
         {
-          //Should already have finalized the proxy edge
-          //target.to = pointer.target;
+          const targetNode = target.to;
+
+          //Look for an existing edge with similar from and to
+          for(const edge of this.graph.edges)
+          {
+            if (edge !== target && edge.from === target.from && edge.to === pointer.target)
+            {
+              let result = edge.label.split(",");
+              if (target.label !== Config.STR_TRANSITION_PROXY_LABEL)
+              {
+                result = result.concat(target.label.split(","));
+              }
+
+              //Allow the user to edit the merged labels
+              this.openLabelEditor(edge, x, y, result.join(","));
+
+              //Delete the merged label
+              this.graph.deleteEdge(target);
+              return true;
+            }
+          }
+
+          //If the edge has changed...
+          if (this.prevEdgeTo !== null)
+          {
+            //Make sure that it's previous edge was not null
+            target._to = this.prevEdgeTo;
+            //Finalize the edge (trigger the event)
+            target.to = targetNode;
+          }
+
+          //If the cursor returns to the state after leaving it...
+          if (target.isSelfLoop())
+          {
+            //Make it a self loop
+            const dx = target.from.x - x;
+            const dy = target.from.y - y;
+            const angle = Math.atan2(dy, dx);
+            target.makeSelfLoop(angle);
+          }
+          //Otherwise, maintain original curve
+          else
+          {
+            target.quad.x = this.prevQuad.x;
+            target.quad.y = this.prevQuad.y;
+          }
+
+          if (this.isNewEdge)
+          {
+            this.isNewEdge = false;
+
+            //Emit event
+            this.emit("edgeCreate", target);
+          }
+          else if (this.prevEdgeTo !== null)
+          {
+            //Emit event
+            this.emit("edgeDestination", target, target.to, this.prevEdgeTo, this.prevQuad);
+          }
+
+          //Bend away if there is another edge not bent with the same src/dst
+          for(const edge of this.graph.edges)
+          {
+            if (edge.isQuadratic()) continue;
+            if ((edge.to === target.from && edge.from === target.to))
+            {
+              target.quad.y = -Config.PARALLEL_EDGE_HEIGHT;
+              edge.quad.y = Config.PARALLEL_EDGE_HEIGHT;
+            }
+          }
 
           //Open label editor if default edge...
           if (target.label === Config.STR_TRANSITION_PROXY_LABEL)
@@ -450,15 +592,20 @@ class GraphInputController extends InputController
         //If valid initial object to mark...
         if (this.ghostInitialMarker instanceof Node)
         {
+          const prevInitial = this.graph.getStartNode();
+
           //Set the new object as the initial node
           this.graph.setStartNode(this.ghostInitialMarker);
+
+          //Emit event
+          this.emit("nodeInitial", this.ghostInitialMarker, prevInitial);
         }
 
         //Reset ghost initial marker
         this.ghostInitialMarker = null;
         return true;
       }
-      else if (targetType === 'graph')
+      else if (targetType === 'none')
       {
         //Do nothing. It should already be moved.
         return true;
@@ -486,14 +633,69 @@ class GraphInputController extends InputController
 
   createNode(x, y)
   {
-    const node = this.graph.newNode(x, y, Config.STR_STATE_LABEL + (this.graph.nodes.length));
+    const newNodeLabel = this.machineBuilder.getNextDefaultNodeLabel();
+    const node = this.graph.newNode(x, y, newNodeLabel);
     node.x = x || (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
     node.y = y || (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
     return node;
   }
 
+  deleteSelectedNodes(selectedNode)
+  {
+    const selector = this.selector;
+    const selection = selector.getSelection().slice();
+
+    //Remove from graph
+    for(const node of selection)
+    {
+      this.graph.deleteNode(node);
+    }
+
+    //Remove from selection
+    selector.clearSelection();
+
+    //Emit event
+    this.emit("nodeDeleteAll", selection, selectedNode, this.prevX, this.prevY);
+  }
+
+  deleteTargetNode(target)
+  {
+    this.graph.deleteNode(target);
+
+    //Emit event
+    this.emit("nodeDelete", target, this.prevX, this.prevY);
+  }
+
+  deleteTargetEdge(target)
+  {
+    this.graph.deleteEdge(target);
+
+    //Emit event
+    this.emit("edgeDelete", target);
+  }
+
   moveNodeTo(pointer, node, x, y)
   {
+    for(const other of this.graph.nodes)
+    {
+      //Update node collision
+      if (node === other) continue;
+
+      const dx = x - other.x;
+      const dy = y - other.y;
+      const angle = Math.atan2(dy, dx);
+
+      const diameter = (Config.NODE_RADIUS * 2);
+      const nextDX = other.x + (Math.cos(angle) * diameter) - x;
+      const nextDY = other.y + (Math.sin(angle) * diameter) - y;
+
+      if (dx * dx + dy * dy < Config.NODE_RADIUS_SQU * 4)
+      {
+        x += nextDX;
+        y += nextDY;
+      }
+    }
+
     node.x = x;
     node.y = y;
   }
@@ -523,7 +725,7 @@ class GraphInputController extends InputController
   {
     //Get ONLY node at x and y (cannot use hover target, since it is not ONLY nodes)
     const dst = pointer.getNodeAt(x, y) || pointer;
-    edge.to = dst;
+    edge._to = dst;
 
     //If the cursor returns to the state after leaving it...
     if (edge.isSelfLoop())
@@ -544,7 +746,14 @@ class GraphInputController extends InputController
 
   openLabelEditor(target, x, y, placeholder=null)
   {
-    this.labelEditor.openEditor(target, placeholder);
+    const prevLabel = placeholder || target.label;
+    this.labelEditor.openEditor(target, placeholder, () => {
+      const label = target.label;
+      if (label != prevLabel)
+      {
+        this.emit("edgeLabel", target, label, prevLabel);
+      }
+    });
   }
 }
 

@@ -1,0 +1,32 @@
+.panel-content {
+  width: 100%;
+  text-overflow: ellipsis;
+}
+.export-button {
+  text-align: left;
+  color: white;
+
+  width: 100%;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.export-button svg {
+  height: 4em;
+  vertical-align: middle;
+}
+.export-button label {
+  font-size: 1.4em;
+  vertical-align: middle;
+  
+  cursor: pointer;
+}
+.export-button:hover {
+  background: var(--color-main-lite);
+}
+.export-button:disabled {
+  opacity: 0.2;
+}
+.export-button:disabled:hover {
+  background: none;
+}

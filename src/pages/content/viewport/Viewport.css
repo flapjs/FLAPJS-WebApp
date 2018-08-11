@@ -1,20 +1,25 @@
 .viewport-container {
-  /*TODO: this should be 100% width and height, but it blocks the trash can :3*/
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+
+  outline: 0.8em dashed rgba(0, 0, 0, 0.02);
+  outline-offset: -2.5em;
+
+  transition: outline-color 0.1s ease;
+}
+.viewport-container>* {
+  pointer-events: auto;
 }
 
-.anchor-bottom-right{
+.anchor-bottom-right {
   position: absolute;
   bottom: 0px;
   right: 0px;
 }
-#trash-btn {
-  width: 3em;
-  height: 3em;
-  padding: 10px;
 
-  fill: #6E6E6E;
-  transition: fill 0.3s ease;
-}
-#trash-btn:hover {
-  fill: #B05454;
+.anchor-bottom-left {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
 }

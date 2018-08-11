@@ -2,16 +2,27 @@
   height: 100%;
 }
 
+/*For hiding scrollbars*/
+::-webkit-scrollbar {
+  display: none;
+}
+/*
+* {
+  -ms-overflow-style: none;
+}
+*/
+
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100%;
+  font-size: 1em;
 
   --toolbar-height: 4em;
 
   --panel-size: 300px;
-  --panel-tab-size: 2em;
-  --panel-border-size: 10px;
+  --panel-tab-size: 2.2em;
+  --panel-border-size: 0.8em;
 
   --panel-tab-border: calc(var(--panel-tab-size) + var(--panel-border-size));
 }
@@ -37,7 +48,7 @@
   width: calc(100% - var(--panel-tab-border));
   height: inherit;
 
-  transition: right 0.3s ease;
+  transition: opacity 0.1s ease, right 0.3s ease;
 
   right: var(--panel-tab-border);
 }
@@ -49,22 +60,16 @@
   height: inherit;
   pointer-events: none;
 
-  outline: 0.8em dashed rgba(0, 0, 0, 0.02);
-  outline-offset: -2.5em;
-
-  transition: width 0.3s ease, outline-color 0.1s ease;
+  transition: width 0.3s ease;
 
   width: calc(100% - var(--panel-tab-border));
 }
 .workspace-viewport>* {
   pointer-events: auto;
 }
-.workspace-viewport.danger {
-  outline-color: #E35B5B;
-}
 
 .workspace-drawer {
-  z-index: 999;
+  z-index: 800;
   position: fixed;
   width: var(--panel-size);/* Drawer width */
   height: inherit;
@@ -72,6 +77,9 @@
   transition: right 0.3s ease;
 
   right: calc(-1 * var(--panel-size) + var(--panel-tab-border));/* -(Drawer width) */
+}
+.workspace-drawer.open.fullscreen {
+  width: 100%;
 }
 
 .workspace-main.open {
@@ -82,9 +90,11 @@
 }
 .workspace-drawer.open {
   right: 0px;/* At edge */
+  max-width: 100%;
 }
 
-@media screen and (max-width: 400px) {
+/*Refer to Drawer.css*/
+@media screen and (max-width: 420px) {
   .workspace-main {
     right: 0px;/* Overwrite changes */
     height: calc(100% - var(--toolbar-height) - var(--panel-tab-border));/* Overwrite changes */
@@ -111,6 +121,9 @@
 
     bottom: calc(-1 * var(--panel-size) + var(--panel-tab-border));/* -(Drawer width) */
   }
+  .workspace-drawer.open.fullscreen {
+    height: calc(100% - var(--toolbar-height));
+  }
 
   .workspace-main.open {
     right: 0px; /* Overwrite changes */
@@ -125,13 +138,10 @@
   }
   .workspace-drawer.open {
     right: 0px; /* Overwrite changes */
+    max-height: calc(100% - var(--toolbar-height));
 
     transition: bottom 0.3s ease;
 
     bottom: 0px;
   }
-}
-
-@media screen and (max-height: 300px) {
-  /* TODO: it should be auto fullscreen mode */
 }

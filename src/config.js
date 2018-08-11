@@ -1,77 +1,170 @@
-//Input
-export const SUBMIT_KEY = 13; //ENTER
-export const CLEAR_KEY = 27; //ESCAPE
+const LOCAL_STORAGE_ID = "config";
 
-export const STR_TRANSITION_DEFAULT_LABEL = "0";
-export const STR_TRANSITION_PROXY_LABEL = "?";
-export const STR_STATE_LABEL = "q";
+const cfg = {};
+export default cfg;
+
+//General
+cfg.CLEAR_GRAPH_MESSAGE = "Any unsaved changes will be lost. Are you sure you want to continue?";
+cfg.EXIT_WINDOW_MESSAGE = "Any unsaved changes will be lost. Are you sure you want to leave?";
+
+//Toolbar
+cfg.DEFAULT_MACHINE_NAME = "Untitled";
+
+//Status Button
+cfg.ACTIVE_PENDING_COLOR = "white";
+cfg.ACTIVE_SUCCESS_COLOR = "lime";
+cfg.ACTIVE_FAILURE_COLOR = "red";
+cfg.INACTIVE_COLOR = "gray";
+
+//Testing Panel
+cfg.PLACEHOLDER_TEXT = "Test string";
+
+//Overview Panel
+cfg.DEFAULT_COLOR = "gray";
+cfg.DEFAULT_CUSTOM_COLOR = "white";
+cfg.EDIT_COLOR = "rgba(255,255,255,0.1)";
+cfg.ERROR_COLOR = "rgba(255,0,0,0.7)";
+cfg.DEFAULT_BACKGROUND = "#4D4D4D";
+cfg.DEFAULT_CUSTOM_BACKGROUND = "#4D4D4D";
+cfg.ERROR_BACKGROUND = "rgba(255,0,0,0.5)";
+
+//Controller
+cfg.SMOOTH_OFFSET_DAMPING = 0.4;
+cfg.SCROLL_SENSITIVITY = 1.0 / 300.0;
+cfg.MIN_SCALE = 0.1;
+cfg.MAX_SCALE = 10;
+
+//Workspace
+cfg.EMPTY_MESSAGE = "Double-tap to create a node";
+cfg.INIT_WAITTIME = 5000;
+
+//NodalGraph
+cfg.STR_TRANSITION_DEFAULT_LABEL = "";
+cfg.STR_TRANSITION_PROXY_LABEL = "?";
+cfg.STR_STATE_LABEL = "q";
+cfg.PARALLEL_EDGE_HEIGHT = 10;
+cfg.SELF_LOOP_HEIGHT = 32;
+
+//Input Fields
+cfg.SUBMIT_KEY = 13; //ENTER
+cfg.CLEAR_KEY = 27; //ESCAPE
+cfg.TAB_KEY = 9; //TAB
+
+/** LEGACY CONFIG **/
+
+//Input
+cfg.DELETE_KEY = 8; //DELETE
+cfg.DELETE_FORWARD_KEY = 46; //DELETE FORWARD
 
 //Geometry
-export const NODE_RADIUS = 16;
-export const NODE_RADIUS_SQU = NODE_RADIUS * NODE_RADIUS;
-export const NODE_DIAMETER = NODE_RADIUS * 2;
-export const NODE_RADIUS_INNER = 12;
+cfg.DEFAULT_GRAPH_SIZE = 300;
 
-export const INITIAL_MARKER_OFFSET_X = -(NODE_RADIUS + (NODE_RADIUS / 3));//Not centered, but a little closer to tip
+cfg.NODE_RADIUS = 16;
+cfg.NODE_RADIUS_SQU = cfg.NODE_RADIUS * cfg.NODE_RADIUS;
+cfg.NODE_DIAMETER = cfg.NODE_RADIUS * 2;
+cfg.NODE_RADIUS_INNER = 12;
 
-export const EDGE_RADIUS = 12;
-export const EDGE_RADIUS_SQU = EDGE_RADIUS * EDGE_RADIUS;
-export const ARROW_WIDTH = 10;
-export const PLACEHOLDER_LENGTH = NODE_RADIUS * 3;
-export const ENDPOINT_RADIUS = 6;
-export const ENDPOINT_RADIUS_SQU = ENDPOINT_RADIUS * ENDPOINT_RADIUS;
+cfg.INITIAL_MARKER_OFFSET_X = -(cfg.NODE_RADIUS + (cfg.NODE_RADIUS / 3));//Not centered, but a little closer to tip
 
-export const HOVER_RADIUS_OFFSET = 4;
-export const CURSOR_RADIUS = 4;
-export const CURSOR_RADIUS_SQU = CURSOR_RADIUS * CURSOR_RADIUS;
+cfg.EDGE_RADIUS = 12;
+cfg.EDGE_RADIUS_SQU = cfg.EDGE_RADIUS * cfg.EDGE_RADIUS;
+cfg.ARROW_WIDTH = 10;
+cfg.PLACEHOLDER_LENGTH = cfg.NODE_RADIUS * 3;
+cfg.ENDPOINT_RADIUS = 6;
+cfg.ENDPOINT_RADIUS_SQU = cfg.ENDPOINT_RADIUS * cfg.ENDPOINT_RADIUS;
 
-export const SELF_LOOP_HEIGHT = 32;
+cfg.HOVER_RADIUS_OFFSET = 4;
+cfg.CURSOR_RADIUS = 4;
+cfg.CURSOR_RADIUS_SQU = cfg.CURSOR_RADIUS * cfg.CURSOR_RADIUS;
 
 //Interface
-export const DOUBLE_TAP_TICKS = 350;
-export const SPAWN_RADIUS = 64;
-export const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
+cfg.DOUBLE_TAP_TICKS = 600;
+cfg.LONG_TAP_TICKS = 600;
+cfg.SPAWN_RADIUS = 64;
+cfg.DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
+cfg.DRAGGING_BUFFER = 18;
+cfg.DRAGGING_BUFFER_SQU = cfg.DRAGGING_BUFFER * cfg.DRAGGING_BUFFER;
 
 //Graph sorting
-export const PADDING_RADIUS_SQU = 2304;
+cfg.PADDING_RADIUS_SQU = 2304;
 
 //Colors
-export const STATE_BASE_COLOR = "#EDEBA6";
-export const STATE_LINE_COLOR = "black";
-export const STATE_TEXT_COLOR = "black";
-export const TRANSITION_COLOR = "black";
-export const TRANSITION_TEXT_COLOR = "black";
-export const GRAPH_INFO_COLOR = "lightgray";
+cfg.STATE_BASE_COLOR = "#FEE781";
+cfg.STATE_LINE_COLOR = "black";
+cfg.STATE_TEXT_COLOR = "black";
+cfg.TRANSITION_COLOR = "black";
+cfg.TRANSITION_TEXT_COLOR = "black";
+cfg.GRAPH_INFO_COLOR = "lightgray";
 
 //Styling
-export const NODE_FONT = "12px Arial";
-export const NODE_TEXT_ALIGN = "center";
-export const NODE_TEXT_ANCHOR = "middle";
-export const NODE_STROKE_STYLE = STATE_LINE_COLOR;
-export const NODE_FILL_STYLE = STATE_BASE_COLOR;
-export const NODE_TEXT_FILL_STYLE = STATE_TEXT_COLOR;
+cfg.NODE_FONT = "12px Arial";
+cfg.NODE_TEXT_ALIGN = "center";
+cfg.NODE_TEXT_ANCHOR = "middle";
+cfg.NODE_STROKE_STYLE = cfg.STATE_LINE_COLOR;
+cfg.NODE_FILL_STYLE = cfg.STATE_BASE_COLOR;
+cfg.NODE_TEXT_FILL_STYLE = cfg.STATE_TEXT_COLOR;
 
-export const EDGE_FONT = "12px Arial";
-export const EDGE_TEXT_ALIGN = "center";
-export const EDGE_TEXT_ANCHOR = "middle";
-export const EDGE_STROKE_STYLE = TRANSITION_COLOR;
-export const EDGE_TEXT_STROKE_STYLE = TRANSITION_TEXT_COLOR;
+cfg.EDGE_FONT = "12px Arial";
+cfg.EDGE_TEXT_ALIGN = "center";
+cfg.EDGE_TEXT_ANCHOR = "middle";
+cfg.EDGE_STROKE_STYLE = cfg.TRANSITION_COLOR;
+cfg.EDGE_TEXT_FILL_STYLE = cfg.TRANSITION_TEXT_COLOR;
 
-export const BORDER_STROKE_STYLE = "rgba(0,0,0,0.02)";
-export const BORDER_LINE_WIDTH = "0.5em";
-export const BORDER_LINE_DASH = [20, 24];
+cfg.BORDER_STROKE_STYLE = "rgba(0,0,0,0.02)";
+cfg.BORDER_LINE_WIDTH = "0.5em";
+cfg.BORDER_LINE_DASH = [20, 24];
 
-export const HOVER_STROKE_STYLE = "rgba(0,0,0,0.6)";
-export const HOVER_LINE_WIDTH = 2;
-export const HOVER_LINE_DASH = [6, 4];
-export const HOVER_ANGLE_SPEED = 0.01;
+cfg.HOVER_STROKE_STYLE = "rgba(0,0,0,0.6)";
+cfg.HOVER_LINE_WIDTH = 2;
+cfg.HOVER_LINE_DASH = [6, 4];
+cfg.HOVER_ANGLE_SPEED = 0.01;
 
-export const SELECTION_BOX_SHADOW_COLOR = "black";
-export const SELECTION_BOX_SHADOW_SIZE = 5;
-export const SELECTION_BOX_SHADOW_OFFSETX = 2;
-export const SELECTION_BOX_SHADOW_OFFSETY = 2;
-export const SELECTION_BOX_FILL_STYLE = "rgba(0, 0, 0, 0.1)";
-export const SELECTION_BOX_STROKE_STYLE = "black";
+cfg.SELECTION_BOX_SHADOW_COLOR = "black";
+cfg.SELECTION_BOX_SHADOW_SIZE = 5;
+cfg.SELECTION_BOX_SHADOW_OFFSETX = 2;
+cfg.SELECTION_BOX_SHADOW_OFFSETY = 2;
+cfg.SELECTION_BOX_FILL_STYLE = "rgba(0, 0, 0, 0.1)";
+cfg.SELECTION_BOX_STROKE_STYLE = "black";
 
 //IO
-export const EXPORT_FILE_NAME = "flap-machine.png";
+cfg.EXPORT_FILE_NAME = "flap-machine.png";
+
+
+/** LOCAL STORAGE FUNCTIONS **/
+
+//check if browser support local storage
+export function doesSupportLocalStorage() {
+  return typeof(Storage) !== 'undefined';
+}
+
+export function loadConfig() {
+  const jsonString = localStorage.getItem(LOCAL_STORAGE_ID);
+  if (!jsonString) return null;
+  try
+  {
+    const jsonData = JSON.parse(jsonString);
+    Object.assign(cfg, jsonData);
+  }
+  catch (e)
+  {
+    //Reset the config
+    clearConfig();
+  }
+};
+
+export function saveConfig() {
+  try
+  {
+    const jsonString = JSON.stringify(cfg);
+    localStorage.setItem(LOCAL_STORAGE_ID, jsonString);
+  }
+  catch (e)
+  {
+    //Reset the config
+    clearConfig();
+  }
+};
+
+export function clearConfig() {
+  localStorage.clear();
+};

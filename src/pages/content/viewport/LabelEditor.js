@@ -1,11 +1,17 @@
 import React from 'react';
-
-import * as Config from 'config.js';
-
 import './LabelEditor.css';
 
-//TODO: Figure out why this is negative sixty five...
-const LABEL_OFFSET_Y = -65;
+import Config from 'config.js';
+import { EMPTY } from 'machine/Symbols.js';
+
+//TODO: This is equivalent to 4em for toolbar height
+const LABEL_OFFSET_Y = -64;
+const EDITOR_OFFSET_Y = -36;
+const DELETE_KEY = 8;
+const DELETE_FORWARD_KEY = 46;
+
+const RECOMMENDED_SYMBOLS = ["0", "1"];
+const DEFAULT_SYMBOLS = [EMPTY];
 
 class LabelEditor extends React.Component
 {
@@ -16,22 +22,36 @@ class LabelEditor extends React.Component
     this.parentElement = React.createRef();
     this.inputElement = React.createRef();
 
+    //HACK: this is so if the click is focused back to the label editor, then it will NOT close
+    this._timer = null;
+
     this.state = {
-      target: null
+      target: null,
+      callback: null
     };
+
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onContextMenu = this.onContextMenu.bind(this);
   }
 
-  openEditor(targetEdge, defaultText=null)
+  openEditor(targetEdge, defaultText=null, callback=null)
   {
     this.setState((prev, props) => {
       return {
-        target: targetEdge
+        target: targetEdge,
+        callback: callback
       };
     });
 
     this.inputElement.value = defaultText || targetEdge.label;
-    this.inputElement.focus();
-    this.inputElement.select();
+    this.parentElement.focus();
+
+    //TODO: if (!window.matchMedia("(max-height: 420px)").matches)
+    {
+      this.inputElement.select();
+    }
   }
 
   closeEditor(saveOnExit=false)
@@ -39,8 +59,16 @@ class LabelEditor extends React.Component
     //Save data
     if (this.state.target !== null)
     {
-      if (saveOnExit) this.state.target.label = this.inputElement.value;
+      if (saveOnExit)
+      {
+        let value = this.inputElement.value;
+        if (!value) value = EMPTY;
+
+        this.state.target.setLabel(value);
+      }
       this.state.target = null;
+
+      if (this.state.callback) this.state.callback();
     }
 
     //Reset label editor
@@ -50,6 +78,38 @@ class LabelEditor extends React.Component
   isEditorOpen()
   {
     return this.state.target !== null;
+  }
+
+  onContextMenu(e)
+  {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  onKeyDown(e)
+  {
+    if (e.keyCode === Config.DELETE_KEY)
+    {
+      const input = this.inputElement;
+      const index = input.selectionStart - 1;
+      //If delete commas, delete the associated element too
+      if (input.value.charAt(index) === ',')
+      {
+        input.setSelectionRange(index, index);
+      }
+      //Continue to processs delete event
+    }
+    else if (e.keyCode === Config.DELETE_FORWARD_KEY)
+    {
+      const input = this.inputElement;
+      const index = input.selectionStart;
+      //If delete commas, delete the associated element too
+      if (input.value.charAt(index) === ',')
+      {
+        input.setSelectionRange(index + 1, index + 1);
+      }
+      //Continue to processs delete event
+    }
   }
 
   onKeyUp(e)
@@ -64,13 +124,56 @@ class LabelEditor extends React.Component
     }
   }
 
-  onBlur(e)
+  onInputChange(e)
   {
-    this.closeEditor(false);
+    //Maintain proper format
+    const target = e.target;
+    //Save cursor position for later
+    const prevStart = target.selectionStart;
+    const prevEnd = target.selectionEnd;
+    const prevLength = target.value.length;
+
+    target.value = this.props.machineBuilder.formatAlphabetString(target.value);
+
+    if (prevStart < prevLength)
+    {
+      //Set cursor back to where it was
+      target.setSelectionRange(prevStart, prevEnd);
+    }
+  }
+
+  appendSymbol(symbol)
+  {
+    const string = this.inputElement.value;
+    let result = "";
+
+    //Make sure that the transition does not already have symbol
+    const symbols = string.split(",");
+    if (!symbols.includes(symbol))
+    {
+      //Replace the selected text
+      if (this.inputElement.selectionStart === 0 &&
+        this.inputElement.selectionEnd === string.length)
+      {
+        result = symbol;
+      }
+      else
+      {
+        symbols.push(symbol);
+        //symbols.sort();
+        result = symbols.join(",");
+      }
+
+      this.inputElement.value = result;
+    }
+
+    //Redirect user to input field after button click
+    this.inputElement.focus();
   }
 
   render()
   {
+    const controller = this.props.controller;
     const targetStyle = {
       visibility: "hidden"
     };
@@ -79,9 +182,11 @@ class LabelEditor extends React.Component
     if (target)
     {
       targetStyle.visibility = "visible";
-      const screen = getScreenPosition(this.props.workspace, target.x, target.y);
+      const screen = getScreenPosition(this.props.screen,
+        target.x + controller.pointer.offsetX,
+        target.y + controller.pointer.offsetY);
       const x = screen.x;
-      const y = screen.y + LABEL_OFFSET_Y;//HACK: WHERE IS THIS OFFSET FROM???
+      const y = screen.y + LABEL_OFFSET_Y + EDITOR_OFFSET_Y;
       const offsetX = -(this.parentElement.offsetWidth / 2);
       const offsetY = -(this.parentElement.offsetHeight / 2);
 
@@ -89,12 +194,56 @@ class LabelEditor extends React.Component
       targetStyle.left = (x + offsetX) + "px";
     }
 
-    return <span id="label-editor" ref={ref=>this.parentElement=ref}
-      style={targetStyle}>
-      <input type="text" ref={ref=>this.inputElement=ref}
-        onKeyUp={this.onKeyUp.bind(this)}
-        onBlur={this.onBlur.bind(this)}/>
-    </span>;
+    const usedAlphabet = this.props.machineBuilder.getMachine().getAlphabet();
+
+    return <div className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
+      tabIndex={"0"/*This is to allow div's to focus/blur*/}
+      style={targetStyle}
+      onContextMenu={this.onContextMenu}
+      onFocus={(e)=>{
+        //HACK: delete the timer that will exit labelEditor
+        clearTimeout(this._timer);
+      }}
+      onBlur={(e)=>{
+        //HACK: start the timer that will exit labelEditor if not return focus
+        this._timer = setTimeout(() => this.closeEditor(true), 10);
+      }}>
+      <input className="label-editor-input" type="text" ref={ref=>this.inputElement=ref}
+        onKeyDown={this.onKeyDown}
+        onKeyUp={this.onKeyUp}
+        onChange={this.onInputChange}/>
+      <div className="label-editor-tray">
+        {
+          usedAlphabet &&
+          <span className="label-editor-tray-used">
+            {
+              usedAlphabet.map((e, i) => {
+                if (e.length < 1) return null;
+                return <button key={i} onClick={ev=>this.appendSymbol(e)}>{e}</button>
+              })
+            }
+          </span>
+        }
+        <span className="label-editor-tray-default">
+          {
+            usedAlphabet &&
+            usedAlphabet.length <= 1 &&
+            RECOMMENDED_SYMBOLS.map((e, i) => {
+              return <button key={i} onClick={ev=>this.appendSymbol(e)}>
+              {e}
+              </button>;
+            })
+          }
+          {
+            DEFAULT_SYMBOLS.map((e, i) => {
+              return <button key={i} onClick={ev=>this.appendSymbol(e)}>
+              {e}
+              </button>;
+            })
+          }
+        </span>
+      </div>
+    </div>;
   }
 }
 

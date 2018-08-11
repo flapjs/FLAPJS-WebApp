@@ -1,48 +1,70 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import NodalGraph from 'graph/NodalGraph.js';
-import GraphInputController from 'controller/GraphInputController.js';
+import Router from 'router.js';
+import Config from 'config.js';
+import { loadConfig, saveConfig } from 'config.js';
 
 import HomePage from 'pages/home/HomePage.js';
 import App from 'pages/content/App.js';
-import Page404 from 'pages/Page404.js';
+import NotFoundPage from 'pages/404/NotFoundPage.js';
 
-const PAGES = {
-  '/': HomePage,
-  '/app': App
-};
+//HACK: to determine if this is first time use
+import AutoSaver from 'util/AutoSaver.js';
 
-//TODO: this should be set by the server! initially it should be '/'.
-const ROUTER = {
-  pathname: "/"
-};
+const ALWAYS_OPEN_WELCOME_PAGE = false;
+const USE_SERVICE_WORKER = false;
 
-const FRAMES_PER_SECOND = 60;
+Router.registerPage('/', HomePage);
+Router.registerPage('/app', App);
+Router.registerPage(null, NotFoundPage);
+
+//Skip welcome page if already seen it
+if (!ALWAYS_OPEN_WELCOME_PAGE && AutoSaver.hasAutoSave())
+{
+  Router.routeTo("/app");
+}
 
 //Setup viewport
 window.addEventListener('load', (event) => {
+  loadConfig();
   loadApplication();
   window.requestAnimationFrame(updateApplication);
 });
+//Warn user before exit
+window.addEventListener('beforeunload', (event) => {
+  saveConfig();
+
+  const message = Config.EXIT_WINDOW_MESSAGE;
+  event = event || window.event;
+  // For IE and Firefox
+  if (e) e.returnValue = message;
+
+  //For Safari
+  return message;
+});
+
+//Service Worker
+if (USE_SERVICE_WORKER && 'serviceWorker' in navigator)
+{
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+      console.log("ServiceWorker registration successful: ", registration.scope);
+    }, function(err) {
+      console.log("ServiceWorker registration failed: ", err);
+    });
+  });
+}
 
 //Setup application
+const FRAMES_PER_SECOND = 60;
 let prevtime = 0;
 let root = null;
-let graph = new NodalGraph();
-
-//Must be initialized (will be called in Workspace.componentDidMount)
-let controller = new GraphInputController(graph);
 
 //Load application
 function loadApplication()
 {
   root = document.getElementById("root");
-
-  //Initial graph setup
-  const q0 = graph.newNode(-32, 0, "q0");
-  const q1 = graph.newNode(32, 0, "q1");
-  graph.newEdge(q0, q1, "0");
 }
 
 //Update application
@@ -50,8 +72,8 @@ function updateApplication(time)
 {
   const dt = (time - prevtime) / FRAMES_PER_SECOND;
   {
-    const PageHandler = PAGES[ROUTER.pathname] || Page404;
-    ReactDOM.render(React.createElement(PageHandler, { router: ROUTER, graph: graph, controller: controller }, null), root);
+    const page = Router.getPage();
+    ReactDOM.render(React.createElement(page, {router: Router}, null), root);
   }
   prevtime = time;
   window.requestAnimationFrame(updateApplication);

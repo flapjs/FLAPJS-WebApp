@@ -1,0 +1,20 @@
+.hotkey-list {
+  padding: 5px;
+}
+.hotkey-category {
+  margin-top: 10px;
+  text-align: center;
+  border-bottom: 1px solid black;
+}
+.hotkey-container {
+  display: block;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+.hotkey-desc {
+  width: 100%;
+}
+.hotkey-input {
+  float: right;
+}

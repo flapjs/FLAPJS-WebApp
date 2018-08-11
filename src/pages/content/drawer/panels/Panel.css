@@ -1,12 +1,27 @@
 .panel-container {
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
+.panel-bottom {
+  height: 50px;/*Extra bottom padding for PC scrolling*/
+}
+
 .panel-title {
+  border-bottom: 1px solid black;
+  margin-bottom: 5px;
   /*
   position: sticky;
   top: 0px;
 
   background: #FAFAFA;
   */
+}
+
+.panel-button {
+  width: 100%;
+  font-size: 12px;
+}
+
+.panel-button-label {
+  display: block;
 }

@@ -1,4 +1,6 @@
-import * as Config from 'config.js';
+import Config from 'config.js';
+
+const BOUNDING_RECT_UPDATE_INTERVAL = 100;
 
 class GraphPointer
 {
@@ -14,6 +16,15 @@ class GraphPointer
     this.x = 0;
     this.y = 0;
 
+    this.offsetX = 0;
+    this.offsetY = 0;
+    this.nextOffsetX = 0;
+    this.nextOffsetY = 0;
+
+    this._boundingRect = null;
+    this._boundingRectTime = 0;
+    this.scale = 1;
+
     this.target = null;
     this.targetType = null;
 
@@ -22,10 +33,52 @@ class GraphPointer
     this.dragging = false;
   }
 
+  setOffset(x, y, immediate=false)
+  {
+    if (immediate)
+    {
+      this.nextOffsetX = this.offsetX = x;
+      this.nextOffsetY = this.offsetY = y;
+    }
+    else
+    {
+      this.nextOffsetX = x;
+      this.nextOffsetY = y;
+    }
+  }
+
+  updateOffset()
+  {
+    const dx = this.nextOffsetX - this.offsetX;
+    this.offsetX += dx * Config.SMOOTH_OFFSET_DAMPING;
+    const dy = this.nextOffsetY - this.offsetY;
+    this.offsetY += dy * Config.SMOOTH_OFFSET_DAMPING;
+  }
+
+  setScale(scale)
+  {
+    //Add delay to this so it is not called every frame
+    if (Date.now() - this._boundingRectTime > BOUNDING_RECT_UPDATE_INTERVAL)
+    {
+      this._boundingRect = this.graph.getBoundingRect();
+      this._boundingRectTime = Date.now();
+    }
+
+    const rect = this._boundingRect;
+    //const dw = (Math.max(Config.DEFAULT_GRAPH_SIZE, rect.width)) / Config.DEFAULT_GRAPH_SIZE;
+    //const dh = (Math.max(Config.DEFAULT_GRAPH_SIZE, rect.height)) / Config.DEFAULT_GRAPH_SIZE;
+    this.scale = Math.min(Config.MAX_SCALE, Math.max(Config.MIN_SCALE, scale));
+  }
+
+  isWaitingForMoveMode()
+  {
+    return !this.dragging; //!this.moveMode
+  }
+
   setInitialPosition(x, y)
   {
-    this.initial.x = this.x = x;
-    this.initial.y = this.y = y;
+    this.initial.x = this.x = x - this.offsetX;
+    this.initial.y = this.y = y - this.offsetY;
     this.initial.time = Date.now();
 
     this.updateTarget();
@@ -37,8 +90,8 @@ class GraphPointer
 
   setPosition(x, y)
   {
-    this.x = x;
-    this.y = y;
+    this.x = x - this.offsetX;
+    this.y = y - this.offsetY;
   }
 
   updateTarget()
@@ -170,21 +223,25 @@ class GraphPointer
       targetType = this.targetType;
     }
 
-    if (targetType == "node")
+    if (targetType === 'node')
     {
-      return Config.NODE_RADIUS_SQU;
+      return Config.NODE_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
     }
     else if (targetType == "edge")
     {
-      return Config.EDGE_RADIUS_SQU;
+      return Config.EDGE_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
     }
     else if (targetType == "endpoint")
     {
-      return Config.ENDPOINT_RADIUS_SQU;
+      return Config.ENDPOINT_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
+    }
+    else if (targetType === 'initial')
+    {
+      return Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
     }
     else
     {
-      return Config.CURSOR_RADIUS_SQU;
+      return Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
     }
   }
 

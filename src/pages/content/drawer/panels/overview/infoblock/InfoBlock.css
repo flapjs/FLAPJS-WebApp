@@ -1,0 +1,29 @@
+.infoblock-container {
+  position: relative;
+  padding: 5px;
+}
+
+.infoblock-container .icon-toggle {
+  margin-top: 4px;/* Make it vertically centered */
+  margin-right: 5px;/* Make it horizontally centered */
+
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.infoblock-header {
+  margin-bottom: 5px;
+}
+
+.infoblock-header label {
+  font-size: 1.2em;
+  
+  cursor: pointer;
+}
+
+.infoblock-content {
+  font-size: 1em;
+  border-left: 2px solid gray;
+  padding-left: 10px;
+}

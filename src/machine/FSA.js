@@ -13,6 +13,15 @@ class FSA
     this._customAlphabet = [];
   }
 
+  clear()
+  {
+    this._states.length = 0;
+    this._transitions.length = 0;
+    this._finalStates.length = 0;
+    
+    this._customAlphabet.length = 0;
+  }
+
   newState(state)
   {
     if (this._states.includes(state))
