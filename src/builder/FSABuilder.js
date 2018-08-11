@@ -9,12 +9,11 @@ import { EMPTY } from 'machine/Symbols.js';
 
 class FSABuilder extends MachineBuilder
 {
-  constructor(graph, tester, app)
+  constructor(graph, tester)
   {
     super(graph);
 
     this.tester = tester;
-    this.app = app;
 
     this._machine = new NFA();
     this._machineType = "DFA";
@@ -31,8 +30,10 @@ class FSABuilder extends MachineBuilder
     this.onDelayedErrorCheck = this.onDelayedErrorCheck.bind(this);
   }
 
-  initialize()
+  initialize(notification)
   {
+    this.notification = notification;
+
     this.graph.on("nodeCreate", this.onGraphChange);
     this.graph.on("nodeDestroy", this.onGraphChange);
     this.graph.on("nodeLabel", this.onGraphChange);
@@ -95,7 +96,7 @@ class FSABuilder extends MachineBuilder
     if (!this.tester.shouldCheckError) return;
 
     //clear previous error messages
-    const notification = this.app.notification;
+    const notification = this.notification;
     notification.clearErrorMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);
     const result = this.machineErrorChecker.checkErrors((error, targets) => {
       notification.clearMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);

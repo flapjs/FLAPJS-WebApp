@@ -51,7 +51,7 @@ class App extends React.Component
     this.graph = new NodalGraph();
     this.eventHistory = new EventHistory();
     this.testingManager = new TestingManager();
-    this.machineBuilder = new FSABuilder(this.graph, this.testingManager, this);
+    this.machineBuilder = new FSABuilder(this.graph, this.testingManager);
     this.hotKeys = new HotKeys(this.graph, this.eventHistory);
 
     //HACK: this should be a listener to FSABuilder, should not access graph
@@ -89,7 +89,7 @@ class App extends React.Component
 
     //Initialize the controller to graph components
     controller.initialize(this, this.workspace.ref);
-    machineBuilder.initialize();
+    machineBuilder.initialize(this);
     this.hotKeys.initialize(this.workspace, this.toolbar);
 
     //Auto rename machine
