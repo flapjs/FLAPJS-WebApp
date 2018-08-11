@@ -34,12 +34,8 @@ class OptionsPanel extends React.Component
             <span className="hotkey-input">Ctrl + Shift + Z</span>
           </div>
           <div className="hotkey-container">
-            <label className="hotkey-desc">Upload File</label>
-            <span className="hotkey-input">Ctrl + U</span>
-          </div>
-          <div className="hotkey-container">
             <label className="hotkey-desc">Export to PNG</label>
-            <span className="hotkey-input">Ctrl + E</span>
+            <span className="hotkey-input">Ctrl + P</span>
           </div>
 
           <div className="hotkey-category">Testing Panel</div>

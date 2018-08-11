@@ -10,9 +10,6 @@ import JPGIcon from 'icons/flat/JPGIcon.js';
 import JSONIcon from 'icons/flat/JSONIcon.js';
 import XMLIcon from 'icons/flat/XMLIcon.js';
 
-const EXPORT_PADDING_X = 30;
-const EXPORT_PADDING_Y = 0;
-
 class ExportingPanel extends React.Component
 {
   constructor(props)
@@ -20,26 +17,6 @@ class ExportingPanel extends React.Component
     super(props);
 
     this.container = React.createRef();
-  }
-
-  prepareSVGForExport(svg, width, height)
-  {
-    const pointer = this.props.controller.pointer;
-    const offsetX = pointer.offsetX;
-    const offsetY = pointer.offsetY;
-    const bounds = this.props.graph.getBoundingRect();
-
-    const dx = bounds.minX + offsetX - EXPORT_PADDING_X;
-    const dy = bounds.minY + offsetY - EXPORT_PADDING_Y;
-    const w = bounds.width + EXPORT_PADDING_X * 2;
-    const h = bounds.height + EXPORT_PADDING_Y * 2;
-
-    const clone = svg.cloneNode(true);
-    clone.setAttribute('viewBox',
-      dx + " " + dy + " " + w + " " + h);
-    clone.setAttribute('width', width);
-    clone.setAttribute('height', height);
-    return clone;
   }
 
   render()
@@ -63,10 +40,10 @@ class ExportingPanel extends React.Component
         {/*PNG*/}
         <IconButton className="export-button" id="export-png" title="Export as PNG"
           onClick={() => {
-            const original = workspace.ref;
-            const width = original.viewBox.baseVal.width;
-            const height = original.viewBox.baseVal.height;
-            const svg = this.prepareSVGForExport(original, width, height);
+            const workspaceDim = workspace.ref.viewBox.baseVal;
+            const width = workspaceDim.width;
+            const height = workspaceDim.height;
+            const svg = workspace.getSVGForExport(width, height);
             Downloader.downloadSVG(toolbar.getMachineName(), 'png', svg, width, height);
           }}>
           <PNGIcon/>

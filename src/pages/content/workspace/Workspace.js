@@ -13,6 +13,8 @@ import HighlightRenderer from './renderer/HighlightRenderer.js';
 
 const WORKSPACE_OFFSET_X = 15;
 const WORKSPACE_OFFSET_Y = 0;
+const EXPORT_PADDING_X = 30;
+const EXPORT_PADDING_Y = 0;
 
 class Workspace extends React.Component
 {
@@ -21,6 +23,27 @@ class Workspace extends React.Component
     super(props);
 
     this.ref = React.createRef();
+  }
+
+  getSVGForExport(width, height)
+  {
+    const svg = this.ref;
+    const pointer = this.props.controller.pointer;
+    const offsetX = pointer.offsetX;
+    const offsetY = pointer.offsetY;
+    const bounds = this.props.graph.getBoundingRect();
+
+    const dx = bounds.minX + offsetX - EXPORT_PADDING_X;
+    const dy = bounds.minY + offsetY - EXPORT_PADDING_Y;
+    const w = bounds.width + EXPORT_PADDING_X * 2;
+    const h = bounds.height + EXPORT_PADDING_Y * 2;
+
+    const clone = svg.cloneNode(true);
+    clone.setAttribute('viewBox',
+      dx + " " + dy + " " + w + " " + h);
+    clone.setAttribute('width', width);
+    clone.setAttribute('height', height);
+    return clone;
   }
 
   componentWillUpdate()
