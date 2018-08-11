@@ -14,7 +14,7 @@ class TestingPanel extends React.Component
     this.container = React.createRef();
 
     this.state = {
-      errorCheckMode: "none"
+      errorCheckMode: this.props.tester.getErrorCheckMode()
     };
 
     this.onChangeErrorCheckMode = this.onChangeErrorCheckMode.bind(this);

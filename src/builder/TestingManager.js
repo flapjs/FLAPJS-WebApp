@@ -12,6 +12,7 @@ class TestingManager
 
     this.shouldCheckError = false;
     this.isImmediateErrorCheck = false;
+    this.errorCheckMode = TestingManager.NO_ERROR_CHECK;
 
     this.placeholder = new Test();
   }
@@ -21,21 +22,29 @@ class TestingManager
     if (mode == TestingManager.NO_ERROR_CHECK)
     {
       this.shouldCheckError = false;
+      this.errorCheckMode = mode;
     }
     else if (mode == TestingManager.DELAYED_ERROR_CHECK)
     {
       this.shouldCheckError = true;
       this.isImmediateErrorCheck = false;
+      this.errorCheckMode = mode;
     }
     else if (mode == TestingManager.IMMEDIATE_ERROR_CHECK)
     {
       this.shouldCheckError = true;
       this.isImmediateErrorCheck = true;
+      this.errorCheckMode = mode;
     }
     else
     {
       throw new Error("Unknown error check mode \'" + mode + "\'");
     }
+  }
+
+  getErrorCheckMode()
+  {
+    return this.errorCheckMode;
   }
 
   addTestInput(input)
