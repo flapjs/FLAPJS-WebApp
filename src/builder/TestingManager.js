@@ -10,8 +10,32 @@ class TestingManager
   {
     this.inputs = [];
 
-    this.autoErrorCheck = false;
+    this.shouldCheckError = false;
+    this.isImmediateErrorCheck = false;
+
     this.placeholder = new Test();
+  }
+
+  setErrorCheckMode(mode)
+  {
+    if (mode == TestingManager.NO_ERROR_CHECK)
+    {
+      this.shouldCheckError = false;
+    }
+    else if (mode == TestingManager.DELAYED_ERROR_CHECK)
+    {
+      this.shouldCheckError = true;
+      this.isImmediateErrorCheck = false;
+    }
+    else if (mode == TestingManager.IMMEDIATE_ERROR_CHECK)
+    {
+      this.shouldCheckError = true;
+      this.isImmediateErrorCheck = true;
+    }
+    else
+    {
+      throw new Error("Unknown error check mode \'" + mode + "\'");
+    }
   }
 
   addTestInput(input)
@@ -76,6 +100,9 @@ class TestingManager
     }
   }
 }
+TestingManager.NO_ERROR_CHECK = "none";
+TestingManager.DELAYED_ERROR_CHECK = "delayed";
+TestingManager.IMMEDIATE_ERROR_CHECK = "immediate";
 
 class Test
 {

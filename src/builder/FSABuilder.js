@@ -8,7 +8,6 @@ import NodalGraph from 'graph/NodalGraph';
 const MESSAGE_NO_ERRORS = "Hooray! No more errors!";
 const MESSAGE_TAG_MACHINE_ERRORS = "machineError";
 const ERROR_CHECK_INTERVAL = 2000;
-const SHOULD_DELAY_ERROR_CHECKER = false;
 
 class FSABuilder extends MachineBuilder
 {
@@ -38,8 +37,7 @@ class FSABuilder extends MachineBuilder
     }
 
     const doErrorCheck = () => {
-      //HACK: this is to turn off error checking really quick
-      if (!this.tester.autoErrorCheck) return;
+      if (!this.tester.shouldCheckError) return;
 
       //clear previous error messages
       const notification = this.app.notification;
@@ -50,7 +48,7 @@ class FSABuilder extends MachineBuilder
         message += targets.join(", ");
         notification.addErrorMessage(message, MESSAGE_TAG_MACHINE_ERRORS);
       });
-      
+
       //Output success if no errors were found
       if (!result)
       {
@@ -59,7 +57,7 @@ class FSABuilder extends MachineBuilder
       }
     };
 
-    if (SHOULD_DELAY_ERROR_CHECKER)
+    if (!this.tester.isImmediateErrorCheck)
     {
       this._timer = setTimeout(doErrorCheck, ERROR_CHECK_INTERVAL);
     }

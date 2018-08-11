@@ -2,6 +2,7 @@ import React from 'react';
 import '../Panel.css';
 import './TestingPanel.css';
 
+import TestingManager from 'builder/TestingManager.js';
 import TestList from './components/TestList.js';
 
 class TestingPanel extends React.Component
@@ -11,6 +12,32 @@ class TestingPanel extends React.Component
     super(props);
 
     this.container = React.createRef();
+
+    this.state = {
+      errorCheckMode: "none"
+    };
+
+    this.onChangeErrorCheckMode = this.onChangeErrorCheckMode.bind(this);
+  }
+
+  onChangeErrorCheckMode(e)
+  {
+    const value = e.target.value;
+    const tester = this.props.tester;
+    const machineBuilder = this.props.machineBuilder;
+    tester.setErrorCheckMode(value);
+
+    //HACK: this should automatically be updated by testing manager on set error check mode
+    if (!tester.shouldCheckError)
+    {
+      machineBuilder.machineErrorChecker.clear();
+    }
+    else
+    {
+      machineBuilder.onGraphChange(machineBuilder.graph);
+    }
+    
+    this.setState({errorCheckMode: value});
   }
 
   render()
@@ -26,13 +53,15 @@ class TestingPanel extends React.Component
       <TestList machineBuilder={machineBuilder} tester={tester}/>
       <hr />
 
-      <div>
-        <input id="test-errorcheck" type="checkbox"
-          checked={tester.autoErrorCheck}
-          onChange={(e)=>{
-            tester.autoErrorCheck = e.target.checked;
-          }}/>
-        <label htmlFor="test-errorcheck">Automatically Check Errors</label>
+      <div id="test-errorcheck">
+        <label>Error Checking</label>
+        <select
+          value={this.state.errorCheckMode}
+          onChange={this.onChangeErrorCheckMode}>
+          <option value={TestingManager.NO_ERROR_CHECK}>None</option>
+          <option value={TestingManager.DELAYED_ERROR_CHECK}>Delayed</option>
+          <option value={TestingManager.IMMEDIATE_ERROR_CHECK}>Immediate</option>
+        </select>
       </div>
       <div>
         <input id="test-step" type="checkbox" disabled="true"/>

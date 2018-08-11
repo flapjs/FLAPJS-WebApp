@@ -18,6 +18,12 @@ class DFAErrorChecker
     this.errorEdges = [];
   }
 
+  clear()
+  {
+    this.errorNodes.length = 0;
+    this.errorEdges.length = 0;
+  }
+
   checkErrors(callback)
   {
     //HACK: This will only run for "DFA" machine types...
