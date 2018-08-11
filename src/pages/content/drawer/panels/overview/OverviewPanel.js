@@ -38,7 +38,7 @@ class OverviewPanel extends React.Component
         <h1>Definition</h1>
       </div>
       <div className="panel-content">
-        <select className="machine-type"
+        <select className="machine-type panel-select"
           value={this.state.machineType}
           onChange={this.onChangeMachineType}>
           <option value="DFA">DFA</option>
@@ -54,7 +54,7 @@ class OverviewPanel extends React.Component
       </div>
 
       <hr />
-      
+
       <button disabled="true" className="panel-button">Convert To...</button>
       <div>
         <input type="checkbox" id="auto-statename" onChange={(e) => {
