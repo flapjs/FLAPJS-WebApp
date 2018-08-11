@@ -19,11 +19,35 @@
 
 .panel-button {
   width: 100%;
-  font-size: 12px;
+  font-size: 0.8em;
+  outline: none;
+
+  cursor: pointer;
+  background: white;
+  color: black;
+
+  border-radius: 10px;
+
+  transition: background 0.3s ease;
+}
+.panel-button:hover {
+  background: lightgray;
+}
+.panel-button>label {
+  /*TODO: What goes here?*/
 }
 .panel-checkbox {
   padding-bottom: 5px;
 }
 .panel-checkbox>label {
   padding-left: 5px;
+}
+.panel-select {
+  width: 100%;
+  font-size: 0.8em;
+  outline: none;
+
+  cursor: pointer;
+  background: white;
+  color: black;
 }

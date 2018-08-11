@@ -25,7 +25,7 @@
 */
 
 .app-container {
-  animation: fadein 2s;
+  animation: fadein 1s;
 
   display: flex;
   flex-direction: column;

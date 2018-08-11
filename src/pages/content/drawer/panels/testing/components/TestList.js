@@ -70,7 +70,7 @@ class TestList extends React.Component
       <button className="panel-button" id="test-upload">
         <input id="test-upload-input" type="file" name="import" style={{display: "none"}}
           onChange={this.onUploadFileChange} accept=".txt"/>
-        <label className="panel-button-label" htmlFor="test-upload-input">
+        <label htmlFor="test-upload-input">
           Import Tests
         </label>
       </button>

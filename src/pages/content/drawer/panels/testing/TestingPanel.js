@@ -36,7 +36,7 @@ class TestingPanel extends React.Component
     {
       machineBuilder.onGraphChange(machineBuilder.graph);
     }
-    
+
     this.setState({errorCheckMode: value});
   }
 
@@ -55,7 +55,7 @@ class TestingPanel extends React.Component
 
       <div id="test-errorcheck">
         <label>Error Checking</label>
-        <select
+        <select className="panel-select"
           value={this.state.errorCheckMode}
           onChange={this.onChangeErrorCheckMode}>
           <option value={TestingManager.NO_ERROR_CHECK}>None</option>
