@@ -64,6 +64,10 @@
 
 }
 
+.btn-default:hover{
+    background-color: #FFC82C;
+}
+
 .footer {
 
     font-family: "Arvo", 'Serif';
