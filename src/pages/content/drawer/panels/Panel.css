@@ -36,6 +36,11 @@
 .panel-button>label {
   /*TODO: What goes here?*/
 }
+.panel-button:disabled {
+  cursor: default;
+  background: lightgray;
+  color: gray;
+}
 .panel-checkbox {
   padding-bottom: 5px;
 }
