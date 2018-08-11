@@ -1,14 +1,13 @@
 .homepage-container html, body{
     height: 100%;
     width: 100%;
-    /*background-image: url("./Pictures/jflapback.png");*/
 }
 
 .homepage-container {
     min-height: 100%;
-    position: relative;
-    padding-bottom: 20px;
     background-color: #006A96;
+    padding-bottom: 15px;
+    display: block;
 
 }
 
@@ -21,42 +20,61 @@
     position: static;
 }
 
-.title h1 {
-    font-family: 'Arvo', serif;
-    color: black;
-    font-size: 5em;
-    text-align: left;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: 10px;
-}
-
-
 .title img{
 
-    height: 88px;
-    width: 354px;
-    margin-left: 15px;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    display: block;
+    margin: 15px auto 15px auto;
 }
 
+.content{
+
+    font-family: "Arvo", "Serif" ;
+    text-align: center;
+    color: white;
+}
+
+.content h1{
+    font-size: 11vh;
+}
+
+.content p{
+    font-size: 5vh;
+}
+
+.buttons {
+    display: table;
+    margin: 0 auto;
+}
+
+.buttons button{
+
+    font-family: "Arvo", "Serif";
+    font-size: 25px;
+}
+
+.buttons button:hover{
+    cursor: pointer;
+}
+
+.btn-default {
+
+    background-color: white;
+    border-radius: 10px;
+    border-style: outset;
+
+}
 
 .footer {
 
-    font-family: "Arvo", Serif;
+    font-family: "Arvo", 'Serif';
     border-top: solid;
     background-color: white;
     text-align: center;
-    display: block;
 
     position: absolute;
-    left: 0px;
     bottom: 0px;
     width: 100%;
 
-    float: left ;
-    display: block;
     font-size: 12px;
 }
 .squares ul{
@@ -128,155 +146,9 @@
 
 @media screen and (max-width: 200px) {
 
+
+
+
+
 }
 
-.arrow {
-    display: block;
-    position: absolute;
-    font-family: "Arvo", Serif;
-    font-size: 20px;
-    bottom: 15%;
-    right: 5%;
-    cursor: pointer;
-}
-
-/* Arrow adapted from https://codepen.io/nicoencarnacion/pen/XpaRQV */
-.the-arrow {
-    width: 64px;
-    transition: all 0.2s;
-}
-.the-arrow.-left {
-    position: absolute;
-    top: 60%;
-    left: 0;
-}
-.the-arrow.-left > .shaft {
-    width: 0;
-    background-color: black;
-}
-.the-arrow.-left > .shaft:before, .the-arrow.-left > .shaft:after {
-    width: 0;
-    background-color: black;
-}
-.the-arrow.-left > .shaft:before {
-    -webkit-transform: rotate(0);
-    transform: rotate(0);
-}
-.the-arrow.-left > .shaft:after {
-    -webkit-transform: rotate(0);
-    transform: rotate(0);
-}
-.the-arrow.-right {
-    top: 3px;
-}
-.the-arrow.-right > .shaft {
-    width: 64px;
-    transition-delay: 0.2s;
-}
-.the-arrow.-right > .shaft:before, .the-arrow.-right > .shaft:after {
-    width: 8px;
-    transition-delay: 0.3s;
-    transition: all 0.5s;
-}
-.the-arrow.-right > .shaft:before {
-    -webkit-transform: rotate(40deg);
-    transform: rotate(40deg);
-}
-.the-arrow.-right > .shaft:after {
-    -webkit-transform: rotate(-40deg);
-    transform: rotate(-40deg);
-}
-.the-arrow > .shaft {
-    background-color: white;
-    display: block;
-    height: 1px;
-    position: relative;
-    transition: all 0.2s;
-    transition-delay: 0;
-    will-change: transform;
-}
-.the-arrow > .shaft:before, .the-arrow > .shaft:after {
-    background-color: white;
-    content: '';
-    display: block;
-    height: 1px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    transition: all 0.2s;
-    transition-delay: 0;
-}
-.the-arrow > .shaft:before {
-    -webkit-transform-origin: top right;
-    transform-origin: top right;
-}
-.the-arrow > .shaft:after {
-    -webkit-transform-origin: bottom right;
-    transform-origin: bottom right;
-}
-
-.animated-arrow {
-    display: inline-block;
-    color: white;
-    font-size: 1.25em;
-    font-style: italic;
-    text-decoration: none;
-    position: relative;
-    transition: all 0.2s;
-}
-.animated-arrow:hover {
-    color: lawngreen;
-}
-.animated-arrow:hover > .the-arrow.-left > .shaft {
-    width: 64px;
-    transition-delay: 0.1s;
-    background-color: lawngreen;
-}
-.animated-arrow:hover > .the-arrow.-left > .shaft:before, .animated-arrow:hover > .the-arrow.-left > .shaft:after {
-    width: 8px;
-    transition-delay: 0.1s;
-    background-color: lawngreen;
-}
-.animated-arrow:hover > .the-arrow.-left > .shaft:before {
-    -webkit-transform: rotate(40deg);
-    transform: rotate(40deg);
-}
-.animated-arrow:hover > .the-arrow.-left > .shaft:after {
-    -webkit-transform: rotate(-40deg);
-    transform: rotate(-40deg);
-}
-.animated-arrow:hover > .main {
-    -webkit-transform: translateX(80px);
-    transform: translateX(80px);
-}
-.animated-arrow:hover > .main > .the-arrow.-right > .shaft {
-    width: 0;
-    -webkit-transform: translateX(200%);
-    transform: translateX(200%);
-    transition-delay: 0;
-}
-.animated-arrow:hover > .main > .the-arrow.-right > .shaft:before, .animated-arrow:hover > .main > .the-arrow.-right > .shaft:after {
-    width: 0;
-    transition-delay: 0;
-    transition: all 0.1s;
-}
-.animated-arrow:hover > .main > .the-arrow.-right > .shaft:before {
-    -webkit-transform: rotate(0);
-    transform: rotate(0);
-}
-.animated-arrow:hover > .main > .the-arrow.-right > .shaft:after {
-    -webkit-transform: rotate(0);
-    transform: rotate(0);
-}
-.animated-arrow > .main {
-    display: flex;
-    align-items: center;
-    transition: all 0.2s;
-}
-.animated-arrow > .main > .text {
-    margin: 0 16px 0 0;
-    line-height: 1;
-}
-.animated-arrow > .main > .the-arrow {
-    position: relative;
-}

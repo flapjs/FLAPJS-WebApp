@@ -1,6 +1,5 @@
 import React from 'react';
 
-import ucsdlogo from './Pictures/ucsdlogo.gif';
 
 class Footer extends React.Component{
 
