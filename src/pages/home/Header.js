@@ -1,13 +1,13 @@
 import React from 'react';
 
-import pic from './Pictures/jflaplogo.png';
+import pic from './Pictures/flaplogo.png';
 class Header extends React.Component{
 
     render() {
 
         return (
                 <div className="title">
-                    <h1>JFLAP <img src={pic} /> </h1>
+                    <img src={pic} />
                 </div>
 
         );

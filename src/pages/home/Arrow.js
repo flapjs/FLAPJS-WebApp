@@ -17,14 +17,30 @@ class Arrow extends React.Component{
 
             <div className = "arrow" onClick={this.onClick.bind(this)}>
 
-                <h2> Let's Get Started ! </h2>
+                    <a className='animated-arrow'>
 
-                <div className="circle arrowbutton">
+                        <span className='the-arrow -left'>
 
-                    <h1> &#9654; </h1>
+                            <span className='shaft'></span>
 
-                </div>
+                        </span>
 
+                        <span className='main'>
+
+                            <span className='text'>
+
+                                Launch Workspace!
+
+                            </span>
+
+                            <span className='the-arrow -right'>
+
+                                <span className='shaft'></span>
+
+                            </span>
+
+                        </span>
+                    </a>
             </div>
 
 
