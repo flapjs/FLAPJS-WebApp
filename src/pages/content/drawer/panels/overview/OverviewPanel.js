@@ -45,11 +45,11 @@ class OverviewPanel extends React.Component
           <option value="NFA">NFA</option>
         </select>
         <div className="graphinfo-important">
-          <StateList machine={this.props.machineBuilder} controller={this.props.controller}/>
-          <AlphabetList machine={this.props.machineBuilder}/>
+          <StateList machineBuilder={this.props.machineBuilder} controller={this.props.controller}/>
+          <AlphabetList machineBuilder={this.props.machineBuilder}/>
         </div>
         <div className="graphinfo">
-          <TransitionTable machine={this.props.machineBuilder}/>
+          <TransitionTable machineBuilder={this.props.machineBuilder}/>
         </div>
       </div>
 

@@ -19,17 +19,17 @@ class StateList extends React.Component
 
   onStateCreate(e)
   {
-    const machine = this.props.machine;
-    const graph = machine.graph;
+    const machineBuilder = this.props.machineBuilder;
+    const graph = machineBuilder.graph;
     const x = -100 + (Math.random() * 100 * 2);
     const y = -100 + (Math.random() * 100 * 2);
-    graph.newNode(x, y, machine.getLabeler().getNextDefaultNodeLabel());
+    graph.newNode(x, y, machineBuilder.getLabeler().getNextDefaultNodeLabel());
   }
 
   render()
   {
     const pointer = this.props.controller.pointer;
-    const graph = this.props.machine.graph;
+    const graph = this.props.machineBuilder.graph;
     return <InfoBlock title="States" defaultValue="true">
       <div className="statelist-container">
         <div className="statelist">
