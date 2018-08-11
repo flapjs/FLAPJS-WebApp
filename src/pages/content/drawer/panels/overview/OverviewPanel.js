@@ -17,7 +17,6 @@ class OverviewPanel extends React.Component
     this.container = React.createRef();
 
     this.state = {
-      autoNameStates: true,
       machineType: this.props.machineBuilder.getMachineType()
     };
 
@@ -33,6 +32,7 @@ class OverviewPanel extends React.Component
 
   render()
   {
+    const machineBuilder = this.props.machineBuilder;
     return <div className="panel-container" id="overview" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>Definition</h1>
@@ -45,11 +45,11 @@ class OverviewPanel extends React.Component
           <option value="NFA">NFA</option>
         </select>
         <div className="graphinfo-important">
-          <StateList machineBuilder={this.props.machineBuilder} controller={this.props.controller}/>
-          <AlphabetList machineBuilder={this.props.machineBuilder}/>
+          <StateList machineBuilder={machineBuilder} controller={this.props.controller}/>
+          <AlphabetList machineBuilder={machineBuilder}/>
         </div>
         <div className="graphinfo">
-          <TransitionTable machineBuilder={this.props.machineBuilder}/>
+          <TransitionTable machineBuilder={machineBuilder}/>
         </div>
       </div>
 
@@ -58,11 +58,8 @@ class OverviewPanel extends React.Component
       <button disabled="true" className="panel-button">Convert To...</button>
       <div>
         <input type="checkbox" id="auto-statename" onChange={(e) => {
-          const checked = e.target.checked;
-          this.setState({autoNameStates: checked}, () => {
-            this.props.machineBuilder.shouldAutomaticallyRenameNodes = checked;
-          });
-        }} checked={this.state.autoNameStates}/>
+          machineBuilder.setAutoRenameNodes(e.target.checked);
+        }} checked={machineBuilder.shouldAutoRenameNodes()}/>
         <label htmlFor="auto-statename">Automatic State Labels</label>
       </div>
 

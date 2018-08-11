@@ -9,9 +9,9 @@ import { EMPTY } from 'machine/Symbols.js';
 
 class FSABuilder extends MachineBuilder
 {
-  constructor(graph, tester)
+  constructor(graph, controller, tester)
   {
-    super(graph);
+    super(graph, controller);
 
     this.tester = tester;
 
@@ -30,9 +30,11 @@ class FSABuilder extends MachineBuilder
     this.onDelayedErrorCheck = this.onDelayedErrorCheck.bind(this);
   }
 
-  initialize(notification)
+  initialize(app)
   {
-    this.notification = notification;
+    super.initialize(app);
+
+    this.notification = app.notification;
 
     this.graph.on("nodeCreate", this.onGraphChange);
     this.graph.on("nodeDestroy", this.onGraphChange);
@@ -60,6 +62,8 @@ class FSABuilder extends MachineBuilder
     this.graph.removeEventListener("edgeDestination", this.onGraphChange);
     this.graph.removeEventListener("toggleAccept", this.onGraphChange);
     this.graph.removeEventListener("newInitial", this.onGraphChange);
+
+    super.destroy();
   }
 
   onGraphChange(graph)

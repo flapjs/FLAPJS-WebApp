@@ -13,7 +13,6 @@ nodeMove(targetNode, nextX, nextY, prevX, prevY)
 nodeMoveAll(targetNodes, dx, dy)
 nodeAccept(targetNode, nextAccept, prevAccept)
 nodeInitial(nextInitial, prevInitial)
-nodeLabel(targetNode, nextLabel, prevLabel)//Not used
 
 edgeCreate(targetEdge)
 edgeDelete(targetEdge)

@@ -5,19 +5,27 @@ const Eventable = {
     Object.assign(targetClass.prototype, Eventable);
     targetClass.prototype.__events = new Map();
   },
-  addListener(eventName, listener)
+  addEventListener(eventName, listener)
   {
     if (!this.__events.has(eventName)) this.__events.set(eventName, []);
 
     const listeners = this.__events.get(eventName);
     listeners.push(listener);
   },
-  removeListener(eventName, listener)
+  addListener()
+  {
+    throw new Error("DEPRECATED!");
+  },
+  removeEventListener(eventName, listener)
   {
     if (!this.__events.has(eventName)) return;
 
     const listeners = this.__events.get(eventName);
     listeners.splice(listeners.indexOf(listener), 1);
+  },
+  removeListener()
+  {
+    throw new Error("DEPRECATED!");
   },
   removeAllListeners(eventName)
   {
@@ -55,7 +63,7 @@ const Eventable = {
   },
   on(eventName, listener)
   {
-    this.addListener(eventName, listener);
+    this.addEventListener(eventName, listener);
   },
   once(eventName, listener)
   {
@@ -63,7 +71,7 @@ const Eventable = {
       listener.apply(null, arguments);
       this.removeEventListener(f);
     };
-    this.addListener(eventName, f);
+    this.addEventListener(eventName, f);
   },
   onEventProcessed(eventName, args)
   {

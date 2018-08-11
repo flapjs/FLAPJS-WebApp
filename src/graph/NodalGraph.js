@@ -10,6 +10,7 @@ import { EMPTY } from 'machine/Symbols.js';
 //nodeCreate(node) - Whenever a new node is created
 //nodeDestroy(node) - Whenever a node is destroyed (even on clear)
 //nodeLabel(node, newLabel, oldLabel) - Whenever a node label changes
+//nodeCustomLabel(node, newLabel, oldLabel) - Whenever a node custom label changes
 //edgeCreate(edge) - Whenever a new edge is created
 //edgeDestroy(edge) - Whenever an edge is destroyed (even on clear)
 //edgeLabel(edge, newLabel, oldLabel) - Whenever a node label changes
