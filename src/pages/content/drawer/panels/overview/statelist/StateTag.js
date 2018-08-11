@@ -20,7 +20,14 @@ class StateTag extends React.Component
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
 
+    this.onDragStart = this.onDragStart.bind(this);
     this.onDrop = this.onDrop.bind(this);
+  }
+
+  onDragStart(e)
+  {
+    //Drag all of it
+    e.target.select();
   }
 
   onDrop(e)
@@ -143,6 +150,7 @@ class StateTag extends React.Component
         onBlur={this.onBlur}
         onKeyUp={this.onKeyUp}
         onKeyDown={this.onKeyDown}
+        onDragStart={this.onDragStart}
         onDrop={this.onDrop}/>
     </div>;
   }

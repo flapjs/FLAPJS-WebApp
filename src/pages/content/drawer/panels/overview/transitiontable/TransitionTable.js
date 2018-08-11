@@ -38,31 +38,31 @@ class TransitionTable extends React.Component
         <table className="transitiontable">
           <tbody>
             <tr>
-            <th className="emptycell">
-              <button onClick={()=>
-                this.setState((prev, props)=>{
-                  return {
-                    rowAxis: prev.rowAxis == SYMBOL_AXIS ? STATE_AXIS : SYMBOL_AXIS
-                  };
-                })}>
-                Swap
-              </button>
-            </th>
-            {
-              rowAxisType === SYMBOL_AXIS ?
-                alphabet.map((e, i)=><th key={e} scope="col">{e}</th>) :
-              rowAxisType === STATE_AXIS ?
-                states.map((e, i)=><th key={e} scope="col">{e}</th>) :
-              null
-            }
-            {
-              hasEmptyColumn &&
-                <th scope="col">{EMPTY}</th>
-            }
+              <th className="emptycell">
+                <button onClick={()=>
+                  this.setState((prev, props)=>{
+                    return {
+                      rowAxis: prev.rowAxis == SYMBOL_AXIS ? STATE_AXIS : SYMBOL_AXIS
+                    };
+                  })}>
+                  Swap
+                </button>
+              </th>
+              {
+                rowAxisType === SYMBOL_AXIS ?
+                  alphabet.map((e, i)=><th key={e} scope="col" className="col">{e}</th>) :
+                rowAxisType === STATE_AXIS ?
+                  states.map((e, i)=><th key={e} scope="col" className="col">{e}</th>) :
+                null
+              }
+              {
+                hasEmptyColumn &&
+                  <th scope="col">{EMPTY}</th>
+              }
             </tr>
             {
               states.map((e, i)=><tr key={e}>
-                <th scope="row">{e}</th>
+                <th scope="row" className="row">{e}</th>
                 {
                   rowAxisType === SYMBOL_AXIS ?
                     alphabet.map((symbol, i)=><td key={e + "," + symbol}>{getDestinationFromSourceAndSymbol(machine, e, symbol)}</td>) :

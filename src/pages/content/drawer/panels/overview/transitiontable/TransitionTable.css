@@ -2,9 +2,26 @@
   width: 100%;
 
   overflow: auto;
+
+  font-size: inherit;
+  font-family: 'Overpass Mono', monospace;
+  text-align: center;
 }
 
-.transitiontable, .transitiontable th, .transitiontable td {
-  border: 1px solid black;
+.transitiontable th, .transitiontable td {
   padding: 5px;
+  border-radius: 5px;
+
+  background: #4D4D4D;
+}
+
+.transitiontable th {
+  color: white;
+}
+.transitiontable th.col {
+}
+.transitiontable th.row {
+}
+.transitiontable td {
+  color: gray;
 }
