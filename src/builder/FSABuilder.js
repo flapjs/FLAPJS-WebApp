@@ -66,8 +66,6 @@ class FSABuilder extends MachineBuilder
 
   onGraphChange(graph)
   {
-    console.log("GRAPH CHANGE!");
-    
     if (this._timer)
     {
       clearTimeout(this._timer);
