@@ -15,7 +15,7 @@ import NotificationSystem from './notification/NotificationSystem.js';
 import FSABuilder from 'builder/FSABuilder.js';
 import EventHistory from 'events/EventHistory.js';
 import GraphUploader from 'graph/GraphUploader.js';
-import TestingManager from './drawer/panels/testing/TestingManager.js';
+import TestingManager from 'builder/TestingManager.js';
 
 import GraphEdgeCreateEvent from 'events/GraphEdgeCreateEvent.js';
 import GraphEdgeDeleteEvent from 'events/GraphEdgeDeleteEvent.js';
