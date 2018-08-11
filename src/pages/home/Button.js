@@ -10,7 +10,12 @@ class Button extends React.Component
 
     onClick(ev)
     {
-        Router.routeTo("/app");
+        const timeout = 300;
+        const homepage = document.getElementById("homepage");
+        homepage.style.animation = "fadeout " + timeout + "ms";
+        setTimeout(() => {
+          Router.routeTo("/app");
+        }, timeout);
     }
 
     render()

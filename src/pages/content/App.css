@@ -2,6 +2,11 @@
   height: 100%;
 }
 
+@keyframes fadein {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
 /*For hiding scrollbars*/
 ::-webkit-scrollbar {
   display: none;
@@ -13,6 +18,8 @@
 */
 
 .app-container {
+  animation: fadein 2s;
+
   display: flex;
   flex-direction: column;
   height: 100%;

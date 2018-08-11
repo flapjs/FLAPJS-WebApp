@@ -17,12 +17,9 @@ class HomePage extends React.Component {
     }
 
     render() {
-
-
         //<Arrow router={this.props.router}/>
         return (
-
-            <div className="homepage-container">
+            <div className="homepage-container" id="homepage">
                 <Header/>
                 <Content/>
                 <Button/>
