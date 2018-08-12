@@ -71,7 +71,11 @@ class Workspace extends React.Component
       <Subtitle visible={graph.isEmpty()}/>
 
       {/* Graph elements */}
-      <g id="workspace-content-elements" transform={"translate(" + controller.pointer.offsetX + " " + controller.pointer.offsetY + ")"}>
+      <g id="workspace-content-elements" transform={
+        "translate(" +
+        controller.pointer.offsetX + " " +
+        controller.pointer.offsetY + ")"}>
+
         {/* Graph origin crosshair */}
         <line x1="0" y1="-5" x2="0" y2="5" stroke="rgba(0,0,0,0.04)"/>
         <line x1="-5" y1="0" x2="5" y2="0" stroke="rgba(0,0,0,0.04)"/>
@@ -101,18 +105,18 @@ class Workspace extends React.Component
           {/* Selected elements */}
           { controller.selector.hasSelection() &&
             controller.selector.getSelection().map((e, i) =>
-              <HighlightRenderer key={e.label} target={e} type="node" color="gray"/>) }
+              <HighlightRenderer key={e.label} className="highlight-select"target={e} type="node"/>) }
 
           {/* Selection box */}
           <SelectionBoxRenderer src={controller.selector}/>
 
           {/* Node error targets */}
           { machineBuilder.machineErrorChecker.errorNodes.map((e, i) =>
-            <HighlightRenderer key={e.label + "." + i} target={e} type="node" color="red" offset="6"/>) }
+            <HighlightRenderer key={e.label + "." + i} className="highlight-error"target={e} type="node" offset="6"/>) }
 
           {/* Edge error targets */}
           { machineBuilder.machineErrorChecker.errorEdges.map((e, i) =>
-            <HighlightRenderer key={e.label + "." + i} target={e} type="edge" color="red" offset="6"/>) }
+            <HighlightRenderer key={e.label + "." + i} className="highlight-error" target={e} type="edge" offset="6"/>) }
 
           {/* Hover markers */}
           { /*controller.pointer.target &&

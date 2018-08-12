@@ -47,13 +47,12 @@ class HighlightRenderer extends React.Component
     }
 
     return <g className="graph-highlight-container">
-      <circle className="graph-highlight"
+      <circle className={"graph-highlight " + this.props.className}
         cx={x} cy={y}
         r={r + HIGHLIGHT_RADIUS_OFFSET}
         strokeDashoffset={this.props.offset || 0}
         strokeDasharray={HIGHLIGHT_LINE_ARRAY}
         strokeWidth={HIGHLIGHT_LINE_WIDTH}
-        stroke={this.props.color || "black"}
         fill="none"/>
     </g>;
   }

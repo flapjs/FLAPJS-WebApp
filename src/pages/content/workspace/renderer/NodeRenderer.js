@@ -12,32 +12,24 @@ class NodeRenderer extends React.Component
   render()
   {
     const node = this.props.node;
-    //TODO: style={{cursor: "crosshair"}}
-    //TODO: style={{filter:"url(#error-highlight)"}}
     return <g className="graph-node-container">
       //Outer circle
       <circle className="graph-node"
         cx={node.x}
         cy={node.y}
-        r={Config.NODE_RADIUS}
-        stroke={Config.NODE_STROKE_STYLE}
-        fill={Config.NODE_FILL_STYLE} />
+        r={Config.NODE_RADIUS}/>
 
       //Inner circle
       {node.accept &&
-        <circle
+        <circle className="graph-node-inner"
           cx={node.x}
           cy={node.y}
           r={Config.NODE_RADIUS_INNER}
-          stroke={Config.NODE_STROKE_STYLE}
-          fill="none" />}
+          fill="none"/>}
 
       //Label
-      <text
+      <text className="graph-node-label"
         x={node.x} y={node.y + 4}
-        textAnchor={Config.NODE_TEXT_ANCHOR}
-        font={Config.NODE_FONT}
-        fill={Config.NODE_TEXT_FILL_STYLE}
         pointerEvents="none"
         style={{userSelect: "none"}}>
         {node.label}

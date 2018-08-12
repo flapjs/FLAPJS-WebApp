@@ -8,8 +8,17 @@
 
   transition: outline-color 0.1s ease;
 }
-.viewport-container>* {
+.viewport-container > * {
   pointer-events: auto;
+}
+.viewport-normal {
+  outline-color: rgba(0,0,0,0.02);
+}
+.viewport-dangerous {
+  outline-color: var(--color-viewport-error);
+}
+.viewport-waiting {
+  outline-color: rgba(0,0,0,0.1);
 }
 
 .anchor-bottom-right {
@@ -17,7 +26,6 @@
   bottom: 0px;
   right: 0px;
 }
-
 .anchor-bottom-left {
   position: absolute;
   bottom: 0px;
