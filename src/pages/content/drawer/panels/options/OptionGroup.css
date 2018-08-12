@@ -3,10 +3,11 @@
   margin-top: 10px;
 }
 .option-header {
+  cursor: pointer;
   width: 100%;
   position: relative;
   padding-bottom: 5px;
-  
+
   white-space: nowrap;
   overflow: hidden;
 
@@ -14,11 +15,15 @@
   font-size: 1.2em;
   border-bottom: 1px solid black;
 }
+.option-header label {
+  cursor: pointer;
+  user-select: none;
+}
 .option-header > * {
-  color: gray;
+  color: var(--color-drawer-text-subtle);
 }
 .option-header > *:first-child {
-  color: white;
+  color: var(--color-drawer-text);
 }
 .option-header > *:first-child::after {
   content: " ";
