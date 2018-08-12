@@ -7,6 +7,21 @@
   --color-toolbar-main-dark: #077787;
   --color-toolbar-accent: #FEE781;
   --color-toolbar-accent-dark: #FFCD00;
+
+  --color-drawer-text: #FFFFFF;
+  --color-drawer-text-subtle: #909090;
+  --color-drawer-text-ghost: #676767;
+  --color-drawer-text-invert: #000000;
+  --color-drawer-text-back: #4D4D4D;
+  --color-drawer-main: #575757;
+  --color-drawer-main-dark: #3D3D3D;
+  --color-drawer-accent: #FFF2BA;
+  --color-drawer-error: rgba(255,0,0,0.7);
+
+  --color-testing-failure: red;
+  --color-testing-success: lime;
+  --color-testing-working: gray;
+  --color-testing-text: white;
 }
 
 @keyframes fadein {

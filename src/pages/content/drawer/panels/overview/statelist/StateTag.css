@@ -5,30 +5,30 @@
   border-radius: 5px;
 }
 .statetag-container:nth-child(2) {
-  outline: 2px dashed var(--color-main-lite);
+  outline: 2px dashed var(--color-drawer-text-ghost);
   outline-offset: 2px;
   margin-left: -2px;
 }
 
 /*Backgrounds based on input type*/
 .statetag-container {
-  background: #4D4D4D;
+  background: var(--color-drawer-text-back);
 }
 .statetag-container.emptytag {
-  background: rgba(255,0,0,0.5);
+  background: var(--color-drawer-error);
 }
 .statetag-container.errortag {
 }
 
 /*Colors based on input type*/
 .statetag-container > input {
-  color: gray;
+  color: var(--color-drawer-text-subtle);
 }
 .statetag-container.customtag > input {
-  color: white;
+  color: var(--color-drawer-text);
 }
 .statetag-container.errortag > input {
-  color: rgba(255,0,0,0.7);
+  color: var(--color-drawer-error);
 }
 
 .statetag-container > input {
@@ -41,6 +41,6 @@
 }
 .statetag-container > input.accept {
   margin: -1px;/*Remove border space*/
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-drawer-text-subtle);
   border-radius: 5px;
 }

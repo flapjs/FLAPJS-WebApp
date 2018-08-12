@@ -24,6 +24,6 @@
 
 .infoblock-content {
   font-size: 1em;
-  border-left: 2px solid gray;
+  border-left: 2px solid var(--color-drawer-text-subtle);
   padding-left: 10px;
 }

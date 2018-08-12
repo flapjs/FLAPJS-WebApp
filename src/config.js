@@ -22,12 +22,6 @@ cfg.GRAPH_IMMEDIATE_INTERVAL = 50;
 //Toolbar
 cfg.DEFAULT_MACHINE_NAME = "Untitled";
 
-//Status Button
-cfg.ACTIVE_PENDING_COLOR = "white";
-cfg.ACTIVE_SUCCESS_COLOR = "lime";
-cfg.ACTIVE_FAILURE_COLOR = "red";
-cfg.INACTIVE_COLOR = "gray";
-
 //Testing Panel
 cfg.PLACEHOLDER_TEXT = "Test string";
 

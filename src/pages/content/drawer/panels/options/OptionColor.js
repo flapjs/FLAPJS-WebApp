@@ -26,6 +26,11 @@ class OptionColor extends React.Component
     {
       style.setProperty(name + "-invert", value);
     }
+
+    if (this.props.lite)
+    {
+      style.setProperty(name + "-lite", value);
+    }
   }
 
   render()

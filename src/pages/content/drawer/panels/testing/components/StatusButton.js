@@ -1,5 +1,5 @@
 import React from 'react';
-import Config from 'config.js';
+import './StatusButton.css';
 
 import IconButton from 'icons/IconButton.js';
 import SuccessIcon from 'icons/SuccessIcon.js';
@@ -19,8 +19,7 @@ class StatusButton extends React.Component
     if (this.props.mode > 0)
     {
       //Success icon
-      return <IconButton className="status-icon"
-        style={{fill: active ? Config.ACTIVE_SUCCESS_COLOR : Config.INACTIVE_COLOR}}
+      return <IconButton className={"status-icon success" + (active ? " active" : "")}
         onClick={this.props.onClick}>
         <SuccessIcon/>
       </IconButton>;
@@ -28,8 +27,7 @@ class StatusButton extends React.Component
     else if (this.props.mode < 0)
     {
       //Failure icon
-      return <IconButton className="status-icon"
-        style={{fill: active ? Config.ACTIVE_FAILURE_COLOR : Config.INACTIVE_COLOR}}
+      return <IconButton className={"status-icon failure" + (active ? " active" : "")}
         onClick={this.props.onClick}>
         <FailureIcon/>
       </IconButton>;
@@ -37,8 +35,7 @@ class StatusButton extends React.Component
     else
     {
       //Pending icon
-      return <IconButton className="status-icon"
-        style={{fill: active ? Config.ACTIVE_PENDING_COLOR : Config.INACTIVE_COLOR}}
+      return <IconButton className={"status-icon" + (active ? " active" : "")}
         onClick={this.props.onClick}>
         <WorkingIcon/>
       </IconButton>;

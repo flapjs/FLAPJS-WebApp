@@ -12,16 +12,16 @@
   padding: 5px;
   border-radius: 5px;
 
-  background: #4D4D4D;
+  background: var(--color-drawer-text-back);
 }
 
 .transitiontable th {
-  color: white;
+  color: var(--color-drawer-text);
 }
 .transitiontable th.col {
 }
 .transitiontable th.row {
 }
 .transitiontable td {
-  color: gray;
+  color: var(--color-drawer-text-subtle);
 }
