@@ -184,6 +184,10 @@ class FSABuilder extends MachineBuilder
     this.onGraphChange();
   }
 
+  includes(symbol) {
+    return this._symbols.includes(symbol);
+  }
+
   getAlphabet()
   {
     const machine = this.getMachine();
