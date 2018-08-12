@@ -121,6 +121,10 @@ class FSABuilder extends MachineBuilder
     this._symbols.splice(this._symbols.indexOf(symbol), 1);
   }
 
+  includes(symbol) {
+    return this._symbols.includes(symbol);
+  }
+
   getAlphabet()
   {
     const machine = this.getMachine();

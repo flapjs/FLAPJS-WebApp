@@ -1,3 +1,16 @@
 .alphatag-container {
-  padding: 5px;
+  margin: 5px;
+  padding: 3px;
+  border-radius: 5px;
+  background: #4D4D4D;
 }
+
+.alphatag-input {
+  background: none;
+  border: none;
+  outline: none;
+  width: 1ch;
+  font-size: inherit;
+  font-family: 'Overpass Mono', monospace;
+}
+

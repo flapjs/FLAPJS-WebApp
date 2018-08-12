@@ -13,12 +13,24 @@ class AlphabetList extends React.Component
   {
     super(props);
 
+    this.state = {
+      editing: false
+    };
+
+    this.editSymbolTag = React.createRef();
+
     this.onCreate = this.onCreate.bind(this);
+    this.disableEdit = this.disableEdit.bind(this);
   }
 
-  onCreate(e)
-  {
+  onCreate(e) {
+    this.setState({editing: true}, () => {
+      this.editSymbolTag.ref.focus();
+    });
+  }
 
+  disableEdit() {
+    this.setState({editing: false});
   }
 
   render()
@@ -27,11 +39,15 @@ class AlphabetList extends React.Component
     return <InfoBlock title="Alphabet">
       <div className="alphalist-container">
         <div className="alphalist">
-        {
-          alphabet.map((e, i) => {
-            return <AlphabetTag key={i} src={e}/>
-          })
-        }
+          {
+            alphabet.map((e, i) => {
+              return <AlphabetTag key={i} src={e} list={this} machine={this.props.machine} alphabet={alphabet}/>
+            })
+          }
+          <AlphabetTag key={-1} ref={ref=>this.editSymbolTag=ref} src={""} list={this} machine={this.props.machine}
+                       alphabet={alphabet} style={{
+            display: this.state.editing ? "block" : "none"
+          }}/>
         </div>
         <IconButton onClick={this.onCreate}>
           <BoxAddIcon/>
