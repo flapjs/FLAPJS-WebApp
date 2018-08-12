@@ -27,7 +27,10 @@
 
   color: var(--color-drawer-text);
 }
-.test-input-field::placeholder, .test-input-field::-ms-input-placeholder {
+.test-input-field::placeholder {
+  color: var(--color-drawer-text-subtle);
+}
+.test-input-field::-ms-input-placeholder {
   color: var(--color-drawer-text-subtle);
 }
 

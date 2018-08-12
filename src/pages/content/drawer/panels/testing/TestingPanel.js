@@ -64,11 +64,11 @@ class TestingPanel extends React.Component
             <option value={TestingManager.IMMEDIATE_ERROR_CHECK}>Immediate</option>
           </select>
         </div>
-        <div>
+        <div className="panel-checkbox">
           <input id="test-step" type="checkbox" disabled="true"/>
           <label htmlFor="test-step">Step-by-Step Mode</label>
         </div>
-        <div>
+        <div className="panel-checkbox">
           <input id="test-closure" type="checkbox" disabled="true"/>
           <label htmlFor="test-closure">Transition By Closure</label>
         </div>

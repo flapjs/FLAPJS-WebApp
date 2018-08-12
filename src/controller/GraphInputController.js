@@ -298,7 +298,7 @@ class GraphInputController extends InputController
       {
         if (!this.pointer.isTrashMode(x, y))
         {
-          const edge = this.graph.newEdge(target, this.pointer, Config.STR_TRANSITION_PROXY_LABEL);
+          const edge = this.graph.newEdge(target, this.pointer, Config.STR_TRANSITION_DEFAULT_LABEL);
 
           //Redirect pointer to refer to the edge as the new target
           this.pointer.initial.target = edge;
@@ -507,7 +507,7 @@ class GraphInputController extends InputController
             if (edge !== target && edge.from === target.from && edge.to === pointer.target)
             {
               let result = edge.label.split(",");
-              if (target.label !== Config.STR_TRANSITION_PROXY_LABEL)
+              if (target.label !== Config.STR_TRANSITION_DEFAULT_LABEL)
               {
                 result = result.concat(target.label.split(","));
               }
@@ -571,10 +571,8 @@ class GraphInputController extends InputController
           }
 
           //Open label editor if default edge...
-          if (target.label === Config.STR_TRANSITION_PROXY_LABEL)
+          if (target.label === Config.STR_TRANSITION_DEFAULT_LABEL)
           {
-            //Silently set the label...
-            target._label = Config.STR_TRANSITION_DEFAULT_LABEL;
             this.openLabelEditor(target, x, y);
           }
           return true;
@@ -594,9 +592,8 @@ class GraphInputController extends InputController
             target.makePlaceholder();
 
             //Open label editor if default edge...
-            if (target.label === Config.STR_TRANSITION_PROXY_LABEL)
+            if (target.label === Config.STR_TRANSITION_DEFAULT_LABEL)
             {
-              target.label = Config.STR_TRANSITION_DEFAULT_LABEL;
               this.openLabelEditor(target, x, y);
             }
             return true;

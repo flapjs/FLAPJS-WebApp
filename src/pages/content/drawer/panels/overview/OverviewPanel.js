@@ -55,7 +55,7 @@ class OverviewPanel extends React.Component
         <hr />
 
         <button disabled="true" className="panel-button">Convert To...</button>
-        <div>
+        <div className="panel-checkbox">
           <input type="checkbox" id="auto-statename" onChange={(e) => {
             machineBuilder.setAutoRenameNodes(e.target.checked);
           }} checked={machineBuilder.shouldAutoRenameNodes()}/>
