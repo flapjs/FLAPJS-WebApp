@@ -2,3 +2,6 @@
   outline: none;
   margin-right: 10px;
 }
+.option-container * {
+  cursor: pointer;
+}
