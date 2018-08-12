@@ -27,6 +27,9 @@
 
   color: var(--color-drawer-text);
 }
+.test-input-field::placeholder, .test-input-field::-ms-input-placeholder {
+  color: var(--color-drawer-text-subtle);
+}
 
 .test-input-container .status-icon {
   margin-left: 5px;

@@ -1,6 +1,8 @@
 import React from 'react';
 import './OptionColor.css';
 
+import ColorHelper from 'util/ColorHelper.js';
+
 class OptionColor extends React.Component
 {
   constructor(props)
@@ -17,19 +19,69 @@ class OptionColor extends React.Component
     const value = e.target.value;
     style.setProperty(name, value);
 
-    if (this.props.dark)
-    {
-      style.setProperty(name + "-dark", value);
-    }
-
     if (this.props.invert)
     {
-      style.setProperty(name + "-invert", value);
+      const color = [];
+      ColorHelper.HEXtoRGB(value, color);
+      ColorHelper.RGBtoHSV(...color, color);
+      //INVERT HUE: color[0] = (color[0] + 0.5) % 1;
+      //INVERT BRIGHTNESS:
+      color[2] = 1 - color[2];
+      ColorHelper.HSVtoRGB(...color, color);
+      const result = ColorHelper.RGBtoHEX(...color);
+      style.setProperty(name + "-invert", result);
     }
 
-    if (this.props.lite)
+    if (this.props.dark)
     {
-      style.setProperty(name + "-lite", value);
+      //v < 0.15 ? lighten : darken
+      const color = [];
+      ColorHelper.HEXtoRGB(value, color);
+      ColorHelper.RGBtoHSV(...color, color);
+      console.log(color);
+      color[2] *= 0.8;
+      ColorHelper.HSVtoRGB(...color, color);
+      const result = ColorHelper.RGBtoHEX(...color);
+      style.setProperty(name + "-dark", result);
+    }
+
+    if (this.props.subtle)
+    {
+      //v < 0.15 ? lighten : darken
+      const color = [];
+      ColorHelper.HEXtoRGB(value, color);
+      ColorHelper.RGBtoHSV(...color, color);
+      console.log(color);
+      color[2] *= 0.61;
+      ColorHelper.HSVtoRGB(...color, color);
+      const result = ColorHelper.RGBtoHEX(...color);
+      style.setProperty(name + "-subtle", result);
+    }
+
+    if (this.props.ghost)
+    {
+      //v < 0.15 ? lighten : darken
+      const color = [];
+      ColorHelper.HEXtoRGB(value, color);
+      ColorHelper.RGBtoHSV(...color, color);
+      console.log(color);
+      color[2] *= 0.74;
+      ColorHelper.HSVtoRGB(...color, color);
+      const result = ColorHelper.RGBtoHEX(...color);
+      style.setProperty(name + "-ghost", result);
+    }
+
+    if (this.props.back)
+    {
+      //v < 0.15 ? lighten : darken
+      const color = [];
+      ColorHelper.HEXtoRGB(value, color);
+      ColorHelper.RGBtoHSV(...color, color);
+      console.log(color);
+      color[2] *= 0.87;
+      ColorHelper.HSVtoRGB(...color, color);
+      const result = ColorHelper.RGBtoHEX(...color);
+      style.setProperty(name + "-back", result);
     }
   }
 
