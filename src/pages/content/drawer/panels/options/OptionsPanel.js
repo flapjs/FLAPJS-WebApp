@@ -86,8 +86,8 @@ class OptionsPanel extends React.Component
         </OptionGroup>
 
         <OptionGroup title="Label Editor" label="Colors">
-        <OptionColor label="Text Color" propName="--color-labeleditor-text" root={root}/>
-        <OptionColor label="Main Color" propName="--color-labeleditor-main" root={root}/>
+          <OptionColor label="Text Color" propName="--color-labeleditor-text" root={root}/>
+          <OptionColor label="Main Color" propName="--color-labeleditor-main" root={root}/>
         </OptionGroup>
 
         <OptionGroup title="General" label="Colors">

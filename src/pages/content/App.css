@@ -18,10 +18,10 @@
   --color-drawer-accent: #FFF2BA;
   --color-drawer-error: #B05454;
 
-  --color-testing-failure: red;
-  --color-testing-success: lime;
-  --color-testing-working: gray;
-  --color-testing-text: white;
+  --color-testing-failure: #FF0000;
+  --color-testing-success: #00FF00;
+  --color-testing-working: #808080;
+  --color-testing-text: #FFFFFF;
 
   --color-notification-text: #F7F5E6;
   --color-notification-info: #7D7D7D;
@@ -32,17 +32,17 @@
   --color-notification-warning-dark: #DFBC20;
 
   --color-viewport-error: #F54545;
-  --color-highlight-select: gray;
+  --color-highlight-select: #808080;
 
-  --color-labeleditor-text: black;
-  --color-labeleditor-main: lightgray;
+  --color-labeleditor-text: #000000;
+  --color-labeleditor-main: #D3D3D3;
 
   --color-graph-node: #FEE781;
-  --color-workspace-main: white;
-  --color-workspace-text: black;
+  --color-workspace-main: #FFFFFF;
+  --color-workspace-text: #000000;
 
-  --color-selection-main: rgba(0,0,0,0.1);
-  --color-selection-border: black;
+  --color-selection-main: #000000;
+  --color-selection-border: #000000;
 }
 
 @keyframes fadein {
