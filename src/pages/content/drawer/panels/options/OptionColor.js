@@ -38,7 +38,6 @@ class OptionColor extends React.Component
       const color = [];
       ColorHelper.HEXtoRGB(value, color);
       ColorHelper.RGBtoHSV(...color, color);
-      console.log(color);
       color[2] *= 0.8;
       ColorHelper.HSVtoRGB(...color, color);
       const result = ColorHelper.RGBtoHEX(...color);
@@ -51,7 +50,6 @@ class OptionColor extends React.Component
       const color = [];
       ColorHelper.HEXtoRGB(value, color);
       ColorHelper.RGBtoHSV(...color, color);
-      console.log(color);
       color[2] *= 0.61;
       ColorHelper.HSVtoRGB(...color, color);
       const result = ColorHelper.RGBtoHEX(...color);
@@ -64,7 +62,6 @@ class OptionColor extends React.Component
       const color = [];
       ColorHelper.HEXtoRGB(value, color);
       ColorHelper.RGBtoHSV(...color, color);
-      console.log(color);
       color[2] *= 0.74;
       ColorHelper.HSVtoRGB(...color, color);
       const result = ColorHelper.RGBtoHEX(...color);
@@ -77,7 +74,6 @@ class OptionColor extends React.Component
       const color = [];
       ColorHelper.HEXtoRGB(value, color);
       ColorHelper.RGBtoHSV(...color, color);
-      console.log(color);
       color[2] *= 0.87;
       ColorHelper.HSVtoRGB(...color, color);
       const result = ColorHelper.RGBtoHEX(...color);
