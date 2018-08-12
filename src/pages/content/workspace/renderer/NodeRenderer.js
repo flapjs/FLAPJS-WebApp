@@ -11,27 +11,36 @@ class NodeRenderer extends React.Component
 
   render()
   {
+    //TODO: Refer to app.css for comparable colors
     const node = this.props.node;
     return <g className="graph-node-container">
-      //Outer circle
+      {/*Outer circle*/}
       <circle className="graph-node"
         cx={node.x}
         cy={node.y}
-        r={Config.NODE_RADIUS}/>
+        r={Config.NODE_RADIUS}
 
-      //Inner circle
+        fill="#FEE781"
+        stroke="#000000"/>
+
+      {/*Inner circle*/}
       {node.accept &&
         <circle className="graph-node-inner"
           cx={node.x}
           cy={node.y}
           r={Config.NODE_RADIUS_INNER}
-          fill="none"/>}
+          fill="none"
+
+          stroke="#000000"/>}
 
       //Label
       <text className="graph-node-label"
         x={node.x} y={node.y + 4}
         pointerEvents="none"
-        style={{userSelect: "none"}}>
+        style={{userSelect: "none"}}
+
+        fontFamily="\'Overpass Mono\', monospace"
+        textAnchor="middle">
         {node.label}
       </text>
     </g>;

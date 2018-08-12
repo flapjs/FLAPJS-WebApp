@@ -24,7 +24,7 @@ class Subtitle extends React.Component
   render()
   {
     const visible = this.state.active ? this.props.visible : false;
-    return <text y="-1em" className={"subtitle" + (visible ? " visible" : "")}
+    return <text y="-1em" className={"graph-ui subtitle" + (visible ? " visible" : "")}
       textAnchor="middle">{Config.EMPTY_MESSAGE}</text>;
   }
 }

@@ -37,12 +37,27 @@ class Workspace extends React.Component
     const dy = bounds.minY + offsetY - EXPORT_PADDING_Y;
     const w = bounds.width + EXPORT_PADDING_X * 2;
     const h = bounds.height + EXPORT_PADDING_Y * 2;
-
     const clone = svg.cloneNode(true);
     clone.setAttribute('viewBox',
       dx + " " + dy + " " + w + " " + h);
     clone.setAttribute('width', width);
     clone.setAttribute('height', height);
+
+    /*
+    //TODO: Link the font family to svg
+    const link = document.createElement("link");
+    link.setAttribute("href", "https://fonts.googleapis.com/css?family=Overpass+Mono");
+    link.setAttribute("rel", "stylesheet");
+    clone.appendChild(link);
+    */
+
+    //Remove unwanted ui elements from image
+    const uiElements = clone.getElementsByClassName("graph-ui");
+    for(const e of uiElements)
+    {
+      e.remove();
+    }
+
     return clone;
   }
 
@@ -77,8 +92,8 @@ class Workspace extends React.Component
         controller.pointer.offsetY + ")"}>
 
         {/* Graph origin crosshair */}
-        <line x1="0" y1="-5" x2="0" y2="5" stroke="rgba(0,0,0,0.04)"/>
-        <line x1="-5" y1="0" x2="5" y2="0" stroke="rgba(0,0,0,0.04)"/>
+        <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="rgba(0,0,0,0.04)"/>
+        <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="rgba(0,0,0,0.04)"/>
 
         {/* Graph objects */}
         <g>
@@ -112,11 +127,11 @@ class Workspace extends React.Component
 
           {/* Node error targets */}
           { machineBuilder.machineErrorChecker.errorNodes.map((e, i) =>
-            <HighlightRenderer key={e.label + "." + i} className="highlight-error"target={e} type="node" offset="6"/>) }
+            <HighlightRenderer key={e.label + "." + i} className="highlight-error graph-gui" target={e} type="node" offset="6"/>) }
 
           {/* Edge error targets */}
           { machineBuilder.machineErrorChecker.errorEdges.map((e, i) =>
-            <HighlightRenderer key={e.label + "." + i} className="highlight-error" target={e} type="edge" offset="6"/>) }
+            <HighlightRenderer key={e.label + "." + i} className="highlight-error graph-gui" target={e} type="edge" offset="6"/>) }
 
           {/* Hover markers */}
           { /*controller.pointer.target &&

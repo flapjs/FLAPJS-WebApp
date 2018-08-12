@@ -56,7 +56,9 @@ class EdgeRenderer extends React.Component
           "L " +
             (end.x - (Config.ARROW_WIDTH * Math.sin(arrowAngle + SIXTH_PI))) + " " +
             (end.y - (Config.ARROW_WIDTH * Math.cos(arrowAngle + SIXTH_PI)))}
-        fill="none" />
+        fill="none"
+
+        stroke="#000000"/>
 
       //Draw labels
       { labels.length > 0 && labels.map((str, i) => {
@@ -73,7 +75,10 @@ class EdgeRenderer extends React.Component
             x={xx} y={yy}
             alignmentBaseline="central"
             pointerEvents="none"
-            style={{userSelect: "none"}}>
+            style={{userSelect: "none"}}
+
+            fontFamily="\'Overpass Mono\', monospace"
+            textAnchor="middle">
             {str}
           </text>;
       })}
