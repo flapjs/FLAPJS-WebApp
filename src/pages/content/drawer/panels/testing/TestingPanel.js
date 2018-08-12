@@ -50,26 +50,28 @@ class TestingPanel extends React.Component
         <h1>Testing</h1>
       </div>
 
-      <TestList machineBuilder={machineBuilder} tester={tester}/>
-      <hr />
+      <div className="panel-content">
+        <TestList machineBuilder={machineBuilder} tester={tester}/>
+        <hr />
 
-      <div id="test-errorcheck">
-        <label>Error Checking</label>
-        <select className="panel-select"
-          value={this.state.errorCheckMode}
-          onChange={this.onChangeErrorCheckMode}>
-          <option value={TestingManager.NO_ERROR_CHECK}>None</option>
-          <option value={TestingManager.DELAYED_ERROR_CHECK}>Delayed</option>
-          <option value={TestingManager.IMMEDIATE_ERROR_CHECK}>Immediate</option>
-        </select>
-      </div>
-      <div>
-        <input id="test-step" type="checkbox" disabled="true"/>
-        <label htmlFor="test-step">Step-by-Step Mode</label>
-      </div>
-      <div>
-        <input id="test-closure" type="checkbox" disabled="true"/>
-        <label htmlFor="test-closure">Transition By Closure</label>
+        <div id="test-errorcheck">
+          <label>Error Checking</label>
+          <select className="panel-select"
+            value={this.state.errorCheckMode}
+            onChange={this.onChangeErrorCheckMode}>
+            <option value={TestingManager.NO_ERROR_CHECK}>None</option>
+            <option value={TestingManager.DELAYED_ERROR_CHECK}>Delayed</option>
+            <option value={TestingManager.IMMEDIATE_ERROR_CHECK}>Immediate</option>
+          </select>
+        </div>
+        <div>
+          <input id="test-step" type="checkbox" disabled="true"/>
+          <label htmlFor="test-step">Step-by-Step Mode</label>
+        </div>
+        <div>
+          <input id="test-closure" type="checkbox" disabled="true"/>
+          <label htmlFor="test-closure">Transition By Closure</label>
+        </div>
       </div>
 
       <div className="panel-bottom"></div>

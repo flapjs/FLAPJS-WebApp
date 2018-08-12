@@ -51,16 +51,16 @@ class OverviewPanel extends React.Component
         <div className="graphinfo">
           <TransitionTable machineBuilder={machineBuilder}/>
         </div>
-      </div>
 
-      <hr />
+        <hr />
 
-      <button disabled="true" className="panel-button">Convert To...</button>
-      <div>
-        <input type="checkbox" id="auto-statename" onChange={(e) => {
-          machineBuilder.setAutoRenameNodes(e.target.checked);
-        }} checked={machineBuilder.shouldAutoRenameNodes()}/>
-        <label htmlFor="auto-statename">Automatic State Labels</label>
+        <button disabled="true" className="panel-button">Convert To...</button>
+        <div>
+          <input type="checkbox" id="auto-statename" onChange={(e) => {
+            machineBuilder.setAutoRenameNodes(e.target.checked);
+          }} checked={machineBuilder.shouldAutoRenameNodes()}/>
+          <label htmlFor="auto-statename">Automatic State Labels</label>
+        </div>
       </div>
 
       <div className="panel-bottom"></div>

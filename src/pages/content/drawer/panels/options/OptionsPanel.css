@@ -1,31 +1,3 @@
-.option-group {
-  width: 100%;
-  margin-top: 10px;
-}
-.option-header {
-  padding-bottom: 5px;
-
-  text-align: left;
-  font-size: 1.2em;
-  border-bottom: 1px solid black;
-}
-.option-header > * {
-  color: gray;
-}
-.option-header > *:first-child {
-  color: white;
-}
-.option-header > *:first-child::after {
-  content: " ";
-}
-.option-content {
-  padding: 5px;
-}
-.option-content > * {
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
-
 .option-container input {
   outline: none;
   margin-right: 10px;
