@@ -1,20 +1,32 @@
-.hotkey-list {
-  padding: 5px;
-}
-.hotkey-category {
+.option-group {
+  width: 100%;
   margin-top: 10px;
-  text-align: center;
+}
+.option-header {
+  padding-bottom: 5px;
+
+  text-align: left;
+  font-size: 1.2em;
   border-bottom: 1px solid black;
 }
-.hotkey-container {
-  display: block;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  width: 100%;
+.option-header > * {
+  color: gray;
 }
-.hotkey-desc {
-  width: 100%;
+.option-header > *:first-child {
+  color: white;
 }
-.hotkey-input {
-  float: right;
+.option-header > *:first-child::after {
+  content: " ";
+}
+.option-content {
+  padding: 5px;
+}
+.option-content > * {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.option-container input {
+  outline: none;
+  margin-right: 10px;
 }

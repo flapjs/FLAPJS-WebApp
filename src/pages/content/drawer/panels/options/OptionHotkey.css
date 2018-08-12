@@ -1,0 +1,9 @@
+.option-hotkey {
+  display: block;
+}
+.option-hotkey label {
+  width: 100%;
+}
+.option-hotkey span {
+  float: right;
+}
