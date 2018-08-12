@@ -39,7 +39,7 @@ class TransitionTable extends React.Component
           <tbody>
             <tr>
               <th className="emptycell">
-                <button onClick={()=>
+                <button className="panel-button" onClick={()=>
                   this.setState((prev, props)=>{
                     return {
                       rowAxis: prev.rowAxis == SYMBOL_AXIS ? STATE_AXIS : SYMBOL_AXIS
