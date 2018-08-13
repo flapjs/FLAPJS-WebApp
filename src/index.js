@@ -38,7 +38,7 @@ window.addEventListener('beforeunload', (event) => {
   const message = Config.EXIT_WINDOW_MESSAGE;
   event = event || window.event;
   // For IE and Firefox
-  if (e) e.returnValue = message;
+  if (event) event.returnValue = message;
 
   //For Safari
   return message;
