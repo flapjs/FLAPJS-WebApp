@@ -19,13 +19,15 @@ class InitialMarkerRenderer extends React.Component
     const y = node.y;
     const r = Config.NODE_RADIUS;
     const d = r * 2;
-    return <g>
+    return <g className="graph-initial-container">
       <path className="graph-initial" d={
         "M" + (x - r) + " " + (y) +
         " L" + (x - d) + " " + (y - r) +
         " L" + (x - d) + " " + (y + r) +
         " Z"}
-        fill="none" />
+        fill="none"
+
+        stroke="#000000"/>
     </g>;
   }
 }
