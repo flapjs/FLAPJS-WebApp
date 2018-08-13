@@ -11,26 +11,22 @@ class GraphEdgeDestinationEvent extends Event
 
     this.nextDestination = nextDestination;
     this.prevDestination = prevDestination;
-    this.prevQuadX = prevQuad.x;
-    this.prevQuadY = prevQuad.y;
-    this.nextQuadX = edge.quad.x;
-    this.nextQuadY = edge.quad.y;
+    this.nextQuad = edge.copyQuadraticsTo({});
+    this.prevQuad = Object.assign({}, prevQuad);
   }
 
   //Override
   applyUndo()
   {
     this.edge.to = this.prevDestination;
-    this.edge.quad.x = this.prevQuadX;
-    this.edge.quad.y = this.prevQuadY;
+    this.edge.copyQuadraticsFrom(this.prevQuad);
   }
 
   //Override
   applyRedo()
   {
     this.edge.to = this.nextDestination;
-    this.edge.quad.x = this.nextQuadX;
-    this.edge.quad.y = this.nextQuadY;
+    this.edge.copyQuadraticsFrom(this.nextQuad);
   }
 }
 

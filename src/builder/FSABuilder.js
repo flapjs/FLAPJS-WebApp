@@ -5,17 +5,15 @@ import DFAErrorChecker from './DFAErrorChecker.js';
 import NFA from 'machine/NFA.js';
 import NodalGraph from 'graph/NodalGraph';
 
-const ERROR_CHECK_INTERVAL = 2000;
+import { EMPTY } from 'machine/Symbols.js';
 
 class FSABuilder extends MachineBuilder
 {
-  //HACK: this should not take app
-  constructor(graph, app)
+  constructor(graph, controller, tester)
   {
-    super(graph, app);
+    super(graph, controller);
 
-    //HACK: this should not take app
-    this.app = app;
+    this.tester = tester;
 
     this._machine = new NFA();
     this._machineType = "DFA";
@@ -23,11 +21,49 @@ class FSABuilder extends MachineBuilder
     this._symbols = [];
 
     this._timer = null;
+    this._errorTimer = null;
 
     this.machineErrorChecker = new DFAErrorChecker(this, graph);
 
-    //HACK: this is a quick and dirty way to error check notifications...
-    this.graph.on("markDirty", this.onGraphChange.bind(this));
+    this.onGraphChange = this.onGraphChange.bind(this);
+    this.onDelayedGraphChange = this.onDelayedGraphChange.bind(this);
+    this.onDelayedErrorCheck = this.onDelayedErrorCheck.bind(this);
+  }
+
+  initialize(app)
+  {
+    super.initialize(app);
+
+    this.notification = app.notification;
+
+    this.graph.on("nodeCreate", this.onGraphChange);
+    this.graph.on("nodeDestroy", this.onGraphChange);
+    this.graph.on("nodeLabel", this.onGraphChange);
+    this.graph.on("edgeCreate", this.onGraphChange);
+    this.graph.on("edgeDestroy", this.onGraphChange);
+    this.graph.on("edgeLabel", this.onGraphChange);
+    this.graph.on("edgeDestination", this.onGraphChange);
+    this.graph.on("toggleAccept", this.onGraphChange);
+    this.graph.on("newInitial", this.onGraphChange);
+
+    this.onGraphChange();
+  }
+
+  destroy()
+  {
+    this.onGraphChange();
+
+    this.graph.removeEventListener("nodeCreate", this.onGraphChange);
+    this.graph.removeEventListener("nodeDestroy", this.onGraphChange);
+    this.graph.removeEventListener("nodeLabel", this.onGraphChange);
+    this.graph.removeEventListener("edgeCreate", this.onGraphChange);
+    this.graph.removeEventListener("edgeDestroy", this.onGraphChange);
+    this.graph.removeEventListener("edgeLabel", this.onGraphChange);
+    this.graph.removeEventListener("edgeDestination", this.onGraphChange);
+    this.graph.removeEventListener("toggleAccept", this.onGraphChange);
+    this.graph.removeEventListener("newInitial", this.onGraphChange);
+
+    super.destroy();
   }
 
   onGraphChange(graph)
@@ -38,24 +74,47 @@ class FSABuilder extends MachineBuilder
       this._timer = null;
     }
 
-    this._timer = setTimeout(() => {
-      //HACK: this is to turn off error checking really quick
-      if (!this.app.testingManager.autoErrorCheck) return;
+    if (this._errorTimer)
+    {
+      clearTimeout(this._errorTimer);
+      this._errorTimer = null;
+    }
 
-      //clear previous error messages
-      this.app.notification.clearErrorMessage("machine");
-      this.machineErrorChecker.checkErrors();
-      for(const [error, objects] of this.machineErrorChecker.errorMessages)
-      {
-        //TODO: this should notify the user and highlight the error
-        let message = error + ": ";
-        for(const o of objects)
-        {
-          message += o.label + ", ";
-        }
-        this.app.notification.addErrorMessage(message, "machine");
-      }
-    }, ERROR_CHECK_INTERVAL);
+    this._timer = setTimeout(this.onDelayedGraphChange, Config.GRAPH_IMMEDIATE_INTERVAL);
+    this._errorTimer = setTimeout(this.onDelayedErrorCheck,
+      this.tester.isImmediateErrorCheck ? (Config.GRAPH_IMMEDIATE_INTERVAL * 2) : Config.ERROR_CHECK_INTERVAL);
+  }
+
+  onDelayedGraphChange()
+  {
+    this._machine.clear();
+    const result = this.graph._toNFA(this._machine);
+    for(const s of this._symbols)
+    {
+      this._machine.newSymbol(s);
+    }
+  }
+
+  onDelayedErrorCheck()
+  {
+    if (!this.tester.shouldCheckError) return;
+
+    //clear previous error messages
+    const notification = this.notification;
+    notification.clearErrorMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);
+    const result = this.machineErrorChecker.checkErrors((error, targets) => {
+      notification.clearMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);
+      let message = error + ": ";
+      message += targets.join(", ");
+      notification.addErrorMessage(message, Config.MACHINE_ERRORS_MESSAGE_TAG);
+    });
+
+    //Output success if no errors were found
+    if (!result)
+    {
+      notification.clearErrorMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);
+      notification.addMessage(Config.NO_ERRORS_MESSAGE, Config.MACHINE_ERRORS_MESSAGE_TAG);
+    }
   }
 
   formatAlphabetString(string)
@@ -102,6 +161,8 @@ class FSABuilder extends MachineBuilder
   setMachineType(machineType)
   {
     this._machineType = machineType;
+
+    this.onGraphChange();
   }
 
   getMachineType()
@@ -112,11 +173,19 @@ class FSABuilder extends MachineBuilder
   addSymbol(symbol)
   {
     this._symbols.push(symbol);
+
+    this.onGraphChange();
   }
 
   removeSymbol(symbol)
   {
     this._symbols.splice(this._symbols.indexOf(symbol), 1);
+
+    this.onGraphChange();
+  }
+
+  includes(symbol) {
+    return this._symbols.includes(symbol);
   }
 
   getAlphabet()
@@ -129,13 +198,7 @@ class FSABuilder extends MachineBuilder
 
   getMachine()
   {
-    this._machine.clear();
-    const result = this.graph._toNFA(this._machine);
-    for(const s of this._symbols)
-    {
-      this._machine.newSymbol(s);
-    }
-    return result;
+    return this._machine;
   }
 }
 

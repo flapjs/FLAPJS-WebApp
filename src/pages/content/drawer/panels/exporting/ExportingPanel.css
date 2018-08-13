@@ -4,7 +4,7 @@
 }
 .export-button {
   text-align: left;
-  color: white;
+  color: var(--color-drawer-text);
 
   width: 100%;
   padding-left: 10px;
@@ -18,11 +18,11 @@
 .export-button label {
   font-size: 1.4em;
   vertical-align: middle;
-  
+
   cursor: pointer;
 }
 .export-button:hover {
-  background: var(--color-main-lite);
+  background: var(--color-drawer-text-ghost);
 }
 .export-button:disabled {
   opacity: 0.2;

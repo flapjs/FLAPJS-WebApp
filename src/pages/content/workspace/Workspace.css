@@ -1,6 +1,40 @@
 #workspace-content {
+  padding: 0;
+  margin: 0;
+
+  background: var(--color-workspace-main);
 }
 .graph-node {
+  fill: var(--color-graph-node);
+  stroke: var(--color-workspace-text);
+}
+.graph-node-inner {
+  stroke: var(--color-workspace-text);
+}
+.graph-node-label {
+  text-anchor: middle;
+  font-size: inherit;
+  font-family: 'Overpass Mono', monospace;
 }
 .graph-edge {
+  stroke: black;
+}
+.graph-edge-label {
+  text-anchor: middle;
+  font-size: inherit;
+  font-family: 'Overpass Mono', monospace;
+}
+.graph-initial {
+  stroke: var(--color-workspace-text);
+}
+.graph-selection {
+  fill-opacity: 0.1;
+  fill: var(--color-selection-main);
+  stroke: var(--color-selection-border);
+}
+.highlight-select {
+  stroke: var(--color-highlight-select);
+}
+.highlight-error {
+  stroke: var(--color-viewport-error);
 }

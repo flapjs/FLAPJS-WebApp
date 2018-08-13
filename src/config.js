@@ -1,32 +1,30 @@
 const LOCAL_STORAGE_ID = "config";
 
 const cfg = {};
+cfg._resetOnLoad = false;
 export default cfg;
 
 //General
 cfg.CLEAR_GRAPH_MESSAGE = "Any unsaved changes will be lost. Are you sure you want to continue?";
 cfg.EXIT_WINDOW_MESSAGE = "Any unsaved changes will be lost. Are you sure you want to leave?";
 
+cfg.NO_ERRORS_MESSAGE = "Hooray! No more errors!";
+cfg.MACHINE_ERROR_EDGE_PLACEHOLDER_MESSAGE = "Incomplete transitions";
+cfg.MACHINE_ERROR_EDGE_EMPTY_MESSAGE = "Empty transitions";
+cfg.MACHINE_ERROR_EDGE_DUPE_MESSAGE = "Duplicate transitions";
+cfg.MACHINE_ERROR_NODE_UNREACHABLE_MESSAGE = "Unreachable node";
+cfg.MACHINE_ERROR_NODE_MISSING_MESSAGE = "Missing transitions";
+
+cfg.MACHINE_ERRORS_MESSAGE_TAG = "machineError";
+
+cfg.ERROR_CHECK_INTERVAL = 2000;
+cfg.GRAPH_IMMEDIATE_INTERVAL = 50;
+
 //Toolbar
 cfg.DEFAULT_MACHINE_NAME = "Untitled";
 
-//Status Button
-cfg.ACTIVE_PENDING_COLOR = "white";
-cfg.ACTIVE_SUCCESS_COLOR = "lime";
-cfg.ACTIVE_FAILURE_COLOR = "red";
-cfg.INACTIVE_COLOR = "gray";
-
 //Testing Panel
 cfg.PLACEHOLDER_TEXT = "Test string";
-
-//Overview Panel
-cfg.DEFAULT_COLOR = "gray";
-cfg.DEFAULT_CUSTOM_COLOR = "white";
-cfg.EDIT_COLOR = "rgba(255,255,255,0.1)";
-cfg.ERROR_COLOR = "rgba(255,0,0,0.7)";
-cfg.DEFAULT_BACKGROUND = "#4D4D4D";
-cfg.DEFAULT_CUSTOM_BACKGROUND = "#4D4D4D";
-cfg.ERROR_BACKGROUND = "rgba(255,0,0,0.5)";
 
 //Controller
 cfg.SMOOTH_OFFSET_DAMPING = 0.4;
@@ -40,7 +38,6 @@ cfg.INIT_WAITTIME = 5000;
 
 //NodalGraph
 cfg.STR_TRANSITION_DEFAULT_LABEL = "";
-cfg.STR_TRANSITION_PROXY_LABEL = "?";
 cfg.STR_STATE_LABEL = "q";
 cfg.PARALLEL_EDGE_HEIGHT = 10;
 cfg.SELF_LOOP_HEIGHT = 32;
@@ -88,47 +85,6 @@ cfg.DRAGGING_BUFFER_SQU = cfg.DRAGGING_BUFFER * cfg.DRAGGING_BUFFER;
 //Graph sorting
 cfg.PADDING_RADIUS_SQU = 2304;
 
-//Colors
-cfg.STATE_BASE_COLOR = "#FEE781";
-cfg.STATE_LINE_COLOR = "black";
-cfg.STATE_TEXT_COLOR = "black";
-cfg.TRANSITION_COLOR = "black";
-cfg.TRANSITION_TEXT_COLOR = "black";
-cfg.GRAPH_INFO_COLOR = "lightgray";
-
-//Styling
-cfg.NODE_FONT = "12px Arial";
-cfg.NODE_TEXT_ALIGN = "center";
-cfg.NODE_TEXT_ANCHOR = "middle";
-cfg.NODE_STROKE_STYLE = cfg.STATE_LINE_COLOR;
-cfg.NODE_FILL_STYLE = cfg.STATE_BASE_COLOR;
-cfg.NODE_TEXT_FILL_STYLE = cfg.STATE_TEXT_COLOR;
-
-cfg.EDGE_FONT = "12px Arial";
-cfg.EDGE_TEXT_ALIGN = "center";
-cfg.EDGE_TEXT_ANCHOR = "middle";
-cfg.EDGE_STROKE_STYLE = cfg.TRANSITION_COLOR;
-cfg.EDGE_TEXT_FILL_STYLE = cfg.TRANSITION_TEXT_COLOR;
-
-cfg.BORDER_STROKE_STYLE = "rgba(0,0,0,0.02)";
-cfg.BORDER_LINE_WIDTH = "0.5em";
-cfg.BORDER_LINE_DASH = [20, 24];
-
-cfg.HOVER_STROKE_STYLE = "rgba(0,0,0,0.6)";
-cfg.HOVER_LINE_WIDTH = 2;
-cfg.HOVER_LINE_DASH = [6, 4];
-cfg.HOVER_ANGLE_SPEED = 0.01;
-
-cfg.SELECTION_BOX_SHADOW_COLOR = "black";
-cfg.SELECTION_BOX_SHADOW_SIZE = 5;
-cfg.SELECTION_BOX_SHADOW_OFFSETX = 2;
-cfg.SELECTION_BOX_SHADOW_OFFSETY = 2;
-cfg.SELECTION_BOX_FILL_STYLE = "rgba(0, 0, 0, 0.1)";
-cfg.SELECTION_BOX_STROKE_STYLE = "black";
-
-//IO
-cfg.EXPORT_FILE_NAME = "flap-machine.png";
-
 
 /** LOCAL STORAGE FUNCTIONS **/
 
@@ -143,7 +99,17 @@ export function loadConfig() {
   try
   {
     const jsonData = JSON.parse(jsonString);
-    Object.assign(cfg, jsonData);
+    if (jsonData['_resetOnLoad'] == true)
+    {
+      //Reset the config
+      clearConfig();
+      //Save a new config
+      saveConfig();
+    }
+    else
+    {
+      Object.assign(cfg, jsonData);
+    }
   }
   catch (e)
   {
@@ -166,5 +132,5 @@ export function saveConfig() {
 };
 
 export function clearConfig() {
-  localStorage.clear();
+  localStorage.removeItem(LOCAL_STORAGE_ID);
 };

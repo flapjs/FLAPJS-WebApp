@@ -2,13 +2,8 @@
   padding-left: var(--panel-tab-border);/* Height of tabs + border */
   height: 100%;
 
-  --color-main: #575757;
-  --color-main-dark: #3D3D3D;
-  --color-main-lite: #676767;
-  --color-accent: #FFF2BA;
-
-  background: var(--color-main);
-  color: #FFFFFF;
+  background: var(--color-drawer-main);
+  color: var(--color-drawer-text);
 
   transition: padding-top 0.2s;
 
@@ -53,15 +48,15 @@
   height: 100%;
   transition: color 0.3s;
 
-  color: #909090;
+  color: var(--color-drawer-text-subtle);
 }
 .tab-list button:hover {
-  color: #FFFFFF;
+  color: var(--color-drawer-text);
 }
 .tab-list button.active {
   transition: border-width 0.3s;
-  border-bottom: 4px solid var(--color-accent) !important;
-  color: var(--color-accent);
+  border-bottom: 4px solid var(--color-drawer-accent) !important;
+  color: var(--color-drawer-accent);
 }
 .drawer-content {
   padding-left: 10px;
@@ -81,7 +76,7 @@
   width: var(--panel-border-size);/* border */
   height: 100%;
 
-  background: var(--color-main-dark);
+  background: var(--color-drawer-main-dark);
 }
 .drawer-border > * {
   position: absolute;
@@ -107,7 +102,12 @@
     height: 100%;
   }
 }
-
+/*Fixed 10px padding from left side*/
+@media screen and (max-height: 420px) {
+  .tab-right {
+    padding-right: 10px;
+  }
+}
 @media screen and (max-width: 420px) {
   .drawer-container {
     padding-left: var(--panel-tab-size);/* Height of tabs */
@@ -119,6 +119,10 @@
 
     padding-left: 5px;
     width: 100%;/* Parent width */
+  }
+  /*Fixed 5px padding from left side*/
+  .tab-right {
+    padding-right: 5px;
   }
   .drawer-border {
     width: 100%;

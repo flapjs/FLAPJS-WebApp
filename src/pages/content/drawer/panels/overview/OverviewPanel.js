@@ -17,7 +17,6 @@ class OverviewPanel extends React.Component
     this.container = React.createRef();
 
     this.state = {
-      autoNameStates: true,
       machineType: this.props.machineBuilder.getMachineType()
     };
 
@@ -33,35 +32,35 @@ class OverviewPanel extends React.Component
 
   render()
   {
+    const machineBuilder = this.props.machineBuilder;
     return <div className="panel-container" id="overview" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>Definition</h1>
       </div>
       <div className="panel-content">
-        <select className="machine-type"
+        <select className="machine-type panel-select"
           value={this.state.machineType}
           onChange={this.onChangeMachineType}>
           <option value="DFA">DFA</option>
           <option value="NFA">NFA</option>
         </select>
         <div className="graphinfo-important">
-          <StateList machine={this.props.machineBuilder} controller={this.props.controller}/>
-          <AlphabetList machine={this.props.machineBuilder}/>
+          <StateList machineBuilder={machineBuilder} controller={this.props.controller}/>
+          <AlphabetList machineBuilder={machineBuilder}/>
         </div>
         <div className="graphinfo">
-          <TransitionTable machine={this.props.machineBuilder}/>
+          <TransitionTable machineBuilder={machineBuilder}/>
         </div>
-      </div>
-      <hr />
-      <button disabled="true" className="panel-button">Convert To...</button>
-      <div>
-        <input type="checkbox" id="auto-statename" onChange={(e) => {
-          const checked = e.target.checked;
-          this.setState({autoNameStates: checked}, () => {
-            this.props.machineBuilder.shouldAutomaticallyRenameNodes = checked;
-          });
-        }} checked={this.state.autoNameStates}/>
-        <label htmlFor="auto-statename">Automatic State Labels</label>
+
+        <hr />
+
+        <button disabled="true" className="panel-button">Convert To...</button>
+        <div className="panel-checkbox">
+          <input type="checkbox" id="auto-statename" onChange={(e) => {
+            machineBuilder.setAutoRenameNodes(e.target.checked);
+          }} checked={machineBuilder.shouldAutoRenameNodes()}/>
+          <label htmlFor="auto-statename">Automatic State Labels</label>
+        </div>
       </div>
 
       <div className="panel-bottom"></div>

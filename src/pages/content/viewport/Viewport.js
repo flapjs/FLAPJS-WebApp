@@ -22,34 +22,23 @@ class Viewport extends React.Component
 
   render()
   {
-    return <div className="viewport-container" ref={ref=>this.ref=ref}
-      style={{outlineColor: getModeColor(this.state.mode)}}>
+    return <div className={"viewport-container viewport-" + this.state.mode} ref={ref=>this.ref=ref}>
       <LabelEditor controller={this.props.controller}
+        graph={this.props.app.graph}
         machineBuilder={this.props.app.machineBuilder}
         screen={this.props.app.workspace.ref}
         ref={ref=>this.labelEditor=ref}/>
       <TrashCan controller={this.props.controller}
         viewport={this}/>
-      <TestTray/>
+      {
+        this.props.tester.getStepByStepMode() &&
+        <TestTray/>
+      }
     </div>;
   }
 }
-Viewport.NORMAL = 0;
-Viewport.WAITING = 1;
-Viewport.DANGEROUS = 2;
-
-function getModeColor(mode)
-{
-  switch(mode)
-  {
-    case Viewport.WAITING:
-      return "rgba(0,0,0,0.1)";
-    case Viewport.DANGEROUS:
-      return "#E35B5B";
-    case Viewport.NORMAL:
-    default:
-      return "rgba(0,0,0,0.02)";
-  }
-}
+Viewport.NORMAL = "normal";
+Viewport.WAITING = "waiting";
+Viewport.DANGEROUS = "dangerous";
 
 export default Viewport;

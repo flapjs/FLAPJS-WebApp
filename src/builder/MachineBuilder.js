@@ -1,83 +1,61 @@
 import Config from 'config.js';
+import MachineLabeler from './MachineLabeler.js';
+
+const DEFAULT_AUTO_RENAME = true;
 
 class MachineBuilder
 {
-  //HACK: this should not take app
-  constructor(graph, app)
+  constructor(graph, controller)
   {
     this.graph = graph;
-    this.controller = app.controller;
+    this.controller = controller;
 
-    this.shouldAutomaticallyRenameNodes = true;
-    this.sortDefaultNodeLabels = this.sortDefaultNodeLabels.bind(this);
+    //TODO: this is hooked into the controller in App.js
+    this.shouldAutoLabel = false;
+    this.labeler = new MachineLabeler(graph);
 
-    this.controller.on("nodeDelete", this.sortDefaultNodeLabels);
-    this.controller.on("nodeDeleteAll", this.sortDefaultNodeLabels);
-    this.controller.on("nodeInitial", this.sortDefaultNodeLabels);
-    this.controller.on("nodeLabel", this.sortDefaultNodeLabels);
+    this.onGraphNodeLabelChange = this.onGraphNodeLabelChange.bind(this);
   }
 
-  sortDefaultNodeLabels()
+  initialize(app)
   {
-    if (!this.shouldAutomaticallyRenameNodes) return;
+    this.setAutoRenameNodes(DEFAULT_AUTO_RENAME);
+  }
 
-    const startNode = this.graph.getStartNode();
-    if (!startNode) return;
-    const isDefaultInitial = !startNode.hasCustomLabel();
+  destroy()
+  {
 
-    const defaultNodes = [];
-    const customLabels = [];
-    for(const node of this.graph.nodes)
+  }
+
+  onGraphNodeLabelChange()
+  {
+    this.labeler.sortDefaultNodeLabels();
+  }
+
+  setAutoRenameNodes(enable)
+  {
+    const prev = this.shouldAutoLabel;
+    this.shouldAutoLabel = enable;
+    if (prev != enable && enable)
     {
-      if (node.hasCustomLabel())
-      {
-        customLabels.push(node.label);
-      }
-      else
-      {
-        defaultNodes.push(node);
-      }
+      this.controller.on("nodeDelete", this.onGraphNodeLabelChange);
+      this.controller.on("nodeDeleteAll", this.onGraphNodeLabelChange);
     }
-
-    let index = isDefaultInitial ? 0 : 1;
-    for(const node of defaultNodes)
+    else
     {
-      let defaultName = null;
-      while(customLabels.includes(
-        defaultName = this.getDefaultNodeLabelByIndex(index++))) {}
-
-      node.setLabel(defaultName);
+      this.controller.removeEventListener("nodeDelete", this.onGraphNodeLabelChange);
+      this.controller.removeEventListener("nodeDeleteAll", this.onGraphNodeLabelChange);
     }
   }
 
-  getNextDefaultNodeLabel()
+  shouldAutoRenameNodes()
   {
-    let nodeIndex = 0;
-    let result = this.getDefaultNodeLabelByIndex(nodeIndex);
-    while(!this.isUniqueNodeLabel(result))
-    {
-      ++nodeIndex;
-      result = this.getDefaultNodeLabelByIndex(nodeIndex);
-    }
-    return result;
+    return this.shouldAutoLabel;
   }
 
-  getDefaultNodeLabelByIndex(index)
+  getLabeler()
   {
-    return Config.STR_STATE_LABEL + (index);
-  }
-
-  isUniqueNodeLabel(newLabel)
-  {
-    for(const node of this.graph.nodes)
-    {
-      if (node.label == newLabel)
-      {
-        return false;
-      }
-    }
-
-    return true;
+    return this.labeler;
   }
 }
 

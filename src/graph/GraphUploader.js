@@ -25,6 +25,7 @@ class GraphUploader
       }
       catch(e)
       {
+        //TODO: graph.deleteAll();
         reader.abort();
 
         if (errorCallback) errorCallback(e);
@@ -61,7 +62,7 @@ class GraphUploader
       }
       catch(e)
       {
-        console.log(e);
+        //TODO: graph.deleteAll();
         reader.abort();
 
         if (errorCallback) errorCallback();

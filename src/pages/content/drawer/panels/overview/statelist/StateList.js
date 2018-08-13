@@ -14,29 +14,29 @@ class StateList extends React.Component
   {
     super(props);
 
-    this.onCreate = this.onCreate.bind(this);
+    this.onStateCreate = this.onStateCreate.bind(this);
   }
 
-  onCreate(e)
+  onStateCreate(e)
   {
-    const machine = this.props.machine;
-    const graph = machine.graph;
+    const machineBuilder = this.props.machineBuilder;
+    const graph = machineBuilder.graph;
     const x = -100 + (Math.random() * 100 * 2);
     const y = -100 + (Math.random() * 100 * 2);
-    graph.newNode(x, y, machine.getNextDefaultNodeLabel());
+    graph.newNode(x, y, machineBuilder.getLabeler().getNextDefaultNodeLabel());
   }
 
   render()
   {
     const pointer = this.props.controller.pointer;
-    const graph = this.props.machine.graph;
+    const graph = this.props.machineBuilder.graph;
     return <InfoBlock title="States" defaultValue="true">
       <div className="statelist-container">
         <div className="statelist">
           <TriangleIcon/>
           {
             graph.nodes.map((e, i) => {
-              return <StateTag key={i} src={e} label={e.label} accept={e.accept} graph={graph}
+              return <StateTag key={e.label} src={e} label={e.label} accept={e.accept} graph={graph}
                 onFocus={(ev) => {
                   //Center workspace at focused node; inverted due to graph-to-screen space
                   pointer.setOffset(-e.x, -e.y);
@@ -44,7 +44,7 @@ class StateList extends React.Component
             })
           }
         </div>
-        <IconButton onClick={this.onCreate}>
+        <IconButton onClick={this.onStateCreate}>
           <BoxAddIcon/>
         </IconButton>
       </div>

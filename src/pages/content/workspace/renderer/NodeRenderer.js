@@ -11,35 +11,36 @@ class NodeRenderer extends React.Component
 
   render()
   {
+    //TODO: Refer to app.css for comparable colors
     const node = this.props.node;
-    //TODO: style={{cursor: "crosshair"}}
-    //TODO: style={{filter:"url(#error-highlight)"}}
-    return <g className="graph-node">
-      //Outer circle
-      <circle
+    return <g className="graph-node-container">
+      {/*Outer circle*/}
+      <circle className="graph-node"
         cx={node.x}
         cy={node.y}
         r={Config.NODE_RADIUS}
-        stroke={Config.NODE_STROKE_STYLE}
-        fill={Config.NODE_FILL_STYLE} />
 
-      //Inner circle
+        fill="#FEE781"
+        stroke="#000000"/>
+
+      {/*Inner circle*/}
       {node.accept &&
-        <circle
+        <circle className="graph-node-inner"
           cx={node.x}
           cy={node.y}
           r={Config.NODE_RADIUS_INNER}
-          stroke={Config.NODE_STROKE_STYLE}
-          fill="none" />}
+          fill="none"
+
+          stroke="#000000"/>}
 
       //Label
-      <text
+      <text className="graph-node-label"
         x={node.x} y={node.y + 4}
-        textAnchor={Config.NODE_TEXT_ANCHOR}
-        font={Config.NODE_FONT}
-        fill={Config.NODE_TEXT_FILL_STYLE}
         pointerEvents="none"
-        style={{userSelect: "none"}}>
+        style={{userSelect: "none"}}
+
+        fontFamily="\'Overpass Mono\', monospace"
+        textAnchor="middle">
         {node.label}
       </text>
     </g>;
