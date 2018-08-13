@@ -25,7 +25,7 @@ class NodalGraph
     this.nodes = nodes;
     this.edges = edges;
 
-    this.shouldUseQuadCoords = false;
+    this.shouldUseQuadCoords = true;
   }
 
   getNodeByLabel(label)
