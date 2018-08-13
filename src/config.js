@@ -1,6 +1,7 @@
 const LOCAL_STORAGE_ID = "config";
 
 const cfg = {};
+cfg._resetOnLoad = false;
 export default cfg;
 
 //General
@@ -98,7 +99,15 @@ export function loadConfig() {
   try
   {
     const jsonData = JSON.parse(jsonString);
-    Object.assign(cfg, jsonData);
+    if (jsonData['_resetOnLoad'])
+    {
+      //Reset the config
+      clearConfig();
+    }
+    else
+    {
+      Object.assign(cfg, jsonData);
+    }
   }
   catch (e)
   {
