@@ -6,7 +6,9 @@ import './HomePage.css';
 import Footer from "./Footer";
 import Header from "./Header";
 import Arrow from "./Arrow";
-import Circles from "./Circles";
+import Squares from "./Squares";
+import Content from "./Content";
+import Button from "./Button";
 
 class HomePage extends React.Component {
 
@@ -15,15 +17,13 @@ class HomePage extends React.Component {
     }
 
     render() {
-
+        //<Arrow router={this.props.router}/>
         return (
-
-            <div className="homepage-container">
+            <div className="homepage-container" id="homepage">
                 <Header/>
-                <Arrow router={this.props.router}/>
-                <Footer/>
+                <Content/>
+                <Button/>
             </div>
-
         );
 
     }

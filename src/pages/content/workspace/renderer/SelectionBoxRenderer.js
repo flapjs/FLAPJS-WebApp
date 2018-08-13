@@ -22,15 +22,13 @@ class SelectionBoxRenderer extends React.Component
     const dx = toX - fromX;
     const dy = toY - fromY;
 
-    return <g>
-    {(src ? src.isActive() : true) &&
-      <rect
+    return <g className="graph-selection-container">
+    {(!src || src.isActive()) &&
+      <rect className="graph-selection"
         x={dx < 0 ? toX : fromX}
         y={dy < 0 ? toY : fromY}
         width={dx < 0 ? -dx : dx}
-        height={dy < 0 ? -dy : dy}
-        fill={Config.SELECTION_BOX_FILL_STYLE}
-        stroke={Config.SELECTION_BOX_STROKE_STYLE}/>}
+        height={dy < 0 ? -dy : dy}/>}
     </g>;
   }
 }

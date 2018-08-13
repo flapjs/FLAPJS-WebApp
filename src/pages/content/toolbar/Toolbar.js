@@ -18,33 +18,6 @@ import UndoIcon from 'icons/UndoIcon.js';
 import RedoIcon from 'icons/RedoIcon.js';
 import HelpIcon from 'icons/HelpIcon.js';
 
-/*
-import AddIcon from 'icons/AddIcon.js';
-import BoxAddIcon from 'icons/BoxAddIcon.js';
-import CreateIcon from 'icons/CreateIcon.js';
-import DiskSaveIcon from 'icons/DiskSaveIcon.js';
-import DropDownIcon from 'icons/DropDownIcon.js';
-import ErrorIcon from 'icons/ErrorIcon.js';
-import ExpandIcon from 'icons/ExpandIcon.js';
-import FailureIcon from 'icons/FailureIcon.js';
-import MoreIcon from 'icons/MoreIcon.js';
-import HelpIcon from 'icons/HelpIcon.js';
-import InfoIcon from 'icons/InfoIcon.js';
-import OfflineIcon from 'icons/OfflineIcon.js';
-import PageAddIcon from 'icons/PageAddIcon.js';
-import PauseIcon from 'icons/PauseIcon.js';
-import PlayIcon from 'icons/PlayIcon.js';
-import RedoIcon from 'icons/RedoIcon.js';
-import SaveIcon from 'icons/SaveIcon.js';
-import SuccessIcon from 'icons/SuccessIcon.js';
-import TrashIcon from 'icons/TrashIcon.js';
-import TriangleIcon from 'icons/TriangleIcon.js';
-import UndoIcon from 'icons/UndoIcon.js';
-import UploadIcon from 'icons/UploadIcon.js';
-import WarningIcon from 'icons/WarningIcon.js';
-import WorkingIcon from 'icons/WorkingIcon.js';
-*/
-
 class Toolbar extends React.Component
 {
   constructor(props)

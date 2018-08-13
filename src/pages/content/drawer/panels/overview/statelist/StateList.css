@@ -10,10 +10,10 @@
   right: 5px;/*Same as statelist-container*/
   bottom: 0;
 
-  fill: gray;
+  fill: var(--color-drawer-text-subtle);
 }
 .boxadd-icon:hover {
-  fill: white;
+  fill: var(--color-drawer-text);
 }
 
 .statelist {
@@ -27,7 +27,7 @@
   font-size: inherit;
   margin-top: auto;
   margin-bottom: auto;
-  fill: gray;
+  fill: var(--color-drawer-text-subtle);
 
   width: 1em;
   height: 1em;

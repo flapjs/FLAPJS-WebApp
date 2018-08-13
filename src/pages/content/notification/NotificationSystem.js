@@ -16,21 +16,55 @@ class NotificationSystem extends React.Component
     };
   }
 
-  //TODO: allow add and delete by tag for messages
-  addMessage(message, tag=null)
+  addMessage(message, tag=null, clearOnAdd=true)
   {
+    if (tag && clearOnAdd)
+    {
+      this.clearMessage(tag);
+    }
+
     this.state.messages.push([message, tag]);
   }
 
-  addErrorMessage(message, tag=null) {
-    this.state.errorMessages.push([message, tag]);
+  addWarningMessage(message, tag=null, clearOnAdd=true)
+  {
+    if (tag && clearOnAdd)
+    {
+      this.clearWarningMessage(tag);
+    }
+
+    this.state.warningMessages.push([message, tag]);
   }
 
+  addErrorMessage(message, tag=null, clearOnAdd=true) {
+    if (tag && clearOnAdd)
+    {
+      this.clearWarningMessage(tag);
+    }
+
+    this.state.errorMessages.push([message, tag]);
+  }
 
   clearErrorMessage(tag=null) {
     for(let i = this.state.errorMessages.length-1; i >= 0; i--) {
       if(this.state.errorMessages[i][1] == tag) {
         this.state.errorMessages.splice(i, 1);
+      }
+    }
+  }
+
+  clearWarningMessage(tag=null) {
+    for(let i = this.state.warningMessages.length-1; i >= 0; i--) {
+      if(this.state.warningMessages[i][1] == tag) {
+        this.state.warningMessages.splice(i, 1);
+      }
+    }
+  }
+
+  clearMessage(tag=null) {
+    for(let i = this.state.messages.length-1; i >= 0; i--) {
+      if(this.state.messages[i][1] == tag) {
+        this.state.messages.splice(i, 1);
       }
     }
   }
@@ -47,9 +81,9 @@ class NotificationSystem extends React.Component
         <div className="notification-stack">
           {
             this.state.errorMessages.map((e, i) => {
-              return <div key={i} className="notification-message" id="notification-message-error">
+              return <div key={i} className="notification-message notification-error">
                 {e[0]}
-                <div className="notification-message-response">
+                <div className="notification-response">
                   <button onClick={(e) => {
                     this.state.errorMessages.splice(i, 1);
                   }}>
@@ -61,13 +95,13 @@ class NotificationSystem extends React.Component
           }
           {
             this.state.warningMessages.map((e, i) => {
-              return <div key={i} className="notification-message" id="notification-message-warning">
+              return <div key={i} className="notification-message notification-warning">
                 {e[0]}
-                <div className="notification-message-response">
+                <div className="notification-response">
                   <button onClick={(e) => {
                     this.state.warningMessages.splice(i, 1);
                   }}>
-                    I don't care
+                    I do not care
                   </button>
                 </div>
               </div>;
@@ -77,7 +111,7 @@ class NotificationSystem extends React.Component
             this.state.messages.map((e, i) => {
               return <div key={i} className="notification-message">
                 {e[0]}
-                <div className="notification-message-response">
+                <div className="notification-response">
                   <button onClick={(e) => {
                     this.state.messages.splice(i, 1);
                   }}>

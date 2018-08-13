@@ -272,6 +272,15 @@ class GraphPointer
   isTrashMode(x, y)
   {
     return this.trashMode;
+    /*
+    if (this.trashMode) return true;
+
+    const x1 = this._trashArea.x;
+    const y1 = this._trashArea.y;
+    const x2 = x1 + this._trashArea.width;
+    const y2 = y1 + this._trashArea.height;
+    return x >= x1 && y >= y1 && x < x2 && y < y2;
+    */
   }
 }
 

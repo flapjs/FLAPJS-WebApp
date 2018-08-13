@@ -20,12 +20,11 @@ class InitialMarkerRenderer extends React.Component
     const r = Config.NODE_RADIUS;
     const d = r * 2;
     return <g>
-      <path d={
+      <path className="graph-initial" d={
         "M" + (x - r) + " " + (y) +
         " L" + (x - d) + " " + (y - r) +
         " L" + (x - d) + " " + (y + r) +
         " Z"}
-        stroke={Config.EDGE_STROKE_STYLE}
         fill="none" />
     </g>;
   }

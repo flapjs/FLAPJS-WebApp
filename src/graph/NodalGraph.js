@@ -10,6 +10,7 @@ import { EMPTY } from 'machine/Symbols.js';
 //nodeCreate(node) - Whenever a new node is created
 //nodeDestroy(node) - Whenever a node is destroyed (even on clear)
 //nodeLabel(node, newLabel, oldLabel) - Whenever a node label changes
+//nodeCustomLabel(node, newLabel, oldLabel) - Whenever a node custom label changes
 //edgeCreate(edge) - Whenever a new edge is created
 //edgeDestroy(edge) - Whenever an edge is destroyed (even on clear)
 //edgeLabel(edge, newLabel, oldLabel) - Whenever a node label changes
@@ -23,9 +24,6 @@ class NodalGraph
   {
     this.nodes = nodes;
     this.edges = edges;
-
-    //TODO: should remove this
-    this._machine = null;
   }
 
   getNodeByLabel(label)
@@ -39,6 +37,33 @@ class NodalGraph
     }
 
     return null;
+  }
+
+  getNodeIndex(node)
+  {
+    for(let i = this.nodes.length - 1; i >= 0; --i)
+    {
+      const other = this.nodes[i];
+      if (node === other)
+      {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  getNodeIndexByLabel(label)
+  {
+    for(let i = this.nodes.length - 1; i >= 0; --i)
+    {
+      const node = this.nodes[i];
+      if (node.label == label)
+      {
+        return i;
+      }
+    }
+
+    return -1;
   }
 
   newNode(x, y, label)
@@ -213,14 +238,7 @@ class NodalGraph
 
   markDirty()
   {
-    const prevMachine = this._machine;
-    this._machine = null;
     this.emit("markDirty", this);
-  }
-
-  isDirty()
-  {
-    return !this._machine;
   }
 
   static parseJSON(data)

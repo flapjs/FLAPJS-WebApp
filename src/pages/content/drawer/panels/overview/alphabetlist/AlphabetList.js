@@ -35,16 +35,17 @@ class AlphabetList extends React.Component
 
   render()
   {
-    const alphabet = this.props.machine.getAlphabet().sort();
+    const machineBuilder = this.props.machineBuilder;
+    const alphabet = machineBuilder.getAlphabet().sort();
     return <InfoBlock title="Alphabet">
       <div className="alphalist-container">
         <div className="alphalist">
           {
             alphabet.map((e, i) => {
-              return <AlphabetTag key={i} src={e} list={this} machine={this.props.machine} alphabet={alphabet}/>
+              return <AlphabetTag key={i} src={e} list={this} machine={machineBuilder} alphabet={alphabet}/>
             })
           }
-          <AlphabetTag key={-1} ref={ref=>this.editSymbolTag=ref} src={""} list={this} machine={this.props.machine}
+          <AlphabetTag key={-1} ref={ref=>this.editSymbolTag=ref} src={""} list={this} machine={machineBuilder}
                        alphabet={alphabet} style={{
             display: this.state.editing ? "block" : "none"
           }}/>

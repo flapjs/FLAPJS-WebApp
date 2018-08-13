@@ -1,3 +1,5 @@
+import Config from 'config.js';
+
 import { EMPTY } from 'machine/Symbols.js';
 
 class DFAErrorChecker
@@ -7,105 +9,124 @@ class DFAErrorChecker
     this.machineBuilder = machineBuilder;
     this.graph = graph;
 
-    this.errorMessages = new Map();
     this.errorNodes = [];
     this.errorEdges = [];
   }
 
-  checkErrors()
+  clear()
+  {
+    this.errorNodes.length = 0;
+    this.errorEdges.length = 0;
+  }
+
+  checkErrors(callback)
   {
     //HACK: This will only run for "DFA" machine types...
     if (this.machineBuilder.getMachineType() != "DFA") return;
 
     const machine = this.machineBuilder.getMachine();
+    const graph = this.graph;
+    const alphabet = machine.getAlphabet();
+    const nodeTargets = this.errorNodes;
+    const edgeTargets = this.errorEdges;
+    nodeTargets.length = 0;
+    edgeTargets.length = 0;
 
-    this.errorMessages = new Map();
     let nodeTransitionMap = new Map();
-    let unReachedNode =this.graph.nodes.slice();
-    let startNode = this.graph.getStartNode();
+    let unReachedNode = graph.nodes.slice();
+    let startNode = graph.getStartNode();
     unReachedNode.splice(unReachedNode.indexOf(startNode),1);
-    let alphabet = machine.getAlphabet();
-    for(const edge of this.graph.edges)
+
+    const placeholderEdges = [];
+    const emptyEdges = [];
+    const dupeEdges = [];
+    for(const edge of graph.edges)
     {
       //check incomplete edges
       if (edge.isPlaceholder())
       {
-        this.errorEdges.push(edge);
-        this.addErrorMessage("Incomplete edges", edge);
+        //Update cached error targets
+        placeholderEdges.push(edge.label);
+        if (edgeTargets.indexOf(edge) == -1) edgeTargets.push(edge);
       }
       else
       {
         const from = edge.from;
         const to = edge.to;
         const labels = edge.label.split(",");
+
         for(const label of labels)
         {
           //remove to from unReachedNode list
           if(unReachedNode.includes(to)) unReachedNode.splice(unReachedNode.indexOf(to),1);
+
           //check for empty transitions
           if(label == EMPTY)
           {
-            this.errorEdges.push(edge);
-            this.addErrorMessage("Empty transitions", edge);
+            //Update cached error targets
+            emptyEdges.push(edge.label);
+            if (edgeTargets.indexOf(edge) == -1) edgeTargets.push(edge);
           }
           else
           {
-            if(typeof nodeTransitionMap.get(from) === "undefined")
+            if(!nodeTransitionMap.has(from))
             {
               nodeTransitionMap.set(from, [label]);
             }
             else
             {
               //check for duplicate transitions
-              let currentAlphabet = nodeTransitionMap.get(from);
+              const currentAlphabet = nodeTransitionMap.get(from);
               if(currentAlphabet.includes(label))
               {
-                this.errorEdges.push(edge);
-                this.addErrorMessage("Duplicate transitions", edge)
+                //Update cached error targets
+                dupeEdges.push(edge.label);
+                if (edgeTargets.indexOf(edge) == -1) edgeTargets.push(edge);
               }
               else
               {
-                nodeTransitionMap.get(from).push(label);
+                currentAlphabet.push(label);
               }
             }
           }
         }
       }
     }
+
+    const unreachableNodes = [];
     //check disconnect states
     for (const node of unReachedNode)
     {
-      this.errorNodes.push(node);
-      this.addErrorMessage("Unreachable node", node);
+      //Update cached error targets
+      unreachableNodes.push(node.label);
+      if (nodeTargets.indexOf(node) == -1) nodeTargets.push(node);
     }
-    //Check for missing transitions
-    for(const node of this.graph.nodes)
-    {
-      let nodeTransitions = nodeTransitionMap.get(node);
-      if (typeof nodeTransitions === "undefined" && alphabet.length != 0)
-      {
-        this.errorNodes.push(node);
-        this.addErrorMessage("Missing transitions", node);
-      }
-      else if(typeof nodeTransitions != "undefined" && nodeTransitions.length < alphabet.length)
-      {
-        this.errorNodes.push(node);
-        this.addErrorMessage("Missing transitions", node);
-      }
-    }
-  }
 
-  //helper method for add into errorMessages map
-  addErrorMessage(error, object)
-  {
-    if(typeof this.errorMessages.get(error) === "undefined")
+    const missingNodes = [];
+    //Check for missing transitions
+    for(const node of graph.nodes)
     {
-      this.errorMessages.set(error, [object]);
+      const nodeTransitions = nodeTransitionMap.get(node);
+      if (!nodeTransitions && alphabet.length != 0 ||
+        nodeTransitions && nodeTransitions.length < alphabet.length)
+      {
+        //Update cached error targets
+        missingNodes.push(node.label);
+        if (nodeTargets.indexOf(node) == -1) nodeTargets.push(node);
+      }
     }
-    else
+
+    //Callbacks for all collected errors
+    if (callback)
     {
-      this.errorMessages.get(error).push(object);
+      if (placeholderEdges.length > 0) callback(Config.MACHINE_ERROR_EDGE_PLACEHOLDER_MESSAGE, placeholderEdges);
+      if (emptyEdges.length > 0) callback(Config.MACHINE_ERROR_EDGE_EMPTY_MESSAGE, emptyEdges);
+      if (dupeEdges.length > 0) callback(Config.MACHINE_ERROR_EDGE_DUPE_MESSAGE, dupeEdges);
+      if (unreachableNodes.length > 0) callback(Config.MACHINE_ERROR_NODE_UNREACHABLE_MESSAGE, unreachableNodes);
+      if (missingNodes.length > 0) callback(Config.MACHINE_ERROR_NODE_MISSING_MESSAGE, missingNodes);
     }
+
+    return !(nodeTargets.length == 0 && edgeTargets.length == 0);
   }
 }
 

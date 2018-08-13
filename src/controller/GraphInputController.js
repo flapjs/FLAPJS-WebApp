@@ -13,13 +13,14 @@ nodeMove(targetNode, nextX, nextY, prevX, prevY)
 nodeMoveAll(targetNodes, dx, dy)
 nodeAccept(targetNode, nextAccept, prevAccept)
 nodeInitial(nextInitial, prevInitial)
-nodeLabel(targetNode, nextLabel, prevLabel)//Not used
 
 edgeCreate(targetEdge)
 edgeDelete(targetEdge)
 edgeDestination(targetEdge, nextDestination, prevDestination, prevQuad)
 edgeMove(targetEdge, nextX, nextY, prevX, prevY)
 edgeLabel(targetEdge, nextLabel, prevLabel)
+
+tryCreateWhileTrash()
 */
 class GraphInputController extends InputController
 {
@@ -91,11 +92,18 @@ class GraphInputController extends InputController
       //If within the time to double tap...
       if (this.firstEmptyClick && (dx * dx + dy * dy) < Config.CURSOR_RADIUS_SQU && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
       {
-        //Create state at position
-        const node = this.createNode(x, y);
+        if (!this.pointer.isTrashMode(x, y))
+        {
+          //Create state at position
+          const node = this.createNode(x, y);
 
-        //Emit event
-        this.emit("nodeCreate", node);
+          //Emit event
+          this.emit("nodeCreate", node);
+        }
+        else
+        {
+          this.emit("tryCreateWhileTrash");
+        }
 
         this.firstEmptyClick = false;
       }
@@ -288,20 +296,27 @@ class GraphInputController extends InputController
       //If action dragged a node...
       if (targetType === 'node')
       {
-        const edge = this.graph.newEdge(target, this.pointer, Config.STR_TRANSITION_PROXY_LABEL);
+        if (!this.pointer.isTrashMode(x, y))
+        {
+          const edge = this.graph.newEdge(target, this.pointer, Config.STR_TRANSITION_DEFAULT_LABEL);
 
-        //Redirect pointer to refer to the edge as the new target
-        this.pointer.initial.target = edge;
-        this.pointer.initial.targetType = "endpoint";
-        this.isNewEdge = true;
+          //Redirect pointer to refer to the edge as the new target
+          this.pointer.initial.target = edge;
+          this.pointer.initial.targetType = "endpoint";
+          this.isNewEdge = true;
 
-        //Reset previous quad values for new proxy edge
-        this.prevQuad.x = 0;
-        this.prevQuad.y = 0;
+          //Reset previous quad values for new proxy edge
+          this.prevQuad.x = 0;
+          this.prevQuad.y = 0;
 
-        //Ready to move proxy edge to pointer...
-        this.pointer.moveMode = true;
-        return true;
+          //Ready to move proxy edge to pointer...
+          this.pointer.moveMode = true;
+          return true;
+        }
+        else
+        {
+          this.emit("tryCreateWhileTrash");
+        }
       }
       else if (targetType === 'endpoint')
       {
@@ -492,7 +507,7 @@ class GraphInputController extends InputController
             if (edge !== target && edge.from === target.from && edge.to === pointer.target)
             {
               let result = edge.label.split(",");
-              if (target.label !== Config.STR_TRANSITION_PROXY_LABEL)
+              if (target.label !== Config.STR_TRANSITION_DEFAULT_LABEL)
               {
                 result = result.concat(target.label.split(","));
               }
@@ -556,9 +571,8 @@ class GraphInputController extends InputController
           }
 
           //Open label editor if default edge...
-          if (target.label === Config.STR_TRANSITION_PROXY_LABEL)
+          if (target.label === Config.STR_TRANSITION_DEFAULT_LABEL)
           {
-            target.label = Config.STR_TRANSITION_DEFAULT_LABEL;
             this.openLabelEditor(target, x, y);
           }
           return true;
@@ -578,9 +592,8 @@ class GraphInputController extends InputController
             target.makePlaceholder();
 
             //Open label editor if default edge...
-            if (target.label === Config.STR_TRANSITION_PROXY_LABEL)
+            if (target.label === Config.STR_TRANSITION_DEFAULT_LABEL)
             {
-              target.label = Config.STR_TRANSITION_DEFAULT_LABEL;
               this.openLabelEditor(target, x, y);
             }
             return true;

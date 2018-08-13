@@ -5,6 +5,7 @@ import './App.css';
 import GraphInputController from 'controller/GraphInputController.js';
 import NodalGraph from 'graph/NodalGraph.js';
 import AutoSaver from 'util/AutoSaver.js';
+import HotKeys from './HotKeys.js';
 
 import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
@@ -15,14 +16,13 @@ import NotificationSystem from './notification/NotificationSystem.js';
 import FSABuilder from 'builder/FSABuilder.js';
 import EventHistory from 'events/EventHistory.js';
 import GraphUploader from 'graph/GraphUploader.js';
-import TestingManager from './drawer/panels/testing/TestingManager.js';
+import TestingManager from 'builder/TestingManager.js';
 
 import GraphEdgeCreateEvent from 'events/GraphEdgeCreateEvent.js';
 import GraphEdgeDeleteEvent from 'events/GraphEdgeDeleteEvent.js';
 import GraphEdgeDestinationEvent from 'events/GraphEdgeDestinationEvent.js';
 import GraphEdgeLabelEvent from 'events/GraphEdgeLabelEvent.js';
 import GraphEdgeMoveEvent from 'events/GraphEdgeMoveEvent.js';
-
 import GraphNodeAcceptEvent from 'events/GraphNodeAcceptEvent.js';
 import GraphNodeInitialEvent from 'events/GraphNodeInitialEvent.js';
 import GraphNodeCreateEvent from 'events/GraphNodeCreateEvent.js';
@@ -38,15 +38,6 @@ class App extends React.Component
   {
     super(props);
 
-    //Must be initialized (will be called in Workspace.componentDidMount)
-    this.controller = new GraphInputController();
-    this.graph = new NodalGraph();
-    //HACK: this should not be passed to FSA Builder
-    this.machineBuilder = new FSABuilder(this.graph, null, this);
-    this.testingManager = new TestingManager(this.machineBuilder);
-    this.machineBuilder.tester = this.testingManager;//HACK: let machine builder ref testing manager
-    this.eventHistory = new EventHistory();
-
     //Create references
     this.container = React.createRef();
     this.workspace = React.createRef();
@@ -54,6 +45,19 @@ class App extends React.Component
     this.drawer = React.createRef();
     this.notification = React.createRef();
     this.toolbar = React.createRef();
+
+    //Must be initialized (will be called in Workspace.componentDidMount)
+    this.controller = new GraphInputController();
+    this.graph = new NodalGraph();
+    this.eventHistory = new EventHistory();
+    this.testingManager = new TestingManager();
+    this.machineBuilder = new FSABuilder(this.graph, this.controller, this.testingManager);
+    this.hotKeys = new HotKeys(this.graph, this.eventHistory);
+
+    //HACK: this should be a listener to FSABuilder, should not access graph
+    this.graph.on("markDirty", (g) => {
+      this.testingManager.markDirty();
+    });
 
     this.state = {
       isOpen: true,
@@ -66,6 +70,87 @@ class App extends React.Component
     this.onDragEnter = this.onDragEnter.bind(this);
     this.onDragLeave = this.onDragLeave.bind(this);
     this.onFileDrop = this.onFileDrop.bind(this);
+  }
+
+  componentDidMount()
+  {
+    //Does the browser support autosaving?
+    if(AutoSaver.doesSupportLocalStorage())
+    {
+      AutoSaver.loadAutoSave(this.graph);
+
+      //Start auto-saving
+      AutoSaver.initAutoSave(this.graph);
+    }
+
+    const graph = this.graph;
+    const controller = this.controller;
+    const machineBuilder = this.machineBuilder;
+
+    //Initialize the controller to graph components
+    controller.initialize(this, this.workspace.ref);
+    machineBuilder.initialize(this);
+    this.hotKeys.initialize(this.workspace, this.toolbar);
+
+    //Notify on create in delete mode
+    const tryCreateWhileTrash = () => {
+      if (controller.pointer.trashMode)
+      {
+        this.notification.addWarningMessage("Sorry, but you cannot create new states or edges while in delete mode.",
+          "tryCreateWhileTrash", true);
+      }
+    };
+    controller.on("tryCreateWhileTrash", tryCreateWhileTrash);
+
+    //Upload drop zone
+    const workspaceDOM = this.workspace.ref;
+    workspaceDOM.addEventListener("drop", this.onFileDrop);
+    workspaceDOM.addEventListener("dragover", this.onDragOver);
+    workspaceDOM.addEventListener("dragenter", this.onDragEnter);
+    workspaceDOM.addEventListener("dragleave", this.onDragLeave);
+
+    //Insert event listeners
+    const eventHistory = this.eventHistory;
+    /*graph.on("nodeCustomLabel", (targetNode, nextLabel, prevLabel) =>
+      eventHistory.handleEvent(new GraphNodeLabelEvent(graph, targetNode, nextLabel, prevLabel)));*/
+    controller.on("nodeCreate", targetNode =>
+      eventHistory.handleEvent(new GraphNodeCreateEvent(graph, targetNode)));
+    controller.on("nodeDelete", (targetNode, prevX, prevY) =>
+      eventHistory.handleEvent(new GraphNodeDeleteEvent(graph, targetNode, prevX, prevY)));
+    controller.on("nodeDeleteAll", (targetNodes, selectedNode, prevX, prevY) =>
+      eventHistory.handleEvent(new GraphNodeDeleteAllEvent(graph, targetNodes, selectedNode, prevX, prevY)));
+    controller.on("nodeMove", (targetNode, nextX, nextY, prevX, prevY) =>
+      eventHistory.handleEvent(new GraphNodeMoveEvent(graph, targetNode, nextX, nextY, prevX, prevY)));
+    controller.on("nodeMoveAll", (targetNodes, dx, dy) =>
+      eventHistory.handleEvent(new GraphNodeMoveAllEvent(graph, targetNodes, dx, dy)));
+    controller.on("nodeAccept", (targetNode, nextAccept, prevAccept) =>
+      eventHistory.handleEvent(new GraphNodeAcceptEvent(graph, targetNode, nextAccept, prevAccept)));
+    controller.on("nodeInitial", (nextInitial, prevInitial) =>
+      eventHistory.handleEvent(new GraphNodeInitialEvent(graph, nextInitial, prevInitial)));
+    controller.on("edgeCreate", targetEdge =>
+      eventHistory.handleEvent(new GraphEdgeCreateEvent(graph, targetEdge)));
+    controller.on("edgeDelete", targetEdge =>
+      eventHistory.handleEvent(new GraphEdgeDeleteEvent(graph, targetEdge)));
+    controller.on("edgeDestination", (targetEdge, nextDestination, prevDestination, prevQuad) =>
+      eventHistory.handleEvent(new GraphEdgeDestinationEvent(graph, targetEdge, nextDestination, prevDestination, prevQuad)));
+    controller.on("edgeMove", (targetEdge, nextX, nextY, prevX, prevY) =>
+      eventHistory.handleEvent(new GraphEdgeMoveEvent(graph, targetEdge, nextX, nextY, prevX, prevY)));
+    controller.on("edgeLabel", (targetEdge, nextLabel, prevLabel) =>
+      eventHistory.handleEvent(new GraphEdgeLabelEvent(graph, targetEdge, nextLabel, prevLabel)));
+  }
+
+  componentWillUnmount()
+  {
+    this.hotKeys.destroy();
+    this.machineBuilder.destroy();
+    this.controller.destroy();
+
+    //Upload drop zone
+    const workspaceDOM = this.workspace.ref;
+    workspaceDOM.removeEventListener("drop", this.onFileDrop);
+    workspaceDOM.removeEventListener("dragover", this.onDragOver);
+    workspaceDOM.removeEventListener("dragenter", this.onDragEnter);
+    workspaceDOM.removeEventListener("dragleave", this.onDragLeave);
   }
 
   //Called to prevent default file open
@@ -182,81 +267,6 @@ class App extends React.Component
     return this.state.isFullscreen && this.state.isOpen;
   }
 
-  componentDidMount()
-  {
-    //Does the browser support autosaving?
-    if(AutoSaver.doesSupportLocalStorage())
-    {
-      AutoSaver.loadAutoSave(this.graph);
-
-      //Start auto-saving
-      AutoSaver.initAutoSave(this.graph);
-    }
-
-    const graph = this.graph;
-    const controller = this.controller;
-
-    //Initialize the controller to graph components
-    controller.initialize(this, this.workspace.ref);
-
-    //Auto rename machine
-    const relabel = () => {
-      this.machineBuilder.getLabeler().sortDefaultNodeLabels();
-    };
-    controller.on("nodeDelete", relabel);
-    controller.on("nodeDeleteAll", relabel);
-    controller.on("nodeInitial", relabel);
-    controller.on("nodeLabel", relabel);
-
-    //Upload drop zone
-    const workspaceDOM = this.workspace.ref;
-    workspaceDOM.addEventListener("drop", this.onFileDrop);
-    workspaceDOM.addEventListener("dragover", this.onDragOver);
-    workspaceDOM.addEventListener("dragenter", this.onDragEnter);
-    workspaceDOM.addEventListener("dragleave", this.onDragLeave);
-
-    //Insert event listeners
-    const eventHistory = this.eventHistory;
-    controller.on("nodeCreate", targetNode =>
-      eventHistory.handleEvent(new GraphNodeCreateEvent(graph, targetNode)));
-    controller.on("nodeDelete", (targetNode, prevX, prevY) =>
-      eventHistory.handleEvent(new GraphNodeDeleteEvent(graph, targetNode, prevX, prevY)));
-    controller.on("nodeDeleteAll", (targetNodes, selectedNode, prevX, prevY) =>
-      eventHistory.handleEvent(new GraphNodeDeleteAllEvent(graph, targetNodes, selectedNode, prevX, prevY)));
-    controller.on("nodeMove", (targetNode, nextX, nextY, prevX, prevY) =>
-      eventHistory.handleEvent(new GraphNodeMoveEvent(graph, targetNode, nextX, nextY, prevX, prevY)));
-    controller.on("nodeMoveAll", (targetNodes, dx, dy) =>
-      eventHistory.handleEvent(new GraphNodeMoveAllEvent(graph, targetNodes, dx, dy)));
-    controller.on("nodeAccept", (targetNode, nextAccept, prevAccept) =>
-      eventHistory.handleEvent(new GraphNodeAcceptEvent(graph, targetNode, nextAccept, prevAccept)));
-    controller.on("nodeInitial", (nextInitial, prevInitial) =>
-      eventHistory.handleEvent(new GraphNodeInitialEvent(graph, nextInitial, prevInitial)));
-    controller.on("nodeLabel", (targetNode, nextLabel, prevLabel) =>
-      eventHistory.handleEvent(new GraphNodeLabelEvent(graph, targetNode, nextLabel, prevLabel)));
-    controller.on("edgeCreate", targetEdge =>
-      eventHistory.handleEvent(new GraphEdgeCreateEvent(graph, targetEdge)));
-    controller.on("edgeDelete", targetEdge =>
-      eventHistory.handleEvent(new GraphEdgeDeleteEvent(graph, targetEdge)));
-    controller.on("edgeDestination", (targetEdge, nextDestination, prevDestination, prevQuad) =>
-      eventHistory.handleEvent(new GraphEdgeDestinationEvent(graph, targetEdge, nextDestination, prevDestination, prevQuad)));
-    controller.on("edgeMove", (targetEdge, nextX, nextY, prevX, prevY) =>
-      eventHistory.handleEvent(new GraphEdgeMoveEvent(graph, targetEdge, nextX, nextY, prevX, prevY)));
-    controller.on("edgeLabel", (targetEdge, nextLabel, prevLabel) =>
-      eventHistory.handleEvent(new GraphEdgeLabelEvent(graph, targetEdge, nextLabel, prevLabel)));
-  }
-
-  componentWillUnmount()
-  {
-    this.controller.destroy();
-
-    //Upload drop zone
-    const workspaceDOM = this.workspace.ref;
-    workspaceDOM.removeEventListener("drop", this.onFileDrop);
-    workspaceDOM.removeEventListener("dragover", this.onDragOver);
-    workspaceDOM.removeEventListener("dragenter", this.onDragEnter);
-    workspaceDOM.removeEventListener("dragleave", this.onDragLeave);
-  }
-
   render()
   {
     const controller = this.controller;
@@ -277,7 +287,7 @@ class App extends React.Component
             opacity: this.state.isWaitingForFile ? "0.1" : "1"
           }}>
 
-          <Workspace ref={ref=>this.workspace=ref} graph={graph} controller={controller}/>
+          <Workspace ref={ref=>this.workspace=ref} graph={graph} machineBuilder={machineBuilder} controller={controller}/>
         </div>
 
         <div className={"workspace-viewport" +

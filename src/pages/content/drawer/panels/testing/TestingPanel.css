@@ -1,0 +1,7 @@
+#test-errorcheck > select {
+  display: block;
+  width: 100%;
+
+  margin-top: 5px;
+  margin-bottom: 10px;
+}

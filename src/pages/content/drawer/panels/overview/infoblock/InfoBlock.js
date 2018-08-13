@@ -4,6 +4,7 @@ import './InfoBlock.css';
 import IconToggle from 'icons/IconToggle.js';
 import DropDownIcon from 'icons/DropDownIcon.js';
 
+//TODO: Should be deprecated to use OptionGroup (or something similar)
 class InfoBlock extends React.Component
 {
   constructor(props)
@@ -20,10 +21,11 @@ class InfoBlock extends React.Component
 
   render()
   {
-    return <div className="infoblock-container">
-      <div className="infoblock-header">
-        <label onClick={(e)=>this.dropdown.onClick(e)}>{this.props.title}</label>
-        <IconToggle id="collapse" ref={ref=>this.dropdown=ref} defaultValue={this.props.defaultValue}>
+    return <div className={"infoblock-container " + this.props.className}>
+      <div className="infoblock-header" onClick={(e)=>this.dropdown.onClick(e)}>
+        <label>{this.props.title}</label>
+        <IconToggle id="collapse" ref={ref=>this.dropdown=ref} defaultValue={this.props.defaultValue}
+          style={{pointerEvents: "none"}}>
           <DropDownIcon/>
         </IconToggle>
       </div>

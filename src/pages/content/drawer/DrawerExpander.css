@@ -1,6 +1,6 @@
 .drawer-expand {
   cursor: pointer;
-  fill: #909090;
+  fill: var(--color-drawer-text-subtle);
   transition: fill 0.3s ease, transform 0.3s ease;
   transform: rotate(90deg);
   width: 1.5em;
@@ -10,7 +10,7 @@
   margin: 0.4em;
 }
 .drawer-expand:hover {
-  fill: #FFFFFF;
+  fill: var(--color-drawer-text);
   transform: rotate(-90deg);
 }
 .drawer-expand.open {
