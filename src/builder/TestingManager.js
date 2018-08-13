@@ -13,6 +13,7 @@ class TestingManager
     this.shouldCheckError = false;
     this.isImmediateErrorCheck = false;
     this.errorCheckMode = TestingManager.NO_ERROR_CHECK;
+    this.stepByStepMode = false;
 
     this.placeholder = new Test();
   }
@@ -45,6 +46,16 @@ class TestingManager
   getErrorCheckMode()
   {
     return this.errorCheckMode;
+  }
+
+  setStepByStepMode(mode)
+  {
+    this.stepByStepMode = mode ? true : false;
+  }
+
+  getStepByStepMode()
+  {
+    return this.stepByStepMode;
   }
 
   addTestInput(input)

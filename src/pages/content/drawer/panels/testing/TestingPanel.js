@@ -65,7 +65,10 @@ class TestingPanel extends React.Component
           </select>
         </div>
         <div className="panel-checkbox">
-          <input id="test-step" type="checkbox" disabled="true"/>
+          <input id="test-step" type="checkbox" onChange={(e) => {
+            //HACK: this needs to default to tester.getStepByStepMode first
+            tester.setStepByStepMode(e.target.checked);
+          }}/>
           <label htmlFor="test-step">Step-by-Step Mode</label>
         </div>
         <div className="panel-checkbox">

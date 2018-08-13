@@ -30,7 +30,10 @@ class Viewport extends React.Component
         ref={ref=>this.labelEditor=ref}/>
       <TrashCan controller={this.props.controller}
         viewport={this}/>
-      <TestTray/>
+      {
+        this.props.tester.getStepByStepMode() &&
+        <TestTray/>
+      }
     </div>;
   }
 }

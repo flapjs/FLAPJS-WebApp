@@ -272,6 +272,7 @@ class App extends React.Component
     const controller = this.controller;
     const graph = this.graph;
     const machineBuilder = this.machineBuilder;
+    const tester = this.testingManager;
 
     controller.update();
 
@@ -296,7 +297,7 @@ class App extends React.Component
             visibility: this.shouldHideContent() ? "hidden" : "visible"
           }}>
 
-          <Viewport ref={ref=>this.viewport=ref} app={this} graph={graph} controller={controller}/>
+          <Viewport ref={ref=>this.viewport=ref} app={this} graph={graph} controller={controller} tester={tester}/>
         </div>
 
         <div className={"workspace-drawer" +
