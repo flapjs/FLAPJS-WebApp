@@ -1,5 +1,7 @@
 import { solveNFA } from 'machine/util/solveNFA.js';
 
+import TestMode from 'pages/content/viewport/TestMode.js';
+
 const PENDING = 0;
 const SUCCESS = 1;
 const FAILURE = -1;
@@ -13,6 +15,7 @@ class TestingManager
 
     this.autoErrorCheck = false;
     this.placeholder = new Test();
+    this.testMode = new TestMode(machineBuilder, this);
 
     //HACK: this should be a listener to FSABuilder, should not access graph
     this.machineBuilder.graph.on("markDirty", (g) => {
@@ -24,7 +27,17 @@ class TestingManager
       }
     });
   }
-
+  getCurrentTestString()
+  {
+    //TODO:GEt the test STRING not input
+    return "";
+  }
+  nextTestInput()
+  {
+    //TODO:CAN RETURN NULL IF NO MORE INPUTS TO TEST
+    //TODO:Returns TestingInput objects
+    return null;
+  }
   addTestInput(input)
   {
     const result = new Test(input);
