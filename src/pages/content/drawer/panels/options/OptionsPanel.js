@@ -2,6 +2,8 @@ import React from 'react';
 import '../Panel.css';
 import './OptionsPanel.css';
 
+import Config from 'config.js';
+
 import OptionGroup from './OptionGroup.js';
 import OptionHotkey from './OptionHotkey.js';
 import OptionColor from './OptionColor.js';
@@ -101,6 +103,13 @@ class OptionsPanel extends React.Component
           <input id="option-altinput" type="checkbox" disabled="true"/>
           <label htmlFor="option-altinput">Swap Input Controls</label>
         </div>
+
+        <button className="panel-button" onClick={(e) => {
+          Config._resetOnLoad = true;
+          //saveConfig will be called on unload
+          location.reload();
+        }}>Reset to default</button>
+
 
       </div>
 

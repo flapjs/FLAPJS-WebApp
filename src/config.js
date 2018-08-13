@@ -99,10 +99,12 @@ export function loadConfig() {
   try
   {
     const jsonData = JSON.parse(jsonString);
-    if (jsonData['_resetOnLoad'])
+    if (jsonData['_resetOnLoad'] == true)
     {
       //Reset the config
       clearConfig();
+      //Save a new config
+      saveConfig();
     }
     else
     {
@@ -130,5 +132,5 @@ export function saveConfig() {
 };
 
 export function clearConfig() {
-  localStorage.clear();
+  localStorage.removeItem(LOCAL_STORAGE_ID);
 };
