@@ -17,7 +17,7 @@ nodeInitial(nextInitial, prevInitial)
 edgeCreate(targetEdge)
 edgeDelete(targetEdge)
 edgeDestination(targetEdge, nextDestination, prevDestination, prevQuad)
-edgeMove(targetEdge, nextX, nextY, prevX, prevY)
+edgeMove(targetEdge, nextQuad, prevQuad)
 edgeLabel(targetEdge, nextLabel, prevLabel)
 
 tryCreateWhileTrash()
@@ -31,7 +31,10 @@ class GraphInputController extends InputController
     this.labelEditor = null;
     this.machineBuilder = null;
 
-    this.prevQuad = {x: 0, y: 0};
+    this.prevQuad = {
+      radians: 0, length: 0,
+      x: 0, y: 0
+    };
     this.prevEdgeTo = null;
     this.prevX = 0;
     this.prevY = 0;
@@ -241,8 +244,9 @@ class GraphInputController extends InputController
         }
 
         //Save previous quadratics
-        this.prevQuad.x = target.quad.x;
-        this.prevQuad.y = target.quad.y;
+        target.copyQuadraticsTo(this.prevQuad);
+        //this.prevQuad.x = target.quad.x;
+        //this.prevQuad.y = target.quad.y;
 
         //Ready to move the edge vertex to pointer...
         return true;
@@ -254,8 +258,9 @@ class GraphInputController extends InputController
         if (!(target instanceof Edge))
           throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Edge.");
 
-        this.prevQuad.x = target.quad.x;
-        this.prevQuad.y = target.quad.y;
+        target.copyQuadraticsTo(this.prevQuad);
+        //this.prevQuad.x = target.quad.x;
+        //this.prevQuad.y = target.quad.y;
         this.prevEdgeTo = target.to;
         this.isNewEdge = false;
 
@@ -306,8 +311,9 @@ class GraphInputController extends InputController
           this.isNewEdge = true;
 
           //Reset previous quad values for new proxy edge
-          this.prevQuad.x = 0;
-          this.prevQuad.y = 0;
+          edge.copyQuadraticsTo(this.prevQuad);
+          //this.prevQuad.x = 0;
+          //this.prevQuad.y = 0;
 
           //Ready to move proxy edge to pointer...
           this.pointer.moveMode = true;
@@ -326,8 +332,7 @@ class GraphInputController extends InputController
         if (!(target instanceof Edge))
           throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Edge.");
 
-        this.prevQuad.x = target.quad.x;
-        this.prevQuad.y = target.quad.y;
+        this.copyQuadraticsTo(this.prevQuad);
         this.prevEdgeTo = target.to;
         this.isNewEdge = false;
 
@@ -483,7 +488,7 @@ class GraphInputController extends InputController
         else
         {
           //Do nothing, since should have moved to position
-          this.emit("edgeMove", target, target.quad.x, target.quad.y, this.prevQuad.x, this.prevQuad.y);
+          this.emit("edgeMove", target, target.getQuadratic(), this.prevQuad);
         }
         return true;
       }
@@ -542,8 +547,7 @@ class GraphInputController extends InputController
           //Otherwise, maintain original curve
           else
           {
-            target.quad.x = this.prevQuad.x;
-            target.quad.y = this.prevQuad.y;
+            target.copyQuadraticsFrom(this.prevQuad);
           }
 
           if (this.isNewEdge)
@@ -565,8 +569,9 @@ class GraphInputController extends InputController
             if (edge.isQuadratic()) continue;
             if ((edge.to === target.from && edge.from === target.to))
             {
-              target.quad.y = -Config.PARALLEL_EDGE_HEIGHT;
-              edge.quad.y = Config.PARALLEL_EDGE_HEIGHT;
+              const HALFPI = Math.PI / 2;
+              target.setQuadVector(HALFPI, Config.PARALLEL_EDGE_HEIGHT);
+              edge.setQuadVector(HALFPI, Config.PARALLEL_EDGE_HEIGHT);
             }
           }
 
@@ -731,7 +736,7 @@ class GraphInputController extends InputController
 
   moveEdgeTo(pointer, edge, x, y)
   {
-    edge.setQuadraticByAbsolute(x, y);
+    edge.setQuadraticByPosition(x, y);
   }
 
   moveEndpointTo(pointer, edge, x, y)
@@ -752,8 +757,7 @@ class GraphInputController extends InputController
     //Otherwise, maintain original curve
     else
     {
-      edge.quad.x = this.prevQuad.x;
-      edge.quad.y = this.prevQuad.y;
+      edge.copyQuadraticsFrom(this.prevQuad);
     }
   }
 
@@ -762,7 +766,7 @@ class GraphInputController extends InputController
     const prevLabel = placeholder || target.label;
     this.labelEditor.openEditor(target, placeholder, () => {
       const label = target.label;
-      if (label != prevLabel)
+      if (prevLabel.length > 0 && label != prevLabel)
       {
         this.emit("edgeLabel", target, label, prevLabel);
       }

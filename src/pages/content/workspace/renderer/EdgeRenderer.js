@@ -21,6 +21,7 @@ class EdgeRenderer extends React.Component
     const end = this.props.end;
     const center = this.props.center;
     const label = this.props.label;
+    const quadCoords = edge.getQuadCoords();
 
     //Calculate curved lines...
     let quadLine = null;
@@ -33,8 +34,8 @@ class EdgeRenderer extends React.Component
     else
     {
       //Quadratic curve
-      const cx = center.x + edge.quad.x;//midpoint + the quadratic offset * 2
-      const cy = center.y + edge.quad.y;//midpoint + the quadratic offset * 2
+      const cx = center.x + quadCoords.x;//midpoint + the quadratic offset * 2
+      const cy = center.y + quadCoords.y;//midpoint + the quadratic offset * 2
       arrowAngle = Math.atan2(cx - end.x, cy - end.y) + Math.PI;
       quadLine = "Q " + cx + " " + cy + " " + end.x + " " + end.y;
     }
@@ -64,7 +65,7 @@ class EdgeRenderer extends React.Component
       { labels.length > 0 && labels.map((str, i) => {
           const cx = (center && center.x || 0);
           const cy = (center && center.y || 0);
-          const signy = Math.sign(edge.quad.y) || -1;
+          const signy = Math.sign(quadCoords.y) || -1;
           const xx = cx;
           const yy = cy + ((i + 1) * signy * 15);
 

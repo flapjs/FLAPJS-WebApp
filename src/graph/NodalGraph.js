@@ -24,6 +24,8 @@ class NodalGraph
   {
     this.nodes = nodes;
     this.edges = edges;
+
+    this.shouldUseQuadCoords = true;
   }
 
   getNodeByLabel(label)
@@ -250,6 +252,7 @@ class NodalGraph
     if (edgeLength < 0) throw new Error("Invalid graph data: negative number of edges.");
 
     const dst = new NodalGraph(new Array(nodeLength), new Array(edgeLength));
+    dst.shouldUseQuadCoords = data.shouldUseQuadCoords || false;
 
     //The initial node is always saved/loaded first!
     for(let i = 0; i < nodeLength; ++i)
@@ -271,8 +274,9 @@ class NodalGraph
       if (edge.from >= nodeLength || edge.from < 0) throw new Error("Invalid edge from data: node index \'" + edge.from + "\' out of bounds.");
 
       const newEdge = new Edge(dst, dst.nodes[edge.from], edge.to < 0 ? null : dst.nodes[edge.to], edge.label || "0");
-      newEdge.quad.x = edge.quadx || 0;
-      newEdge.quad.y = edge.quady || 0;
+
+      //Force copy all quadratic data
+      newEdge.copyQuadraticsFrom(edge.quad);
       dst.edges[i] = newEdge;
     }
 
@@ -281,7 +285,6 @@ class NodalGraph
 
   static parseXML(data)
   {
-
     let nodeList = data.getElementsByTagName("state");
     let edgeList = data.getElementsByTagName("transition");
     const nodeLength = nodeList.length;
@@ -372,7 +375,8 @@ class NodalGraph
       nodeCount: nodeLength,
       nodes: new Array(nodeLength),
       edgeCount: edgeLength,
-      edges: new Array(edgeLength)
+      edges: new Array(edgeLength),
+      shouldUseQuadCoords: this.shouldUseQuadCoords
     };
 
     for(let i = 0; i < nodeLength; ++i)
@@ -393,8 +397,7 @@ class NodalGraph
       data.edges[i] = {
         from: this.nodes.indexOf(edge.from),
         to: this.nodes.indexOf(edge.to),
-        quadx: edge.quad.x,
-        quady: edge.quad.y,
+        quad: edge.copyQuadraticsTo({}),
         label: edge.label
       };
     }
