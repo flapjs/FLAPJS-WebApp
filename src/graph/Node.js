@@ -32,7 +32,7 @@ class Node
 
     if (prevLabel != label)
     {
-      this.graph.emit("nodeLabel", this, this._label, prevLabel);
+      this.graph.emit("nodeCustomLabel", this, this._label, prevLabel);
       this.graph.markDirty();
     }
   }
@@ -44,14 +44,7 @@ class Node
 
   get label() { return this._label; }
   set label(value) {
-    let prevLabel = this._label;
-    this._label = value;
-
-    if (prevLabel != value)
-    {
-      this.graph.emit("nodeLabel", this, this._label, prevLabel);
-      this.graph.markDirty();
-    }
+    throw new Error("Deprecated!");
   }
 
   get accept() { return this._accept; }

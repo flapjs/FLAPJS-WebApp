@@ -15,7 +15,7 @@ class NotificationSystem extends React.Component
       warningMessages: []
     };
   }
-  
+
   addMessage(message, tag=null, clearOnAdd=true)
   {
     if (tag && clearOnAdd)
@@ -81,9 +81,9 @@ class NotificationSystem extends React.Component
         <div className="notification-stack">
           {
             this.state.errorMessages.map((e, i) => {
-              return <div key={i} className="notification-message" id="notification-message-error">
+              return <div key={i} className="notification-message notification-error">
                 {e[0]}
-                <div className="notification-message-response">
+                <div className="notification-response">
                   <button onClick={(e) => {
                     this.state.errorMessages.splice(i, 1);
                   }}>
@@ -95,9 +95,9 @@ class NotificationSystem extends React.Component
           }
           {
             this.state.warningMessages.map((e, i) => {
-              return <div key={i} className="notification-message" id="notification-message-warning">
+              return <div key={i} className="notification-message notification-warning">
                 {e[0]}
-                <div className="notification-message-response">
+                <div className="notification-response">
                   <button onClick={(e) => {
                     this.state.warningMessages.splice(i, 1);
                   }}>
@@ -111,7 +111,7 @@ class NotificationSystem extends React.Component
             this.state.messages.map((e, i) => {
               return <div key={i} className="notification-message">
                 {e[0]}
-                <div className="notification-message-response">
+                <div className="notification-response">
                   <button onClick={(e) => {
                     this.state.messages.splice(i, 1);
                   }}>

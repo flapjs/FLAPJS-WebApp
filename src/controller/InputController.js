@@ -79,6 +79,11 @@ class InputController
     this.pointer.updateOffset();
   }
 
+  isUsingTouch()
+  {
+    return this.cursor._touchmove || this.cursor._touchend;
+  }
+
   onContextMenu(e)
   {
     e.stopPropagation();

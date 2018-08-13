@@ -2,31 +2,27 @@ import Event from './Event.js';
 
 class GraphEdgeMoveEvent extends Event
 {
-  constructor(graph, edge, nextX, nextY, prevX, prevY)
+  constructor(graph, edge, nextQuad, prevQuad)
   {
     super();
 
     this.graph = graph;
     this.edge = edge;
 
-    this.nextX = nextX;
-    this.nextY = nextY;
-    this.prevX = prevX;
-    this.prevY = prevY;
+    this.nextQuad = Object.assign({}, nextQuad);
+    this.prevQuad = Object.assign({}, prevQuad);
   }
 
   //Override
   applyUndo()
   {
-    this.edge.quad.x = this.prevX;
-    this.edge.quad.y = this.prevY;
+    this.edge.copyQuadraticsFrom(this.prevQuad);
   }
 
   //Override
   applyRedo()
   {
-    this.edge.quad.x = this.nextX;
-    this.edge.quad.y = this.nextY;
+    this.edge.copyQuadraticsFrom(this.nextQuad);
   }
 }
 

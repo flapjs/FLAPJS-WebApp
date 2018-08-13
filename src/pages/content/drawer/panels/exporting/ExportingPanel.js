@@ -24,6 +24,8 @@ class ExportingPanel extends React.Component
     const graph = this.props.graph;
     const toolbar = this.props.toolbar;
     const workspace = this.props.workspace;
+    const controller = this.props.controller;
+
     return <div className="panel-container" id="exporting" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>Exporting</h1>
@@ -37,13 +39,22 @@ class ExportingPanel extends React.Component
         </IconButton>
         {/*PNG*/}
         <IconButton className="export-button" id="export-png" title="Export as PNG"
-          onClick={()=>Downloader.downloadSVG(toolbar.getMachineName(), 'png', workspace.ref)}>
+          onClick={() => {
+            const workspaceDim = workspace.ref.viewBox.baseVal;
+            const width = workspaceDim.width;
+            const height = workspaceDim.height;
+            const svg = workspace.getSVGForExport(width, height);
+            Downloader.downloadSVG(toolbar.getMachineName(), 'png', svg, width, height);
+          }}>
           <PNGIcon/>
           <label>Export as PNG</label>
         </IconButton>
         {/*JPG*/}
         <IconButton className="export-button" id="export-jpg" title="Export as JPG"
-          onClick={()=>Downloader.downloadSVG(toolbar.getMachineName(), 'jpg', workspace.ref)}>
+          onClick={() => {
+            const boundingRect = graph.getBoundingRect();
+            Downloader.downloadSVG(toolbar.getMachineName(), 'jpg', workspace.ref, boundingRect);
+          }}>
           <JPGIcon/>
           <label>Export as JPG</label>
         </IconButton>

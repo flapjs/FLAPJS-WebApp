@@ -10,6 +10,7 @@ import { EMPTY } from 'machine/Symbols.js';
 //nodeCreate(node) - Whenever a new node is created
 //nodeDestroy(node) - Whenever a node is destroyed (even on clear)
 //nodeLabel(node, newLabel, oldLabel) - Whenever a node label changes
+//nodeCustomLabel(node, newLabel, oldLabel) - Whenever a node custom label changes
 //edgeCreate(edge) - Whenever a new edge is created
 //edgeDestroy(edge) - Whenever an edge is destroyed (even on clear)
 //edgeLabel(edge, newLabel, oldLabel) - Whenever a node label changes
@@ -24,8 +25,7 @@ class NodalGraph
     this.nodes = nodes;
     this.edges = edges;
 
-    //TODO: should remove this
-    this._machine = null;
+    this.shouldUseQuadCoords = false;
   }
 
   getNodeByLabel(label)
@@ -39,6 +39,33 @@ class NodalGraph
     }
 
     return null;
+  }
+
+  getNodeIndex(node)
+  {
+    for(let i = this.nodes.length - 1; i >= 0; --i)
+    {
+      const other = this.nodes[i];
+      if (node === other)
+      {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  getNodeIndexByLabel(label)
+  {
+    for(let i = this.nodes.length - 1; i >= 0; --i)
+    {
+      const node = this.nodes[i];
+      if (node.label == label)
+      {
+        return i;
+      }
+    }
+
+    return -1;
   }
 
   newNode(x, y, label)
@@ -213,14 +240,7 @@ class NodalGraph
 
   markDirty()
   {
-    const prevMachine = this._machine;
-    this._machine = null;
     this.emit("markDirty", this);
-  }
-
-  isDirty()
-  {
-    return !this._machine;
   }
 
   static parseJSON(data)
@@ -232,6 +252,7 @@ class NodalGraph
     if (edgeLength < 0) throw new Error("Invalid graph data: negative number of edges.");
 
     const dst = new NodalGraph(new Array(nodeLength), new Array(edgeLength));
+    dst.shouldUseQuadCoords = data.shouldUseQuadCoords || false;
 
     //The initial node is always saved/loaded first!
     for(let i = 0; i < nodeLength; ++i)
@@ -253,8 +274,9 @@ class NodalGraph
       if (edge.from >= nodeLength || edge.from < 0) throw new Error("Invalid edge from data: node index \'" + edge.from + "\' out of bounds.");
 
       const newEdge = new Edge(dst, dst.nodes[edge.from], edge.to < 0 ? null : dst.nodes[edge.to], edge.label || "0");
-      newEdge.quad.x = edge.quadx || 0;
-      newEdge.quad.y = edge.quady || 0;
+
+      //Force copy all quadratic data
+      newEdge.copyQuadraticsFrom(edge.quad);
       dst.edges[i] = newEdge;
     }
 
@@ -263,7 +285,6 @@ class NodalGraph
 
   static parseXML(data)
   {
-
     let nodeList = data.getElementsByTagName("state");
     let edgeList = data.getElementsByTagName("transition");
     const nodeLength = nodeList.length;
@@ -354,7 +375,8 @@ class NodalGraph
       nodeCount: nodeLength,
       nodes: new Array(nodeLength),
       edgeCount: edgeLength,
-      edges: new Array(edgeLength)
+      edges: new Array(edgeLength),
+      shouldUseQuadCoords: this.shouldUseQuadCoords
     };
 
     for(let i = 0; i < nodeLength; ++i)
@@ -375,8 +397,7 @@ class NodalGraph
       data.edges[i] = {
         from: this.nodes.indexOf(edge.from),
         to: this.nodes.indexOf(edge.to),
-        quadx: edge.quad.x,
-        quady: edge.quad.y,
+        quad: edge.copyQuadraticsTo({}),
         label: edge.label
       };
     }

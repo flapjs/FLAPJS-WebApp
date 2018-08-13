@@ -1,69 +1,164 @@
+.homepage-container {
+    width: 100%;
+    height: 100%;
+
+    min-height: 100%;
+    background-color: #006A96;
+    padding-bottom: 15px;
+    display: block;
+
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeout {
+    0% { opacity: 1; }
+    80% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
 .title {
 
     width: 100%;
     background-color: white;
     border-bottom-style: solid;
-    margin-left: 0px;
-}
-
-.title h1 {
-
-
-    font-family: 'Arvo', serif;
-    color: black;
-    font-size: 50px;
-    text-align: left;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    margin-left: 10px;
-
-}
-
-.homepage-container{
-    width: 100%;
-    height: 100%;
-    background-color: #b3fffa;
+    margin-left: 0;
+    position: static;
 }
 
 .title img{
 
-    height: 40px;
-    width: 60px;
+    display: block;
+    margin: 15px auto 15px auto;
+}
+
+.content{
+
+    font-family: "Arvo", "Serif" ;
+    text-align: center;
+    color: white;
+}
+
+.content h1{
+    font-size: 11vh;
+}
+
+.content p{
+    font-size: 5vh;
+}
+
+.buttons {
+    display: table;
+    margin: 0 auto;
+}
+
+.buttons button{
+
+    font-family: "Arvo", "Serif";
+    font-size: 25px;
+}
+
+.buttons button:hover{
+    cursor: pointer;
+
+    transition: background-color 0.3s ease;
+}
+
+.btn-default {
+
+    background-color: white;
+    border-radius: 10px;
+    border-style: outset;
+
+}
+
+.btn-default:hover{
+    background-color: #FFC82C;
 }
 
 .footer {
 
-    font-family: "Arvo", Serif;
-    position: absolute;
-    width: 100%;
-    bottom: 0px;
+    font-family: "Arvo", 'Serif';
     border-top: solid;
     background-color: white;
     text-align: center;
 
-}
-
-.arrow {
     position: absolute;
-    font-family: "Arvo", Serif;
-    bottom: 15%;
-    right: 5%;
-    cursor: pointer;
-}
+    bottom: 0px;
+    width: 100%;
 
-.circle {
-    border-radius: 50%;
+    font-size: 12px;
+}
+.squares ul{
+    list-style-type: none;
     display: inline-block;
-    padding: 2px 36px;
-    border-style: dashed;
 }
 
-.arrowbutton {
+.squares li{
+    float: left;
+}
 
-    background-color: #FFC82C;
-    color: white;
+.squares {
+
     position: center;
-    margin-left: 50%;
+    font-family: 'Arvo', serif;
+}
+
+.btn-square{
+    cursor: pointer;
+    border-radius: 25px;
+    background: #FEE781;
+    padding: 20px;
+    width: 320px;
+    height: 400px;
+    text-align: center;
+
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* spacing */
+    margin: 20px 50px 20px;
+
+
+}
+
+.btn-square:hover{
+
+    background: white;
+    text-align: left;
+
+}
+
+.btn-square span{
+
+    font-size: 40px;
+
+}
+
+.btn-square:hover span{
+
+    display: none;
+}
+
+.intro:hover:before {
+
+    content: "Flap.js is Web Wrapper Application developed by an undergraduate research student group at University of California, San Diego. This web application is meant to make JFLAP portable for students that are enrolled in CSE 105 : Theory Computability. ";
+}
+
+.class:hover:before {
+
+    content: "CSE 105 is an introduction to the mathematical theory of computability. Formal languages. Finite automata and regular expression. Push-down automata and context-free languages. Computable or recursive functions: Turing machines, the halting problem. Undecidability.";
+}
+
+.original:hover:before {
+    content: "JFLAP is software for experimenting with formal languages topics including nondeterministic finite automata, nondeterministic pushdown automata, multi-tape Turing machines, several types of grammars, parsing, and L-systems.";
+}
+
+@media screen and (max-width: 200px) {
+
+
+
 
 
 }

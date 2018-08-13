@@ -4,6 +4,6 @@
   outline: none;
   padding: 0;
 
-  fill: white;
+  fill: var(--color-drawer-text);
   cursor: pointer;
 }

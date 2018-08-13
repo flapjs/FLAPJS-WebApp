@@ -1,5 +1,6 @@
 import Event from './Event.js';
 
+//TODO: this is not used!
 class GraphNodeLabelEvent extends Event
 {
   constructor(graph, node, nextLabel, prevLabel)
@@ -16,13 +17,13 @@ class GraphNodeLabelEvent extends Event
   //Override
   applyUndo()
   {
-    this.node.label = this.prevLabel;
+    //TODO: this.node.setCustomLabel(this.prevLabel);
   }
 
   //Override
   applyRedo()
   {
-    this.node.label = this.nextLabel;
+    //TODO: this.node.setCustomLabel(this.nextLabel);
   }
 }
 

@@ -1,6 +1,3 @@
-const WIDTH = 640;
-const HEIGHT = 480;
-
 class Downloader
 {
   static downloadText(filename, data)
@@ -8,7 +5,7 @@ class Downloader
     Downloader.downloadURL(filename, 'data:text/plain; charset=utf-8,' + encodeURIComponent(data));
   }
 
-  static downloadSVG(filename, filetype, svg)
+  static downloadSVG(filename, filetype, svg, width, height)
   {
     const serializer = new XMLSerializer();
     const svgString = serializer.serializeToString(svg);
@@ -17,11 +14,16 @@ class Downloader
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext("2d");
+    const pixelRatio = window.devicePixelRatio || 1;
+    canvas.width = width * pixelRatio;
+    canvas.height = height * pixelRatio;
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
     const image = new Image();
     image.onload = function() {
-      ctx.canvas.width = WIDTH;
-      ctx.canvas.height = HEIGHT;
-      ctx.drawImage(image, 0, 0, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT);
+      ctx.drawImage(image, 0, 0);
       URL.revokeObjectURL(url);
 
       const imageURI = canvas.toDataURL('image/'+filetype).replace('image'+filetype, 'image/octet-stream');
