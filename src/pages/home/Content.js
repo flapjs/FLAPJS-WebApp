@@ -15,8 +15,8 @@ class Content extends React.Component{
         return(
 
             <div className = "content">
-            <h1> Welcome to FLAP.js </h1>
-                <p> Making Automata Theory usabilty Cross-Platform </p>
+            <h1> Welcome to flap.js !</h1>
+                <p> Currently supporting NFA and DFA </p>
             </div>
         );
 

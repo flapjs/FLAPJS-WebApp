@@ -3,7 +3,7 @@
     height: 100%;
 
     min-height: 100%;
-    background-color: #006A96;
+    background-color: #077787;
     padding-bottom: 15px;
     display: block;
 
@@ -27,6 +27,8 @@
 
 .title img{
 
+    width: 300px;
+    height: 100px;
     display: block;
     margin: 15px auto 15px auto;
 }
