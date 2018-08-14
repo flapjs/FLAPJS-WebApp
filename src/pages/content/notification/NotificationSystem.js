@@ -30,7 +30,7 @@ class NotificationSystem extends React.Component
   {
     if (tag && clearOnAdd)
     {
-      this.clearWarningMessage(tag);
+      this.clearMessage(tag);
     }
 
     this.state.warningMessages.push([message, tag]);
@@ -39,32 +39,36 @@ class NotificationSystem extends React.Component
   addErrorMessage(message, tag=null, clearOnAdd=true) {
     if (tag && clearOnAdd)
     {
-      this.clearWarningMessage(tag);
+      this.clearMessage(tag);
     }
 
     this.state.errorMessages.push([message, tag]);
   }
 
   clearErrorMessage(tag=null) {
-    for(let i = this.state.errorMessages.length-1; i >= 0; i--) {
-      if(this.state.errorMessages[i][1] == tag) {
-        this.state.errorMessages.splice(i, 1);
-      }
-    }
+    console.error("The function clearErrorMessage is deprecated. Please use clearMessage");
+    this.clearMessage(tag);
   }
 
   clearWarningMessage(tag=null) {
-    for(let i = this.state.warningMessages.length-1; i >= 0; i--) {
-      if(this.state.warningMessages[i][1] == tag) {
-        this.state.warningMessages.splice(i, 1);
-      }
-    }
+    console.error("The function clearWarningMessage is deprecated. Please use clearMessage");
+    this.clearMessage(tag);
   }
 
   clearMessage(tag=null) {
     for(let i = this.state.messages.length-1; i >= 0; i--) {
       if(this.state.messages[i][1] == tag) {
         this.state.messages.splice(i, 1);
+      }
+    }
+    for(let i = this.state.warningMessages.length-1; i >= 0; i--) {
+      if(this.state.warningMessages[i][1] == tag) {
+        this.state.warningMessages.splice(i, 1);
+      }
+    }
+    for(let i = this.state.errorMessages.length-1; i >= 0; i--) {
+      if(this.state.errorMessages[i][1] == tag) {
+        this.state.errorMessages.splice(i, 1);
       }
     }
   }
