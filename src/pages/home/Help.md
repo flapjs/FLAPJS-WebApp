@@ -19,8 +19,11 @@ or close the window.
 * **Delete Mode** - You can drag and drop items into the outlined outer margins of the workspace, which will trigger
 the red outlined dashed margins, warning you that you're about to delete something.
 
-* **Cross Platform** - ~~You can only use JFLAP on your deskptop/laptop~~. The workspace provides the same functionality 
+* **Cross Platform** - ~~You can only use JFLAP on your deskptop/laptop.~~ The workspace provides the same functionality 
 in both your desktop/laptop or your mobile device. We made sure that flap.js is responsive in web browsers and mobile devices. 
+
+* **Debug Mode** - Is a step by step mode, for testing strings in order to analyze your machine.
+
 
 
 
