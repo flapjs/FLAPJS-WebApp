@@ -65,7 +65,7 @@ class EdgeRenderer extends React.Component
       { labels.length > 0 && labels.map((str, i) => {
           const cx = (center && center.x || 0);
           const cy = (center && center.y || 0);
-          const signy = Math.sign(quadCoords.y) || -1;
+          const signy = (quadCoords && Math.sign(quadCoords.y)) || -1;
           const xx = cx;
           const yy = cy + ((i + 1) * signy * 15);
 
