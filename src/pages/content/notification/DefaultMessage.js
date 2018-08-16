@@ -9,8 +9,9 @@ class DefaultMessage extends React.Component {
   render() {
     return(
         <div className="notification-message">
+          {this.props.message}
           <div className="notification-response">
-            <button>Get out of my way</button>
+            <button onClick={this.props.onDelete}>Get out of my way</button>
           </div>
         </div>
     );
