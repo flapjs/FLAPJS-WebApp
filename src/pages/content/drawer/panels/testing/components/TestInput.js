@@ -82,8 +82,10 @@ class TestInput extends React.Component
         newTest.result = tester.placeholder.result;
         newTest.dirty = tester.placeholder.dirty;
 
-        //Select everything again
-        this.inputElement.select();
+        //Delete already processed test
+        this.state.src.value = "";
+        tester.placeholder.dirty = true;
+        this.inputElement.focus();
       }
       //Otherwise just run it
       else

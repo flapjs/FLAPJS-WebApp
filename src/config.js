@@ -40,7 +40,7 @@ cfg.INIT_WAITTIME = 1500;
 cfg.STR_TRANSITION_DEFAULT_LABEL = "";
 cfg.STR_STATE_LABEL = "q";
 cfg.PARALLEL_EDGE_HEIGHT = 10;
-cfg.SELF_LOOP_HEIGHT = 32;
+cfg.SELF_LOOP_HEIGHT = 40;
 
 //Input Fields
 cfg.SUBMIT_KEY = 13; //ENTER
@@ -95,15 +95,20 @@ export function doesSupportLocalStorage() {
 
 export function loadConfig() {
   const jsonString = localStorage.getItem(LOCAL_STORAGE_ID);
+  //If cannot find a config...
   if (!jsonString)
   {
+    console.log("Using default config...");
     //Save a new config
-    saveConfig();
+    //saveConfig();
+
+    //Or just use the default one and don't save anything...
     return;
   }
 
   try
   {
+    console.log("Loading config...");
     const jsonData = JSON.parse(jsonString);
     if (jsonData['_resetOnLoad'] == true)
     {
@@ -127,6 +132,7 @@ export function loadConfig() {
 export function saveConfig() {
   try
   {
+    console.log("Saving config...");
     const jsonString = JSON.stringify(cfg);
     localStorage.setItem(LOCAL_STORAGE_ID, jsonString);
   }
