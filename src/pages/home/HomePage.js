@@ -5,7 +5,7 @@ import { hot } from 'react-hot-loader';
 import './HomePage.css';
 
 
-import pic from './Pictures/flaplogo.png';
+import pic from './Pictures/flapjs.svg';
 
 import Button from "./Button";
 import Help from "./Help";

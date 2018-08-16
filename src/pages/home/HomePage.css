@@ -118,10 +118,6 @@ a,a:hover,a:click, a:visited{
     -webkit-tap-highlight-color: white;
 }
 
-a{
-    text-decoration: none;
-}
-
 @media screen and (max-width: 200px) {
 
 }
