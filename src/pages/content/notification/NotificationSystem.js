@@ -8,6 +8,9 @@ class NotificationSystem extends React.Component
   {
     super(props);
 
+    const graph = this.props.graph;
+    const machineBuilder = this.props.machineBuilder;
+
     this.state = {
       messages: [["Good Morning! Welcome to the Flap.js Workspace!", null, DefaultMessage],
         ["If you need help, the '?' button is at the top-right of the screen.", null, DefaultMessage],
