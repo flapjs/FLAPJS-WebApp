@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cea43697-9fa1-4281-ad83-b5e3ff605763" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/builder/FSABuilder.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/builder/FSABuilder.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/content/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/content/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/content/notification/DefaultMessage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/content/notification/DefaultMessage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/content/notification/ErrorEmptyTrans.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/content/notification/ErrorEmptyTrans.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/content/notification/NotificationSystem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/content/notification/NotificationSystem.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -23,7 +20,7 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-632">
+            <state relative-caret-position="-506">
               <caret line="18" column="33" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="33" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
@@ -35,8 +32,8 @@
       <file leaf-file-name="NotificationSystem.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/pages/content/notification/NotificationSystem.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="75" column="6" lean-forward="true" selection-start-line="75" selection-start-column="6" selection-end-line="75" selection-end-column="6" />
+            <state relative-caret-position="312">
+              <caret line="33" column="64" selection-start-line="33" selection-start-column="64" selection-end-line="33" selection-end-column="64" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -59,8 +56,8 @@
       <file leaf-file-name="App.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/pages/content/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="159">
-              <caret line="280" column="93" selection-start-line="280" selection-start-column="93" selection-end-line="280" selection-end-column="93" />
+            <state relative-caret-position="231">
+              <caret line="280" column="75" selection-start-line="280" selection-start-column="75" selection-end-line="280" selection-end-column="75" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -71,8 +68,8 @@
       <file leaf-file-name="ErrorEmptyTrans.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/pages/content/notification/ErrorEmptyTrans.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="196">
-              <caret line="15" column="3" lean-forward="true" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
+            <state relative-caret-position="181">
+              <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -162,10 +159,10 @@
         <option value="$PROJECT_DIR$/src/pages/home/HomePage.js" />
         <option value="$PROJECT_DIR$/src/pages/home/HomePage.css" />
         <option value="$PROJECT_DIR$/src/pages/home/Help.js" />
-        <option value="$PROJECT_DIR$/src/pages/content/App.js" />
-        <option value="$PROJECT_DIR$/src/pages/content/notification/ErrorEmptyTrans.js" />
         <option value="$PROJECT_DIR$/src/builder/FSABuilder.js" />
         <option value="$PROJECT_DIR$/src/pages/content/notification/DefaultMessage.js" />
+        <option value="$PROJECT_DIR$/src/pages/content/notification/ErrorEmptyTrans.js" />
+        <option value="$PROJECT_DIR$/src/pages/content/App.js" />
         <option value="$PROJECT_DIR$/src/pages/content/notification/NotificationSystem.js" />
       </list>
     </option>
@@ -370,7 +367,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74883000" />
+    <option name="totallyTimeSpent" value="75935000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -395,11 +392,11 @@
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.32965517" />
-      <window_info id="npm" order="2" side_tool="true" />
+      <window_info id="npm" order="2" sideWeight="0.5020492" side_tool="true" weight="0.25767368" />
       <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49919224" visible="true" weight="0.32689655" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25767368" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49795082" visible="true" weight="0.25767368" />
       <window_info anchor="right" id="Database" order="6" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.38482758" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -677,40 +674,10 @@
     <entry file="file://$PROJECT_DIR$/src/machine/FSA.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="280" column="93" selection-start-line="280" selection-start-column="93" selection-end-line="280" selection-end-column="93" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/builder/FSABuilder.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="377">
           <caret line="110" lean-forward="true" selection-start-line="110" selection-end-line="110" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/notification/ErrorEmptyTrans.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="15" column="3" lean-forward="true" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-632">
-          <caret line="18" column="33" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -724,10 +691,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/content/notification/ErrorEmptyTrans.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/content/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="280" column="75" selection-start-line="280" selection-start-column="75" selection-end-line="280" selection-end-column="75" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-506">
+          <caret line="18" column="33" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/pages/content/notification/NotificationSystem.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="75" column="6" lean-forward="true" selection-start-line="75" selection-start-column="6" selection-end-line="75" selection-end-column="6" />
+        <state relative-caret-position="312">
+          <caret line="33" column="64" selection-start-line="33" selection-start-column="64" selection-end-line="33" selection-end-column="64" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>

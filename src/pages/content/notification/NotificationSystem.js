@@ -30,9 +30,13 @@ class NotificationSystem extends React.Component
   }
 
   clearMessage(tag=null) {
-    for(let i = this.state.messages.length-1; i >= 0; i--) {
-      if(this.state.messages[i][1] == tag) {
-        this.state.messages.splice(i, 1);
+    if(!tag) {
+      this.state.messages.splice(0, this.state.messages.length);
+    } else {
+      for(let i = this.state.messages.length-1; i >= 0; i--) {
+        if(this.state.messages[i][1] == tag) {
+          this.state.messages.splice(i, 1);
+        }
       }
     }
   }
