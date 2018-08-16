@@ -93,7 +93,7 @@ class GraphInputController extends InputController
       const dx = x - this.firstEmptyX;
       const dy = y - this.firstEmptyY;
       //If within the time to double tap...
-      if (this.firstEmptyClick && (dx * dx + dy * dy) < Config.CURSOR_RADIUS_SQU && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
+      if (this.firstEmptyClick && (dx * dx + dy * dy) < (Config.CURSOR_RADIUS_SQU * 16) && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
       {
         if (!this.pointer.isTrashMode(x, y))
         {
