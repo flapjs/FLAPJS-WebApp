@@ -184,7 +184,8 @@ class FSABuilder extends MachineBuilder
     this.onGraphChange();
   }
 
-  includes(symbol) {
+  isCustomSymbol(symbol)
+  {
     return this._symbols.includes(symbol);
   }
 

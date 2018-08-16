@@ -50,7 +50,7 @@ class AlphabetTag extends React.Component
             edge.setLabel(newSymbol);
           }
         }
-        if(this.props.machine.includes(oldSymbol)) {
+        if(this.props.machine.isCustomSymbol(oldSymbol)) {
           this.props.machine.removeSymbol(oldSymbol);
           this.props.machine.addSymbol(newSymbol);
         }
@@ -63,7 +63,7 @@ class AlphabetTag extends React.Component
           graph.deleteEdge(edge);
         }
       }
-      if(this.props.machine.includes(oldSymbol)) {
+      if(this.props.machine.isCustomSymbol(oldSymbol)) {
         this.props.machine.removeSymbol(oldSymbol);
       }
     }
