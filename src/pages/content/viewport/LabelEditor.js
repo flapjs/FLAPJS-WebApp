@@ -192,9 +192,12 @@ class LabelEditor extends React.Component
     if (target)
     {
       targetStyle.visibility = "visible";
+
+      //Assumes target is an instance of Edge
+      const center = target.getCenterPoint();
       const screen = getScreenPosition(this.props.screen,
-        target.x + controller.pointer.offsetX,
-        target.y + controller.pointer.offsetY);
+        center.x + controller.pointer.offsetX,
+        center.y + controller.pointer.offsetY);
       const x = screen.x;
       const y = screen.y + LABEL_OFFSET_Y + EDITOR_OFFSET_Y;
       const offsetX = -(this.parentElement.offsetWidth / 2);

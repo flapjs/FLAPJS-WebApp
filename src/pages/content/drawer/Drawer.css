@@ -75,12 +75,16 @@
   left: 0px;
   width: var(--panel-border-size);/* border */
   height: 100%;
+  cursor: grab;
 
   background: var(--color-drawer-main-dark);
 }
 .drawer-border > * {
   position: absolute;
   left: 0;
+}
+.drawer-border.dragging {
+  cursor: grabbing;
 }
 
 /*Refer to App.css*/

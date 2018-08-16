@@ -20,8 +20,6 @@ class Edge
 
     this._to = to;
     this._label = label;
-
-    //this._dirVector = {x: 0, y: 0};
   }
 
   copyQuadraticsFrom(src)
@@ -277,7 +275,9 @@ class Edge
     }
     else
     {
-      const angleOffset = Math.atan2(dy, dx);
+      //Remember: y-axis is flipped because canvas coord-space is -y => +y
+      //Therefore, dy needs to be flipped
+      const angleOffset = Math.atan2(-dy, dx);
       dx = x - midpointx;
       dy = y - midpointy;
 
@@ -285,15 +285,17 @@ class Edge
       const PI2 = PI * 2;
       const HALFPI = PI / 2;
       //0 rad = to the right
-      //Remember: y-axis is flipped because canvas coord-space is -y => +y
       //Also: angleOffset is the offset from midpoint angle, the orthogonal base vector
       //This is because the from and to could be flipped, and
       //therefore give a negative, or at least a reversed angle.
       let radians = Math.atan2(dy, dx) + angleOffset;
-      let length = Math.sqrt(dx * dx + dy * dy);
+      let length = Math.sqrt(dx * dx + dy * dy) - Config.EDGE_RADIUS;
+      if (length < 0) length = 0;
+
       const outrad = radians - (-HALFPI);//-PI / 2 is outward
       const inrad = radians - (HALFPI);//PI / 2 is inward
-      const maxdr = PI / 8;
+      //TODO: Should be dependent on length
+      const maxdr = PI / 20;
 
       if (Math.abs(length) < 8)
       {

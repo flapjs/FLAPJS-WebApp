@@ -27,7 +27,8 @@ class Drawer extends React.Component
     this.panel = React.createRef();
 
     this.state = {
-      tabIndex: DEFAULT_TAB_INDEX
+      tabIndex: DEFAULT_TAB_INDEX,
+      dragging: false
     };
 
     this.onTouchStart = this.onTouchStart.bind(this);
@@ -79,6 +80,7 @@ class Drawer extends React.Component
   onStartDraggingDrawerBorder(x, y)
   {
     const app = this.props.app;
+    this.setState({dragging: true});
 
     //Disable fullscreen if dragging off of it
     if (app.state.isFullscreen)
@@ -88,6 +90,11 @@ class Drawer extends React.Component
 
     //Update panel to current click position
     updatePanelSize(app, x, y);
+  }
+
+  onStopDraggingDrawerBorder()
+  {
+    this.setState({dragging: false});
   }
 
   onTouchStart(e)
@@ -125,6 +132,7 @@ class Drawer extends React.Component
 
       const touch = ev.changedTouches[0];
       updatePanelSize(app, touch.clientX, touch.clientY);
+      this.onStopDraggingDrawerBorder();
 
       //Remove listeners that are no longer needed
       document.removeEventListener("touchend", onTouchEnd);
@@ -154,20 +162,19 @@ class Drawer extends React.Component
 
     this.onStartDraggingDrawerBorder(e.clientX, e.clientY);
 
-    const onMouseMove = function(ev)
-    {
+    const onMouseMove = (ev) => {
       ev.stopPropagation();
       ev.preventDefault();
 
       updatePanelSize(app, ev.clientX, ev.clientY);
     };
 
-    const onMouseUp = function(ev)
-    {
+    const onMouseUp = (ev) => {
       ev.stopPropagation();
       ev.preventDefault();
 
       updatePanelSize(app, ev.clientX, ev.clientY);
+      this.onStopDraggingDrawerBorder();
 
       //Remove listeners that are no longer needed
       document.removeEventListener("mouseup", onMouseUp);
@@ -222,7 +229,7 @@ class Drawer extends React.Component
         <div className="tab-right"></div>
       </div>
 
-      <div className="drawer-border"
+      <div className={"drawer-border" + (this.state.dragging ? " dragging" : "")}
         onTouchStart={this.onTouchStart}
         onMouseDown={this.onMouseDown}>
       </div>
