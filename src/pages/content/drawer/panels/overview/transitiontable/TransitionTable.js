@@ -45,7 +45,7 @@ class TransitionTable extends React.Component
                       rowAxis: prev.rowAxis == SYMBOL_AXIS ? STATE_AXIS : SYMBOL_AXIS
                     };
                   })}>
-                  Swap
+                  {this.state.rowAxis == SYMBOL_AXIS ? "Q/\u03A3" : "Q/Q"}
                 </button>
               </th>
               {
