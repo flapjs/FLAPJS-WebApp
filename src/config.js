@@ -34,7 +34,7 @@ cfg.MAX_SCALE = 10;
 
 //Workspace
 cfg.EMPTY_MESSAGE = "Double-tap to create a node";
-cfg.INIT_WAITTIME = 5000;
+cfg.INIT_WAITTIME = 1500;
 
 //NodalGraph
 cfg.STR_TRANSITION_DEFAULT_LABEL = "";
