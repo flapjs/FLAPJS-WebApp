@@ -71,7 +71,7 @@ class Drawer extends React.Component
       case EXPORTING:
         return <ExportingPanel ref={ref=>this.panel=ref} workspace={app.workspace} graph={this.props.graph} toolbar={this.props.toolbar} controller={app.controller} />;
       case OPTIONS:
-        return <OptionsPanel ref={ref=>this.panel=ref} />;
+        return <OptionsPanel ref={ref=>this.panel=ref} controller={app.container}/>;
       default:
         throw new Error("Unknown tab index \'" + tabIndex + "\'.");
     }

@@ -13,7 +13,7 @@ import NotFoundPage from 'pages/404/NotFoundPage.js';
 import AutoSaver from 'util/AutoSaver.js';
 
 const ALWAYS_OPEN_WELCOME_PAGE = false;
-const USE_SERVICE_WORKER = true;
+const USE_SERVICE_WORKER = false;
 const AUTOSAVE_CONFIG = false;
 
 Router.registerPage('/', HomePage);
