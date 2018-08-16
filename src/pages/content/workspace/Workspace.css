@@ -2,8 +2,7 @@
   padding: 0;
   margin: 0;
 
-  background: none;
-  /*background: var(--color-workspace-main);*/
+  background: var(--color-workspace-main);
 }
 .graph-node {
   fill: var(--color-graph-node);
