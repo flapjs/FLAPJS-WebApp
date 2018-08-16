@@ -40,7 +40,8 @@
   font-family: 'Overpass Mono', monospace;
 }
 .statetag-container > input.accept {
-  margin: -1px;/*Remove border space*/
-  border: 1px solid var(--color-drawer-text-subtle);
+  margin: -3px;/*Remove border space*/
+  /*text-decoration: underline;*/
+  border: 3px solid var(--color-drawer-text-subtle);
   border-radius: 5px;
 }
