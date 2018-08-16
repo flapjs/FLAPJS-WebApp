@@ -3,6 +3,7 @@ import '../Panel.css';
 import './OptionsPanel.css';
 
 import Config from 'config.js';
+import { saveConfig } from 'config.js';
 
 import OptionGroup from './OptionGroup.js';
 import OptionHotkey from './OptionHotkey.js';
@@ -106,7 +107,10 @@ class OptionsPanel extends React.Component
 
         <button className="panel-button" onClick={(e) => {
           Config._resetOnLoad = true;
-          //saveConfig will be called on unload
+          //TODO: This is currently only used to make sure a config file is saved
+          //TODO: Remove this when there is a 'save config' button!
+          saveConfig();
+
           location.reload();
         }}>Reset to default</button>
 

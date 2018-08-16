@@ -2,6 +2,7 @@ import Config from 'config.js';
 
 import MachineBuilder from './MachineBuilder.js';
 import DFAErrorChecker from './DFAErrorChecker.js';
+import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
 import NodalGraph from 'graph/NodalGraph';
 
@@ -9,11 +10,9 @@ import { EMPTY } from 'machine/Symbols.js';
 
 class FSABuilder extends MachineBuilder
 {
-  constructor(graph, controller, tester)
+  constructor(graph, controller)
   {
     super(graph, controller);
-
-    this.tester = tester;
 
     this._machine = new NFA();
     this._machineType = "DFA";
@@ -24,6 +23,7 @@ class FSABuilder extends MachineBuilder
     this._errorTimer = null;
 
     this.machineErrorChecker = new DFAErrorChecker(this, graph);
+    this.tester = null;
 
     this.onGraphChange = this.onGraphChange.bind(this);
     this.onDelayedGraphChange = this.onDelayedGraphChange.bind(this);
@@ -34,6 +34,7 @@ class FSABuilder extends MachineBuilder
   {
     super.initialize(app);
 
+    this.tester = app.testingManager;
     this.notification = app.notification;
 
     this.graph.on("nodeCreate", this.onGraphChange);
@@ -184,7 +185,8 @@ class FSABuilder extends MachineBuilder
     this.onGraphChange();
   }
 
-  includes(symbol) {
+  isCustomSymbol(symbol)
+  {
     return this._symbols.includes(symbol);
   }
 
@@ -196,10 +198,71 @@ class FSABuilder extends MachineBuilder
     return this._alphabet;
   }
 
+  toDFA()
+  {
+    const result = new DFA();
+    fillFSA(this.graph, result);
+    return result;
+  }
+
   getMachine()
   {
     return this._machine;
   }
+}
+
+function fillFSA(graph, fsa)
+{
+  if (graph.nodes.length <= 0) return fsa;
+  //Create all the nodes
+  for(const node of graph.nodes)
+  {
+    try
+    {
+      let state = node.label;
+      fsa.newState(state);
+
+      //Set final state
+      if (node.accept)
+      {
+        fsa.setFinalState(state, true);
+      }
+    }
+    catch(e)
+    {
+      throw e;
+    }
+  }
+
+  //Create all the edges
+  for(const edge of graph.edges)
+  {
+    //Ignore any incomplete edges
+    if (edge.isPlaceholder()) continue;
+    const from = edge.from;
+    const to = edge.to;
+    if (from instanceof Node && to instanceof Node)
+    {
+      const labels = edge.label.split(",");
+      for(const label of labels)
+      {
+        try
+        {
+          fsa.newTransition(from.label, to.label, label);
+        }
+        catch(e)
+        {
+          throw e;
+        }
+      }
+    }
+  }
+
+  //Set start state
+  let startState = graph.getStartNode().label;
+  fsa.setStartState(startState);
+
+  return fsa;
 }
 
 export default FSABuilder;

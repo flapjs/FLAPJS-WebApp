@@ -61,7 +61,7 @@ class TrashCan extends React.Component
     return <svg id="trash-btn"
       className={"anchor-bottom-right" +
         (this.props.controller.pointer.trashMode ? " danger" : "") +
-        (this.props.controller.isUsingTouch() ? " hidden" : "")}
+        (this.props.controller.isUsingTouch() && this.props.controller.pointer.dragging ? " hidden" : "")}
       width="24" height="24"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"

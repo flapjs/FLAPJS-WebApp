@@ -68,6 +68,15 @@ class TestingPanel extends React.Component
           <input id="test-step" type="checkbox" onChange={(e) => {
             //HACK: this needs to default to tester.getStepByStepMode first
             tester.setStepByStepMode(e.target.checked);
+            if (tester.getStepByStepMode())
+            {
+              if (tester.testMode.isStarted()) tester.testMode.onStop();
+              tester.testMode.onStart();
+            }
+            else
+            {
+              if (tester.testMode.isStarted()) tester.testMode.onStop();
+            }
           }}/>
           <label htmlFor="test-step">Step-by-Step Mode</label>
         </div>

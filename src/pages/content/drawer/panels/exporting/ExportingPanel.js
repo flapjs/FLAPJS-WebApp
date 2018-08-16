@@ -52,8 +52,11 @@ class ExportingPanel extends React.Component
         {/*JPG*/}
         <IconButton className="export-button" id="export-jpg" title="Export as JPG"
           onClick={() => {
-            const boundingRect = graph.getBoundingRect();
-            Downloader.downloadSVG(toolbar.getMachineName(), 'jpg', workspace.ref, boundingRect);
+            const workspaceDim = workspace.ref.viewBox.baseVal;
+            const width = workspaceDim.width;
+            const height = workspaceDim.height;
+            const svg = workspace.getSVGForExport(width, height);
+            Downloader.downloadSVG(toolbar.getMachineName(), 'jpg', svg, width, height);
           }}>
           <JPGIcon/>
           <label>Export as JPG</label>

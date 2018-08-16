@@ -2,7 +2,7 @@ import * as TEST from '../Tester.js';
 
 import NFA from 'machine/NFA.js';
 import { EMPTY } from 'machine/Symbols.js';
-import { solveNFA } from 'machine/util/solveNFA.js';
+import { solveNFA, solveNFAbyStep} from 'machine/util/solveNFA.js';
 
 //Regex: 1*
 let machine = new NFA();

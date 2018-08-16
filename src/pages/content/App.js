@@ -50,8 +50,8 @@ class App extends React.Component
     this.controller = new GraphInputController();
     this.graph = new NodalGraph();
     this.eventHistory = new EventHistory();
-    this.testingManager = new TestingManager();
-    this.machineBuilder = new FSABuilder(this.graph, this.controller, this.testingManager);
+    this.machineBuilder = new FSABuilder(this.graph, this.controller);
+    this.testingManager = new TestingManager(this.machineBuilder);
     this.hotKeys = new HotKeys(this.graph, this.eventHistory);
 
     //HACK: this should be a listener to FSABuilder, should not access graph
@@ -288,7 +288,7 @@ class App extends React.Component
             opacity: this.state.isWaitingForFile ? "0.1" : "1"
           }}>
 
-          <Workspace ref={ref=>this.workspace=ref} graph={graph} machineBuilder={machineBuilder} controller={controller}/>
+          <Workspace ref={ref=>this.workspace=ref} graph={graph} machineBuilder={machineBuilder} controller={controller} tester={tester}/>
         </div>
 
         <div className={"workspace-viewport" +

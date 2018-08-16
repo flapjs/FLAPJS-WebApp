@@ -73,6 +73,7 @@ class Workspace extends React.Component
     const controller = this.props.controller;
     const pointer = controller.pointer;
     const machineBuilder = this.props.machineBuilder;
+    const tester = this.props.tester;
 
     let size = Config.DEFAULT_GRAPH_SIZE * Math.max(Number.MIN_VALUE, pointer.scale);
     const halfSize = size / 2;
@@ -132,6 +133,13 @@ class Workspace extends React.Component
           {/* Edge error targets */}
           { machineBuilder.machineErrorChecker.errorEdges.map((e, i) =>
             <HighlightRenderer key={e.label + "." + i} className="highlight-error graph-gui" target={e} type="edge" offset="6"/>) }
+
+          {/* Node test targets */}
+          { tester.testMode.targets.map((e, i) =>
+            {
+              return <HighlightRenderer key={e.state + "." + i} className="highlight-test graph-gui" target={graph.getNodeByLabel(e.state)} type="node" offset="6"/>;
+            })
+          }
 
           {/* Hover markers */}
           { /*controller.pointer.target &&

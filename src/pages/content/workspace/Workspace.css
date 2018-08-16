@@ -32,7 +32,7 @@
   fill: var(--color-selection-main);
   stroke: var(--color-selection-border);
 }
-.highlight-select {
+.highlight-select, .highlight-test {
   stroke: var(--color-highlight-select);
 }
 .highlight-error {

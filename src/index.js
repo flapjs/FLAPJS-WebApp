@@ -14,6 +14,7 @@ import AutoSaver from 'util/AutoSaver.js';
 
 const ALWAYS_OPEN_WELCOME_PAGE = false;
 const USE_SERVICE_WORKER = false;
+const AUTOSAVE_CONFIG = false;
 
 Router.registerPage('/', HomePage);
 Router.registerPage('/app', App);
@@ -33,7 +34,10 @@ window.addEventListener('load', (event) => {
 });
 //Warn user before exit
 window.addEventListener('beforeunload', (event) => {
-  saveConfig();
+  if (AUTOSAVE_CONFIG)
+  {
+    saveConfig();
+  }
 
   const message = Config.EXIT_WINDOW_MESSAGE;
   event = event || window.event;
