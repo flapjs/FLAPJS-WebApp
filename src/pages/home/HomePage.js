@@ -1,14 +1,14 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
 
+
 import './HomePage.css';
 
-import Footer from "./Footer";
-import Header from "./Header";
-import Arrow from "./Arrow";
-import Squares from "./Squares";
-import Content from "./Content";
+
+import pic from './Pictures/flaplogo.png';
+
 import Button from "./Button";
+import Help from "./Help";
 
 class HomePage extends React.Component {
 
@@ -17,12 +17,17 @@ class HomePage extends React.Component {
     }
 
     render() {
-        //<Arrow router={this.props.router}/>
         return (
             <div className="homepage-container" id="homepage">
-                <Header/>
-                <Content/>
-                <Button/>
+                <div className="title">
+                    <img src={pic} />
+                </div>
+                <div className = "content">
+                    <h1> Welcome to flap.js !</h1>
+                    <p> Currently supporting NFA and DFA </p>
+                </div>
+                <Button router = {this.props.router}/>
+                <Help/>
             </div>
         );
 

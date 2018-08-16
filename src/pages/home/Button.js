@@ -22,7 +22,7 @@ class Button extends React.Component
     {
         return(
             <div className="buttons" onClick={this.onClick.bind(this)}>
-            <button type="button" className="btn btn-default"> Launch Workspace </button>
+                Launch Workspace
             </div>
         );
     }
