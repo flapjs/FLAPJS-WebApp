@@ -94,7 +94,7 @@ class Toolbar extends React.Component
         </IconButton>
         {/*Save Button*/}
         <IconButton className="navicon" id="toolbar-save" title="Save"
-          onClick={()=>drawer.setTab(2)}>
+          onClick={()=>drawer.setTab(2)} disabled={graph.isEmpty()}>
           <SaveIcon/>
         </IconButton>
         {/*Help Button*/}
