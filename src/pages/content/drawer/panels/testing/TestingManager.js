@@ -59,6 +59,8 @@ class TestingManager
     {
       //This is not a hack, because it is NOT a React.Component
       this.placeholder.value = "";
+      this.placeholder.result = 0;
+      this.placeholder.dirty = true;
     }
   }
 
