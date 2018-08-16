@@ -1,6 +1,8 @@
 import React from 'react';
 import './NotificationSystem.css';
 import DefaultMessage from "./DefaultMessage";
+import DefaultWarningMessage from "./DefaultWarningMessage";
+import DefaultErrorMessage from "./DefaultErrorMessage";
 
 class NotificationSystem extends React.Component
 {
@@ -44,12 +46,12 @@ class NotificationSystem extends React.Component
   addWarningMessage(message, tag=null, clearOnAdd=true)
   {
     console.error("The function addWarningMessage is deprecated. Please use addMessage.");
-    this.addMessage(message, tag, null, clearOnAdd);
+    this.addMessage(message, tag, DefaultWarningMessage, clearOnAdd);
   }
 
   addErrorMessage(message, tag=null, clearOnAdd=true) {
     console.error("The function addErrorMessage is deprecated. Please use addMessage.");
-    this.addMessage(message, tag, null, clearOnAdd);
+    this.addMessage(message, tag, DefaultErrorMessage, clearOnAdd);
   }
 
   clearErrorMessage(tag=null) {
