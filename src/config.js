@@ -95,7 +95,13 @@ export function doesSupportLocalStorage() {
 
 export function loadConfig() {
   const jsonString = localStorage.getItem(LOCAL_STORAGE_ID);
-  if (!jsonString) return null;
+  if (!jsonString)
+  {
+    //Save a new config
+    saveConfig();
+    return;
+  }
+
   try
   {
     const jsonData = JSON.parse(jsonString);
