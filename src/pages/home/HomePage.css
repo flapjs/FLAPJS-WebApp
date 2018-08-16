@@ -13,7 +13,7 @@
     100% { opacity: 0; }
 }
 
-.title {
+.homepage-container .title {
 
     width: 100%;
     background-color: white;
@@ -23,7 +23,7 @@
     display: block;
 }
 
-.title img{
+.homepage-container .title img{
 
     width: 300px;
     height: 100px;
@@ -31,7 +31,7 @@
     margin: 15px auto 15px auto;
 }
 
-.content{
+.homepage-container .content{
 
     font-family: "Arvo", "Serif" ;
     text-align: center;
@@ -39,26 +39,26 @@
     display: block;
 }
 
-.content h1{
+.homepage-container .content h1{
     font-size: 9vh;
 }
 
-.content p{
+.homepage-container .content p{
     font-size: 5vh;
 }
 
-.buttons {
+.homepage-container .buttons {
     display: table;
     margin: 0 auto;
 }
 
-.buttons button{
+.homepage-container .buttons button{
 
     font-family: "Arvo", "Serif";
     font-size: 25px;
 }
 
-.buttons {
+.homepage-container .buttons {
     width: 200px;
     margin-top: 40px;
     margin-right: auto;
@@ -98,7 +98,7 @@
     font-family: Arvo;
 }
 
-.buttons:hover {
+.homepage-container .buttons:hover {
     background-color: #FEFEFE;
     color: #C4C4C4;
     cursor: pointer;
@@ -110,7 +110,7 @@
     cursor: pointer;
 }
 
-a,a:hover,a:click, a:visited{
+.homepage-container a,a:hover,a:click, a:visited{
     border:none;
     outline:none;
     text-decoration:none;
@@ -118,11 +118,6 @@ a,a:hover,a:click, a:visited{
     -webkit-tap-highlight-color: white;
 }
 
-a{
-    text-decoration: none;
-}
-
 @media screen and (max-width: 200px) {
 
 }
-
