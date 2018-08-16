@@ -15,8 +15,8 @@ export function solveNFA(nfa, input)
   while(cachedStates.length > 0)
   {
     symbol = input.next().value;
-    let res = solveNFAbyStep(nfa,symbol, cachedStates, cachedSymbols, checkedStates);
-    if(res) return true;
+    let res = solveNFAbyStep(nfa, symbol, cachedStates, cachedSymbols, checkedStates);
+    if (res) return true;
   }
 
   return false;
@@ -28,7 +28,6 @@ export function solveNFAbyStep(nfa, symbol, cachedStates,cachedSymbols,checkedSt
   let state = null;
   let nextStates = [];
   let nextIndex = 0;
-
 
   if (symbol != null)
   {
@@ -67,4 +66,5 @@ export function solveNFAbyStep(nfa, symbol, cachedStates,cachedSymbols,checkedSt
   }
   cachedStates.length = 0
   cachedStates.push(...nextStates);
+  return false;
 }

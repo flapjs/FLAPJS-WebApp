@@ -1,0 +1,9 @@
+.test-tray-container .icon-button {
+  width: 3em;
+  height: 3em;
+  padding: 10px;
+
+  opacity: 1.0;
+  fill: var(--color-drawer-main);
+  transition: fill 0.3s ease, opacity 0.1s ease;
+}

@@ -1,10 +1,11 @@
-import {solveDFA} from 'machine/util/solveDFA.js'
-import {solveNFA, solveNFAbyStep} from 'machine/util/solveNFA.js'
-import DFA from 'machine/DFA.js'
+import { solveDFA } from 'machine/util/solveDFA.js';
+import { solveNFA, solveNFAbyStep } from 'machine/util/solveNFA.js';
+
+import { DFA } from 'machine/DFA.js';
 
 class TestMode
 {
-  constructor(machineBuilder,testingManager)
+  constructor(machineBuilder, testingManager)
   {
     this.machineBuilder = machineBuilder;
     this.targets = [];
@@ -12,20 +13,50 @@ class TestMode
     this.indexofString = -1;
     this.testingManager = testingManager;
     this.result = false;
+
     //for nfa use
     this.cachedStates = [];
     this.cachedSymbols = [];
-    cachedStates.push({state: nfa.getStartState(), index: 0});
     this.checkedStates = [];
     this.running = false;
+    this.started = false;
   }
+
+  onStart()
+  {
+    //Check the machine, if DFA, then it must be a valid DFA
+    /*if (this.machineBuilder.getMachineType() == "DFA")
+    {
+      const dfa = this.machineBuilder.toDFA();
+      if (!dfa.validate()) return;
+    }*/
+
+    this.history.length = 0;
+    this.prepareForNewTest();
+
+    this.started = true;
+  }
+
+  onStop()
+  {
+    this.history.length = 0;
+
+    this.started = false;
+  }
+
+  isStarted()
+  {
+    return this.started;
+  }
+
   onResume()
   {
     this.running = true;
-    while(this.running == true)
+    while(this.running)
     {
-      this.oneNextStep();
+      this.onNextStep();
     }
+    console.log("Finished tests...");
   }
 
   onPause()
@@ -35,29 +66,84 @@ class TestMode
 
   onPreviousStep()
   {
-    this.targets.length = 0;
     this.history.pop();
-    let previous = this.history[this.history.length - 1];
-    this.targets.push(previous);
+    const previous = this.history[this.history.length - 1];
+
+    //Reset targets
+    this.targets.length = 0;
+    for(const state of previous)
+    {
+      this.targets.push(state);
+    }
+
+    //Reset test index
+    if (this.indexofString <= 0)
+    {
+      //Go to previous test string
+      this.testingManager.prevTestInput();
+
+      this.prepareForNewTest();
+    }
+    else
+    {
+      --this.indexofString;
+    }
   }
 
   onNextStep()
   {
-    let nextChar = this.getNextCharacter();
-    this.targets.length = 0;
+    const testInput = this.testingManager.getCurrentTestInput();
     const fsa = this.machineBuilder.getMachine();
-    if(fsa instanceof DFA)
+    if (!testInput)
     {
-      let state = fsa.doTransition(this.history[this.history.lengt-1], nextChar)
-      this.targets.push(state);
-      this.history.push(state);
-      this.result = fsa.isFinalState(state);
+      //End of test!
+      console.log("= End of test =");
+      this.onPause();
+      return false;
+    }
+
+    //Get next character of current test string
+    console.log("Getting next character....");
+    this.indexofString += 1;
+
+    //If no more characters to get...
+    if(this.indexofString >= testInput.value.length)
+    {
+      //End of test string
+      console.log("...end of test string...");
+
+      //Run it one more time...
+      this.result = solveNFAbyStep(fsa, null, this.cachedStates, this.cachedSymbols, this.checkedStates);
+      testInput.setResult(this.result);
+      const result = this.testingManager.nextTestInput();
+      console.log("...setting up for another test...");
+      console.log(JSON.stringify(this.testingManager.getCurrentTestInput()));
+
+      this.running = false;//Stop the resume at each string
+
+      this.prepareForNewTest();
+      return true;
     }
     else
     {
-      this.result = solveNFAbyStep(fsa, nextChar, this.cachedStates,this.cachedSymbols,this.checkedStates);
-      this.targets.push(this.cachedStates);
+      let nextChar = testInput.value[this.indexofString];
+      console.log("The next character (should never be null): " + nextChar);
+
+      this.result = solveNFAbyStep(fsa, nextChar, this.cachedStates, this.cachedSymbols, this.checkedStates);
+
+      //Update targets
+      this.targets.length = 0;
+      for(const state of this.cachedStates)
+      {
+        this.targets.push(state);
+      }
+      console.log("For that character, the next state is: " + JSON.stringify(this.cachedStates));
+
+      //Update history
       this.history.push(this.cachedStates);
+
+      console.log("Have we reached the end? " + this.result);
+      return true;
     }
   }
 
@@ -66,19 +152,17 @@ class TestMode
     return this.indexofString;
   }
 
-  getNextCharacter()
+  prepareForNewTest()
   {
-    if(this.indexofString == this.currentTestString.length - 1 || this.indexofString == -1)
-    {
-      if(this.indexofString == this.currentTestString.length - 1)
-      {
-        let test = this.testingManager.getTestInput();
-        test.result = this.result;
-      }
-      this.testingManager.nextTestString();
-      this.indexofString = -1;
-    }
-    this.indexofString += 1;
-    return this.testingManager.getCurrentTestString()[this.indexofString];
+    const startState = this.machineBuilder.getMachine().getStartState();
+    this.cachedStates.length = 0;
+    this.cachedSymbols.length = 0;
+    this.checkedStates.length = 0;
+
+    this.history.push(startState);
+    this.cachedStates.push({state: startState, index: 0});
+    this.indexofString = -1;
   }
 }
+
+export default TestMode;
