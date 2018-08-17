@@ -1,9 +1,9 @@
-const path = require("path");
-const webpack = require("webpack");
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   //Change this to 'production' for optimizations
-  mode: "development",
+  mode: 'development',
   //Entry point to start bundling...
   entry: {
     app: './src/app/index.js'
@@ -44,7 +44,7 @@ module.exports = {
       path.resolve('./src/app'),
     ]
   },
-  target: "web",
+  target: 'web',
   devServer: {
     contentBase: path.join(__dirname, 'dist'),//public/
     host: '0.0.0.0',

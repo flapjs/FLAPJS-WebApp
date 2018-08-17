@@ -1,6 +1,6 @@
 const path = require('path');
-const fs = require('fs');
 const webpack = require('webpack');
+const fs = require('fs');
 
 const nodeExternals = {};
 fs.readdirSync('node_modules')
