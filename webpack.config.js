@@ -44,7 +44,12 @@ module.exports = {
     publicPath: 'dist/'
   },
   devServer: {
+    historyApiFallback: {
+      index:'app.html',
+      rewrites: [{ from: /list\/*/, to: 'app.html' }]
+    },
     contentBase: path.join(__dirname, 'dist'),//public/
+    index: 'app.html',
     port: 3000,
     //For devServer to find directory from web user
     publicPath: 'http://localhost:3000/dist/',

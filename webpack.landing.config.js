@@ -45,6 +45,7 @@ module.exports = {
   },
   devServer: {
     contentBase: path.join(__dirname, '/'),//public/
+    index: "index.html",
     port: 3000,
     //For devServer to find directory from web user
     publicPath: 'http://localhost:3000/dist/',
