@@ -2,8 +2,12 @@ var CACHE_NAME = "flapjs-cache-v1";
 var urlsToCache = [
   '/',
   '/index.html',
-  '/dist/bundle.js',
-  '/style.css'
+  '/dist/app.html',
+  '/dist/app.bundle.js',
+  '/dist/runtime.bundle.js',
+  '/dist/vendors.bundle.js',
+  '/dist/landing.bundle.js',
+  '/dist/style.css'
 ];
 
 self.addEventListener('install', function(event) {
