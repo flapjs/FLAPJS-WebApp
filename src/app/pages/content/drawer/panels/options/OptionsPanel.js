@@ -2,12 +2,16 @@ import React from 'react';
 import '../Panel.css';
 import './OptionsPanel.css';
 
+import Storage from 'util/Storage.js';
 import Config from 'config.js';
 import { saveConfig } from 'config.js';
 
 import OptionGroup from './OptionGroup.js';
 import OptionHotkey from './OptionHotkey.js';
 import OptionColor from './OptionColor.js';
+
+//This should be the same as the one referred to by index.html
+const LOCAL_STORAGE_ID = "skipWelcome";
 
 class OptionsPanel extends React.Component
 {
@@ -16,6 +20,10 @@ class OptionsPanel extends React.Component
     super(props)
 
     this.container = React.createRef();
+
+    this.state = {
+      skipWelcome: Storage.loadFromLocalStorage(LOCAL_STORAGE_ID) == "true"
+    };
   }
 
   render()
@@ -99,6 +107,16 @@ class OptionsPanel extends React.Component
         </OptionGroup>
 
         <hr/>
+
+        <div className="panel-checkbox">
+          <input id="option-skipwelcome" type="checkbox" checked={this.state.skipWelcome}
+          onChange={(e) => {
+            const result = e.target.checked;
+            this.setState({skipWelcome: e.target.checked});
+            Storage.saveToLocalStorage("skipWelcome", result);
+          }}/>
+          <label htmlFor="option-skipwelcome">Skip Welcome Page</label>
+        </div>
 
         <div className="panel-checkbox">
           <input id="option-altinput" type="checkbox" disabled="true"/>
