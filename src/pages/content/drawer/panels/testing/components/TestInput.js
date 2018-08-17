@@ -2,6 +2,7 @@ import React from 'react';
 import './TestInput.css';
 
 import Config from 'config.js';
+import { EMPTY } from 'machine/Symbols.js';
 
 import IconButton from 'icons/IconButton.js';
 import AddIcon from 'icons/AddIcon.js';
@@ -124,7 +125,7 @@ class TestInput extends React.Component
 
       <input ref={ref=>this.inputElement=ref} className="test-input-field"
         value={this.state.src.value}
-        placeholder={Config.PLACEHOLDER_TEXT}
+        placeholder={this.props.placeholder ? Config.PLACEHOLDER_TEXT : EMPTY}
         onChange={this.onValueChange}
         onKeyDown={this.onKeyDown}
         onKeyUp={this.onKeyUp}
