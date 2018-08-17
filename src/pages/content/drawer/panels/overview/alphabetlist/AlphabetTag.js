@@ -112,8 +112,6 @@ class AlphabetTag extends React.Component
     return <div className="alphatag-container" style={this.props.style}>
       <input type="text" ref={ref=>this.ref=ref} className="alphatag-input"
              spellCheck="false" maxLength="1" value={symbol}
-             style={{color: this.state.symbol ? this.state.error ? Config.ERROR_COLOR : Config.EDIT_COLOR
-                   : Config.DEFAULT_COLOR}}
       onChange={this.onValueChange}
       onFocus = {this.onFocus}
       onBlur={this.onBlur}

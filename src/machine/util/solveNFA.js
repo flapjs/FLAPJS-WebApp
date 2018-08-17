@@ -12,17 +12,29 @@ export function solveNFA(nfa, input)
   let checkedStates = [];
   let symbol = null;
 
+  let counter = 0;
+
   while(cachedStates.length > 0)
   {
     symbol = input.next().value;
     let res = solveNFAbyStep(nfa, symbol, cachedStates, cachedSymbols, checkedStates);
     if (res) return true;
+
+    //HACK: This is to stop any infinite loops! This will be fixed in the future!
+    ++counter;
+    if (counter > 1000)
+    {
+      return false;
+    }
   }
 
   return false;
 }
 
-export function solveNFAbyStep(nfa, symbol, cachedStates,cachedSymbols,checkedStates)
+//TODO: When an empty transition occurs, it does a closure transition.
+//The closure chain will be stored as a group
+//Any future transitions must not re-enter the group
+export function solveNFAbyStep(nfa, symbol, cachedStates, cachedSymbols, checkedStates)
 {
   //initialize variables
   let state = null;

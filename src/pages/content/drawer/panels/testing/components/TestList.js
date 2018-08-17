@@ -57,7 +57,7 @@ class TestList extends React.Component
           tester.inputs.map((e, i) => {
             if (!e) return null;
 
-            return <TestInput key={e.toString() + "." + i} index={i} machineBuilder={machineBuilder} tester={tester} src={e}/>;
+            return <TestInput key={e.id} index={i} machineBuilder={machineBuilder} tester={tester} src={e}/>;
           })
         }
         <button className="panel-button"

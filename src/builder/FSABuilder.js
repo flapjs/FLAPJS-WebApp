@@ -102,18 +102,16 @@ class FSABuilder extends MachineBuilder
 
     //clear previous error messages
     const notification = this.notification;
-    notification.clearErrorMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);
+    notification.clearMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);
     const result = this.machineErrorChecker.checkErrors((error, targets) => {
-      notification.clearMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);
       let message = error + ": ";
       message += targets.join(", ");
-      notification.addErrorMessage(message, Config.MACHINE_ERRORS_MESSAGE_TAG);
+      notification.addErrorMessage(message, Config.MACHINE_ERRORS_MESSAGE_TAG, false);
     });
 
     //Output success if no errors were found
     if (!result)
     {
-      notification.clearErrorMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);
       notification.addMessage(Config.NO_ERRORS_MESSAGE, Config.MACHINE_ERRORS_MESSAGE_TAG);
     }
   }

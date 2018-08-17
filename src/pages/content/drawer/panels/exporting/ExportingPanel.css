@@ -10,10 +10,14 @@
   padding-left: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
+  display: flex;
+  align-items: center;
 }
 .export-button svg {
   height: 4em;
   vertical-align: middle;
+  float: left;
+  flex-shrink: 0;
 }
 .export-button label {
   font-size: 1.4em;

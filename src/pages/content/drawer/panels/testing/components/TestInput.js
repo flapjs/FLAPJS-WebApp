@@ -2,6 +2,7 @@ import React from 'react';
 import './TestInput.css';
 
 import Config from 'config.js';
+import { EMPTY } from 'machine/Symbols.js';
 
 import IconButton from 'icons/IconButton.js';
 import AddIcon from 'icons/AddIcon.js';
@@ -106,11 +107,12 @@ class TestInput extends React.Component
   {
     const tester = this.props.tester;
     const machineBuilder = this.props.machineBuilder;
+    const src = this.state.src;
 
     return <div className={"test-input-container" +
       (this.props.placeholder ? " test-input-placeholder" : "")}>
 
-      <StatusButton active={!this.state.src.dirty} mode={this.state.src.result}
+      <StatusButton active={!src.dirty} mode={src.result}
         onClick={()=>{
           if (this.props.placeholder)
           {
@@ -123,8 +125,8 @@ class TestInput extends React.Component
         }}/>
 
       <input ref={ref=>this.inputElement=ref} className="test-input-field"
-        value={this.state.src.value}
-        placeholder={Config.PLACEHOLDER_TEXT}
+        value={src.value}
+        placeholder={this.props.placeholder ? Config.PLACEHOLDER_TEXT : EMPTY}
         onChange={this.onValueChange}
         onKeyDown={this.onKeyDown}
         onKeyUp={this.onKeyUp}

@@ -28,3 +28,6 @@
 .transitiontable td.accept {
   text-decoration: underline;
 }
+.transitiontable td.error {
+  color: var(--color-drawer-error);
+}

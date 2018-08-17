@@ -8,9 +8,9 @@ import HelpButton from "./HelpButton.js";
 
 import IconButton from 'icons/IconButton.js';
 
-import UploadIcon from 'icons/MoreIcon.js';
-//import UploadIcon from 'icons/UploadIcon.js';
-import CreateIcon from 'icons/PageAddIcon.js';
+import MoreIcon from 'icons/MoreIcon.js';
+import UploadIcon from 'icons/UploadIcon.js';
+import CreateIcon from 'icons/PageNewIcon.js';
 //import CreateIcon from 'icons/CreateIcon.js';
 import SaveIcon from 'icons/SaveIcon.js';
 //import SaveIcon from 'icons/DiskSaveIcon.js';
@@ -52,13 +52,13 @@ class Toolbar extends React.Component
           {/*Machine Name*/}
           <input id="machine-name" type="text" defaultValue={Config.DEFAULT_MACHINE_NAME} ref={ref=>this.machineName=ref}/>
           {/*Upload Button*/}
-          <UploadButton id="toolbar-upload" title="Upload"
+          <UploadButton id="toolbar-upload-alt" title="Upload"
             graph={graph}
             onChange={(e)=>{
               this.setMachineName(e.name);
               eventHistory.clear();
             }}>
-            <UploadIcon/>
+            <MoreIcon/>
           </UploadButton>
         </div>
         {/*Machine Type*/}
@@ -80,6 +80,15 @@ class Toolbar extends React.Component
           }}>
           <CreateIcon/>
         </IconButton>
+        {/*Upload Button*/}
+        <UploadButton className="navicon" id="toolbar-upload" title="Upload"
+          graph={graph}
+          onChange={(e)=>{
+            this.setMachineName(e.name);
+            eventHistory.clear();
+          }}>
+          <UploadIcon/>
+        </UploadButton>
         {/*Undo Button*/}
         <IconButton className="navicon" id="toolbar-undo" title="Undo"
           disabled={!eventHistory.canUndo()}
