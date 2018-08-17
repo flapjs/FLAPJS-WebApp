@@ -39,7 +39,7 @@ module.exports = {
   output: {
     //Output to ./dist/bundle.js
     path: path.resolve(__dirname, 'dist'),
-    filename: 'landing.bundle.js',
+    filename: 'src/landing.bundle.js',
     //For devServer to find directory from project root
     publicPath: 'dist/'
   },
