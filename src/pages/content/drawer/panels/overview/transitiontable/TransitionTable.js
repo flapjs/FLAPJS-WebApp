@@ -45,7 +45,7 @@ class TransitionTable extends React.Component
                       rowAxis: prev.rowAxis == SYMBOL_AXIS ? STATE_AXIS : SYMBOL_AXIS
                     };
                   })}>
-                  Swap
+                  {this.state.rowAxis == SYMBOL_AXIS ? "Q/\u03A3" : "Q/Q"}
                 </button>
               </th>
               {
@@ -65,7 +65,7 @@ class TransitionTable extends React.Component
                 <th scope="row" className="row">{e}</th>
                 {
                   rowAxisType === SYMBOL_AXIS ?
-                    alphabet.map((symbol, i)=><td key={e + "," + symbol}>{getDestinationFromSourceAndSymbol(machine, e, symbol)}</td>) :
+                    alphabet.map((symbol, i)=><td key={e + "," + symbol} className={"" + (machine.isFinalState(e) ? "accept" : "")}>{getDestinationFromSourceAndSymbol(machine, e, symbol)}</td>) :
                   rowAxisType === STATE_AXIS ?
                     states.map((dst, i)=><td key={e + "," + dst}>{getSymbolFromSourceAndDestination(machine, e, dst)}</td>) :
                   null

@@ -93,7 +93,7 @@ class GraphInputController extends InputController
       const dx = x - this.firstEmptyX;
       const dy = y - this.firstEmptyY;
       //If within the time to double tap...
-      if (this.firstEmptyClick && (dx * dx + dy * dy) < Config.CURSOR_RADIUS_SQU && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
+      if (this.firstEmptyClick && (dx * dx + dy * dy) < (Config.CURSOR_RADIUS_SQU * 16) && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
       {
         if (!this.pointer.isTrashMode(x, y))
         {
@@ -126,17 +126,37 @@ class GraphInputController extends InputController
   onInputAction(x, y, target, targetType)
   {
     const pointer = this.pointer;
+    const trashMode = pointer.isTrashMode(x, y);
+
+    //Makes sure that user cannot toggle state while in trash mode
+    if (targetType === 'node')
+    {
+      if (!trashMode)
+      {
+        const prev = target.accept;
+        const result = !target.accept;
+        //Toggle accept for selected node
+        target.accept = result;
+
+        //Emit event
+        this.emit("nodeAccept", target, result, prev);
+        return true;
+      }
+    }
 
     //If is in move mode...
     if (pointer.isMoveMode())
     {
+      pointer.moveMode = false;
+      this.emit("tryCreateWhileTrash");
+
       return false;
     }
     //If is NOT in move mode...
     else
     {
       //If is in trash mode... capture all events!
-      if (pointer.isTrashMode(x, y))
+      if (trashMode)
       {
         //Click to delete node
         if (targetType === 'node')
@@ -177,18 +197,7 @@ class GraphInputController extends InputController
       //Otherwise, ALL events are captured to prevent ALL default behavior.
 
       //If selected target...
-      if (targetType === 'node')
-      {
-        const prev = target.accept;
-        const result = !target.accept;
-        //Toggle accept for selected node
-        target.accept = result;
-
-        //Emit event
-        this.emit("nodeAccept", target, result, prev);
-        return true;
-      }
-      else if (targetType === 'edge')
+      if (targetType === 'edge')
       {
         //Edit label for selected edge
         this.openLabelEditor(target, x, y);
@@ -209,6 +218,15 @@ class GraphInputController extends InputController
     //If is in move mode...
     if (pointer.isMoveMode())
     {
+      //Make sure it is not in trash mode
+      if (pointer.isTrashMode(x, y))
+      {
+        pointer.moveMode = false;
+
+        this.emit("tryCreateWhileTrash");
+        return false;
+      }
+
       //Makes sure that placeholders are not quadratics!
       if (targetType === 'edge' && target.isPlaceholder())
       {

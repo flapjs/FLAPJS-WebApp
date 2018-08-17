@@ -25,3 +25,6 @@
 .transitiontable td {
   color: var(--color-drawer-text-subtle);
 }
+.transitiontable td.accept {
+  text-decoration: underline;
+}

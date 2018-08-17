@@ -1,12 +1,12 @@
 import { solveNFA } from 'machine/util/solveNFA.js';
-
+import TestMode from 'pages/content/viewport/testmode/TestMode.js'
 const PENDING = 0;
 const SUCCESS = 1;
 const FAILURE = -1;
 
 class TestingManager
 {
-  constructor()
+  constructor(machineBuilder)
   {
     this.inputs = [];
 
@@ -16,6 +16,8 @@ class TestingManager
     this.stepByStepMode = false;
 
     this.placeholder = new Test();
+    this.testMode = new TestMode(machineBuilder, this);
+    this.testIndex = 0;
   }
 
   setErrorCheckMode(mode)
@@ -72,6 +74,41 @@ class TestingManager
     //TODO: This is so that the 'key' is unique AND consistent
   }
 
+  getCurrentTestInput()
+  {
+    if (this.inputs.length > 0 && this.testIndex < this.inputs.length)
+    {
+      return this.inputs[this.testIndex];
+    }
+
+    return null;
+  }
+
+  nextTestInput()
+  {
+    ++this.testIndex;
+    if (this.testIndex >= this.inputs.length)
+    {
+      this.testIndex = 0;
+      return null;
+    }
+
+    return this.getCurrentTestInput();
+  }
+
+  prevTestInput()
+  {
+    --this.testIndex;
+    if (this.testIndex < 0)
+    {
+      //Does not loop around
+      this.testIndex = 0;
+      return null;
+    }
+
+    return this.getCurrentTestInput();
+  }
+
   clear(clearPlaceholder=false)
   {
     this.inputs.length = 0;
@@ -79,6 +116,8 @@ class TestingManager
     {
       //This is not a hack, because it is NOT a React.Component
       this.placeholder.value = "";
+      this.placeholder.result = 0;
+      this.placeholder.dirty = true;
     }
   }
 
@@ -132,6 +171,35 @@ class Test
     this.result = 0;
     this.dirty = true;
   }
+
+  setResult(result)
+  {
+    this.dirty = false;
+    if (result === true)
+    {
+      this.result = SUCCESS;
+    }
+    else if (result === false)
+    {
+      this.result = FAILURE;
+    }
+    else if (typeof result == "number")
+    {
+      this.result = result;
+    }
+    else
+    {
+      throw new Error("Unknown result for test");
+    }
+  }
+
+  toString()
+  {
+    return this.value + "." + this.result;
+  }
 }
+Test.PENDING = PENDING;
+Test.SUCCESS = SUCCESS;
+Test.FAILURE = FAILURE;
 
 export default TestingManager;

@@ -70,24 +70,27 @@ class TestInput extends React.Component
     {
       const tester = this.props.tester;
       const machineBuilder = this.props.machineBuilder;
+      const skipTest = e.shiftKey;
 
       //Add input if placeholder and Run
       if (this.props.placeholder)
       {
-        tester.testPlaceholder(machineBuilder.getMachine());
+        if (!skipTest) tester.testPlaceholder(machineBuilder.getMachine());
         //Add test input to list
         const newTest = tester.addTestInput(this.state.src.value);
         //Save result to new test
         newTest.result = tester.placeholder.result;
-        newTest.dirty = false;
+        newTest.dirty = tester.placeholder.dirty;
 
-        //Select everything again
-        this.inputElement.select();
+        //Delete already processed test
+        this.state.src.value = "";
+        tester.placeholder.dirty = true;
+        this.inputElement.focus();
       }
       //Otherwise just run it
       else
       {
-        tester.testByIndex(this.props.index, machineBuilder.getMachine());
+        if (!skipTest) tester.testByIndex(this.props.index, machineBuilder.getMachine());
 
         //Select everything again
         this.inputElement.select();

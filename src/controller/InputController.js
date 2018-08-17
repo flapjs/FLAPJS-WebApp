@@ -144,7 +144,8 @@ class InputController
 
       return false;
     }
-    else if (e.changedTouches.length == 1)
+
+    if (e.touches.length == 1)
     {
       e.stopPropagation();
       e.preventDefault();

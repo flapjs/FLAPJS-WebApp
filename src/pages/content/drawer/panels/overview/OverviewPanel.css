@@ -6,7 +6,8 @@
 .graphinfo-important {
   display: flex;
   flex-direction: column;
-  border-bottom: 2px solid var(--color-drawer-text-subtle);
+  border-bottom: 1px solid black;
+  /*border-bottom: 2px solid var(--color-drawer-text-subtle);*/
 
   padding: 10px;
 }

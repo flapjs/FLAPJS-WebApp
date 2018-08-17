@@ -22,6 +22,7 @@ class Viewport extends React.Component
 
   render()
   {
+    const tester = this.props.tester;
     return <div className={"viewport-container viewport-" + this.state.mode} ref={ref=>this.ref=ref}>
       <LabelEditor controller={this.props.controller}
         graph={this.props.app.graph}
@@ -31,8 +32,8 @@ class Viewport extends React.Component
       <TrashCan controller={this.props.controller}
         viewport={this}/>
       {
-        this.props.tester.getStepByStepMode() &&
-        <TestTray/>
+        tester.getStepByStepMode() &&
+        <TestTray tester={tester}/>
       }
     </div>;
   }
