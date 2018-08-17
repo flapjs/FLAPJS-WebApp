@@ -31,7 +31,8 @@ class TransitionTable extends React.Component
     const alphabet = machine.getAlphabet();
     const transitions = machine.getTransitions();
     const rowAxisType = this.state.rowAxis;
-    const hasEmptyColumn = rowAxisType === SYMBOL_AXIS && machineBuilder.getMachineType() == "NFA";
+    const isNFAMachine = machineBuilder.getMachineType() == "NFA";
+    const hasEmptyColumn = rowAxisType === SYMBOL_AXIS && isNFAMachine;
 
     return <InfoBlock title="Transition Table">
       <div className="transitiontable-container">
@@ -65,9 +66,24 @@ class TransitionTable extends React.Component
                 <th scope="row" className="row">{e}</th>
                 {
                   rowAxisType === SYMBOL_AXIS ?
-                    alphabet.map((symbol, i)=><td key={e + "," + symbol} className={"" + (machine.isFinalState(e) ? "accept" : "")}>{getDestinationFromSourceAndSymbol(machine, e, symbol)}</td>) :
+                    alphabet.map((symbol, i) => {
+                      let className = machine.isFinalState(e) ? "accept" : "";
+                      const result = getDestinationFromSourceAndSymbol(machine, e, symbol, isNFAMachine);
+                      if (!isNFAMachine && (result.startsWith("{") || result == "-"))
+                      {
+                        className += " error";
+                      }
+                      return <td key={e + "," + symbol} className={className}>
+                        {result}
+                      </td>;
+                    }) :
                   rowAxisType === STATE_AXIS ?
-                    states.map((dst, i)=><td key={e + "," + dst}>{getSymbolFromSourceAndDestination(machine, e, dst)}</td>) :
+                    states.map((dst, i) => {
+                      const result = getSymbolFromSourceAndDestination(machine, e, dst);
+                      return <td key={e + "," + dst}>
+                        {result}
+                      </td>;
+                    }) :
                   null
                 }
                 {
@@ -83,12 +99,17 @@ class TransitionTable extends React.Component
   }
 }
 
-function getDestinationFromSourceAndSymbol(machine, src, symbol)
+function getDestinationFromSourceAndSymbol(machine, src, symbol, isSet=true)
 {
   const result = machine.doTransition(src, symbol);
+
+  //Assumes that the machine is always an NFA, therefore the result is an array
   if (Array.isArray(result))
   {
-    return result.length === 1 ? result : result.length > 0 ? "{" + result.join(", ") + "}" : "-";
+    return !isSet && result.length == 1 ?
+      result[0] :
+      result.length > 0 ?
+      "{" + result.join(", ") + "}" : "-";
   }
   else
   {
