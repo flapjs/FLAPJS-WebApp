@@ -47,6 +47,7 @@ module.exports = {
   target: "web",
   devServer: {
     contentBase: path.join(__dirname, '/'),//public/
+    host: '0.0.0.0',
     port: 3000,
     index: 'index.html',
     hotOnly: true,
