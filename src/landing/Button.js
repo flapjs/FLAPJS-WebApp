@@ -13,7 +13,7 @@ class Button extends React.Component
         const homepage = document.getElementById("homepage");
         homepage.style.animation = "fadeout " + timeout + "ms";
         setTimeout(() => {
-          window.location.href = "app.html";
+          window.location.href = "./dist/app.html";
         }, timeout);
     }
 

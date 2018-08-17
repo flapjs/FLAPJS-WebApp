@@ -3,7 +3,7 @@ const webpack = require("webpack");
 
 module.exports = {
   //Entry point to start bundling...
-  entry: './src/index.js',
+  entry: './src/app/index.js',
   //Change this to 'production' for optimizations
   mode: "development",
   module: {
@@ -31,7 +31,7 @@ module.exports = {
     extensions: ['*', '.js', '.jsx', '.mjs'],
     //Resolve by absolute path
     modules: [
-      path.resolve('./src'),
+      path.resolve('./src/app'),
       path.resolve('./dist'),
       'node_modules'
     ]
@@ -39,12 +39,12 @@ module.exports = {
   output: {
     //Output to ./dist/bundle.js
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: 'app.bundle.js',
     //For devServer to find directory from project root
     publicPath: 'dist/'
   },
   devServer: {
-    contentBase: path.join(__dirname, '/'),//public/
+    contentBase: path.join(__dirname, 'dist'),//public/
     port: 3000,
     //For devServer to find directory from web user
     publicPath: 'http://localhost:3000/dist/',
