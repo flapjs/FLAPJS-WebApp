@@ -8,7 +8,7 @@ class Help extends React.Component{
 
     onClick()
     {
-        var newtab = window.open("https://github.com/flapjs/FLAPJS-WebApp/blob/intro_page/src/pages/home/Help.md", '_blank');
+        var newtab = window.open("https://github.com/flapjs/FLAPJS-WebApp/blob/intro_page/src/landing/Help.md", '_blank');
         newtab.focus();
     }
 
