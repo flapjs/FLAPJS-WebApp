@@ -69,9 +69,7 @@ class TestingManager
 
   removeTestInputByIndex(index)
   {
-    this.inputs[index] = null;
-    //HACK: this.inputs.splice(index, 1);
-    //TODO: This is so that the 'key' is unique AND consistent
+    this.inputs.splice(index, 1);
   }
 
   getCurrentTestInput()
@@ -170,6 +168,8 @@ class Test
     this.value = value;
     this.result = 0;
     this.dirty = true;
+
+    this.id = guid();
   }
 
   setResult(result)
@@ -193,13 +193,22 @@ class Test
     }
   }
 
-  toString()
+  hashCode()
   {
-    return this.value + "." + this.result;
+    return
   }
 }
 Test.PENDING = PENDING;
 Test.SUCCESS = SUCCESS;
 Test.FAILURE = FAILURE;
+
+function guid()
+{
+  function s4()
+  {
+    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
 
 export default TestingManager;
