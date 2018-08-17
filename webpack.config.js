@@ -1,5 +1,6 @@
-const path = require("path");
-const webpack = require("webpack");
+const path = require('path');
+const webpack = require('webpack');
+//const WorkboxPlugin = require('workbox-webpack-plugin');
 
 module.exports = {
   //Entry point to start bundling...
@@ -36,6 +37,20 @@ module.exports = {
       'node_modules'
     ]
   },
+  /*
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all'
+        }
+      }
+    }
+  },
+  */
   output: {
     //Output to ./dist/bundle.js
     path: path.resolve(__dirname, 'dist'),
@@ -45,10 +60,10 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: {
-      index:'app.html',
+      index: 'app.html',
       rewrites: [{ from: /list\/*/, to: 'app.html' }]
     },
-    contentBase: path.join(__dirname, 'dist'),//public/
+    contentBase: path.join(__dirname, '/'),//public/
     index: 'app.html',
     port: 3000,
     //For devServer to find directory from web user
@@ -56,5 +71,13 @@ module.exports = {
     hotOnly: true,
     open: true
   },
-  plugins: [ new webpack.HotModuleReplacementPlugin() ]
+  plugins: [
+    /*
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true
+    }),
+    */
+    new webpack.HotModuleReplacementPlugin()
+  ]
 };

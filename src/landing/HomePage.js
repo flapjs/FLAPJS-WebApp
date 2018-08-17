@@ -10,8 +10,9 @@ import Help from "./Help";
 
 class HomePage extends React.Component {
 
-    constructor(props) {
-        super(props);
+    constructor(props)
+    {
+      super(props);
     }
 
     render() {
