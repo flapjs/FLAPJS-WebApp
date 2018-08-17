@@ -1,12 +1,19 @@
-const path = require('path');
-const webpack = require('webpack');
-//const WorkboxPlugin = require('workbox-webpack-plugin');
+const path = require("path");
+const webpack = require("webpack");
 
 module.exports = {
-  //Entry point to start bundling...
-  entry: './src/app/index.js',
   //Change this to 'production' for optimizations
   mode: "development",
+  //Entry point to start bundling...
+  entry: {
+    app: './src/app/index.js'
+  },
+  output: {
+    //Output to ./dist/bundle.js
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].bundle.js',
+    publicPath: '/',
+  },
   module: {
     rules: [
       {
@@ -23,7 +30,7 @@ module.exports = {
       },
       {
         test:  /\.(jpg|png|gif|svg|pdf|ico)$/,
-        use: [ 'file-loader?name=/images/[name].[ext]' ]
+        use: [ 'file-loader?name=images/[name].[ext]' ]
       }
     ]
   },
@@ -32,52 +39,18 @@ module.exports = {
     extensions: ['*', '.js', '.jsx', '.mjs'],
     //Resolve by absolute path
     modules: [
-      path.resolve('./src/app'),
+      'node_modules',
       path.resolve('./dist'),
-      'node_modules'
+      path.resolve('./src/app'),
     ]
   },
-  /*
-  optimization: {
-    runtimeChunk: 'single',
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all'
-        }
-      }
-    }
-  },
-  */
-  output: {
-    //Output to ./dist/bundle.js
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'src/app.bundle.js',
-    //For devServer to find directory from project root
-    publicPath: 'dist/'
-  },
+  target: "web",
   devServer: {
-    historyApiFallback: {
-      index: 'app.html',
-      rewrites: [{ from: /list\/*/, to: 'app.html' }]
-    },
-    contentBase: path.join(__dirname, '/'),//public/
-    index: 'app.html',
+    contentBase: path.join(__dirname, 'dist'),//public/
     port: 3000,
-    //For devServer to find directory from web user
-    publicPath: 'http://localhost:3000/dist/',
+    index: 'app.html',
     hotOnly: true,
     open: true
   },
-  plugins: [
-    /*
-    new WorkboxPlugin.GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true
-    }),
-    */
-    new webpack.HotModuleReplacementPlugin()
-  ]
+  plugins: [ new webpack.HotModuleReplacementPlugin() ]
 };

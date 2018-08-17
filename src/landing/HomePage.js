@@ -25,7 +25,7 @@ class HomePage extends React.Component {
                     <h1> Welcome to flap.js !</h1>
                     <p> Currently supporting NFA and DFA </p>
                 </div>
-                <Button router = {this.props.router}/>
+                <Button/>
                 <Help/>
             </div>
         );

@@ -2,10 +2,18 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  //Entry point to start bundling...
-  entry: './src/landing/index.js',
   //Change this to 'production' for optimizations
   mode: "development",
+  //Entry point to start bundling...
+  entry: {
+    landing: './src/landing/index.js'
+  },
+  output: {
+    //Output to ./dist/bundle.js
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].bundle.js',
+    publicPath: 'dist/',
+  },
   module: {
     rules: [
       {
@@ -31,24 +39,16 @@ module.exports = {
     extensions: ['*', '.js', '.jsx', '.mjs'],
     //Resolve by absolute path
     modules: [
-      path.resolve('./src/landing'),
+      'node_modules',
       path.resolve('./dist'),
-      'node_modules'
+      path.resolve('./src/landing'),
     ]
   },
-  output: {
-    //Output to ./dist/bundle.js
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'src/landing.bundle.js',
-    //For devServer to find directory from project root
-    publicPath: 'dist/'
-  },
+  target: "web",
   devServer: {
     contentBase: path.join(__dirname, '/'),//public/
-    index: "index.html",
     port: 3000,
-    //For devServer to find directory from web user
-    publicPath: 'http://localhost:3000/dist/',
+    index: 'index.html',
     hotOnly: true,
     open: true
   },

@@ -2,7 +2,7 @@
   "name": "flap.js",
   "version": "1.0.0",
   "description": "Repository for flap.js web app project",
-  "main": "./dist/bundle.js",
+  "main": "./dist/debug/bundle.js",
   "scripts": {
     "start": "webpack-dev-server --mode development --config webpack.config.js",
     "start-landing": "webpack-dev-server --mode development --config webpack.landing.config.js",
