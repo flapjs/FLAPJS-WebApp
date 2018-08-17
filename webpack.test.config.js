@@ -15,20 +15,22 @@ module.exports = {
   //Entry point to start bundling...
   entry: './src/debug/Tester.js',
   mode: 'development',
+  output: {
+    //Output to ./dist/debug/bundle.js
+    path: path.resolve(__dirname, 'dist/debug'),
+    filename: 'bundle.js'
+  },
   target: 'node',
   resolve: {
     //Resolve by filename without extensions
     extensions: ['*', '.js', '.mjs'],
     //Resolve by absolute path
     modules: [
-      path.resolve('./src'),
-      'node_modules'
+      'node_modules',
+      path.resolve('./dist'),
+      path.resolve('./src/app'),
+      path.resolve('./src/debug')
     ]
-  },
-  output: {
-    //Output to ./dist/debug/bundle.js
-    path: path.resolve(__dirname, 'dist/debug'),
-    filename: 'bundle.js'
   },
   //Make sure to not bundle node_modules
   externals: nodeExternals

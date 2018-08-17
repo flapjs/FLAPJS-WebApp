@@ -2,8 +2,7 @@ import * as TEST from '../Tester.js';
 import DFA from 'machine/DFA.js';
 import { EMPTY } from 'machine/Symbols.js';
 
-import { isEquivalentFSA } from 'machine/util/equalFSA.js';
-import { isEquivalentDFA } from 'machine/util/equalFSA.js';
+import { isEquivalentFSA, isEquivalentDFA } from 'machine/util/equalFSA.js';
 
 let dfa1 = new DFA();
 let dfa2 = new DFA();
