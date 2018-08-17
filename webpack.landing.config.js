@@ -3,7 +3,7 @@ const webpack = require("webpack");
 
 module.exports = {
   //Entry point to start bundling...
-  entry: './src/index.js',
+  entry: './src/landing/index.js',
   //Change this to 'production' for optimizations
   mode: "development",
   module: {
@@ -22,7 +22,7 @@ module.exports = {
       },
       {
         test:  /\.(jpg|png|gif|svg|pdf|ico)$/,
-        use: [ 'file-loader?name=/images/[name].[ext]' ]
+        use: [ 'file-loader?name=images/[name].[ext]' ]
       }
     ]
   },
@@ -31,7 +31,7 @@ module.exports = {
     extensions: ['*', '.js', '.jsx', '.mjs'],
     //Resolve by absolute path
     modules: [
-      path.resolve('./src'),
+      path.resolve('./src/landing'),
       path.resolve('./dist'),
       'node_modules'
     ]
@@ -39,7 +39,7 @@ module.exports = {
   output: {
     //Output to ./dist/bundle.js
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: 'landing.bundle.js',
     //For devServer to find directory from project root
     publicPath: 'dist/'
   },

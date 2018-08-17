@@ -1,5 +1,4 @@
 import React from "react";
-import Router from 'router.js';
 
 class Button extends React.Component
 {
@@ -14,7 +13,7 @@ class Button extends React.Component
         const homepage = document.getElementById("homepage");
         homepage.style.animation = "fadeout " + timeout + "ms";
         setTimeout(() => {
-          Router.routeTo("/app");
+          window.location.href = "app.html";
         }, timeout);
     }
 

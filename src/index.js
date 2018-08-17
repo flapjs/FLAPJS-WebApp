@@ -5,7 +5,6 @@ import Router from 'router.js';
 import Config from 'config.js';
 import { loadConfig, saveConfig } from 'config.js';
 
-import HomePage from 'pages/home/HomePage.js';
 import App from 'pages/content/App.js';
 import NotFoundPage from 'pages/404/NotFoundPage.js';
 
@@ -16,15 +15,16 @@ const ALWAYS_OPEN_WELCOME_PAGE = false;
 const USE_SERVICE_WORKER = false;
 const AUTOSAVE_CONFIG = false;
 
-Router.registerPage('/', HomePage);
-Router.registerPage('/app', App);
+Router.registerPage('/', App);
 Router.registerPage(null, NotFoundPage);
 
 //Skip welcome page if already seen it
+/*
 if (!ALWAYS_OPEN_WELCOME_PAGE && AutoSaver.hasAutoSave())
 {
-  Router.routeTo("/app");
+  Router.routeTo("/");
 }
+*/
 
 //Setup viewport
 window.addEventListener('load', (event) => {
@@ -77,7 +77,7 @@ function updateApplication(time)
   const dt = (time - prevtime) / FRAMES_PER_SECOND;
   {
     const page = Router.getPage();
-    ReactDOM.render(React.createElement(page, {router: Router}, null), root);
+    ReactDOM.render(React.createElement(page), root);
   }
   prevtime = time;
   window.requestAnimationFrame(updateApplication);

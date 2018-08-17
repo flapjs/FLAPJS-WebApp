@@ -1,11 +1,9 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
 
-
 import './HomePage.css';
 
-
-import pic from './Pictures/flapjs.svg';
+import pic from 'images/flapjs.svg';
 
 import Button from "./Button";
 import Help from "./Help";

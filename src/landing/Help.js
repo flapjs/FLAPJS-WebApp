@@ -1,5 +1,4 @@
 import React from "react";
-import Router from "../../router";
 
 class Help extends React.Component{
 
