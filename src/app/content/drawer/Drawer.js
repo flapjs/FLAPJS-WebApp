@@ -1,6 +1,11 @@
 import React from 'react';
 import './Drawer.css';
 
+import { TESTING_PANEL_TITLE,
+  OVERVIEW_PANEL_TITLE,
+  EXPORTING_PANEL_TITLE,
+  OPTIONS_PANEL_TITLE } from 'lang.js';
+
 import OverviewPanel from './panels/overview/OverviewPanel.js';
 import TestingPanel from './panels/testing/TestingPanel.js';
 import ExportingPanel from './panels/exporting/ExportingPanel.js';
@@ -211,19 +216,19 @@ class Drawer extends React.Component
         <DrawerExpander app={app}/>
         <button className={"tab-link" + (this.state.tabIndex == TESTING ? " active" : "")}
           onClick={ev=>this.setTab(TESTING)}>
-          Testing
+          {TESTING_PANEL_TITLE}
         </button>
         <button className={"tab-link" + (this.state.tabIndex == OVERVIEW ? " active" : "")}
           onClick={ev=>this.setTab(OVERVIEW)}>
-          <span>Definition</span>
+          {OVERVIEW_PANEL_TITLE}
         </button>
         <button className={"tab-link" + (this.state.tabIndex == EXPORTING ? " active" : "")}
           onClick={ev=>this.setTab(EXPORTING)}>
-          Exporting
+          {EXPORTING_PANEL_TITLE}
         </button>
         <button className={"tab-link" + (this.state.tabIndex == OPTIONS ? " active" : "")}
           onClick={ev=>this.setTab(OPTIONS)}>
-          Options
+          {OPTIONS_PANEL_TITLE}
         </button>
 
         <div className="tab-right"></div>

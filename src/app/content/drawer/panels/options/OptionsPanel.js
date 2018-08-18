@@ -5,6 +5,12 @@ import './OptionsPanel.css';
 import Storage from 'util/Storage.js';
 import Config from 'config.js';
 import { saveConfig } from 'config.js';
+import { OPTIONS_PANEL_TITLE, TESTING_PANEL_TITLE,
+  WORKSPACE_TITLE, TOOLBAR_TITLE, DRAWER_TITLE, NOTIFICATION_TITLE, GRAPH_TITLE,
+  LABEL_EDITOR_TITLE, GENERAL_TITLE,
+  CHOOSE_COLOR_THEME, CATEGORY_SHORTCUTS, CATEGORY_COLOR,
+  ACTION_SAVE_MACHINE, ACTION_UNDO, ACTION_REDO, ACTION_SAVE_IMAGE,
+  SKIP_WELCOME_PAGE, SWAP_INPUT_CONTROLS, RESET_TO_DEFAULT } from 'lang.js';
 
 import OptionGroup from './OptionGroup.js';
 import OptionHotkey from './OptionHotkey.js';
@@ -31,27 +37,27 @@ class OptionsPanel extends React.Component
     const root = document.getElementById("root");
     return <div className="panel-container" id="option" ref={ref=>this.container=ref}>
       <div className="panel-title">
-        <h1>Option</h1>
+        <h1>{OPTIONS_PANEL_TITLE}</h1>
       </div>
       <div className="panel-content">
 
-        <button className="panel-button" disabled="true">Change Theme...</button>
+        <button className="panel-button" disabled="true">{CHOOSE_COLOR_THEME}</button>
 
         <hr/>
 
-        <OptionGroup title="Workspace" label="Shortcuts">
-          <OptionHotkey label="Save Machine File" keyName="Ctrl + S"/>
-          <OptionHotkey label="Undo Action" keyName="Ctrl + Z"/>
-          <OptionHotkey label="Redo Action" keyName="Ctrl + Shift + Z"/>
-          <OptionHotkey label="Export to PNG" keyName="Ctrl + P"/>
+        <OptionGroup title={WORKSPACE_TITLE} label={CATEGORY_SHORTCUTS}>
+          <OptionHotkey label={ACTION_SAVE_MACHINE} keyName="Ctrl + S"/>
+          <OptionHotkey label={ACTION_UNDO} keyName="Ctrl + Z"/>
+          <OptionHotkey label={ACTION_REDO} keyName="Ctrl + Shift + Z"/>
+          <OptionHotkey label={ACTION_SAVE_IMAGE} keyName="Ctrl + P"/>
         </OptionGroup>
 
-        <OptionGroup title="Testing" label="Shortcuts">
+        <OptionGroup title={TESTING_PANEL_TITLE} label={CATEGORY_SHORTCUTS}>
           <OptionHotkey label="Submit Change" keyName="Enter"/>
           <OptionHotkey label="Cancel Change" keyName="Escape"/>
         </OptionGroup>
 
-        <OptionGroup title="Toolbar" label="Colors">
+        <OptionGroup title={TOOLBAR_TITLE} label={CATEGORY_COLOR}>
           <OptionColor label="Main Color" propName="--color-toolbar-main" root={root}
             dark="true"/>
           <OptionColor label="Accent Color" propName="--color-toolbar-accent" root={root}
@@ -60,7 +66,7 @@ class OptionsPanel extends React.Component
             invert="true"/>
         </OptionGroup>
 
-        <OptionGroup title="Drawer" label="Colors">
+        <OptionGroup title={DRAWER_TITLE} label={CATEGORY_COLOR}>
           <OptionColor label="Main Color" propName="--color-drawer-main" root={root}
             dark="true"/>
           <OptionColor label="Accent Color" propName="--color-drawer-accent" root={root}/>
@@ -72,14 +78,14 @@ class OptionsPanel extends React.Component
           <OptionColor label="Error Color" propName="--color-drawer-error" root={root}/>
         </OptionGroup>
 
-        <OptionGroup title="Testing" label="Colors">
+        <OptionGroup title={TESTING_PANEL_TITLE} label={CATEGORY_COLOR}>
           <OptionColor label="Success Color" propName="--color-testing-success" root={root}/>
           <OptionColor label="Failure Color" propName="--color-testing-failure" root={root}/>
           <OptionColor label="Working Color" propName="--color-testing-working" root={root}/>
           <OptionColor label="Text Color" propName="--color-testing-text" root={root}/>
         </OptionGroup>
 
-        <OptionGroup title="Notification" label="Colors">
+        <OptionGroup title={NOTIFICATION_TITLE} label={CATEGORY_COLOR}>
           <OptionColor label="Text Color" propName="--color-notification-text" root={root}/>
           <OptionColor label="Info Color" propName="--color-notification-info" root={root}
             dark="true"/>
@@ -89,19 +95,19 @@ class OptionsPanel extends React.Component
             dark="true"/>
         </OptionGroup>
 
-        <OptionGroup title="Graph" label="Colors">
+        <OptionGroup title={GRAPH_TITLE} label={CATEGORY_COLOR}>
           <OptionColor label="Node Color" propName="--color-graph-node" root={root}/>
           <OptionColor label="Text Color" propName="--color-workspace-text" root={root}/>
           <OptionColor label="Main Color" propName="--color-workspace-main" root={root}/>
           <OptionColor label="Label Editor Main Color" propName="--color-labeleditor-main" root={root}/>
         </OptionGroup>
 
-        <OptionGroup title="Label Editor" label="Colors">
+        <OptionGroup title={LABEL_EDITOR_TITLE} label={CATEGORY_COLOR}>
           <OptionColor label="Text Color" propName="--color-labeleditor-text" root={root}/>
           <OptionColor label="Main Color" propName="--color-labeleditor-main" root={root}/>
         </OptionGroup>
 
-        <OptionGroup title="General" label="Colors">
+        <OptionGroup title={GENERAL_TITLE} label={CATEGORY_COLOR}>
           <OptionColor label="Viewport Error Color" propName="--color-viewport-error" root={root}/>
           <OptionColor label="Viewport Warning Color" propName="--color-viewport-warning" root={root}/>
           <OptionColor label="Highlight Select Color" propName="--color-highlight-select" root={root}/>
@@ -116,12 +122,12 @@ class OptionsPanel extends React.Component
             this.setState({skipWelcome: e.target.checked});
             Storage.saveToLocalStorage("skipWelcome", result);
           }}/>
-          <label htmlFor="option-skipwelcome">Skip Welcome Page</label>
+          <label htmlFor="option-skipwelcome">{SKIP_WELCOME_PAGE}</label>
         </div>
 
         <div className="panel-checkbox">
           <input id="option-altinput" type="checkbox" disabled="true"/>
-          <label htmlFor="option-altinput">Swap Input Controls</label>
+          <label htmlFor="option-altinput">{SWAP_INPUT_CONTROLS}</label>
         </div>
 
         <button className="panel-button" onClick={(e) => {
@@ -131,7 +137,7 @@ class OptionsPanel extends React.Component
           saveConfig();
 
           location.reload();
-        }}>Reset to default</button>
+        }}>{RESET_TO_DEFAULT}</button>
 
 
       </div>

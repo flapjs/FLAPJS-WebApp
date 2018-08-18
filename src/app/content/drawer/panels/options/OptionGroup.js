@@ -23,7 +23,7 @@ class OptionGroup extends React.Component
     return <div className={"option-group " + this.props.className}>
       <div className="option-header" onClick={(e)=>this.dropdown.onClick(e)}>
         <label>{this.props.title}</label>
-        <label>({this.props.label}}</label>
+        <label>({this.props.label})</label>
         <IconToggle id="collapse" ref={ref=>this.dropdown=ref} defaultValue={this.props.defaultValue}
           style={{pointerEvents: "none"}}>
           <DropDownIcon/>

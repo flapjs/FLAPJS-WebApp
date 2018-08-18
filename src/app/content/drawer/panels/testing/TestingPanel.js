@@ -2,6 +2,14 @@ import React from 'react';
 import '../Panel.css';
 import './TestingPanel.css';
 
+import { NO_ERROR_CHECK,
+  DELAYED_ERROR_CHECK,
+  IMMEDIATE_ERROR_CHECK,
+  TESTING_PANEL_TITLE,
+  ERROR_CHECK_LABEL,
+  STEP_BY_STEP_MODE,
+  TRANSITION_BY_CLOSURE} from 'lang.js';
+
 import TestingManager from 'builder/TestingManager.js';
 import TestList from './components/TestList.js';
 
@@ -47,7 +55,7 @@ class TestingPanel extends React.Component
 
     return <div className="panel-container" id="testing" ref={ref=>this.container=ref}>
       <div className="panel-title">
-        <h1>Testing</h1>
+        <h1>{TESTING_PANEL_TITLE}</h1>
       </div>
 
       <div className="panel-content">
@@ -55,13 +63,13 @@ class TestingPanel extends React.Component
         <hr />
 
         <div id="test-errorcheck">
-          <label>Error Checking</label>
+          <label>{ERROR_CHECK_LABEL}</label>
           <select className="panel-select"
             value={this.state.errorCheckMode}
             onChange={this.onChangeErrorCheckMode}>
-            <option value={TestingManager.NO_ERROR_CHECK}>None</option>
-            <option value={TestingManager.DELAYED_ERROR_CHECK}>Delayed</option>
-            <option value={TestingManager.IMMEDIATE_ERROR_CHECK}>Immediate</option>
+            <option value={TestingManager.NO_ERROR_CHECK}>{NO_ERROR_CHECK}</option>
+            <option value={TestingManager.DELAYED_ERROR_CHECK}>{DELAYED_ERROR_CHECK}</option>
+            <option value={TestingManager.IMMEDIATE_ERROR_CHECK}>{IMMEDIATE_ERROR_CHECK}</option>
           </select>
         </div>
         <div className="panel-checkbox">
@@ -78,11 +86,11 @@ class TestingPanel extends React.Component
               if (tester.testMode.isStarted()) tester.testMode.onStop();
             }
           }}/>
-          <label htmlFor="test-step">Step-by-Step Mode</label>
+          <label htmlFor="test-step">{STEP_BY_STEP_MODE}</label>
         </div>
         <div className="panel-checkbox">
           <input id="test-closure" type="checkbox" disabled="true"/>
-          <label htmlFor="test-closure">Transition By Closure</label>
+          <label htmlFor="test-closure">{TRANSITION_BY_CLOSURE}</label>
         </div>
       </div>
 

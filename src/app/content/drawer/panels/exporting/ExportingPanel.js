@@ -2,6 +2,8 @@ import React from 'react';
 import '../Panel.css';
 import './ExportingPanel.css';
 
+import { EXPORTING_PANEL_TITLE, SAVE_AS_MACHINE, SAVE_AS_PNG, SAVE_AS_JPG, SAVE_AS_JFLAP } from 'lang.js';
+
 import Downloader from 'util/Downloader.js';
 
 import IconButton from 'icons/IconButton.js';
@@ -28,14 +30,14 @@ class ExportingPanel extends React.Component
 
     return <div className="panel-container" id="exporting" ref={ref=>this.container=ref}>
       <div className="panel-title">
-        <h1>Exporting</h1>
+        <h1>{EXPORTING_PANEL_TITLE}</h1>
       </div>
       <div className="panel-content">
         {/*JSON*/}
         <IconButton className="export-button" id="export-json" title="Save as JSON"
           onClick={()=>Downloader.downloadText(toolbar.getMachineName() + '.json', JSON.stringify(graph.toJSON()))}>
           <JSONIcon/>
-          <label>Save as Flap.js Machine</label>
+          <label>{SAVE_AS_MACHINE}</label>
         </IconButton>
         {/*PNG*/}
         <IconButton className="export-button" id="export-png" title="Export as PNG"
@@ -47,7 +49,7 @@ class ExportingPanel extends React.Component
             Downloader.downloadSVG(toolbar.getMachineName(), 'png', svg, width, height);
           }}>
           <PNGIcon/>
-          <label>Export as PNG</label>
+          <label>{SAVE_AS_PNG}</label>
         </IconButton>
         {/*JPG*/}
         <IconButton className="export-button" id="export-jpg" title="Export as JPG"
@@ -59,14 +61,14 @@ class ExportingPanel extends React.Component
             Downloader.downloadSVG(toolbar.getMachineName(), 'jpg', svg, width, height);
           }}>
           <JPGIcon/>
-          <label>Export as JPG</label>
+          <label>{SAVE_AS_JPG}</label>
         </IconButton>
         {/*XML*/}
         <IconButton className="export-button" id="export-xml" title="Export as JFF"
           disabled="true">
           {/*TODO: Add JFLAP export functionality*/}
           <XMLIcon/>
-          <label>Export to JFLAP</label>
+          <label>{SAVE_AS_JFLAP}</label>
         </IconButton>
       </div>
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import './TestList.css';
 
+import { RUN_ALL_TESTS, CLEAR_ALL_TESTS, IMPORT_TESTS } from 'lang.js';
+
 import TestInput from './TestInput.js';
 
 class TestList extends React.Component
@@ -47,7 +49,7 @@ class TestList extends React.Component
         tester.testPlaceholder(machine);
         tester.testAll(machine);
       }}>
-        Run All Tests
+        {RUN_ALL_TESTS}
       </button>
 
       <div className="scrollbar-container">
@@ -62,7 +64,7 @@ class TestList extends React.Component
         }
         <button className="panel-button"
           onClick={()=>tester.clear(true)}>
-          Clear
+          {CLEAR_ALL_TESTS}
         </button>
       </div>
       </div>
@@ -71,7 +73,7 @@ class TestList extends React.Component
         <input id="test-upload-input" type="file" name="import" style={{display: "none"}}
           onChange={this.onUploadFileChange} accept=".txt"/>
         <label htmlFor="test-upload-input">
-          Import Tests
+          {IMPORT_TESTS}
         </label>
       </button>
     </div>;
