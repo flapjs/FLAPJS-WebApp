@@ -22,9 +22,9 @@ class NotificationSystem extends React.Component
 
   componentWillMount()
   {
-    this.addMessage("Good Morning! Welcome to the Flap.js Workspace!");
-    this.addMessage("If you need help, the '?' button is at the top-right of the screen.");
     this.addMessage("If you need still help, find a tutor. I can't help you :( . . . Good-bye.");
+    this.addMessage("If you need help, the '?' button is at the top-right of the screen.");
+    this.addMessage("Good Morning! Welcome to the Flap.js Workspace!");
   }
 
   addMessage(message, tag=null, component=null, clearOnAdd=true) {
