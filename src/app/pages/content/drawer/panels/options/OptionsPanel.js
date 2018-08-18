@@ -35,7 +35,7 @@ class OptionsPanel extends React.Component
       </div>
       <div className="panel-content">
 
-        <button className="panel-button">Change Theme...</button>
+        <button className="panel-button" disabled="true">Change Theme...</button>
 
         <hr/>
 
