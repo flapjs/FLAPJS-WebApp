@@ -1,5 +1,6 @@
 import React from 'react';
 import './NotificationSystem.css';
+
 import DefaultMessage from "./DefaultMessage";
 import DefaultWarningMessage from "./DefaultWarningMessage";
 import DefaultErrorMessage from "./DefaultErrorMessage";
@@ -76,7 +77,7 @@ class NotificationSystem extends React.Component
         <div className="notification-stack">
           {
             this.state.messages.map((e, i) => {
-              return React.createElement(e[2], {key: i, onDelete: () => this.state.messages.splice(i, 1),
+              return React.createElement(e[2], {key: i, onExit: () => this.state.messages.splice(i, 1),
                 message: e[0], tag: e[1], notification: this}, null);
             })
           }

@@ -1,0 +1,17 @@
+.notification-stack {
+  position: fixed;
+  top: var(--toolbar-height);
+  z-index: 999;
+
+  max-height: calc(100vh - var(--toolbar-height));
+  overflow-y: scroll;
+}
+
+.notification-error {
+  border-top: 4px solid var(--color-notification-error-dark)!important;
+  background: var(--color-notification-error)!important;
+}
+.notification-warning {
+  border-top: 4px solid var(--color-notification-warning-dark)!important;
+  background: var(--color-notification-warning)!important;
+}

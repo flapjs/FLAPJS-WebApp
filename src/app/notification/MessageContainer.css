@@ -1,0 +1,24 @@
+.notification-message {
+  padding: 10px;
+  margin: 10px;
+
+  width: 12em;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  color: var(--color-notification-text);
+
+  border-top: 4px solid var(--color-notification-info-dark);
+  background: var(--color-notification-info);
+}
+
+.notification-message-response {
+  display: flex;
+  flex-direction: row;
+
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.notification-message-response > * {
+  flex-grow: 1;
+}

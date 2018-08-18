@@ -5,8 +5,8 @@ import Router from 'router.js';
 import Config from 'config.js';
 import { loadConfig, saveConfig } from 'config.js';
 
-import App from 'pages/content/App.js';
-import NotFoundPage from 'pages/404/NotFoundPage.js';
+import App from 'content/App.js';
+import NotFoundPage from '404/NotFoundPage.js';
 
 //HACK: to determine if this is first time use
 import AutoSaver from 'util/AutoSaver.js';

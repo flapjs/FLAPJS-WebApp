@@ -11,7 +11,7 @@ import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
 import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
-import NotificationSystem from './notification/NotificationSystem.js';
+import NotificationSystem from 'notification/NotificationSystem.js';
 
 import FSABuilder from 'builder/FSABuilder.js';
 import EventHistory from 'events/EventHistory.js';
