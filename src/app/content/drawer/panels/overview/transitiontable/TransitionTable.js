@@ -1,8 +1,6 @@
 import React from 'react';
 import './TransitionTable.css';
 
-import { TRANSITION_TABLE } from 'lang.js';
-
 import InfoBlock from '../infoblock/InfoBlock.js';
 import NFA from 'machine/NFA.js';
 import { EMPTY } from 'machine/Symbols.js';
@@ -36,7 +34,7 @@ class TransitionTable extends React.Component
     const isNFAMachine = machineBuilder.getMachineType() == "NFA";
     const hasEmptyColumn = rowAxisType === SYMBOL_AXIS && isNFAMachine;
 
-    return <InfoBlock title={TRANSITION_TABLE}>
+    return <InfoBlock title={I18N.toString("TRANSITION_TABLE")}>
       <div className="transitiontable-container">
         <table className="transitiontable">
           <tbody>

@@ -1,8 +1,6 @@
 import React from 'react';
 import './StateList.css';
 
-import { STATES_LIST } from 'lang.js';
-
 import InfoBlock from '../infoblock/InfoBlock.js';
 import IconButton from 'icons/IconButton.js';
 import BoxAddIcon from 'icons/BoxAddIcon.js';
@@ -32,7 +30,7 @@ class StateList extends React.Component
   {
     const controller = this.props.controller;
     const graph = this.props.machineBuilder.graph;
-    return <InfoBlock title={STATES_LIST} defaultValue="true">
+    return <InfoBlock title={I18N.toString("STATES_LIST")} defaultValue="true">
       <div className="statelist-container">
         <div className="statelist">
           <TriangleIcon/>

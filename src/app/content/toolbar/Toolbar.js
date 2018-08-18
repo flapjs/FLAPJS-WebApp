@@ -50,7 +50,7 @@ class Toolbar extends React.Component
       <div className="toolbar-title">
         <div className="toolbar-title-name">
           {/*Machine Name*/}
-          <input id="machine-name" type="text" defaultValue={Config.DEFAULT_MACHINE_NAME} ref={ref=>this.machineName=ref}/>
+          <input id="machine-name" type="text" defaultValue={I18N.toString("UNTITLED_MACHINE_NAME")} ref={ref=>this.machineName=ref}/>
           {/*Upload Button*/}
           <UploadButton id="toolbar-upload-alt" title="Upload"
             graph={graph}

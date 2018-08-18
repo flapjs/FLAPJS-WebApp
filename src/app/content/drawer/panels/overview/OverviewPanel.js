@@ -3,7 +3,6 @@ import '../Panel.css';
 import './OverviewPanel.css';
 
 import Config from 'config.js';
-import { OVERVIEW_PANEL_TITLE, AUTO_LABEL_STATES, CONVERT_MACHINE_TO } from 'lang.js';
 
 import StateList from './statelist/StateList.js';
 import AlphabetList from './alphabetlist/AlphabetList.js';
@@ -36,7 +35,7 @@ class OverviewPanel extends React.Component
     const machineBuilder = this.props.machineBuilder;
     return <div className="panel-container" id="overview" ref={ref=>this.container=ref}>
       <div className="panel-title">
-        <h1>{OVERVIEW_PANEL_TITLE}</h1>
+        <h1>{I18N.toString("OVERVIEW_PANEL_TITLE")}</h1>
       </div>
       <div className="panel-content">
         <select className="machine-type panel-select"
@@ -55,12 +54,12 @@ class OverviewPanel extends React.Component
 
         <hr />
 
-        <button disabled="true" className="panel-button">{CONVERT_MACHINE_TO}</button>
+        <button disabled="true" className="panel-button">{I18N.toString("CONVERT_MACHINE_TO")}</button>
         <div className="panel-checkbox">
           <input type="checkbox" id="auto-statename" onChange={(e) => {
             machineBuilder.setAutoRenameNodes(e.target.checked);
           }} checked={machineBuilder.shouldAutoRenameNodes()}/>
-          <label htmlFor="auto-statename">{AUTO_LABEL_STATES}</label>
+          <label htmlFor="auto-statename">{I18N.toString("AUTO_LABEL_STATES")}</label>
         </div>
       </div>
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { UNREACHABLE_STATE } from 'lang.js';
 
 import MessageContainer from 'notification/MessageContainer.js';
 
@@ -62,7 +61,7 @@ class StateUnreachableWarningMessage extends React.Component
   {
     return <MessageContainer
       className="notification-warning"
-      value={UNREACHABLE_STATE + ": " + this.targetLabel}
+      value={I18N.toString("UNREACHABLE_STATE") + ": " + this.targetLabel}
       onExit={this.props.onExit}>
       <button value="locate" onClick={this.onClick}>Where is it?</button>
       <button value="deleteall" onClick={this.onClick}>Delete All</button>

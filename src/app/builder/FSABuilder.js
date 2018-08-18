@@ -1,5 +1,4 @@
 import Config from 'config.js';
-import { NO_MORE_ERRORS } from 'lang.js';
 
 import MachineBuilder from './MachineBuilder.js';
 import DFAErrorChecker from './DFAErrorChecker.js';
@@ -150,7 +149,7 @@ class FSABuilder extends MachineBuilder
   setMachineType(machineType)
   {
     if (this._machineType == machineType) return;
-    
+
     this._machineType = machineType;
     if (machineType == "DFA")
     {

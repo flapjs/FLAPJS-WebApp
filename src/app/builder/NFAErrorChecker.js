@@ -1,6 +1,5 @@
 import Config from 'config.js';
 import { EMPTY } from 'machine/Symbols.js';
-import { NO_MORE_ERRORS, INCOMPLETE_TRANSITION } from 'lang.js';
 
 import StateUnreachableWarningMessage from './error/StateUnreachableWarningMessage.js';
 import TransitionErrorMessage from './error/TransitionErrorMessage.js';
@@ -88,7 +87,7 @@ class NFAErrorChecker
       //No errors!
       if (!result)
       {
-        notification.addMessage(NO_MORE_ERRORS, messageTag, SuccessMessage, false);
+        notification.addMessage(I18N.toString("NO_MORE_ERRORS"), messageTag, SuccessMessage, false);
       }
       //There are some errors/warnings...
       else
@@ -99,7 +98,7 @@ class NFAErrorChecker
 
         //Add new error messages
         if (placeholderEdges.length > 0) notification.addMessage(
-          {text: INCOMPLETE_TRANSITION, targets: placeholderEdges},
+          {text: I18N.toString("INCOMPLETE_TRANSITION"), targets: placeholderEdges},
           messageTag, TransitionErrorMessage, false);
       }
     }

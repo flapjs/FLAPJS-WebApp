@@ -1,8 +1,6 @@
 import React from 'react';
 import './AlphabetList.css';
 
-import { ALPHABET_LIST } from 'lang.js';
-
 import InfoBlock from '../infoblock/InfoBlock.js';
 import IconButton from 'icons/IconButton.js';
 import BoxAddIcon from 'icons/BoxAddIcon.js';
@@ -39,7 +37,7 @@ class AlphabetList extends React.Component
   {
     const machineBuilder = this.props.machineBuilder;
     const alphabet = machineBuilder.getAlphabet().sort();
-    return <InfoBlock title={ALPHABET_LIST}>
+    return <InfoBlock title={I18N.toString("ALPHABET_LIST")}>
       <div className="alphalist-container">
         <div className="alphalist">
           {

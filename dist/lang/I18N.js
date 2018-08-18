@@ -1,24 +1,30 @@
 const I18N = {
   languageMapping: new Map(),
-  fetchLanguageFile(langCode)
+  fetchLanguageFile(langCode, callback=null)
   {
     const BASE_URL = "lang/";
 
     console.log("Fetching language file \'" + langCode + "\'...");
     const request = new XMLHttpRequest();
-    request.onreadystatechange = function()
-    {
+    request.onreadystatechange = function() {
       if (request.readyState === 4/* READY */ &&
         request.status === 200/* GOT REPONSE */)
       {
-        console.log("Loading language file...");
-        I18N.loadLanguageFile(request.responseText);
-        console.log("Language file loaded.");
+        const result = request.responseText;
+        if (callback)
+        {
+          callback(result);
+        }
+        else
+        {
+          console.log("Loading language file \'" + langCode + "\'...");
+          I18N.loadLanguageFile(result);
+          console.log("Language file \'" + langCode + "\' loaded.");
+        }
       }
-      else
-      {
-        console.log("Unable to find language file for \'" + langCode + "\'.");
-      }
+    };
+    request.onerror = function() {
+      console.log("Unable to find language file for \'" + langCode + "\'.");
     };
     request.open("GET", BASE_URL + langCode + ".lang", true);
     request.send();
@@ -49,6 +55,6 @@ const I18N = {
 
   toString(langKey)
   {
-    return this.languageMapping.get(langKey) || langKey;
+    return langKey || this.languageMapping.get(langKey) || langKey;
   }
 };

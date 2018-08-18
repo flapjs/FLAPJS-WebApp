@@ -1,6 +1,7 @@
 export const CLEAR_GRAPH_ALERT = "Any unsaved changes will be lost. Are you sure you want to continue?";
 export const EXIT_WINDOW_ALERT = "Any unsaved changes will be lost. Are you sure you want to leave?";
 
+export const UNTITLED_MACHINE_NAME = "Untitled";
 export const NO_MORE_ERRORS = "Hooray! No more errors!";
 export const INCOMPLETE_TRANSITION = "Found incomplete transition(s)";
 export const EMPTY_TRANSITION = "Found empty transition(s)";

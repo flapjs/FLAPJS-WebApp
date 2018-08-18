@@ -1,6 +1,5 @@
 import Config from 'config.js';
 import { EMPTY } from 'machine/Symbols.js';
-import { NO_MORE_ERRORS, INCOMPLETE_TRANSITION, EMPTY_TRANSITION, DUPLICATE_TRANSITION, MISSING_TRANSITION } from 'lang.js';
 
 import StateUnreachableWarningMessage from './error/StateUnreachableWarningMessage.js';
 import TransitionErrorMessage from './error/TransitionErrorMessage.js';
@@ -139,7 +138,7 @@ class DFAErrorChecker
       //No errors!
       if (!result)
       {
-        notification.addMessage(NO_MORE_ERRORS, messageTag, SuccessMessage, false);
+        notification.addMessage(I18N.toString("NO_MORE_ERRORS"), messageTag, SuccessMessage, false);
       }
       //There are some errors/warnings...
       else
@@ -150,16 +149,16 @@ class DFAErrorChecker
 
         //Add new error messages
         if (placeholderEdges.length > 0) notification.addMessage(
-          {text: INCOMPLETE_TRANSITION, targets: placeholderEdges},
+          {text: I18N.toString("INCOMPLETE_TRANSITION"), targets: placeholderEdges},
           messageTag, TransitionErrorMessage, false);
         if (emptyEdges.length > 0) notification.addMessage(
-          {text: EMPTY_TRANSITION, targets: emptyEdges},
+          {text: I18N.toString("EMPTY_TRANSITION"), targets: emptyEdges},
           messageTag, TransitionErrorMessage, false);
         if (dupeEdges.length > 0) notification.addMessage(
-          {text: DUPLICATE_TRANSITION, targets: dupeEdges},
+          {text: I18N.toString("DUPLICATE_TRANSITION"), targets: dupeEdges},
           messageTag, TransitionErrorMessage, false);
         if (missingNodes.length > 0) notification.addMessage(
-          {text: MISSING_TRANSITION, targets: missingNodes},
+          {text: I18N.toString("MISSING_TRANSITION"), targets: missingNodes},
           messageTag, StateErrorMessage, false);
       }
     }

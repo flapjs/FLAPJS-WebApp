@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import Router from 'router.js';
 import Config from 'config.js';
 import { loadConfig, saveConfig } from 'config.js';
-import { EXIT_WINDOW_ALERT } from 'lang.js';
 
 import App from 'content/App.js';
 
@@ -29,12 +28,13 @@ window.addEventListener('beforeunload', (event) => {
     saveConfig();
   }
 
+  const message = I18N.toString("EXIT_WINDOW_ALERT");
   event = event || window.event;
   // For IE and Firefox
-  if (event) event.returnValue = EXIT_WINDOW_ALERT;
+  if (event) event.returnValue = message;
 
   //For Safari
-  return EXIT_WINDOW_ALERT;
+  return message;
 });
 
 //Service Worker

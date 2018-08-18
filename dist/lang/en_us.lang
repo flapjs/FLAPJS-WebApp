@@ -1,1 +1,73 @@
-SOMETHING = NOTHING
+alert.graph.clear = Any unsaved changes will be lost. Are you sure you want to continue?
+alert.window.exit = Any unsaved changes will be lost. Are you sure you want to leave?
+
+message.error.none = Hooray! No more errors!
+message.error.incomplete = Found incomplete transition(s)
+message.error.empty = Found empty transition(s)
+message.error.dupe = Found duplicate transitions
+message.error.missing = Found missing transition(s) for state(s)
+message.warning.unreachable = Found unreachable state(s)
+
+message.action.close = Get out of my way!
+
+CLEAR_GRAPH_ALERT = Any unsaved changes will be lost. Are you sure you want to continue?
+EXIT_WINDOW_ALERT = Any unsaved changes will be lost. Are you sure you want to leave?
+
+UNTITLED_MACHINE_NAME = Untitled
+NO_MORE_ERRORS = Hooray! No more errors!
+INCOMPLETE_TRANSITION = Found incomplete transition(s)
+EMPTY_TRANSITION = Found empty transition(s)
+DUPLICATE_TRANSITION = Found duplicate transitions
+UNREACHABLE_STATE = Found unreachable state(s)
+MISSING_TRANSITION = Found missing transition(s) for state(s)
+
+CLOSE_MESSAGE = Get out of my way!
+
+ERROR_CHECK_LABEL = Error Checking
+NO_ERROR_CHECK = None
+DELAYED_ERROR_CHECK = Delayed
+IMMEDIATE_ERROR_CHECK = Immediate
+
+TESTING_PANEL_TITLE = Testing
+OVERVIEW_PANEL_TITLE = Definition
+EXPORTING_PANEL_TITLE = Exporting
+OPTIONS_PANEL_TITLE = Options
+TOOLBAR_TITLE = Toolbar
+WORKSPACE_TITLE = Workspace
+DRAWER_TITLE = Drawer
+NOTIFICATION_TITLE = Notification
+GRAPH_TITLE = Graph
+LABEL_EDITOR_TITLE = Label Editor
+GENERAL_TITLE = General
+
+CATEGORY_COLOR = Colors
+CATEGORY_SHORTCUTS = Shortcuts
+
+AUTO_LABEL_STATES = Automatic State Labels
+CONVERT_MACHINE_TO = Convert to...
+TRANSITION_TABLE = Transition Table
+STATES_LIST = States
+ALPHABET_LIST = Alphabet
+
+SAVE_AS_MACHINE = Save flap.js machine
+SAVE_AS_PNG = Export as PNG
+SAVE_AS_JPG = Export as JPG
+SAVE_AS_JFLAP = Export to JFLAP
+
+STEP_BY_STEP_MODE = Step-by-Step Mode
+TRANSITION_BY_CLOSURE = Transition By Closure
+
+TEST_PLACEHOLDER = Test string
+RUN_ALL_TESTS = Run All Tests
+CLEAR_ALL_TESTS = Clear
+IMPORT_TESTS = Import Tests
+
+CHOOSE_COLOR_THEME = Change Theme...
+ACTION_SAVE_MACHINE = Save Machine File
+ACTION_UNDO = Undo Action
+ACTION_REDO = Redo Action
+ACTION_SAVE_IMAGE = Export to Image
+
+SKIP_WELCOME_PAGE = Skip Welcome Page
+SWAP_INPUT_CONTROLS = Swap Input Controls
+RESET_TO_DEFAULT = Reset to Default
