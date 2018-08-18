@@ -14,7 +14,8 @@ const TUTORIAL_BUTTON_TEXT = "= Want to try our awesome tutorial? =";
 const CONTENT_QUOTE = "Explore what it means to be \'computable\'.";
 const CONTENT_SUBQUOTE = "- Prof. Mia Minnes";
 
-const HELP_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
+const TUTORIAL_LINK = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/HELP.md";
+const HELP_LINK = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/HELP.md";
 const ABOUT_LINK = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/README.md";
 const REPORT_BUG_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
 const GITHUB_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
@@ -55,7 +56,7 @@ class LandingPage extends React.Component
 
   onTutorialButton(e)
   {
-    const newTab = window.open(HELP_LINK, '_blank');
+    const newTab = window.open(TUTORIAL_LINK, '_blank');
     newTab.focus();
   }
 
