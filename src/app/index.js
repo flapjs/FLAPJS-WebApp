@@ -34,7 +34,7 @@ window.addEventListener('beforeunload', (event) => {
   if (event) event.returnValue = EXIT_WINDOW_ALERT;
 
   //For Safari
-  return message;
+  return EXIT_WINDOW_ALERT;
 });
 
 //Service Worker
