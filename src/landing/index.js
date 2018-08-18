@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import LandingPage from './components/LandingPage.js';
 import HomePage from './HomePage.js';
 
 //Setup viewport
@@ -25,7 +26,7 @@ function updateApplication(time)
 {
   const dt = (time - prevtime) / FRAMES_PER_SECOND;
   {
-    ReactDOM.render(React.createElement(HomePage), root);
+    ReactDOM.render(React.createElement(LandingPage), root);
   }
   prevtime = time;
   window.requestAnimationFrame(updateApplication);
