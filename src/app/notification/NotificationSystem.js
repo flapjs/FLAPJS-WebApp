@@ -13,12 +13,18 @@ class NotificationSystem extends React.Component
 
     const graph = this.props.graph;
     const machineBuilder = this.props.machineBuilder;
+    const controller = this.props.controller;
 
     this.state = {
-      messages: [["Good Morning! Welcome to the Flap.js Workspace!", null, DefaultMessage],
-        ["If you need help, the '?' button is at the top-right of the screen.", null, DefaultMessage],
-        ["If you need still help, find a tutor. I can't help you :( . . . Good-bye.", null, DefaultMessage]],
+      messages: []
     };
+  }
+
+  componentWillMount()
+  {
+    this.addMessage("Good Morning! Welcome to the Flap.js Workspace!");
+    this.addMessage("If you need help, the '?' button is at the top-right of the screen.");
+    this.addMessage("If you need still help, find a tutor. I can't help you :( . . . Good-bye.");
   }
 
   addMessage(message, tag=null, component=null, clearOnAdd=true) {
@@ -29,7 +35,9 @@ class NotificationSystem extends React.Component
     if(component === null) {
       component = DefaultMessage;
     }
-    this.state.messages.unshift([message, tag, component]);
+
+    const id = guid();
+    this.state.messages.unshift([message, tag, component, id]);
   }
 
   clearMessage(tag=null) {
@@ -80,7 +88,8 @@ class NotificationSystem extends React.Component
               const message = e[0];
               const tag = e[1];
               const ComponentClass = e[2];
-              return <ComponentClass key={i}
+              const guid = e[3];
+              return <ComponentClass key={guid}
                 onExit={() => this.state.messages.splice(i, 1)}
                 message={message}
                 tag={tag}
@@ -91,6 +100,16 @@ class NotificationSystem extends React.Component
       </div>
     );
   }
+}
+
+/*TODO: ANOTHER ONE EXISTS IN TESTING MANAGER!!!*/
+function guid()
+{
+  function s4()
+  {
+    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
 
 export default NotificationSystem;

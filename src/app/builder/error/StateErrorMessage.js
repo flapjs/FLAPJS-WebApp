@@ -1,9 +1,8 @@
 import React from 'react';
-import { UNREACHABLE_STATE } from 'lang.js';
 
 import MessageContainer from 'notification/MessageContainer.js';
 
-class StateUnreachableWarningMessage extends React.Component
+class StateErrorMessage extends React.Component
 {
   constructor(props)
   {
@@ -11,11 +10,12 @@ class StateUnreachableWarningMessage extends React.Component
 
     this.targetIndex = 0;
     this.targetLabel = "";
-    for(const target of this.props.message)
+    const targets = this.props.message.targets;
+    for(const target of targets)
     {
       if (this.targetLabel.length > 0)
       {
-        this.targetLabel += ",";
+        this.targetLabel += ", ";
       }
       this.targetLabel += target.label;
     }
@@ -29,19 +29,24 @@ class StateUnreachableWarningMessage extends React.Component
     if (target.value == "locate")
     {
       const notification = this.props.notification;
-      //Locate the target node
-      const target = this.props.message[this.targetIndex++];
-      if (this.targetIndex >= this.props.message.length)
+      const targets = this.props.message.targets;
+      const targetLength = targets.length;
+      if (targetLength > 0 && this.targetIndex < targetLength)
       {
-        this.targetIndex = 0;
+        //Locate the target edge
+        const target = targets[this.targetIndex++];
+        if (this.targetIndex >= targetLength) this.targetIndex = 0;
+
+        //Move pointer to target
+        notification.props.controller.pointer.setOffset(-target.x, -target.y);
       }
-      notification.props.controller.pointer.setOffset(-target.x, -target.y);
     }
     else if (target.value == "deleteall")
     {
       const notification = this.props.notification;
+      const targets = this.props.message.targets;
       //Delete all target nodes
-      for(const node of this.props.message)
+      for(const node of targets)
       {
         notification.props.graph.deleteNode(node);
       }
@@ -57,12 +62,12 @@ class StateUnreachableWarningMessage extends React.Component
   render()
   {
     return <MessageContainer
-      className="notification-warning"
-      value={UNREACHABLE_STATE + ": " + this.targetLabel}
+      className="notification-error"
+      value={this.props.message.text + ": " + this.targetLabel}
       onExit={this.props.onExit}>
       <button value="locate" onClick={this.onClick}>Where is it?</button>
-      <button value="deleteall" onClick={this.onClick}>Delete All</button>
+      <button value="deleteall" onClick={this.onClick}>Delete them all.</button>
     </MessageContainer>;
   }
 }
-export default StateUnreachableWarningMessage;
+export default StateErrorMessage;
