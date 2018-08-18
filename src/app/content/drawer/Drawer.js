@@ -211,19 +211,19 @@ class Drawer extends React.Component
         <DrawerExpander app={app}/>
         <button className={"tab-link" + (this.state.tabIndex == TESTING ? " active" : "")}
           onClick={ev=>this.setTab(TESTING)}>
-          {I18N.toString("TESTING_PANEL_TITLE")}
+          {I18N.toString("component.testing.title")}
         </button>
         <button className={"tab-link" + (this.state.tabIndex == OVERVIEW ? " active" : "")}
           onClick={ev=>this.setTab(OVERVIEW)}>
-          {I18N.toString("OVERVIEW_PANEL_TITLE")}
+          {I18N.toString("component.overview.title")}
         </button>
         <button className={"tab-link" + (this.state.tabIndex == EXPORTING ? " active" : "")}
           onClick={ev=>this.setTab(EXPORTING)}>
-          {I18N.toString("EXPORTING_PANEL_TITLE")}
+          {I18N.toString("component.exporting.title")}
         </button>
         <button className={"tab-link" + (this.state.tabIndex == OPTIONS ? " active" : "")}
           onClick={ev=>this.setTab(OPTIONS)}>
-          {I18N.toString("OPTIONS_PANEL_TITLE")}
+          {I18N.toString("component.options.title")}
         </button>
 
         <div className="tab-right"></div>

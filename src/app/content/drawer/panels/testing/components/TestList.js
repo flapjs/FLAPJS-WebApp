@@ -47,7 +47,7 @@ class TestList extends React.Component
         tester.testPlaceholder(machine);
         tester.testAll(machine);
       }}>
-        {I18N.toString("RUN_ALL_TESTS")}
+        {I18N.toString("action.testing.runall")}
       </button>
 
       <div className="scrollbar-container">
@@ -62,7 +62,7 @@ class TestList extends React.Component
         }
         <button className="panel-button"
           onClick={()=>tester.clear(true)}>
-          {I18N.toString("CLEAR_ALL_TESTS")}
+          {I18N.toString("action.testing.clear")}
         </button>
       </div>
       </div>
@@ -71,7 +71,7 @@ class TestList extends React.Component
         <input id="test-upload-input" type="file" name="import" style={{display: "none"}}
           onChange={this.onUploadFileChange} accept=".txt"/>
         <label htmlFor="test-upload-input">
-          {I18N.toString("IMPORT_TESTS")}
+          {I18N.toString("action.testing.import")}
         </label>
       </button>
     </div>;

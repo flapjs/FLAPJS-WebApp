@@ -25,7 +25,7 @@ class Subtitle extends React.Component
   {
     const visible = this.state.active ? this.props.visible : false;
     return <text y="-1em" className={"graph-ui subtitle" + (visible ? " visible" : "")}
-      textAnchor="middle">{Config.EMPTY_MESSAGE}</text>;
+      textAnchor="middle">{I18N.toString("message.workspace.empty")}</text>;
   }
 }
 

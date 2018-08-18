@@ -5,18 +5,10 @@ cfg._resetOnLoad = false;
 export default cfg;
 
 //General
-cfg.CLEAR_GRAPH_MESSAGE = "Any unsaved changes will be lost. Are you sure you want to continue?";
-
 cfg.MACHINE_ERRORS_MESSAGE_TAG = "machineError";
 
 cfg.ERROR_CHECK_INTERVAL = 2000;
 cfg.GRAPH_IMMEDIATE_INTERVAL = 50;
-
-//Toolbar
-cfg.DEFAULT_MACHINE_NAME = "Untitled";
-
-//Testing Panel
-cfg.PLACEHOLDER_TEXT = "Test string";
 
 //Controller
 cfg.SMOOTH_OFFSET_DAMPING = 0.4;
@@ -25,7 +17,6 @@ cfg.MIN_SCALE = 0.1;
 cfg.MAX_SCALE = 10;
 
 //Workspace
-cfg.EMPTY_MESSAGE = "Double-tap to create a node";
 cfg.INIT_WAITTIME = 1500;
 
 //NodalGraph

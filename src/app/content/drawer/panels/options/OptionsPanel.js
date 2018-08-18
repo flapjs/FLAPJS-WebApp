@@ -31,27 +31,27 @@ class OptionsPanel extends React.Component
     const root = document.getElementById("root");
     return <div className="panel-container" id="option" ref={ref=>this.container=ref}>
       <div className="panel-title">
-        <h1>{I18N.toString("OPTIONS_PANEL_TITLE")}</h1>
+        <h1>{I18N.toString("component.options.title")}</h1>
       </div>
       <div className="panel-content">
 
-        <button className="panel-button" disabled="true">{I18N.toString("CHOOSE_COLOR_THEME")}</button>
+        <button className="panel-button" disabled="true">{I18N.toString("action.options.changetheme")}</button>
 
         <hr/>
 
-        <OptionGroup title={I18N.toString("WORKSPACE_TITLE")} label={I18N.toString("CATEGORY_SHORTCUTS")}>
-          <OptionHotkey label={I18N.toString("ACTION_SAVE_MACHINE")} keyName="Ctrl + S"/>
-          <OptionHotkey label={I18N.toString("ACTION_UNDO")} keyName="Ctrl + Z"/>
-          <OptionHotkey label={I18N.toString("ACTION_REDO")} keyName="Ctrl + Shift + Z"/>
-          <OptionHotkey label={I18N.toString("ACTION_SAVE_IMAGE")} keyName="Ctrl + P"/>
+        <OptionGroup title={I18N.toString("component.workspace.title")} label={I18N.toString("options.category.shortcuts")}>
+          <OptionHotkey label={I18N.toString("action.toolbar.savemachine")} keyName="Ctrl + S"/>
+          <OptionHotkey label={I18N.toString("action.toolbar.undo.label")} keyName="Ctrl + Z"/>
+          <OptionHotkey label={I18N.toString("action.toolbar.redo.label")} keyName="Ctrl + Shift + Z"/>
+          <OptionHotkey label={I18N.toString("action.toolbar.saveimage")} keyName="Ctrl + P"/>
         </OptionGroup>
 
-        <OptionGroup title={I18N.toString("TESTING_PANEL_TITLE")} label={I18N.toString("CATEGORY_SHORTCUTS")}>
-          <OptionHotkey label="Submit Change" keyName="Enter"/>
-          <OptionHotkey label="Cancel Change" keyName="Escape"/>
+        <OptionGroup title={I18N.toString("component.testing.title")} label={I18N.toString("options.category.shortcuts")}>
+          <OptionHotkey label={I18N.toString("action.workspace.submit.label")} keyName="Enter"/>
+          <OptionHotkey label={I18N.toString("action.workspace.cancel.label")} keyName="Escape"/>
         </OptionGroup>
 
-        <OptionGroup title={I18N.toString("TOOLBAR_TITLE")} label={I18N.toString("CATEGORY_COLOR")}>
+        <OptionGroup title={I18N.toString("component.toolbar.title")} label={I18N.toString("options.category.colors")}>
           <OptionColor label="Main Color" propName="--color-toolbar-main" root={root}
             dark="true"/>
           <OptionColor label="Accent Color" propName="--color-toolbar-accent" root={root}
@@ -60,7 +60,7 @@ class OptionsPanel extends React.Component
             invert="true"/>
         </OptionGroup>
 
-        <OptionGroup title={I18N.toString("DRAWER_TITLE")} label={I18N.toString("CATEGORY_COLOR")}>
+        <OptionGroup title={I18N.toString("component.drawer.title")} label={I18N.toString("options.category.colors")}>
           <OptionColor label="Main Color" propName="--color-drawer-main" root={root}
             dark="true"/>
           <OptionColor label="Accent Color" propName="--color-drawer-accent" root={root}/>
@@ -72,14 +72,14 @@ class OptionsPanel extends React.Component
           <OptionColor label="Error Color" propName="--color-drawer-error" root={root}/>
         </OptionGroup>
 
-        <OptionGroup title={I18N.toString("TESTING_PANEL_TITLE")} label={I18N.toString("CATEGORY_COLOR")}>
+        <OptionGroup title={I18N.toString("component.testing.title")} label={I18N.toString("options.category.colors")}>
           <OptionColor label="Success Color" propName="--color-testing-success" root={root}/>
           <OptionColor label="Failure Color" propName="--color-testing-failure" root={root}/>
           <OptionColor label="Working Color" propName="--color-testing-working" root={root}/>
           <OptionColor label="Text Color" propName="--color-testing-text" root={root}/>
         </OptionGroup>
 
-        <OptionGroup title={I18N.toString("NOTIFICATION_TITLE")} label={I18N.toString("CATEGORY_COLOR")}>
+        <OptionGroup title={I18N.toString("component.notification.title")} label={I18N.toString("options.category.colors")}>
           <OptionColor label="Text Color" propName="--color-notification-text" root={root}/>
           <OptionColor label="Info Color" propName="--color-notification-info" root={root}
             dark="true"/>
@@ -89,19 +89,19 @@ class OptionsPanel extends React.Component
             dark="true"/>
         </OptionGroup>
 
-        <OptionGroup title={I18N.toString("GRAPH_TITLE")} label={I18N.toString("CATEGORY_COLOR")}>
+        <OptionGroup title={I18N.toString("component.graph.title")} label={I18N.toString("options.category.colors")}>
           <OptionColor label="Node Color" propName="--color-graph-node" root={root}/>
           <OptionColor label="Text Color" propName="--color-workspace-text" root={root}/>
           <OptionColor label="Main Color" propName="--color-workspace-main" root={root}/>
           <OptionColor label="Label Editor Main Color" propName="--color-labeleditor-main" root={root}/>
         </OptionGroup>
 
-        <OptionGroup title={I18N.toString("LABEL_EDITOR_TITLE")} label={I18N.toString("CATEGORY_COLOR")}>
+        <OptionGroup title={I18N.toString("component.labeleditor.title")} label={I18N.toString("options.category.colors")}>
           <OptionColor label="Text Color" propName="--color-labeleditor-text" root={root}/>
           <OptionColor label="Main Color" propName="--color-labeleditor-main" root={root}/>
         </OptionGroup>
 
-        <OptionGroup title={I18N.toString("GENERAL_TITLE")} label={I18N.toString("CATEGORY_COLOR")}>
+        <OptionGroup title={I18N.toString("options.category.general")} label={I18N.toString("options.category.colors")}>
           <OptionColor label="Viewport Error Color" propName="--color-viewport-error" root={root}/>
           <OptionColor label="Viewport Warning Color" propName="--color-viewport-warning" root={root}/>
           <OptionColor label="Highlight Select Color" propName="--color-highlight-select" root={root}/>
@@ -116,7 +116,7 @@ class OptionsPanel extends React.Component
             this.setState({skipWelcome: e.target.checked});
             Storage.saveToLocalStorage("skipWelcome", result);
           }}/>
-          <label htmlFor="option-skipwelcome">{I18N.toString("SKIP_WELCOME_PAGE")}</label>
+          <label htmlFor="option-skipwelcome">{I18N.toString("options.skipwelcome")}</label>
         </div>
 
         <div className="panel-checkbox">
@@ -124,7 +124,7 @@ class OptionsPanel extends React.Component
             onChange={(e) => {
               this.props.controller.setMouseActionMode(e.target.checked);
             }}/>
-          <label htmlFor="option-altinput">{I18N.toString("SWAP_INPUT_CONTROLS")}</label>
+          <label htmlFor="option-altinput">{I18N.toString("options.swapinputs")}</label>
         </div>
 
         <button className="panel-button" onClick={(e) => {
@@ -134,7 +134,7 @@ class OptionsPanel extends React.Component
           saveConfig();
 
           location.reload();
-        }}>{I18N.toString("RESET_TO_DEFAULT")}</button>
+        }}>{I18N.toString("action.options.reset")}</button>
 
 
       </div>

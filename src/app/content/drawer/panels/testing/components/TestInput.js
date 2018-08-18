@@ -126,7 +126,7 @@ class TestInput extends React.Component
 
       <input ref={ref=>this.inputElement=ref} className="test-input-field"
         value={src.value}
-        placeholder={this.props.placeholder ? I18N.toString("TEST_PLACEHOLDER") : EMPTY}
+        placeholder={this.props.placeholder ? I18N.toString("testing.placeholder") : EMPTY}
         onChange={this.onValueChange}
         onKeyDown={this.onKeyDown}
         onKeyUp={this.onKeyUp}

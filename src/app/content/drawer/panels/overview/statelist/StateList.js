@@ -30,7 +30,7 @@ class StateList extends React.Component
   {
     const controller = this.props.controller;
     const graph = this.props.machineBuilder.graph;
-    return <InfoBlock title={I18N.toString("STATES_LIST")} defaultValue="true">
+    return <InfoBlock title={I18N.toString("component.stateslist.title")} defaultValue="true">
       <div className="statelist-container">
         <div className="statelist">
           <TriangleIcon/>

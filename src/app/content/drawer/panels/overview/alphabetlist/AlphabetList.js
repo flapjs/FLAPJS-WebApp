@@ -37,7 +37,7 @@ class AlphabetList extends React.Component
   {
     const machineBuilder = this.props.machineBuilder;
     const alphabet = machineBuilder.getAlphabet().sort();
-    return <InfoBlock title={I18N.toString("ALPHABET_LIST")}>
+    return <InfoBlock title={I18N.toString("component.alphabetlist.title")}>
       <div className="alphalist-container">
         <div className="alphalist">
           {

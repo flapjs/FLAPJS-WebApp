@@ -50,9 +50,9 @@ class Toolbar extends React.Component
       <div className="toolbar-title">
         <div className="toolbar-title-name">
           {/*Machine Name*/}
-          <input id="machine-name" type="text" defaultValue={I18N.toString("UNTITLED_MACHINE_NAME")} ref={ref=>this.machineName=ref}/>
+          <input id="machine-name" type="text" defaultValue={I18N.toString("file.untitled")} ref={ref=>this.machineName=ref}/>
           {/*Upload Button*/}
-          <UploadButton id="toolbar-upload-alt" title="Upload"
+          <UploadButton id="toolbar-upload-alt" title={I18N.toString("action.toolbar.uploadmachine")}
             graph={graph}
             onChange={(e)=>{
               this.setMachineName(e.name);
@@ -70,9 +70,9 @@ class Toolbar extends React.Component
 
       <div className="toolbar-tray">
         {/*New Button*/}
-        <IconButton className="navicon" id="toolbar-new" title="New"
+        <IconButton className="navicon" id="toolbar-new" title={I18N.toString("action.toolbar.newmachine")}
           onClick={() => {
-            if (window.confirm(Config.CLEAR_GRAPH_MESSAGE))
+            if (window.confirm(I18N.toString("alert.graph.clear")))
             {
               graph.deleteAll();
               eventHistory.clear();
@@ -81,7 +81,7 @@ class Toolbar extends React.Component
           <CreateIcon/>
         </IconButton>
         {/*Upload Button*/}
-        <UploadButton className="navicon" id="toolbar-upload" title="Upload"
+        <UploadButton className="navicon" id="toolbar-upload" title={I18N.toString("action.toolbar.uploadmachine")}
           graph={graph}
           onChange={(e)=>{
             this.setMachineName(e.name);
@@ -90,24 +90,24 @@ class Toolbar extends React.Component
           <UploadIcon/>
         </UploadButton>
         {/*Undo Button*/}
-        <IconButton className="navicon" id="toolbar-undo" title="Undo"
+        <IconButton className="navicon" id="toolbar-undo" title={I18N.toString("action.toolbar.undo")}
           disabled={!eventHistory.canUndo()}
           onClick={()=>eventHistory.undo()}>
           <UndoIcon/>
         </IconButton>
         {/*Redo Button*/}
-        <IconButton className="navicon" id="toolbar-redo" title="Redo"
+        <IconButton className="navicon" id="toolbar-redo" title={I18N.toString("action.toolbar.redo")}
           disabled={!eventHistory.canRedo()}
           onClick={()=>eventHistory.redo()}>
           <RedoIcon/>
         </IconButton>
         {/*Save Button*/}
-        <IconButton className="navicon" id="toolbar-save" title="Save"
+        <IconButton className="navicon" id="toolbar-save" title={I18N.toString("action.toolbar.save")}
           onClick={()=>drawer.setTab(2)} disabled={graph.isEmpty()}>
           <SaveIcon/>
         </IconButton>
         {/*Help Button*/}
-        <HelpButton className="navicon" id="toolbar-help" title="Help"
+        <HelpButton className="navicon" id="toolbar-help" title={I18N.toString("action.toolbar.help")}
           notification={notification}>
           <HelpIcon/>
         </HelpButton>

@@ -138,7 +138,7 @@ class DFAErrorChecker
       //No errors!
       if (!result)
       {
-        notification.addMessage(I18N.toString("NO_MORE_ERRORS"), messageTag, SuccessMessage, false);
+        notification.addMessage(I18N.toString("message.error.none"), messageTag, SuccessMessage, false);
       }
       //There are some errors/warnings...
       else
@@ -149,16 +149,16 @@ class DFAErrorChecker
 
         //Add new error messages
         if (placeholderEdges.length > 0) notification.addMessage(
-          {text: I18N.toString("INCOMPLETE_TRANSITION"), targets: placeholderEdges},
+          {text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
           messageTag, TransitionErrorMessage, false);
         if (emptyEdges.length > 0) notification.addMessage(
-          {text: I18N.toString("EMPTY_TRANSITION"), targets: emptyEdges},
+          {text: I18N.toString("message.error.empty"), targets: emptyEdges},
           messageTag, TransitionErrorMessage, false);
         if (dupeEdges.length > 0) notification.addMessage(
-          {text: I18N.toString("DUPLICATE_TRANSITION"), targets: dupeEdges},
+          {text: I18N.toString("message.error.dupe"), targets: dupeEdges},
           messageTag, TransitionErrorMessage, false);
         if (missingNodes.length > 0) notification.addMessage(
-          {text: I18N.toString("MISSING_TRANSITION"), targets: missingNodes},
+          {text: I18N.toString("message.error.missing"), targets: missingNodes},
           messageTag, StateErrorMessage, false);
       }
     }

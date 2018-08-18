@@ -38,8 +38,15 @@ const I18N = {
     //Load langugage file
     let separator, key, value;
     const lines = langFile.split("\n");
-    for(const line of lines)
+    for(let line of lines)
     {
+      line = line.trim();
+      if (line.startsWith("//")) continue;
+      if (line.startsWith("//TODO:"))
+      {
+        console.log("Warning - found incomplete lang file: " + line.substring("//".length).trim());
+      }
+
       separator = line.indexOf('=');
       if (separator < 0) continue;
 
@@ -47,14 +54,12 @@ const I18N = {
       value = line.substring(separator + 1).trim();
       if (key.length == 0) continue;
 
-      //TODO: debug message!
-      console.log("KEY:" + key + " = VALUE:" + value);
       this.languageMapping.set(key, value);
     }
   },
 
   toString(langKey)
   {
-    return langKey || this.languageMapping.get(langKey) || langKey;
+    return this.languageMapping.get(langKey) || langKey;
   }
 };

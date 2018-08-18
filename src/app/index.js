@@ -28,7 +28,7 @@ window.addEventListener('beforeunload', (event) => {
     saveConfig();
   }
 
-  const message = I18N.toString("EXIT_WINDOW_ALERT");
+  const message = I18N.toString("alert.window.exit");
   event = event || window.event;
   // For IE and Firefox
   if (event) event.returnValue = message;

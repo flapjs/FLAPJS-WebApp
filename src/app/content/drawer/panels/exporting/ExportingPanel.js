@@ -28,17 +28,17 @@ class ExportingPanel extends React.Component
 
     return <div className="panel-container" id="exporting" ref={ref=>this.container=ref}>
       <div className="panel-title">
-        <h1>{I18N.toString("EXPORTING_PANEL_TITLE")}</h1>
+        <h1>{I18N.toString("component.exporting.title")}</h1>
       </div>
       <div className="panel-content">
         {/*JSON*/}
-        <IconButton className="export-button" id="export-json" title="Save as JSON"
+        <IconButton className="export-button" id="export-json" title={I18N.toString("file.export.machine.hint")}
           onClick={()=>Downloader.downloadText(toolbar.getMachineName() + '.json', JSON.stringify(graph.toJSON()))}>
           <JSONIcon/>
-          <label>{I18N.toString("SAVE_AS_MACHINE")}</label>
+          <label>{I18N.toString("file.export.machine")}</label>
         </IconButton>
         {/*PNG*/}
-        <IconButton className="export-button" id="export-png" title="Export as PNG"
+        <IconButton className="export-button" id="export-png" title={I18N.toString("file.export.png.hint")}
           onClick={() => {
             const workspaceDim = workspace.ref.viewBox.baseVal;
             const width = workspaceDim.width;
@@ -47,10 +47,10 @@ class ExportingPanel extends React.Component
             Downloader.downloadSVG(toolbar.getMachineName(), 'png', svg, width, height);
           }}>
           <PNGIcon/>
-          <label>{I18N.toString("SAVE_AS_PNG")}</label>
+          <label>{I18N.toString("file.export.png")}</label>
         </IconButton>
         {/*JPG*/}
-        <IconButton className="export-button" id="export-jpg" title="Export as JPG"
+        <IconButton className="export-button" id="export-jpg" title={I18N.toString("file.export.jpg.hint")}
           onClick={() => {
             const workspaceDim = workspace.ref.viewBox.baseVal;
             const width = workspaceDim.width;
@@ -59,14 +59,14 @@ class ExportingPanel extends React.Component
             Downloader.downloadSVG(toolbar.getMachineName(), 'jpg', svg, width, height);
           }}>
           <JPGIcon/>
-          <label>{I18N.toString("SAVE_AS_JPG")}</label>
+          <label>{I18N.toString("file.export.jpg")}</label>
         </IconButton>
         {/*XML*/}
-        <IconButton className="export-button" id="export-xml" title="Export as JFF"
+        <IconButton className="export-button" id="export-xml" title={I18N.toString("file.export.jff.hint")}
           disabled="true">
           {/*TODO: Add JFLAP export functionality*/}
           <XMLIcon/>
-          <label>{I18N.toString("SAVE_AS_JFLAP")}</label>
+          <label>{I18N.toString("file.export.jff")}</label>
         </IconButton>
       </div>
 

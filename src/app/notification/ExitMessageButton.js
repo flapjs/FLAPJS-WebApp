@@ -10,7 +10,7 @@ class ExitMessageButton extends React.Component
   render()
   {
     return <button className={this.props.className} onClick={this.props.onClick}>
-      {this.props.label || I18N.toString("CLOSE_MESSAGE")}
+      {this.props.label || I18N.toString("message.action.close")}
     </button>;
   }
 }

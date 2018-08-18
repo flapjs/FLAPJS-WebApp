@@ -47,7 +47,7 @@ class TestingPanel extends React.Component
 
     return <div className="panel-container" id="testing" ref={ref=>this.container=ref}>
       <div className="panel-title">
-        <h1>{I18N.toString("TESTING_PANEL_TITLE")}</h1>
+        <h1>{I18N.toString("component.testing.title")}</h1>
       </div>
 
       <div className="panel-content">
@@ -55,13 +55,13 @@ class TestingPanel extends React.Component
         <hr />
 
         <div id="test-errorcheck">
-          <label>{I18N.toString("ERROR_CHECK_LABEL")}</label>
+          <label>{I18N.toString("options.checkerrors")}</label>
           <select className="panel-select"
             value={this.state.errorCheckMode}
             onChange={this.onChangeErrorCheckMode}>
-            <option value={TestingManager.NO_ERROR_CHECK}>{I18N.toString("NO_ERROR_CHECK")}</option>
-            <option value={TestingManager.DELAYED_ERROR_CHECK}>{I18N.toString("DELAYED_ERROR_CHECK")}</option>
-            <option value={TestingManager.IMMEDIATE_ERROR_CHECK}>{I18N.toString("IMMEDIATE_ERROR_CHECK")}</option>
+            <option value={TestingManager.NO_ERROR_CHECK}>{I18N.toString("options.checkerrors.mode.none")}</option>
+            <option value={TestingManager.DELAYED_ERROR_CHECK}>{I18N.toString("options.checkerrors.mode.delayed")}</option>
+            <option value={TestingManager.IMMEDIATE_ERROR_CHECK}>{I18N.toString("options.checkerrors.mode.immediate")}</option>
           </select>
         </div>
         <div className="panel-checkbox">
@@ -78,11 +78,11 @@ class TestingPanel extends React.Component
               if (tester.testMode.isStarted()) tester.testMode.onStop();
             }
           }}/>
-          <label htmlFor="test-step">{I18N.toString("STEP_BY_STEP_MODE")}</label>
+          <label htmlFor="test-step">{I18N.toString("options.testing.stepmode")}</label>
         </div>
         <div className="panel-checkbox">
           <input id="test-closure" type="checkbox" disabled="true"/>
-          <label htmlFor="test-closure">{I18N.toString("TRANSITION_BY_CLOSURE")}</label>
+          <label htmlFor="test-closure">{I18N.toString("options.testing.closure")}</label>
         </div>
       </div>
 

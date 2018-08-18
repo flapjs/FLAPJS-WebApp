@@ -87,7 +87,7 @@ class NFAErrorChecker
       //No errors!
       if (!result)
       {
-        notification.addMessage(I18N.toString("NO_MORE_ERRORS"), messageTag, SuccessMessage, false);
+        notification.addMessage(I18N.toString("message.error.none"), messageTag, SuccessMessage, false);
       }
       //There are some errors/warnings...
       else
@@ -98,7 +98,7 @@ class NFAErrorChecker
 
         //Add new error messages
         if (placeholderEdges.length > 0) notification.addMessage(
-          {text: I18N.toString("INCOMPLETE_TRANSITION"), targets: placeholderEdges},
+          {text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
           messageTag, TransitionErrorMessage, false);
       }
     }

@@ -9,65 +9,74 @@ message.error.missing = Found missing transition(s) for state(s)
 message.warning.unreachable = Found unreachable state(s)
 
 message.action.close = Get out of my way!
+message.workspace.empty = Double-tap to create a node
 
-CLEAR_GRAPH_ALERT = Any unsaved changes will be lost. Are you sure you want to continue?
-EXIT_WINDOW_ALERT = Any unsaved changes will be lost. Are you sure you want to leave?
+component.testing.title = Testing
+component.overview.title = Definition
+component.exporting.title = Exporting
+component.options.title = Options
+component.toolbar.title = Toolbar
+component.workspace.title = Workspace
+component.drawer.title = Drawer
+component.notification.title = Notification
+component.transitiontable.title = Transition Table
+component.stateslist.title = States
+component.alphabetlist.title = Alphabet
+component.graph.title = Graph
+component.labeleditor.title = Label Editor
 
-UNTITLED_MACHINE_NAME = Untitled
-NO_MORE_ERRORS = Hooray! No more errors!
-INCOMPLETE_TRANSITION = Found incomplete transition(s)
-EMPTY_TRANSITION = Found empty transition(s)
-DUPLICATE_TRANSITION = Found duplicate transitions
-UNREACHABLE_STATE = Found unreachable state(s)
-MISSING_TRANSITION = Found missing transition(s) for state(s)
+options.category.colors = Colors
+options.category.shortcuts = Shortcuts
+options.category.general = General
 
-CLOSE_MESSAGE = Get out of my way!
+options.checkerrors = Error Checking
+options.checkerrors.mode.none = None
+options.checkerrors.mode.delayed = Delayed
+options.checkerrors.mode.immediate = Immediate
 
-ERROR_CHECK_LABEL = Error Checking
-NO_ERROR_CHECK = None
-DELAYED_ERROR_CHECK = Delayed
-IMMEDIATE_ERROR_CHECK = Immediate
+options.autolabel = Automatic State Labels
+options.skipwelcome = Skip Welcome Page
+options.swapinputs = Swap Input Controls
 
-TESTING_PANEL_TITLE = Testing
-OVERVIEW_PANEL_TITLE = Definition
-EXPORTING_PANEL_TITLE = Exporting
-OPTIONS_PANEL_TITLE = Options
-TOOLBAR_TITLE = Toolbar
-WORKSPACE_TITLE = Workspace
-DRAWER_TITLE = Drawer
-NOTIFICATION_TITLE = Notification
-GRAPH_TITLE = Graph
-LABEL_EDITOR_TITLE = Label Editor
-GENERAL_TITLE = General
+options.testing.stepmode = Step-by-Step Mode
+options.testing.closure = Transition By Closure
 
-CATEGORY_COLOR = Colors
-CATEGORY_SHORTCUTS = Shortcuts
+file.untitled = Untitled
+file.export.machine = Save flap.js machine
+file.export.png = Export as PNG
+file.export.jpg = Export as JPG
+file.export.jff = Export to JFLAP
 
-AUTO_LABEL_STATES = Automatic State Labels
-CONVERT_MACHINE_TO = Convert to...
-TRANSITION_TABLE = Transition Table
-STATES_LIST = States
-ALPHABET_LIST = Alphabet
+file.export.machine.hint = Save machine as .json
+file.export.png.hint = Export machine as .png
+file.export.jpg.hint = Export machine as .jpg
+file.export.jff.hint = Export machine as .jff
 
-SAVE_AS_MACHINE = Save flap.js machine
-SAVE_AS_PNG = Export as PNG
-SAVE_AS_JPG = Export as JPG
-SAVE_AS_JFLAP = Export to JFLAP
+testing.placeholder = Test string
 
-STEP_BY_STEP_MODE = Step-by-Step Mode
-TRANSITION_BY_CLOSURE = Transition By Closure
+//TODO: Actions should probably be labeled by context...
 
-TEST_PLACEHOLDER = Test string
-RUN_ALL_TESTS = Run All Tests
-CLEAR_ALL_TESTS = Clear
-IMPORT_TESTS = Import Tests
+action.testing.runall = Run All Tests
+action.testing.clear = Clear
+action.testing.import = Import Tests
 
-CHOOSE_COLOR_THEME = Change Theme...
-ACTION_SAVE_MACHINE = Save Machine File
-ACTION_UNDO = Undo Action
-ACTION_REDO = Redo Action
-ACTION_SAVE_IMAGE = Export to Image
+action.overview.convertmachine = Convert To...
 
-SKIP_WELCOME_PAGE = Skip Welcome Page
-SWAP_INPUT_CONTROLS = Swap Input Controls
-RESET_TO_DEFAULT = Reset to Default
+action.options.changetheme = Change Theme...
+action.options.reset = Reset to Default
+action.toolbar.savemachine = Save Machine File
+action.toolbar.saveimage = Export to Image
+
+action.toolbar.save = Save
+action.toolbar.help = Help
+action.toolbar.newmachine = New
+action.toolbar.uploadmachine = Upload
+action.toolbar.undo = Undo
+action.toolbar.redo = Redo
+action.workspace.submit = Submit
+action.workspace.cancel = Cancel
+
+action.toolbar.undo.label = Undo Action
+action.toolbar.redo.label = Redo Action
+action.workspace.submit.label = Submit Change
+action.workspace.cancel.label = Cancel Change

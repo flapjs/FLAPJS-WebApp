@@ -34,7 +34,7 @@ class TransitionTable extends React.Component
     const isNFAMachine = machineBuilder.getMachineType() == "NFA";
     const hasEmptyColumn = rowAxisType === SYMBOL_AXIS && isNFAMachine;
 
-    return <InfoBlock title={I18N.toString("TRANSITION_TABLE")}>
+    return <InfoBlock title={I18N.toString("component.transitiontable.title")}>
       <div className="transitiontable-container">
         <table className="transitiontable">
           <tbody>
