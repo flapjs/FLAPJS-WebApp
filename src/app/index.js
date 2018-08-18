@@ -7,7 +7,6 @@ import { loadConfig, saveConfig } from 'config.js';
 import { EXIT_WINDOW_ALERT } from 'lang.js';
 
 import App from 'content/App.js';
-import NotFoundPage from '404/NotFoundPage.js';
 
 //HACK: to determine if this is first time use
 import AutoSaver from 'util/AutoSaver.js';
@@ -16,7 +15,6 @@ const USE_SERVICE_WORKER = false;
 const AUTOSAVE_CONFIG = false;
 
 Router.registerPage('/', App);
-Router.registerPage(null, NotFoundPage);
 
 //Setup viewport
 window.addEventListener('load', (event) => {

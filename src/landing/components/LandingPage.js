@@ -50,7 +50,7 @@ class LandingPage extends React.Component
     element.style.animation = "fadeout " + timeout + "ms ease forwards";
 
     setTimeout(() => {
-      window.location.replace("dist/app.html");
+      window.location.href = "dist/app.html";
     }, timeout);
   }
 
