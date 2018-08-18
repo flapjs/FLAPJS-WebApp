@@ -15,7 +15,7 @@ class StateUnreachableWarningMessage extends React.Component
     {
       if (this.targetLabel.length > 0)
       {
-        this.targetLabel += ",";
+        this.targetLabel += ", ";
       }
       this.targetLabel += target.label;
     }
@@ -35,7 +35,9 @@ class StateUnreachableWarningMessage extends React.Component
       {
         this.targetIndex = 0;
       }
-      notification.props.controller.pointer.setOffset(-target.x, -target.y);
+
+      //Move pointer to target
+      notification.props.controller.focusOnNode(target);
     }
     else if (target.value == "deleteall")
     {
@@ -45,6 +47,8 @@ class StateUnreachableWarningMessage extends React.Component
       {
         notification.props.graph.deleteNode(node);
       }
+      //Sort the nodes after deleting if enabled...
+      notification.props.machineBuilder.labeler.sortDefaultNodeLabels();
       //Exit the message
       this.props.onExit(e);
     }

@@ -30,8 +30,11 @@
   --color-notification-error-dark: #B54A4A;
   --color-notification-warning: #E6CB53;
   --color-notification-warning-dark: #DFBC20;
+  --color-notification-success: #A1C797;
+  --color-notification-success-dark: #468C34;
 
   --color-viewport-error: #F54545;
+  --color-viewport-warning: #E6CB53;
   --color-highlight-select: #808080;
 
   --color-labeleditor-text: #000000;

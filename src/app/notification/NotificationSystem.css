@@ -15,3 +15,7 @@
   border-color: var(--color-notification-warning-dark)!important;
   background-color: var(--color-notification-warning)!important;
 }
+.notification-success {
+  border-color: var(--color-notification-success-dark)!important;
+  background-color: var(--color-notification-success)!important;
+}

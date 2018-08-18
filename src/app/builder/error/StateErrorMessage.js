@@ -50,6 +50,10 @@ class StateErrorMessage extends React.Component
       {
         notification.props.graph.deleteNode(node);
       }
+
+      //Sort the nodes after deleting if enabled...
+      notification.props.machineBuilder.labeler.sortDefaultNodeLabels();
+
       //Exit the message
       this.props.onExit(e);
     }

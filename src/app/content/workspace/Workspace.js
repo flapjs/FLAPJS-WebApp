@@ -126,6 +126,14 @@ class Workspace extends React.Component
           {/* Selection box */}
           <SelectionBoxRenderer src={controller.selector}/>
 
+          {/* Node warning targets */}
+          { machineBuilder.machineErrorChecker.warningNodes.map((e, i) =>
+            <HighlightRenderer key={e.label + "." + i} className="highlight-warning graph-gui" target={e} type="node" offset="6"/>) }
+
+          {/* Edge warning targets */}
+          { machineBuilder.machineErrorChecker.warningEdges.map((e, i) =>
+            <HighlightRenderer key={e.label + "." + i} className="highlight-warning graph-gui" target={e} type="edge" offset="6"/>) }
+
           {/* Node error targets */}
           { machineBuilder.machineErrorChecker.errorNodes.map((e, i) =>
             <HighlightRenderer key={e.label + "." + i} className="highlight-error graph-gui" target={e} type="node" offset="6"/>) }
@@ -133,6 +141,7 @@ class Workspace extends React.Component
           {/* Edge error targets */}
           { machineBuilder.machineErrorChecker.errorEdges.map((e, i) =>
             <HighlightRenderer key={e.label + "." + i} className="highlight-error graph-gui" target={e} type="edge" offset="6"/>) }
+
 
           {/* Node test targets */}
           { tester.testMode.targets.map((e, i) =>

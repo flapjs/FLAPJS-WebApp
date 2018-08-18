@@ -35,6 +35,9 @@
 .highlight-select, .highlight-test {
   stroke: var(--color-highlight-select);
 }
+.highlight-warning {
+  stroke: var(--color-viewport-warning);
+}
 .highlight-error {
   stroke: var(--color-viewport-error);
 }

@@ -5,6 +5,7 @@ import { NO_MORE_ERRORS, INCOMPLETE_TRANSITION, EMPTY_TRANSITION, DUPLICATE_TRAN
 import StateUnreachableWarningMessage from './error/StateUnreachableWarningMessage.js';
 import TransitionErrorMessage from './error/TransitionErrorMessage.js';
 import StateErrorMessage from './error/StateErrorMessage.js';
+import SuccessMessage from 'notification/SuccessMessage.js';
 
 class DFAErrorChecker
 {
@@ -15,12 +16,16 @@ class DFAErrorChecker
 
     this.errorNodes = [];
     this.errorEdges = [];
+    this.warningNodes = [];
+    this.warningEdges = [];
   }
 
   clear()
   {
     this.errorNodes.length = 0;
     this.errorEdges.length = 0;
+    this.warningNodes.length = 0;
+    this.warningEdges.length = 0;
   }
 
   checkErrors(notification=null)
@@ -31,10 +36,11 @@ class DFAErrorChecker
     const machine = this.machineBuilder.getMachine();
     const graph = this.graph;
     const alphabet = machine.getAlphabet();
-    const nodeTargets = this.errorNodes;
-    const edgeTargets = this.errorEdges;
-    nodeTargets.length = 0;
-    edgeTargets.length = 0;
+    const errorNodes = this.errorNodes;
+    const errorEdges = this.errorEdges;
+    const warnNodes = this.warningNodes;
+    const warnEdges = this.warningEdges;
+    this.clear();
 
     let nodeTransitionMap = new Map();
     let unReachedNode = graph.nodes.slice();
@@ -51,7 +57,7 @@ class DFAErrorChecker
       {
         //Update cached error targets
         placeholderEdges.push(edge);
-        if (edgeTargets.indexOf(edge) == -1) edgeTargets.push(edge);
+        if (errorEdges.indexOf(edge) == -1) errorEdges.push(edge);
       }
       else
       {
@@ -69,7 +75,7 @@ class DFAErrorChecker
           {
             //Update cached error targets
             emptyEdges.push(edge);
-            if (edgeTargets.indexOf(edge) == -1) edgeTargets.push(edge);
+            if (errorEdges.indexOf(edge) == -1) errorEdges.push(edge);
           }
           else
           {
@@ -85,7 +91,7 @@ class DFAErrorChecker
               {
                 //Update cached error targets
                 dupeEdges.push(edge);
-                if (edgeTargets.indexOf(edge) == -1) edgeTargets.push(edge);
+                if (errorEdges.indexOf(edge) == -1) errorEdges.push(edge);
               }
               else
               {
@@ -100,7 +106,7 @@ class DFAErrorChecker
     //check disconnect states
     for (const node of unReachedNode)
     {
-      if (nodeTargets.indexOf(node) == -1) nodeTargets.push(node);
+      if (warnNodes.indexOf(node) == -1) warnNodes.push(node);
     }
 
     const missingNodes = [];
@@ -113,11 +119,12 @@ class DFAErrorChecker
       {
         //Update cached error targets
         missingNodes.push(node);
-        if (nodeTargets.indexOf(node) == -1) nodeTargets.push(node);
+        if (errorNodes.indexOf(node) == -1) errorNodes.push(node);
       }
     }
 
-    const result = !(nodeTargets.length == 0 && edgeTargets.length == 0);
+    const result = !(errorNodes.length == 0 && errorEdges.length == 0 &&
+      warnNodes.length == 0 && warnEdges.length == 0);
 
     //Callbacks for all collected errors
     if (notification)
@@ -129,7 +136,7 @@ class DFAErrorChecker
       //No errors!
       if (!result)
       {
-        notification.addMessage(NO_MORE_ERRORS, messageTag, null, false);
+        notification.addMessage(NO_MORE_ERRORS, messageTag, SuccessMessage, false);
       }
       //There are some errors/warnings...
       else
