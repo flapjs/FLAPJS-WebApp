@@ -192,11 +192,6 @@ class Test
       throw new Error("Unknown result for test");
     }
   }
-
-  hashCode()
-  {
-    return
-  }
 }
 Test.PENDING = PENDING;
 Test.SUCCESS = SUCCESS;
