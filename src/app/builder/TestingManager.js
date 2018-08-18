@@ -1,5 +1,6 @@
 import { solveNFA } from 'machine/util/solveNFA.js';
-import TestMode from 'pages/content/viewport/testmode/TestMode.js'
+import TestMode from 'content/viewport/testmode/TestMode.js';
+
 const PENDING = 0;
 const SUCCESS = 1;
 const FAILURE = -1;
