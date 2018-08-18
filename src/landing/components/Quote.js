@@ -10,8 +10,6 @@ class Quote extends React.Component
 
   render()
   {
-    /*<span>{"\""}</span>*/
-    /*<div className="quote-content">*/
     return <div className="quote-container">
       <div className="quote">
         {this.props.value}
