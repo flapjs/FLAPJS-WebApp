@@ -190,7 +190,7 @@ class LandingPage extends React.Component
 
         <div className="subtitle-container">
           <div className="subtitle">
-            {"&copy; 2018 University of California, San Diego. All rights reserved."}
+            {"\u00A9 2018 University of California, San Diego. All rights reserved."}
           </div>
           <div className="subtitle">
             <label>{"Thank you for reading me! Stay amazing!"}</label>
