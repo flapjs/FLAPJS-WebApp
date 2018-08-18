@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import LandingPage from './components/LandingPage.js';
-import HomePage from './HomePage.js';
 
 //Setup viewport
 window.addEventListener('load', (event) => {
