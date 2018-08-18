@@ -3,6 +3,7 @@ import { NO_MORE_ERRORS } from 'lang.js';
 
 import MachineBuilder from './MachineBuilder.js';
 import DFAErrorChecker from './DFAErrorChecker.js';
+import NFAErrorChecker from './NFAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
 import NodalGraph from 'graph/NodalGraph';
@@ -149,6 +150,18 @@ class FSABuilder extends MachineBuilder
   setMachineType(machineType)
   {
     this._machineType = machineType;
+    if (machineType == "DFA")
+    {
+      this.machineErrorChecker = new DFAErrorChecker(this, this.graph);
+    }
+    else if (machineType == "NFA")
+    {
+      this.machineErrorChecker = new NFAErrorChecker(this, this.graph);
+    }
+    else
+    {
+      throw new Error("Cannot find error checker for machine type \'" + machineType + "\'");
+    }
 
     this.onGraphChange();
   }
