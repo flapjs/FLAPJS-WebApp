@@ -25,7 +25,8 @@ class InputController
     };
 
     //Swap left to right clicks and vice versa on anything else but Macs
-    this.swapButtons = !navigator.platform.startsWith("Mac");
+    this._swapMouseScheme = !navigator.platform.startsWith("Mac");
+    
     this.prevPinchDist = 0;
     this.pinchDist = 0;
 
@@ -77,6 +78,16 @@ class InputController
   {
     //Smooth transition offset
     this.pointer.updateOffset();
+  }
+
+  setMouseActionMode(isLeftMouse)
+  {
+    this._swapMouseScheme = isLeftMouse;
+  }
+
+  getMouseActionMode()
+  {
+    return this._swapMouseScheme;
   }
 
   isUsingTouch()
@@ -166,7 +177,7 @@ class InputController
         this.cursor._touchend = null;
       }
 
-      if (this.doInputDown(touch.clientX, touch.clientY, false/*this.swapButtons*/))//default false
+      if (this.doInputDown(touch.clientX, touch.clientY, false/*this._swapMouseScheme*/))//default false
       {
         this.cursor._touchmove = this.onTouchStartAndMove.bind(this);
         this.cursor._touchend = this.onTouchStartAndEnd.bind(this);
@@ -264,7 +275,7 @@ class InputController
     }
 
     let moveMode = (e.button == 2);
-    if (this.doInputDown(e.clientX, e.clientY, this.swapButtons ? !moveMode : moveMode))
+    if (this.doInputDown(e.clientX, e.clientY, this._swapMouseScheme ? !moveMode : moveMode))
     {
       this.cursor._mousemove = this.onMouseDownAndMove.bind(this);
       this.cursor._mouseup = this.onMouseDownAndUp.bind(this);
@@ -319,7 +330,7 @@ class InputController
     this.cursor._timer = setTimeout(() => {
       if (pointer.isWaitingForMoveMode())
       {
-        pointer.moveMode = true;//!(this.swapButtons ? !moveMode : moveMode);//default true
+        pointer.moveMode = true;//!(this._swapMouseScheme ? !moveMode : moveMode);//default true
       }
     }, Config.LONG_TAP_TICKS);
 

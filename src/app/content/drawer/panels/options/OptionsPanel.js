@@ -126,7 +126,10 @@ class OptionsPanel extends React.Component
         </div>
 
         <div className="panel-checkbox">
-          <input id="option-altinput" type="checkbox" disabled="true"/>
+          <input id="option-altinput" type="checkbox" value={this.props.controller.getMouseActionMode()}
+            onChange={(e) => {
+              this.props.controller.setMouseActionMode(e.target.checked);
+            }}/>
           <label htmlFor="option-altinput">{SWAP_INPUT_CONTROLS}</label>
         </div>
 
