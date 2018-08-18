@@ -7,6 +7,7 @@ message.error.empty = Found empty transition(s)
 message.error.dupe = Found duplicate transitions
 message.error.missing = Found missing transition(s) for state(s)
 message.warning.unreachable = Found unreachable state(s)
+message.warning.cannotmodify = Sorry, but you cannot change or create new states or edges while in delete mode.
 
 message.action.close = Get out of my way!
 message.workspace.empty = Double-tap to create a node

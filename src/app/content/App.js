@@ -96,7 +96,7 @@ class App extends React.Component
     const tryCreateWhileTrash = () => {
       if (controller.pointer.trashMode)
       {
-        this.notification.addWarningMessage("Sorry, but you cannot create new states or edges while in delete mode.",
+        this.notification.addWarningMessage(I18N.toString("message.warning.cannotmodify"),
           "tryCreateWhileTrash", true);
       }
     };
