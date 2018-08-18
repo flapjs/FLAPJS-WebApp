@@ -149,6 +149,8 @@ class FSABuilder extends MachineBuilder
 
   setMachineType(machineType)
   {
+    if (this._machineType == machineType) return;
+    
     this._machineType = machineType;
     if (machineType == "DFA")
     {

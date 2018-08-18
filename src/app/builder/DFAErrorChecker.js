@@ -30,8 +30,11 @@ class DFAErrorChecker
 
   checkErrors(notification=null)
   {
-    //HACK: This will only run for "DFA" machine types...
-    if (this.machineBuilder.getMachineType() != "DFA") return;
+    //This should only run for "DFA" machine types...
+    if (this.machineBuilder.getMachineType() != "DFA")
+    {
+      throw new Error("Invalid machine type to check for DFA errors");
+    }
 
     const machine = this.machineBuilder.getMachine();
     const graph = this.graph;

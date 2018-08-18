@@ -29,9 +29,6 @@ class NFAErrorChecker
 
   checkErrors(notification=null)
   {
-    //HACK: This will only run for "DFA" machine types...
-    if (this.machineBuilder.getMachineType() != "DFA") return;
-
     const machine = this.machineBuilder.getMachine();
     const graph = this.graph;
     const alphabet = machine.getAlphabet();

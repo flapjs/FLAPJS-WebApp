@@ -9,6 +9,7 @@ class TestingManager
 {
   constructor(machineBuilder)
   {
+    this.machineBuilder = machineBuilder;
     this.inputs = [];
 
     this.shouldCheckError = false;
@@ -23,6 +24,9 @@ class TestingManager
 
   setErrorCheckMode(mode)
   {
+    //Update machine builder error checker
+    this.machineBuilder.setMachineType(this.machineBuilder.getMachineType());
+    
     if (mode == TestingManager.NO_ERROR_CHECK)
     {
       this.shouldCheckError = false;
