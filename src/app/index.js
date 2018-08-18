@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import Router from 'router.js';
 import Config from 'config.js';
 import { loadConfig, saveConfig } from 'config.js';
+import { EXIT_WINDOW_ALERT } from 'lang.js';
 
 import App from 'content/App.js';
 import NotFoundPage from '404/NotFoundPage.js';
@@ -11,20 +12,11 @@ import NotFoundPage from '404/NotFoundPage.js';
 //HACK: to determine if this is first time use
 import AutoSaver from 'util/AutoSaver.js';
 
-const ALWAYS_OPEN_WELCOME_PAGE = false;
 const USE_SERVICE_WORKER = false;
 const AUTOSAVE_CONFIG = false;
 
 Router.registerPage('/', App);
 Router.registerPage(null, NotFoundPage);
-
-//Skip welcome page if already seen it
-/*
-if (!ALWAYS_OPEN_WELCOME_PAGE && AutoSaver.hasAutoSave())
-{
-  Router.routeTo("/");
-}
-*/
 
 //Setup viewport
 window.addEventListener('load', (event) => {
@@ -39,10 +31,9 @@ window.addEventListener('beforeunload', (event) => {
     saveConfig();
   }
 
-  const message = Config.EXIT_WINDOW_MESSAGE;
   event = event || window.event;
   // For IE and Firefox
-  if (event) event.returnValue = message;
+  if (event) event.returnValue = EXIT_WINDOW_ALERT;
 
   //For Safari
   return message;

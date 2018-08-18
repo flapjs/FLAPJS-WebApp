@@ -11,7 +11,9 @@ class DefaultMessage extends React.Component
 
   render()
   {
-    return <MessageContainer value={this.props.message} onExit={this.props.onExit}>
+    return <MessageContainer
+      value={this.props.message}
+      onExit={this.props.onExit}>
     </MessageContainer>;
   }
 }

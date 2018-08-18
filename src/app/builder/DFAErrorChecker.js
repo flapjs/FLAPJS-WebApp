@@ -1,6 +1,12 @@
 import Config from 'config.js';
-
 import { EMPTY } from 'machine/Symbols.js';
+import { NO_MORE_ERRORS } from 'lang.js';
+
+import TransitionDupeErrorMessage from './error/TransitionDupeErrorMessage.js';
+import TransitionEmptyErrorMessage from './error/TransitionEmptyErrorMessage.js';
+import TransitionPlaceholderErrorMessage from './error/TransitionPlaceholderErrorMessage.js';
+import TransitionMissingErrorMessage from './error/TransitionMissingErrorMessage.js';
+import StateUnreachableWarningMessage from './error/StateUnreachableWarningMessage.js';
 
 class DFAErrorChecker
 {
@@ -19,7 +25,7 @@ class DFAErrorChecker
     this.errorEdges.length = 0;
   }
 
-  checkErrors(callback)
+  checkErrors(notification=null)
   {
     //HACK: This will only run for "DFA" machine types...
     if (this.machineBuilder.getMachineType() != "DFA") return;
@@ -116,17 +122,40 @@ class DFAErrorChecker
       }
     }
 
+    const result = !(nodeTargets.length == 0 && edgeTargets.length == 0);
+
     //Callbacks for all collected errors
-    if (callback)
+    if (notification)
     {
-      if (placeholderEdges.length > 0) callback(Config.MACHINE_ERROR_EDGE_PLACEHOLDER_MESSAGE, placeholderEdges);
-      if (emptyEdges.length > 0) callback(Config.MACHINE_ERROR_EDGE_EMPTY_MESSAGE, emptyEdges);
-      if (dupeEdges.length > 0) callback(Config.MACHINE_ERROR_EDGE_DUPE_MESSAGE, dupeEdges);
-      if (unreachableNodes.length > 0) callback(Config.MACHINE_ERROR_NODE_UNREACHABLE_MESSAGE, unreachableNodes);
-      if (missingNodes.length > 0) callback(Config.MACHINE_ERROR_NODE_MISSING_MESSAGE, missingNodes);
+      const messageTag = Config.MACHINE_ERRORS_MESSAGE_TAG;
+      //Clear the existing messages
+      notification.clearMessage(messageTag);
+
+      //No errors!
+      if (!result)
+      {
+        notification.addMessage(NO_MORE_ERRORS, messageTag, null, false);
+      }
+      //There are some errors/warnings...
+      else
+      {
+        //Add new warning messages
+        if (unreachableNodes.length > 0) notification.addMessage(
+          unreachableNodes, messageTag, StateUnreachableWarningMessage, false);
+          
+        //Add new error messages
+        if (placeholderEdges.length > 0) notification.addMessage(
+          placeholderEdges, messageTag, TransitionPlaceholderErrorMessage, false);
+        if (emptyEdges.length > 0) notification.addMessage(
+          emptyEdges, messageTag, TransitionEmptyErrorMessage, false);
+        if (dupeEdges.length > 0) notification.addMessage(
+          dupeEdges, messageTag, TransitionDupeErrorMessage, false);
+        if (missingNodes.length > 0) notification.addMessage(
+          missingNodes, messageTag, TransitionMissingErrorMessage, false);
+      }
     }
 
-    return !(nodeTargets.length == 0 && edgeTargets.length == 0);
+    return result;
   }
 }
 

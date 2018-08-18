@@ -1,7 +1,5 @@
 import React from 'react';
-import './ExitMessageButton.css';
-
-const DEFAULT_BUTTON_TEXT = "Get out of my way!";
+import { CLOSE_MESSAGE } from 'lang.js';
 
 class ExitMessageButton extends React.Component
 {
@@ -12,7 +10,9 @@ class ExitMessageButton extends React.Component
 
   render()
   {
-    return <button onClick={this.props.onClick}>{this.props.label || DEFAULT_BUTTON_TEXT}</button>;
+    return <button className={this.props.className} onClick={this.props.onClick}>
+      {this.props.label || CLOSE_MESSAGE}
+    </button>;
   }
 }
 export default ExitMessageButton;

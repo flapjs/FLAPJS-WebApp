@@ -12,13 +12,32 @@
 
 .notification-message-response {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 
   margin-top: 10px;
   margin-left: 10px;
   margin-right: 10px;
 }
 
-.notification-message-response > * {
+.notification-message-response > button {
+  cursor: pointer;
+  margin-top: 3px;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding: 2px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+
   flex-grow: 1;
+
+  color: black;
+  background: white;
+}
+.notification-message-response > button:hover {
+  background: lightgray;
+}
+.notification-message-response > button:disabled {
+  cursor: auto;
+  background: darkgray;
 }

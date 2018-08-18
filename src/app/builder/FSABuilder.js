@@ -1,4 +1,5 @@
 import Config from 'config.js';
+import { NO_MORE_ERRORS } from 'lang.js';
 
 import MachineBuilder from './MachineBuilder.js';
 import DFAErrorChecker from './DFAErrorChecker.js';
@@ -24,6 +25,7 @@ class FSABuilder extends MachineBuilder
 
     this.machineErrorChecker = new DFAErrorChecker(this, graph);
     this.tester = null;
+    this.notification = null;
 
     this.onGraphChange = this.onGraphChange.bind(this);
     this.onDelayedGraphChange = this.onDelayedGraphChange.bind(this);
@@ -100,20 +102,7 @@ class FSABuilder extends MachineBuilder
   {
     if (!this.tester.shouldCheckError) return;
 
-    //clear previous error messages
-    const notification = this.notification;
-    notification.clearMessage(Config.MACHINE_ERRORS_MESSAGE_TAG);
-    const result = this.machineErrorChecker.checkErrors((error, targets) => {
-      let message = error + ": ";
-      message += targets.join(", ");
-      notification.addErrorMessage(message, Config.MACHINE_ERRORS_MESSAGE_TAG, false);
-    });
-
-    //Output success if no errors were found
-    if (!result)
-    {
-      notification.addMessage(Config.NO_ERRORS_MESSAGE, Config.MACHINE_ERRORS_MESSAGE_TAG);
-    }
+    this.machineErrorChecker.checkErrors(this.notification);
   }
 
   formatAlphabetString(string)

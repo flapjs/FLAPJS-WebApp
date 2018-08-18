@@ -17,7 +17,8 @@ class MessageContainer extends React.Component
         {this.props.value}
       </div>
       <div className="notification-message-response">
-        {this.props.children || <ExitMessageButton onClick={this.props.onExit}/>}
+        {this.props.children}
+        {!this.props.hideDefaultExit && <ExitMessageButton onClick={this.props.onExit}/>}
       </div>
     </div>;
   }

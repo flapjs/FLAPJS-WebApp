@@ -77,8 +77,14 @@ class NotificationSystem extends React.Component
         <div className="notification-stack">
           {
             this.state.messages.map((e, i) => {
-              return React.createElement(e[2], {key: i, onExit: () => this.state.messages.splice(i, 1),
-                message: e[0], tag: e[1], notification: this}, null);
+              const message = e[0];
+              const tag = e[1];
+              const ComponentClass = e[2];
+              return <ComponentClass key={i}
+                onExit={() => this.state.messages.splice(i, 1)}
+                message={message}
+                tag={tag}
+                notification={this}/>;
             })
           }
         </div>

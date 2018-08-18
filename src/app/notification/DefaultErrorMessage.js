@@ -11,7 +11,10 @@ class DefaultErrorMessage extends React.Component
 
   render()
   {
-    return <MessageContainer className="notification-error" value={this.props.message} onExit={this.props.onDelete}>
+    return <MessageContainer
+      className="notification-error"
+      value={this.props.message}
+      onExit={this.props.onExit}>
     </MessageContainer>;
   }
 }
