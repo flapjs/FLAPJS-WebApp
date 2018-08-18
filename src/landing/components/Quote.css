@@ -1,0 +1,23 @@
+.quote-container {
+  font-family: 'Arvo', sans-serif;
+
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+}
+.quote {
+  min-width: 7em;
+  font-size: 3em;
+  text-align: left;
+  transition: text-shadow 0.8s ease;/* SAME AS SUBQUOTE */
+}
+.quote:hover, .subquote:hover {
+  text-shadow: 0px 0px 8px white;
+}
+.subquote {
+  cursor: pointer;
+  font-size: 2em;
+  text-align: right;
+  transition: text-shadow 0.8s ease;/* SAME AS QUOTE */
+
+  padding-top: 10px;
+}

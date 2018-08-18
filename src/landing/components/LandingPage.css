@@ -3,6 +3,7 @@
   flex-direction: column;
   text-align: center;
 
+  overflow-x: hidden;
   overflow-y: auto;
 }
 .landing-container .content-container {
@@ -43,30 +44,44 @@
   height: 100%;
 }
 
-.content-quote {
-  margin-top: 1em;
+/** QUOTE CONTAINER **/
+.content-quote-container {
+  margin-top: 8vw;
   margin-left: auto;
   margin-right: auto;
-  max-width: 60vw;
-  font-family: 'Arvo', sans-serif;
-  font-size: 3em;
+  max-width: calc((60vw + 60vh) / 2);
 
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+@media screen and (max-height: 600px) {
+  .content-quote-container {
+    font-size: 0.7em;
+  }
+}
+@media screen and (max-height: 520px) {
+  .content-quote-container {
+    opacity: 0;
+  }
+}
+
+/** TUTORIAL BUTTON **/
+#tutorial-button {
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  padding-top: 1em;
+
+  font-family: 'Arvo', sans-serif;
+  /* If increase font, subtract from bottom-padding of launch button */
+  font-size: 1.2em;
+
+  color: lightgray;
+  transition: color 0.3s ease;
+}
+#tutorial-button:hover {
   color: white;
-  text-shadow: 2px 2px 6px black;
-}
-.content-quote label {
-  display: inline-block;
-  text-align: right;
-}
-@media screen and (max-height: 640px) {
-  .content-quote {
-    font-size: 2em;
-  }
-}
-@media screen and (max-height: 480px) {
-  .content-quote {
-    display: none;
-  }
 }
 
 /** LAUNCH BUTTON **/
@@ -76,7 +91,7 @@
   bottom: 0;
 
   width: 100%;
-  padding-bottom: 4em;
+  padding-bottom: 1em;
 }
 #launch-button {
   background: none;
@@ -113,12 +128,13 @@
   }
 }
 @keyframes fadein {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes fadeout {
+    0% { opacity: 1; }
+    80% { opacity: 0; }
+    100% { opacity: 0; }
 }
 
 /** SET CONTAINER **/
@@ -136,6 +152,7 @@
 
   font-family: 'Arvo', sans-serif;
   font-size: 4em;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
 }
 .set-container .openset {
   text-align: right;
@@ -164,6 +181,21 @@
   vertical-align: middle;
   margin-bottom: 3px;
   margin-right: 5px;
+}
+
+/** RETURN HOME ICON **/
+#return-home {
+  position: absolute;
+  top: -2em;
+  right: 0;
+  margin-right: 2em;
+  cursor: pointer;
+
+  fill: gray;
+  transition: fill 0.3s ease;
+}
+#return-home:hover {
+  fill: #DEC557
 }
 
 /** UTILITY **/
