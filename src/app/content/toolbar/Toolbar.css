@@ -95,8 +95,9 @@
   fill: white;
   justify-content: flex-end;
 
+  margin-right: 5px;
   margin-bottom: 5px;
-  width: 6em;
+  width: 4em;
   height: 100%;
   min-width: 30px;
 
