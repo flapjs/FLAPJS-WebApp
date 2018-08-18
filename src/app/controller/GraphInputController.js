@@ -64,6 +64,19 @@ class GraphInputController extends InputController
     this.machineBuilder = app.machineBuilder;
   }
 
+  focusOnNode(node)
+  {
+    //Center workspace at focused node; inverted due to graph-to-screen space
+    this.pointer.setOffset(-node.x, -node.y);
+  }
+
+  focusOnEdge(edge)
+  {
+    //Center workspace at focused edge; inverted due to graph-to-screen space
+    const center = edge.getCenterPoint();
+    this.pointer.setOffset(-center.x, -center.y);
+  }
+
   onInputDown(x, y, target, targetType)
   {
     //Make sure to lose focus on label editors

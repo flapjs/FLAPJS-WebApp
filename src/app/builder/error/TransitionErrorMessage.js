@@ -38,8 +38,7 @@ class TransitionErrorMessage extends React.Component
         if (this.targetIndex >= targetLength) this.targetIndex = 0;
 
         //Move pointer to target
-        const centerPoint = target.getCenterPoint();
-        notification.props.controller.pointer.setOffset(-centerPoint.x, -centerPoint.y);
+        notification.props.controller.focusOnEdge(target);
       }
     }
     else if (target.value == "deleteall")

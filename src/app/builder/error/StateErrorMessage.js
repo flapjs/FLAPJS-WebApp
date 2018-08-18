@@ -38,7 +38,7 @@ class StateErrorMessage extends React.Component
         if (this.targetIndex >= targetLength) this.targetIndex = 0;
 
         //Move pointer to target
-        notification.props.controller.pointer.setOffset(-target.x, -target.y);
+        notification.props.controller.focusOnNode(target);
       }
     }
     else if (target.value == "deleteall")

@@ -28,7 +28,7 @@ class StateList extends React.Component
 
   render()
   {
-    const pointer = this.props.controller.pointer;
+    const controller = this.props.controller;
     const graph = this.props.machineBuilder.graph;
     return <InfoBlock title="States" defaultValue="true">
       <div className="statelist-container">
@@ -37,10 +37,7 @@ class StateList extends React.Component
           {
             graph.nodes.map((e, i) => {
               return <StateTag key={e.label} src={e} label={e.label} accept={e.accept} graph={graph}
-                onFocus={(ev) => {
-                  //Center workspace at focused node; inverted due to graph-to-screen space
-                  pointer.setOffset(-e.x, -e.y);
-                }}/>
+                onFocus={ev => controller.focusOnNode(e)}/>
             })
           }
         </div>
