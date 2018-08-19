@@ -10,7 +10,8 @@ const CONFIG = {
 
     '/src/app.bundle.js',
     '/src/landing.bundle.js',
-    '/src/runtime.bundle.js',
+    '/src/runtime~app.bundle.js',
+    '/src/runtime~landing.bundle.js',
     '/src/vendors.bundle.js',
 
     '/lang/I18N.js',

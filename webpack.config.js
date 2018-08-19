@@ -53,9 +53,8 @@ module.exports = {
     hotOnly: true,
     open: true
   },
-  /*
   optimization: {
-    runtimeChunk: 'single',
+    runtimeChunk: 'multiple',
     splitChunks: {
       cacheGroups: {
         vendors: {
@@ -67,6 +66,5 @@ module.exports = {
       }
     }
   },
-  */
   plugins: [ new webpack.HotModuleReplacementPlugin() ]
 };
