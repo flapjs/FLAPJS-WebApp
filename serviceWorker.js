@@ -101,8 +101,7 @@ self.addEventListener('install', event => {
     const cacheKey = cacheName('static', opts);
     return caches.open(cacheKey)
       .then(cache => {
-        const request = event.request;
-        const url = new URL(".");
+        const url = new URL("./");
         console.log(url);
         console.log(JSON.stringify(url));
         console.log(url.href);
