@@ -11,9 +11,9 @@ module.exports = {
   },
   output: {
     //Output to ./docs/bundle.js
-    path: path.resolve(__dirname, 'docs'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'src/[name].bundle.js',
-    publicPath: 'docs/',
+    publicPath: 'dist/',
   },
   module: {
     rules: [
@@ -41,7 +41,7 @@ module.exports = {
     //Resolve by absolute path
     modules: [
       'node_modules',
-      path.resolve('./docs'),
+      path.resolve('./dist'),
       path.resolve('./src/app'),
       path.resolve('./src/landing'),
     ]

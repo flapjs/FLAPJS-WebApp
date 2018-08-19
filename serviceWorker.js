@@ -1,5 +1,6 @@
 //TODO: When we get a server, this needs to be at the root!
-//TODO: when we get a server, remove all  "docs/"
+//TODO: when we get a server, remove all  "dist/"
+//TODO: Don't forget to remove \/dist\/ from isValidCachePath
 
 //Must stay in service worker to trigger update
 //Must also NEVER rename the file
@@ -13,28 +14,26 @@ const CONFIG = {
     '/',
     '/app.html',
 
-    //TODO: These items should be in root dir, not docs/
-    
-    '/docs/offline/',
+    '/dist/offline/',
 
-    '/docs/src/app.bundle.js',
-    '/docs/src/landing.bundle.js',
-    '/docs/src/runtime~app.bundle.js',
-    '/docs/src/runtime~landing.bundle.js',
-    '/docs/src/vendors.bundle.js',
+    '/dist/src/app.bundle.js',
+    '/dist/src/landing.bundle.js',
+    '/dist/src/runtime~app.bundle.js',
+    '/dist/src/runtime~landing.bundle.js',
+    '/dist/src/vendors.bundle.js',
 
-    '/docs/lang/I18N.js',
-    '/docs/lang/en_us.lang',
+    '/dist/lang/I18N.js',
+    '/dist/lang/en_us.lang',
 
-    '/docs/images/flapjs.svg',
+    '/dist/images/flapjs.svg',
 
-    '/docs/style.css'
+    '/dist/style.css'
   ],
-  offlineImage: 'docs/offline/offline.png',
-  offlinePage: 'docs/offline/offline.html',
+  offlineImage: 'dist/offline/offline.png',
+  offlinePage: 'dist/offline/offline.html',
   isValidCachePath(cachePath)
   {
-    const pattern = /^\/(images|src|lang)\//g;
+    const pattern = /^\/dist\/(images|src|lang)\//g;
     const result = pattern.exec(cachePath);
     return result;
   },
