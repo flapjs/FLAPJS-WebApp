@@ -150,7 +150,7 @@ self.addEventListener('fetch', event => {
 
     //Filter resources by headers...
     const acceptHeader = request.headers.get('Accept');
-    console.log("Cache -> " + acceptHeader);
+    //TODO: this should work, but it doesn't. Probably server settings.
     if (acceptHeader.indexOf('text/html') !== -1)
     {
       resourceType = 'content';
