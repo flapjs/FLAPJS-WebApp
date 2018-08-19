@@ -11,26 +11,26 @@ const CONFIG = {
   //TODO: For production mode, change this to false!
   sourcePriority: true,
   staticCacheItems: [
-    '/',
-    '/app.html',
+    './',
+    './app.html',
 
-    '/dist/offline/',
+    './dist/offline/',
 
-    '/dist/src/app.bundle.js',
-    '/dist/src/landing.bundle.js',
-    '/dist/src/runtime~app.bundle.js',
-    '/dist/src/runtime~landing.bundle.js',
-    '/dist/src/vendors.bundle.js',
+    './dist/src/app.bundle.js',
+    './dist/src/landing.bundle.js',
+    './dist/src/runtime~app.bundle.js',
+    './dist/src/runtime~landing.bundle.js',
+    './dist/src/vendors.bundle.js',
 
-    '/dist/lang/I18N.js',
-    '/dist/lang/en_us.lang',
+    './dist/lang/I18N.js',
+    './dist/lang/en_us.lang',
 
-    '/dist/images/flapjs.svg',
+    './dist/images/flapjs.svg',
 
-    '/dist/style.css'
+    './dist/style.css'
   ],
-  offlineImage: '/dist/offline/offline.png',
-  offlinePage: '/dist/offline/offline.html',
+  offlineImage: './dist/offline/offline.png',
+  offlinePage: './dist/offline/offline.html',
   isValidCachePath(cachePath)
   {
     const pattern = /^\/(dist|FLAPJS-WebApp\/dist)\/(images|src|lang)\//g;
@@ -148,7 +148,7 @@ self.addEventListener('fetch', event => {
 
     //Filter resources by headers...
     const acceptHeader = request.headers.get('Accept');
-    console.log(acceptHeader);
+    console.log("Cache -> " + acceptHeader);
     if (acceptHeader.indexOf('text/html') !== -1)
     {
       resourceType = 'content';
