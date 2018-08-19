@@ -27,17 +27,36 @@ class Toolbar extends React.Component
   {
     super(props);
 
+    //TODO: this should be in builder!
     this.machineName = React.createRef();
+
+    this.onMachineNameChange = this.onMachineNameChange.bind(this);
   }
 
   setMachineName(name)
   {
     this.machineName.value = name;
+    this.onMachineNameChange({target: this.machineName});
   }
 
   getMachineName()
   {
     return this.machineName.value;
+  }
+
+  onMachineNameChange(e)
+  {
+    const element = document.getElementById('window-title');
+    const string = element.innerHTML;
+    const separator = string.indexOf('-');
+    if (separator !== -1)
+    {
+      element.innerHTML = e.target.value.trim() + " - " + string.substring(separator + 1).trim();
+    }
+    else
+    {
+      element.innerHTML = e.target.value.trim() + " - " + string;
+    }
   }
 
   render()
@@ -54,13 +73,28 @@ class Toolbar extends React.Component
       <div className="toolbar-title">
         <div className="toolbar-title-name">
           {/*Machine Name*/}
-          <input id="machine-name" type="text" defaultValue={I18N.toString("file.untitled")} ref={ref=>this.machineName=ref}/>
+          <input id="machine-name" type="text" defaultValue={I18N.toString("file.untitled")}
+            onChange={this.onMachineNameChange} ref={ref=>this.machineName=ref}/>
           {/*Toolbar Alt. Title*/}
           <div className="toolbar-title-alt">
             {/*Offline Button*/}
             <IconButton id="toolbar-lang" title={I18N.toString("action.toolbar.lang")}
               onClick={() => {
-                //TODO: Manual install of ServiceWorker!!!
+                if ('serviceWorker' in navigator)
+                {
+                  if (navigator.serviceWorker.getRegistration("./app.html"))
+                  {
+                    alert(I18N.toString("message.offline.ready"));
+                  }
+                  else
+                  {
+                    alert(I18N.toString("message.offline.failed"));
+                  }
+                }
+                else
+                {
+                  alert(I18N.toString("message.offline.nosupport"));
+                }
               }} disabled={offline}>
               <OfflineIcon/>
             </IconButton>
@@ -90,6 +124,7 @@ class Toolbar extends React.Component
             {
               graph.deleteAll();
               eventHistory.clear();
+              this.setMachineName(I18N.toString("file.untitled"));
             }
           }}>
           <CreateIcon/>

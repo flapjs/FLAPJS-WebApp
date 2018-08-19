@@ -13,6 +13,9 @@ message.action.locate = Whar be the loot?
 message.action.deleteall = More fer the fishes!
 message.action.close = Get out o' me way, seadog!
 message.workspace.empty = Ahoy matey! All hands on deck!
+message.offline.ready = Ye ar' ready for open waters!
+message.offline.failed = Ye ar' not ready for the ocean, me hearty. Do give 'er 'nother try!
+message.offline.nosupport = Arrr! Yer browser be soon swimmin' with the fishies.
 
 message.intro.1 = Ahoy! Welcome aboard to yer ship, cap'n!
 message.intro.2 = T' find yer new sea legs, look starboard fer yer hat.
