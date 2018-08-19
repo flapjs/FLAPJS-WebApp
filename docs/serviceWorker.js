@@ -2,26 +2,27 @@
 //Must also NEVER rename the file
 const CONFIG = {
   version: '0.0.0',
-  networkPriority: true,
+  networkPriority: true,//TODO: For production mode, change this to false!
+  sourcePriority: true,
   staticCacheItems: [
     '/',
+    '/offline/',
+
     '/src/app.bundle.js',
     '/src/landing.bundle.js',
     '/src/runtime.bundle.js',
     '/src/vendors.bundle.js',
+
     '/lang/I18N.js',
     '/lang/en_us.lang',
+
     '/images/flapjs.svg',
 
     '/style.css',
-    '/app.html',
-    '/index.html',
-
-    '/images/404logo.png',
-    '/offline.html'
+    '/app.html'
   ],
-  offlineImage: '/images/404logo.png',
-  offlinePage: '/offline.html',
+  offlineImage: '/offline/offline.png',
+  offlinePage: '/offline/offline.html',
   isValidCachePath(cachePath)
   {
     const pattern = /^\/(images|src|lang)\//g;
@@ -67,7 +68,6 @@ function fetchFromCache(event)
 
 function offlineResponse(request, opts)
 {
-  /*
   if (resourceType === 'content')
   {
     return caches.match(opts.offlinePage);
@@ -80,7 +80,6 @@ function offlineResponse(request, opts)
   {
     //Handle any other resources that have offline versions...
   }
-  */
 
   return undefined;
 }
@@ -135,12 +134,13 @@ self.addEventListener('fetch', event => {
   function onFetch(event, opts)
   {
     const request = event.request;
+    const url = new URL(request.url);
     let resourceType = 'static';
     let cacheKey;
 
     //Filter resources by headers...
-    /*
     const acceptHeader = request.headers.get('Accept');
+    console.log(acceptHeader);
     if (acceptHeader.indexOf('text/html') !== -1)
     {
       resourceType = 'content';
@@ -149,17 +149,26 @@ self.addEventListener('fetch', event => {
     {
       resourceType = 'image';
     }
+    else if (url.pathname.endsWith(".js"))
+    {
+      resourceType = 'js';
+    }
+    else if (url.pathname.endsWith(".lang"))
+    {
+      resourceType = 'lang';
+    }
     else// if (...)
     {
       //Filter by other resource types...
     }
-    */
 
     //Use resource type as cache key (not required, but nice)
     cacheKey = cacheName(resourceType, opts);
 
     //Prioritize content files to always grab network versions FIRST
-    if (CONFIG.networkPriority || resourceType === 'content')
+    if (CONFIG.networkPriority ||
+      resourceType === 'content' ||
+      (CONFIG.sourcePriority && resourceType === 'js'))
     {
       //Network-first strategy
       event.respondWith(fetch(request)
