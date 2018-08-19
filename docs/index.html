@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8"/>
     <title>flap.js</title>
-		<link rel="stylesheet" href="./dist/style.css">
+		<link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script>
       if (typeof(Storage) !== 'undefined' && localStorage.getItem("skipWelcome") == "true")
       {
-        window.location.replace("./dist/app.html");
+        window.location.replace("./app.html");
       }
     </script>
 
@@ -26,6 +26,16 @@
       You need to enable Javascript to run this app.
     </noscript>
 
-    <script src="./dist/src/landing.bundle.js" type="text/javascript"></script>
+    <script>
+      //Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/serviceWorker.js', { scope: '/' })
+          .then(registration => console.log("ServiceWorker registration successful: ", registration.scope),
+            error => console.log("ServiceWorker registration failed: ", error));
+        });
+      }
+    </script>
+    <script src="src/landing.bundle.js" type="text/javascript"></script>
   </body>
 </html>

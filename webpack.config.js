@@ -6,11 +6,12 @@ module.exports = {
   mode: 'development',
   //Entry point to start bundling...
   entry: {
-    app: './src/app/index.js'
+    app: './src/app/index.js',
+    landing: './src/landing/index.js'
   },
   output: {
-    //Output to ./dist/bundle.js
-    path: path.resolve(__dirname, 'dist'),
+    //Output to ./docs/bundle.js
+    path: path.resolve(__dirname, 'docs'),
     filename: 'src/[name].bundle.js',
     publicPath: '/',
   },
@@ -40,19 +41,19 @@ module.exports = {
     //Resolve by absolute path
     modules: [
       'node_modules',
-      path.resolve('./dist'),
+      path.resolve('./docs'),
       path.resolve('./src/app'),
+      path.resolve('./src/landing'),
     ]
   },
   target: 'web',
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),//public/
-    host: '0.0.0.0',
+    contentBase: path.join(__dirname, 'docs'),//public/
     port: 3000,
-    index: 'app.html',
     hotOnly: true,
     open: true
   },
+  /*
   optimization: {
     runtimeChunk: 'single',
     splitChunks: {
@@ -66,5 +67,6 @@ module.exports = {
       }
     }
   },
+  */
   plugins: [ new webpack.HotModuleReplacementPlugin() ]
 };

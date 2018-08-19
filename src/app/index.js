@@ -10,7 +10,6 @@ import App from 'content/App.js';
 //HACK: to determine if this is first time use
 import AutoSaver from 'util/AutoSaver.js';
 
-const USE_SERVICE_WORKER = false;
 const AUTOSAVE_CONFIG = false;
 
 Router.registerPage('/', App);
@@ -36,18 +35,6 @@ window.addEventListener('beforeunload', (event) => {
   //For Safari
   return message;
 });
-
-//Service Worker
-if (USE_SERVICE_WORKER && 'serviceWorker' in navigator)
-{
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/src/sw/service-worker.js').then(function(registration) {
-      console.log("ServiceWorker registration successful: ", registration.scope);
-    }, function(err) {
-      console.log("ServiceWorker registration failed: ", err);
-    });
-  });
-}
 
 //Setup application
 const FRAMES_PER_SECOND = 60;

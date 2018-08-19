@@ -11,8 +11,8 @@ window.addEventListener('load', (event) => {
 
 //Setup application
 const FRAMES_PER_SECOND = 60;
-let prevtime = 0;
-let root = null;
+var prevtime = 0;
+var root = null;
 
 //Load application
 function loadApplication()
