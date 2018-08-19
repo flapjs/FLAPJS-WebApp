@@ -16,7 +16,7 @@ message.workspace.empty = Double-tap to create a node
 
 message.intro.1 = Good Morning! Welcome to the Flap.js Workspace!
 message.intro.2 = If you need help, the '?' button is at the top-right of the screen.
-message.intro.3 = If you need still help, find a tutor. I can't help you :( . . . Good-bye.
+message.intro.3 = If you need still help, find a tutor. I can't help you. If you can help with localization, please help us! . . . and Good-bye!
 message.help.1 = You need help. Unfortunately, I am not qualified to provide such assistance. Please refer to your local tutor/developer for more information.
 message.help.2 = I see you want help. I'm not sure I want to help you after you so rudely got rid of all my other messages.
 message.help.3 = Thank you for being awesome :3
