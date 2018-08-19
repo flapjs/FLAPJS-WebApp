@@ -3,7 +3,7 @@
 const CONFIG = {
   version: '0.0.0',
   networkPriority: true,//TODO: For production mode, change this to false!
-  sourcePriority: true,
+  sourcePriority: true,//TODO: For production mode, change this to false!
   staticCacheItems: [
     '/',
     '/offline/',
