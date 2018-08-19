@@ -6,7 +6,7 @@
 //Must stay in service worker to trigger update
 //Must also NEVER rename the file
 const CONFIG = {
-  version: '0.0.0f',
+  version: '0.0.0g',
   //TODO: For production mode, change this to false!
   networkPriority: true,
   //TODO: For production mode, change this to false!
@@ -14,21 +14,22 @@ const CONFIG = {
   staticCacheItems: [
     './',
     './app.html',
-    './dist/offline/',
+    
+    './dist/src/app.bundle.js',
+    './dist/src/landing.bundle.js',
+    './dist/src/runtime~app.bundle.js',
+    './dist/src/runtime~landing.bundle.js',
+    './dist/src/vendors.bundle.js',
 
     /*
-    '/FLAPJS-WebApp/dist/src/app.bundle.js',
-    '/FLAPJS-WebApp/dist/src/landing.bundle.js',
-    '/FLAPJS-WebApp/dist/src/runtime~app.bundle.js',
-    '/FLAPJS-WebApp/dist/src/runtime~landing.bundle.js',
-    '/FLAPJS-WebApp/dist/src/vendors.bundle.js',
+    './dist/offline/',
 
-    '/FLAPJS-WebApp/dist/lang/I18N.js',
-    '/FLAPJS-WebApp/dist/lang/en_us.lang',
+    './dist/lang/I18N.js',
+    './dist/lang/en_us.lang',
 
-    '/FLAPJS-WebApp/dist/images/flapjs.svg',
+    './dist/images/flapjs.svg',
 
-    '/FLAPJS-WebApp/dist/style.css'
+    './dist/style.css'
     */
   ],
   offlineImage: '/FLAPJS-WebApp/dist/offline/offline.png',
