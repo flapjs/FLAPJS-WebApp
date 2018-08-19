@@ -6,13 +6,13 @@
 //Must stay in service worker to trigger update
 //Must also NEVER rename the file
 const CONFIG = {
-  version: '0.0.0c',
+  version: '0.0.0d',
   //TODO: For production mode, change this to false!
   networkPriority: true,
   //TODO: For production mode, change this to false!
   sourcePriority: true,
   staticCacheItems: [
-    '/FLAPJS-WebApp/index.html'
+    '/FLAPJS-WebApp/'
     /*
     '/FLAPJS-WebApp/app.html',
 
