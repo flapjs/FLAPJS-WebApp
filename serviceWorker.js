@@ -6,7 +6,7 @@
 //Must stay in service worker to trigger update
 //Must also NEVER rename the file
 const CONFIG = {
-  version: '0.0.0g',
+  version: '0.0.0',
   //TODO: For production mode, change this to false!
   networkPriority: true,
   //TODO: For production mode, change this to false!
@@ -14,15 +14,15 @@ const CONFIG = {
   staticCacheItems: [
     './',
     './app.html',
-    
+
+    './dist/offline/offline.html',
+    './dist/offline/offline.png',
+
     './dist/src/app.bundle.js',
     './dist/src/landing.bundle.js',
     './dist/src/runtime~app.bundle.js',
     './dist/src/runtime~landing.bundle.js',
     './dist/src/vendors.bundle.js',
-
-    /*
-    './dist/offline/',
 
     './dist/lang/I18N.js',
     './dist/lang/en_us.lang',
@@ -30,10 +30,9 @@ const CONFIG = {
     './dist/images/flapjs.svg',
 
     './dist/style.css'
-    */
   ],
-  offlineImage: '/FLAPJS-WebApp/dist/offline/offline.png',
-  offlinePage: '/FLAPJS-WebApp/dist/offline/offline.html',
+  offlineImage: './dist/offline/offline.png',
+  offlinePage: './dist/offline/offline.html',
   isValidCachePath(cachePath)
   {
     const pattern = /^\/(dist|FLAPJS-WebApp\/dist)\/(images|src|lang)\//g;
