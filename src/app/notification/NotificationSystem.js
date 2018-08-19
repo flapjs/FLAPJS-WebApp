@@ -22,9 +22,9 @@ class NotificationSystem extends React.Component
 
   componentWillMount()
   {
-    this.addMessage("If you need still help, find a tutor. I can't help you :( . . . Good-bye.");
-    this.addMessage("If you need help, the '?' button is at the top-right of the screen.");
-    this.addMessage("Good Morning! Welcome to the Flap.js Workspace!");
+    this.addMessage("message.intro.3");
+    this.addMessage("message.intro.2");
+    this.addMessage("message.intro.1");
   }
 
   addMessage(message, tag=null, component=null, clearOnAdd=true) {
@@ -85,7 +85,7 @@ class NotificationSystem extends React.Component
         <div className="notification-stack">
           {
             this.state.messages.map((e, i) => {
-              const message = e[0];
+              const message = I18N.toString(e[0]);
               const tag = e[1];
               const ComponentClass = e[2];
               const guid = e[3];
