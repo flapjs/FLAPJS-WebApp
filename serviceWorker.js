@@ -29,13 +29,13 @@ const CONFIG = {
 
     './dist/images/flapjs.svg',
 
-    './dist/style.css'
+    './dist/css/style.css'
   ],
   offlineImage: './dist/offline/offline.png',
   offlinePage: './dist/offline/offline.html',
   isValidCachePath(cachePath)
   {
-    const pattern = /^\/(dist|FLAPJS-WebApp\/dist)\/(images|src|lang)\//g;
+    const pattern = /^\/((dist|FLAPJS-WebApp\/dist)\/(images|src|css|lang)\/|.*(\.html)$)/g;
     const result = pattern.exec(cachePath);
     return result;
   },
@@ -151,7 +151,7 @@ self.addEventListener('fetch', event => {
     //Filter resources by headers...
     const acceptHeader = request.headers.get('Accept');
     //TODO: this should work, but it doesn't. Probably server settings.
-    if (acceptHeader.indexOf('text/html') !== -1)
+    if (url.pathname.endsWith(".html") || acceptHeader.indexOf('text/html') !== -1)
     {
       resourceType = 'content';
     }
