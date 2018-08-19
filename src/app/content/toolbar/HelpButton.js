@@ -19,8 +19,8 @@ class UploadButton extends React.Component
     const notification = this.props.notification;
     if (notification.hasMessages())
     {
-      notification.addMessage("message.help.1");
       notification.addMessage("message.help.3");
+      notification.addMessage("message.help.1");
     }
     else
     {

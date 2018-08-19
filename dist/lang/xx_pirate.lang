@@ -9,6 +9,8 @@ message.error.missing = Fool! Thar be missing transitions fer some states
 message.warning.unreachable = Avast ye! Thar states will soon be shark bait
 message.warning.cannotmodify = Well shave me belly with a rusty razor! Ye know ye can't change states or edges while deletin'.
 
+message.action.locate = Whar be the loot?
+message.action.deleteall = More fer the fishes!
 message.action.close = Get out o' me way, seadog!
 message.workspace.empty = Ahoy matey! All hands on deck!
 
