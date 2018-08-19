@@ -17,6 +17,8 @@ import SaveIcon from 'icons/SaveIcon.js';
 import UndoIcon from 'icons/UndoIcon.js';
 import RedoIcon from 'icons/RedoIcon.js';
 import HelpIcon from 'icons/HelpIcon.js';
+import LanguageIcon from 'icons/LanguageIcon.js';
+import OfflineIcon from 'icons/OfflineIcon.js';
 
 class Toolbar extends React.Component
 {
@@ -51,15 +53,24 @@ class Toolbar extends React.Component
         <div className="toolbar-title-name">
           {/*Machine Name*/}
           <input id="machine-name" type="text" defaultValue={I18N.toString("file.untitled")} ref={ref=>this.machineName=ref}/>
-          {/*Upload Button*/}
-          <UploadButton id="toolbar-upload-alt" title={I18N.toString("action.toolbar.uploadmachine")}
-            graph={graph}
-            onChange={(e)=>{
-              this.setMachineName(e.name);
-              eventHistory.clear();
-            }}>
-            <MoreIcon/>
-          </UploadButton>
+          {/*Toolbar Alt. Title*/}
+          <div className="toolbar-title-alt">
+            {/*Language Button*/}
+            <IconButton id="toolbar-lang" title={I18N.toString("action.toolbar.lang")}
+              onClick={() => {}} disabled={navigator && navigator.onLine}>
+              <OfflineIcon/>
+            </IconButton>
+            {/*Upload Button*/}
+            <UploadButton id="toolbar-upload-alt" title={I18N.toString("action.toolbar.uploadmachine")}
+              graph={graph}
+              onChange={(e)=>{
+                this.setMachineName(e.name);
+                eventHistory.clear();
+              }}>
+              <MoreIcon/>
+            </UploadButton>
+
+          </div>
         </div>
         {/*Machine Type*/}
         <label id="machine-type"
@@ -106,11 +117,20 @@ class Toolbar extends React.Component
           onClick={()=>drawer.setTab(2)} disabled={graph.isEmpty()}>
           <SaveIcon/>
         </IconButton>
-        {/*Help Button*/}
-        <HelpButton className="navicon" id="toolbar-help" title={I18N.toString("action.toolbar.help")}
-          notification={notification}>
-          <HelpIcon/>
-        </HelpButton>
+
+        {/*Right Alt. Toolbar*/}
+        <div className="toolbar-tray-alt">
+          {/*Help Button*/}
+          <HelpButton className="navicon" id="toolbar-help" title={I18N.toString("action.toolbar.help")}
+            notification={notification}>
+            <HelpIcon/>
+          </HelpButton>
+          {/*Language Button*/}
+          <IconButton className="navicon" id="toolbar-lang" title={I18N.toString("action.toolbar.lang")}
+            onClick={() => {}}>
+            <LanguageIcon/>
+          </IconButton>
+        </div>
       </div>
     </div>;
   }
