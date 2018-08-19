@@ -100,7 +100,14 @@ self.addEventListener('install', event => {
   {
     const cacheKey = cacheName('static', opts);
     return caches.open(cacheKey)
-      .then(cache => cache.addAll(opts.staticCacheItems));
+      .then(cache => {
+        const request = event.request;
+        const url = new URL(".");
+        console.log(url);
+        console.log(JSON.stringify(url));
+        console.log(url.href);
+        cache.addAll(opts.staticCacheItems)
+      });
   }
 
   //Wait for it to happen...
