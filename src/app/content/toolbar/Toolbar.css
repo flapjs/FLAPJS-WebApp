@@ -102,6 +102,7 @@
 }
 
 .navicon {
+  cursor: pointer;
   fill: white;
   justify-content: flex-end;
 
@@ -140,6 +141,10 @@
 .toolbar-tray-alt > * {
   margin-top: auto;
   margin-bottom: auto;
+}
+
+#toolbar-upload svg {
+  cursor: pointer;
 }
 
 #toolbar-lang-select {
