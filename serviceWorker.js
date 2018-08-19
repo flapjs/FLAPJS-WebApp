@@ -12,7 +12,7 @@ const CONFIG = {
   //TODO: For production mode, change this to false!
   sourcePriority: true,
   staticCacheItems: [
-    '/FLAPJS-WebApp/'
+    './'
     /*
     '/FLAPJS-WebApp/app.html',
 
