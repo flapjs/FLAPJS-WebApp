@@ -1,40 +1,34 @@
-//This is the github-ready service worker
-//TODO: When we get a server, this needs to be at the root!
-//TODO: when we get a server, remove all  "dist/"
-//TODO: Don't forget to remove \/dist\/ from isValidCachePath
-
+//This is the production-ready service worker
 //Must stay in service worker to trigger update
 //Must also NEVER rename the file
 const CONFIG = {
   version: '0.0.0',
-  //TODO: For production mode, change this to false!
-  networkPriority: true,
-  //TODO: For production mode, change this to false!
-  sourcePriority: true,
+  networkPriority: false,
+  sourcePriority: false,
   staticCacheItems: [
-    '/FLAPJS-WebApp/',
-    '/FLAPJS-WebApp/app.html',
+    '/',
+    '/app.html',
 
-    '/FLAPJS-WebApp/dist/offline/',
+    '/offline/',
 
-    '/FLAPJS-WebApp/dist/src/app.bundle.js',
-    '/FLAPJS-WebApp/dist/src/landing.bundle.js',
-    '/FLAPJS-WebApp/dist/src/runtime~app.bundle.js',
-    '/FLAPJS-WebApp/dist/src/runtime~landing.bundle.js',
-    '/FLAPJS-WebApp/dist/src/vendors.bundle.js',
+    '/src/app.bundle.js',
+    '/src/landing.bundle.js',
+    '/src/runtime~app.bundle.js',
+    '/src/runtime~landing.bundle.js',
+    '/src/vendors.bundle.js',
 
-    '/FLAPJS-WebApp/dist/lang/I18N.js',
-    '/FLAPJS-WebApp/dist/lang/en_us.lang',
+    '/lang/I18N.js',
+    '/lang/en_us.lang',
 
-    '/FLAPJS-WebApp/dist/images/flapjs.svg',
+    '/images/flapjs.svg',
 
-    '/FLAPJS-WebApp/dist/style.css'
+    '/style.css'
   ],
-  offlineImage: '/FLAPJS-WebApp/dist/offline/offline.png',
-  offlinePage: '/FLAPJS-WebApp/dist/offline/offline.html',
+  offlineImage: '/offline/offline.png',
+  offlinePage: '/offline/offline.html',
   isValidCachePath(cachePath)
   {
-    const pattern = /^\/(dist|FLAPJS-WebApp\/dist)\/(images|src|lang)\//g;
+    const pattern = /^\/(images|src|lang)\//g;
     const result = pattern.exec(cachePath);
     return result;
   },
@@ -149,7 +143,6 @@ self.addEventListener('fetch', event => {
 
     //Filter resources by headers...
     const acceptHeader = request.headers.get('Accept');
-    console.log("Cache -> " + acceptHeader);
     if (acceptHeader.indexOf('text/html') !== -1)
     {
       resourceType = 'content';
