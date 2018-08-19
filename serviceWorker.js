@@ -12,7 +12,8 @@ const CONFIG = {
   //TODO: For production mode, change this to false!
   sourcePriority: true,
   staticCacheItems: [
-    '/FLAPJS-WebApp/',
+    './FLAPJS-WebApp/app.html'
+    /*
     '/FLAPJS-WebApp/app.html',
 
     '/FLAPJS-WebApp/dist/offline/',
@@ -29,6 +30,7 @@ const CONFIG = {
     '/FLAPJS-WebApp/dist/images/flapjs.svg',
 
     '/FLAPJS-WebApp/dist/style.css'
+    */
   ],
   offlineImage: '/FLAPJS-WebApp/dist/offline/offline.png',
   offlinePage: '/FLAPJS-WebApp/dist/offline/offline.html',
