@@ -11,8 +11,22 @@ const SMALL_LAUNCH_BUTTON_TEXT = "Get Started!";
 const SMALLER_LAUNCH_BUTTON_TEXT = "Proceed.";
 const TUTORIAL_BUTTON_TEXT = "= Want to try our awesome tutorial? =";
 
-const CONTENT_QUOTE = "Explore what it means to be \'computable\'.";
-const CONTENT_SUBQUOTE = "- Prof. Mia Minnes";
+const QUOTES = [
+  ["Explore what it means to be \'computable\'.", "- Prof. Mia Minnes"],
+  ["okay foshos foshos", "- David"],
+  ["also mood", "- David"],
+  ["Lush has an interactive background in Mozilla but not in Google Chrome", "- David"],
+  ["fasho", "- Maya"],
+  ["yeah I can!", "- Maya"],
+  ["uh", "- Andrew"],
+  ["Hi Andrew", "- Erik"],
+  ["Hey Erik", "- Andrew"],
+  ["Hi", "- Lixuan"],
+  ["Good almost afternoon (I totally didn’t just wake up).", "- Noah"],
+  ["RONALDO IS MY GOD", "- David"],
+];
+const QUOTE_INDEX = Math.floor(Math.random() * QUOTES.length);
+const [CONTENT_QUOTE, CONTENT_SUBQUOTE] = QUOTES[QUOTE_INDEX];
 
 const TUTORIAL_LINK = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/HELP.md";
 const HELP_LINK = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/HELP.md";
