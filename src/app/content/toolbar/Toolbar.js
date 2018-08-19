@@ -130,7 +130,7 @@ class Toolbar extends React.Component
           </HelpButton>
           {/*Language Button*/}
           <IconButton className="navicon" id="toolbar-lang" title={I18N.toString("action.toolbar.lang")}
-            onClick={(e) => document.activeElement.blur()} disabled={!offline}>
+            onClick={(e) => document.activeElement.blur()}>
             <LanguageIcon/>
           </IconButton>
           {/*Language Select*/}
