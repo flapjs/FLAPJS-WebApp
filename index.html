@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <title>flap.js</title>
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="docs/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- TODO: when we get a server, remove all  "docs/" -->
 
     <script>
       if (typeof(Storage) !== 'undefined' && localStorage.getItem("skipWelcome") == "true")
@@ -36,8 +37,8 @@
         });
       }
     </script>
-    <script src="src/vendors.bundle.js" type="text/javascript"></script>
-    <script src="src/runtime~landing.bundle.js" type="text/javascript"></script>
-    <script src="src/landing.bundle.js" type="text/javascript"></script>
+    <script src="docs/src/vendors.bundle.js" type="text/javascript"></script>
+    <script src="docs/src/runtime~landing.bundle.js" type="text/javascript"></script>
+    <script src="docs/src/landing.bundle.js" type="text/javascript"></script>
   </body>
 </html>

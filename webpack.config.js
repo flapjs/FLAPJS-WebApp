@@ -13,7 +13,7 @@ module.exports = {
     //Output to ./docs/bundle.js
     path: path.resolve(__dirname, 'docs'),
     filename: 'src/[name].bundle.js',
-    publicPath: '/',
+    publicPath: 'docs/',
   },
   module: {
     rules: [
@@ -48,7 +48,7 @@ module.exports = {
   },
   target: 'web',
   devServer: {
-    contentBase: path.join(__dirname, 'docs'),//public/
+    contentBase: path.join(__dirname, '/'),//public/
     port: 3000,
     hotOnly: true,
     open: true

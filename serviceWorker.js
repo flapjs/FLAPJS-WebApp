@@ -1,29 +1,37 @@
+//TODO: When we get a server, this needs to be at the root!
+//TODO: when we get a server, remove all  "docs/"
+
 //Must stay in service worker to trigger update
 //Must also NEVER rename the file
 const CONFIG = {
   version: '0.0.0',
-  networkPriority: true,//TODO: For production mode, change this to false!
-  sourcePriority: true,//TODO: For production mode, change this to false!
+  //TODO: For production mode, change this to false!
+  networkPriority: true,
+  //TODO: For production mode, change this to false!
+  sourcePriority: true,
   staticCacheItems: [
     '/',
-    '/offline/',
+    '/app.html',
 
-    '/src/app.bundle.js',
-    '/src/landing.bundle.js',
-    '/src/runtime~app.bundle.js',
-    '/src/runtime~landing.bundle.js',
-    '/src/vendors.bundle.js',
+    //TODO: These items should be in root dir, not docs/
+    
+    '/docs/offline/',
 
-    '/lang/I18N.js',
-    '/lang/en_us.lang',
+    '/docs/src/app.bundle.js',
+    '/docs/src/landing.bundle.js',
+    '/docs/src/runtime~app.bundle.js',
+    '/docs/src/runtime~landing.bundle.js',
+    '/docs/src/vendors.bundle.js',
 
-    '/images/flapjs.svg',
+    '/docs/lang/I18N.js',
+    '/docs/lang/en_us.lang',
 
-    '/style.css',
-    '/app.html'
+    '/docs/images/flapjs.svg',
+
+    '/docs/style.css'
   ],
-  offlineImage: '/offline/offline.png',
-  offlinePage: '/offline/offline.html',
+  offlineImage: 'docs/offline/offline.png',
+  offlinePage: 'docs/offline/offline.html',
   isValidCachePath(cachePath)
   {
     const pattern = /^\/(images|src|lang)\//g;

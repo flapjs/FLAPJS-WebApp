@@ -1,9 +1,8 @@
 const I18N = {
+  baseUrl: "lang/",
   languageMapping: new Map(),
   fetchLanguageFile(langCode, callback=null)
   {
-    const BASE_URL = "lang/";
-
     console.log("Fetching language file \'" + langCode + "\'...");
     const request = new XMLHttpRequest();
     request.onreadystatechange = function() {
@@ -26,7 +25,7 @@ const I18N = {
     request.onerror = function() {
       console.log("Unable to find language file for \'" + langCode + "\'.");
     };
-    request.open("GET", BASE_URL + langCode + ".lang", true);
+    request.open("GET", this.baseUrl + langCode + ".lang", true);
     request.send();
   },
 
