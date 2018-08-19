@@ -37,7 +37,10 @@ class NodeRenderer extends React.Component
       <text className="graph-node-label"
         x={node.x} y={node.y + 4}
         pointerEvents="none"
-        style={{userSelect: "none"}}
+        style={{
+          userSelect: "none",
+          fontSize: (1 - Math.min(Math.max(node.label.length - 2, 0) / 6, 0.5)) + "em"
+        }}
 
         fontFamily="\'Overpass Mono\', monospace"
         textAnchor="middle">
