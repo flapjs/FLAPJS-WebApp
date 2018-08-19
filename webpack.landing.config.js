@@ -9,10 +9,10 @@ module.exports = {
     landing: './src/landing/index.js'
   },
   output: {
-    //Output to ./dist/bundle.js
-    path: path.resolve(__dirname, 'dist'),
+    //Output to ./docs/bundle.js
+    path: path.resolve(__dirname, 'docs'),
     filename: 'src/[name].bundle.js',
-    publicPath: 'dist/',
+    publicPath: 'docs/',
   },
   module: {
     rules: [
@@ -40,14 +40,13 @@ module.exports = {
     //Resolve by absolute path
     modules: [
       'node_modules',
-      path.resolve('./dist'),
+      path.resolve('./docs'),
       path.resolve('./src/landing'),
     ]
   },
   target: 'web',
   devServer: {
     contentBase: path.join(__dirname, '/'),//public/
-    host: '0.0.0.0',
     port: 3000,
     index: 'index.html',
     hotOnly: true,

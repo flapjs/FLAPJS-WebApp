@@ -17,7 +17,7 @@ module.exports = {
   mode: 'development',
   output: {
     //Output to ./dist/debug/bundle.js
-    path: path.resolve(__dirname, 'dist/debug'),
+    path: path.resolve(__dirname, 'docs/debug'),
     filename: 'bundle.js'
   },
   target: 'node',
@@ -27,7 +27,7 @@ module.exports = {
     //Resolve by absolute path
     modules: [
       'node_modules',
-      path.resolve('./dist'),
+      path.resolve('./docs'),
       path.resolve('./src/app'),
       path.resolve('./src/debug')
     ]
