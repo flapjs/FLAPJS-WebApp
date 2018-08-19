@@ -14,9 +14,9 @@ const CONFIG = {
   staticCacheItems: [
     './',
     './app.html',
-    /*
-    '/FLAPJS-WebApp/dist/offline/',
+    './dist/offline/',
 
+    /*
     '/FLAPJS-WebApp/dist/src/app.bundle.js',
     '/FLAPJS-WebApp/dist/src/landing.bundle.js',
     '/FLAPJS-WebApp/dist/src/runtime~app.bundle.js',
