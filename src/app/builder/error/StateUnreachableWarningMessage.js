@@ -63,8 +63,8 @@ class StateUnreachableWarningMessage extends React.Component
       className="notification-warning"
       value={I18N.toString("message.warning.unreachable") + ": " + this.targetLabel}
       onExit={this.props.onExit}>
-      <button value="locate" onClick={this.onClick}>Where is it?</button>
-      <button value="deleteall" onClick={this.onClick}>Delete All</button>
+      <button value="locate" onClick={this.onClick}>{I18N.toString("message.action.locate")}</button>
+      <button value="deleteall" onClick={this.onClick}>{I18N.toString("message.action.deleteall")}</button>
     </MessageContainer>;
   }
 }

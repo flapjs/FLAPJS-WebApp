@@ -44,7 +44,7 @@ cfg.NODE_RADIUS_SQU = cfg.NODE_RADIUS * cfg.NODE_RADIUS;
 cfg.NODE_DIAMETER = cfg.NODE_RADIUS * 2;
 cfg.NODE_RADIUS_INNER = 12;
 
-cfg.INITIAL_MARKER_OFFSET_X = -(cfg.NODE_RADIUS + (cfg.NODE_RADIUS / 3));//Not centered, but a little closer to tip
+cfg.INITIAL_MARKER_OFFSET_X = -(cfg.NODE_RADIUS + (cfg.NODE_RADIUS / 2));
 
 cfg.EDGE_RADIUS = 12;
 cfg.EDGE_RADIUS_SQU = cfg.EDGE_RADIUS * cfg.EDGE_RADIUS;

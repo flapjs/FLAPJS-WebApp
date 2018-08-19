@@ -26,7 +26,7 @@ class InputController
 
     //Swap left to right clicks and vice versa on anything else but Macs
     this._swapMouseScheme = !navigator.platform.startsWith("Mac");
-    
+
     this.prevPinchDist = 0;
     this.pinchDist = 0;
 
@@ -251,8 +251,20 @@ class InputController
 
   onMouseMove(e)
   {
-    const mouse = getMousePosition(this.workspace, e);
+    const pointer = this.pointer;
+    const mouse = getMousePosition(this.workspace, e.clientX, e.clientY);
     this.pointer.setPosition(mouse.x, mouse.y);
+
+    //Update target
+    this.pointer.updateTarget();
+    if (this.pointer.target != null)
+    {
+      document.body.style.cursor = "pointer";
+    }
+    else
+    {
+      document.body.style.cursor = "auto";
+    }
   }
 
   onMouseDown(e)
@@ -274,7 +286,7 @@ class InputController
       this.cursor._mouseup = null;
     }
 
-    let moveMode = (e.button == 2);
+    let moveMode = (e.button == 2) || e.ctrlKey;
     if (this.doInputDown(e.clientX, e.clientY, this._swapMouseScheme ? !moveMode : moveMode))
     {
       this.cursor._mousemove = this.onMouseDownAndMove.bind(this);

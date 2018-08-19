@@ -17,6 +17,9 @@ import SaveIcon from 'icons/SaveIcon.js';
 import UndoIcon from 'icons/UndoIcon.js';
 import RedoIcon from 'icons/RedoIcon.js';
 import HelpIcon from 'icons/HelpIcon.js';
+import LanguageIcon from 'icons/LanguageIcon.js';
+import OfflineIcon from 'icons/OfflineIcon.js';
+import OfflinePinIcon from 'icons/OfflinePinIcon.js';
 
 class Toolbar extends React.Component
 {
@@ -45,21 +48,32 @@ class Toolbar extends React.Component
     const machineBuilder = this.props.machineBuilder;
     const graph = this.props.graph;
     const eventHistory = this.props.eventHistory;
+    const offline = navigator && navigator.onLine;
 
     return <div className="toolbar-container">
       <div className="toolbar-title">
         <div className="toolbar-title-name">
           {/*Machine Name*/}
           <input id="machine-name" type="text" defaultValue={I18N.toString("file.untitled")} ref={ref=>this.machineName=ref}/>
-          {/*Upload Button*/}
-          <UploadButton id="toolbar-upload-alt" title={I18N.toString("action.toolbar.uploadmachine")}
-            graph={graph}
-            onChange={(e)=>{
-              this.setMachineName(e.name);
-              eventHistory.clear();
-            }}>
-            <MoreIcon/>
-          </UploadButton>
+          {/*Toolbar Alt. Title*/}
+          <div className="toolbar-title-alt">
+            {/*Offline Button*/}
+            <IconButton id="toolbar-lang" title={I18N.toString("action.toolbar.lang")}
+              onClick={() => {
+                //TODO: Manual install of ServiceWorker!!!
+              }} disabled={offline}>
+              <OfflineIcon/>
+            </IconButton>
+            {/*Upload Button*/}
+            <UploadButton id="toolbar-upload-alt" title={I18N.toString("action.toolbar.uploadmachine")}
+              graph={graph}
+              onChange={(e)=>{
+                this.setMachineName(e.name);
+                eventHistory.clear();
+              }}>
+              <MoreIcon/>
+            </UploadButton>
+          </div>
         </div>
         {/*Machine Type*/}
         <label id="machine-type"
@@ -106,11 +120,25 @@ class Toolbar extends React.Component
           onClick={()=>drawer.setTab(2)} disabled={graph.isEmpty()}>
           <SaveIcon/>
         </IconButton>
-        {/*Help Button*/}
-        <HelpButton className="navicon" id="toolbar-help" title={I18N.toString("action.toolbar.help")}
-          notification={notification}>
-          <HelpIcon/>
-        </HelpButton>
+
+        {/*Right Alt. Toolbar*/}
+        <div className="toolbar-tray-alt">
+          {/*Help Button*/}
+          <HelpButton className="navicon" id="toolbar-help" title={I18N.toString("action.toolbar.help")}
+            notification={notification}>
+            <HelpIcon/>
+          </HelpButton>
+          {/*Language Button*/}
+          <IconButton className="navicon" id="toolbar-lang" title={I18N.toString("action.toolbar.lang")}
+            onClick={(e) => document.activeElement.blur()} disabled={!offline}>
+            <LanguageIcon/>
+          </IconButton>
+          {/*Language Select*/}
+          <select id="toolbar-lang-select" onChange={(e) => {I18N.fetchLanguageFile(e.target.value);}}>
+            <option value="en_us">English</option>
+            <option value="xx_pirate">Pirate Speak</option>
+          </select>
+        </div>
       </div>
     </div>;
   }

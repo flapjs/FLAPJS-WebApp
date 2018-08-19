@@ -65,8 +65,8 @@ class TransitionErrorMessage extends React.Component
       className="notification-error"
       value={this.props.message.text + ": " + this.targetLabel}
       onExit={this.props.onExit}>
-      <button value="locate" onClick={this.onClick}>Where is it?</button>
-      <button value="deleteall" onClick={this.onClick}>Delete them all.</button>
+      <button value="locate" onClick={this.onClick}>{I18N.toString("message.action.locate")}</button>
+      <button value="deleteall" onClick={this.onClick}>{I18N.toString("message.action.deleteall")}</button>
     </MessageContainer>;
   }
 }

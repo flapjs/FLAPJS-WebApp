@@ -162,7 +162,7 @@ class GraphPointer
 
     const dx = x - (startNode.x + Config.INITIAL_MARKER_OFFSET_X);
     const dy = y - startNode.y;
-    if (dx * dx + dy * dy < Config.CURSOR_RADIUS_SQU)
+    if (dx * dx + dy * dy < Config.EDGE_RADIUS_SQU)
     {
       return startNode;
     }
