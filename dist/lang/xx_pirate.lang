@@ -12,6 +12,10 @@ message.warning.cannotmodify = Well shave me belly with a rusty razor! Ye know y
 message.action.close = Get out o' me way, seadog!
 message.workspace.empty = Ahoy matey! All hands on deck!
 
+message.intro.1 = Ahoy! Welcome aboard to yer ship, cap'n!
+message.intro.2 = T' find yer new sea legs, look starboard fer yer hat.
+message.intro.3 = If ye in need o' 'nother swabber, drop anchor me hearty and find yerself 'nother matey. Arrr!
+
 component.testing.title = Parley
 component.overview.title = Swagger
 component.exporting.title = Plunder
