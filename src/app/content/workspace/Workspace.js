@@ -151,9 +151,9 @@ class Workspace extends React.Component
           }
 
           {/* Hover markers */}
-          { /*controller.pointer.target &&
+          { controller.pointer.target &&
             !controller.selector.isTargetSelected(controller.pointer.target) &&
-            <Select target={controller.pointer.target} type={controller.pointer.targetType}/>*/ }
+            <HighlightRenderer className="highlight-select" target={controller.pointer.target} type={controller.pointer.targetType}/> }
 
         </g>
       </g>

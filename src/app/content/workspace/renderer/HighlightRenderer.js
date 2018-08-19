@@ -40,9 +40,9 @@ class HighlightRenderer extends React.Component
         r = Config.ENDPOINT_RADIUS;
         break;
       case "initial":
-        x = target.x - Config.NODE_RADIUS || 0;
+        x = target.x + Config.INITIAL_MARKER_OFFSET_X || 0;
         y = target.y || 0;
-        r = Config.CURSOR_RADIUS;
+        r = Config.EDGE_RADIUS;
         break;
     }
 
