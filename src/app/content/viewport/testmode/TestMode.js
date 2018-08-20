@@ -21,6 +21,8 @@ class TestMode
     this.checkedStates = [];
     this.running = false;
     this.started = false;
+
+    this.timer = null;
   }
 
   onStart()
@@ -32,13 +34,43 @@ class TestMode
       if (!dfa.validate()) return;
     }*/
     this.prepareForNewTest();
-    this.targets.push(this.machineBuilder.graph.getStartNode())
     this.started = true;
+  }
+
+  onResume()
+  {
+    this.running = true;
+
+    const STEPTIME = 500;
+    const step = () => {
+      if (this.running)
+      {
+        this.onNextStep();
+        this.timer = setTimeout(step, STEPTIME);
+      }
+      else
+      {
+        console.log("Finished tests...");
+      }
+    };
+    this.timer = setTimeout(step, STEPTIME);
+  }
+
+  onPause()
+  {
+    this.running = false;
   }
 
   onStop()
   {
+    this.targets.length = 0;
+
     this.started = false;
+  }
+
+  isRunning()
+  {
+    return this.running;
   }
 
   isStarted()
@@ -46,19 +78,9 @@ class TestMode
     return this.started;
   }
 
-  onResume()
+  hasPrevStep()
   {
-    this.running = true;
-    while(this.running)
-    {
-      this.onNextStep();
-    }
-    console.log("Finished tests...");
-  }
-
-  onPause()
-  {
-    this.running = false;
+    return this.testingManager.getCurrentTestInput();
   }
 
   onPreviousStep()
@@ -79,6 +101,11 @@ class TestMode
     else{
       this.testingManager.prevTestInput();
     }
+  }
+
+  hasNextStep()
+  {
+    return this.testingManager.getCurrentTestInput();
   }
 
   onNextStep()
@@ -110,11 +137,10 @@ class TestMode
       console.log("...setting up for another test...");
       console.log(JSON.stringify(this.testingManager.getCurrentTestInput()));
 
-      this.running = false;//Stop the resume at each string
+      //Stop the resume at each string
+      //this.running = false;
 
       this.prepareForNewTest();
-      this.targets.length = 0
-      this.targets.push(this.machineBuilder.graph.getStartNode())
       return true;
     }
     else
@@ -144,17 +170,20 @@ class TestMode
 
   getCurrentTestStringIndex()
   {
-    return this.indexofString;
+    return this.indexofString + 1;
   }
 
   prepareForNewTest()
   {
     const startState = this.machineBuilder.getMachine().getStartState();
+    const startNode = this.machineBuilder.graph.getStartNode();
     this.cachedStates.length = 0;
     this.cachedSymbols.length = 0;
     this.checkedStates.length = 0;
+    this.targets.length = 0;
+    this.targets.push(startNode)
     this.history.length = 0;
-    this.history.push(this.machineBuilder.graph.getStartNode());
+    this.history.push(startNode);
     this.cachedStates.push({state: startState, index: 0});
     this.indexofString = -1;
   }

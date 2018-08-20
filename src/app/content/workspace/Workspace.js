@@ -133,10 +133,7 @@ class Workspace extends React.Component
 
           {/* Node test targets */}
           { tester.testMode.targets.map((e, i) =>
-            {
-              return <HighlightRenderer key={e.label + "." + i} className="highlight-test graph-gui" target={e} type="node" offset="6"/>;
-            })
-          }
+            <HighlightRenderer key={e.id} className="highlight-test graph-gui" target={e} type="node" offset="6"/>) }
 
           {/* Hover markers */}
           { controller.pointer.target &&

@@ -1,3 +1,7 @@
+.test-tray-container {
+  overflow: hidden;
+  white-space: nowrap;
+}
 .test-tray-container .icon-button {
   padding: 10px;
 
@@ -15,13 +19,17 @@
   width: 4em;
   height: 4em;
 }
-
 .test-tray-input-string-container>* {
   transition: opacity 0.3s ease;
 }
-.test-tray-input-string-container>*:last-child {
+.test-tray-input-string-container>.test-tray-input-char:last-child {
   text-decoration: underline;
   opacity: 0.6;
+}
+.test-tray-input-placeholder {
+  font-size: 3em;
+  color: var(--color-drawer-main);
+  opacity: 0.1;
 }
 .test-tray-input-char {
   padding: 10px;

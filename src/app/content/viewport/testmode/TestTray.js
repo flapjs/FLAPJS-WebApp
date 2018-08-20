@@ -22,25 +22,25 @@ class TestTray extends React.Component
     const testIndex = tester.testMode.getCurrentTestStringIndex();
 
     return <div className="anchor-bottom-left test-tray-container">
-      <IconButton onClick={(e)=>{tester.testMode.onResume();}}>
+      <IconButton onClick={(e)=>{tester.testMode.onResume();}} disabled={tester.testMode.isRunning()}>
         <PlayIcon/>
       </IconButton>
 
       <IconButton onClick = {(e)=>{
         tester.testMode.onPause();
-      }}>
+      }} disabled={!tester.testMode.isRunning()}>
         <PauseIcon/>
       </IconButton>
 
       <IconButton onClick = {(e)=>{
         tester.testMode.onPreviousStep();
-      }}>
+      }} disabled={!tester.testMode.hasPrevStep()}>
         <UndoIcon/>
       </IconButton>
 
       <IconButton onClick = {(e)=>{
         tester.testMode.onNextStep();
-      }}>
+      }} disabled={!tester.testMode.hasNextStep()}>
         <RedoIcon/>
       </IconButton>
 
@@ -48,8 +48,12 @@ class TestTray extends React.Component
       {
         testInput && testIndex >= 0 &&
         testInput.value.split('').map((e, i) => {
-          if (testIndex - i > 3) return <span key={i}></span>;
-          if (testIndex - i < -3) return <span key={i}></span>;
+          const testOffset = testIndex - i;
+          if (testOffset > 6 || testOffset < -6) return;
+          if (testOffset > 3 || testOffset < -3)
+          {
+            return <span key={e + "." + i} className="test-tray-input-placeholder">.</span>;
+          }
           return <span key={e + "." + i}
             className={"test-tray-input-char" +
             (testIndex == i ? " active" : "")}>
