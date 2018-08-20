@@ -1,3 +1,4 @@
+import { guid } from 'GUID.js';
 import { solveNFA } from 'machine/util/solveNFA.js';
 import TestMode from 'content/viewport/testmode/TestMode.js';
 
@@ -26,7 +27,7 @@ class TestingManager
   {
     //Update machine builder error checker
     this.machineBuilder.setMachineType(this.machineBuilder.getMachineType());
-    
+
     if (mode == TestingManager.NO_ERROR_CHECK)
     {
       this.shouldCheckError = false;
@@ -201,14 +202,5 @@ class Test
 Test.PENDING = PENDING;
 Test.SUCCESS = SUCCESS;
 Test.FAILURE = FAILURE;
-
-function guid()
-{
-  function s4()
-  {
-    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
 
 export default TestingManager;
