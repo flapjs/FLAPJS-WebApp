@@ -20,7 +20,7 @@ class TransitionFunction extends React.Component {
             <table className="transitionfunction-table">
               <tbody>
                 <tr>
-                  <th>Q&#10005;&Sigma;</th>
+                  <th>Q{"\u00d7"}&Sigma;</th>
                   <th>{isNFA ? "\u2118(Q)" : "Q"}</th>
                 </tr>
                 {
