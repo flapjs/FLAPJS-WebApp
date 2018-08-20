@@ -43,18 +43,28 @@ class GraphInputController extends InputController
     this.registerEvent("nodeCreate");
     //nodeDelete(targetNode, prevX, prevY) - Called when a node is deleted
     this.registerEvent("nodeDelete");
-
-    this.registerEvent("nodeDeleteAll"/* targetNodes, selectedNode, prevX, prevY */);
-    this.registerEvent("nodeMove"/* targetNode, nextX, nextY, prevX, prevY */);
-    this.registerEvent("nodeMoveAll"/* targetNodes, dx, dy */);
-    this.registerEvent("nodeAccept"/* targetNode, nextAccept, prevAccept */);
-    this.registerEvent("nodeInitial"/* nextInitial, prevInitial */);
-    this.registerEvent("edgeCreate"/* targetEdge */);
-    this.registerEvent("edgeDelete"/* targetEdge */);
-    this.registerEvent("edgeDestination"/* targetEdge, nextDestination, prevDestination, prevQuad */);
-    this.registerEvent("edgeMove"/* targetEdge, nextQuad, prevQuad */);
-    this.registerEvent("edgeLabel"/* targetEdge, nextLabel, prevLabel */);
-    this.registerEvent("tryCreateWhileTrash"/*  */);
+    //nodeDeleteAll(targetNodes, selectedNode, prevX, prevY)
+    this.registerEvent("nodeDeleteAll");
+    //nodeMove(targetNode, nextX, nextY, prevX, prevY)
+    this.registerEvent("nodeMove");
+    //nodeMoveAll(targetNodes, dx, dy)
+    this.registerEvent("nodeMoveAll");
+    //nodeAccept(targetNode, nextAccept, prevAccept)
+    this.registerEvent("nodeAccept");
+    //nodeInitial(nextInitial, prevInitial)
+    this.registerEvent("nodeInitial");
+    //edgeCreate(targetEdge)
+    this.registerEvent("edgeCreate");
+    //edgeDelete(targetEdge)
+    this.registerEvent("edgeDelete");
+    //edgeDestination(targetEdge, nextDestination, prevDestination, prevQuad)
+    this.registerEvent("edgeDestination");
+    //edgeMove(targetEdge, nextQuad, prevQuad)
+    this.registerEvent("edgeMove");
+    //edgeLabel(targetEdge, nextLabel, prevLabel)
+    this.registerEvent("edgeLabel");
+    //tryCreateWhileTrash()
+    this.registerEvent("tryCreateWhileTrash");
   }
 
   initialize(app, workspace)

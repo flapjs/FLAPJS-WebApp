@@ -7,7 +7,7 @@ class AutoSaver
   //check if browser support local storage
   static doesSupportLocalStorage()
   {
-    return typeof(Storage) !== 'undefined';
+    return typeof Storage !== 'undefined';
   }
 
   static loadAutoSave(graph)
@@ -23,6 +23,7 @@ class AutoSaver
     catch (e)
     {
       //Ignore any errors, the graph should remain the same :)
+      console.error(e);
     }
   }
 

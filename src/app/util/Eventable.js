@@ -1,16 +1,18 @@
 const ALLOW_AUTOMATIC_REGISTER = false;
 
 const Eventable = {
+  __eventListeners: null,
   mixin(targetClass)
   {
     const targetPrototype = targetClass.prototype;
     Object.assign(targetPrototype, Eventable);
     delete targetPrototype.mixin;
-    targetPrototype.__eventListeners = new Map();
   },
 
   registerEvent(eventName)
   {
+    if (!this.__eventListeners) this.__eventListeners = new Map();
+
     if (!this.__eventListeners.has(eventName))
     {
       this.__eventListeners.set(eventName, []);
@@ -23,6 +25,8 @@ const Eventable = {
 
   unregisterEvent(eventName)
   {
+    if (!this.__eventListeners) return;
+
     if (this.__eventListeners.has(eventName))
     {
       this.__eventListeners.delete(eventName);
@@ -35,6 +39,8 @@ const Eventable = {
 
   addEventListener(eventName, listener)
   {
+    if (!this.__eventListeners) this.__eventListeners = new Map();
+
     let listeners;
     if (this.__eventListeners.has(eventName))
     {
@@ -55,6 +61,8 @@ const Eventable = {
 
   removeEventListener(eventName, listener)
   {
+    if (!this.__eventListeners) return;
+
     if (this.__eventListeners.has(eventName))
     {
       const listeners = this.__eventListeners.get(eventName);
@@ -82,6 +90,8 @@ const Eventable = {
 
   clearEventListeners(eventName)
   {
+    if (!this.__eventListeners) return;
+
     if (this.__eventListeners.has(eventName))
     {
       const listeners = this.__eventListeners.get(eventName);
@@ -100,11 +110,13 @@ const Eventable = {
 
   countEventListeners(eventName)
   {
+    if (!this.__eventListeners) return 0;
     return this.__eventListeners.has(eventName) ? this.__eventListeners.get(eventName).length : 0;
   },
 
   getEventListeners(eventName)
   {
+    if (!this.__eventListeners) return null;
     return this.__eventListeners.get(eventName);
   },
 
@@ -133,6 +145,8 @@ const Eventable = {
   {
     try
     {
+      if (!this.__eventListeners) return;
+
       let listeners;
       if (ALLOW_AUTOMATIC_REGISTER && !this.__eventListeners.has(eventName))
       {
