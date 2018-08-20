@@ -10,7 +10,7 @@ module.exports = {
     landing: './src/landing/index.js'
   },
   output: {
-    //Output to ./docs/bundle.js
+    //Output to ./dist/bundle.js
     path: path.resolve(__dirname, 'dist'),
     filename: 'src/[name].bundle.js',
     publicPath: 'dist/',

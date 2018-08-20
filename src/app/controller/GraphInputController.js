@@ -5,23 +5,6 @@ import SelectionBox from './SelectionBox.js';
 import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
 
-/*
-nodeCreate(targetNode)
-nodeDelete(targetNode, prevX, prevY)
-nodeDeleteAll(targetNodes, selectedNode, prevX, prevY)
-nodeMove(targetNode, nextX, nextY, prevX, prevY)
-nodeMoveAll(targetNodes, dx, dy)
-nodeAccept(targetNode, nextAccept, prevAccept)
-nodeInitial(nextInitial, prevInitial)
-
-edgeCreate(targetEdge)
-edgeDelete(targetEdge)
-edgeDestination(targetEdge, nextDestination, prevDestination, prevQuad)
-edgeMove(targetEdge, nextQuad, prevQuad)
-edgeLabel(targetEdge, nextLabel, prevLabel)
-
-tryCreateWhileTrash()
-*/
 class GraphInputController extends InputController
 {
   constructor()
@@ -53,6 +36,25 @@ class GraphInputController extends InputController
     this.selector = new SelectionBox(null);
 
     this.shouldDestroyPointlessEdges = Config.DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
+
+    //The difference between controller events vs graph events is: controller has user-intent
+
+    //nodeCreate(targetNode) - Called when a node is created
+    this.registerEvent("nodeCreate");
+    //nodeDelete(targetNode, prevX, prevY) - Called when a node is deleted
+    this.registerEvent("nodeDelete");
+
+    this.registerEvent("nodeDeleteAll"/* targetNodes, selectedNode, prevX, prevY */);
+    this.registerEvent("nodeMove"/* targetNode, nextX, nextY, prevX, prevY */);
+    this.registerEvent("nodeMoveAll"/* targetNodes, dx, dy */);
+    this.registerEvent("nodeAccept"/* targetNode, nextAccept, prevAccept */);
+    this.registerEvent("nodeInitial"/* nextInitial, prevInitial */);
+    this.registerEvent("edgeCreate"/* targetEdge */);
+    this.registerEvent("edgeDelete"/* targetEdge */);
+    this.registerEvent("edgeDestination"/* targetEdge, nextDestination, prevDestination, prevQuad */);
+    this.registerEvent("edgeMove"/* targetEdge, nextQuad, prevQuad */);
+    this.registerEvent("edgeLabel"/* targetEdge, nextLabel, prevLabel */);
+    this.registerEvent("tryCreateWhileTrash"/*  */);
   }
 
   initialize(app, workspace)
@@ -549,7 +551,7 @@ class GraphInputController extends InputController
               }
 
               //Allow the user to edit the merged labels
-              this.openLabelEditor(edge, x, y, result.join(","));
+              this.openLabelEditor(edge, x, y, result.join(","), false);
 
               //Delete the merged label
               this.graph.deleteEdge(target);
@@ -792,10 +794,10 @@ class GraphInputController extends InputController
     }
   }
 
-  openLabelEditor(target, x, y, placeholder=null)
+  openLabelEditor(target, x, y, placeholder=null, replace=true)
   {
     const prevLabel = placeholder || target.label;
-    this.labelEditor.openEditor(target, placeholder, () => {
+    this.labelEditor.openEditor(target, placeholder, replace, () => {
       const label = target.label;
       if (prevLabel.length > 0 && label != prevLabel)
       {

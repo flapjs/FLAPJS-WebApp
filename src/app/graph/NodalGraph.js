@@ -1,5 +1,5 @@
-import Eventable from 'util/Eventable.js';
 import Config from 'config.js';
+import Eventable from 'util/Eventable.js';
 
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
@@ -7,25 +7,38 @@ import NFA from 'machine/NFA.js';
 import Node from './Node.js';
 import Edge from './Edge.js';
 import { EMPTY } from 'machine/Symbols.js';
-//nodeCreate(node) - Whenever a new node is created
-//nodeDestroy(node) - Whenever a node is destroyed (even on clear)
-//nodeLabel(node, newLabel, oldLabel) - Whenever a node label changes
-//nodeCustomLabel(node, newLabel, oldLabel) - Whenever a node custom label changes
-//edgeCreate(edge) - Whenever a new edge is created
-//edgeDestroy(edge) - Whenever an edge is destroyed (even on clear)
-//edgeLabel(edge, newLabel, oldLabel) - Whenever a node label changes
-//edgeDestination(edge, newDestination, oldDestination) - Whenever a node changes destination
-//toggleAccept(node) - Whenever a node changes to an accept state, or vice versa
-//newInitial(node, oldNode) - Whenever a node becomes the initial state; oldNode could be null
-//markDirty(graph) - Whenever the graph is marked dirty
+
 class NodalGraph
 {
   constructor(nodes=[], edges=[])
   {
     this.nodes = nodes;
     this.edges = edges;
-
+    
     this.shouldUseQuadCoords = false;
+
+    //nodeCreate(node) - Whenever a new node is created
+    this.registerEvent("nodeCreate");
+    //nodeDestroy(node) - Whenever a node is destroyed (even on clear)
+    this.registerEvent("nodeDestroy");
+    //nodeLabel(node, newLabel, oldLabel) - Whenever a node label changes
+    this.registerEvent("nodeLabel");
+    //nodeCustomLabel(node, newLabel, oldLabel) - Whenever a node custom label changes
+    this.registerEvent("nodeCustomLabel");
+    //edgeCreate(edge) - Whenever a new edge is created
+    this.registerEvent("edgeCreate");
+    //edgeDestroy(edge) - Whenever an edge is destroyed (even on clear)
+    this.registerEvent("edgeDestroy");
+    //edgeLabel(edge, newLabel, oldLabel) - Whenever a node label changes
+    this.registerEvent("edgeLabel");
+    //edgeDestination(edge, newDestination, oldDestination) - Whenever a node changes destination
+    this.registerEvent("edgeDestination");
+    //toggleAccept(node) - Whenever a node changes to an accept state, or vice versa
+    this.registerEvent("toggleAccept");
+    //newInitial(node, oldNode) - Whenever a node becomes the initial state; oldNode could be null
+    this.registerEvent("newInitial");
+    //markDirty(graph) - Whenever the graph is marked dirty
+    this.registerEvent("markDirty");
   }
 
   getNodeByLabel(label)

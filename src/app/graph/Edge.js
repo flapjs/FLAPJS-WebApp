@@ -220,6 +220,7 @@ class Edge
       //Make sure to use quad for placeholder direction (not magnitude)
       const placeholderCoords = this.getPlaceholderCoords();
       const placeholderLength = Config.NODE_RADIUS + Config.PLACEHOLDER_LENGTH / 2;
+
       return {
         x: from.x + placeholderCoords.x * placeholderLength,
         y: from.y + placeholderCoords.y * placeholderLength
@@ -236,8 +237,10 @@ class Edge
     if (this.isQuadratic())
     {
       const qcoords = this.getQuadCoords();
-      midpoint.x += qcoords.x;
-      midpoint.y += qcoords.y;
+      const qx = qcoords.x;
+      const qy = qcoords.y;
+      midpoint.x += qx;
+      midpoint.y += qy;
     }
 
     return midpoint;
@@ -289,7 +292,7 @@ class Edge
       //This is because the from and to could be flipped, and
       //therefore give a negative, or at least a reversed angle.
       let radians = Math.atan2(dy, dx) + angleOffset;
-      let length = Math.sqrt(dx * dx + dy * dy) - Config.EDGE_RADIUS;
+      let length = Math.sqrt(dx * dx + dy * dy);
       if (length < 0) length = 0;
 
       const outrad = radians - (-HALFPI);//-PI / 2 is outward

@@ -36,7 +36,7 @@ class LabelEditor extends React.Component
     this.onContextMenu = this.onContextMenu.bind(this);
   }
 
-  openEditor(targetEdge, defaultText=null, callback=null)
+  openEditor(targetEdge, defaultText=null, replace=true, callback=null)
   {
     this.setState((prev, props) => {
       return {
@@ -47,10 +47,14 @@ class LabelEditor extends React.Component
 
     this.inputElement.value = defaultText || targetEdge.label;
     this.parentElement.focus();
-
-    //TODO: if (!window.matchMedia("(max-height: 420px)").matches)
+    
+    if (replace)
     {
       this.inputElement.select();
+    }
+    else
+    {
+      this.inputElement.focus();
     }
   }
 

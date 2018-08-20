@@ -1,81 +1,174 @@
+const ALLOW_AUTOMATIC_REGISTER = false;
+
 const Eventable = {
-  __events: null,
   mixin(targetClass)
   {
-    Object.assign(targetClass.prototype, Eventable);
-    targetClass.prototype.__events = new Map();
+    const targetPrototype = targetClass.prototype;
+    Object.assign(targetPrototype, Eventable);
+    delete targetPrototype.mixin;
+    targetPrototype.__eventListeners = new Map();
   },
+
+  registerEvent(eventName)
+  {
+    if (!this.__eventListeners.has(eventName))
+    {
+      this.__eventListeners.set(eventName, []);
+    }
+    else
+    {
+      throw new Error("Already registered event \'" + eventName + "\'");
+    }
+  },
+
+  unregisterEvent(eventName)
+  {
+    if (this.__eventListeners.has(eventName))
+    {
+      this.__eventListeners.delete(eventName);
+    }
+    else
+    {
+      throw new Error("Unable to find event \'" + eventName + "\'");
+    }
+  },
+
   addEventListener(eventName, listener)
   {
-    if (!this.__events.has(eventName)) this.__events.set(eventName, []);
-
-    const listeners = this.__events.get(eventName);
-    listeners.push(listener);
-  },
-  addListener()
-  {
-    throw new Error("DEPRECATED!");
-  },
-  removeEventListener(eventName, listener)
-  {
-    if (!this.__events.has(eventName)) return;
-
-    const listeners = this.__events.get(eventName);
-    listeners.splice(listeners.indexOf(listener), 1);
-  },
-  removeListener()
-  {
-    throw new Error("DEPRECATED!");
-  },
-  removeAllListeners(eventName)
-  {
-    if (!this.__events.has(eventName)) return;
-
-    const listeners = this.__events.get(eventName);
-    listeners.length = 0;
-  },
-  clearListeners()
-  {
-    this.__events.clear();
-  },
-  countListeners(eventName)
-  {
-    return this.__events.has(eventName) ? this.__events.get(eventName).length : 0;
-  },
-  getListeners(eventName)
-  {
-    return this.__events.get(eventName);
-  },
-  emit(eventName)
-  {
-    if (!this.__events.has(eventName)) return;
-
-    //Can pass additional args to listeners here...
-    const args = Array.prototype.splice.call(arguments, 1);
-    const listeners = this.__events.get(eventName).slice();
-    for(let listener of listeners)
+    let listeners;
+    if (this.__eventListeners.has(eventName))
     {
-      const result = listener.apply(null, args);
-      if (result) break;
+      listeners = this.__eventListeners.get(eventName);
+    }
+    else if (ALLOW_AUTOMATIC_REGISTER)
+    {
+      listeners = [];
+      this.__eventListeners.set(eventName, listeners);
+    }
+    else
+    {
+      throw new Error("Unable to find event \'" + eventName + "\'");
     }
 
-    this.onEventProcessed(eventName, args);
+    listeners.push(listener);
   },
+
+  removeEventListener(eventName, listener)
+  {
+    if (this.__eventListeners.has(eventName))
+    {
+      const listeners = this.__eventListeners.get(eventName);
+      let flag = false;
+      let i = listeners.length;
+      while(i--)
+      {
+        if (listeners[i] === listener)
+        {
+          listeners.splice(i, 1);
+          flag = true;
+        }
+      }
+
+      if (!flag)
+      {
+        throw new Error("Unable to find listener for event \'" + eventName + "\'");
+      }
+    }
+    else
+    {
+      throw new Error("Unknown event \'" + eventName + "\'");
+    }
+  },
+
+  clearEventListeners(eventName)
+  {
+    if (this.__eventListeners.has(eventName))
+    {
+      const listeners = this.__eventListeners.get(eventName);
+      listeners.length = 0;
+    }
+    else if (ALLOW_AUTOMATIC_REGISTER)
+    {
+      listeners = [];
+      this.__eventListeners.set(eventName, listeners);
+    }
+    else
+    {
+      throw new Error("Unable to find event \'" + eventName + "\'");
+    }
+  },
+
+  countEventListeners(eventName)
+  {
+    return this.__eventListeners.has(eventName) ? this.__eventListeners.get(eventName).length : 0;
+  },
+
+  getEventListeners(eventName)
+  {
+    return this.__eventListeners.get(eventName);
+  },
+
   on(eventName, listener)
   {
     this.addEventListener(eventName, listener);
   },
+
   once(eventName, listener)
   {
-    const f = () => {
-      listener.apply(null, arguments);
-      this.removeEventListener(f);
+    const f = (...args) => {
+      try
+      {
+        listener.apply(null, args);
+      }
+      finally
+      {
+        this.removeEventListener(eventName, f);
+      }
     };
+
     this.addEventListener(eventName, f);
   },
-  onEventProcessed(eventName, args)
+
+  emit(eventName, ...args)
   {
-    //Do nothing...
+    try
+    {
+      let listeners;
+      if (ALLOW_AUTOMATIC_REGISTER && !this.__eventListeners.has(eventName))
+      {
+        listeners = [];
+        this.__eventListeners.set(eventName, listeners);
+      }
+      else
+      {
+        listeners = this.__eventListeners.get(eventName);
+
+        let result = null;
+        let i = listeners.length;
+        while(i--)
+        {
+          try
+          {
+            result = listeners[i].apply(null, args);
+          }
+          catch(e)
+          {
+            console.error(e);
+          }
+
+          if (result === true) break;
+        }
+      }
+    }
+    finally
+    {
+      this.onEventProcessed(eventName, ...args);
+    }
+  },
+
+  onEventProcessed(eventName, ...args)
+  {
+    //Do nothing.
   }
 };
 
