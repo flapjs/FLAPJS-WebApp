@@ -6,7 +6,7 @@
   text-align: center;
 }
 
-.transitionfunction-table th {
+.transitionfunction-table th, .transitionfunction-table td {
   padding: 5px;
   border-radius: 5px;
   background: var(--color-drawer-text-back);
@@ -14,4 +14,16 @@
 
 .transitionfunction-table th {
   color: var(--color-drawer-text);
+}
+
+.transitionfunction-table td {
+  color: var(--color-drawer-text-subtle);
+}
+
+.transitionfunction-table td.accept {
+  text-decoration: underline;
+}
+
+.transitionfunction-table td.error {
+  color: var(--color-drawer-error);
 }
