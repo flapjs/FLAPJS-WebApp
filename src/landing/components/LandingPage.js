@@ -48,6 +48,9 @@ class LandingPage extends React.Component
   {
     super(props);
 
+    this.footer = React.createRef();
+    this.returnHome = React.createRef();
+
     this.onLaunchButton = this.onLaunchButton.bind(this);
     this.onTutorialButton = this.onTutorialButton.bind(this);
     this.onReturnHomeButton = this.onReturnHomeButton.bind(this);
@@ -55,6 +58,22 @@ class LandingPage extends React.Component
     this.onAboutButton = this.onAboutButton.bind(this);
     this.onHelpButton = this.onHelpButton.bind(this);
     this.onGithubButton = this.onGithubButton.bind(this);
+  }
+
+  componentDidMount()
+  {
+    //Parallax effect for footer
+    window.onscroll = (e) => {
+      let height = Math.max(
+        document.body.scrollHeight, document.documentElement.scrollHeight,
+        document.body.offsetHeight, document.documentElement.offsetHeight,
+        document.body.clientHeight, document.documentElement.clientHeight
+      ) - window.innerHeight;
+      let scroll = window.pageYOffset;
+      const value = Math.round(height - scroll) / 5;
+      this.footer.style.bottom = value + "px";
+      this.returnHome.style.opacity = (scroll / height);
+    };
   }
 
   onLaunchButton(e)
@@ -76,7 +95,7 @@ class LandingPage extends React.Component
 
   onReturnHomeButton(e)
   {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   onReportBugButton(e)
@@ -157,11 +176,8 @@ class LandingPage extends React.Component
             </div>
           </div>
         </div>
-      </div>
 
-      {/* FOOTER */}
-      <footer>
-        <div id="return-home">
+        <div ref={ref=>this.returnHome=ref} id="return-home">
           <svg xmlns="http://www.w3.org/2000/svg"
             width="24" height="24" viewBox="0 0 24 24"
             onClick={this.onReturnHomeButton}>
@@ -169,6 +185,10 @@ class LandingPage extends React.Component
               <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/>
           </svg>
         </div>
+      </div>
+
+      {/* FOOTER */}
+      <footer ref={ref=>this.footer=ref}>
         <div className="utility">
           <div><a className="info" onClick={this.onReportBugButton}>Report a Bug</a></div>
           <div><a className="info" onClick={this.onAboutButton}>About</a></div>
