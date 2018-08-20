@@ -137,7 +137,7 @@ class Workspace extends React.Component
           {/* Node test targets */}
           { tester.testMode.targets.map((e, i) =>
             {
-              return <HighlightRenderer key={e.state + "." + i} className="highlight-test graph-gui" target={graph.getNodeByLabel(e.state)} type="node" offset="6"/>;
+              return <HighlightRenderer key={e.label + "." + i} className="highlight-test graph-gui" target={e} type="node" offset="6"/>;
             })
           }
 
