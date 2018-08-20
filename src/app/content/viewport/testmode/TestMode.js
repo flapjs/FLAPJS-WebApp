@@ -163,7 +163,6 @@ class TestMode
     else
     {
       //Update history
-      //TODO: history must keep a copy of all cachedStates, symbols, etc or else it cannot run correctly...
       console.log(JSON.stringify(this.targets));
       const currentStep = this.getCurrentCache();
       this.history.push(currentStep);
