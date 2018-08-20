@@ -61,12 +61,6 @@ class Workspace extends React.Component
     return clone;
   }
 
-  componentWillUpdate()
-  {
-    //Update input controller (usually mouse position for hover info)
-    //this.props.controller.pointer.updateTarget();
-  }
-
   render()
   {
     const graph = this.props.graph;

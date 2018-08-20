@@ -15,14 +15,18 @@
   text-anchor: middle;
   font-size: inherit;
   font-family: 'Overpass Mono', monospace;
+
+  fill: var(--color-workspace-text);
 }
 .graph-edge {
-  stroke: black;
+  stroke: var(--color-workspace-text);
 }
 .graph-edge-label {
   text-anchor: middle;
   font-size: inherit;
   font-family: 'Overpass Mono', monospace;
+
+  fill: var(--color-workspace-text);
 }
 .graph-initial {
   stroke: var(--color-workspace-text);

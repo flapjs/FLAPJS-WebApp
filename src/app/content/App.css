@@ -28,8 +28,8 @@
   --color-notification-info-dark: #3D3D3D;
   --color-notification-error: #C77575;
   --color-notification-error-dark: #B54A4A;
-  --color-notification-warning: #E6CB53;
-  --color-notification-warning-dark: #DFBC20;
+  --color-notification-warning: #D6A922;/*#E6CB53;*/
+  --color-notification-warning-dark: #AD8715;/*#DFBC20;*/
   --color-notification-success: #A1C797;
   --color-notification-success-dark: #468C34;
 
