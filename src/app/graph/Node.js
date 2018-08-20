@@ -1,3 +1,5 @@
+import { guid } from 'util/GUID.js';
+
 class Node
 {
   constructor(graph, x=0, y=0, label="q")
@@ -6,6 +8,7 @@ class Node
     this.x = x;
     this.y = y;
     this.customLabel = false;
+    this.id = guid();
 
     this._label = label;
     this._accept = false;

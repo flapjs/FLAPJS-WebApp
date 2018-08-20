@@ -1,4 +1,6 @@
 import Config from 'config.js';
+
+import { guid } from 'util/GUID.js';
 import Node from './Node.js';
 
 class Edge
@@ -7,6 +9,7 @@ class Edge
   {
     this.graph = graph;
     this.from = from;
+    this.id = guid();
 
     //radians = the angle in radians, where 0 is the normal of midpoint
     //length = the distance from midpoint

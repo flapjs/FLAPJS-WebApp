@@ -1,6 +1,7 @@
 import React from 'react';
 import './NotificationSystem.css';
 
+import { guid } from 'util/GUID.js';
 import DefaultMessage from "./DefaultMessage";
 import DefaultWarningMessage from "./DefaultWarningMessage";
 import DefaultErrorMessage from "./DefaultErrorMessage";
@@ -100,16 +101,6 @@ class NotificationSystem extends React.Component
       </div>
     );
   }
-}
-
-/*TODO: ANOTHER ONE EXISTS IN TESTING MANAGER!!!*/
-function guid()
-{
-  function s4()
-  {
-    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
 
 export default NotificationSystem;

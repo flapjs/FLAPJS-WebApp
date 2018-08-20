@@ -17,10 +17,10 @@ class EdgeRenderer extends React.Component
 
     let arrowAngle = 0;
     const edge = this.props.edge;
-    const start = this.props.start;
-    const end = this.props.end;
-    const center = this.props.center;
-    const label = this.props.label;
+    const start = edge.getStartPoint();
+    const end = edge.getEndPoint();
+    const center = edge.getCenterPoint();
+    const label = edge.label;
     const quadCoords = edge.getQuadCoords();
 
     //Calculate curved lines...
@@ -34,8 +34,9 @@ class EdgeRenderer extends React.Component
     else
     {
       //Quadratic curve
-      const cx = center.x + quadCoords.x;//(midpoint + the quadratic offset) + the quadratic offset
-      const cy = center.y + quadCoords.y;//(midpoint + the quadratic offset) + the quadratic offset
+      //center = (midpoint + the quadratic offset) + the quadratic offset
+      const cx = center.x + quadCoords.x;
+      const cy = center.y + quadCoords.y;
       arrowAngle = Math.atan2(cx - end.x, cy - end.y) + Math.PI;
       quadLine = "Q " + cx + " " + cy + " " + end.x + " " + end.y;
     }
@@ -71,7 +72,7 @@ class EdgeRenderer extends React.Component
 
           //TODO: ctx.clearRect(xx - cx - 2, yy - 5, (cx * 2) + 4, 10);
           return <text
-            key={i}
+            key={str + "." + i}
             className="graph-edge-label"
             x={xx} y={yy}
             alignmentBaseline="central"

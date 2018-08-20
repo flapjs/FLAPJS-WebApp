@@ -99,16 +99,10 @@ class Workspace extends React.Component
         {/* Graph objects */}
         <g>
           {/* Nodes */}
-          { graph.nodes.map((e, i) =>
-            <NodeRenderer key={i} node={e}/>) }
+          {graph.nodes.map((e, i) => <NodeRenderer key={e.id} node={e}/>)}
 
           {/* Edges */}
-          { graph.edges.map((e, i) =>
-            <EdgeRenderer key={i} edge={e}
-              start={e.getStartPoint()}
-              end={e.getEndPoint()}
-              center={e.getCenterPoint()}
-              label={e.label}/>) }
+          {graph.edges.map((e, i) => <EdgeRenderer key={e.id} edge={e}/>)}
         </g>
 
         {/* Graph GUIs */}
@@ -121,26 +115,26 @@ class Workspace extends React.Component
           {/* Selected elements */}
           { controller.selector.hasSelection() &&
             controller.selector.getSelection().map((e, i) =>
-              <HighlightRenderer key={e.label} className="highlight-select"target={e} type="node"/>) }
+              <HighlightRenderer key={e.id} className="highlight-select" target={e} type="node"/>) }
 
           {/* Selection box */}
           <SelectionBoxRenderer src={controller.selector}/>
 
           {/* Node warning targets */}
           { machineBuilder.machineErrorChecker.warningNodes.map((e, i) =>
-            <HighlightRenderer key={e.label + "." + i} className="highlight-warning graph-gui" target={e} type="node" offset="6"/>) }
+            <HighlightRenderer key={e.id} className="highlight-warning graph-gui" target={e} type="node" offset="6"/>) }
 
           {/* Edge warning targets */}
           { machineBuilder.machineErrorChecker.warningEdges.map((e, i) =>
-            <HighlightRenderer key={e.label + "." + i} className="highlight-warning graph-gui" target={e} type="edge" offset="6"/>) }
+            <HighlightRenderer key={e.id} className="highlight-warning graph-gui" target={e} type="edge" offset="6"/>) }
 
           {/* Node error targets */}
           { machineBuilder.machineErrorChecker.errorNodes.map((e, i) =>
-            <HighlightRenderer key={e.label + "." + i} className="highlight-error graph-gui" target={e} type="node" offset="6"/>) }
+            <HighlightRenderer key={e.id} className="highlight-error graph-gui" target={e} type="node" offset="6"/>) }
 
           {/* Edge error targets */}
           { machineBuilder.machineErrorChecker.errorEdges.map((e, i) =>
-            <HighlightRenderer key={e.label + "." + i} className="highlight-error graph-gui" target={e} type="edge" offset="6"/>) }
+            <HighlightRenderer key={e.id} className="highlight-error graph-gui" target={e} type="edge" offset="6"/>) }
 
 
           {/* Node test targets */}

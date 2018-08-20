@@ -407,6 +407,10 @@ class InputController
 
     this.onInputUp(pointer.x, pointer.y,
         pointer.initial.target, pointer.initial.targetType);
+
+    //Set target as nothing since no longer interacting
+    pointer.target = null;
+    pointer.targetType = "none";
   }
 
   //Returns true if should act on input, false to ignore remaining click events
