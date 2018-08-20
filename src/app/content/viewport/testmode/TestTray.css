@@ -1,0 +1,43 @@
+.test-tray-container {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.test-tray-container .icon-button {
+  padding: 10px;
+
+  opacity: 0.7;
+  fill: var(--color-drawer-main);
+  transition: opacity 0.1s ease;
+}
+.test-tray-container .icon-button:hover {
+  opacity: 1.0;
+}
+.test-tray-container .icon-button:disabled {
+  opacity: 0.2;
+}
+.test-tray-container .icon-button>svg {
+  width: 4em;
+  height: 4em;
+}
+.test-tray-input-string-container>* {
+  transition: opacity 0.3s ease;
+}
+.test-tray-input-string-container>.test-tray-input-char:last-child {
+  text-decoration: underline;
+  opacity: 0.6;
+}
+.test-tray-input-placeholder {
+  font-size: 3em;
+  color: var(--color-drawer-main);
+  opacity: 0.1;
+}
+.test-tray-input-char {
+  padding: 10px;
+  font-size: 3em;
+  color: var(--color-drawer-main);
+
+  opacity: 0.2;
+}
+.test-tray-input-char.active {
+  opacity: 1.0;
+}

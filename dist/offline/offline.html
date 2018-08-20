@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <title>flap.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      html, body {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+
+        font-family: sans-serif;
+      }
+
+      .four04-container {
+        margin: auto;
+        padding: 90px 0;
+        width: 50%;
+        height: 200px;
+        position: relative;
+        text-align: center;
+      }
+
+      .four04-text {
+        font-size: 20px;
+        color: #747678;
+      }
+
+      .four04-logo {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="four04-container">
+      <h1 class="four04-heading">Page Not Found</h1>
+      <img src="offline.png" class="four04-logo" onclick='window.location.replace("app.html")'/>
+      <p class="four04-text">Sorry, the page you're looking for isn't available.</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <title id="window-title">flap.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- TODO: when we get a server, remove all  "dist/" -->
+
+    <link rel="stylesheet" href="dist/css/style.css">
+    <!-- Import Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Overpass+Mono" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Entry point -->
+    <noscript>
+      You need to enable Javascript to run this app.
+    </noscript>
+
+    <script>
+      //Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('./serviceWorker.js', { scope: './' })
+          .then(registration => console.log("ServiceWorker registration successful: ", registration.scope),
+            error => console.log("ServiceWorker registration failed: ", error));
+        });
+      }
+    </script>
+    <script src="dist/lang/I18N.js" type="text/javascript"></script>
+    <script>
+      //TODO: this should be only lang/ when have server
+      I18N.baseUrl = "dist/lang/";
+      I18N.fetchLanguageFile("en_us");
+    </script>
+    <script src="dist/src/vendors.bundle.js" type="text/javascript"></script>
+    <script src="dist/src/runtime~app.bundle.js" type="text/javascript"></script>
+    <script src="dist/src/app.bundle.js" type="text/javascript"></script>
+  </body>
+</html>

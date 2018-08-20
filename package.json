@@ -1,8 +1,8 @@
 {
-  "name": "flapjs-webapp",
+  "name": "flap.js",
   "version": "1.0.0",
-  "description": "Repository for Flap.js webapp project",
-  "main": "./dist/bundle.js",
+  "description": "Repository for flap.js web app project",
+  "main": "./dist/debug/bundle.js",
   "scripts": {
     "start": "webpack-dev-server --mode development --config webpack.config.js",
     "build": "webpack --mode production --config webpack.config.js",
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/flapjs/FLAPJS-WebApp.git"
   },
-  "author": "",
+  "author": "Noah, Maya, David, Erik, Lixuan, Andrew",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/flapjs/FLAPJS-WebApp/issues"

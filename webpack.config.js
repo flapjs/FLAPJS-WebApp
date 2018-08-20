@@ -1,11 +1,20 @@
-const path = require("path");
-const webpack = require("webpack");
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
-  //Entry point to start bundling...
-  entry: './src/index.js',
   //Change this to 'production' for optimizations
-  mode: "development",
+  mode: 'development',
+  //Entry point to start bundling...
+  entry: {
+    app: './src/app/index.js',
+    landing: './src/landing/index.js'
+  },
+  output: {
+    //Output to ./dist/bundle.js
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'src/[name].bundle.js',
+    publicPath: 'dist/',
+  },
   module: {
     rules: [
       {
@@ -22,7 +31,7 @@ module.exports = {
       },
       {
         test:  /\.(jpg|png|gif|svg|pdf|ico)$/,
-        use: [ 'file-loader' ]
+        use: [ 'file-loader?name=images/[name].[ext]' ]
       }
     ]
   },
@@ -31,24 +40,31 @@ module.exports = {
     extensions: ['*', '.js', '.jsx', '.mjs'],
     //Resolve by absolute path
     modules: [
-      path.resolve('./src'),
-      'node_modules'
+      'node_modules',
+      path.resolve('./dist'),
+      path.resolve('./src/app'),
+      path.resolve('./src/landing'),
     ]
   },
-  output: {
-    //Output to ./dist/bundle.js
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    //For devServer to find directory from project root
-    publicPath: '/dist/'
-  },
+  target: 'web',
   devServer: {
     contentBase: path.join(__dirname, '/'),//public/
     port: 3000,
-    //For devServer to find directory from web user
-    publicPath: 'http://localhost:3000/dist/',
     hotOnly: true,
     open: true
+  },
+  optimization: {
+    runtimeChunk: 'multiple',
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          enforce: true,
+          chunks: 'all'
+        }
+      }
+    }
   },
   plugins: [ new webpack.HotModuleReplacementPlugin() ]
 };
