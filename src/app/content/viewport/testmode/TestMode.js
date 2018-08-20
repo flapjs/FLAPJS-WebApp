@@ -9,8 +9,6 @@ class TestMode
   {
     this.machineBuilder = machineBuilder;
     this.targets = [];
-    //TODO: make this store the start state
-    //TODO: Make targets actual graph nodes, NOT just state labels
 
     this.history = [];
     this.indexofString = -1;
@@ -33,17 +31,13 @@ class TestMode
       const dfa = this.machineBuilder.toDFA();
       if (!dfa.validate()) return;
     }*/
-
-    this.history.length = 0;
     this.prepareForNewTest();
-
+    this.targets.push(this.machineBuilder.graph.getStartNode())
     this.started = true;
   }
 
   onStop()
   {
-    this.history.length = 0;
-
     this.started = false;
   }
 
@@ -69,30 +63,21 @@ class TestMode
 
   onPreviousStep()
   {
-    this.history.pop();
-    const previous = this.history[this.history.length - 1];
+    console.log(this.history[1])
+    if (this.history){
+      const previous = this.history[this.history.length - 1];
+      this.history.pop()
+      this.targets.length = 0;
+      for(const state of previous)
+      {
+        this.targets.push(state);
 
-    //Reset targets
-    this.targets.length = 0;
-    for(const state of previous)
-    {
-      this.targets.push(state);
+      }
+      this.indexofString--;
     }
 
-    //Reset test index
-    if (this.indexofString <= 0)
-    {
-      //TODO: This currently does not work!
-      /*
-      //Go to previous test string
+    else{
       this.testingManager.prevTestInput();
-
-      */
-      this.prepareForNewTest();
-    }
-    else
-    {
-      --this.indexofString;
     }
   }
 
@@ -128,6 +113,8 @@ class TestMode
       this.running = false;//Stop the resume at each string
 
       this.prepareForNewTest();
+      this.targets.length = 0
+      this.targets.push(this.machineBuilder.graph.getStartNode())
       return true;
     }
     else
@@ -139,15 +126,17 @@ class TestMode
 
       //Update targets
       this.targets.length = 0;
+      console.log(this.cachedStates)
       for(const state of this.cachedStates)
       {
-        this.targets.push(state);
+        this.targets.push(this.machineBuilder.graph.getNodeByLabel(state.state));
       }
       console.log("For that character, the next state is: " + JSON.stringify(this.cachedStates));
 
       //Update history
-      this.history.push(this.cachedStates);
-
+      console.log(this.targets)
+      this.history.push(this.targets);
+      console.log(this.history[this.history.length - 1])
       console.log("Have we reached the end? " + this.result);
       return true;
     }
@@ -164,8 +153,8 @@ class TestMode
     this.cachedStates.length = 0;
     this.cachedSymbols.length = 0;
     this.checkedStates.length = 0;
-
-    this.history.push(startState);
+    this.history.length = 0;
+    this.history.push(this.machineBuilder.graph.getStartNode());
     this.cachedStates.push({state: startState, index: 0});
     this.indexofString = -1;
   }
