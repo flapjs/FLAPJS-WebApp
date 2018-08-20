@@ -1,17 +1,19 @@
 //This is the github-ready service worker
+// - Config must stay in service worker to trigger update
+// - Must be at the root
+// - Must also NEVER rename the file
+
 //TODO: When we get a server, this needs to be at the root!
 //TODO: when we get a server, remove all  "dist/"
 //TODO: Don't forget to remove \/dist\/ from isValidCachePath
 
-//Must stay in service worker to trigger update
-//Must also NEVER rename the file
 const CONFIG = {
-  version: '0.0.0',
-  //TODO: For production mode, change this to false!
-  networkPriority: true,
-  //TODO: For production mode, change this to false!
-  sourcePriority: true,
-  staticCacheItems: [
+  version: '0.0.0',         //Change this to invalidate user caches
+  forceNetworkFirst: true,  //For debuggin' purposes, force load everything!
+  networkPriority: [
+    'content'
+  ],
+  staticCacheItems: [       //Static cache for installing
     './',
     './app.html',
 
@@ -31,14 +33,62 @@ const CONFIG = {
 
     './dist/css/style.css'
   ],
-  offlineImage: './dist/offline/offline.png',
-  offlinePage: './dist/offline/offline.html',
-  isValidCachePath(cachePath)
+  isValidPathToCache(cachePath)
   {
     const pattern = /^\/((dist|FLAPJS-WebApp\/dist)\/(images|src|css|lang)\/|.*(\.html)$)/g;
     const result = pattern.exec(cachePath);
     return result;
   },
+  getResourceType(request)
+  {
+    const url = new URL(request.url);
+    //Filter resources by headers...
+    const acceptHeader = request.headers.get('Accept');
+
+    //TODO: For debuggin'
+    console.log("[ServiceWorker] Resolving fetch for \'" + url.pathname + "\' with header: " + acceptHeader + "...");
+
+    //TODO: this should work, but it doesn't. Probably server settings.
+    if (url.pathname.endsWith(".html") || acceptHeader.indexOf('text/html') !== -1)
+    {
+      return 'content';
+    }
+    else if (acceptHeader.indexOf('image') !== -1)
+    {
+      return 'image';
+    }
+    else if (url.pathname.endsWith(".js"))
+    {
+      return 'js';
+    }
+    else if (url.pathname.endsWith(".lang"))
+    {
+      return 'lang';
+    }
+    else// if (...)
+    {
+      //Filter by other resource types...
+    }
+
+    return undefined;
+  },
+  getOfflineResponse(resourceType)
+  {
+    if (resourceType === 'content')
+    {
+      return caches.match('./dist/offline/offline.html');
+    }
+    else if (responseType === 'image')
+    {
+      return caches.match('./dist/offline/offline.png');
+    }
+    else// if (responseType === ...)
+    {
+      //Handle any other resources that have offline versions...
+    }
+
+    return undefined;
+  }
 };
 
 function cacheName(key, opts)
@@ -74,24 +124,6 @@ function fetchFromCache(event)
       }
       return response;
     });
-}
-
-function offlineResponse(request, opts)
-{
-  if (resourceType === 'content')
-  {
-    return caches.match(opts.offlinePage);
-  }
-  else if (responseType === 'image')
-  {
-    return caches.match(opts.offlineImage);
-  }
-  else// if (responseType === ...)
-  {
-    //Handle any other resources that have offline versions...
-  }
-
-  return undefined;
 }
 
 //Pre-cache static resources for offline use...
@@ -134,57 +166,28 @@ self.addEventListener('fetch', event => {
   {
     const request = event.request;
     const url = new URL(request.url);
-
-    return opts.isValidCachePath(url.pathname) &&//Is fetch a wanted cache?
-      request.method === 'GET' &&//Is fetch a GET request?
-      url.origin === self.location.origin;//Is fetch from same origin?
+    return opts.isValidPathToCache(url.pathname) &&   //Is fetch a wanted cache?
+      request.method === 'GET' &&                     //Is fetch a GET request?
+      url.origin === self.location.origin;            //Is fetch from same origin?
   }
 
   //Yes, let's do it.
   function onFetch(event, opts)
   {
     const request = event.request;
-    const url = new URL(request.url);
-    let resourceType = 'static';
-    let cacheKey;
-
-    //Filter resources by headers...
-    const acceptHeader = request.headers.get('Accept');
-    //TODO: this should work, but it doesn't. Probably server settings.
-    if (url.pathname.endsWith(".html") || acceptHeader.indexOf('text/html') !== -1)
-    {
-      resourceType = 'content';
-    }
-    else if (acceptHeader.indexOf('image') !== -1)
-    {
-      resourceType = 'image';
-    }
-    else if (url.pathname.endsWith(".js"))
-    {
-      resourceType = 'js';
-    }
-    else if (url.pathname.endsWith(".lang"))
-    {
-      resourceType = 'lang';
-    }
-    else// if (...)
-    {
-      //Filter by other resource types...
-    }
+    const resourceType = opts.getResourceType(request) || 'static';
 
     //Use resource type as cache key (not required, but nice)
-    cacheKey = cacheName(resourceType, opts);
+    const cacheKey = cacheName(resourceType, opts);
 
     //Prioritize content files to always grab network versions FIRST
-    if (CONFIG.networkPriority ||
-      resourceType === 'content' ||
-      (CONFIG.sourcePriority && resourceType === 'js'))
+    if (opts.forceNetworkFirst || opts.networkPriority.includes(resourceType))
     {
       //Network-first strategy
       event.respondWith(fetch(request)
         .then(response => addToCache(cacheKey, request, response))
         .catch(() => fetchFromCache(event))
-        .catch(() => offlineResponse(resourceType, opts))
+        .catch(() => opts.getOfflineResponse(resourceType))
       );
     }
     //Other files rely on cached files FIRST
@@ -194,7 +197,7 @@ self.addEventListener('fetch', event => {
       event.respondWith(fetchFromCache(event)
         .catch(() => fetch(request))
         .then(response => addToCache(cacheKey, request, response))
-        .catch(() => offlineResponse(resourceType, opts))
+        .catch(() => opts.getOfflineResponse(resourceType))
       );
     }
   }
