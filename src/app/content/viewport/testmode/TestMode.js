@@ -86,19 +86,36 @@ class TestMode
   onPreviousStep()
   {
     console.log(this.history[1])
-    if (this.history){
-      const previous = this.history[this.history.length - 1];
-      this.history.pop()
+    if (this.history.length > 0)
+    {
+      const previous = this.history.pop();
       this.targets.length = 0;
-      for(const state of previous)
-      {
-        this.targets.push(state);
+      this.cachedStates.length = 0;
+      this.cachedSymbols.length = 0;
+      this.checkedStates.length = 0;
 
+      //Copy the old step
+      for(const target of previous.targets)
+      {
+        this.targets.push(target);
       }
+      for(const state of previous.cachedStates)
+      {
+        this.cachedStates.push(state);
+      }
+      for(const symbol of previous.cachedSymbols)
+      {
+        this.cachedSymbols.push(symbol);
+      }
+      for(const state of previous.checkedStates)
+      {
+        this.checkedStates.push(state);
+      }
+
       this.indexofString--;
     }
-
-    else{
+    else
+    {
       this.testingManager.prevTestInput();
     }
   }
@@ -145,6 +162,14 @@ class TestMode
     }
     else
     {
+      //Update history
+      //TODO: history must keep a copy of all cachedStates, symbols, etc or else it cannot run correctly...
+      console.log(JSON.stringify(this.targets));
+      const currentStep = this.getCurrentCache();
+      this.history.push(currentStep);
+      console.log(JSON.stringify(this.history[this.history.length - 1]));
+
+      //Run it
       let nextChar = testInput.value[this.indexofString];
       console.log("The next character (should never be null): " + nextChar);
 
@@ -159,13 +184,19 @@ class TestMode
       }
       console.log("For that character, the next state is: " + JSON.stringify(this.cachedStates));
 
-      //Update history
-      console.log(this.targets)
-      this.history.push(this.targets);
-      console.log(this.history[this.history.length - 1])
       console.log("Have we reached the end? " + this.result);
       return true;
     }
+  }
+
+  getCurrentCache()
+  {
+    return {
+      targets: this.targets.slice(),
+      cachedStates: this.cachedStates.slice(),
+      cachedSymbols: this.cachedSymbols.slice(),
+      checkedStates: this.checkedStates.slice()
+    };
   }
 
   getCurrentTestStringIndex()
@@ -180,12 +211,12 @@ class TestMode
     this.cachedStates.length = 0;
     this.cachedSymbols.length = 0;
     this.checkedStates.length = 0;
-    this.targets.length = 0;
-    this.targets.push(startNode)
-    this.history.length = 0;
-    this.history.push(startNode);
     this.cachedStates.push({state: startState, index: 0});
+    this.targets.length = 0;
+    this.targets.push(startNode);
     this.indexofString = -1;
+
+    this.history.length = 0;
   }
 }
 
