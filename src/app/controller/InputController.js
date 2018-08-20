@@ -25,7 +25,7 @@ class InputController
     };
 
     //Swap left to right clicks and vice versa on anything else but Macs
-    this._swapMouseScheme = !navigator.platform.startsWith("Mac");
+    this._swapMouseScheme = true;//!navigator.platform.startsWith("Mac");
 
     this.prevPinchDist = 0;
     this.pinchDist = 0;
