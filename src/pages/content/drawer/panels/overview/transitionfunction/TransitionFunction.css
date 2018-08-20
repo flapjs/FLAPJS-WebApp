@@ -1,0 +1,17 @@
+.transitionfunction-container {
+  width: 100%;
+  overflow: auto;
+  font-size: inherit;
+  font-family: 'Overpass Mono', monospace;
+  text-align: center;
+}
+
+.transitionfunction-table th {
+  padding: 5px;
+  border-radius: 5px;
+  background: var(--color-drawer-text-back);
+}
+
+.transitionfunction-table th {
+  color: var(--color-drawer-text);
+}
