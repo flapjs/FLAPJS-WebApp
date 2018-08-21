@@ -213,7 +213,7 @@ class FSABuilder extends MachineBuilder
     const result = dst || new NFA();
     if (!(result instanceof NFA))
       throw new Error("Trying to parse graph mismatched machine type.");
-    fillFSA(this, result);
+    fillFSA(this.graph, result);
     return result;
   }
 
