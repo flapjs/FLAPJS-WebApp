@@ -52,7 +52,7 @@ options.skipwelcome = Straight t' the sea
 options.swapinputs = Hand me yer cutlass
 
 options.testing.stepmode = Swab the deck!
-options.testing.closure = I reckon's the Kraken
+//options.testing.closure = I reckon's the Kraken
 
 file.untitled = Cap'n's Log
 file.export.machine = Batten down the hatches

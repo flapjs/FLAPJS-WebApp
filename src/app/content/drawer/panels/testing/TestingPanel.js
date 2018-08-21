@@ -80,10 +80,6 @@ class TestingPanel extends React.Component
           }}/>
           <label htmlFor="test-step">{I18N.toString("options.testing.stepmode")}</label>
         </div>
-        <div className="panel-checkbox">
-          <input id="test-closure" type="checkbox" disabled="true"/>
-          <label htmlFor="test-closure">{I18N.toString("options.testing.closure")}</label>
-        </div>
       </div>
 
       <div className="panel-bottom"></div>
