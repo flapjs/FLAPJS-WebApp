@@ -91,7 +91,7 @@ class FSABuilder extends MachineBuilder
   onDelayedGraphChange()
   {
     this._machine.clear();
-    const result = this.graph._toNFA(this._machine);
+    const result = this.toNFA(this._machine);
     for(const s of this._symbols)
     {
       this._machine.newSymbol(s);
@@ -199,10 +199,21 @@ class FSABuilder extends MachineBuilder
     return this._alphabet;
   }
 
-  toDFA()
+  toDFA(dst = null)
   {
-    const result = new DFA();
+    const result = dst || new DFA();
+    if (!(result instanceof DFA))
+      throw new Error("Trying to parse graph mismatched machine type.");
     fillFSA(this.graph, result);
+    return result;
+  }
+
+  toNFA(dst=null)
+  {
+    const result = dst || new NFA();
+    if (!(result instanceof NFA))
+      throw new Error("Trying to parse graph mismatched machine type.");
+    fillFSA(this, result);
     return result;
   }
 
