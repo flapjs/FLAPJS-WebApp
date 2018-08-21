@@ -78,7 +78,7 @@ class NotificationSystem extends React.Component
   {
     return this.state.messages.length > 0;
   }
-
+  //TODO: change key
   render()
   {
     return(
