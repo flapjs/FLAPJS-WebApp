@@ -14,7 +14,7 @@
 .graph-node-label {
   text-anchor: middle;
   font-size: inherit;
-  font-family: 'Overpass Mono', monospace;
+  font-family: monospace;
 
   fill: var(--color-workspace-text);
 }
@@ -24,7 +24,7 @@
 .graph-edge-label {
   text-anchor: middle;
   font-size: inherit;
-  font-family: 'Overpass Mono', monospace;
+  font-family: monospace;
 
   fill: var(--color-workspace-text);
 }

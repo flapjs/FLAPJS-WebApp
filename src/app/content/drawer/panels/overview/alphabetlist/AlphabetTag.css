@@ -12,6 +12,6 @@
   width: 1ch;
   color: var(--color-drawer-text-subtle);
   font-size: inherit;
-  font-family: 'Overpass Mono', monospace;
+  font-family: monospace;
   color: var(--color-drawer-text-subtle);
 }

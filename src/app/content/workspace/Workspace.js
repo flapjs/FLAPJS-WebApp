@@ -46,7 +46,6 @@ class Workspace extends React.Component
     /*
     //TODO: Link the font family to svg
     const link = document.createElement("link");
-    link.setAttribute("href", "https://fonts.googleapis.com/css?family=Overpass+Mono");
     link.setAttribute("rel", "stylesheet");
     clone.appendChild(link);
     */

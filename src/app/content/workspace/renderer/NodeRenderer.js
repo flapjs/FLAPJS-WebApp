@@ -42,7 +42,7 @@ class NodeRenderer extends React.Component
           fontSize: (1 - Math.min(Math.max(node.label.length - 2, 0) / 6, 0.5)) + "em"
         }}
 
-        fontFamily="\'Overpass Mono\', monospace"
+        fontFamily="monospace"
         textAnchor="middle">
         {node.label}
       </text>
