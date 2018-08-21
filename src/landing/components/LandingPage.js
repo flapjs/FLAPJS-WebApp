@@ -35,12 +35,12 @@ const REPORT_BUG_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
 const GITHUB_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
 
 const PROFMINNES_LINK = "http://cseweb.ucsd.edu/~minnes/";
-const MAYA_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
+const MAYA_LINK = "https://www.linkedin.com/in/maya-bello-6b8637a7/";
 const NOAH_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
-const DAVID_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
+const DAVID_LINK = "https://www.linkedin.com/in/osunadavid/";
 const ERIK_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
-const LIXUAN_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
-const ANDREW_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
+const LIXUAN_LINK = "https://www.linkedin.com/in/lixuan-lang-3ba206143/";
+const ANDREW_LINK = "https://www.linkedin.com/in/andrew-kuo-790243132/";
 
 class LandingPage extends React.Component
 {
