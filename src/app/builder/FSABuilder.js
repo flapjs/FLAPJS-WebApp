@@ -105,7 +105,7 @@ class FSABuilder extends MachineBuilder
     this.machineErrorChecker.checkErrors(this.notification);
   }
 
-  formatAlphabetString(string)
+  formatAlphabetString(string, allowNull=false)
   {
     const symbols = string.split(",");
     const result = new Set();
@@ -142,7 +142,7 @@ class FSABuilder extends MachineBuilder
     }
 
     //If it is an empty string...
-    if (result.size === 0) return EMPTY;
+    if (result.size === 0) return allowNull ? null : EMPTY;
     return Array.from(result).join(",");
   }
 

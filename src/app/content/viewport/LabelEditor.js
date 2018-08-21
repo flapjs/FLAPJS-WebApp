@@ -47,7 +47,7 @@ class LabelEditor extends React.Component
 
     this.inputElement.value = defaultText || targetEdge.label;
     this.parentElement.focus();
-    
+
     if (replace)
     {
       this.inputElement.select();
@@ -147,7 +147,7 @@ class LabelEditor extends React.Component
     const prevEnd = target.selectionEnd;
     const prevLength = target.value.length;
 
-    target.value = this.props.machineBuilder.formatAlphabetString(target.value);
+    target.value = this.props.machineBuilder.formatAlphabetString(target.value, true);
 
     if (prevStart < prevLength)
     {
