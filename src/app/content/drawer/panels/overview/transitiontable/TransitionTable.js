@@ -67,7 +67,7 @@ class TransitionTable extends React.Component
                 {
                   rowAxisType === SYMBOL_AXIS ?
                     alphabet.map((symbol, i) => {
-                      let className = machine.isFinalState(e) ? "accept" : "";
+                      let className = "";//TODO: machine.isFinalState(e) ? "accept" : "";
                       const result = getDestinationFromSourceAndSymbol(machine, e, symbol, isNFAMachine);
                       if (!isNFAMachine && (result.startsWith("{") || result == "-"))
                       {
