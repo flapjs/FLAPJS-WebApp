@@ -92,7 +92,7 @@ class AlphabetTag extends React.Component
   }
 
   onValueChange(e) {
-    const symbol = e.target.value;
+    const symbol = e.target.value.trim();
     let error = false;
     if(symbol.length > 0) {
       if(this.props.alphabet.includes(symbol) && symbol != this.props.src) {
