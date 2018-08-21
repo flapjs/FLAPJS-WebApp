@@ -4,7 +4,7 @@ import './OverviewPanel.css';
 
 import Config from 'config.js';
 
-import StateList from './statelist/StateList.js';
+import StatesList from './stateslist/StatesList.js';
 import AlphabetList from './alphabetlist/AlphabetList.js';
 import TransitionTable from './transitiontable/TransitionTable.js';
 import TransitionFunction from './transitionfunction/TransitionFunction.js';
@@ -56,7 +56,7 @@ class OverviewPanel extends React.Component
             <option value="NFA">NFA</option>
           </select>
           <div className="graphinfo-important">
-            <StateList machineBuilder={machineBuilder} controller={this.props.controller}/>
+            <StatesList machineBuilder={machineBuilder} controller={this.props.controller}/>
             <AlphabetList machineBuilder={machineBuilder}/>
           </div>
           <div className="graphinfo">
