@@ -21,10 +21,12 @@ class UploadButton extends React.Component
     const fileType = file.type || fileName.substring(fileName.lastIndexOf('.'));
     if (fileType === FILETYPE_JSON)
     {
+      //TODO: should error out if invalid
       GraphUploader.uploadFileToGraph(file, this.props.graph, this.props.onChange);
     }
     else if (fileType === FILETYPE_JFLAP)
     {
+      //TODO: should error out if invalid
       GraphUploader.uploadJFFToGraph(file, this.props.graph, this.props.onChange);
     }
     else

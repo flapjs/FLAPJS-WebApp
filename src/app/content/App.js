@@ -210,6 +210,7 @@ class App extends React.Component
         if (file.kind === 'file')
         {
           const data = file.getAsFile();
+          //TODO: should show error message if invalid
           GraphUploader.uploadFileToGraph(data, this.graph, null, null);
         }
       }
@@ -220,6 +221,7 @@ class App extends React.Component
       for(let i = 0; i < length; ++i)
       {
         const data = ev.dataTransfer.files[i];
+        //TODO: should show error message if invalid
         GraphUploader.uploadFileToGraph(data, this.graph, null, null);
       }
     }
