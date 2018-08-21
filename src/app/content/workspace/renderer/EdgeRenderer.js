@@ -83,8 +83,6 @@ class EdgeRenderer extends React.Component
             alignmentBaseline="central"
             pointerEvents="none"
             style={{userSelect: "none"}}
-
-            fontFamily="monospace"
             textAnchor="middle">
             {str}
           </text>;

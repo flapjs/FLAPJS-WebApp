@@ -1,10 +1,6 @@
 .transitiontable-container {
   width: 100%;
-
   overflow: auto;
-
-  font-size: inherit;
-  font-family: monospace;
   text-align: center;
 }
 
@@ -24,6 +20,9 @@
 }
 .transitiontable td {
   color: var(--color-drawer-text-subtle);
+
+  font-size: 1.2em;
+  font-family: monospace;
 }
 .transitiontable td.accept {
   text-decoration: underline;

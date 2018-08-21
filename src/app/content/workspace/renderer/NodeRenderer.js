@@ -41,8 +41,6 @@ class NodeRenderer extends React.Component
           userSelect: "none",
           fontSize: (1 - Math.min(Math.max(node.label.length - 2, 0) / 6, 0.5)) + "em"
         }}
-
-        fontFamily="monospace"
         textAnchor="middle">
         {node.label}
       </text>

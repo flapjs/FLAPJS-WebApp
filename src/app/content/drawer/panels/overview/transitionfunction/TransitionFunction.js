@@ -39,8 +39,8 @@ class TransitionFunction extends React.Component {
                       }
                       trans = isNFA ? "{" + trans + "}" : "" + trans;
                       return <tr key={""+state+symbol}>
-                          <td>{"(" + state + "," + symbol + ")"}</td>
-                          <td className={className}>{trans}</td>
+                          <td className="transitionfunction-key">{"(" + state + "," + symbol + ")"}</td>
+                          <td className={"transitionfunction-value " + className}>{trans}</td>
                         </tr>
                     })
                   })

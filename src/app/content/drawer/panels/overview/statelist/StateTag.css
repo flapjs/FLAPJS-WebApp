@@ -36,7 +36,7 @@
   border: none;
   outline: none;
 
-  font-size: inherit;
+  font-size: 1.2em;
   font-family: monospace;
 }
 .statetag-container > input.accept {
