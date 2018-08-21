@@ -29,6 +29,8 @@ cfg.SELF_LOOP_HEIGHT = 40;
 cfg.SUBMIT_KEY = 13; //ENTER
 cfg.CLEAR_KEY = 27; //ESCAPE
 cfg.TAB_KEY = 9; //TAB
+cfg.UP_KEY = 38; //UP
+cfg.DOWN_KEY = 40; //DOWN
 
 /** LEGACY CONFIG **/
 

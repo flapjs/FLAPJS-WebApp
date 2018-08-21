@@ -65,7 +65,7 @@ file.export.png.hint = Export yer charts as .png
 file.export.jpg.hint = Export yer charts as .jpg
 file.export.jff.hint = Export yer charts as .jff
 
-testing.placeholder = Black Spot
+//testing.placeholder = Black Spot
 
 //TODO: Actions should probably be labeled by context...
 

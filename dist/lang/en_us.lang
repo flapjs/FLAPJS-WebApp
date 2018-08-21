@@ -65,7 +65,7 @@ file.export.png.hint = Export machine as .png
 file.export.jpg.hint = Export machine as .jpg
 file.export.jff.hint = Export machine as .jff
 
-testing.placeholder = Test string
+//testing.placeholder = Test string
 
 //TODO: Actions should probably be labeled by context...
 

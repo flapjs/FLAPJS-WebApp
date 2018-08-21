@@ -37,7 +37,7 @@
 .panel-button:hover {
   background: var(--color-drawer-text-subtle);
 }
-.panel-button>label {
+.panel-button > label {
   /*TODO: What goes here?*/
 }
 .panel-button:disabled {

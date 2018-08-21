@@ -4,7 +4,6 @@ import './TestTray.css';
 import IconButton from 'icons/IconButton.js';
 import PlayIcon from 'icons/PlayIcon.js';
 import PauseIcon from 'icons/PauseIcon.js';
-import TestMode from './TestMode.js'
 import UndoIcon from 'icons/UndoIcon.js';
 import RedoIcon from 'icons/RedoIcon.js';
 
@@ -21,25 +20,27 @@ class TestTray extends React.Component
   render()
   {
     const tester = this.props.tester;
-    const testInput = tester.getCurrentTestInput();
-    const testIndex = tester.testMode.getCurrentTestStringIndex();
+    const testList = this.props.tester.inputList;
+    const testMode = this.props.tester.testMode;
+    const testInput = testList.getCurrentInput();
+    const testIndex = testMode.getCurrentTestStringIndex();
 
     return <div className="anchor-bottom-left test-tray-container">
       <IconButton onClick={(e)=>{
-        tester.testMode.onResume();
-      }} disabled={tester.testMode.isRunning()}>
+        testMode.onResume();
+      }} disabled={testMode.isRunning()}>
         <PlayIcon/>
       </IconButton>
 
       <IconButton onClick = {(e)=>{
-        tester.testMode.onPause();
-      }} disabled={!tester.testMode.isRunning()}>
+        testMode.onPause();
+      }} disabled={!testMode.isRunning()}>
         <PauseIcon/>
       </IconButton>
 
       <IconButton onClick = {(e)=>{
-        tester.testMode.onPreviousStep();
-      }} disabled={!tester.testMode.hasPrevStep()}>
+        testMode.onPreviousStep();
+      }} disabled={!testMode.hasPrevStep()}>
         <UndoIcon/>
       </IconButton>
 

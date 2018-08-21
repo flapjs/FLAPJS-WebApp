@@ -16,7 +16,7 @@ import NotificationSystem from 'notification/NotificationSystem.js';
 import FSABuilder from 'builder/FSABuilder.js';
 import EventHistory from 'events/EventHistory.js';
 import GraphUploader from 'graph/GraphUploader.js';
-import TestingManager from 'builder/TestingManager.js';
+import TestingManager from 'testing/TestingManager.js';
 
 import GraphEdgeCreateEvent from 'events/GraphEdgeCreateEvent.js';
 import GraphEdgeDeleteEvent from 'events/GraphEdgeDeleteEvent.js';
@@ -53,11 +53,6 @@ class App extends React.Component
     this.machineBuilder = new FSABuilder(this.graph, this.controller);
     this.testingManager = new TestingManager(this.machineBuilder);
     this.hotKeys = new HotKeys(this.graph, this.eventHistory);
-
-    //HACK: this should be a listener to FSABuilder, should not access graph
-    this.graph.on("markDirty", (g) => {
-      this.testingManager.markDirty();
-    });
 
     this.state = {
       isOpen: true,
