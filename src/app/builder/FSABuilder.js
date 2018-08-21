@@ -6,6 +6,7 @@ import NFAErrorChecker from './NFAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
 import NodalGraph from 'graph/NodalGraph';
+import Node from 'graph/Node.js';
 
 import { EMPTY } from 'machine/Symbols.js';
 
