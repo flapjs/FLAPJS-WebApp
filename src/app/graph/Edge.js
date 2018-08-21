@@ -1,6 +1,6 @@
 import Config from 'config.js';
 
-import { guid } from 'util/GUID.js';
+import { guid } from 'util/MathHelper.js';
 import Node from './Node.js';
 
 class Edge

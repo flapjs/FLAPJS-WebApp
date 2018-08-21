@@ -1,4 +1,4 @@
-import { guid } from 'util/GUID.js';
+import { guid } from 'util/MathHelper.js';
 import { solveNFA } from 'machine/util/solveNFA.js';
 import TestMode from 'content/viewport/testmode/TestMode.js';
 
