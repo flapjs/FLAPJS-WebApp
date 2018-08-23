@@ -5,7 +5,7 @@ import SelectionBox from './SelectionBox.js';
 import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
 
-class GraphInputController extends InputController
+class GraphController extends InputController
 {
   constructor()
   {
@@ -821,4 +821,4 @@ class GraphInputController extends InputController
   }
 }
 
-export default GraphInputController;
+export default GraphController;

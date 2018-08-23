@@ -2,7 +2,7 @@ import React from 'react';
 import { hot } from 'react-hot-loader';
 import './App.css';
 
-import GraphInputController from 'controller/GraphInputController.js';
+import GraphController from 'controller/GraphController.js';
 import NodalGraph from 'graph/NodalGraph.js';
 import AutoSaver from 'util/AutoSaver.js';
 import HotKeys from './HotKeys.js';
@@ -47,7 +47,7 @@ class App extends React.Component
     this.toolbar = React.createRef();
 
     //Must be initialized (will be called in Workspace.componentDidMount)
-    this.controller = new GraphInputController();
+    this.controller = new GraphController();
     this.graph = new NodalGraph();
     this.eventHistory = new EventHistory();
     this.machineBuilder = new FSABuilder(this.graph, this.controller);

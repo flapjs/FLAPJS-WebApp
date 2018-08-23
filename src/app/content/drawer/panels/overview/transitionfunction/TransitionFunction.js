@@ -15,7 +15,7 @@ class TransitionFunction extends React.Component {
     const alphabet = machine.getAlphabet().sort();
     let isNFA = machineBuilder.getMachineType() == "NFA";
     return(
-        <InfoBlock title="Transition Function">
+        <InfoBlock title="Transition Chart">
           <div className="transitionfunction-container">
             <table className="transitionfunction-table">
               <tbody>

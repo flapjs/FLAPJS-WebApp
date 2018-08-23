@@ -60,8 +60,8 @@ class OverviewPanel extends React.Component
             <AlphabetList machineBuilder={machineBuilder}/>
           </div>
           <div className="graphinfo">
-            <TransitionTable machineBuilder={machineBuilder}/>
             <TransitionFunction machineBuilder={machineBuilder}/>
+            <TransitionTable machineBuilder={machineBuilder}/>
           </div>
 
           <hr/>
