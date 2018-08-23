@@ -24,7 +24,6 @@ class OverviewPanel extends React.Component
     this.container = React.createRef();
 
     this.state = {
-      machineType: this.props.machineBuilder.getMachineType(),
       viewFormal: false
     };
 
@@ -36,7 +35,6 @@ class OverviewPanel extends React.Component
   {
     const value = e.target.value;
     this.props.machineBuilder.setMachineType(value);
-    this.setState({machineType: value});
   }
 
   switchDefinition()
@@ -62,7 +60,7 @@ class OverviewPanel extends React.Component
           {!viewFormal &&
             <div>
               <select className="machine-type panel-select"
-                      value={this.state.machineType}
+                      value={machineBuilder.getMachineType()}
                       onChange={this.onChangeMachineType}>
                 <option value="DFA">DFA</option>
                 <option value="NFA">NFA</option>
@@ -82,6 +80,7 @@ class OverviewPanel extends React.Component
             <button className="panel-button" onClick={(e) => {
               const result = convertToDFA(machineBuilder.getMachine(), new DFA());
               machineBuilder.graph.copyMachine(result);
+              machineBuilder.setMachineType("DFA");
             }}>
               {I18N.toString("action.overview.convertmachine")}
             </button>}
