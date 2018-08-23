@@ -29,6 +29,10 @@ export function convertToDFA(nfa, dst=null)
     }
   }
 
+  //Create trap state
+  const trapState = result.newState("qt");
+  let flag = false;
+
   //Check for the new alphabet...
   const newAlphabet = result.getAlphabet();
   for(const state of result.getStates())
@@ -39,9 +43,17 @@ export function convertToDFA(nfa, dst=null)
       if (!result.doTransition(state, symbol))
       {
         //Create it
-        result.newTransition(state, state, symbol);
+        result.newTransition(state, trapState, symbol);
+
+        if (state !== trapState) flag = true;
       }
     }
+  }
+  
+  //Delete the trap state if it was not used
+  if (!flag)
+  {
+    result.deleteState(trapState);
   }
 
   return result;
