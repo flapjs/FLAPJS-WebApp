@@ -98,7 +98,6 @@
 
 .workspace-main {
   position: fixed;
-  left: 0;
   height: inherit;
 
   transition: opacity 0.1s ease, right 0.3s ease;
