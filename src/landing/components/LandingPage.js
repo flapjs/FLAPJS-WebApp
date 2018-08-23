@@ -38,7 +38,7 @@ const PROFMINNES_LINK = "http://cseweb.ucsd.edu/~minnes/";
 const MAYA_LINK = "https://www.linkedin.com/in/maya-bello-6b8637a7/";
 const NOAH_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
 const DAVID_LINK = "https://www.linkedin.com/in/osunadavid/";
-const ERIK_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
+const ERIK_LINK = "https://www.linkedin.com/in/xuanqiang-zhao-364225153/";
 const LIXUAN_LINK = "https://www.linkedin.com/in/lixuan-lang-3ba206143/";
 const ANDREW_LINK = "https://www.linkedin.com/in/andrew-kuo-790243132/";
 
