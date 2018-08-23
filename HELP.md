@@ -46,7 +46,7 @@ You can create a transition between nodes by `tapping and holding` the desired s
 As previously mentioned above you can enable `Delete Mode` by `tapping` on the `Trashcan Icon`, and then `tapping` on the 
 nodes you desire to delete. To disable `Delete Mode` tap on the Trashcan Icon again. The second way to delete one
 node or multiple nodes, is using a `selection box` to grab multiple nodes and then `tap` on the selected box and `drag`
-towards the `Trascan Icon`.
+towards the `Trashcan Icon`.
 
 ### Changing the Start State 
 To change the start state `tap and drag` the triangle onto the desired start state.
@@ -58,7 +58,28 @@ To create an accept state double tap to create the node and then single `tap` on
 
 ### Uploading a DFA/NFA File
 To create a DFA or NFA from a file, just upload the file by dragging and dropping workspace or 
-clicking on the `more options icon (three dots)` next to the name of the workspace.
+clicking on the `more options icon (three dots)` next to the name of the workspace. **Note:** The file that is 
+being imported must be a `.txt` file type. The file must be formatted such that each string is on it's own line or
+comma seperated. 
+
+
+*First Format* 
+
+file1.txt
+```
+010101010
+101010110
+100001100
+```
+
+*Second Format* 
+
+file2.txt
+
+```
+0101010101,010101010,0101010101
+```
+
 
 ### Testing Single or Multiple Strings
 Tap on the triangle on top right to expand the drawer, then select `Testing Panel`. Inside the testing panel test the 
