@@ -1,7 +1,6 @@
 import React from 'react';
 import '../Panel.css';
 import './TestingPanel.css';
-import './components/TestList.css';
 
 import TestingManager from 'testing/TestingManager.js';
 import TestingInput from './TestingInput.js';
@@ -96,6 +95,8 @@ class TestingPanel extends React.Component
     const tester = this.props.tester;
     const testList = tester.inputList;
 
+    const isTestInvalid = !machineBuilder.isValidMachine();
+
     return <div className="panel-container" id="testing" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>{I18N.toString("component.testing.title")}</h1>
@@ -110,6 +111,8 @@ class TestingPanel extends React.Component
 
           <div className="scrollbar-container">
             <div className="test-inputlist-content">
+              {isTestInvalid &&
+                <label className="test-inputlist-content-warning">Not a valid machine!</label>}
               {testList.getTests().map((e, i) =>
                 <TestingInput key={e.id} index={i}
                   testList={testList}

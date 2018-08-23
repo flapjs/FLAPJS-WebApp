@@ -10,7 +10,7 @@
 
   white-space: nowrap;
 }
-.testinginput-container:first-child {
+.testinginput-container:first-of-type {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   border-bottom: 2px solid var(--color-drawer-text-subtle);
@@ -48,7 +48,7 @@
 .testinginput-submit {
   margin-left: 5px;
   margin-right: 5px;
-  
+
   fill: var(--color-drawer-text-subtle);
   float: right;
 }

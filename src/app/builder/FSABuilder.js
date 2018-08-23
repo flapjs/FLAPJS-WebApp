@@ -18,6 +18,7 @@ class FSABuilder extends MachineBuilder
 
     this._machine = new NFA();
     this._machineType = "DFA";
+    this._machineValidDFA = false;
     this._alphabet = [];
     this._symbols = [];
 
@@ -97,6 +98,7 @@ class FSABuilder extends MachineBuilder
     {
       this._machine.newSymbol(s);
     }
+    this._machineValidDFA = this._machine.isValidDFA();
   }
 
   onDelayedErrorCheck()
@@ -198,6 +200,18 @@ class FSABuilder extends MachineBuilder
     this._alphabet.length = 0;
     machine.getAlphabet(this._alphabet);
     return this._alphabet;
+  }
+
+  isValidMachine()
+  {
+    if (this._machineType == "DFA")
+    {
+      return this._machineValidDFA;
+    }
+    else
+    {
+      return true;
+    }
   }
 
   toDFA(dst = null)
