@@ -6,6 +6,7 @@ import NFAErrorChecker from './NFAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
 import NodalGraph from 'graph/NodalGraph';
+import Node from 'graph/Node.js';
 
 import { EMPTY } from 'machine/Symbols.js';
 
@@ -17,6 +18,7 @@ class FSABuilder extends MachineBuilder
 
     this._machine = new NFA();
     this._machineType = "DFA";
+    this._machineValidDFA = false;
     this._alphabet = [];
     this._symbols = [];
 
@@ -91,11 +93,12 @@ class FSABuilder extends MachineBuilder
   onDelayedGraphChange()
   {
     this._machine.clear();
-    const result = this.graph._toNFA(this._machine);
+    const result = this.toNFA(this._machine);
     for(const s of this._symbols)
     {
       this._machine.newSymbol(s);
     }
+    this._machineValidDFA = this._machine.isValidDFA();
   }
 
   onDelayedErrorCheck()
@@ -105,7 +108,7 @@ class FSABuilder extends MachineBuilder
     this.machineErrorChecker.checkErrors(this.notification);
   }
 
-  formatAlphabetString(string)
+  formatAlphabetString(string, allowNull=false)
   {
     const symbols = string.split(",");
     const result = new Set();
@@ -142,7 +145,7 @@ class FSABuilder extends MachineBuilder
     }
 
     //If it is an empty string...
-    if (result.size === 0) return EMPTY;
+    if (result.size === 0) return allowNull ? null : EMPTY;
     return Array.from(result).join(",");
   }
 
@@ -199,9 +202,32 @@ class FSABuilder extends MachineBuilder
     return this._alphabet;
   }
 
-  toDFA()
+  isValidMachine()
   {
-    const result = new DFA();
+    if (this._machineType == "DFA")
+    {
+      return this._machineValidDFA;
+    }
+    else
+    {
+      return true;
+    }
+  }
+
+  toDFA(dst = null)
+  {
+    const result = dst || new DFA();
+    if (!(result instanceof DFA))
+      throw new Error("Trying to parse graph mismatched machine type.");
+    fillFSA(this.graph, result);
+    return result;
+  }
+
+  toNFA(dst=null)
+  {
+    const result = dst || new NFA();
+    if (!(result instanceof NFA))
+      throw new Error("Trying to parse graph mismatched machine type.");
     fillFSA(this.graph, result);
     return result;
   }

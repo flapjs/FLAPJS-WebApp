@@ -45,9 +45,14 @@ class EdgeRenderer extends React.Component
     const labels = label.split(",");
     let dy = 0;
 
+    /*
+    <textPath startOffset="50%" textAnchor="middle" alignmentBaseline="top" href={"#" + edgeID}>
+      {str}
+    </textPath>
+    */
     return <g className="graph-edge-container">
       //Draw lines
-      <path className="graph-edge"
+      <path className="graph-edge" id={"edge:" + edge.id}
         d={
           "M " + start.x + " " + start.y + " " +
           quadLine + " " +
@@ -78,8 +83,6 @@ class EdgeRenderer extends React.Component
             alignmentBaseline="central"
             pointerEvents="none"
             style={{userSelect: "none"}}
-
-            fontFamily="\'Overpass Mono\', monospace"
             textAnchor="middle">
             {str}
           </text>;

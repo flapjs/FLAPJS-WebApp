@@ -16,7 +16,7 @@ class StatusButton extends React.Component
   render()
   {
     const active = this.props.active;
-    if (this.props.mode > 0)
+    if (this.props.mode === true)
     {
       //Success icon
       return <IconButton className={"status-icon success" + (active ? " active" : "")}
@@ -24,7 +24,7 @@ class StatusButton extends React.Component
         <SuccessIcon/>
       </IconButton>;
     }
-    else if (this.props.mode < 0)
+    else if (this.props.mode === false)
     {
       //Failure icon
       return <IconButton className={"status-icon failure" + (active ? " active" : "")}

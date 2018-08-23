@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cea43697-9fa1-4281-ad83-b5e3ff605763" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/content/notification/DefaultWarningMessage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/content/notification/ErrorEmptyTrans.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/content/notification/DefaultErrorMessage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/content/notification/NotificationSystem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/content/notification/NotificationSystem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,11 +18,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/index.js">
+      <file leaf-file-name="TransitionFunction.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-506">
-              <caret line="18" column="33" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="33" />
+            <state relative-caret-position="618">
+              <caret line="45" column="20" lean-forward="true" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -31,11 +30,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NotificationSystem.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/pages/content/notification/NotificationSystem.js">
+      <file leaf-file-name="FormalDefinition.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="795">
-              <caret line="53" column="53" selection-start-line="53" selection-start-column="53" selection-end-line="53" selection-end-column="53" />
+            <state relative-caret-position="89">
+              <caret line="16" column="44" selection-start-line="16" selection-start-column="44" selection-end-line="16" selection-end-column="44" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -43,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DefaultMessage.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pages/content/notification/DefaultMessage.js">
+      <file leaf-file-name="OverviewPanel.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="12" lean-forward="true" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+            <state relative-caret-position="241">
+              <caret line="47" column="76" lean-forward="true" selection-start-line="47" selection-start-column="76" selection-end-line="47" selection-end-column="76" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -55,11 +54,38 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="App.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pages/content/App.js">
+      <file leaf-file-name="FormalDefinition.css" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="280" column="75" selection-start-line="280" selection-start-column="75" selection-end-line="280" selection-end-column="75" />
+            <state relative-caret-position="30">
+              <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TransitionFunction.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="336">
+              <caret line="27" column="35" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FSA.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/machine/FSA.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1364">
+              <caret line="144" column="2" selection-start-line="144" selection-start-column="2" selection-end-line="144" selection-end-column="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TransitionTable.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitiontable/TransitionTable.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="12" column="28" lean-forward="true" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -67,26 +93,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DefaultErrorMessage.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pages/content/notification/DefaultErrorMessage.js">
+      <file leaf-file-name="TransitionTable.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitiontable/TransitionTable.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="51" selection-start-line="3" selection-start-column="51" selection-end-line="3" selection-end-column="51" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DefaultWarningMessage.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pages/content/notification/DefaultWarningMessage.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="65" selection-start-line="10" selection-start-column="65" selection-end-line="10" selection-end-column="65" />
-              <folding>
-                <element signature="e#0#26#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="360">
+              <caret line="24" column="11" selection-start-line="24" selection-start-column="11" selection-end-line="24" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -97,6 +108,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -145,7 +157,17 @@
         <option value="$PROJECT_DIR$/src/pages/content/notification/ErrorEmptyTrans.js" />
         <option value="$PROJECT_DIR$/src/pages/content/notification/DefaultErrorMessage.js" />
         <option value="$PROJECT_DIR$/src/pages/content/notification/DefaultWarningMessage.js" />
+        <option value="$PROJECT_DIR$/src/pages/content/drawer/panels/overview/transitionfunction.js" />
+        <option value="$PROJECT_DIR$/src/pages/content/drawer/panels/overview/transitionfunction/TransitionFunction.css" />
+        <option value="$PROJECT_DIR$/src/pages/content/drawer/panels/overview/OverviewPanel.js" />
+        <option value="$PROJECT_DIR$/src/pages/content/drawer/panels/overview/transitionfunction/TransitionFunction.js" />
         <option value="$PROJECT_DIR$/src/pages/content/notification/NotificationSystem.js" />
+        <option value="$PROJECT_DIR$/src/app/notification/NotificationSystem.js" />
+        <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.css" />
+        <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js" />
+        <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.js" />
+        <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js" />
+        <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.css" />
       </list>
     </option>
   </component>
@@ -210,7 +232,59 @@
               <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="machine" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="builder" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+              <item name="drawer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+              <item name="drawer" type="462c0819:PsiDirectoryNode" />
+              <item name="panels" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+              <item name="drawer" type="462c0819:PsiDirectoryNode" />
+              <item name="panels" type="462c0819:PsiDirectoryNode" />
+              <item name="overview" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+              <item name="drawer" type="462c0819:PsiDirectoryNode" />
+              <item name="panels" type="462c0819:PsiDirectoryNode" />
+              <item name="overview" type="462c0819:PsiDirectoryNode" />
+              <item name="formaldefinition" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
@@ -231,7 +305,16 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="pages" type="462c0819:PsiDirectoryNode" />
               <item name="content" type="462c0819:PsiDirectoryNode" />
-              <item name="notification" type="462c0819:PsiDirectoryNode" />
+              <item name="drawer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+              <item name="drawer" type="462c0819:PsiDirectoryNode" />
+              <item name="panels" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -244,6 +327,7 @@
     <property name="SearchEverywhereHistoryKey" value="undo&#9;ACTION&#9;$Undo&#10;redo&#9;ACTION&#9;$Redo" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.prettier" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.jscs" value="project" />
@@ -264,11 +348,11 @@
       <recent name="$PROJECT_DIR$/src/Components" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/app/content/drawer/panels/overview" />
       <recent name="$PROJECT_DIR$/src/pages/home/Pictures" />
       <recent name="$PROJECT_DIR$/src/pages/content/drawer/panels/exporting/icon" />
       <recent name="$PROJECT_DIR$/src/Components" />
       <recent name="$PROJECT_DIR$/src/Pictures" />
-      <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -349,7 +433,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="77838000" />
+    <option name="totallyTimeSpent" value="94201000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -419,23 +503,34 @@
     </layout>
     <layout-to-restore>
       <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info id="npm" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24947146" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info id="Capture Tool" order="6" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24806201" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Theme Preview" order="5" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
+      <window_info id="Image Layers" order="3" />
+      <window_info id="Designer" order="4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="right" id="Maven Projects" order="7" weight="0.32956383" />
-      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info id="UI Designer" order="5" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="right" id="Database" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.27441284" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Version Control" order="11" weight="0.32965517" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Capture Tool" order="6" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Maven Projects" order="8" />
+      <window_info id="Favorites" order="7" side_tool="true" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -450,159 +545,41 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Components/Title.js" />
-    <entry file="file://$PROJECT_DIR$/intro_page.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="7" selection-start-line="13" selection-start-column="7" selection-end-line="13" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webpack.config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="16" column="7" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.js" />
-    <entry file="file://$PROJECT_DIR$/src/Components/Header.js" />
-    <entry file="file://$PROJECT_DIR$/src/Components/Homepage.js" />
-    <entry file="file://$PROJECT_DIR$/src/Components/Circles.js" />
-    <entry file="file://$PROJECT_DIR$/src/Components/style.css" />
-    <entry file="file://$PROJECT_DIR$/src/Components/Arrow.js" />
-    <entry file="file://$PROJECT_DIR$/src/App.js" />
-    <entry file="file://$PROJECT_DIR$/src/pages/content/drawer/panels/exporting/icon/XMLIcon.js" />
-    <entry file="file://$PROJECT_DIR$/src/graph/NodalGraph.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="622">
-          <caret line="300" column="1" selection-start-line="300" selection-start-column="1" selection-end-line="300" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="16" column="14" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/toolbar/button/SaveButton.js" />
-    <entry file="file://$PROJECT_DIR$/src/graph/GraphUploader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="9" lean-forward="true" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/drawer/panels/exporting/ExportingPanel.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="15" selection-start-line="4" selection-start-column="15" selection-end-line="4" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/drawer/panels/exporting/icon/JSONIcon.js" />
-    <entry file="file://$PROJECT_DIR$/src/App.js" />
-    <entry file="file://$PROJECT_DIR$/src/Components/Homepage.js" />
-    <entry file="file://$PROJECT_DIR$/src/Components/style.css" />
-    <entry file="file://$PROJECT_DIR$/src/pages/content/drawer/panels/exporting/icon/PNGIcon.js" />
-    <entry file="file://$PROJECT_DIR$/src/pages/content/toolbar/button/HelpButton.js" />
-    <entry file="file://$PROJECT_DIR$/src/pages/content/App.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="25" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/InputController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="23" column="37" selection-start-line="23" selection-start-column="37" selection-end-line="23" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/home/Arrow.js" />
-    <entry file="file://$PROJECT_DIR$/src/config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1365" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/home/Help.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="221">
-            <caret line="26" selection-start-line="26" selection-end-line="26" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/toolbar/Toolbar.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/home/Content.js" />
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="750">
-          <caret line="50" selection-start-line="50" selection-end-line="50" />
-          <folding>
-            <element signature="n#style#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/home/Header.js" />
-    <entry file="file://$PROJECT_DIR$/src/pages/home/Footer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/home/HomePage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="20" column="15" selection-start-line="20" selection-start-column="15" selection-end-line="20" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/home/HomePage.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1232">
-          <caret line="121" column="24" selection-start-line="121" selection-start-column="24" selection-end-line="121" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/home/Button.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="3" selection-start-line="20" selection-start-column="3" selection-end-line="20" selection-end-column="3" />
+        <state relative-caret-position="330">
+          <caret line="22" column="31" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/home/Help.js">
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="56" selection-start-line="18" selection-start-column="56" selection-end-line="18" selection-end-column="56" />
+        <state relative-caret-position="330">
+          <caret line="72" column="14" lean-forward="true" selection-start-line="72" selection-start-column="14" selection-end-line="72" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/content/drawer/panels/exporting/icon/PNGIcon.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/toolbar/button/HelpButton.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/App.css" />
+    <entry file="file://$PROJECT_DIR$/src/controller/InputController.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/home/Arrow.js" />
+    <entry file="file://$PROJECT_DIR$/src/config.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/home/Help.md" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/toolbar/Toolbar.css" />
+    <entry file="file://$PROJECT_DIR$/src/pages/home/Content.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/home/Header.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/home/Footer.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/home/HomePage.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/home/HomePage.css" />
+    <entry file="file://$PROJECT_DIR$/src/pages/home/Button.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/home/Help.js" />
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="276">
@@ -610,115 +587,138 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/drawer/panels/overview/OverviewPanel.js">
+    <entry file="file://$PROJECT_DIR$/src/pages/content/drawer/Drawer.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/workspace/renderer/EdgeRenderer.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/App.js" />
+    <entry file="file://$PROJECT_DIR$/src/machine/NFA.js" />
+    <entry file="file://$PROJECT_DIR$/src/builder/FSABuilder.js" />
+    <entry file="file://$PROJECT_DIR$/src/builder/DFAErrorChecker.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/notification/DefaultErrorMessage.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/notification/DefaultWarningMessage.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/notification/DefaultMessage.js" />
+    <entry file="file://$PROJECT_DIR$/src/index.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/drawer/panels/overview/infoblock/InfoBlock.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/drawer/panels/overview/OverviewPanel.js" />
+    <entry file="file://$PROJECT_DIR$/src/machine/FSA.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/drawer/panels/overview/transitiontable/TransitionTable.css" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/drawer/panels/overview/transitiontable/TransitionTable.js" />
+    <entry file="file://$PROJECT_DIR$/src/builder/TestingManager.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/content/notification/NotificationSystem.js" />
+    <entry file="file://$PROJECT_DIR$/src/app/notification/NotificationSystem.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-714">
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="285">
+          <caret line="19" column="18" lean-forward="true" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/drawer/Drawer.js">
+    <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="68" column="19" lean-forward="true" selection-start-line="68" selection-start-column="19" selection-end-line="68" selection-end-column="19" />
+        <state relative-caret-position="433">
+          <caret line="45" selection-start-line="45" selection-end-line="45" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/workspace/renderer/EdgeRenderer.js">
+    <entry file="file://$PROJECT_DIR$/src/app/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
-          <caret line="37" column="35" selection-start-line="37" selection-start-column="35" selection-end-line="37" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
+        <state relative-caret-position="-549" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/machine/FSA.js">
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetTag.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1272" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetList.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-327" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/statelist/StateList.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/App.js">
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/statelist/StateTag.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="280" column="75" selection-start-line="280" selection-start-column="75" selection-end-line="280" selection-end-column="75" />
+        <state relative-caret-position="-1797">
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.js">
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitiontable/TransitionTable.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-506">
-          <caret line="18" column="33" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="33" />
+        <state relative-caret-position="360">
+          <caret line="24" column="11" selection-start-line="24" selection-start-column="11" selection-end-line="24" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitiontable/TransitionTable.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="28" lean-forward="true" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/machine/NFA.js">
+    <entry file="file://$PROJECT_DIR$/src/app/builder/FSABuilder.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-969">
+        <state relative-caret-position="-2549">
           <folding>
-            <element signature="e#0#27#0" expanded="true" />
+            <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/builder/FSABuilder.js">
+    <entry file="file://$PROJECT_DIR$/src/app/machine/FSA.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="110" lean-forward="true" selection-start-line="110" selection-end-line="110" />
+        <state relative-caret-position="-1364">
+          <caret line="144" column="2" selection-start-line="144" selection-start-column="2" selection-end-line="144" selection-end-column="2" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/builder/DFAErrorChecker.js">
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1212">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/notification/DefaultErrorMessage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="51" selection-start-line="3" selection-start-column="51" selection-end-line="3" selection-end-column="51" />
+        <state relative-caret-position="618">
+          <caret line="45" column="20" lean-forward="true" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/notification/DefaultWarningMessage.js">
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="65" selection-start-line="10" selection-start-column="65" selection-end-line="10" selection-end-column="65" />
+        <state relative-caret-position="89">
+          <caret line="16" column="44" selection-start-line="16" selection-start-column="44" selection-end-line="16" selection-end-column="44" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/notification/DefaultMessage.js">
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="12" lean-forward="true" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+        <state relative-caret-position="336">
+          <caret line="27" column="35" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="241">
+          <caret line="47" column="76" lean-forward="true" selection-start-line="47" selection-start-column="76" selection-end-line="47" selection-end-column="76" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/content/notification/NotificationSystem.js">
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="795">
-          <caret line="53" column="53" selection-start-line="53" selection-start-column="53" selection-end-line="53" selection-end-column="53" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="30">
+          <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
         </state>
       </provider>
     </entry>

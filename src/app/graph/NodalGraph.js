@@ -14,7 +14,7 @@ class NodalGraph
   {
     this.nodes = nodes;
     this.edges = edges;
-    
+
     this.shouldUseQuadCoords = false;
 
     //nodeCreate(node) - Whenever a new node is created
@@ -420,89 +420,21 @@ class NodalGraph
 
   toDFA(dst=null)
   {
-    const result = dst || new DFA();
-    if (!(result instanceof DFA))
-      throw new Error("Trying to parse graph mismatched machine type.");
-    fillFSA(this, result);
-    return result;
+    throw new Error("DEPRECATED!");
   }
 
   toNFA(dst=null)
   {
-    console.error("RAWR! I am a T-Rex!");
-    return this._toNFA(dst);
+    throw new Error("DEPRECATED!");
   }
 
   //TODO: NEVER CALL THIS DIRECTLY (Only FSABuilder is allowed.) Will be deprecated later.
   _toNFA(dst=null)
   {
-    const result = dst || new NFA();
-    if (!(result instanceof NFA))
-      throw new Error("Trying to parse graph mismatched machine type.");
-    fillFSA(this, result);
-    return result;
+    throw new Error("DEPRECATED!");
   }
 }
 //Mixin Eventable
 Eventable.mixin(NodalGraph);
-
-function fillFSA(graph, fsa)
-{
-  if (graph.nodes.length <= 0) return fsa;
-  //Create all the nodes
-  for(const node of graph.nodes)
-  {
-    try
-    {
-      let state = node.label;
-      fsa.newState(state);
-
-      //Set final state
-      if (node.accept)
-      {
-        fsa.setFinalState(state, true);
-      }
-    }
-    catch(e)
-    {
-      throw e;
-    }
-  }
-
-  //Create all the edges
-  for(const edge of graph.edges)
-  {
-    //Ignore any incomplete edges
-    if (edge.isPlaceholder()) continue;
-    const from = edge.from;
-    const to = edge.to;
-    if (from instanceof Node && to instanceof Node)
-    {
-      const labels = edge.label.split(",");
-      for(const label of labels)
-      {
-        try
-        {
-          fsa.newTransition(from.label, to.label, label);
-        }
-        catch(e)
-        {
-          throw e;
-        }
-      }
-    }
-  }
-
-  //Set start state
-  let startState = graph.getStartNode().label;
-  fsa.setStartState(startState);
-
-  return fsa;
-}
-
-function lerp(a, b, dt)
-{
-  return a * (1 - dt) + b * dt;
-}
 
 export default NodalGraph;

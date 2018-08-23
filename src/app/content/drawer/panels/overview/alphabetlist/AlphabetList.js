@@ -42,7 +42,7 @@ class AlphabetList extends React.Component
         <div className="alphalist">
           {
             alphabet.map((e, i) => {
-              return <AlphabetTag key={i} src={e} list={this} machine={machineBuilder} alphabet={alphabet}/>
+              return <AlphabetTag key={e + "." + i} src={e} list={this} machine={machineBuilder} alphabet={alphabet}/>
             })
           }
           <AlphabetTag key={-1} ref={ref=>this.editSymbolTag=ref} src={""} list={this} machine={machineBuilder}

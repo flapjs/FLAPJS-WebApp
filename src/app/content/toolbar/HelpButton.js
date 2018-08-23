@@ -27,6 +27,10 @@ class UploadButton extends React.Component
       notification.addMessage("message.help.2");
     }
 
+    //The tutorial
+    const LINK = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/HELP.md";
+    const newTab = window.open(LINK, '_blank');
+
     if (this.props.onClick)
     {
       this.props.onClick(e);

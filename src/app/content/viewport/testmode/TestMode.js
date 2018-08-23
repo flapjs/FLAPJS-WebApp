@@ -39,14 +39,27 @@ class TestMode
 
   onResume()
   {
+    //If at the end, restart!
+    if (!this.hasNextStep())
+    {
+      this.testingManager.inputList.resetTests(false);
+    }
+
     this.running = true;
 
     const STEPTIME = 500;
     const step = () => {
       if (this.running)
       {
-        this.onNextStep();
-        this.timer = setTimeout(step, STEPTIME);
+        if (this.hasNextStep())
+        {
+          this.onNextStep();
+          this.timer = setTimeout(step, STEPTIME);
+        }
+        else
+        {
+          this.onPause();
+        }
       }
       else
       {
@@ -80,7 +93,8 @@ class TestMode
 
   hasPrevStep()
   {
-    return this.testingManager.getCurrentTestInput();
+    return this.history.length > 0 ||
+      this.testingManager.inputList.hasPrevInput();
   }
 
   onPreviousStep()
@@ -116,26 +130,21 @@ class TestMode
     }
     else
     {
-      this.testingManager.prevTestInput();
+      this.indexofString = -1;
+      this.testingManager.inputList.prevInput();
     }
   }
 
   hasNextStep()
   {
-    return this.testingManager.getCurrentTestInput();
+    return this.indexofString < this.testingManager.inputList.getCurrentInput().value.length ||
+      this.testingManager.inputList.hasNextInput();
   }
 
   onNextStep()
   {
-    const testInput = this.testingManager.getCurrentTestInput();
+    const testInput = this.testingManager.inputList.getCurrentInput();
     const fsa = this.machineBuilder.getMachine();
-    if (!testInput)
-    {
-      //End of test!
-      console.log("= End of test =");
-      this.onPause();
-      return false;
-    }
 
     //Get next character of current test string
     console.log("Getting next character....");
@@ -150,20 +159,31 @@ class TestMode
       //Run it one more time...
       this.result = solveNFAbyStep(fsa, null, this.cachedStates, this.cachedSymbols, this.checkedStates);
       testInput.setResult(this.result);
-      const result = this.testingManager.nextTestInput();
-      console.log("...setting up for another test...");
-      console.log(JSON.stringify(this.testingManager.getCurrentTestInput()));
 
-      //Stop the resume at each string
-      //this.running = false;
+      //If this is the last test input...
+      if (!this.testingManager.inputList.hasNextInput())
+      {
+        //End of test!
+        console.log("= End of test =");
+        this.onPause();
+        return false;
+      }
+      else
+      {
+        const result = this.testingManager.inputList.nextInput();
+        console.log("...setting up for another test...");
+        console.log(JSON.stringify(this.testingManager.inputList.getCurrentInput()));
 
-      this.prepareForNewTest();
-      return true;
+        //Stop the resume at each string
+        //this.running = false;
+
+        this.prepareForNewTest();
+        return true;
+      }
     }
     else
     {
       //Update history
-      //TODO: history must keep a copy of all cachedStates, symbols, etc or else it cannot run correctly...
       console.log(JSON.stringify(this.targets));
       const currentStep = this.getCurrentCache();
       this.history.push(currentStep);

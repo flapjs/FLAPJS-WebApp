@@ -14,7 +14,19 @@ class MessageContainer extends React.Component
   {
     return <div className={"notification-message " + this.props.className}>
       <div className="notification-message-content">
-        {this.props.value}
+        {
+          /* Let new lines create divs */
+          this.props.value.split("\\n").map((e, i) => {
+            if (e.length > 0)
+            {
+              return <div key={e + "." + i}>{e}</div>
+            }
+            else
+            {
+              return <br key={e + "." + i}/>;
+            }
+          })
+        }
       </div>
       <div className="notification-message-response">
         {this.props.children}

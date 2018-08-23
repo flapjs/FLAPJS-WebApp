@@ -115,7 +115,7 @@ class StateTag extends React.Component
   onValueChange(e)
   {
     const graph = this.props.graph;
-    const value = e.target.value;
+    const value = e.target.value.trim();
     let error = false;
     if (value.length > 0)
     {

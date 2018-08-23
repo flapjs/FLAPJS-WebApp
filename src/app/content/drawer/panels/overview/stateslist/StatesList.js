@@ -1,5 +1,5 @@
 import React from 'react';
-import './StateList.css';
+import './StatesList.css';
 
 import InfoBlock from '../infoblock/InfoBlock.js';
 import IconButton from 'icons/IconButton.js';
@@ -8,7 +8,7 @@ import TriangleIcon from 'icons/TriangleIcon.js';
 
 import StateTag from './StateTag.js';
 
-class StateList extends React.Component
+class StatesList extends React.Component
 {
   constructor(props)
   {
@@ -49,4 +49,4 @@ class StateList extends React.Component
   }
 }
 
-export default StateList;
+export default StatesList;

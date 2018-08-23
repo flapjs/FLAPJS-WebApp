@@ -43,10 +43,13 @@ class Workspace extends React.Component
     clone.setAttribute('width', width);
     clone.setAttribute('height', height);
 
+    //Apply the workspace font (refer to Workspace.css)
+    clone.setAttribute('font-size', "16px");
+    clone.setAttribute('font-family', "monospace");
+
     /*
     //TODO: Link the font family to svg
     const link = document.createElement("link");
-    link.setAttribute("href", "https://fonts.googleapis.com/css?family=Overpass+Mono");
     link.setAttribute("rel", "stylesheet");
     clone.appendChild(link);
     */

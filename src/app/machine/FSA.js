@@ -243,6 +243,46 @@ class FSA
     return this._finalStates;
   }
 
+  isValidDFA()
+  {
+    const alphabet = this.getAlphabet();
+    const foundSymbols = new Array(alphabet.length);
+    foundSymbols.fill(false);
+
+    for(const state of this._states)
+    {
+      //Get all outgoing transitions
+      const transitions = this.getOutgoingTransitions(state);
+      for(const transition of transitions)
+      {
+        const index = alphabet.indexOf(transition[1]);
+        if (foundSymbols[index] == false)
+        {
+          foundSymbols[index] = true;
+        }
+        else
+        {
+          //Found duplicate
+          return false;
+        }
+      }
+
+      //Reset foundSymbols for next state
+      const length = foundSymbols.length;
+      for(let i = 0; i < length; ++i)
+      {
+        if (foundSymbols[i] == false)
+        {
+          //Found missing symbol for state
+          return false;
+        }
+        foundSymbols[i] = false;
+      }
+    }
+
+    return true;
+  }
+
   toJSON()
   {
     const result = {};

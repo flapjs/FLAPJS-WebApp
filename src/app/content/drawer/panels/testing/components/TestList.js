@@ -14,7 +14,18 @@ class TestList extends React.Component
 
   onUploadFileChange(e)
   {
-    const fileBlob = e.target.files[0];
+    const tester = this.props.tester;
+
+    //Clear the tester for import
+    tester.clear(true);
+
+    const target = e.target;
+    if (!target) return;
+
+    const files = target.files;
+    if (!Array.isArray(files)) return;
+
+    const fileBlob = target.files[0];
     if (!fileBlob) return;
 
     const reader = new FileReader();
@@ -25,7 +36,7 @@ class TestList extends React.Component
         const testInputs = data.replace(/\n/g, ",").split(",");
         for(const testInput of testInputs)
         {
-          this.props.tester.addTestInput(testInput.trim());
+          tester.addTestInput(testInput.trim());
         }
       }
       catch(e)
