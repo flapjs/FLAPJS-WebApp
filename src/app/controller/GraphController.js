@@ -594,6 +594,13 @@ class GraphController extends InputController
           //Otherwise, maintain original curve
           else
           {
+            /*
+            for(const node of this.graph.nodes)
+            {
+              //TODO: Get the intersection between edges and nodes
+            }
+            */
+
             target.copyQuadraticsFrom(this.prevQuad);
           }
 

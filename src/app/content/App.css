@@ -98,11 +98,12 @@
 
 .workspace-main {
   position: fixed;
-  width: calc(100% - var(--panel-tab-border));
+  left: 0;
   height: inherit;
 
   transition: opacity 0.1s ease, right 0.3s ease;
 
+  width: calc(100% - var(--panel-tab-border));
   right: var(--panel-tab-border);
 }
 
@@ -150,6 +151,7 @@
 @media screen and (max-width: 420px) {
   .workspace-main {
     right: 0px;/* Overwrite changes */
+    width: 100%;/* Overwrite changes */
     height: calc(100% - var(--toolbar-height) - var(--panel-tab-border));/* Overwrite changes */
 
     transition: bottom 0.3s ease;
