@@ -6,12 +6,12 @@
   border-bottom: 1px solid black;
 }
 .formaldef-container h3 {
-  /* display: inline-block; */
+  display: inline-block;
   white-space: nowrap;
   margin: 0;
   margin-top: 10px;
 }
 .formaldef-container .formaldef-values {
   margin: 0;
-  margin-left: 10px;
+  margin-left: 5px;
 }
