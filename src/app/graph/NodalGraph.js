@@ -261,6 +261,32 @@ class NodalGraph
     this.markDirty();
   }
 
+  copyMachine(machine)
+  {
+    this.deleteAll();
+
+    let node;
+    //Add all states
+    for(const state of machine.getStates())
+    {
+      node = this.newNode(0, 0, state);
+      if (machine.isFinalState(state))
+      {
+        node.accept = true;
+      }
+    }
+
+    //Add all transitions
+    for(const transition of machine.getTransitions())
+    {
+      this.newEdge(this.getNodeByLabel(transition[0]), this.getNodeByLabel(transition[2]), transition[1]);
+    }
+
+    //Set start state
+    const startState = machine.getStartState();
+    this.setStartNode(this.getNodeByLabel(startState));
+  }
+
   markDirty()
   {
     this.emit("markDirty", this);

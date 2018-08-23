@@ -1,9 +1,9 @@
 import DFA from 'machine/DFA.js';
 import { EMPTY } from 'machine/Symbols.js';
 
-export function convertToDFA(nfa)
+export function convertToDFA(nfa, dst=null)
 {
-  const result = new DFA();
+  const result = dst || new DFA();
 
   const alphabet = nfa.getAlphabet();
   const startState = nfa.getStartState();

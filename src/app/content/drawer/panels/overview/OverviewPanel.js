@@ -9,7 +9,12 @@ import AlphabetList from './alphabetlist/AlphabetList.js';
 import TransitionTable from './transitiontable/TransitionTable.js';
 import TransitionFunction from './transitionfunction/TransitionFunction.js';
 import FormalDefinition from "./formaldefinition/FormalDefinition";
+
 import AutoLayout from "util/AutoLayout.js"
+
+import DFA from 'machine/DFA.js';
+import { convertToDFA } from 'machine/util/convertNFA.js';
+
 class OverviewPanel extends React.Component
 {
   constructor(props)
@@ -74,7 +79,10 @@ class OverviewPanel extends React.Component
 
           <hr/>
 
-          <button disabled="true" className="panel-button">
+          <button className="panel-button" onClick={(e) => {
+            const result = convertToDFA(this.props.machineBuilder.getMachine(), new DFA());
+            console.log(result);
+          }}>
             {I18N.toString("action.overview.convertmachine")}
           </button>
           <button className="panel-button" onClick = {() => {
