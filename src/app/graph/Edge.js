@@ -358,7 +358,7 @@ class Edge
     }
   }
 
-  makeSelfLoop(angle)
+  makeSelfLoop(angle=(Math.PI / 2))
   {
     //If not already a self loop, make it so.
     if (this.from !== this.to)

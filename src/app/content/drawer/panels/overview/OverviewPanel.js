@@ -9,7 +9,12 @@ import AlphabetList from './alphabetlist/AlphabetList.js';
 import TransitionTable from './transitiontable/TransitionTable.js';
 import TransitionFunction from './transitionfunction/TransitionFunction.js';
 import FormalDefinition from "./formaldefinition/FormalDefinition";
-import AutoLayout from "util/AutoLayout.js"
+
+import GraphLayout from "graph/GraphLayout.js"
+
+import DFA from 'machine/DFA.js';
+import { convertToDFA } from 'machine/util/convertNFA.js';
+
 class OverviewPanel extends React.Component
 {
   constructor(props)
@@ -73,14 +78,17 @@ class OverviewPanel extends React.Component
             </div>}
 
           <hr/>
-
-          <button disabled="true" className="panel-button">
-            {I18N.toString("action.overview.convertmachine")}
-          </button>
+          {machineBuilder.getMachineType() == "NFA" &&
+            <button className="panel-button" onClick={(e) => {
+              const result = convertToDFA(machineBuilder.getMachine(), new DFA());
+              machineBuilder.graph.copyMachine(result);
+            }}>
+              {I18N.toString("action.overview.convertmachine")}
+            </button>}
           <button className="panel-button" onClick = {() => {
-            AutoLayout.applyLayout(machineBuilder.graph)
+            GraphLayout.applyLayout(machineBuilder.graph)
           }}>
-            AutoLayout
+            Auto-layout
           </button>
           <button className="panel-button" onClick={this.switchDefinition}>
             {viewFormal ? "View Defintion" : "View Formal Definition"}
