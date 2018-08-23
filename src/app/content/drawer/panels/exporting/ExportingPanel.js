@@ -63,8 +63,11 @@ class ExportingPanel extends React.Component
         </IconButton>
         {/*XML*/}
         <IconButton className="export-button" id="export-xml" title={I18N.toString("file.export.jff.hint")}
-          disabled="true">
-          {/*TODO: Add JFLAP export functionality*/}
+          onClick={() => {
+            const xmlString = new XMLSerializer().serializeToString(graph.toXML());
+            console.log(xmlString);
+            Downloader.downloadText(toolbar.getMachineName() + '.jff', xmlString);
+          }}>
           <XMLIcon/>
           <label>{I18N.toString("file.export.jff")}</label>
         </IconButton>
