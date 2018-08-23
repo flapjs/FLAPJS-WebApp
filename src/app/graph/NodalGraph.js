@@ -129,6 +129,7 @@ class NodalGraph
 
   newEdge(from, to, label)
   {
+    //TODO: This is also in GraphController!!!
     //Look for an existing edge with similar from and to
     for(const edge of this.edges)
     {
@@ -148,6 +149,19 @@ class NodalGraph
 
     const result = new Edge(this, from, to, label);
     this.edges.push(result);
+
+    //TODO: This is also in GraphController!!!
+    //Bend away if there is another edge not bent with the same src/dst
+    for(const edge of this.edges)
+    {
+      if (edge.isQuadratic()) continue;
+      if ((edge.to === result.from && edge.from === result.to))
+      {
+        const HALFPI = Math.PI / 2;
+        result.setQuadVector(HALFPI, Config.PARALLEL_EDGE_HEIGHT);
+        edge.setQuadVector(HALFPI, Config.PARALLEL_EDGE_HEIGHT);
+      }
+    }
 
     if (from === to)
     {
