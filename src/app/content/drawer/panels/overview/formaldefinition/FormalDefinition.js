@@ -1,6 +1,8 @@
 import React from 'react';
 import './FormalDefinition.css';
 
+const EMPTY_SET = "\u2205";
+const ARROW = "\u2192";
 class FormalDefinition extends React.Component {
   constructor(props) {
     super(props);
@@ -19,13 +21,13 @@ class FormalDefinition extends React.Component {
       <div>
         <h3>Q</h3>
         <span className="formaldef-values">
-          {"{" + states.join(", ") + "}"}
+          {states.length > 0 ? "{ " + states.join(", ") + " }" : EMPTY_SET}
         </span>
       </div>
       <div>
         <h3>&Sigma;</h3>
         <span className="formaldef-values">
-          {"{" + alphabet.join(", ") + "}"}
+          {alphabet.length > 0 ? "{ " + alphabet.join(", ") + " }" : EMPTY_SET}
         </span>
       </div>
       <div>
@@ -43,11 +45,11 @@ class FormalDefinition extends React.Component {
               }
               if(!isNFA && trans.length > 1) {
                 className = "error";
-                trans = "{" + trans + "}"
+                trans = "{ " + trans + " }"
               }
               trans = isNFA ? "{" + trans + "}" : "" + trans;
               return <div key={""+state+symbol} className={className}>
-                    {"(" + state + "," + symbol + ")" + " \u2192 " + trans}
+                    {"(" + state + "," + symbol + ")" + " " + ARROW + " " + trans}
               </div>
             })
           })
@@ -63,7 +65,7 @@ class FormalDefinition extends React.Component {
       <div>
         <h3>F</h3>
         <span className="formaldef-values">
-          {"{" + finalStates.join(",") + "}"}
+          {finalStates.length > 0 ? "{ " + finalStates.join(",") + " }" : EMPTY_SET}
         </span>
       </div>
     </div>;
