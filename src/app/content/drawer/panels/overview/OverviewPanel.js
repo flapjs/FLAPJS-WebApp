@@ -9,7 +9,7 @@ import AlphabetList from './alphabetlist/AlphabetList.js';
 import TransitionTable from './transitiontable/TransitionTable.js';
 import TransitionFunction from './transitionfunction/TransitionFunction.js';
 import FormalDefinition from "./formaldefinition/FormalDefinition";
-
+import AutoLayout from "util/AutoLayout.js"
 class OverviewPanel extends React.Component
 {
   constructor(props)
@@ -76,6 +76,11 @@ class OverviewPanel extends React.Component
 
           <button disabled="true" className="panel-button">
             {I18N.toString("action.overview.convertmachine")}
+          </button>
+          <button className="panel-button" onClick = {() => {
+            AutoLayout.applyLayout(machineBuilder.graph)
+          }}>
+            AutoLayout
           </button>
           <button className="panel-button" onClick={this.switchDefinition}>
             {viewFormal ? "View Defintion" : "View Formal Definition"}
