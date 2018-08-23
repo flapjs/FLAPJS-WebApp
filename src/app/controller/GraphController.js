@@ -553,6 +553,7 @@ class GraphController extends InputController
         {
           const targetNode = target.to;
 
+          //TODO: this is the same in graph.newEdge
           //Look for an existing edge with similar from and to
           for(const edge of this.graph.edges)
           {
@@ -617,6 +618,7 @@ class GraphController extends InputController
             this.emit("edgeDestination", target, target.to, this.prevEdgeTo, this.prevQuad);
           }
 
+          //TODO: this is the same in graph.newEdge
           //Bend away if there is another edge not bent with the same src/dst
           for(const edge of this.graph.edges)
           {
