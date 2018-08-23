@@ -2,6 +2,7 @@ import Config from 'config.js';
 import { EMPTY } from 'machine/Symbols.js';
 
 import StateUnreachableWarningMessage from './error/StateUnreachableWarningMessage.js';
+import StateMissingTransitionErrorMessage from './error/StateMissingTransitionErrorMessage.js';
 import TransitionErrorMessage from './error/TransitionErrorMessage.js';
 import StateErrorMessage from './error/StateErrorMessage.js';
 import SuccessMessage from 'notification/SuccessMessage.js';
@@ -119,6 +120,26 @@ class DFAErrorChecker
       if (!nodeTransitions && alphabet.length != 0 ||
         nodeTransitions && nodeTransitions.length < alphabet.length)
       {
+        //Get the required missing symbols
+        /*
+        let array;
+        if (nodeTransitions)
+        {
+          array = [];
+          for(const symbol of alphabet)
+          {
+            if (!nodeTransitions.includes(symbol))
+            {
+              array.push(symbol);
+            }
+          }
+        }
+        else
+        {
+          array = alphabet.slice();
+        }
+        */
+
         //Update cached error targets
         missingNodes.push(node);
         if (errorNodes.indexOf(node) == -1) errorNodes.push(node);
@@ -158,8 +179,7 @@ class DFAErrorChecker
           {text: I18N.toString("message.error.dupe"), targets: dupeEdges},
           messageTag, TransitionErrorMessage, false);
         if (missingNodes.length > 0) notification.addMessage(
-          {text: I18N.toString("message.error.missing"), targets: missingNodes},
-          messageTag, StateErrorMessage, false);
+          missingNodes, messageTag, StateMissingTransitionErrorMessage, false);
       }
     }
 
