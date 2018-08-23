@@ -2,8 +2,8 @@ import React from 'react';
 import './FormalDefinition.css';
 import { EMPTY } from 'machine/Symbols.js';
 
-const EMPTY_SET = "\u2205";
-const ARROW = "\u2192";
+import { EMPTY_SET, ARROW } from 'machine/Symbols.js';
+
 class FormalDefinition extends React.Component {
   constructor(props) {
     super(props);
