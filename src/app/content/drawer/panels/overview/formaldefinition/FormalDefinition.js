@@ -19,13 +19,13 @@ class FormalDefinition extends React.Component {
       <h2>{"M = (Q, \u03A3, \u03b4, q0, F)"}</h2>
       <hr/>
       <div>
-        <h3>Q</h3>
+        <h3>Q =</h3>
         <span className="formaldef-values">
           {states.length > 0 ? "{ " + states.join(", ") + " }" : EMPTY_SET}
         </span>
       </div>
       <div>
-        <h3>&Sigma;</h3>
+        <h3>&Sigma; =</h3>
         <span className="formaldef-values">
           {alphabet.length > 0 ? "{ " + alphabet.join(", ") + " }" : EMPTY_SET}
         </span>
@@ -57,13 +57,13 @@ class FormalDefinition extends React.Component {
         </div>
       </div>
       <div>
-        <h3>q0</h3>
+        <h3>q0 =</h3>
         <span className="formaldef-values">
           {states[0]}
         </span>
       </div>
       <div>
-        <h3>F</h3>
+        <h3>F =</h3>
         <span className="formaldef-values">
           {finalStates.length > 0 ? "{ " + finalStates.join(",") + " }" : EMPTY_SET}
         </span>
