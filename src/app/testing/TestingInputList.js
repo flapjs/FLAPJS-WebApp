@@ -180,7 +180,7 @@ class TestingInputList
 
   hasNextInput()
   {
-    return this.inputIndex < this.inputList.length - 1;
+    return this.inputIndex < this.inputList.length;
   }
 
   hasPrevInput()
