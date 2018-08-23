@@ -1,0 +1,3 @@
+.formaldef-container p.error {
+  color: var(--color-drawer-error);
+}

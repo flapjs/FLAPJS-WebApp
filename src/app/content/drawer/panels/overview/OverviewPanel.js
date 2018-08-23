@@ -44,10 +44,12 @@ class OverviewPanel extends React.Component
     return <div className="panel-container" id="overview" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>{I18N.toString("component.overview.title")}</h1>
-        <button onClick={this.switchDefinition}>{this.state.viewFormal ? "Close Formal Def" : "View Formal Def"}</button>
+        <button onClick={this.switchDefinition}>
+          {this.state.viewFormal ? "Close Formal Def." : "View Formal Def."}
+        </button>
       </div>
       {
-        this.state.viewFormal ? <FormalDefinition/> :
+        this.state.viewFormal ? <FormalDefinition machineBuilder={machineBuilder}/> :
         <div className="panel-content">
           <select className="machine-type panel-select"
                   value={this.state.machineType}
