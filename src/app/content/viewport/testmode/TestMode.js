@@ -93,7 +93,6 @@ class TestMode
 
   onPreviousStep()
   {
-    console.log(this.history[1])
     if (this.history.length > 0)
     {
       const previous = this.history.pop();
@@ -148,14 +147,18 @@ class TestMode
     //Get next character of current test string
     console.log("Getting next character....");
     this.indexofString += 1;
-
+    for(let state of this.cachedStates){
+      console.log("alsdlahflahlasf", state)
+    }
     //If no more characters to get...
     if(this.indexofString >= testInput.value.length)
     {
       //End of test string
       console.log("...end of test string...");
-
       //Run it one more time...
+      for(let state of this.cachedStates){
+        console.log("alsdlahflahlasf", state)
+      }
       this.result = solveNFAbyStep(fsa, null, this.cachedStates, this.cachedSymbols, this.checkedStates);
       testInput.setResult(this.result);
       const result = this.testingManager.nextTestInput();
@@ -171,20 +174,19 @@ class TestMode
     else
     {
       //Update history
-      console.log(JSON.stringify(this.targets));
       const currentStep = this.getCurrentCache();
       this.history.push(currentStep);
-      console.log(JSON.stringify(this.history[this.history.length - 1]));
 
       //Run it
       let nextChar = testInput.value[this.indexofString];
       console.log("The next character (should never be null): " + nextChar);
 
+
       this.result = solveNFAbyStep(fsa, nextChar, this.cachedStates, this.cachedSymbols, this.checkedStates);
       console.log("result is ", this.cachedStates);
       //Update targets
       this.targets.length = 0;
-      console.log(this.cachedStates)
+
       for(const state of this.cachedStates)
       {
         this.targets.push(this.machineBuilder.graph.getNodeByLabel(state.state));
@@ -213,6 +215,7 @@ class TestMode
 
   prepareForNewTest()
   {
+    this.cachedStates.length = 0;
     const graph = this.machineBuilder.graph;
     if (graph.isEmpty()) return;
     this.targets.length = 0;
@@ -221,7 +224,6 @@ class TestMode
       this.cachedStates.push({state: curr_state, index: 0});
       this.targets.push(graph.getNodeByLabel(curr_state));
     }
-    this.cachedStates.length = 0;
     this.cachedSymbols.length = 0;
     this.checkedStates.length = 0;
     this.indexofString = -1;
