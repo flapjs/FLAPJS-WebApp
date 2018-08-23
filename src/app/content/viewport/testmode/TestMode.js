@@ -165,9 +165,6 @@ class TestMode
       //End of test string
       console.log("...end of test string...");
       //Run it one more time...
-      for(let state of this.cachedStates){
-        console.log("alsdlahflahlasf", state)
-      }
       this.result = solveNFAbyStep(fsa, null, this.cachedStates, this.cachedSymbols, this.checkedStates);
       testInput.setResult(this.result);
 
@@ -210,10 +207,11 @@ class TestMode
 
       for(const state of this.cachedStates)
       {
-        this.targets.push(this.machineBuilder.graph.getNodeByLabel(state.state));
+        let node = this.machineBuilder.graph.getNodeByLabel(state.state);
+        if (!this.targets.includes(node)) this.targets.push(node);
       }
       console.log("For that character, the next state is: " + JSON.stringify(this.cachedStates));
-
+      if(this.targets.length == 0) this.indexofString = testInput.value.length;
       console.log("Have we reached the end? " + this.result);
       return true;
     }
