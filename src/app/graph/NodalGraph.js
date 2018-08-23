@@ -248,6 +248,16 @@ class NodalGraph
     this.nodes = this.nodes.concat(graph.nodes);
     this.edges = this.edges.concat(graph.edges);
 
+    //Reassign all nodes and edges to new graph
+    for(const node of graph.nodes)
+    {
+      node.graph = this;
+    }
+    for(const edge of graph.edges)
+    {
+      edge.graph = this;
+    }
+
     this.markDirty();
   }
 

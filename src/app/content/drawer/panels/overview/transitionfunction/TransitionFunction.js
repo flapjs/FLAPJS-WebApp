@@ -2,6 +2,7 @@ import React from 'react';
 import './TransitionFunction.css';
 
 import InfoBlock from '../infoblock/InfoBlock';
+import {EMPTY} from "../../../../../machine/Symbols";
 
 class TransitionFunction extends React.Component {
   constructor(props) {
@@ -25,7 +26,10 @@ class TransitionFunction extends React.Component {
                 </tr>
                 {
                   states.map((state, i) => {
-                    return alphabet.map((symbol, j) => {
+                    let emptrans = machine.doTransition(state, EMPTY);
+                    let empclassName = "";
+
+                    let transitions = alphabet.map((symbol, j) => {
                       let className = "";
                       let trans = machine.doTransition(state, symbol);
                       if(isNFA && !trans.length) return;
@@ -42,7 +46,22 @@ class TransitionFunction extends React.Component {
                           <td className="transitionfunction-key">{"(" + state + "," + symbol + ")"}</td>
                           <td className={"transitionfunction-value " + className}>{trans}</td>
                         </tr>
-                    })
+                    });
+
+                    if(emptrans.length > 0) {
+                      if(!isNFA) {
+                        empclassName = "error";
+                      }
+                      const addBrac = isNFA || emptrans.length > 1;
+                      emptrans = addBrac ? "{" + emptrans + "}" : "" + emptrans;
+                      transitions.unshift(
+                          <tr key={""+state+EMPTY}>
+                            <td className={"transitionfunction-key " + empclassName}>{"(" + state + "," + EMPTY + ")"}</td>
+                            <td className="transitionfunction-value">{emptrans}</td>
+                          </tr>
+                      );
+                    }
+                    return transitions;
                   })
                 }
               </tbody>
