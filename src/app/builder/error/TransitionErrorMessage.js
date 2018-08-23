@@ -2,6 +2,8 @@ import React from 'react';
 
 import MessageContainer from 'notification/MessageContainer.js';
 
+import { ARROW } from 'machine/Symbols.js';
+
 class TransitionErrorMessage extends React.Component
 {
   constructor(props)
@@ -17,7 +19,7 @@ class TransitionErrorMessage extends React.Component
       {
         this.targetLabel += ", ";
       }
-      this.targetLabel += target.label;
+      this.targetLabel += "(" + target.from.label + ", " + target.to.label + ") " + ARROW + " " + target.label;
     }
 
     this.onClick = this.onClick.bind(this);
