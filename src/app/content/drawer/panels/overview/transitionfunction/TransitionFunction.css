@@ -1,32 +1,36 @@
-.transitiontable-container {
+.transitionfunction-container {
   width: 100%;
   overflow: auto;
   text-align: center;
 }
 
-.transitiontable th, .transitiontable td {
+.transitionfunction-table th, .transitionfunction-table td {
   padding: 5px;
   border-radius: 5px;
-
   background: var(--color-drawer-text-back);
 }
 
-.transitiontable th {
+.transitionfunction-table th {
   color: var(--color-drawer-text);
 }
-.transitiontable th.col {
-}
-.transitiontable th.row {
-}
-.transitiontable td {
+
+.transitionfunction-table td {
   color: var(--color-drawer-text-subtle);
 
   font-size: 1.2em;
   font-family: monospace;
 }
-.transitiontable td.accept {
+
+.transitionfunction-table td.accept {
   text-decoration: underline;
 }
-.transitiontable td.error {
+
+.transitionfunction-table td.error {
   color: var(--color-drawer-error);
+}
+
+.transitionfunction-key {
+}
+
+.transitionfunction-value {
 }

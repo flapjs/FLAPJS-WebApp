@@ -14,7 +14,7 @@ class NodalGraph
   {
     this.nodes = nodes;
     this.edges = edges;
-    
+
     this.shouldUseQuadCoords = false;
 
     //nodeCreate(node) - Whenever a new node is created
@@ -248,6 +248,16 @@ class NodalGraph
     this.nodes = this.nodes.concat(graph.nodes);
     this.edges = this.edges.concat(graph.edges);
 
+    //Reassign all nodes and edges to new graph
+    for(const node of graph.nodes)
+    {
+      node.graph = this;
+    }
+    for(const edge of graph.edges)
+    {
+      edge.graph = this;
+    }
+
     this.markDirty();
   }
 
@@ -418,91 +428,98 @@ class NodalGraph
     return data;
   }
 
+  toXML()
+  {
+    const header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!--Created with flap.js 1.0.0.--><structure></structure>";
+    let parser = new DOMParser();
+    const doc = parser.parseFromString(header, "application/xml");
+
+    const structure = doc.getElementsByTagName("structure")[0];
+
+    const type = doc.createElement("type");
+    type.innerHTML = "fa";//For FSA
+    structure.appendChild(type);
+
+    const automaton = doc.createElement("automaton");
+    structure.appendChild(automaton);
+
+    let node, state, x, y;
+    for(let i = 0; i < this.nodes.length; ++i)
+    {
+      node = this.nodes[i];
+
+      //state tag
+      state = doc.createElement("state");
+      state.id = "" + i;
+      state.name = node.label;
+      automaton.appendChild(state);
+
+      //x tag
+      x = doc.createElement("x");
+      x.innerHTML = node.x;
+      state.appendChild(x);
+
+      //y tag
+      y = doc.createElement("y");
+      y.innerHTML = node.y;
+      state.appendChild(y);
+
+      //initial tag
+      if (i == 0)
+      {
+        state.appendChild(doc.createElement("initial"));
+      }
+
+      //final tag
+      if (node.accept)
+      {
+        state.appendChild(doc.createElement("final"));
+      }
+    }
+
+    let transition, from, to, read;
+    for(let edge of this.edges)
+    {
+      //transition tag
+      transition = doc.createElement("transition");
+      automaton.appendChild(transition);
+
+      //from tag
+      from = doc.createElement("from");
+      from.innerHTML = this.nodes.indexOf(edge.from);
+      transition.appendChild(from);
+
+      //to tag
+      to = doc.createElement("to");
+      to.innerHTML = this.nodes.indexOf(edge.to);
+      transition.appendChild(to);
+
+      //read tag
+      read = doc.createElement("read");
+      read.innerHTML = edge.label;
+      transition.appendChild(read);
+    }
+
+    return doc;
+  }
+
   toDFA(dst=null)
   {
-    const result = dst || new DFA();
-    if (!(result instanceof DFA))
-      throw new Error("Trying to parse graph mismatched machine type.");
-    fillFSA(this, result);
-    return result;
+    throw new Error("DEPRECATED!");
   }
 
   toNFA(dst=null)
   {
-    console.error("RAWR! I am a T-Rex!");
-    return this._toNFA(dst);
+    throw new Error("DEPRECATED!");
   }
 
   //TODO: NEVER CALL THIS DIRECTLY (Only FSABuilder is allowed.) Will be deprecated later.
   _toNFA(dst=null)
   {
-    const result = dst || new NFA();
-    if (!(result instanceof NFA))
-      throw new Error("Trying to parse graph mismatched machine type.");
-    fillFSA(this, result);
-    return result;
+    throw new Error("DEPRECATED!");
   }
 }
 //Mixin Eventable
 Eventable.mixin(NodalGraph);
-
-function fillFSA(graph, fsa)
-{
-  if (graph.nodes.length <= 0) return fsa;
-  //Create all the nodes
-  for(const node of graph.nodes)
-  {
-    try
-    {
-      let state = node.label;
-      fsa.newState(state);
-
-      //Set final state
-      if (node.accept)
-      {
-        fsa.setFinalState(state, true);
-      }
-    }
-    catch(e)
-    {
-      throw e;
-    }
-  }
-
-  //Create all the edges
-  for(const edge of graph.edges)
-  {
-    //Ignore any incomplete edges
-    if (edge.isPlaceholder()) continue;
-    const from = edge.from;
-    const to = edge.to;
-    if (from instanceof Node && to instanceof Node)
-    {
-      const labels = edge.label.split(",");
-      for(const label of labels)
-      {
-        try
-        {
-          fsa.newTransition(from.label, to.label, label);
-        }
-        catch(e)
-        {
-          throw e;
-        }
-      }
-    }
-  }
-
-  //Set start state
-  let startState = graph.getStartNode().label;
-  fsa.setStartState(startState);
-
-  return fsa;
-}
-
-function lerp(a, b, dt)
-{
-  return a * (1 - dt) + b * dt;
-}
 
 export default NodalGraph;

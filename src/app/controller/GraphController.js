@@ -5,7 +5,7 @@ import SelectionBox from './SelectionBox.js';
 import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
 
-class GraphInputController extends InputController
+class GraphController extends InputController
 {
   constructor()
   {
@@ -170,68 +170,72 @@ class GraphInputController extends InputController
     }
 
     //If is in move mode...
+    /*
     if (pointer.isMoveMode())
     {
       pointer.moveMode = false;
-      this.emit("tryCreateWhileTrash");
+      //this.emit("tryCreateWhileTrash");
 
       return false;
     }
     //If is NOT in move mode...
     else
     {
-      //If is in trash mode... capture all events!
-      if (trashMode)
+      //Do the remaining deleting code
+    }
+    */
+
+    //If is in trash mode... capture all events!
+    if (trashMode)
+    {
+      //Click to delete node
+      if (targetType === 'node')
       {
-        //Click to delete node
-        if (targetType === 'node')
-        {
-          //So that the emitted 'delete' events can use this
-          this.prevX = x;
-          this.prevY = y;
+        //So that the emitted 'delete' events can use this
+        this.prevX = x;
+        this.prevY = y;
 
-          //If there exists selected states, delete them all!
-          const selector = this.selector;
-          if (selector.hasSelection())
-          {
-            //Delete all selected nodes
-            this.deleteSelectedNodes(target);
-          }
-          else
-          {
-            //Delete a single node
-            this.deleteTargetNode(target);
-          }
-
-          return true;
-        }
-        else if (targetType === 'edge' || targetType === 'endpoint')
+        //If there exists selected states, delete them all!
+        const selector = this.selector;
+        if (selector.hasSelection())
         {
-          //Delete a single edge
-          this.deleteTargetEdge(target);
-          return true;
+          //Delete all selected nodes
+          this.deleteSelectedNodes(target);
         }
         else
         {
-          //Clicked on something you cannot delete
-          return false;
+          //Delete a single node
+          this.deleteTargetNode(target);
         }
+
+        return true;
       }
-
-      //If not in Trash Mode, then events should pass through to here...
-      //Otherwise, ALL events are captured to prevent ALL default behavior.
-
-      //If selected target...
-      if (targetType === 'edge')
+      else if (targetType === 'edge' || targetType === 'endpoint')
       {
-        //Edit label for selected edge
-        this.openLabelEditor(target, x, y);
+        //Delete a single edge
+        this.deleteTargetEdge(target);
         return true;
       }
       else
       {
+        //Clicked on something you cannot delete
         return false;
       }
+    }
+
+    //If not in Trash Mode, then events should pass through to here...
+    //Otherwise, ALL events are captured to prevent ALL default behavior.
+
+    //If selected target...
+    if (targetType === 'edge')
+    {
+      //Edit label for selected edge
+      this.openLabelEditor(target, x, y);
+      return true;
+    }
+    else
+    {
+      return false;
     }
   }
 
@@ -590,6 +594,13 @@ class GraphInputController extends InputController
           //Otherwise, maintain original curve
           else
           {
+            /*
+            for(const node of this.graph.nodes)
+            {
+              //TODO: Get the intersection between edges and nodes
+            }
+            */
+
             target.copyQuadraticsFrom(this.prevQuad);
           }
 
@@ -817,4 +828,4 @@ class GraphInputController extends InputController
   }
 }
 
-export default GraphInputController;
+export default GraphController;

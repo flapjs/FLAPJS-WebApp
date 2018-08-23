@@ -9,6 +9,10 @@ export function solveNFA(nfa, input)
   let cachedStates = [];
   let cachedSymbols = [];
   cachedStates.push({state: nfa.getStartState(), index: 0});
+  for (let currState of nfa.doClosureTransition(nfa.getStartState())){
+    cachedStates.push({state: currState , index: 0});
+    console.log(currState)
+  }
   let checkedStates = [];
   let symbol = null;
 
@@ -36,6 +40,10 @@ export function solveNFA(nfa, input)
 //Any future transitions must not re-enter the group
 export function solveNFAbyStep(nfa, symbol, cachedStates, cachedSymbols, checkedStates)
 {
+  console.log("symbol", symbol)
+  for (let state of cachedStates){
+    console.log("cachedstate", cachedStates)
+  }
   //initialize variables
   let state = null;
   let nextStates = [];
@@ -55,7 +63,7 @@ export function solveNFAbyStep(nfa, symbol, cachedStates, cachedSymbols, checked
     {
       //Read to next state...
       nextIndex = cstate.index + 1;
-      for(let nextState of nfa.doTransition(state, symbol))
+      for(let nextState of nfa.doTerminalTransition(state, symbol))
       {
         nextStates.push({state: nextState, index: nextIndex});
       }
@@ -68,15 +76,16 @@ export function solveNFAbyStep(nfa, symbol, cachedStates, cachedSymbols, checked
 
     //Read none to next state...
     nextIndex = cstate.index;
-    for(let nextState of nfa.doTransition(state, EMPTY))
+    /*for(let nextState of nfa.doTransition(state,EMPTY))
     {
       if (checkedStates.includes(nextState)) continue;
       if (symbol == null && nfa.isFinalState(nextState)) return true;
 
       nextStates.push({state: nextState, index: nextIndex});
-    }
+    }*/
   }
   cachedStates.length = 0
   cachedStates.push(...nextStates);
+  console.log(cachedStates)
   return false;
 }

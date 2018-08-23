@@ -3,7 +3,7 @@ import './Viewport.css';
 
 import LabelEditor from './LabelEditor.js';
 import TrashCan from './TrashCan.js';
-import TestTray from './testmode/TestTray.js';
+import TestTray from './TestTray.js';
 
 class Viewport extends React.Component
 {

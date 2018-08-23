@@ -1,4 +1,4 @@
-.test-input-container {
+.testinginput-container {
   display: flex;
   flex-direction: row;
 
@@ -10,12 +10,16 @@
 
   white-space: nowrap;
 }
-
-.test-input-placeholder {
+.testinginput-container:first-of-type {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   border-bottom: 2px solid var(--color-drawer-text-subtle);
 }
+.testinginput-container.active {
+  background: rgba(255, 255, 255, 0.06);
+}
 
-.test-input-field {
+.testinginput-field {
   flex-grow: 1;
   font-size: 16px;
   min-width: 0;
@@ -26,23 +30,28 @@
 
   color: var(--color-drawer-text);
 }
-.test-input-field::placeholder {
+.testinginput-field::placeholder {
   color: var(--color-drawer-text-subtle);
 }
-.test-input-field::-ms-input-placeholder {
+.testinginput-field::-ms-input-placeholder {
   color: var(--color-drawer-text-subtle);
 }
 
-.test-input-container .status-icon {
+.testinginput-container .status-icon {
   margin-left: 5px;
   margin-right: 5px;
 }
+.testinginput-container .status-icon:hover, .testinginput-container .status-icon:focus {
+  fill: var(--color-drawer-text);
+}
 
-.test-input-addremove {
+.testinginput-submit {
+  margin-left: 5px;
+  margin-right: 5px;
+
   fill: var(--color-drawer-text-subtle);
   float: right;
 }
-
-.test-input-addremove:hover {
+.testinginput-submit:hover, .testinginput-submit:focus {
   fill: var(--color-drawer-text);
 }

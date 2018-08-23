@@ -2,6 +2,9 @@
   padding: 0;
   margin: 0;
 
+  font-size: 16px;
+  font-family: monospace;
+
   background: var(--color-workspace-main);
 }
 .graph-node {
@@ -12,20 +15,12 @@
   stroke: var(--color-workspace-text);
 }
 .graph-node-label {
-  text-anchor: middle;
-  font-size: inherit;
-  font-family: 'Overpass Mono', monospace;
-
   fill: var(--color-workspace-text);
 }
 .graph-edge {
   stroke: var(--color-workspace-text);
 }
 .graph-edge-label {
-  text-anchor: middle;
-  font-size: inherit;
-  font-family: 'Overpass Mono', monospace;
-
   fill: var(--color-workspace-text);
 }
 .graph-initial {

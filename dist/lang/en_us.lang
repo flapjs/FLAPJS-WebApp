@@ -19,7 +19,7 @@ message.offline.nosupport = Sorry, your browser does not support offline mode.
 
 message.intro.1 = Good Morning! Welcome to the Flap.js Workspace!
 message.intro.2 = If you need help, the '?' button is at the top-right of the screen.
-message.intro.3 = If you need still help, find a tutor. I can't help you. If you can help with localization, please help us! . . . and Good-bye!
+message.tutorial.1 = ==== Quick Tutorial ==== \n Mouse \n * Action = Right Mouse \n * Move = Left Mouse \n\n Touch \n * Action = Tap-Hold \n * Move = Tap-Drag \n\n State = Double Tap \n Transition = Action-Drag \n Symbol = Any Tap \n\n Interactive elements will highlight on hover.
 message.help.1 = You need help. Unfortunately, I am not qualified to provide such assistance. Please refer to your local tutor/developer for more information.
 message.help.2 = I see you want help. I'm not sure I want to help you after you so rudely got rid of all my other messages.
 message.help.3 = Thank you for being awesome :3
@@ -52,7 +52,7 @@ options.skipwelcome = Skip Welcome Page
 options.swapinputs = Swap Input Controls
 
 options.testing.stepmode = Step-by-Step Mode
-options.testing.closure = Transition By Closure
+//options.testing.closure = Transition By Closure
 
 file.untitled = Untitled
 file.export.machine = Save flap.js machine
@@ -65,13 +65,14 @@ file.export.png.hint = Export machine as .png
 file.export.jpg.hint = Export machine as .jpg
 file.export.jff.hint = Export machine as .jff
 
-testing.placeholder = Test string
+//testing.placeholder = Test string
 
 //TODO: Actions should probably be labeled by context...
 
 action.testing.runall = Run All Tests
 action.testing.clear = Clear
 action.testing.import = Import Tests
+action.testing.save = Save Tests
 
 action.overview.convertmachine = Convert To...
 

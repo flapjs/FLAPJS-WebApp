@@ -7,10 +7,7 @@ import { loadConfig, saveConfig } from 'config.js';
 
 import App from 'content/App.js';
 
-//HACK: to determine if this is first time use
-import AutoSaver from 'util/AutoSaver.js';
-
-const AUTOSAVE_CONFIG = false;
+const AUTOSAVE_CONFIG = true;
 
 Router.registerPage('/', App);
 
@@ -24,6 +21,7 @@ window.addEventListener('load', (event) => {
 window.addEventListener('beforeunload', (event) => {
   if (AUTOSAVE_CONFIG)
   {
+    //Only save if changes were made
     saveConfig();
   }
 

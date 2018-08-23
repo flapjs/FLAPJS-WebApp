@@ -2,9 +2,7 @@ import React from 'react';
 
 import MessageContainer from 'notification/MessageContainer.js';
 
-import { ARROW } from 'machine/Symbols.js';
-
-class TransitionErrorMessage extends React.Component
+class StateMissingTransitionErrorMessage extends React.Component
 {
   constructor(props)
   {
@@ -12,14 +10,14 @@ class TransitionErrorMessage extends React.Component
 
     this.targetIndex = 0;
     this.targetLabel = "";
-    const targets = this.props.message.targets;
+    const targets = this.props.message;
     for(const target of targets)
     {
       if (this.targetLabel.length > 0)
       {
         this.targetLabel += ", ";
       }
-      this.targetLabel += "(" + target.from.label + ", " + target.to.label + ") " + ARROW + " " + target.label;
+      this.targetLabel += target.label;
     }
 
     this.onClick = this.onClick.bind(this);
@@ -31,7 +29,7 @@ class TransitionErrorMessage extends React.Component
     if (target.value == "locate")
     {
       const notification = this.props.notification;
-      const targets = this.props.message.targets;
+      const targets = this.props.message;
       const targetLength = targets.length;
       if (targetLength > 0 && this.targetIndex < targetLength)
       {
@@ -40,20 +38,8 @@ class TransitionErrorMessage extends React.Component
         if (this.targetIndex >= targetLength) this.targetIndex = 0;
 
         //Move pointer to target
-        notification.props.controller.focusOnEdge(target);
+        notification.props.controller.focusOnNode(target);
       }
-    }
-    else if (target.value == "deleteall")
-    {
-      const notification = this.props.notification;
-      const targets = this.props.message.targets;
-      //Delete all target edges
-      for(const edge of targets)
-      {
-        notification.props.graph.deleteEdge(edge);
-      }
-      //Exit the message
-      this.props.onExit(e);
     }
     else
     {
@@ -65,11 +51,10 @@ class TransitionErrorMessage extends React.Component
   {
     return <MessageContainer
       className="notification-error"
-      value={this.props.message.text + ": " + this.targetLabel}
+      value={I18N.toString("message.error.missing") + ": " + this.targetLabel}
       onExit={this.props.onExit}>
       <button value="locate" onClick={this.onClick}>{I18N.toString("message.action.locate")}</button>
-      <button value="deleteall" onClick={this.onClick}>{I18N.toString("message.action.deleteall")}</button>
     </MessageContainer>;
   }
 }
-export default TransitionErrorMessage;
+export default StateMissingTransitionErrorMessage;
