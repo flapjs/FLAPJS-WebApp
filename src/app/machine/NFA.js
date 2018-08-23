@@ -47,7 +47,7 @@ class NFA extends FSA
     result.push(state);
     for(let i = 0; i < result.length; ++i)
     {
-      const transitions = this.getOutgoingTransitions(state);
+      const transitions = this.getOutgoingTransitions(result[i]);
       for(const transition of transitions)
       {
         if (transition[SYMBOL] == EMPTY)
@@ -81,6 +81,7 @@ class NFA extends FSA
         }
       }
     }
+
     return result;
   }
 }
