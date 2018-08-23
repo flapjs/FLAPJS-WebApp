@@ -10,12 +10,12 @@ class AutoLayout
     //handle for too much nodes case
     const numOfNode = graph.nodes.length;
     const radius = (numOfNode/5) * 40 + 10;
-    const degree = 2*3.14/numOfNode;
+    const degree = 2* Math.PI/numOfNode;
     let currentStep = 0;
-    for(let i = graph.nodes.length - 1; i >= 0; i--)
+    for(let i = 0; i < numOfNode; i++)
     {
-      graph.nodes[i].x = Math.sin(degree*currentStep)*radius;
-      graph.nodes[i].y = Math.cos(degree*currentStep)*radius;
+      graph.nodes[i].y = Math.sin(degree*currentStep + Math.PI)*radius;
+      graph.nodes[i].x = Math.cos(degree*currentStep + Math.PI)*radius;
       currentStep += 1;
     }
   }
