@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cea43697-9fa1-4281-ad83-b5e3ff605763" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -22,8 +21,8 @@
       <file leaf-file-name="TransitionFunction.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" column="31" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
+            <state relative-caret-position="618">
+              <caret line="45" column="20" lean-forward="true" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -34,8 +33,8 @@
       <file leaf-file-name="FormalDefinition.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+            <state relative-caret-position="89">
+              <caret line="16" column="44" selection-start-line="16" selection-start-column="44" selection-end-line="16" selection-end-column="44" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -43,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="OverviewPanel.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="OverviewPanel.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="113">
-              <caret line="49" column="53" selection-start-line="49" selection-start-column="53" selection-end-line="49" selection-end-column="53" />
+            <state relative-caret-position="241">
+              <caret line="47" column="76" lean-forward="true" selection-start-line="47" selection-start-column="76" selection-end-line="47" selection-end-column="76" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -55,16 +54,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FormalDefinition.css" pinned="false" current-in-tab="false">
+      <file leaf-file-name="FormalDefinition.css" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.css">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file leaf-file-name="TransitionFunction.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="8" column="1" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+            <state relative-caret-position="336">
+              <caret line="27" column="35" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -72,7 +75,7 @@
       <file leaf-file-name="FSA.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/machine/FSA.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2160">
+            <state relative-caret-position="-1364">
               <caret line="144" column="2" selection-start-line="144" selection-start-column="2" selection-end-line="144" selection-end-column="2" />
             </state>
           </provider>
@@ -161,10 +164,10 @@
         <option value="$PROJECT_DIR$/src/pages/content/notification/NotificationSystem.js" />
         <option value="$PROJECT_DIR$/src/app/notification/NotificationSystem.js" />
         <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.css" />
-        <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.js" />
-        <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.css" />
-        <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js" />
         <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js" />
+        <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.js" />
+        <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js" />
+        <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.css" />
       </list>
     </option>
   </component>
@@ -271,6 +274,17 @@
               <item name="drawer" type="462c0819:PsiDirectoryNode" />
               <item name="panels" type="462c0819:PsiDirectoryNode" />
               <item name="overview" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+              <item name="drawer" type="462c0819:PsiDirectoryNode" />
+              <item name="panels" type="462c0819:PsiDirectoryNode" />
+              <item name="overview" type="462c0819:PsiDirectoryNode" />
+              <item name="formaldefinition" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
@@ -419,7 +433,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="90706000" />
+    <option name="totallyTimeSpent" value="94201000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -445,10 +459,10 @@
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.32965517" />
       <window_info id="npm" order="2" sideWeight="0.5020492" side_tool="true" weight="0.25767368" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49919224" visible="true" weight="0.32689655" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49919224" visible="true" weight="0.32689655" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49795082" visible="true" weight="0.25767368" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49795082" visible="true" weight="0.25767368" />
       <window_info anchor="right" id="Database" order="6" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.38482758" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -531,16 +545,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -648,13 +652,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/machine/FSA.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2160">
-          <caret line="144" column="2" selection-start-line="144" selection-start-column="2" selection-end-line="144" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitiontable/TransitionTable.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -662,13 +659,6 @@
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="8" column="1" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
         </state>
       </provider>
     </entry>
@@ -681,10 +671,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js">
+    <entry file="file://$PROJECT_DIR$/src/app/machine/FSA.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="49" column="53" selection-start-line="49" selection-start-column="53" selection-end-line="49" selection-end-column="53" />
+        <state relative-caret-position="-1364">
+          <caret line="144" column="2" selection-start-line="144" selection-start-column="2" selection-end-line="144" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="618">
+          <caret line="45" column="20" lean-forward="true" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -693,21 +690,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        <state relative-caret-position="89">
+          <caret line="16" column="44" selection-start-line="16" selection-start-column="44" selection-end-line="16" selection-end-column="44" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.js">
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/transitionfunction/TransitionFunction.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="31" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
+        <state relative-caret-position="336">
+          <caret line="27" column="35" selection-start-line="27" selection-start-column="2" selection-end-line="27" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="241">
+          <caret line="47" column="76" lean-forward="true" selection-start-line="47" selection-start-column="76" selection-end-line="47" selection-end-column="76" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/formaldefinition/FormalDefinition.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
         </state>
       </provider>
     </entry>

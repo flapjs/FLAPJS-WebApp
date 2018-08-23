@@ -52,7 +52,7 @@ class OverviewPanel extends React.Component
       </div>
         <div className="panel-content">
           {viewFormal &&
-            <FormalDefinition/>}
+            <FormalDefinition machineBuilder={machineBuilder}/>}
 
           {!viewFormal &&
             <div>
