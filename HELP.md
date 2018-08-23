@@ -59,7 +59,27 @@ To create an accept state double tap to create the node and then single `tap` on
 ### Uploading a DFA/NFA File
 To create a DFA or NFA from a file, just upload the file by dragging and dropping workspace or 
 clicking on the `more options icon (three dots)` next to the name of the workspace. **Note:** The file that is 
-being imported must be a `.txt` file type.
+being imported must be a `.txt` file type. The file must be formatted such that each string is on it's own line or
+comma seperated. 
+
+
+*First Format* 
+
+file1.txt
+```
+010101010
+101010110
+100001100
+```
+
+*Second Format* 
+
+file2.txt
+
+```
+0101010101,010101010,0101010101
+```
+
 
 ### Testing Single or Multiple Strings
 Tap on the triangle on top right to expand the drawer, then select `Testing Panel`. Inside the testing panel test the 
