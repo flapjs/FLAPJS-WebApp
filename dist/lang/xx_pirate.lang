@@ -73,6 +73,7 @@ file.export.jff.hint = Export yer charts as .jff
 action.testing.runall = Sing yer sea shanties!
 action.testing.clear = Feed the fishes!
 action.testing.import = More landlubbers...
+action.testing.save = Save fer 'nother day
 
 action.overview.convertmachine = Convert yer charts...
 

@@ -72,6 +72,7 @@ file.export.jff.hint = Export machine as .jff
 action.testing.runall = Run All Tests
 action.testing.clear = Clear
 action.testing.import = Import Tests
+action.testing.save = Save Tests
 
 action.overview.convertmachine = Convert To...
 

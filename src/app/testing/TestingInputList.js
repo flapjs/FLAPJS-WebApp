@@ -66,6 +66,11 @@ class TestingInputList
     reader.readAsText(file);
   }
 
+  getTestsAsStrings()
+  {
+    return this.inputList.map((e, i) => e.value);
+  }
+
   clearTests()
   {
     //Reset first element

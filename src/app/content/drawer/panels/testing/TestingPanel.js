@@ -2,8 +2,12 @@ import React from 'react';
 import '../Panel.css';
 import './TestingPanel.css';
 
+import Downloader from 'util/Downloader.js';
+
 import TestingManager from 'testing/TestingManager.js';
 import TestingInput from './TestingInput.js';
+
+const TEST_FILENAME = "test.txt";
 
 class TestingPanel extends React.Component
 {
@@ -129,6 +133,11 @@ class TestingPanel extends React.Component
               style={{display: "none"}}
               onChange={this.onUploadFileChange} accept=".txt"/>
             {I18N.toString("action.testing.import")}
+          </button>
+          <button className="panel-button" id="test-save" onClick={() => {
+            Downloader.downloadText(TEST_FILENAME, testList.getTestsAsStrings().join("\n"));
+          }}>
+            {I18N.toString("action.testing.save")}
           </button>
         </div>
 
