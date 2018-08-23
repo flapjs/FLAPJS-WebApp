@@ -1,6 +1,8 @@
 import Config from 'config.js';
 import Eventable from 'util/Eventable.js';
 
+import GraphLayout from 'graph/GraphLayout.js';
+
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
 
@@ -127,8 +129,31 @@ class NodalGraph
 
   newEdge(from, to, label)
   {
+    //Look for an existing edge with similar from and to
+    for(const edge of this.edges)
+    {
+      if (edge.from === from && edge.to === to)
+      {
+        let result = edge.label.split(",");
+        if (label && label.length > 0)
+        {
+          result = result.concat(label.split(","));
+          edge.setLabel(result.join(","));
+          this.markDirty();
+        }
+
+        return edge;
+      }
+    }
+
     const result = new Edge(this, from, to, label);
     this.edges.push(result);
+
+    if (from === to)
+    {
+      result.makeSelfLoop();
+    }
+
     this.emit("edgeCreate", result);
 
     this.markDirty();
@@ -241,7 +266,6 @@ class NodalGraph
     return result;
   }
 
-
   copyGraph(graph)
   {
     this.deleteAll();
@@ -265,8 +289,8 @@ class NodalGraph
   {
     this.deleteAll();
 
-    let node;
     //Add all states
+    let node;
     for(const state of machine.getStates())
     {
       node = this.newNode(0, 0, state);
@@ -277,14 +301,21 @@ class NodalGraph
     }
 
     //Add all transitions
-    for(const transition of machine.getTransitions())
+    let edge, from, to, read, labels, flag;
+    for(let transition of machine.getTransitions())
     {
-      this.newEdge(this.getNodeByLabel(transition[0]), this.getNodeByLabel(transition[2]), transition[1]);
+      from = this.getNodeByLabel(transition[0]);
+      read = transition[1];
+      to = this.getNodeByLabel(transition[2]);
+      edge = this.newEdge(from, to, read);
     }
 
     //Set start state
     const startState = machine.getStartState();
     this.setStartNode(this.getNodeByLabel(startState));
+
+    //Auto layout graph
+    GraphLayout.applyLayout(this);
   }
 
   markDirty()
@@ -342,7 +373,8 @@ class NodalGraph
     if (nodeLength < 0) throw new Error("Invalid graph data: negative number of nodes.");
     if (edgeLength < 0) throw new Error("Invalid graph data: negative number of edges.");
 
-    const dst = new NodalGraph(new Array(nodeLength), new Array(edgeLength));
+    //HACK: call newEdge to auto layout the graph, therefore a fixed length array cannot be allocated.
+    const dst = new NodalGraph(new Array(nodeLength), []);
     let nodeIDMap = new Map();
     let startNodeID;
     //create nodes list
@@ -353,12 +385,12 @@ class NodalGraph
       let nodeID = node.attributes[0].nodeValue;
       let nodeX = node.childNodes[1].childNodes[0].nodeValue;
       let nodeY = node.childNodes[3].childNodes[0].nodeValue;
-      let nodeAccept = node.getElementsByTagName("final").length;
-      let nodeStart = node.getElementsByTagName("initial").length;
-      if(nodeStart) startNodeID = nodeID;//TODO: allow JFLAP names to be id
+      let nodeAccept = node.getElementsByTagName("final");
+      let nodeStart = node.getElementsByTagName("initial");
+      if(nodeStart && nodeStart.length > 0) startNodeID = nodeID;//TODO: allow JFLAP names to be id
       let newNode = new Node(dst, nodeX , nodeY , Config.STR_STATE_LABEL + (nodeID));
-      newNode.accept = nodeAccept;
-      if(nodeStart)
+      newNode.accept = (nodeAccept != null && nodeAccept.length > 0);
+      if(nodeStart && nodeStart.length > 0)
       {
         if(dst.nodes[0])
         {
@@ -400,12 +432,7 @@ class NodalGraph
       //check valid from and to node
       if(dst.nodes[indexOfEdgeFrom] || (startNodeID == edgeFrom && dst.nodes[0]) || (edgeFrom == 0 && dst.nodes[startNodeID]) )
       {
-        const newEdge = new Edge(dst, dst.nodes[indexOfEdgeFrom], edgeTo < 0 ? null : dst.nodes[indexOfEdgeTo], edgeLabel || "0");
-        dst.edges[i] = newEdge;
-        if (edgeFrom == edgeTo)
-        {
-          newEdge.makeSelfLoop(Math.PI / 2);
-        }
+        dst.newEdge(dst.nodes[indexOfEdgeFrom], edgeTo < 0 ? null : dst.nodes[indexOfEdgeTo], edgeLabel || "0");
       }
       else
       {
@@ -477,7 +504,7 @@ class NodalGraph
       //state tag
       state = doc.createElement("state");
       state.id = "" + i;
-      state.name = node.label;
+      state.setAttribute("name", node.label);
       automaton.appendChild(state);
 
       //x tag
@@ -503,27 +530,31 @@ class NodalGraph
       }
     }
 
-    let transition, from, to, read;
+    let transition, from, to, read, symbols;
     for(let edge of this.edges)
     {
-      //transition tag
-      transition = doc.createElement("transition");
-      automaton.appendChild(transition);
+      symbols = edge.label.split(",");
+      for(let symbol of symbols)
+      {
+        //transition tag
+        transition = doc.createElement("transition");
+        automaton.appendChild(transition);
 
-      //from tag
-      from = doc.createElement("from");
-      from.innerHTML = this.nodes.indexOf(edge.from);
-      transition.appendChild(from);
+        //from tag
+        from = doc.createElement("from");
+        from.innerHTML = this.nodes.indexOf(edge.from);
+        transition.appendChild(from);
 
-      //to tag
-      to = doc.createElement("to");
-      to.innerHTML = this.nodes.indexOf(edge.to);
-      transition.appendChild(to);
+        //to tag
+        to = doc.createElement("to");
+        to.innerHTML = this.nodes.indexOf(edge.to);
+        transition.appendChild(to);
 
-      //read tag
-      read = doc.createElement("read");
-      read.innerHTML = edge.label;
-      transition.appendChild(read);
+        //read tag
+        read = doc.createElement("read");
+        read.innerHTML = symbol;
+        transition.appendChild(read);
+      }
     }
 
     return doc;
