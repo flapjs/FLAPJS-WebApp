@@ -418,6 +418,81 @@ class NodalGraph
     return data;
   }
 
+  toXML()
+  {
+    const header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!--Created with flap.js 1.0.0.--><structure></structure>";
+    let parser = new DOMParser();
+    const doc = parser.parseFromString(header, "application/xml");
+
+    const structure = doc.getElementsByTagName("structure")[0];
+
+    const type = doc.createElement("type");
+    type.innerHTML = "fa";//For FSA
+    structure.appendChild(type);
+
+    const automaton = doc.createElement("automaton");
+    structure.appendChild(automaton);
+
+    let node, state, x, y;
+    for(let i = 0; i < this.nodes.length; ++i)
+    {
+      node = this.nodes[i];
+
+      //state tag
+      state = doc.createElement("state");
+      state.id = "" + i;
+      state.name = node.label;
+      automaton.appendChild(state);
+
+      //x tag
+      x = doc.createElement("x");
+      x.innerHTML = node.x;
+      state.appendChild(x);
+
+      //y tag
+      y = doc.createElement("y");
+      y.innerHTML = node.y;
+      state.appendChild(y);
+
+      //initial tag
+      if (i == 0)
+      {
+        state.appendChild(doc.createElement("initial"));
+      }
+
+      //final tag
+      if (node.accept)
+      {
+        state.appendChild(doc.createElement("final"));
+      }
+    }
+
+    let transition, from, to, read;
+    for(let edge of this.edges)
+    {
+      //transition tag
+      transition = doc.createElement("transition");
+      automaton.appendChild(transition);
+
+      //from tag
+      from = doc.createElement("from");
+      from.innerHTML = this.nodes.indexOf(edge.from);
+      transition.appendChild(from);
+
+      //to tag
+      to = doc.createElement("to");
+      to.innerHTML = this.nodes.indexOf(edge.to);
+      transition.appendChild(to);
+
+      //read tag
+      read = doc.createElement("read");
+      read.innerHTML = edge.label;
+      transition.appendChild(read);
+    }
+
+    return doc;
+  }
+
   toDFA(dst=null)
   {
     throw new Error("DEPRECATED!");
