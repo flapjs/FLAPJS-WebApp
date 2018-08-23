@@ -23,6 +23,14 @@ class TestMode
     this.started = false;
 
     this.timer = null;
+
+    this.onNodeDestroy = this.onNodeDestroy.bind(this);
+    machineBuilder.graph.on("nodeDestroy", this.onNodeDestroy);
+  }
+
+  onNodeDestroy(node)
+  {
+    this.targets.splice(this.targets.indexOf(node), 1);
   }
 
   onStart()
@@ -173,7 +181,7 @@ class TestMode
       console.log("The next character (should never be null): " + nextChar);
 
       this.result = solveNFAbyStep(fsa, nextChar, this.cachedStates, this.cachedSymbols, this.checkedStates);
-
+      console.log("result is ", this.cachedStates);
       //Update targets
       this.targets.length = 0;
       console.log(this.cachedStates)
@@ -205,16 +213,18 @@ class TestMode
 
   prepareForNewTest()
   {
-    const startState = this.machineBuilder.getMachine().getStartState();
-    const startNode = this.machineBuilder.graph.getStartNode();
+    const graph = this.machineBuilder.graph;
+    if (graph.isEmpty()) return;
+    this.targets.length = 0;
+    let startState = this.machineBuilder.getMachine().getStartState()
+    for (let curr_state of this.machineBuilder.getMachine().doClosureTransition(startState)){
+      this.cachedStates.push({state: curr_state, index: 0});
+      this.targets.push(graph.getNodeByLabel(curr_state));
+    }
     this.cachedStates.length = 0;
     this.cachedSymbols.length = 0;
     this.checkedStates.length = 0;
-    this.cachedStates.push({state: startState, index: 0});
-    this.targets.length = 0;
-    this.targets.push(startNode);
     this.indexofString = -1;
-
     this.history.length = 0;
   }
 }
