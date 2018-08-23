@@ -34,39 +34,52 @@ class OverviewPanel extends React.Component
     this.setState({machineType: value});
   }
 
-  switchDefinition() {
-    this.setState({viewFormal: !this.state.viewFormal});
+  switchDefinition()
+  {
+    this.setState((prev, props) => {
+      return { viewFormal: !prev.viewFormal };
+    });
   }
 
   render()
   {
     const machineBuilder = this.props.machineBuilder;
+    const viewFormal = this.state.viewFormal;
+
     return <div className="panel-container" id="overview" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>{I18N.toString("component.overview.title")}</h1>
-        <button onClick={this.switchDefinition}>{this.state.viewFormal ? "Close Formal Def" : "View Formal Def"}</button>
       </div>
-      {
-        this.state.viewFormal ? <FormalDefinition/> :
         <div className="panel-content">
-          <select className="machine-type panel-select"
-                  value={this.state.machineType}
-                  onChange={this.onChangeMachineType}>
-            <option value="DFA">DFA</option>
-            <option value="NFA">NFA</option>
-          </select>
-          <div className="graphinfo-important">
-            <StatesList machineBuilder={machineBuilder} controller={this.props.controller}/>
-            <AlphabetList machineBuilder={machineBuilder}/>
-          </div>
-          <div className="graphinfo">
-            <TransitionFunction machineBuilder={machineBuilder}/>
-            <TransitionTable machineBuilder={machineBuilder}/>
-          </div>
+          {viewFormal &&
+            <FormalDefinition/>}
+
+          {!viewFormal &&
+            <div>
+              <select className="machine-type panel-select"
+                      value={this.state.machineType}
+                      onChange={this.onChangeMachineType}>
+                <option value="DFA">DFA</option>
+                <option value="NFA">NFA</option>
+              </select>
+              <div className="graphinfo-important">
+                <StatesList machineBuilder={machineBuilder} controller={this.props.controller}/>
+                <AlphabetList machineBuilder={machineBuilder}/>
+              </div>
+              <div className="graphinfo">
+                <TransitionFunction machineBuilder={machineBuilder}/>
+                <TransitionTable machineBuilder={machineBuilder}/>
+              </div>
+            </div>}
 
           <hr/>
 
-          <button disabled="true" className="panel-button">{I18N.toString("action.overview.convertmachine")}</button>
+          <button disabled="true" className="panel-button">
+            {I18N.toString("action.overview.convertmachine")}
+          </button>
+          <button className="panel-button" onClick={this.switchDefinition}>
+            {viewFormal ? "View Defintion" : "View Formal Definition"}
+          </button>
           <div className="panel-checkbox">
             <input type="checkbox" id="auto-statename" onChange={(e) => {
               machineBuilder.setAutoRenameNodes(e.target.checked);
@@ -74,7 +87,6 @@ class OverviewPanel extends React.Component
             <label htmlFor="auto-statename">{I18N.toString("options.autolabel")}</label>
           </div>
         </div>
-      }
 
       <div className="panel-bottom"></div>
     </div>;
