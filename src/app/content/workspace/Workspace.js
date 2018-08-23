@@ -11,7 +11,7 @@ import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
 import InitialMarkerRenderer from './renderer/InitialMarkerRenderer.js';
 import HighlightRenderer from './renderer/HighlightRenderer.js';
 
-const WORKSPACE_OFFSET_X = 15;
+const WORKSPACE_OFFSET_X = 0;
 const WORKSPACE_OFFSET_Y = 0;
 const EXPORT_PADDING_X = 30;
 const EXPORT_PADDING_Y = 0;
