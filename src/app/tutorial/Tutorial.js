@@ -14,7 +14,7 @@ class Tutorial
     const notification = this.app.notification;
     if (!AutoSaver.hasAutoSave())
     {
-      notification.addMessage("message.intro.3");
+      notification.addMessage("message.tutorial.1");
       notification.addMessage("message.intro.2");
       notification.addMessage("message.intro.1");
     }

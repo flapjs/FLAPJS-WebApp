@@ -19,7 +19,8 @@ message.offline.nosupport = Arrr! Yer browser be soon swimmin' with the fishies.
 
 message.intro.1 = Ahoy! Welcome aboard to yer ship, cap'n!
 message.intro.2 = T' find yer new sea legs, look starboard fer yer hat.
-message.intro.3 = If ye in need o' 'nother swabber, drop anchor me hearty and find yerself 'nother matey. Arrr!
+//message.intro.3 = If ye in need o' 'nother helper, drop anchor me hearty and find yerself 'nother matey. Arrr!
+message.tutorial.1 = ==== Yer Ol' Guide ==== \n Using yer rats \n * Action = Right Rat \n * Move = Left Rat \n\n Using yer handy compass \n * Action = Tap-Hold \n * Move = Tap-Drag \n\n State = Double Tap \n Transition = Action-Drag \n Symbol = Any Tap \n\n Interactive elements be colorful when hoverin'.
 message.help.1 = Lookin' fer more swabbers? I bet some 're back at port.
 message.help.2 = Dead men tell no tales. Dead men. Tell no tales.
 message.help.3 = Keep a weather eye open, cap'n!
