@@ -1,5 +1,7 @@
 import NodalGraph from 'graph/NodalGraph.js';
+import { saveConfig } from 'config.js';
 
+const GRAPH_LOCAL_STORAGE_ID = "graph";
 const AUTOSAVE_INTERVAL = 1000; //unit is ms
 
 class AutoSaver
@@ -12,7 +14,7 @@ class AutoSaver
 
   static loadAutoSave(graph)
   {
-    const item = localStorage.getItem('graph');
+    const item = localStorage.getItem(GRAPH_LOCAL_STORAGE_ID);
     if (!item) return;
     try
     {
@@ -29,12 +31,12 @@ class AutoSaver
 
   static clearAutoSave()
   {
-    localStorage.clear();
+    localStorage.removeItem(GRAPH_LOCAL_STORAGE_ID);
   }
 
   static hasAutoSave()
   {
-    return localStorage.getItem('graph') !== null;
+    return localStorage.getItem(GRAPH_LOCAL_STORAGE_ID) !== null;
   }
 
   static initAutoSave(graph)
@@ -43,8 +45,19 @@ class AutoSaver
     {
       //start save the workspace per second
       setInterval(() => {
-        const dst = JSON.stringify(graph.toJSON());
-        localStorage.setItem('graph', dst);
+        if (!graph.isEmpty())
+        {
+          const dst = JSON.stringify(graph.toJSON());
+          localStorage.setItem(GRAPH_LOCAL_STORAGE_ID, dst);
+        }
+        else
+        {
+          localStorage.removeItem(GRAPH_LOCAL_STORAGE_ID);
+        }
+
+        //Save if changes were made
+        saveConfig();
+
       }, AUTOSAVE_INTERVAL);
     }
     catch(e)

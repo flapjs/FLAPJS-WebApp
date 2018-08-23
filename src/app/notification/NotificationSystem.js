@@ -21,13 +21,6 @@ class NotificationSystem extends React.Component
     };
   }
 
-  componentWillMount()
-  {
-    this.addMessage("message.intro.3");
-    this.addMessage("message.intro.2");
-    this.addMessage("message.intro.1");
-  }
-
   addMessage(message, tag=null, component=null, clearOnAdd=true) {
     if(tag && clearOnAdd) {
       this.clearMessage(tag);
@@ -78,7 +71,7 @@ class NotificationSystem extends React.Component
   {
     return this.state.messages.length > 0;
   }
-  //TODO: change key
+
   render()
   {
     return(

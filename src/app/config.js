@@ -2,7 +2,23 @@ const LOCAL_STORAGE_ID = "config";
 
 const cfg = {};
 cfg._resetOnLoad = false;
+cfg._userDefined = false;
+cfg._dirty = false;
+cfg.setValue = function(key, value) {
+  if (this.hasOwnProperty(key))
+  {
+    this._userDefined = true;
+    this._dirty = true;
+    this[key] = value;
+  }
+  else
+  {
+    throw new Error("Trying to assign value to non-existant key in config");
+  }
+}.bind(cfg);
 export default cfg;
+
+//Preferences
 
 //General
 cfg.MACHINE_ERRORS_MESSAGE_TAG = "machineError";
@@ -31,11 +47,11 @@ cfg.CLEAR_KEY = 27; //ESCAPE
 cfg.TAB_KEY = 9; //TAB
 cfg.UP_KEY = 38; //UP
 cfg.DOWN_KEY = 40; //DOWN
+cfg.DELETE_KEY = 8; //DELETE
 
 /** LEGACY CONFIG **/
 
 //Input
-cfg.DELETE_KEY = 8; //DELETE
 cfg.DELETE_FORWARD_KEY = 46; //DELETE FORWARD
 
 //Geometry
@@ -74,20 +90,19 @@ cfg.PADDING_RADIUS_SQU = 2304;
 /** LOCAL STORAGE FUNCTIONS **/
 
 //check if browser support local storage
-export function doesSupportLocalStorage() {
+export function doesSupportLocalStorage()
+{
   return typeof(Storage) !== 'undefined';
 }
 
-export function loadConfig() {
+export function loadConfig()
+{
   const jsonString = localStorage.getItem(LOCAL_STORAGE_ID);
   //If cannot find a config...
   if (!jsonString)
   {
+    //Just use the default one and don't save anything...
     console.log("Using default config...");
-    //Save a new config
-    //saveConfig();
-
-    //Or just use the default one and don't save anything...
     return;
   }
 
@@ -99,6 +114,7 @@ export function loadConfig() {
     {
       //Reset the config
       clearConfig();
+
       //Save a new config
       saveConfig();
     }
@@ -114,20 +130,29 @@ export function loadConfig() {
   }
 };
 
-export function saveConfig() {
-  try
+export function saveConfig(forceSave=false)
+{
+  if (forceSave || (cfg._userDefined && cfg._dirty))
   {
-    console.log("Saving config...");
-    const jsonString = JSON.stringify(cfg);
-    localStorage.setItem(LOCAL_STORAGE_ID, jsonString);
-  }
-  catch (e)
-  {
-    //Reset the config
-    clearConfig();
+    try
+    {
+      console.log("Saving config...");
+      const jsonString = JSON.stringify(cfg);
+      localStorage.setItem(LOCAL_STORAGE_ID, jsonString);
+
+      cfg._dirty = false;
+    }
+    catch (e)
+    {
+      //Reset the config
+      clearConfig();
+    }
   }
 };
 
-export function clearConfig() {
+export function clearConfig()
+{
   localStorage.removeItem(LOCAL_STORAGE_ID);
+
+  cfg._dirty = true;
 };

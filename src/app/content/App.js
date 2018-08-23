@@ -12,6 +12,7 @@ import Workspace from './workspace/Workspace.js';
 import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
 import NotificationSystem from 'notification/NotificationSystem.js';
+import Tutorial from 'tutorial/Tutorial.js';
 
 import FSABuilder from 'builder/FSABuilder.js';
 import EventHistory from 'events/EventHistory.js';
@@ -53,6 +54,7 @@ class App extends React.Component
     this.machineBuilder = new FSABuilder(this.graph, this.controller);
     this.testingManager = new TestingManager(this.machineBuilder);
     this.hotKeys = new HotKeys(this.graph, this.eventHistory);
+    this.tutorial = new Tutorial(this);
 
     this.state = {
       isOpen: true,
@@ -132,6 +134,9 @@ class App extends React.Component
       eventHistory.handleEvent(new GraphEdgeMoveEvent(graph, targetEdge, nextX, nextY, prevX, prevY)));
     controller.on("edgeLabel", (targetEdge, nextLabel, prevLabel) =>
       eventHistory.handleEvent(new GraphEdgeLabelEvent(graph, targetEdge, nextLabel, prevLabel)));
+
+    //Begin tutorial
+    this.tutorial.start();
   }
 
   componentWillUnmount()
