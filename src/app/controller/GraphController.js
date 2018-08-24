@@ -595,14 +595,57 @@ class GraphController extends InputController
           //Otherwise, maintain original curve
           else
           {
-            /*
+            let flag = false;
+            const x1 = target.from.x;
+            const y1 = target.from.y;
+            const x2 = target.to.x;
+            const y2 = target.to.y;
+            const dist12sq = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
+            let vertical = false;
+            let m = 0;
+            let b = 0;
+            if(x1 > x2) {
+              m = (y1-y2) / (x1-x2);
+              b = y2-m*x2;
+            } else if (x1 < x2) {
+              m = (y2-y1) / (x2-x1);
+              b = y1-m*x1;
+            } else {
+              vertical = true;
+            }
+
             for(const node of this.graph.nodes)
             {
-              //TODO: Get the intersection between edges and nodes
-            }
-            */
+              if(node === target.from || node === target.to) continue;
 
-            target.copyQuadraticsFrom(this.prevQuad);
+              const x0 = node.x;
+              const y0 = node.y;
+
+              const dist01sq = (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0);
+              const dist02sq = (x2-x0)*(x2-x0) + (y2-y0)*(y2-y0);
+              if(dist01sq > dist12sq || dist02sq > dist12sq) continue;
+
+              let dist = 0;
+              if(vertical) {
+                dist = Math.abs(x1-x0);
+              } else {
+                dist = Math.abs(b+ m*x0 - y0) / Math.sqrt(1+m*m);
+              }
+
+              if(dist < Config.NODE_RADIUS) {
+                flag = true;
+                break;
+              }
+            }
+
+            if (flag)
+            {
+              target.setQuadVector(-Math.PI / 2, Config.NODE_RADIUS + 10);
+            }
+            else
+            {
+              target.copyQuadraticsFrom(this.prevQuad);
+            }
           }
 
           if (this.isNewEdge)
@@ -827,6 +870,81 @@ class GraphController extends InputController
         this.emit("edgeLabel", target, label, prevLabel);
       }
     });
+  }
+}
+
+function moveNodesOutOfEdges(target, graph)
+{
+
+  const x1 = target.from.x;
+  const y1 = target.from.y;
+  const x2 = target.to.x;
+  const y2 = target.to.y;
+  const dist12sq = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
+  let vertical = false;
+  let m = 0;
+  let b = 0;
+  if(x1 > x2) {
+    m = (y1-y2) / (x1-x2);
+    b = y2-m*x2;
+  } else if (x1 < x2) {
+    m = (y2-y1) / (x2-x1);
+    b = y1-m*x1;
+  } else {
+    vertical = true;
+  }
+
+  for(const node of graph.nodes)
+  {
+    if(node === target.from || node === target.to) continue;
+
+    const x0 = node.x;
+    const y0 = node.y;
+
+    const dist01sq = (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0);
+    const dist02sq = (x2-x0)*(x2-x0) + (y2-y0)*(y2-y0);
+    if(dist01sq > dist12sq || dist02sq > dist12sq) continue;
+
+
+    let dist = 0;
+    let xint = 0;
+    let yint = 0;
+    let m0 = 0;
+    let horizontal = false;
+    if(vertical) {
+      dist = Math.abs(x1-x0);
+      xint = x1;
+      yint = y0;
+      m0 = 0;
+    } else {
+      dist = Math.abs(b+ m*x0 - y0) / Math.sqrt(1+m*m);
+      xint = (x0 + m*y0 - m*b) / (m*m + 1);
+      yint = m * xint + b;
+      if(m !== 0) {
+        m0 = 1 / m;
+      } else {
+        horizontal = true;
+      }
+    }
+
+    if(dist < Config.NODE_RADIUS) {
+      const toMove = Config.NODE_RADIUS - dist + 10;
+      const distx = x0 - xint;
+      const disty = y0 - yint;
+      let signx = -1;
+      let signy = -1;
+      if(distx > 0) signx = 1;
+      if(disty > 0) signy = 1;
+
+      if(horizontal) {
+        node.y = y0 + signy * toMove;
+      } else {
+        let toMovex = toMove / Math.sqrt(m0*m0 + 1);
+        let toMovey = Math.abs(m0) * toMovex;
+        node.x = x0 + signx * toMovex;
+        node.y = y0 + signy * toMovey;
+      }
+    }
   }
 }
 
