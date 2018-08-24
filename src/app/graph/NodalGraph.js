@@ -397,8 +397,8 @@ class NodalGraph
       let node = nodeList[i];
       let nodeLabel = node.attributes[1].nodeValue;
       let nodeID = node.attributes[0].nodeValue;
-      let nodeX = node.childNodes[1].childNodes[0].nodeValue;
-      let nodeY = node.childNodes[3].childNodes[0].nodeValue;
+      let nodeX = parseFloat(node.childNodes[1].childNodes[0].nodeValue);
+      let nodeY = parseFloat(node.childNodes[3].childNodes[0].nodeValue);
       let nodeAccept = node.getElementsByTagName("final");
       let nodeStart = node.getElementsByTagName("initial");
       if(nodeStart && nodeStart.length > 0) startNodeID = nodeID;//TODO: allow JFLAP names to be id
@@ -427,8 +427,10 @@ class NodalGraph
     const height = boundingRect.height;
     for(var i = 0; i < dst.nodes.length; i++)
     {
-      dst.nodes[i].x -= width/2;
-      dst.nodes[i].y -= height/2;
+      dst.nodes[i].x -= boundingRect.minX + width / 2;
+      dst.nodes[i].y -= boundingRect.minY + height / 2;
+      //dst.nodes[i].x = parseFloat(dst.nodes[i].x) + width/2;
+      //dst.nodes[i].y = -height/2 - parseFloat(dst.nodes[i].y);
     }
 
     //create edge lists
