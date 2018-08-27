@@ -4,6 +4,7 @@ import './Viewport.css';
 import LabelEditor from './LabelEditor.js';
 import TrashCan from './TrashCan.js';
 import TestTray from './TestTray.js';
+import CursorMode from './CursorMode.js';
 
 class Viewport extends React.Component
 {
@@ -29,12 +30,17 @@ class Viewport extends React.Component
         machineBuilder={this.props.app.machineBuilder}
         screen={this.props.app.workspace.ref}
         ref={ref=>this.labelEditor=ref}/>
-      <TrashCan controller={this.props.controller}
-        viewport={this}/>
+      <div className="anchor-bottom-right">
+        <TrashCan controller={this.props.controller}
+          viewport={this}/>
+      </div>
+      <div className="anchor-bottom-left" style={{width: "100%"}}>
       {
-        tester.getStepByStepMode() &&
-        <TestTray tester={tester}/>
+        tester.getStepByStepMode() ?
+        <TestTray tester={tester}/> :
+        <CursorMode controller={this.props.controller}/>
       }
+      </div>
     </div>;
   }
 }

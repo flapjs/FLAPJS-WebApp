@@ -25,7 +25,7 @@ class TestTray extends React.Component
     const testInput = testList.getCurrentInput();
     const testIndex = testMode.getCurrentTestStringIndex();
 
-    return <div className="anchor-bottom-left test-tray-container">
+    return <div className="test-tray-container">
       <div className="test-tray-input-string-container">
       {
         testInput && testIndex >= 0 &&
