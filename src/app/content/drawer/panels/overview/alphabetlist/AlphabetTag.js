@@ -42,17 +42,19 @@ class AlphabetTag extends React.Component
       if(oldSymbol == newSymbol) return;
 
       if(!this.props.alphabet.includes(newSymbol)) {
-        this.props.machine.addSymbol(newSymbol);
-        let edge = null;
-        for(let i = edges.length -1; i >= 0; i--) {
-          edge = edges[i];
-          if(edge.label == oldSymbol) {
-            edge.setLabel(newSymbol);
-          }
-        }
         if(this.props.machine.isCustomSymbol(oldSymbol)) {
           this.props.machine.removeSymbol(oldSymbol);
           this.props.machine.addSymbol(newSymbol);
+        } else {
+          let edge = null;
+          for(let i = edges.length -1; i >= 0; i--) {
+            edge = edges[i];
+            let labels = edge.label.split(",");
+            for(let j = labels.length - 1; j >= 0; j--) {
+              if(labels[j] == oldSymbol) labels[j]=newSymbol;
+            }
+            edge.setLabel(labels.join(","));
+          }
         }
       }
     } else if(this.props.alphabet.includes(oldSymbol)) {

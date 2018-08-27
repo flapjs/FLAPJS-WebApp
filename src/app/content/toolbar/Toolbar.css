@@ -159,9 +159,5 @@
   color: white;
   font-size: 1em;
 
-  max-width: 0;
   transition: max-width 0.3s ease;
-}
-#toolbar-lang:focus ~ #toolbar-lang-select {
-  max-width: 10em;
 }
