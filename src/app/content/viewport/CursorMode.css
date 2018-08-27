@@ -1,0 +1,27 @@
+#cursor-btn {
+  display: flex;
+  max-width: 120px;
+
+  margin: 10px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 20px;
+  padding: 5px;
+}
+#cursor-btn > * {
+  flex: 1;
+
+  border-right: 1px solid black;
+}
+#cursor-btn > *:last-child {
+  border-right: none;
+}
+#cursor-btn .icon-button {
+  fill: var(--color-drawer-main);
+}
+#cursor-btn .icon-button svg {
+  opacity: 0.2;
+  transition: opacity 0.1s ease;
+}
+#cursor-btn .icon-button.active svg {
+  opacity: 1.0;
+}

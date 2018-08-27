@@ -22,6 +22,30 @@ class FSA
     this._customAlphabet.length = 0;
   }
 
+  copy(fsa)
+  {
+    this._states.length = 0;
+    for(let state of fsa._states)
+    {
+      this._states.push(state);
+    }
+    this._transitions.length = 0;
+    for(let transition of fsa._transitions)
+    {
+      this._transitions.push(transition.slice());
+    }
+    this._finalStates.length = 0;
+    for(let final of fsa._finalStates)
+    {
+      this._finalStates.push(final);
+    }
+    this._customAlphabet.length = 0;
+    for(let symbol of fsa._customAlphabet)
+    {
+      this._customAlphabet.push(symbol);
+    }
+  }
+
   newState(state)
   {
     if (this._states.includes(state))
@@ -41,6 +65,33 @@ class FSA
     }
 
     this._states.splice(this._states.indexOf(state), 1);
+  }
+
+  renameState(oldState, newState)
+  {
+    if (!this._states.includes(oldState))
+    {
+      throw new Error("State \'" + oldState + "\' does not exist.");
+    }
+    if (this._states.includes(newState))
+    {
+      throw new Error("State \'" + newState + "\' already exists.");
+    }
+
+    for(let transition of this._transitions)
+    {
+      if (transition[SRC] == oldState)
+      {
+        transition[SRC] = newState;
+      }
+      if (transition[DST] == oldState)
+      {
+        transition[DST] = newState;
+      }
+    }
+
+    const index = this._states.indexOf(oldState);
+    this._states[index] = newState;
   }
 
   newTransition(fromState, toState, symbol)
