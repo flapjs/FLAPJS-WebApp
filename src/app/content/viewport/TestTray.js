@@ -26,31 +26,7 @@ class TestTray extends React.Component
     const testIndex = testMode.getCurrentTestStringIndex();
 
     return <div className="anchor-bottom-left test-tray-container">
-      <IconButton onClick={(e)=>{
-        testMode.onResume();
-      }} disabled={testMode.isRunning()}>
-        <PlayIcon/>
-      </IconButton>
-
-      <IconButton onClick = {(e)=>{
-        testMode.onPause();
-      }} disabled={!testMode.isRunning()}>
-        <PauseIcon/>
-      </IconButton>
-
-      <IconButton onClick = {(e)=>{
-        testMode.onPreviousStep();
-      }} disabled={!testMode.hasPrevStep()}>
-        <UndoIcon/>
-      </IconButton>
-
-      <IconButton onClick = {(e)=>{
-        tester.testMode.onNextStep();
-      }} disabled={!tester.testMode.hasNextStep()}>
-        <RedoIcon/>
-      </IconButton>
-
-      <span className="test-tray-input-string-container">
+      <div className="test-tray-input-string-container">
       {
         testInput && testIndex >= 0 &&
         testInput.value.split('').map((e, i) => {
@@ -67,7 +43,34 @@ class TestTray extends React.Component
             </span>;
         })
       }
-      </span>
+      </div>
+      <div className="test-tray-control">
+        <IconButton onClick={(e)=>{
+          testMode.onResume();
+        }} disabled={testMode.isRunning()}>
+          <PlayIcon/>
+        </IconButton>
+
+        <IconButton onClick = {(e)=>{
+          testMode.onPause();
+        }} disabled={!testMode.isRunning()}>
+          <PauseIcon/>
+        </IconButton>
+
+        <IconButton onClick = {(e)=>{
+          testMode.onPreviousStep();
+        }} disabled={!testMode.hasPrevStep()}>
+          <UndoIcon/>
+        </IconButton>
+
+        <IconButton onClick = {(e)=>{
+          tester.testMode.onNextStep();
+        }} disabled={!tester.testMode.hasNextStep()}>
+          <RedoIcon/>
+        </IconButton>
+
+        <div className="trash-placeholder">{/*PLACEHOLDER for TRASH*/}</div>
+      </div>
     </div>;
   }
 }

@@ -74,7 +74,8 @@ action.testing.clear = Clear
 action.testing.import = Import Tests
 action.testing.save = Save Tests
 
-action.overview.convertmachine = Convert To DFA
+action.overview.convertdfa = Convert To DFA
+action.overview.convertnfa = Convert To NFA
 
 action.options.changetheme = Change Theme...
 action.options.reset = Reset to Default

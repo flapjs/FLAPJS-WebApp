@@ -2,10 +2,10 @@ import Downloader from 'util/Downloader.js';
 
 class HotKeys
 {
-  constructor(graph, eventHistory)
+  constructor(graph, events)
   {
     this.graph = graph;
-    this.eventHistory = eventHistory;
+    this.events = events;
 
     this.onKeyDown = this.onKeyDown.bind(this);
   }
@@ -41,13 +41,13 @@ class HotKeys
       {
         //Redo
         //TODO: Refer to toolbar
-        this.eventHistory.redo();
+        this.events.getLogger().redo();
       }
       else
       {
         //Undo
         //TODO: Refer to toolbar
-        this.eventHistory.undo();
+        this.events.getLogger().undo();
       }
       e.preventDefault();
       e.stopPropagation();

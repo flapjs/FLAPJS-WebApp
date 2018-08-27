@@ -1,24 +1,41 @@
 .test-tray-container {
   overflow: hidden;
   white-space: nowrap;
+  
+  width: 100%;
 }
-.test-tray-container .icon-button {
+
+.test-tray-control {
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+}
+.test-tray-control > * {
+  flex: 1;
+  max-width: 8em;
+}
+.test-tray-control .icon-button {
   padding: 10px;
 
   opacity: 0.7;
   fill: var(--color-drawer-main);
   transition: opacity 0.1s ease;
 }
-.test-tray-container .icon-button:hover {
+.test-tray-control .icon-button:hover {
   opacity: 1.0;
 }
-.test-tray-container .icon-button:disabled {
+.test-tray-control .icon-button:disabled {
   opacity: 0.2;
 }
-.test-tray-container .icon-button>svg {
+.test-tray-control .icon-button>svg {
   width: 4em;
   height: 4em;
 }
+.trash-placeholder {
+  margin: 0 3em;
+  padding-left: 10px;
+}
+
 .test-tray-input-string-container>* {
   transition: opacity 0.3s ease;
 }
