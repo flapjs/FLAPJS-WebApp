@@ -30,17 +30,22 @@ class Viewport extends React.Component
         machineBuilder={this.props.app.machineBuilder}
         screen={this.props.app.workspace.ref}
         ref={ref=>this.labelEditor=ref}/>
-      <div className="anchor-bottom-right">
-        <TrashCan controller={this.props.controller}
-          viewport={this}/>
-      </div>
-      <div className="anchor-bottom-left" style={{width: "100%"}}>
       {
         tester.getStepByStepMode() ?
-        <TestTray tester={tester}/> :
-        <CursorMode controller={this.props.controller}/>
+        <div className="anchor-bottom-left" style={{width: "100%"}}>
+          <TestTray tester={tester}/>
+        </div>
+        :
+        <span>
+          <div className="anchor-bottom-left" style={{width: "100%"}}>
+            <CursorMode controller={this.props.controller}/>
+          </div>
+          <div className="anchor-bottom-right">
+            <TrashCan controller={this.props.controller}
+              viewport={this}/>
+          </div>
+        </span>
       }
-      </div>
     </div>;
   }
 }
