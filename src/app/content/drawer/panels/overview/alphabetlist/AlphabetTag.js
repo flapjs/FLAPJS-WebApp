@@ -42,6 +42,7 @@ class AlphabetTag extends React.Component
       if(oldSymbol == newSymbol) return;
 
       if(!this.props.alphabet.includes(newSymbol)) {
+        if(oldSymbol == "") this.props.machine.addCustomSymbol(newSymbol);
         if(this.props.machine.isCustomSymbol(oldSymbol)) {
           this.props.machine.removeCustomSymbol(oldSymbol);
           this.props.machine.addCustomSymbol(newSymbol);
