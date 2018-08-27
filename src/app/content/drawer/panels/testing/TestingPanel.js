@@ -2,6 +2,8 @@ import React from 'react';
 import '../Panel.css';
 import './TestingPanel.css';
 
+import Viewport from 'content/viewport/Viewport.js';
+
 import Downloader from 'util/Downloader.js';
 
 import TestingManager from 'testing/TestingManager.js';
@@ -95,6 +97,7 @@ class TestingPanel extends React.Component
 
   render()
   {
+    const viewport = this.props.viewport;
     const machineBuilder = this.props.machineBuilder;
     const tester = this.props.tester;
     const testList = tester.inputList;
@@ -157,14 +160,21 @@ class TestingPanel extends React.Component
           <input id="test-step" type="checkbox" onChange={(e) => {
             //HACK: this needs to default to tester.getStepByStepMode first
             tester.setStepByStepMode(e.target.checked);
+
             if (tester.getStepByStepMode())
             {
               if (tester.testMode.isStarted()) tester.testMode.onStop();
               tester.testMode.onStart();
+              viewport.setState((prev, props) => {
+                return {prevMode: prev.mode, mode: Viewport.TESTING};
+              });
             }
             else
             {
               if (tester.testMode.isStarted()) tester.testMode.onStop();
+              viewport.setState((prev, props) => {
+                return {mode: prev.prevMode};
+              });
             }
           }}/>
           <label htmlFor="test-step">{I18N.toString("options.testing.stepmode")}</label>

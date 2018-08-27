@@ -6,6 +6,9 @@
 .test-tray-control {
   display: flex;
   overflow-x: auto;
+
+  background: var(--color-workspace-main);
+  border-top: 4px solid var(--color-viewport-testing);
 }
 .test-tray-control > * {
   flex: 1;

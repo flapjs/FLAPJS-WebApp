@@ -51,6 +51,7 @@ class Viewport extends React.Component
 }
 Viewport.NORMAL = "normal";
 Viewport.WAITING = "waiting";
+Viewport.TESTING = "testing";
 Viewport.DANGEROUS = "dangerous";
 
 export default Viewport;
