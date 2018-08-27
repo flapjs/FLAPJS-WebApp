@@ -4,6 +4,11 @@ import { EMPTY } from 'machine/Symbols.js';
 export function convertToDFA(nfa, dst=null)
 {
   const result = dst || new DFA();
+  if (nfa.isValidDFA())
+  {
+    result.copy(nfa);
+    return result;
+  }
 
   const alphabet = nfa.getAlphabet();
   const startState = nfa.getStartState();
@@ -49,10 +54,14 @@ export function convertToDFA(nfa, dst=null)
       }
     }
   }
-  
+
   //Delete the trap state if it was not used
   if (!flag)
   {
+    for(const symbol of newAlphabet)
+    {
+      result.deleteTransition(trapState, trapState, symbol);
+    }
     result.deleteState(trapState);
   }
 
