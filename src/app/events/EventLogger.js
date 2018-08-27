@@ -1,6 +1,6 @@
 const MAX_HISTORY_LENGTH = 100;
 
-class EventHistory
+class EventLogger
 {
   constructor()
   {
@@ -71,4 +71,4 @@ class EventHistory
   }
 }
 
-export default EventHistory;
+export default EventLogger;

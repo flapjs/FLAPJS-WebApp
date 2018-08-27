@@ -1,6 +1,7 @@
 #workspace-content {
   padding: 0;
   margin: 0;
+  z-index: 0;
 
   font-size: 16px;
   font-family: monospace;

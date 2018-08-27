@@ -287,7 +287,8 @@ class InputController
     }
 
     let moveMode = (e.button == 2) || e.ctrlKey;
-    if (this.doInputDown(e.clientX, e.clientY, this._swapMouseScheme ? !moveMode : moveMode))
+    moveMode = this._swapMouseScheme ? !moveMode : moveMode;
+    if (this.doInputDown(e.clientX, e.clientY, moveMode))
     {
       this.cursor._mousemove = this.onMouseDownAndMove.bind(this);
       this.cursor._mouseup = this.onMouseDownAndUp.bind(this);

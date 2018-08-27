@@ -34,6 +34,9 @@ class Drawer extends React.Component
     this.onTouchStart = this.onTouchStart.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onScroll = this.onScroll.bind(this);
+
+    this._ontouchmove = null;
+    this._ontouchend = null;
   }
 
   setTab(index)
@@ -102,6 +105,18 @@ class Drawer extends React.Component
     e.stopPropagation();
     e.preventDefault();
 
+    if (this._ontouchmove)
+    {
+      document.removeEventListener("touchmove", this._ontouchmove);
+      this._ontouchmove = null;
+    }
+
+    if (this._ontouchend)
+    {
+      document.removeEventListener("touchend", this._ontouchend);
+      this._ontouchend = null;
+    }
+
     const app = this.props.app;
     //Ignore drag move if closed
     if (!app.state.isOpen)
@@ -110,13 +125,14 @@ class Drawer extends React.Component
       //Opens the drawer if dragging, but closed
       this.props.app.openDrawer();
       */
+      this.setState({dragging: false});
       return;
     }
 
     const touch = e.changedTouches[0];
     this.onStartDraggingDrawerBorder(touch.clientX, touch.clientY);
 
-    const onTouchMove = function(ev)
+    this._ontouchmove = function(ev)
     {
       e.stopPropagation();
       e.preventDefault();
@@ -125,7 +141,9 @@ class Drawer extends React.Component
       updatePanelSize(app, touch.clientX, touch.clientY);
     };
 
-    const onTouchEnd = function(ev)
+    document.addEventListener(this._ontouchmove);
+
+    this._ontouchend = function(ev)
     {
       e.stopPropagation();
       e.preventDefault();
@@ -135,13 +153,13 @@ class Drawer extends React.Component
       this.onStopDraggingDrawerBorder();
 
       //Remove listeners that are no longer needed
-      document.removeEventListener("touchend", onTouchEnd);
-      document.removeEventListener("touchmove", onTouchMove);
+      document.removeEventListener("touchend", this._ontouchend);
+      document.removeEventListener("touchmove", this._ontouchmove);
     };
 
     //Start listening to move and release events
-    document.addEventListener("touchend", onTouchEnd);
-    document.addEventListener("touchmove", onTouchMove);
+    document.addEventListener("touchend", this._ontouchend);
+    document.addEventListener("touchmove", this._ontouchmove);
   }
 
   onMouseDown(e)

@@ -66,7 +66,7 @@ class Toolbar extends React.Component
     const notification = app.notification;
     const machineBuilder = this.props.machineBuilder;
     const graph = this.props.graph;
-    const eventHistory = this.props.eventHistory;
+    const events = this.props.eventManager.getLogger();
     const offline = navigator && navigator.onLine;
 
     return <div className="toolbar-container">
@@ -103,7 +103,7 @@ class Toolbar extends React.Component
               graph={graph}
               onChange={(e)=>{
                 this.setMachineName(e.name);
-                eventHistory.clear();
+                events.clear();
               }}>
               <MoreIcon/>
             </UploadButton>
@@ -123,7 +123,7 @@ class Toolbar extends React.Component
             if (window.confirm(I18N.toString("alert.graph.clear")))
             {
               graph.deleteAll();
-              eventHistory.clear();
+              events.clear();
               this.setMachineName(I18N.toString("file.untitled"));
             }
           }}>
@@ -134,20 +134,20 @@ class Toolbar extends React.Component
           graph={graph}
           onChange={(e)=>{
             this.setMachineName(e.name);
-            eventHistory.clear();
+            events.clear();
           }}>
           <UploadIcon/>
         </UploadButton>
         {/*Undo Button*/}
         <IconButton className="navicon" id="toolbar-undo" title={I18N.toString("action.toolbar.undo")}
-          disabled={!eventHistory.canUndo()}
-          onClick={()=>eventHistory.undo()}>
+          disabled={!events.canUndo()}
+          onClick={()=>events.undo()}>
           <UndoIcon/>
         </IconButton>
         {/*Redo Button*/}
         <IconButton className="navicon" id="toolbar-redo" title={I18N.toString("action.toolbar.redo")}
-          disabled={!eventHistory.canRedo()}
-          onClick={()=>eventHistory.redo()}>
+          disabled={!events.canRedo()}
+          onClick={()=>events.redo()}>
           <RedoIcon/>
         </IconButton>
         {/*Save Button*/}

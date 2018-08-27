@@ -337,7 +337,7 @@ class NodalGraph
     this.emit("markDirty", this);
   }
 
-  static parseJSON(data)
+  static parseJSON(data, dst=null)
   {
     const nodeLength = data.nodeCount;
     const edgeLength = data.edgeCount;
@@ -345,20 +345,21 @@ class NodalGraph
     if (nodeLength < 0) throw new Error("Invalid graph data: negative number of nodes.");
     if (edgeLength < 0) throw new Error("Invalid graph data: negative number of edges.");
 
-    const dst = new NodalGraph(new Array(nodeLength), new Array(edgeLength));
-    dst.shouldUseQuadCoords = data.shouldUseQuadCoords || false;
+    if (dst) dst.deleteAll();
+    const result = dst || new NodalGraph(new Array(nodeLength), new Array(edgeLength));
+    result.shouldUseQuadCoords = data.shouldUseQuadCoords || false;
 
     //The initial node is always saved/loaded first!
     for(let i = 0; i < nodeLength; ++i)
     {
       const node = data.nodes[i];
-      const newNode = new Node(dst, node.x || 0, node.y || 0, node.label || "q?");
+      const newNode = new Node(result, node.x || 0, node.y || 0, node.label || "q?");
       newNode.accept = node.accept;
       if (node.customLabel)
       {
         newNode.setCustomLabel(newNode.label);
       }
-      dst.nodes[i] = newNode;
+      result.nodes[i] = newNode;
     }
 
     for(let i = 0; i < edgeLength; ++i)
@@ -367,17 +368,17 @@ class NodalGraph
 
       if (edge.from >= nodeLength || edge.from < 0) throw new Error("Invalid edge from data: node index \'" + edge.from + "\' out of bounds.");
 
-      const newEdge = new Edge(dst, dst.nodes[edge.from], edge.to < 0 ? null : dst.nodes[edge.to], edge.label || "0");
+      const newEdge = new Edge(result, result.nodes[edge.from], edge.to < 0 ? null : result.nodes[edge.to], edge.label || "0");
 
       //Force copy all quadratic data
       newEdge.copyQuadraticsFrom(edge.quad);
-      dst.edges[i] = newEdge;
+      result.edges[i] = newEdge;
     }
 
-    return dst;
+    return result;
   }
 
-  static parseXML(data)
+  static parseXML(data, dst=null)
   {
     let nodeList = data.getElementsByTagName("state");
     let edgeList = data.getElementsByTagName("transition");
@@ -387,8 +388,9 @@ class NodalGraph
     if (nodeLength < 0) throw new Error("Invalid graph data: negative number of nodes.");
     if (edgeLength < 0) throw new Error("Invalid graph data: negative number of edges.");
 
+    if (dst) dst.deleteAll();
     //HACK: call newEdge to auto layout the graph, therefore a fixed length array cannot be allocated.
-    const dst = new NodalGraph(new Array(nodeLength), []);
+    const result = dst || new NodalGraph(new Array(nodeLength), []);
     let nodeIDMap = new Map();
     let startNodeID;
     //create nodes list
@@ -402,35 +404,35 @@ class NodalGraph
       let nodeAccept = node.getElementsByTagName("final");
       let nodeStart = node.getElementsByTagName("initial");
       if(nodeStart && nodeStart.length > 0) startNodeID = nodeID;//TODO: allow JFLAP names to be id
-      let newNode = new Node(dst, nodeX , nodeY , Config.STR_STATE_LABEL + (nodeID));
+      let newNode = new Node(result, nodeX , nodeY , Config.STR_STATE_LABEL + (nodeID));
       newNode.accept = (nodeAccept != null && nodeAccept.length > 0);
       if(nodeStart && nodeStart.length > 0)
       {
-        if(dst.nodes[0])
+        if(result.nodes[0])
         {
-          dst.nodes[i] = dst.nodes[0];
+          result.nodes[i] = result.nodes[0];
           nodeIDMap.set(nodeList[0].attributes[0].nodeValue, i);
-          dst.nodes[0] = newNode;
+          result.nodes[0] = newNode;
           nodeIDMap.set(nodeID, 0);
         }
         else
         {
-          dst.nodes[0] = newNode;
+          result.nodes[0] = newNode;
           nodeIDMap.set(nodeID, 0);
         }
       }
-      dst.nodes[i] = newNode;
+      result.nodes[i] = newNode;
       nodeIDMap.set(nodeID, i);
     }
-    const boundingRect = dst.getBoundingRect();
+    const boundingRect = result.getBoundingRect();
     const width = boundingRect.width;
     const height = boundingRect.height;
-    for(var i = 0; i < dst.nodes.length; i++)
+    for(var i = 0; i < result.nodes.length; i++)
     {
-      dst.nodes[i].x -= boundingRect.minX + width / 2;
-      dst.nodes[i].y -= boundingRect.minY + height / 2;
-      //dst.nodes[i].x = parseFloat(dst.nodes[i].x) + width/2;
-      //dst.nodes[i].y = -height/2 - parseFloat(dst.nodes[i].y);
+      result.nodes[i].x -= boundingRect.minX + width / 2;
+      result.nodes[i].y -= boundingRect.minY + height / 2;
+      //result.nodes[i].x = parseFloat(result.nodes[i].x) + width/2;
+      //result.nodes[i].y = -height/2 - parseFloat(result.nodes[i].y);
     }
 
     //create edge lists
@@ -446,16 +448,16 @@ class NodalGraph
       const indexOfEdgeTo = nodeIDMap.get(edgeTo);
 
       //check valid from and to node
-      if(dst.nodes[indexOfEdgeFrom] || (startNodeID == edgeFrom && dst.nodes[0]) || (edgeFrom == 0 && dst.nodes[startNodeID]) )
+      if(result.nodes[indexOfEdgeFrom] || (startNodeID == edgeFrom && result.nodes[0]) || (edgeFrom == 0 && result.nodes[startNodeID]) )
       {
-        dst.newEdge(dst.nodes[indexOfEdgeFrom], edgeTo < 0 ? null : dst.nodes[indexOfEdgeTo], edgeLabel || "0");
+        result.newEdge(result.nodes[indexOfEdgeFrom], edgeTo < 0 ? null : result.nodes[indexOfEdgeTo], edgeLabel || "0");
       }
       else
       {
          throw new Error("Invalid edge from data: node index \'" + edge.from + "\' out of bounds.");
       }
     }
-    return dst;
+    return result;
   }
 
   toJSON()
