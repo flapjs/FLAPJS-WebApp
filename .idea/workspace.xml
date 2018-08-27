@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cea43697-9fa1-4281-ad83-b5e3ff605763" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/app/icons/MoveIcon.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/content/toolbar/Toolbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/content/toolbar/Toolbar.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -32,17 +32,49 @@
       <file leaf-file-name="AddIcon.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/icons/AddIcon.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret selection-end-line="19" />
+            <state relative-caret-position="165">
+              <caret line="11" column="94" lean-forward="true" selection-start-line="11" selection-start-column="72" selection-end-line="11" selection-end-column="94" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MoveIcon.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MoveIcon.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/icons/MoveIcon.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="3" lean-forward="true" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
+            <state relative-caret-position="180">
+              <caret line="12" column="16" selection-start-line="12" selection-start-column="16" selection-end-line="12" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Toolbar.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/app/content/toolbar/Toolbar.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="302">
+              <caret line="180" column="53" selection-start-line="180" selection-start-column="53" selection-end-line="180" selection-end-column="53" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StateTag.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/stateslist/StateTag.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1929">
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Toolbar.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/content/toolbar/Toolbar.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="336">
+              <caret line="165" column="18" lean-forward="true" selection-start-line="165" selection-start-column="2" selection-end-line="165" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -132,6 +164,8 @@
         <option value="$PROJECT_DIR$/src/app/content/drawer/Drawer.css" />
         <option value="$PROJECT_DIR$/src/app/controller/GraphController.js" />
         <option value="$PROJECT_DIR$/src/app/icons/MoveIcon.js" />
+        <option value="$PROJECT_DIR$/src/app/content/toolbar/Toolbar.css" />
+        <option value="$PROJECT_DIR$/src/app/content/toolbar/Toolbar.js" />
       </list>
     </option>
   </component>
@@ -203,7 +237,53 @@
               <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="icons" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+              <item name="drawer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+              <item name="drawer" type="462c0819:PsiDirectoryNode" />
+              <item name="panels" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+              <item name="drawer" type="462c0819:PsiDirectoryNode" />
+              <item name="panels" type="462c0819:PsiDirectoryNode" />
+              <item name="overview" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+              <item name="drawer" type="462c0819:PsiDirectoryNode" />
+              <item name="panels" type="462c0819:PsiDirectoryNode" />
+              <item name="overview" type="462c0819:PsiDirectoryNode" />
+              <item name="stateslist" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+              <item name="toolbar" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -322,7 +402,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="106291000" />
+    <option name="totallyTimeSpent" value="108836000" />
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
@@ -434,8 +514,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/pages/home/Content.js" />
-    <entry file="file://$PROJECT_DIR$/src/pages/home/Header.js" />
     <entry file="file://$PROJECT_DIR$/src/pages/home/Footer.js" />
     <entry file="file://$PROJECT_DIR$/src/pages/home/HomePage.js" />
     <entry file="file://$PROJECT_DIR$/src/pages/home/HomePage.css" />
@@ -550,15 +628,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/stateslist/StateTag.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-933">
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/OverviewPanel.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-189">
@@ -622,6 +691,13 @@
     <entry file="file://$PROJECT_DIR$/src/app/graph/Node.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/icons/AddIcon.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="94" lean-forward="true" selection-start-line="11" selection-start-column="72" selection-end-line="11" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/controller/GraphController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3395">
@@ -632,17 +708,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/icons/AddIcon.js">
+    <entry file="file://$PROJECT_DIR$/src/app/icons/MoveIcon.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="19" />
+        <state relative-caret-position="180">
+          <caret line="12" column="16" selection-start-line="12" selection-start-column="16" selection-end-line="12" selection-end-column="16" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/icons/MoveIcon.js">
+    <entry file="file://$PROJECT_DIR$/src/app/content/toolbar/Toolbar.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="3" lean-forward="true" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
+        <state relative-caret-position="336">
+          <caret line="165" column="18" lean-forward="true" selection-start-line="165" selection-start-column="2" selection-end-line="165" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/stateslist/StateTag.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1929">
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/content/toolbar/Toolbar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="180" column="53" selection-start-line="180" selection-start-column="53" selection-end-line="180" selection-end-column="53" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
