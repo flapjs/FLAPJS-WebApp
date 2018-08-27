@@ -75,7 +75,8 @@ action.testing.clear = Feed the fishes!
 action.testing.import = More landlubbers...
 action.testing.save = Save fer 'nother day
 
-action.overview.convertmachine = Convert yer charts to DFA
+action.overview.convertdfa = Convert yer charts to DFA
+action.overview.convertnfa = Convert yer charts to NFA
 
 action.options.changetheme = Change yer colors...
 action.options.reset = Clean yer barnacles

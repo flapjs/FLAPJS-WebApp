@@ -76,14 +76,23 @@ class OverviewPanel extends React.Component
             </div>}
 
           <hr/>
-          {machineBuilder.getMachineType() == "NFA" &&
-            <button className="panel-button" onClick={(e) => {
-              const result = convertToDFA(machineBuilder.getMachine(), new DFA());
-              machineBuilder.graph.copyMachine(result);
-              machineBuilder.setMachineType("DFA");
-            }}>
-              {I18N.toString("action.overview.convertmachine")}
-            </button>}
+          {
+            machineBuilder.getMachineType() == "DFA" ?
+              <button className="panel-button" onClick={(e) => {
+                machineBuilder.setMachineType("NFA");
+              }}>
+                {I18N.toString("action.overview.convertnfa")}
+              </button>
+            : machineBuilder.getMachineType() == "NFA" ?
+              <button className="panel-button" onClick={(e) => {
+                const result = convertToDFA(machineBuilder.getMachine(), new DFA());
+                machineBuilder.graph.copyMachine(result);
+                machineBuilder.setMachineType("DFA");
+              }}>
+                {I18N.toString("action.overview.convertdfa")}
+              </button>
+            : null
+          }
           <button className="panel-button" onClick = {() => {
             GraphLayout.applyLayout(machineBuilder.graph)
           }}>
