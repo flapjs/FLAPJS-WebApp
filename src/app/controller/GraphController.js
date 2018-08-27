@@ -39,6 +39,51 @@ class GraphController extends InputController
 
     //The difference between controller events vs graph events is: controller has user-intent
 
+    //userCreateNode(graph, node) - When user creates a node
+    this.registerEvent("userCreateNode");
+    /*
+    //userPreCreateNode(graph) - Before user creates a node
+    this.registerEvent("userPreCreateNode");
+    //userDeleteNodes(graph, node, targetNodes, prevX, prevY) - When user deletes one or more nodes
+    this.registerEvent("userDeleteNodes");
+    //userPreDeleteNodes(graph, node, targetNodes, prevX, prevY) - Before user delets one or more nodes
+    this.registerEvent("userPreDeleteNodes");
+    //userMoveNodes(graph, nodes, dx, dy) - When user moves one or more nodes
+    this.registerEvent("userMoveNodes");
+    //userToggleNode(graph, node, prevAccept) - When user toggles the accept state
+    this.registerEvent("userToggleNode");
+    //userMoveInitial(graph, node, prevNode) - When user moves the initial marker to another
+    this.registerEvent("userMoveInitial");
+    //userPreCreateEdge(graph, edge) - When user is about to create an edge, before src
+    this.registerEvent("userPreCreateEdge");
+    //userBeginEdge(graph, edge, src) - When user begins to create an edge, after src and before naming it
+    this.registerEvent("userBeginEdge");
+    //userEndEdge(graph, edge, src, dst) - When user finishes creating an edge, after dst and before naming it (dst could be null for deletion)
+    this.registerEvent("userEndEdge");
+    //userCreateEdge(graph, edge) - When user creates an edge, after naming it
+    this.registerEvent("userCreateEdge");
+    //userPostCreateEdge(graph, edge) - When user is finished creating an edge, after dst and after quad changes
+    this.registerEvent("userPostCreateEdge");
+    //userDeleteEdges(graph, edges) - When user deletes one or more edges
+    this.registerEvent("userDeleteEdges");
+    //userMoveEdge(graph, edge, prevDest) - When user changes the dst of edge
+    this.registerEvent("userChangeEdge");
+    //userBendEdge(graph, edge, prevQuad) - When user bends the edge
+    this.registerEvent("userBendEdge");
+    //userLabelEdge(graph, edge, prevLabel) - When user re-labels the edge
+    this.registerEvent("userLabelEdge");
+    //userDeleteMode(graph, isDeleteMode) - When user enters forced delete mode
+    this.registerEvent("userDeleteMode");
+
+    //Emitted by other components
+    //userLabelNode(graph, node, prevLabel) - When user re-labels the node
+    //userAddSymbol(grpah, symbol) - When user adds a custom symbol
+    //userDeleteSymbol(graph, symbol, prevEdges) - When user delets a symbol (and affects the edges)
+    //userChangeLayout(graph, prevLayout) - When user re-layouts the graph
+    //userPreImportGraph(graph) - When user starts to import a graph, before any changes
+    //userPostImportGraph(graph) - When user finishes importing a graph, after all changes
+    */
+
     //nodeCreate(targetNode) - Called when a node is created
     this.registerEvent("nodeCreate");
     //nodeDelete(targetNode, prevX, prevY) - Called when a node is deleted
@@ -126,6 +171,8 @@ class GraphController extends InputController
           const node = this.createNode(x, y);
 
           //Emit event
+          this.emit("userCreateNode", this, node);
+          //TODO: this will be deprecated
           this.emit("nodeCreate", node);
         }
         else
