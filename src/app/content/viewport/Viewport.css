@@ -20,6 +20,9 @@
 .viewport-waiting {
   outline-color: rgba(0,0,0,0.1);
 }
+.viewport-testing {
+  /*outline-color: var(--color-viewport-testing);*/
+}
 
 .anchor-bottom-right {
   position: absolute;

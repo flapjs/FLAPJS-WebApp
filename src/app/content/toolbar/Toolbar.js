@@ -27,10 +27,15 @@ class Toolbar extends React.Component
   {
     super(props);
 
+    this.state = {
+      langOn: false
+    };
+
     //TODO: this should be in builder!
     this.machineName = React.createRef();
 
     this.onMachineNameChange = this.onMachineNameChange.bind(this);
+    this.langOnClick = this.langOnClick.bind(this);
   }
 
   setMachineName(name)
@@ -57,6 +62,10 @@ class Toolbar extends React.Component
     {
       element.innerHTML = e.target.value.trim() + " - " + string;
     }
+  }
+
+  langOnClick() {
+    this.setState({langOn: !this.state.langOn});
   }
 
   render()
@@ -165,11 +174,11 @@ class Toolbar extends React.Component
           </HelpButton>
           {/*Language Button*/}
           <IconButton className="navicon" id="toolbar-lang" title={I18N.toString("action.toolbar.lang")}
-            onClick={(e) => document.activeElement.blur()}>
+            onClick={(e) => {document.activeElement.blur(); this.langOnClick();}} >
             <LanguageIcon/>
           </IconButton>
           {/*Language Select*/}
-          <select id="toolbar-lang-select" onChange={(e) => {I18N.fetchLanguageFile(e.target.value);}}>
+          <select id="toolbar-lang-select" style={{maxWidth: (this.state.langOn ? "10em" : "0")}} onChange={(e) => {I18N.fetchLanguageFile(e.target.value);}}>
             <option value="en_us">English</option>
             <option value="xx_pirate">Pirate Speak</option>
           </select>

@@ -1,14 +1,20 @@
 #cursor-btn {
   display: flex;
-  max-width: 120px;
+  max-width: 8em;
+  min-width: 3em;
 
   margin: 10px;
+  margin-right: 4em;
   border: 1px solid rgba(0,0,0,0.1);
   border-radius: 20px;
   padding: 5px;
+
+  background: var(--color-workspace-main);
 }
 #cursor-btn > * {
   flex: 1;
+  cursor: pointer;
+  pointer-events: auto;
 
   border-right: 1px solid black;
 }

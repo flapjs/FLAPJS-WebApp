@@ -42,17 +42,20 @@ class AlphabetTag extends React.Component
       if(oldSymbol == newSymbol) return;
 
       if(!this.props.alphabet.includes(newSymbol)) {
-        this.props.machine.addSymbol(newSymbol);
-        let edge = null;
-        for(let i = edges.length -1; i >= 0; i--) {
-          edge = edges[i];
-          if(edge.label == oldSymbol) {
-            edge.setLabel(newSymbol);
-          }
-        }
+        if(oldSymbol == "") this.props.machine.addCustomSymbol(newSymbol);
         if(this.props.machine.isCustomSymbol(oldSymbol)) {
-          this.props.machine.removeSymbol(oldSymbol);
-          this.props.machine.addSymbol(newSymbol);
+          this.props.machine.removeCustomSymbol(oldSymbol);
+          this.props.machine.addCustomSymbol(newSymbol);
+        } else {
+          let edge = null;
+          for(let i = edges.length -1; i >= 0; i--) {
+            edge = edges[i];
+            let labels = edge.label.split(",");
+            for(let j = labels.length - 1; j >= 0; j--) {
+              if(labels[j] == oldSymbol) labels[j]=newSymbol;
+            }
+            edge.setLabel(labels.join(","));
+          }
         }
       }
     } else if(this.props.alphabet.includes(oldSymbol)) {
@@ -61,10 +64,16 @@ class AlphabetTag extends React.Component
         edge = edges[i];
         if(edge.label == oldSymbol) {
           graph.deleteEdge(edge);
+        } else {
+          let labels = edge.label.split(",");
+          for(let j = labels.length - 1; j >= 0; j--) {
+            if(labels[j] == oldSymbol) labels.splice(j,j+1);
+          }
+          edge.setLabel(labels.join(","));
         }
       }
       if(this.props.machine.isCustomSymbol(oldSymbol)) {
-        this.props.machine.removeSymbol(oldSymbol);
+        this.props.machine.removeCustomSymbol(oldSymbol);
       }
     }
     this.setState({
@@ -109,7 +118,8 @@ class AlphabetTag extends React.Component
   render()
   {
     const symbol = this.state.symbol != null ? this.state.symbol : this.props.src;
-    return <div className="alphatag-container" style={this.props.style}>
+    return <div className={"alphatag-container"+(this.state.symbol && this.state.error ? " errortag" : "")}
+                style={this.props.style}>
       <input type="text" ref={ref=>this.ref=ref} className="alphatag-input"
              spellCheck="false" maxLength="1" value={symbol}
       onChange={this.onValueChange}

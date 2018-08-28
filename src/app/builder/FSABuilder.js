@@ -175,14 +175,14 @@ class FSABuilder extends MachineBuilder
     return this._machineType;
   }
 
-  addSymbol(symbol)
+  addCustomSymbol(symbol)
   {
     this._symbols.push(symbol);
 
     this.onGraphChange();
   }
 
-  removeSymbol(symbol)
+  removeCustomSymbol(symbol)
   {
     this._symbols.splice(this._symbols.indexOf(symbol), 1);
 

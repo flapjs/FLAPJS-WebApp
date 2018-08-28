@@ -1,14 +1,14 @@
 .test-tray-container {
   overflow: hidden;
   white-space: nowrap;
-  
-  width: 100%;
 }
 
 .test-tray-control {
   display: flex;
   overflow-x: auto;
-  width: 100%;
+
+  background: var(--color-workspace-main);
+  border-top: 4px solid var(--color-viewport-testing);
 }
 .test-tray-control > * {
   flex: 1;
@@ -36,6 +36,9 @@
   padding-left: 10px;
 }
 
+.test-tray-input-string-container {
+  user-select: none;
+}
 .test-tray-input-string-container>* {
   transition: opacity 0.3s ease;
 }
