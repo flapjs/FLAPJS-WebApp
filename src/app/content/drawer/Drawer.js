@@ -47,7 +47,6 @@ class Drawer extends React.Component
       this.props.app.openDrawer();
     }
     //Full drawer if clicked on same one
-    /*
     else
     {
       if (this.state.tabIndex === index)
@@ -55,7 +54,6 @@ class Drawer extends React.Component
         this.props.app.openDrawer(!this.props.app.state.isFullscreen);
       }
     }
-    */
 
     this.setState((prev, props) => {
       return { tabIndex: index };
