@@ -64,10 +64,16 @@ class AlphabetTag extends React.Component
         edge = edges[i];
         if(edge.label == oldSymbol) {
           graph.deleteEdge(edge);
+        } else {
+          let labels = edge.label.split(",");
+          for(let j = labels.length - 1; j >= 0; j--) {
+            if(labels[j] == oldSymbol) labels.splice(j,j+1);
+          }
+          edge.setLabel(labels.join(","));
         }
       }
       if(this.props.machine.isCustomSymbol(oldSymbol)) {
-        this.props.machine.removeSymbol(oldSymbol);
+        this.props.machine.removeCustomSymbol(oldSymbol);
       }
     }
     this.setState({
