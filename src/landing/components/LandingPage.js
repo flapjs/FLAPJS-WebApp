@@ -18,7 +18,7 @@ const QUOTES = [
   ["RONALDO IS MY GOD", "- David"],
   ["If you dream it, you can do it.", "- Walt Disney"],
   ["Never, never, never give up.", "- Winston Churchill"],
-  ["Don't wait. The time will never be just right.", "- Napolean Hill"]
+  ["Don't wait. The time will never be just right.", "- Napolean Hill"],
   ["I can, therefore I am.", "- Simone Wei"],
   ["Turn your wounds into wisdom.", "- Oprah Winfrey"],
   ["Believe you can and you're halfway there.", "- Theodore Roosevelt"],
