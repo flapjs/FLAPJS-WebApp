@@ -118,7 +118,8 @@ class AlphabetTag extends React.Component
   render()
   {
     const symbol = this.state.symbol != null ? this.state.symbol : this.props.src;
-    return <div className="alphatag-container" style={this.props.style}>
+    return <div className={"alphatag-container"+(this.state.symbol && this.state.error ? " errortag" : "")}
+                style={this.props.style}>
       <input type="text" ref={ref=>this.ref=ref} className="alphatag-input"
              spellCheck="false" maxLength="1" value={symbol}
       onChange={this.onValueChange}

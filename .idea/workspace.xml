@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cea43697-9fa1-4281-ad83-b5e3ff605763" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetTag.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetTag.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetTag.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetTag.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -16,11 +18,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="AlphabetTag.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AlphabetTag.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetTag.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="72" column="9" lean-forward="true" selection-start-line="72" selection-start-column="9" selection-end-line="72" selection-end-column="9" />
+            <state relative-caret-position="37">
+              <caret line="105" column="22" lean-forward="true" selection-start-line="105" selection-start-column="22" selection-end-line="105" selection-end-column="22" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -28,10 +30,40 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="StateTag.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/stateslist/StateTag.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="34" column="19" lean-forward="true" selection-start-line="34" selection-start-column="19" selection-end-line="34" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AlphabetTag.css" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetTag.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="15" column="25" lean-forward="true" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="AlphabetList.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetList.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-436">
+            <state relative-caret-position="-517">
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StateTag.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/stateslist/StateTag.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="146">
+              <caret line="141" column="64" selection-start-line="141" selection-start-column="64" selection-end-line="141" selection-end-column="64" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -135,6 +167,7 @@
         <option value="$PROJECT_DIR$/src/app/content/toolbar/Toolbar.js" />
         <option value="$PROJECT_DIR$/src/app/content/toolbar/Toolbar.css" />
         <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetTag.js" />
+        <option value="$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetTag.css" />
       </list>
     </option>
   </component>
@@ -252,6 +285,17 @@
               <item name="panels" type="462c0819:PsiDirectoryNode" />
               <item name="overview" type="462c0819:PsiDirectoryNode" />
               <item name="alphabetlist" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JFLAP-WebApp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="content" type="462c0819:PsiDirectoryNode" />
+              <item name="drawer" type="462c0819:PsiDirectoryNode" />
+              <item name="panels" type="462c0819:PsiDirectoryNode" />
+              <item name="overview" type="462c0819:PsiDirectoryNode" />
+              <item name="stateslist" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="JFLAP-WebApp" type="b2602c69:ProjectViewProjectNode" />
@@ -377,7 +421,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="112507000" />
+    <option name="totallyTimeSpent" value="113138000" />
   </component>
   <component name="TodoView" selected-index="1">
     <todo-panel id="selected-file">
@@ -403,10 +447,10 @@
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.32965517" />
       <window_info id="npm" order="2" sideWeight="0.5020492" side_tool="true" weight="0.25767368" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49919224" visible="true" weight="0.32689655" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49919224" visible="true" weight="0.32689655" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49795082" visible="true" weight="0.25767368" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49795082" visible="true" weight="0.25767368" />
       <window_info anchor="right" id="Database" order="6" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.38482758" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -489,8 +533,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/pages/home/HomePage.js" />
-    <entry file="file://$PROJECT_DIR$/src/pages/home/HomePage.css" />
     <entry file="file://$PROJECT_DIR$/src/pages/home/Button.js" />
     <entry file="file://$PROJECT_DIR$/src/pages/home/Help.js" />
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
@@ -677,15 +719,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/stateslist/StateTag.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1929">
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/controller/GraphController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3395">
@@ -715,22 +748,46 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetList.js">
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/stateslist/StateTag.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-436">
+        <state relative-caret-position="146">
+          <caret line="141" column="64" selection-start-line="141" selection-start-column="64" selection-end-line="141" selection-end-column="64" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetTag.js">
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetList.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="72" column="9" lean-forward="true" selection-start-line="72" selection-start-column="9" selection-end-line="72" selection-end-column="9" />
+        <state relative-caret-position="-517">
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/stateslist/StateTag.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="34" column="19" lean-forward="true" selection-start-line="34" selection-start-column="19" selection-end-line="34" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetTag.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="37">
+          <caret line="105" column="22" lean-forward="true" selection-start-line="105" selection-start-column="22" selection-end-line="105" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/content/drawer/panels/overview/alphabetlist/AlphabetTag.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="25" lean-forward="true" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
         </state>
       </provider>
     </entry>
