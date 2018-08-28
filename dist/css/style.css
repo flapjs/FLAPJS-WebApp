@@ -5,4 +5,7 @@ html, body {
   margin: 0;
 
   font-family: 'Lato', sans-serif;
+
+  /* Disable drag-down reload behavior */
+  overscroll-behavior-y: contain;
 }

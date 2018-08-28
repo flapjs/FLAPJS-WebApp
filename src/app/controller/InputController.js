@@ -177,7 +177,9 @@ class InputController
         this.cursor._touchend = null;
       }
 
-      if (this.doInputDown(touch.clientX, touch.clientY, false/*this._swapMouseScheme*/))//default false
+      let moveMode = false;
+      moveMode = this._swapMouseScheme ? !moveMode : moveMode;
+      if (this.doInputDown(touch.clientX, touch.clientY, moveMode/* false */))//default false
       {
         this.cursor._touchmove = this.onTouchStartAndMove.bind(this);
         this.cursor._touchend = this.onTouchStartAndEnd.bind(this);
@@ -343,7 +345,7 @@ class InputController
     this.cursor._timer = setTimeout(() => {
       if (pointer.isWaitingForMoveMode())
       {
-        pointer.moveMode = true;//!(this._swapMouseScheme ? !moveMode : moveMode);//default true
+        pointer.moveMode = this._swapMouseScheme ? false : true;//default true
       }
     }, Config.LONG_TAP_TICKS);
 
