@@ -50,7 +50,7 @@ options.checkerrors.mode.immediate = No quarter given!
 
 options.autolabel = Name yer powder monkeys
 options.skipwelcome = Straight t' the sea
-options.swapinputs = Hand me yer cutlass
+//options.swapinputs = Hand me yer cutlass
 
 options.testing.stepmode = Swab the deck!
 //options.testing.closure = I reckon's the Kraken

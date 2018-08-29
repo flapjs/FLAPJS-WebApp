@@ -7,7 +7,17 @@ class MachineController
   initialize(app)
   {
     this.graph = app.graph;
-    this.machine = app.machineBuilder;
+    this.machineBuilder = app.machineBuilder;
+  }
+
+  destroy()
+  {
+
+  }
+
+  getMachineBuilder()
+  {
+    return this.machineBuilder;
   }
 
   changeMachineTo(machineType)

@@ -46,6 +46,7 @@ class OverviewPanel extends React.Component
 
   render()
   {
+    const graphController = this.props.graphController;
     const machineBuilder = this.props.machineBuilder;
     const viewFormal = this.state.viewFormal;
 
@@ -66,7 +67,7 @@ class OverviewPanel extends React.Component
                 <option value="NFA">NFA</option>
               </select>
               <div className="graphinfo-important">
-                <StatesList machineBuilder={machineBuilder} controller={this.props.controller}/>
+                <StatesList machineBuilder={machineBuilder} graphController={graphController}/>
                 <AlphabetList machineBuilder={machineBuilder}/>
               </div>
               <div className="graphinfo">

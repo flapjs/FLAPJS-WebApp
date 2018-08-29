@@ -49,7 +49,7 @@ options.checkerrors.mode.immediate = Immediate
 
 options.autolabel = Automatic State Labels
 options.skipwelcome = Skip Welcome Page
-options.swapinputs = Swap Input Controls
+//options.swapinputs = Swap Input Controls
 
 options.testing.stepmode = Step-by-Step Mode
 //options.testing.closure = Transition By Closure

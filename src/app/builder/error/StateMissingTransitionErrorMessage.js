@@ -38,7 +38,7 @@ class StateMissingTransitionErrorMessage extends React.Component
         if (this.targetIndex >= targetLength) this.targetIndex = 0;
 
         //Move pointer to target
-        notification.props.controller.focusOnNode(target);
+        notification.getGraphController().focusOnNode(target);
       }
     }
     else

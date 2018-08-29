@@ -12,9 +12,9 @@ import { EMPTY } from 'machine/Symbols.js';
 
 class FSABuilder extends MachineBuilder
 {
-  constructor(graph, controller)
+  constructor(graph)
   {
-    super(graph, controller);
+    super(graph);
 
     this._machine = new NFA();
     this._machineType = "DFA";

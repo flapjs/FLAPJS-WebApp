@@ -148,6 +148,10 @@ class GraphController
     this.input.removeEventListener("dragstop", this.onDragStop);
   }
 
+  getGraph()
+  {
+    return this.graph;
+  }
 
   createNode(x, y)
   {

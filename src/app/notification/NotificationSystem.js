@@ -17,6 +17,16 @@ class NotificationSystem extends React.Component
     };
   }
 
+  getGraphController()
+  {
+    return this.props.graphController;
+  }
+
+  getMachineController()
+  {
+    return this.props.machineController;
+  }
+
   addMessage(message, tag=null, component=null, clearOnAdd=true)
   {
     if(tag && clearOnAdd)
@@ -79,6 +89,10 @@ class NotificationSystem extends React.Component
 
   render()
   {
+    //Used by messages
+    //const graphController = this.props.graphController;
+    //const machineController = this.props.machineController;
+
     return <div className="notification-container">
       <div className="notification-stack">
         {

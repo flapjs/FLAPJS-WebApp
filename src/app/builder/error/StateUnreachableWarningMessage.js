@@ -36,7 +36,7 @@ class StateUnreachableWarningMessage extends React.Component
       }
 
       //Move pointer to target
-      notification.props.controller.focusOnNode(target);
+      notification.getGraphController().focusOnNode(target);
     }
     else if (target.value == "deleteall")
     {
@@ -44,10 +44,10 @@ class StateUnreachableWarningMessage extends React.Component
       //Delete all target nodes
       for(const node of this.props.message)
       {
-        notification.props.graph.deleteNode(node);
+        notification.getGraphController.getGraph().deleteNode(node);
       }
       //Sort the nodes after deleting if enabled...
-      notification.props.machineBuilder.labeler.sortDefaultNodeLabels();
+      notification.getMachineBuilder().getMachineBuilder().labeler.sortDefaultNodeLabels();
       //Exit the message
       this.props.onExit(e);
     }

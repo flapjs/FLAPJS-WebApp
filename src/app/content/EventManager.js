@@ -16,45 +16,46 @@ import GraphNodeMoveAllEvent from 'events/GraphNodeMoveAllEvent.js';
 
 class Events
 {
-  constructor(graph, controller)
+  constructor(graph)
   {
     this.graph = graph;
-    this.controller = controller;
+    this.graphController = null;
 
     this.logger = new EventLogger();
   }
 
-  initialize()
+  initialize(graphController)
   {
     const graph = this.graph;
-    const controller = this.controller;
     const events = this.logger;
+
+    this.graphController = graphController;
 
     /*graph.on("nodeCustomLabel", (targetNode, nextLabel, prevLabel) =>
       events.handleEvent(new GraphNodeLabelEvent(graph, targetNode, nextLabel, prevLabel)));*/
-    controller.on("nodeCreate", targetNode =>
+    graphController.on("nodeCreate", targetNode =>
       events.handleEvent(new GraphNodeCreateEvent(graph, targetNode)));
-    controller.on("nodeDelete", (targetNode, prevX, prevY) =>
+    graphController.on("nodeDelete", (targetNode, prevX, prevY) =>
       events.handleEvent(new GraphNodeDeleteEvent(graph, targetNode, prevX, prevY)));
-    controller.on("nodeDeleteAll", (targetNodes, selectedNode, prevX, prevY) =>
+    graphController.on("nodeDeleteAll", (targetNodes, selectedNode, prevX, prevY) =>
       events.handleEvent(new GraphNodeDeleteAllEvent(graph, targetNodes, selectedNode, prevX, prevY)));
-    controller.on("nodeMove", (targetNode, nextX, nextY, prevX, prevY) =>
+    graphController.on("nodeMove", (targetNode, nextX, nextY, prevX, prevY) =>
       events.handleEvent(new GraphNodeMoveEvent(graph, targetNode, nextX, nextY, prevX, prevY)));
-    controller.on("nodeMoveAll", (targetNodes, dx, dy) =>
+    graphController.on("nodeMoveAll", (targetNodes, dx, dy) =>
       events.handleEvent(new GraphNodeMoveAllEvent(graph, targetNodes, dx, dy)));
-    controller.on("nodeAccept", (targetNode, nextAccept, prevAccept) =>
+    graphController.on("nodeAccept", (targetNode, nextAccept, prevAccept) =>
       events.handleEvent(new GraphNodeAcceptEvent(graph, targetNode, nextAccept, prevAccept)));
-    controller.on("nodeInitial", (nextInitial, prevInitial) =>
+    graphController.on("nodeInitial", (nextInitial, prevInitial) =>
       events.handleEvent(new GraphNodeInitialEvent(graph, nextInitial, prevInitial)));
-    controller.on("edgeCreate", targetEdge =>
+    graphController.on("edgeCreate", targetEdge =>
       events.handleEvent(new GraphEdgeCreateEvent(graph, targetEdge)));
-    controller.on("edgeDelete", targetEdge =>
+    graphController.on("edgeDelete", targetEdge =>
       events.handleEvent(new GraphEdgeDeleteEvent(graph, targetEdge)));
-    controller.on("edgeDestination", (targetEdge, nextDestination, prevDestination, prevQuad) =>
+    graphController.on("edgeDestination", (targetEdge, nextDestination, prevDestination, prevQuad) =>
       events.handleEvent(new GraphEdgeDestinationEvent(graph, targetEdge, nextDestination, prevDestination, prevQuad)));
-    controller.on("edgeMove", (targetEdge, nextX, nextY, prevX, prevY) =>
+    graphController.on("edgeMove", (targetEdge, nextX, nextY, prevX, prevY) =>
       events.handleEvent(new GraphEdgeMoveEvent(graph, targetEdge, nextX, nextY, prevX, prevY)));
-    controller.on("edgeLabel", (targetEdge, nextLabel, prevLabel) =>
+    graphController.on("edgeLabel", (targetEdge, nextLabel, prevLabel) =>
       events.handleEvent(new GraphEdgeLabelEvent(graph, targetEdge, nextLabel, prevLabel)));
 
   }
@@ -62,7 +63,7 @@ class Events
   destroy()
   {
     //TODO: Remove all event listeners...
-    this.controller.clearListeners();
+    this.graphController.clearListeners();
   }
 
   getLogger()

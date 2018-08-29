@@ -34,7 +34,7 @@ class App extends React.Component
     this.workspace = React.createRef();
     this.viewport = React.createRef();
     this.drawer = React.createRef();
-    this.notification = React.createRef();
+    this.notification = null;
     this.toolbar = React.createRef();
 
     //Must be initialized (will be called in Workspace.componentDidMount)
@@ -45,7 +45,7 @@ class App extends React.Component
     this.graph = new NodalGraph();
     this.machineBuilder = new FSABuilder(this.graph, this.graphController);
     this.testingManager = new TestingManager(this.machineBuilder);
-    this.eventManager = new EventManager(this.graph, this.graphController);
+    this.eventManager = new EventManager(this.graph);
     this.hotKeys = new HotKeys(this.graph, this.eventManager);
     this.tutorial = new Tutorial(this);
 
@@ -73,15 +73,13 @@ class App extends React.Component
       AutoSaver.initAutoSave(this.graph);
     }
 
-    const graph = this.graph;
-
     //Initialize the controller to graph components
     this.inputController.initialize(this);
     this.graphController.initialize(this);
     this.machineController.initialize(this);
 
+    this.eventManager.initialize(this.graphController);
     this.machineBuilder.initialize(this);
-    this.eventManager.initialize();
     this.hotKeys.initialize(this.workspace, this.toolbar);
 
     //Notify on create in delete mode
@@ -260,7 +258,9 @@ class App extends React.Component
 
       <NotificationSystem ref={ref=>this.notification=ref}
         graph={graph}
-        machineBuilder={machineBuilder}/>
+        machineBuilder={machineBuilder}
+        graphController={graphController}
+        machineController={machineController}/>
 
       <div className="workspace-container">
         <div className={"workspace-main" +
@@ -297,6 +297,7 @@ class App extends React.Component
           <Drawer ref={ref=>this.drawer=ref}
             app={this}
             graph={graph}
+            graphController={graphController}
             toolbar={this.toolbar} />
         </div>
       </div>

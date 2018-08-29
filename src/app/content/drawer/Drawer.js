@@ -63,16 +63,18 @@ class Drawer extends React.Component
   getTab(index)
   {
     const app = this.props.app;
+    const graphController = this.props.graphController;
+
     switch(index)
     {
       case OVERVIEW:
-        return <OverviewPanel ref={ref=>this.panel=ref} graph={app.graph} machineBuilder={app.machineBuilder} controller={app.controller}/>;
+        return <OverviewPanel ref={ref=>this.panel=ref} graph={app.graph} machineBuilder={app.machineBuilder} graphController={graphController}/>;
       case TESTING:
         return <TestingPanel ref={ref=>this.panel=ref} viewport={app.viewport} machineBuilder={app.machineBuilder} tester={app.testingManager}/>;
       case EXPORTING:
-        return <ExportingPanel ref={ref=>this.panel=ref} workspace={app.workspace} graph={this.props.graph} toolbar={this.props.toolbar} controller={app.controller} />;
+        return <ExportingPanel ref={ref=>this.panel=ref} workspace={app.workspace} graph={this.props.graph} toolbar={this.props.toolbar}/>;
       case OPTIONS:
-        return <OptionsPanel ref={ref=>this.panel=ref} controller={app.controller}/>;
+        return <OptionsPanel ref={ref=>this.panel=ref}/>;
       default:
         throw new Error("Unknown tab index \'" + tabIndex + "\'.");
     }

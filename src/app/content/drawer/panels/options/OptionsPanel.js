@@ -29,6 +29,7 @@ class OptionsPanel extends React.Component
   render()
   {
     const root = document.getElementById("root");
+
     return <div className="panel-container" id="option" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>{I18N.toString("component.options.title")}</h1>
@@ -117,14 +118,6 @@ class OptionsPanel extends React.Component
             Storage.saveToLocalStorage("skipWelcome", result);
           }}/>
           <label htmlFor="option-skipwelcome">{I18N.toString("options.skipwelcome")}</label>
-        </div>
-
-        <div className="panel-checkbox">
-          <input id="option-altinput" type="checkbox" checked={!this.props.controller.getMouseActionMode()}
-            onChange={(e) => {
-              this.props.controller.setMouseActionMode(!e.target.checked);
-            }}/>
-          <label htmlFor="option-altinput">{I18N.toString("options.swapinputs")}</label>
         </div>
 
         <button className="panel-button" onClick={(e) => {

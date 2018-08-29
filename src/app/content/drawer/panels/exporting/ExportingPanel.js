@@ -24,7 +24,6 @@ class ExportingPanel extends React.Component
     const graph = this.props.graph;
     const toolbar = this.props.toolbar;
     const workspace = this.props.workspace;
-    const controller = this.props.controller;
 
     return <div className="panel-container" id="exporting" ref={ref=>this.container=ref}>
       <div className="panel-title">

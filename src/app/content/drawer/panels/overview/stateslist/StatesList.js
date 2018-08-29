@@ -28,7 +28,7 @@ class StatesList extends React.Component
 
   render()
   {
-    const controller = this.props.controller;
+    const graphController = this.props.graphController;
     const graph = this.props.machineBuilder.graph;
     return <InfoBlock title={I18N.toString("component.stateslist.title")} defaultValue="true">
       <div className="statelist-container">
@@ -37,7 +37,7 @@ class StatesList extends React.Component
           {
             graph.nodes.map((e, i) => {
               return <StateTag key={e.label} src={e} label={e.label} accept={e.accept} graph={graph}
-                onFocus={ev => controller.focusOnNode(e)}/>
+                onFocus={ev => graphController.focusOnNode(e)}/>
             })
           }
         </div>
