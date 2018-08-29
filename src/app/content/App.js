@@ -30,21 +30,21 @@ class App extends React.Component
     super(props);
 
     //Create references
-    this.container = React.createRef();
-    this.workspace = React.createRef();
-    this.viewport = React.createRef();
-    this.drawer = React.createRef();
+    this.container = null;
+    this.workspace = null;
+    this.viewport = null;
+    this.drawer = null;
     this.notification = null;
-    this.toolbar = React.createRef();
+    this.toolbar = null;
 
-    this.graph = new NodalGraph();
+    this._graph = new NodalGraph();
+    this._machineBuilder = new FSABuilder(this._graph);
 
     //Must be initialized (will be called in Workspace.componentDidMount)
-    this.graphController = new GraphController(this.graph);
-    this.inputController = new InputController();
-    this.machineController = new MachineController();
+    this.graphController = new GraphController(this._graph);
+    this.inputController = new InputController(this._graph);
+    this.machineController = new MachineController(this._machineBuilder);
 
-    this.machineBuilder = new FSABuilder(this.graph, this.graphController);
     this.testingManager = new TestingManager();
     this.eventManager = new EventManager();
 
@@ -69,10 +69,10 @@ class App extends React.Component
     //Does the browser support autosaving?
     if(AutoSaver.doesSupportLocalStorage())
     {
-      AutoSaver.loadAutoSave(this.graph);
+      AutoSaver.loadAutoSave(this._graph);
 
       //Start auto-saving
-      AutoSaver.initAutoSave(this.graph);
+      AutoSaver.initAutoSave(this._graph);
     }
 
     //Initialize the controller to graph components
@@ -80,7 +80,7 @@ class App extends React.Component
     this.graphController.initialize(this);
     this.machineController.initialize(this);
 
-    this.machineBuilder.initialize(this);
+    this._machineBuilder.initialize(this);
     this.testingManager.initialize(this);
     this.eventManager.initialize(this);
     this.hotKeys.initialize(this);
@@ -110,11 +110,12 @@ class App extends React.Component
   {
     this.hotKeys.destroy();
     this.eventManager.destroy();
-    this.machineBuilder.destroy();
 
     this.machineController.destroy();
     this.graphController.destroy();
     this.inputController.destroy();
+
+    this._machineBuilder.destroy();
 
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;
@@ -182,7 +183,7 @@ class App extends React.Component
         {
           const data = file.getAsFile();
           //TODO: should show error message if invalid
-          GraphUploader.uploadFileToGraph(data, this.graph, null, null);
+          GraphUploader.uploadFileToGraph(data, this._graph, null, null);
         }
       }
     }
@@ -193,7 +194,7 @@ class App extends React.Component
       {
         const data = ev.dataTransfer.files[i];
         //TODO: should show error message if invalid
-        GraphUploader.uploadFileToGraph(data, this.graph, null, null);
+        GraphUploader.uploadFileToGraph(data, this._graph, null, null);
       }
     }
 
@@ -246,22 +247,22 @@ class App extends React.Component
     const graphController = this.graphController;
     const machineController = this.machineController;
 
-    const graph = this.graph;
-    const machineBuilder = this.machineBuilder;
+    const graph = this._graph;
+    const machineBuilder = this._machineBuilder;
     const tester = this.testingManager;
+    const screen = this.workspace ? this.workspace.ref : null;
 
     inputController.update();
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar ref={ref=>this.toolbar=ref}
-        app={this}
-        graph={graph}
-        machineBuilder={machineBuilder}
-        eventManager={this.eventManager} />
+        graphController={graphController}
+        machineController={machineController}
+        eventManager={this.eventManager}
+        drawer={this.drawer}
+        notification={this.notification}/>
 
       <NotificationSystem ref={ref=>this.notification=ref}
-        graph={graph}
-        machineBuilder={machineBuilder}
         graphController={graphController}
         machineController={machineController}/>
 
@@ -274,10 +275,9 @@ class App extends React.Component
           }}>
 
           <Workspace ref={ref=>this.workspace=ref}
-            graph={graph}
-            machineBuilder={machineBuilder}
             graphController={graphController}
             inputController={inputController}
+            machineController={machineController}
             tester={tester}/>
         </div>
 
@@ -288,9 +288,11 @@ class App extends React.Component
           }}>
 
           <Viewport ref={ref=>this.viewport=ref}
-            app={this} graph={graph}
+            graphController={graphController}
             inputController={inputController}
-            tester={tester}/>
+            machineController={machineController}
+            tester={tester}
+            screen={screen}/>
         </div>
 
         <div className={"workspace-drawer" +
@@ -299,8 +301,8 @@ class App extends React.Component
 
           <Drawer ref={ref=>this.drawer=ref}
             app={this}
-            graph={graph}
             graphController={graphController}
+            machineController={machineController}
             toolbar={this.toolbar} />
         </div>
       </div>

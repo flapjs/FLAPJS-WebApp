@@ -61,7 +61,7 @@ class Events
   destroy()
   {
     //TODO: Remove all event listeners...
-    this.graphController.clearListeners();
+    this.graphController.clearEventListeners();
   }
 
   getLogger()

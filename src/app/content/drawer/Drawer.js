@@ -64,15 +64,19 @@ class Drawer extends React.Component
   {
     const app = this.props.app;
     const graphController = this.props.graphController;
+    const machineController = this.props.machineController;
+
+    const graph = graphController.getGraph();
+    const machineBuilder = machineController.getMachineBuilder();
 
     switch(index)
     {
       case OVERVIEW:
-        return <OverviewPanel ref={ref=>this.panel=ref} graph={app.graph} machineBuilder={app.machineBuilder} graphController={graphController}/>;
+        return <OverviewPanel ref={ref=>this.panel=ref} graph={graph} machineBuilder={machineBuilder} graphController={graphController}/>;
       case TESTING:
-        return <TestingPanel ref={ref=>this.panel=ref} viewport={app.viewport} machineBuilder={app.machineBuilder} tester={app.testingManager}/>;
+        return <TestingPanel ref={ref=>this.panel=ref} viewport={app.viewport} graphController={graphController} machineController={machineController} tester={app.testingManager}/>;
       case EXPORTING:
-        return <ExportingPanel ref={ref=>this.panel=ref} workspace={app.workspace} graph={this.props.graph} toolbar={this.props.toolbar}/>;
+        return <ExportingPanel ref={ref=>this.panel=ref} workspace={app.workspace} graph={graph} toolbar={this.props.toolbar}/>;
       case OPTIONS:
         return <OptionsPanel ref={ref=>this.panel=ref}/>;
       default:

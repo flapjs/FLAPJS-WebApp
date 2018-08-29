@@ -33,13 +33,17 @@ class TestingPanel extends React.Component
 
   componentWillMount()
   {
+    const graphController = this.props.graphController;
+
     //HACK: this should be a listener to FSABuilder, should not access graph
-    this.props.machineBuilder.graph.on("markDirty", this.onGraphChange);
+    graphController.getGraph().on("markDirty", this.onGraphChange);
   }
 
   componentWillUnmount()
   {
-    this.props.machineBuilder.graph.removeEventListener("markDirty", this.onGraphChange);
+    const graphController = this.props.graphController;
+    
+    graphController.getGraph().removeEventListener("markDirty", this.onGraphChange);
   }
 
   onGraphChange(g)
@@ -62,8 +66,13 @@ class TestingPanel extends React.Component
   onChangeErrorCheckMode(e)
   {
     const value = e.target.value;
+
+    const graphController = this.props.graphController;
+    const machineController = this.props.machineController;
     const tester = this.props.tester;
-    const machineBuilder = this.props.machineBuilder;
+
+    const graph = graphController.getGraph();
+    const machineBuilder = machineController.getMachineBuilder();
     tester.setErrorCheckMode(value);
 
     //HACK: this should automatically be updated by testing manager on set error check mode
@@ -73,7 +82,7 @@ class TestingPanel extends React.Component
     }
     else
     {
-      machineBuilder.onGraphChange(machineBuilder.graph);
+      machineBuilder.onGraphChange(graph);
     }
 
     this.setState({errorCheckMode: value});
@@ -81,7 +90,7 @@ class TestingPanel extends React.Component
 
   onTestsRunAll(e)
   {
-    const machine = this.props.machineBuilder.getMachine();
+    const machine = this.props.machineController.getMachineBuilder().getMachine();
     const testList = this.props.tester.inputList;
     const length = testList.getTests().length;
     for(let i = 0; i < length; ++i)
@@ -98,7 +107,7 @@ class TestingPanel extends React.Component
   render()
   {
     const viewport = this.props.viewport;
-    const machineBuilder = this.props.machineBuilder;
+    const machineBuilder = this.props.machineController.getMachineBuilder();
     const tester = this.props.tester;
     const testList = tester.inputList;
 

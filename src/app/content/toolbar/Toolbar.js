@@ -32,7 +32,7 @@ class Toolbar extends React.Component
     };
 
     //TODO: this should be in builder!
-    this.machineName = React.createRef();
+    this.machineName = null;
 
     this.onMachineNameChange = this.onMachineNameChange.bind(this);
     this.langOnClick = this.langOnClick.bind(this);
@@ -40,12 +40,16 @@ class Toolbar extends React.Component
 
   setMachineName(name)
   {
+    if (!this.machineName) throw new Error("Trying to change label before mounting")
+
     this.machineName.value = name;
     this.onMachineNameChange({target: this.machineName});
   }
 
   getMachineName()
   {
+    if (!this.machineName) throw new Error("Trying to access label before mounting")
+
     return this.machineName.value;
   }
 
@@ -64,26 +68,33 @@ class Toolbar extends React.Component
     }
   }
 
-  langOnClick() {
+  langOnClick()
+  {
     this.setState({langOn: !this.state.langOn});
   }
 
   render()
   {
-    const app = this.props.app;
-    const drawer = app.drawer;
-    const notification = app.notification;
-    const machineBuilder = this.props.machineBuilder;
-    const graph = this.props.graph;
-    const events = this.props.eventManager.getLogger();
+    const graphController = this.props.graphController;
+    const machineController = this.props.machineController;
+    const eventManager = this.props.eventManager;
+    const notification = this.props.notification;
+    const drawer = this.props.drawer;
+
+    const graph = graphController.getGraph();
+    const machineBuilder = machineController.getMachineBuilder();
+    const events = eventManager.getLogger();
+
     const offline = navigator && navigator.onLine;
 
     return <div className="toolbar-container">
       <div className="toolbar-title">
         <div className="toolbar-title-name">
           {/*Machine Name*/}
-          <input id="machine-name" type="text" defaultValue={I18N.toString("file.untitled")}
-            onChange={this.onMachineNameChange} ref={ref=>this.machineName=ref}/>
+          <input ref={ref=>this.machineName=ref}
+            id="machine-name" type="text"
+            defaultValue={I18N.toString("file.untitled")}
+            onChange={this.onMachineNameChange}/>
           {/*Toolbar Alt. Title*/}
           <div className="toolbar-title-alt">
             {/*Offline Button*/}

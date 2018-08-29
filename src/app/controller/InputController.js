@@ -8,11 +8,11 @@ const PINCH_SENSITIVITY = 1 / 300.0;
 
 class InputController
 {
-  constructor()
+  constructor(graph)
   {
     this.workspace = null;
 
-    this._pointer = new GraphPointer(null);
+    this._pointer = new GraphPointer(graph);
 
     this._cursor = {
       _mousemove: null,
@@ -55,9 +55,6 @@ class InputController
 
   initialize(app)
   {
-    //Set the graph
-    this._pointer.graph = app.graph;
-
     //Prepare the workspace
     this.workspace = app.workspace.ref;
 
@@ -104,16 +101,6 @@ class InputController
   getPointer()
   {
     return this._pointer;
-  }
-
-  setMouseActionMode(isLeftMouse)
-  {
-    this._swapMouseScheme = isLeftMouse;
-  }
-
-  getMouseActionMode()
-  {
-    return this._swapMouseScheme;
   }
 
   isUsingTouch()

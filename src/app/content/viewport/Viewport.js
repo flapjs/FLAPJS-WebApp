@@ -24,17 +24,17 @@ class Viewport extends React.Component
   render()
   {
     const inputController = this.props.inputController;
+    const graphController = this.props.graphController;
+    const machineController = this.props.machineController;
     const tester = this.props.tester;
-    const graph = this.props.app.graph;
-    const machineBuilder = this.props.app.machineBuilder;
-    const workspace = this.props.app.workspace;
+    const screen = this.props.screen;
 
     return <div className={"viewport-container viewport-" + this.state.mode} ref={ref=>this.ref=ref}>
       <LabelEditor ref={ref=>this.labelEditor=ref}
         inputController={inputController}
-        graph={graph}
-        machineBuilder={machineBuilder}
-        screen={workspace.ref}/>
+        graphController={graphController}
+        machineController={machineController}
+        screen={screen}/>
       {
         tester.getStepByStepMode() ?
         <div className="anchor-bottom-left" style={{width: "100%"}}>

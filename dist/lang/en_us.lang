@@ -24,6 +24,9 @@ message.help.1 = You need help. Unfortunately, I am not qualified to provide suc
 message.help.2 = I see you want help. I'm not sure I want to help you after you so rudely got rid of all my other messages.
 message.help.3 = Thank you for being awesome :3
 
+cursor.actionmode = Action Mode
+cursor.movemode = Move Mode
+
 component.testing.title = Testing
 component.overview.title = Definition
 component.exporting.title = Exporting

@@ -1,13 +1,13 @@
 class MachineController
 {
-  constructor()
+  constructor(machineBuilder)
   {
+    this.machineBuilder = machineBuilder;
   }
 
   initialize(app)
   {
-    this.graph = app.graph;
-    this.machineBuilder = app.machineBuilder;
+    
   }
 
   destroy()

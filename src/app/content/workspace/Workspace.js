@@ -31,7 +31,7 @@ class Workspace extends React.Component
     const pointer = this.props.inputController.getPointer();
     const offsetX = pointer.offsetX;
     const offsetY = pointer.offsetY;
-    const bounds = this.props.graph.getBoundingRect();
+    const bounds = this.props.graphController.getGraph().getBoundingRect();
 
     const dx = bounds.minX + offsetX - EXPORT_PADDING_X;
     const dy = bounds.minY + offsetY - EXPORT_PADDING_Y;
@@ -66,12 +66,14 @@ class Workspace extends React.Component
 
   render()
   {
-    const graph = this.props.graph;
     const graphController = this.props.graphController;
     const inputController = this.props.inputController;
-    const pointer = inputController.getPointer();
-    const machineBuilder = this.props.machineBuilder;
+    const machineController = this.props.machineController;
     const tester = this.props.tester;
+
+    const graph = graphController.getGraph();
+    const machineBuilder = machineController.getMachineBuilder();
+    const pointer = inputController.getPointer();
 
     let size = Config.DEFAULT_GRAPH_SIZE * Math.max(Number.MIN_VALUE, pointer.scale);
     const halfSize = size / 2;

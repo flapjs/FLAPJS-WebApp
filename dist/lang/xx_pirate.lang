@@ -25,6 +25,9 @@ message.help.1 = Lookin' fer more swabbers? I bet some 're back at port.
 message.help.2 = Dead men tell no tales. Dead men. Tell no tales.
 message.help.3 = Keep a weather eye open, cap'n!
 
+cursor.actionmode = Plunderin' Time
+cursor.movemode = Sailin' Time
+
 component.testing.title = Parley
 component.overview.title = Swagger
 component.exporting.title = Plunder

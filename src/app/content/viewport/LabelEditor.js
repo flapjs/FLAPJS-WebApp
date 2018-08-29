@@ -19,8 +19,8 @@ class LabelEditor extends React.Component
   {
     super(props);
 
-    this.parentElement = React.createRef();
-    this.inputElement = React.createRef();
+    this.parentElement = null;
+    this.inputElement = null;
 
     //HACK: this is so if the click is focused back to the label editor, then it will NOT close
     this._timer = null;
@@ -38,6 +38,12 @@ class LabelEditor extends React.Component
 
   openEditor(targetEdge, defaultText=null, replace=true, callback=null)
   {
+    //If not yet initilized, ignore any editor access
+    if (!this.inputElement || !this.parentElement)
+    {
+      throw new Error("Trying to open editor that has not yet mounted");
+    }
+
     this.setState((prev, props) => {
       return {
         target: targetEdge,
@@ -60,6 +66,12 @@ class LabelEditor extends React.Component
 
   closeEditor(saveOnExit=false)
   {
+    //If not yet initilized, ignore any editor access
+    if (!this.inputElement || !this.parentElement)
+    {
+      throw new Error("Trying to open editor that has not yet mounted");
+    }
+
     //Save data
     if (this.state.target !== null)
     {
@@ -77,10 +89,11 @@ class LabelEditor extends React.Component
           this.state.target.setLabel(EMPTY);
 
           //Delete it since it is not a valid edge
-          this.props.graph.deleteEdge(this.state.target);
+          this.props.graphController.getGraph().deleteEdge(this.state.target);
         }
       }
-      this.state.target = null;
+
+      this.setState({target: null});
 
       if (this.state.callback) this.state.callback();
     }
@@ -147,7 +160,7 @@ class LabelEditor extends React.Component
     const prevEnd = target.selectionEnd;
     const prevLength = target.value.length;
 
-    target.value = this.props.machineBuilder.formatAlphabetString(target.value, true);
+    target.value = this.props.machineController.getMachineBuilder().formatAlphabetString(target.value, true);
 
     if (prevStart < prevLength)
     {
@@ -188,30 +201,35 @@ class LabelEditor extends React.Component
   render()
   {
     const inputController = this.props.inputController;
+    const graphController = this.props.graphController;//This is used in closeEditor()
+    const machineController = this.props.machineController;//This is also used in callbacks
+    const screen = this.props.screen;
+
     const targetStyle = {
       visibility: "hidden"
     };
 
     const target = this.state.target;
+
     if (target)
     {
       targetStyle.visibility = "visible";
 
       //Assumes target is an instance of Edge
       const center = target.getCenterPoint();
-      const screen = getScreenPosition(this.props.screen,
+      const screenPos = getScreenPosition(screen,
         center.x + inputController.getPointer().offsetX,
         center.y + inputController.getPointer().offsetY);
-      const x = screen.x;
-      const y = screen.y + LABEL_OFFSET_Y + EDITOR_OFFSET_Y;
+      const x = screenPos.x;
+      const y = screenPos.y + LABEL_OFFSET_Y + EDITOR_OFFSET_Y;
       const offsetX = -(this.parentElement.offsetWidth / 2);
       const offsetY = -(this.parentElement.offsetHeight / 2);
 
       targetStyle.top = (y + offsetY) + "px";
       targetStyle.left = (x + offsetX) + "px";
     }
-
-    const usedAlphabet = this.props.machineBuilder.getMachine().getAlphabet();
+    
+    const usedAlphabet = machineController.getMachineBuilder().getMachine().getAlphabet();
 
     return <div className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
       tabIndex={"0"/*This is to allow div's to focus/blur*/}

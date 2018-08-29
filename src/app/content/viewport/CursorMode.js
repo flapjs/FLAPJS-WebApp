@@ -16,10 +16,14 @@ class CursorMode extends React.Component
   {
     const inputController = this.props.inputController;
     return <div id="cursor-btn">
-      <IconButton id="action-mode" className={!inputController._swapMouseScheme ? "active" : ""} onClick={() => inputController.setMouseActionMode(false)} title="Action Mode">
+      <IconButton id="action-mode" className={!inputController.getInputScheme() ? "active" : ""}
+        onClick={() => inputController.setInputScheme(true)}
+        title={I18N.toString("cursor.actionmode")}>
         <CreateIcon/>
       </IconButton>
-      <IconButton id="move-mode" className={inputController._swapMouseScheme ? "active" : ""} onClick={() => inputController.setMouseActionMode(true)} title="Move Mode">
+      <IconButton id="move-mode" className={inputController.getInputScheme() ? "active" : ""}
+        onClick={() => inputController.setInputScheme(false)}
+        title={I18N.toString("cursor.movemode")}>
         <MoveIcon/>
       </IconButton>
     </div>;
