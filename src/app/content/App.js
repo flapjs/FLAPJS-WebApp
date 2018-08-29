@@ -37,6 +37,7 @@ class App extends React.Component
     this.controller = new GraphController();
     this.graphController = this.controller;
     this.inputController = this.controller;
+    this.machineController = this.controller;
 
     this.graph = new NodalGraph();
     this.machineBuilder = new FSABuilder(this.graph, this.controller);
@@ -86,7 +87,7 @@ class App extends React.Component
           "tryCreateWhileTrash", true);
       }
     };
-    controller.on("tryCreateWhileTrash", tryCreateWhileTrash);
+    this.graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
 
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;
@@ -104,7 +105,7 @@ class App extends React.Component
     this.hotKeys.destroy();
     this.eventManager.destroy();
     this.machineBuilder.destroy();
-    this.controller.destroy();
+    this.inputController.destroy();
 
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;
@@ -232,7 +233,6 @@ class App extends React.Component
 
   render()
   {
-    const controller = this.controller;
     const graphController = this.graphController;
     const inputController = this.inputController;
     const graph = this.graph;
@@ -250,8 +250,7 @@ class App extends React.Component
 
       <NotificationSystem ref={ref=>this.notification=ref}
         graph={graph}
-        machineBuilder={machineBuilder}
-        controller={controller}/>
+        machineBuilder={machineBuilder}/>
 
       <div className="workspace-container">
         <div className={"workspace-main" +
