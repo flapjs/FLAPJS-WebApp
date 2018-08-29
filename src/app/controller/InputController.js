@@ -10,12 +10,11 @@ class InputController
 {
   constructor()
   {
-    this.graph = null;
     this.workspace = null;
 
     this._pointer = new GraphPointer(null);
 
-    this.cursor = {
+    this._cursor = {
       _mousemove: null,
       _mouseup: null,
       _touchmove: null,
@@ -54,14 +53,13 @@ class InputController
     this.onWheel = this.onWheel.bind(this);
   }
 
-  initialize(graph, workspace)
+  initialize(app)
   {
     //Set the graph
-    this.graph = graph;
-    this._pointer.graph = graph;
+    this._pointer.graph = app.graph;
 
     //Prepare the workspace
-    this.workspace = workspace;
+    this.workspace = app.workspace.ref;
 
     //Process mouse handlers
     this.workspace.addEventListener('mousedown', this.onMouseDown);
@@ -120,7 +118,7 @@ class InputController
 
   isUsingTouch()
   {
-    return this.cursor._touchmove || this.cursor._touchend;
+    return this._cursor._touchmove || this._cursor._touchend;
   }
 
   /*************************************************************************
@@ -166,15 +164,15 @@ class InputController
       document.activeElement.blur();
       this.workspace.focus();
 
-      if (this.cursor._touchmove)
+      if (this._cursor._touchmove)
       {
-        document.removeEventListener('touchmove', this.cursor._touchmove);
-        this.cursor._touchmove = null;
+        document.removeEventListener('touchmove', this._cursor._touchmove);
+        this._cursor._touchmove = null;
       }
-      if (this.cursor._touchend)
+      if (this._cursor._touchend)
       {
-        document.removeEventListener('touchend', this.cursor._touchend);
-        this.cursor._touchend = null;
+        document.removeEventListener('touchend', this._cursor._touchend);
+        this._cursor._touchend = null;
       }
 
       const touch1 = e.touches[0];
@@ -183,11 +181,11 @@ class InputController
         touch1.pageX - touch2.pageX,
         touch1.pageY - touch2.pageY);
 
-      this.cursor._touchmove = this.onPinchMove.bind(this);
-      this.cursor._touchend = this.onPinchEnd.bind(this);
+      this._cursor._touchmove = this.onPinchMove.bind(this);
+      this._cursor._touchend = this.onPinchEnd.bind(this);
 
-      document.addEventListener('touchmove', this.cursor._touchmove);
-      document.addEventListener('touchend', this.cursor._touchend);
+      document.addEventListener('touchmove', this._cursor._touchmove);
+      document.addEventListener('touchend', this._cursor._touchend);
       */
 
       return false;
@@ -203,26 +201,26 @@ class InputController
 
       const touch = e.changedTouches[0];
 
-      if (this.cursor._touchmove)
+      if (this._cursor._touchmove)
       {
-        document.removeEventListener('touchmove', this.cursor._touchmove);
-        this.cursor._touchmove = null;
+        document.removeEventListener('touchmove', this._cursor._touchmove);
+        this._cursor._touchmove = null;
       }
-      if (this.cursor._touchend)
+      if (this._cursor._touchend)
       {
-        document.removeEventListener('touchend', this.cursor._touchend);
-        this.cursor._touchend = null;
+        document.removeEventListener('touchend', this._cursor._touchend);
+        this._cursor._touchend = null;
       }
 
       let moveMode = false;
       moveMode = this._swapMouseScheme ? !moveMode : moveMode;
       if (this.doInputDown(touch.clientX, touch.clientY, moveMode/* false */))//default false
       {
-        this.cursor._touchmove = this.onTouchStartAndMove.bind(this);
-        this.cursor._touchend = this.onTouchStartAndEnd.bind(this);
+        this._cursor._touchmove = this.onTouchStartAndMove.bind(this);
+        this._cursor._touchend = this.onTouchStartAndEnd.bind(this);
 
-        document.addEventListener('touchmove', this.cursor._touchmove);
-        document.addEventListener('touchend', this.cursor._touchend);
+        document.addEventListener('touchmove', this._cursor._touchmove);
+        document.addEventListener('touchend', this._cursor._touchend);
       }
     }
     else
@@ -246,15 +244,15 @@ class InputController
 
   onPinchEnd()
   {
-    if (this.cursor._touchmove)
+    if (this._cursor._touchmove)
     {
-      document.removeEventListener('touchmove', this.cursor._touchmove);
-      this.cursor._touchmove = null;
+      document.removeEventListener('touchmove', this._cursor._touchmove);
+      this._cursor._touchmove = null;
     }
-    if (this.cursor._touchend)
+    if (this._cursor._touchend)
     {
-      document.removeEventListener('touchend', this.cursor._touchend);
-      this.cursor._touchend = null;
+      document.removeEventListener('touchend', this._cursor._touchend);
+      this._cursor._touchend = null;
     }
 
     return false;
@@ -264,15 +262,15 @@ class InputController
   {
     const touch = e.changedTouches[0];
 
-    if (this.cursor._touchmove)
+    if (this._cursor._touchmove)
     {
-      document.removeEventListener('touchmove', this.cursor._touchmove);
-      this.cursor._touchmove = null;
+      document.removeEventListener('touchmove', this._cursor._touchmove);
+      this._cursor._touchmove = null;
     }
-    if (this.cursor._touchend)
+    if (this._cursor._touchend)
     {
-      document.removeEventListener('touchend', this.cursor._touchend);
-      this.cursor._touchend = null;
+      document.removeEventListener('touchend', this._cursor._touchend);
+      this._cursor._touchend = null;
     }
 
     this.doInputDownAndUp(touch.clientX, touch.clientY);
@@ -314,26 +312,26 @@ class InputController
     document.activeElement.blur();
     this.workspace.focus();
 
-    if (this.cursor._mousemove)
+    if (this._cursor._mousemove)
     {
-      document.removeEventListener('mousemove', this.cursor._mousemove);
-      this.cursor._mousemove = null;
+      document.removeEventListener('mousemove', this._cursor._mousemove);
+      this._cursor._mousemove = null;
     }
-    if (this.cursor._mouseup)
+    if (this._cursor._mouseup)
     {
-      document.removeEventListener('mouseup', this.cursor._mouseup);
-      this.cursor._mouseup = null;
+      document.removeEventListener('mouseup', this._cursor._mouseup);
+      this._cursor._mouseup = null;
     }
 
     let moveMode = (e.button == 2) || e.ctrlKey;
     moveMode = this._swapMouseScheme ? !moveMode : moveMode;
     if (this.doInputDown(e.clientX, e.clientY, moveMode))
     {
-      this.cursor._mousemove = this.onMouseDownAndMove.bind(this);
-      this.cursor._mouseup = this.onMouseDownAndUp.bind(this);
+      this._cursor._mousemove = this.onMouseDownAndMove.bind(this);
+      this._cursor._mouseup = this.onMouseDownAndUp.bind(this);
 
-      document.addEventListener('mousemove', this.cursor._mousemove);
-      document.addEventListener('mouseup', this.cursor._mouseup);
+      document.addEventListener('mousemove', this._cursor._mousemove);
+      document.addEventListener('mouseup', this._cursor._mouseup);
     }
   }
 
@@ -352,15 +350,15 @@ class InputController
     e.stopPropagation();
     e.preventDefault();
 
-    if (this.cursor._mousemove)
+    if (this._cursor._mousemove)
     {
-      document.removeEventListener('mousemove', this.cursor._mousemove);
-      this.cursor._mousemove = null;
+      document.removeEventListener('mousemove', this._cursor._mousemove);
+      this._cursor._mousemove = null;
     }
-    if (this.cursor._mouseup)
+    if (this._cursor._mouseup)
     {
-      document.removeEventListener('mouseup', this.cursor._mouseup);
-      this.cursor._mouseup = null;
+      document.removeEventListener('mouseup', this._cursor._mouseup);
+      this._cursor._mouseup = null;
     }
 
     this.doInputDownAndUp(e.clientX, e.clientY);
@@ -380,7 +378,7 @@ class InputController
     this.emit("inputdown", this, pointer.x, pointer.y,
         pointer.initial.target, pointer.initial.targetType, event);
 
-    this.cursor._timer = setTimeout(() => {
+    this._cursor._timer = setTimeout(() => {
       if (pointer.isWaitingForMoveMode())
       {
         pointer.moveMode = this._swapMouseScheme ? false : true;//default true
@@ -424,10 +422,10 @@ class InputController
 
   doInputDownAndUp(x, y)
   {
-    if (this.cursor._timer)
+    if (this._cursor._timer)
     {
-      clearTimeout(this.cursor._timer);
-      this.cursor._timer = null;
+      clearTimeout(this._cursor._timer);
+      this._cursor._timer = null;
     }
 
     const pointer = this._pointer;

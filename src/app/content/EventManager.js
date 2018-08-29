@@ -62,6 +62,7 @@ class Events
   destroy()
   {
     //TODO: Remove all event listeners...
+    this.controller.clearListeners();
   }
 
   getLogger()

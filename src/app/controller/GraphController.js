@@ -1,20 +1,17 @@
 import Config from 'config.js';
 
-import InputController from './InputController.js';
+import Eventable from 'util/Eventable.js';
+
 import SelectionBox from './SelectionBox.js';
 import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
 
-class GraphController extends InputController
+class GraphController
 {
   constructor()
   {
-    super();
-
-    //TODO: this should be passed-in
-    const input = this;
-
-    this.input = input;
+    this.graph = null;
+    this.input = null;
     this.labelEditor = null;
     this.machineBuilder = null;
 
@@ -48,14 +45,6 @@ class GraphController extends InputController
     this.onDragStart = this.onDragStart.bind(this);
     this.onDragMove = this.onDragMove.bind(this);
     this.onDragStop = this.onDragStop.bind(this);
-
-    input.on("inputdown", this.onInputDown);
-    input.on("inputmove", this.onInputMove);
-    input.on("inputup", this.onInputUp);
-    input.on("inputaction", this.onInputAction);
-    input.on("dragstart", this.onDragStart);
-    input.on("dragmove", this.onDragMove);
-    input.on("dragstop", this.onDragStop);
 
     //The difference between controller events vs graph events is: controller has user-intent
 
@@ -132,19 +121,24 @@ class GraphController extends InputController
     this.registerEvent("tryCreateWhileTrash");
   }
 
-  initialize(app, workspace)
+  initialize(app)
   {
-    super.initialize(app.graph, workspace);
-
-    this.selector.graph = app.graph;
+    this.graph = this.selector.graph = app.graph;
     this.labelEditor = app.viewport.labelEditor;
     this.machineBuilder = app.machineBuilder;
+    this.input = app.inputController;
+
+    this.input.on("inputdown", this.onInputDown);
+    this.input.on("inputmove", this.onInputMove);
+    this.input.on("inputup", this.onInputUp);
+    this.input.on("inputaction", this.onInputAction);
+    this.input.on("dragstart", this.onDragStart);
+    this.input.on("dragmove", this.onDragMove);
+    this.input.on("dragstop", this.onDragStop);
   }
 
   destroy()
   {
-    super.destroy();
-
     this.input.removeEventListener("inputdown", this.onInputDown);
     this.input.removeEventListener("inputmove", this.onInputMove);
     this.input.removeEventListener("inputup", this.onInputUp);
@@ -960,6 +954,8 @@ class GraphController extends InputController
     return false;
   }
 }
+//Mixin Eventable
+Eventable.mixin(GraphController);
 
 function moveNodesOutOfEdges(target, graph)
 {

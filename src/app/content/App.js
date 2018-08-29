@@ -2,8 +2,12 @@ import React from 'react';
 import { hot } from 'react-hot-loader';
 import './App.css';
 
-import GraphController from 'controller/GraphController.js';
 import NodalGraph from 'graph/NodalGraph.js';
+
+import GraphController from 'controller/GraphController.js';
+import InputController from 'controller/InputController.js';
+import MachineController from 'controller/MachineController.js';
+
 import AutoSaver from 'util/AutoSaver.js';
 import HotKeys from './HotKeys.js';
 
@@ -34,15 +38,14 @@ class App extends React.Component
     this.toolbar = React.createRef();
 
     //Must be initialized (will be called in Workspace.componentDidMount)
-    this.controller = new GraphController();
-    this.graphController = this.controller;
-    this.inputController = this.controller;
-    this.machineController = this.controller;
+    this.graphController = new GraphController();
+    this.inputController = new InputController();
+    this.machineController = new MachineController();
 
     this.graph = new NodalGraph();
-    this.machineBuilder = new FSABuilder(this.graph, this.controller);
+    this.machineBuilder = new FSABuilder(this.graph, this.graphController);
     this.testingManager = new TestingManager(this.machineBuilder);
-    this.eventManager = new EventManager(this.graph, this.controller);
+    this.eventManager = new EventManager(this.graph, this.graphController);
     this.hotKeys = new HotKeys(this.graph, this.eventManager);
     this.tutorial = new Tutorial(this);
 
@@ -71,10 +74,12 @@ class App extends React.Component
     }
 
     const graph = this.graph;
-    const controller = this.controller;
 
     //Initialize the controller to graph components
-    controller.initialize(this, this.workspace.ref);
+    this.inputController.initialize(this);
+    this.graphController.initialize(this);
+    this.machineController.initialize(this);
+
     this.machineBuilder.initialize(this);
     this.eventManager.initialize();
     this.hotKeys.initialize(this.workspace, this.toolbar);
@@ -105,6 +110,9 @@ class App extends React.Component
     this.hotKeys.destroy();
     this.eventManager.destroy();
     this.machineBuilder.destroy();
+
+    this.machineController.destroy();
+    this.graphController.destroy();
     this.inputController.destroy();
 
     //Upload drop zone
@@ -233,8 +241,10 @@ class App extends React.Component
 
   render()
   {
-    const graphController = this.graphController;
     const inputController = this.inputController;
+    const graphController = this.graphController;
+    const machineController = this.machineController;
+
     const graph = this.graph;
     const machineBuilder = this.machineBuilder;
     const tester = this.testingManager;
