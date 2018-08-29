@@ -14,12 +14,12 @@ class CursorMode extends React.Component
 
   render()
   {
-    const controller = this.props.controller;
+    const inputController = this.props.inputController;
     return <div id="cursor-btn">
-      <IconButton id="action-mode" className={!controller._swapMouseScheme ? "active" : ""} onClick={() => controller.setMouseActionMode(false)} title="Action Mode">
+      <IconButton id="action-mode" className={!inputController._swapMouseScheme ? "active" : ""} onClick={() => inputController.setMouseActionMode(false)} title="Action Mode">
         <CreateIcon/>
       </IconButton>
-      <IconButton id="move-mode" className={controller._swapMouseScheme ? "active" : ""} onClick={() => controller.setMouseActionMode(true)} title="Move Mode">
+      <IconButton id="move-mode" className={inputController._swapMouseScheme ? "active" : ""} onClick={() => inputController.setMouseActionMode(true)} title="Move Mode">
         <MoveIcon/>
       </IconButton>
     </div>;

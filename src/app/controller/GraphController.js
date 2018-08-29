@@ -143,7 +143,7 @@ class GraphController extends InputController
 
   destroy()
   {
-    super();
+    super.destroy();
 
     this.input.removeEventListener("inputdown", this.onInputDown);
     this.input.removeEventListener("inputmove", this.onInputMove);

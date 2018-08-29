@@ -35,6 +35,7 @@ class App extends React.Component
 
     //Must be initialized (will be called in Workspace.componentDidMount)
     this.controller = new GraphController();
+    this.inputController = this.controller;
     this.graph = new NodalGraph();
     this.machineBuilder = new FSABuilder(this.graph, this.controller);
     this.testingManager = new TestingManager(this.machineBuilder);
@@ -77,7 +78,7 @@ class App extends React.Component
 
     //Notify on create in delete mode
     const tryCreateWhileTrash = () => {
-      if (controller.pointer.trashMode)
+      if (this.inputController.pointer.trashMode)
       {
         this.notification.addWarningMessage(I18N.toString("message.warning.cannotmodify"),
           "tryCreateWhileTrash", true);
@@ -230,6 +231,7 @@ class App extends React.Component
   render()
   {
     const controller = this.controller;
+    const inputController = this.inputController;
     const graph = this.graph;
     const machineBuilder = this.machineBuilder;
     const tester = this.testingManager;
@@ -257,7 +259,7 @@ class App extends React.Component
             visibility: this.shouldHideContent() ? "hidden" : "visible"
           }}>
 
-          <Viewport ref={ref=>this.viewport=ref} app={this} graph={graph} controller={controller} tester={tester}/>
+          <Viewport ref={ref=>this.viewport=ref} app={this} graph={graph} inputController={inputController} tester={tester}/>
         </div>
 
         <div className={"workspace-drawer" +

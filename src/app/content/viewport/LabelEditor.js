@@ -187,7 +187,7 @@ class LabelEditor extends React.Component
 
   render()
   {
-    const controller = this.props.controller;
+    const inputController = this.props.inputController;
     const targetStyle = {
       visibility: "hidden"
     };
@@ -200,8 +200,8 @@ class LabelEditor extends React.Component
       //Assumes target is an instance of Edge
       const center = target.getCenterPoint();
       const screen = getScreenPosition(this.props.screen,
-        center.x + controller.pointer.offsetX,
-        center.y + controller.pointer.offsetY);
+        center.x + inputController.pointer.offsetX,
+        center.y + inputController.pointer.offsetY);
       const x = screen.x;
       const y = screen.y + LABEL_OFFSET_Y + EDITOR_OFFSET_Y;
       const offsetX = -(this.parentElement.offsetWidth / 2);
