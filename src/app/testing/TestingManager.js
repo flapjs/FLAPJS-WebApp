@@ -6,9 +6,9 @@ import TestingInputList from './TestingInputList.js';
 
 class TestingManager
 {
-  constructor(machineBuilder)
+  constructor()
   {
-    this.machineBuilder = machineBuilder;
+    this.machineController = null;
 
     this.inputList = new TestingInputList();
 
@@ -17,13 +17,27 @@ class TestingManager
     this.errorCheckMode = TestingManager.NO_ERROR_CHECK;
     this.stepByStepMode = false;
 
-    this.testMode = new TestMode(machineBuilder, this);
+    this.testMode = new TestMode(this);
+  }
+
+  initialize(app)
+  {
+    this.machineController = app.machineController;
+
+    this.testMode.initialize(app);
+  }
+
+  destroy()
+  {
+
   }
 
   setErrorCheckMode(mode)
   {
+    const machineBuilder = this.machineController.getMachineBuilder();
+
     //Update machine builder error checker
-    this.machineBuilder.setMachineType(this.machineBuilder.getMachineType());
+    machineBuilder.setMachineType(machineBuilder.getMachineType());
 
     if (mode == TestingManager.NO_ERROR_CHECK)
     {

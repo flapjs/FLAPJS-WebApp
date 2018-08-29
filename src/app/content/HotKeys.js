@@ -2,18 +2,22 @@ import Downloader from 'util/Downloader.js';
 
 class HotKeys
 {
-  constructor(graph, events)
+  constructor(events)
   {
-    this.graph = graph;
-    this.events = events;
+    this.workspace = null;
+    this.toolbar = null;
+    this.events = null;
+    this.graphController = null;
 
     this.onKeyDown = this.onKeyDown.bind(this);
   }
 
-  initialize(workspace, toolbar)
+  initialize(app)
   {
-    this.workspace = workspace;
-    this.toolbar = toolbar;
+    this.workspace = app.workspace;
+    this.toolbar = app.toolbar;
+    this.events = app.eventManager;
+    this.graphController = app.graphController;
 
     window.addEventListener('keydown', this.onKeyDown);
   }
@@ -30,7 +34,7 @@ class HotKeys
     {
       //Save as machine file
       //TODO: Refer to export panel
-      Downloader.downloadText(this.toolbar.getMachineName() + '.json', JSON.stringify(this.graph.toJSON()));
+      Downloader.downloadText(this.toolbar.getMachineName() + '.json', JSON.stringify(this.graphController.getGraph().toJSON()));
       e.preventDefault();
       e.stopPropagation();
     }

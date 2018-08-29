@@ -37,17 +37,19 @@ class App extends React.Component
     this.notification = null;
     this.toolbar = React.createRef();
 
+    this.graph = new NodalGraph();
+
     //Must be initialized (will be called in Workspace.componentDidMount)
-    this.graphController = new GraphController();
+    this.graphController = new GraphController(this.graph);
     this.inputController = new InputController();
     this.machineController = new MachineController();
 
-    this.graph = new NodalGraph();
     this.machineBuilder = new FSABuilder(this.graph, this.graphController);
-    this.testingManager = new TestingManager(this.machineBuilder);
-    this.eventManager = new EventManager(this.graph);
-    this.hotKeys = new HotKeys(this.graph, this.eventManager);
-    this.tutorial = new Tutorial(this);
+    this.testingManager = new TestingManager();
+    this.eventManager = new EventManager();
+
+    this.hotKeys = new HotKeys();
+    this.tutorial = new Tutorial();
 
     this.state = {
       isOpen: true,
@@ -78,9 +80,10 @@ class App extends React.Component
     this.graphController.initialize(this);
     this.machineController.initialize(this);
 
-    this.eventManager.initialize(this.graphController);
     this.machineBuilder.initialize(this);
-    this.hotKeys.initialize(this.workspace, this.toolbar);
+    this.testingManager.initialize(this);
+    this.eventManager.initialize(this);
+    this.hotKeys.initialize(this);
 
     //Notify on create in delete mode
     const tryCreateWhileTrash = () => {
@@ -100,7 +103,7 @@ class App extends React.Component
     workspaceDOM.addEventListener("dragleave", this.onDragLeave);
 
     //Begin tutorial
-    this.tutorial.start();
+    this.tutorial.start(this);
   }
 
   componentWillUnmount()

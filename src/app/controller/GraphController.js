@@ -8,12 +8,15 @@ import Edge from 'graph/Edge.js';
 
 class GraphController
 {
-  constructor()
+  constructor(graph)
   {
-    this.graph = null;
-    this.input = null;
+    this.graph = graph;
+
+    this.inputController = null;
+    this.machineController = null;
+
     this.labelEditor = null;
-    this.machineBuilder = null;
+    this.selector = new SelectionBox(null);
 
     this.prevQuad = {
       radians: 0, length: 0,
@@ -33,8 +36,6 @@ class GraphController
     this.firstEmptyX = 0;
     this.firstEmptyY = 0;
     this.ghostInitialMarker = null;
-
-    this.selector = new SelectionBox(null);
 
     this.shouldDestroyPointlessEdges = Config.DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
 
@@ -123,29 +124,31 @@ class GraphController
 
   initialize(app)
   {
-    this.graph = this.selector.graph = app.graph;
+    this.selector.graph = this.graph;
+    
     this.labelEditor = app.viewport.labelEditor;
-    this.machineBuilder = app.machineBuilder;
-    this.input = app.inputController;
 
-    this.input.on("inputdown", this.onInputDown);
-    this.input.on("inputmove", this.onInputMove);
-    this.input.on("inputup", this.onInputUp);
-    this.input.on("inputaction", this.onInputAction);
-    this.input.on("dragstart", this.onDragStart);
-    this.input.on("dragmove", this.onDragMove);
-    this.input.on("dragstop", this.onDragStop);
+    this.inputController = app.inputController;
+    this.machineController = app.machineController;
+
+    this.inputController.on("inputdown", this.onInputDown);
+    this.inputController.on("inputmove", this.onInputMove);
+    this.inputController.on("inputup", this.onInputUp);
+    this.inputController.on("inputaction", this.onInputAction);
+    this.inputController.on("dragstart", this.onDragStart);
+    this.inputController.on("dragmove", this.onDragMove);
+    this.inputController.on("dragstop", this.onDragStop);
   }
 
   destroy()
   {
-    this.input.removeEventListener("inputdown", this.onInputDown);
-    this.input.removeEventListener("inputmove", this.onInputMove);
-    this.input.removeEventListener("inputup", this.onInputUp);
-    this.input.removeEventListener("inputaction", this.onInputAction);
-    this.input.removeEventListener("dragstart", this.onDragStart);
-    this.input.removeEventListener("dragmove", this.onDragMove);
-    this.input.removeEventListener("dragstop", this.onDragStop);
+    this.inputController.removeEventListener("inputdown", this.onInputDown);
+    this.inputController.removeEventListener("inputmove", this.onInputMove);
+    this.inputController.removeEventListener("inputup", this.onInputUp);
+    this.inputController.removeEventListener("inputaction", this.onInputAction);
+    this.inputController.removeEventListener("dragstart", this.onDragStart);
+    this.inputController.removeEventListener("dragmove", this.onDragMove);
+    this.inputController.removeEventListener("dragstop", this.onDragStop);
   }
 
   getGraph()
@@ -153,9 +156,19 @@ class GraphController
     return this.graph;
   }
 
+  getLabelEditor()
+  {
+    return this.labelEditor;
+  }
+
+  getSelector()
+  {
+    return this.selector;
+  }
+
   createNode(x, y)
   {
-    const newNodeLabel = this.machineBuilder.getLabeler().getNextDefaultNodeLabel();
+    const newNodeLabel = this.machineController.getMachineBuilder().getLabeler().getNextDefaultNodeLabel();
     const node = this.graph.newNode(x, y, newNodeLabel);
     node.x = x || (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
     node.y = y || (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
@@ -298,7 +311,7 @@ class GraphController
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    *************************************************************************/
 
-  onInputDown(input, x, y, target, targetType, event)
+  onInputDown(inputController, x, y, target, targetType, event)
   {
     //Make sure to lose focus on label editors
     if (this.labelEditor.inputElement === document.activeElement)
@@ -317,14 +330,14 @@ class GraphController
     }
   }
 
-  onInputMove(input, x, y, target, targetType)
+  onInputMove(inputController, x, y, target, targetType)
   {
 
   }
 
-  onInputUp(input, x, y, target, targetType)
+  onInputUp(inputController, x, y, target, targetType)
   {
-    const pointer = input.getPointer();
+    const pointer = inputController.getPointer();
 
     if (targetType === 'none')
     {
@@ -358,9 +371,9 @@ class GraphController
     }
   }
 
-  onInputAction(input, x, y, target, targetType)
+  onInputAction(inputController, x, y, target, targetType)
   {
-    const pointer = input.getPointer();
+    const pointer = inputController.getPointer();
     const trashMode = pointer.isTrashMode(x, y);
 
     //Makes sure that user cannot toggle state while in trash mode
@@ -449,10 +462,10 @@ class GraphController
     }
   }
 
-  onDragStart(input, x, y, target, targetType)
+  onDragStart(inputController, x, y, target, targetType)
   {
     //TODO: sometimes, pointer.target is null when it should not be...
-    const pointer = input.getPointer();
+    const pointer = inputController.getPointer();
 
     //If is in move mode...
     if (pointer.isMoveMode())
@@ -616,9 +629,9 @@ class GraphController
     return false;
   }
 
-  onDragMove(input, x, y, target, targetType)
+  onDragMove(inputController, x, y, target, targetType)
   {
-    const pointer = input.getPointer();
+    const pointer = inputController.getPointer();
 
     //If is in move mode...
     if (pointer.isMoveMode())
@@ -690,9 +703,9 @@ class GraphController
     return false;
   }
 
-  onDragStop(input, x, y, target, targetType)
+  onDragStop(inputController, x, y, target, targetType)
   {
-    const pointer = input.getPointer();
+    const pointer = inputController.getPointer();
 
     //If is in move mode...
     if (pointer.isMoveMode())

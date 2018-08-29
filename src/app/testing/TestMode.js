@@ -5,14 +5,17 @@ import { DFA } from 'machine/DFA.js';
 
 class TestMode
 {
-  constructor(machineBuilder, testingManager)
+  constructor(testingManager)
   {
-    this.machineBuilder = machineBuilder;
+    this.graphController = null;
+    this.machineController = null;
+
+    this.testingManager = testingManager;
+
     this.targets = [];
 
     this.history = [];
     this.indexofString = -1;
-    this.testingManager = testingManager;
     this.result = false;
 
     //for nfa use
@@ -25,7 +28,19 @@ class TestMode
     this.timer = null;
 
     this.onNodeDestroy = this.onNodeDestroy.bind(this);
-    machineBuilder.graph.on("nodeDestroy", this.onNodeDestroy);
+  }
+
+  initialize(app)
+  {
+    this.graphController = app.graphController;
+    this.machineController = app.machineController;
+
+    this.graphController.getGraph().on("nodeDestroy", this.onNodeDestroy);
+  }
+
+  destroy()
+  {
+    this.graphController.getGraph().removeEventListener("nodeDestroy", this.onNodeDestroy);
   }
 
   onNodeDestroy(node)
@@ -36,9 +51,9 @@ class TestMode
   onStart()
   {
     //Check the machine, if DFA, then it must be a valid DFA
-    /*if (this.machineBuilder.getMachineType() == "DFA")
+    /*if (this.machineController.getMachineBuilder().getMachineType() == "DFA")
     {
-      const dfa = this.machineBuilder.toDFA();
+      const dfa = this.machineController.getMachineBuilder().toDFA();
       if (!dfa.validate()) return;
     }*/
     this.prepareForNewTest();
@@ -151,7 +166,7 @@ class TestMode
   onNextStep()
   {
     const testInput = this.testingManager.inputList.getCurrentInput();
-    const fsa = this.machineBuilder.getMachine();
+    const fsa = this.machineController.getMachineBuilder().getMachine();
 
     //Get next character of current test string
     console.log("Getting next character....");
@@ -207,7 +222,7 @@ class TestMode
 
       for(const state of this.cachedStates)
       {
-        let node = this.machineBuilder.graph.getNodeByLabel(state.state);
+        let node = this.graphController.getGraph().getNodeByLabel(state.state);
         if (!this.targets.includes(node)) this.targets.push(node);
       }
       console.log("For that character, the next state is: " + JSON.stringify(this.cachedStates));
@@ -235,14 +250,21 @@ class TestMode
   prepareForNewTest()
   {
     this.cachedStates.length = 0;
-    const graph = this.machineBuilder.graph;
+
+    const graph = this.graphController.getGraph();
     if (graph.isEmpty()) return;
+
+    const machine = this.machineController.getMachineBuilder().getMachine();
+
     this.targets.length = 0;
-    let startState = this.machineBuilder.getMachine().getStartState()
-    for (let curr_state of this.machineBuilder.getMachine().doClosureTransition(startState)){
+
+    let startState = machine.getStartState();
+    for (let curr_state of machine.doClosureTransition(startState))
+    {
       this.cachedStates.push({state: curr_state, index: 0});
       this.targets.push(graph.getNodeByLabel(curr_state));
     }
+
     this.cachedSymbols.length = 0;
     this.checkedStates.length = 0;
     this.indexofString = -1;
