@@ -29,6 +29,7 @@ class TestingPanel extends React.Component
     this.onGraphChange = this.onGraphChange.bind(this);
     this.onTestsRunAll = this.onTestsRunAll.bind(this);
     this.onTestsClear = this.onTestsClear.bind(this);
+    this.onTestsSave = this.onTestsSave.bind(this);
   }
 
   componentWillMount()
@@ -106,6 +107,11 @@ class TestingPanel extends React.Component
     this.props.tester.inputList.clearTests();
   }
 
+  onTestsSave(e)
+  {
+    Downloader.downloadText(TEST_FILENAME, testList.getTestsAsStrings().join("\n"));
+  }
+
   render()
   {
     const viewport = this.props.viewport;
@@ -129,28 +135,35 @@ class TestingPanel extends React.Component
 
           <div className="scrollbar-container">
             <div className="test-inputlist-content">
-              {isTestInvalid &&
-                <label className="test-inputlist-content-warning">Not a valid machine!</label>}
-              {testList.getTests().map((e, i) =>
-                <TestingInput key={e.id} index={i}
-                  testList={testList}
-                  machineBuilder={machineBuilder}/>)}
+              {
+                isTestInvalid &&
+                <label className="test-inputlist-content-warning">Not a valid machine!</label>
+              }
+              {
+                testList.getTests().map((e, i) =>
+                  <TestingInput key={e.id} index={i}
+                    testList={testList}
+                    machineBuilder={machineBuilder}/>)
+              }
+
               <button className="panel-button" onClick={this.onTestsClear}>
                 {I18N.toString("action.testing.clear")}
               </button>
             </div>
           </div>
 
-          <button className="panel-button" id="test-upload" onClick={() => this.uploadInput.click()}>
+          <button className="panel-button" id="test-upload"
+            onClick={() => this.uploadInput.click()}>
             <input ref={ref=>this.uploadInput=ref}
               id="test-upload-input" type="file" name="import"
               style={{display: "none"}}
               onChange={this.onUploadFileChange} accept=".txt"/>
             {I18N.toString("action.testing.import")}
           </button>
-          <button className="panel-button" id="test-save" onClick={() => {
-            Downloader.downloadText(TEST_FILENAME, testList.getTestsAsStrings().join("\n"));
-          }}>
+
+          <button className="panel-button" id="test-save"
+            onClick={this.onTestsSave}
+            disabled={this.props.tester.inputList.isEmpty()}>
             {I18N.toString("action.testing.save")}
           </button>
         </div>

@@ -119,14 +119,10 @@ class Toolbar extends React.Component
               <OfflineIcon/>
             </IconButton>
             {/*Upload Button*/}
-            <UploadButton id="toolbar-upload-alt" title={I18N.toString("action.toolbar.uploadmachine")}
-              graph={graph}
-              onChange={(e)=>{
-                this.setMachineName(e.name);
-                events.clear();
-              }}>
+            <div id="toolbar-upload-alt"
+              title={I18N.toString("action.toolbar.uploadmachine")}>
               <MoreIcon/>
-            </UploadButton>
+            </div>
           </div>
         </div>
         {/*Machine Type*/}
@@ -151,7 +147,7 @@ class Toolbar extends React.Component
         </IconButton>
         {/*Upload Button*/}
         <UploadButton className="navicon" id="toolbar-upload" title={I18N.toString("action.toolbar.uploadmachine")}
-          graph={graph}
+          graphController={graphController}
           onChange={(e)=>{
             this.setMachineName(e.name);
             events.clear();

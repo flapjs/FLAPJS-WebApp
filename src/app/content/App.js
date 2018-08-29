@@ -177,25 +177,27 @@ class App extends React.Component
     if (ev.dataTransfer.items)
     {
       const length = ev.dataTransfer.items.length;
-      for(let i = 0; i < length; ++i)
+
+      //Just get the first one
+      if (length >= 1)
       {
-        let file = ev.dataTransfer.items[i];
+        const file = ev.dataTransfer.items[0];
         if (file.kind === 'file')
         {
           const data = file.getAsFile();
-          //TODO: should show error message if invalid
-          GraphUploader.uploadFileToGraph(data, this._graph, null, null);
+          this.graphController.getUploader().uploadFileGraph(data);
         }
       }
     }
     else
     {
       const length = ev.dataTransfer.files.length;
-      for(let i = 0; i < length; ++i)
+
+      //Just get the first one
+      if (length >= 1)
       {
-        const data = ev.dataTransfer.files[i];
-        //TODO: should show error message if invalid
-        GraphUploader.uploadFileToGraph(data, this._graph, null, null);
+        const data = ev.dataTransfer.files[0];
+        this.graphController.getUploader().uploadFileGraph(data);
       }
     }
 

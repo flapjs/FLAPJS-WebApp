@@ -34,9 +34,16 @@ class TestList extends React.Component
       try
       {
         const testInputs = data.replace(/\n/g, ",").split(",");
-        for(const testInput of testInputs)
+        if (testInputs.length <= 0)
         {
-          tester.addTestInput(testInput.trim());
+          tester.addTestInput("");
+        }
+        else
+        {
+          for(const testInput of testInputs)
+          {
+            tester.addTestInput(testInput.trim());
+          }
         }
       }
       catch(e)

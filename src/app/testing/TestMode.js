@@ -84,10 +84,6 @@ class TestMode
           this.onPause();
         }
       }
-      else
-      {
-        console.log("Finished tests...");
-      }
     };
     this.timer = setTimeout(step, STEPTIME);
   }
@@ -133,6 +129,8 @@ class TestMode
       //Copy the old step
       for(const target of previous.targets)
       {
+        if (!target) throw new Error("Found null target");
+
         this.targets.push(target);
       }
       for(const state of previous.cachedStates)
@@ -169,16 +167,11 @@ class TestMode
     const fsa = this.machineController.getMachineBuilder().getMachine();
 
     //Get next character of current test string
-    console.log("Getting next character....");
     this.indexofString += 1;
-    for(let state of this.cachedStates){
-      console.log("alsdlahflahlasf", state)
-    }
     //If no more characters to get...
     if(this.indexofString >= testInput.value.length)
     {
       //End of test string
-      console.log("...end of test string...");
       //Run it one more time...
       this.result = solveNFAbyStep(fsa, null, this.cachedStates, this.cachedSymbols, this.checkedStates);
       testInput.setResult(this.result);
@@ -187,15 +180,12 @@ class TestMode
       if (!this.testingManager.inputList.hasNextInput())
       {
         //End of test!
-        console.log("= End of test =");
         this.onPause();
         return false;
       }
       else
       {
         const result = this.testingManager.inputList.nextInput();
-        console.log("...setting up for another test...");
-        console.log(JSON.stringify(this.testingManager.inputList.getCurrentInput()));
 
         //Stop the resume at each string
         //this.running = false;
@@ -212,22 +202,19 @@ class TestMode
 
       //Run it
       let nextChar = testInput.value[this.indexofString];
-      console.log("The next character (should never be null): " + nextChar);
-
 
       this.result = solveNFAbyStep(fsa, nextChar, this.cachedStates, this.cachedSymbols, this.checkedStates);
-      console.log("result is ", this.cachedStates);
       //Update targets
       this.targets.length = 0;
 
       for(const state of this.cachedStates)
       {
         let node = this.graphController.getGraph().getNodeByLabel(state.state);
+        if (!node) throw new Error("Found null target");
+
         if (!this.targets.includes(node)) this.targets.push(node);
       }
-      console.log("For that character, the next state is: " + JSON.stringify(this.cachedStates));
       if(this.targets.length == 0) this.indexofString = testInput.value.length;
-      console.log("Have we reached the end? " + this.result);
       return true;
     }
   }
@@ -262,7 +249,9 @@ class TestMode
     for (let curr_state of machine.doClosureTransition(startState))
     {
       this.cachedStates.push({state: curr_state, index: 0});
-      this.targets.push(graph.getNodeByLabel(curr_state));
+      const node = graph.getNodeByLabel(curr_state);
+      if (!node) throw new Error("Found null target");
+      this.targets.push(node);
     }
 
     this.cachedSymbols.length = 0;

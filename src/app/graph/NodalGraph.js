@@ -19,6 +19,8 @@ class NodalGraph
 
     this.shouldUseQuadCoords = false;
 
+    this._version = 0;
+
     //nodeCreate(node) - Whenever a new node is created
     this.registerEvent("nodeCreate");
     //nodeDestroy(node) - Whenever a node is destroyed (even on clear)
@@ -330,6 +332,8 @@ class NodalGraph
 
     //Auto layout graph
     GraphLayout.applyLayout(this);
+    
+    this.markDirty();
   }
 
   markDirty()

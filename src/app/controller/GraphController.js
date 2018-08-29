@@ -3,8 +3,12 @@ import Config from 'config.js';
 import Eventable from 'util/Eventable.js';
 
 import SelectionBox from './SelectionBox.js';
+import Uploader from './Uploader.js';
+
 import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
+
+import GraphLayout from "graph/GraphLayout.js";
 
 class GraphController
 {
@@ -16,7 +20,8 @@ class GraphController
     this.machineController = null;
 
     this.labelEditor = null;
-    this.selector = new SelectionBox(null);
+    this.selector = new SelectionBox(graph);
+    this.uploader = new Uploader(graph);
 
     this.prevQuad = {
       radians: 0, length: 0,
@@ -124,8 +129,6 @@ class GraphController
 
   initialize(app)
   {
-    this.selector.graph = this.graph;
-    
     this.labelEditor = app.viewport.labelEditor;
 
     this.inputController = app.inputController;
@@ -164,6 +167,16 @@ class GraphController
   getSelector()
   {
     return this.selector;
+  }
+
+  getUploader()
+  {
+    return this.uploader;
+  }
+
+  applyAutoLayout()
+  {
+    GraphLayout.applyLayout(this.graph);
   }
 
   createNode(x, y)

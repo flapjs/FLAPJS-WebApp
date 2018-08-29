@@ -1,10 +1,5 @@
 import React from 'react';
 
-import GraphUploader from 'graph/GraphUploader.js';
-
-const FILETYPE_JSON = "application/json";
-const FILETYPE_JFLAP = ".jff";
-
 class UploadButton extends React.Component
 {
   constructor(props)
@@ -17,22 +12,7 @@ class UploadButton extends React.Component
   onUploadFileChange(e)
   {
     const file = e.target.files[0];
-    const fileName = file.name;
-    const fileType = file.type || fileName.substring(fileName.lastIndexOf('.'));
-    if (fileType === FILETYPE_JSON)
-    {
-      //TODO: should error out if invalid
-      GraphUploader.uploadFileToGraph(file, this.props.graph, this.props.onChange);
-    }
-    else if (fileType === FILETYPE_JFLAP)
-    {
-      //TODO: should error out if invalid
-      GraphUploader.uploadJFFToGraph(file, this.props.graph, this.props.onChange);
-    }
-    else
-    {
-      throw new Error("Unknown file type\'" + fileType + "\'");
-    }
+    this.props.graphController.getUploader().uploadFileGraph(file).then(this.props.onChange);
   }
 
   render()
@@ -48,7 +28,7 @@ class UploadButton extends React.Component
       <input id={inputID} type="file" name="import"
         style={{display:"none"}}
         onChange={this.onUploadFileChange}
-        accept={FILETYPE_JSON + "," + FILETYPE_JFLAP}/>
+        accept={this.props.graphController.getUploader().getValidFileTypes().join(",")}/>
       <label htmlFor={inputID}>
         {this.props.children}
       </label>

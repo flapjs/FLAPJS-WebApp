@@ -50,6 +50,7 @@ class FSABuilder extends MachineBuilder
     this.graph.on("edgeDestination", this.onGraphChange);
     this.graph.on("toggleAccept", this.onGraphChange);
     this.graph.on("newInitial", this.onGraphChange);
+    this.graph.on("markDirty", this.onGraphChange);
 
     this.onGraphChange();
   }
@@ -67,6 +68,7 @@ class FSABuilder extends MachineBuilder
     this.graph.removeEventListener("edgeDestination", this.onGraphChange);
     this.graph.removeEventListener("toggleAccept", this.onGraphChange);
     this.graph.removeEventListener("newInitial", this.onGraphChange);
+    this.graph.removeEventListener("markDirty", this.onGraphChange);
 
     super.destroy();
   }

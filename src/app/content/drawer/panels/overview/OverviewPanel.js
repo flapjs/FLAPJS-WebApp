@@ -10,11 +10,6 @@ import TransitionTable from './transitiontable/TransitionTable.js';
 import TransitionFunction from './transitionfunction/TransitionFunction.js';
 import FormalDefinition from "./formaldefinition/FormalDefinition";
 
-import GraphLayout from "graph/GraphLayout.js"
-
-import DFA from 'machine/DFA.js';
-import { convertToDFA } from 'machine/util/convertNFA.js';
-
 class OverviewPanel extends React.Component
 {
   constructor(props)
@@ -31,6 +26,7 @@ class OverviewPanel extends React.Component
     this.onConvertToDFA = this.onConvertToDFA.bind(this);
     this.onConvertToNFA = this.onConvertToNFA.bind(this);
     this.onAutoLayout = this.onAutoLayout.bind(this);
+
     this.onChangeAutoRename = this.onChangeAutoRename.bind(this);
 
     this.switchDefinition = this.switchDefinition.bind(this);
@@ -38,35 +34,33 @@ class OverviewPanel extends React.Component
 
   onConvertToDFA(e)
   {
-    const graph = this.props.graphController.getGraph();
-    const machineBuilder = this.props.machineController.getMachineBuilder();
-    const result = convertToDFA(machineBuilder.getMachine(), new DFA());
-    graph.copyMachine(result);
-    machineBuilder.setMachineType("DFA");
+    const machineController = this.props.machineController;
+    machineController.convertMachineTo("DFA");
   }
 
   onConvertToNFA(e)
   {
-    const machineBuilder = this.props.machineController.getMachineBuilder();
-    machineBuilder.setMachineType("NFA");
+    const machineController = this.props.machineController;
+    machineController.convertMachineTo("NFA");
   }
 
   onAutoLayout(e)
   {
-    GraphLayout.applyLayout(this.props.graphController.getGraph());
+    const graphController = this.props.graphController;
+    graphController.applyAutoLayout();
+  }
+
+  onChangeMachineType(e)
+  {
+    const value = e.target.value;
+    const machineController = this.props.machineController;
+    machineController.changeMachineTo(value);
   }
 
   onChangeAutoRename(e)
   {
     const machineBuilder = this.props.machineController.getMachineBuilder();
     machineBuilder.setAutoRenameNodes(e.target.checked);
-  }
-
-  onChangeMachineType(e)
-  {
-    const value = e.target.value;
-    const machineBuilder = this.props.machineController.getMachineBuilder();
-    machineBuilder.setMachineType(value);
   }
 
   switchDefinition()

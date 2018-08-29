@@ -1,13 +1,18 @@
+import { convertToDFA } from 'machine/util/convertNFA.js';
+import DFA from 'machine/DFA.js';
+
 class MachineController
 {
   constructor(machineBuilder)
   {
     this.machineBuilder = machineBuilder;
+
+    this.graphController = null;
   }
 
   initialize(app)
   {
-    
+    this.graphController = app.graphController;
   }
 
   destroy()
@@ -22,12 +27,26 @@ class MachineController
 
   changeMachineTo(machineType)
   {
-
+    this.machineBuilder.setMachineType(machineType);
   }
 
   convertMachineTo(machineType)
   {
+    const currentMachineType = this.machineBuilder.getMachineType();
 
+    //Already converted machine...
+    if (currentMachineType === machineType) return;
+
+    if (machineType == "DFA" && currentMachineType == "NFA")
+    {
+      const result = convertToDFA(this.machineBuilder.getMachine(), new DFA());
+      this.graphController.getGraph().copyMachine(result);
+      this.machineBuilder.setMachineType(machineType);
+    }
+    else if (machineType == "NFA" && currentMachineType == "DFA")
+    {
+      this.changeMachineTo(machineType);
+    }
   }
 
   createSymbol(symbol)

@@ -17,7 +17,7 @@ message.offline.ready = You are already ready for offline!
 message.offline.failed = You are not ready for offline. Please refresh the page!
 message.offline.nosupport = Sorry, your browser does not support offline mode.
 
-message.intro.1 = Good Morning! Welcome to the Flap.js Workspace!
+//message.intro.1 = Good Morning! Welcome to the Flap.js Workspace!
 message.intro.2 = If you need help, the '?' button is at the top-right of the screen.
 message.tutorial.1 = ==== Quick Tutorial ==== \n Mouse \n * Action = Right Mouse \n * Move = Left Mouse \n\n Touch \n * Action = Tap-Hold \n * Move = Tap-Drag \n\n State = Double Tap \n Transition = Action-Drag \n Symbol = Any Tap \n\n Interactive elements will highlight on hover.
 message.help.1 = You need help. Unfortunately, I am not qualified to provide such assistance. Please refer to your local tutor/developer for more information.

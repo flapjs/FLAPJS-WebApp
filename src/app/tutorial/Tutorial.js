@@ -18,7 +18,6 @@ class Tutorial
     {
       notification.addMessage("message.tutorial.1");
       notification.addMessage("message.intro.2");
-      notification.addMessage("message.intro.1");
     }
   }
 }
