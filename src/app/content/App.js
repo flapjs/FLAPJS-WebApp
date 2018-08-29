@@ -35,7 +35,9 @@ class App extends React.Component
 
     //Must be initialized (will be called in Workspace.componentDidMount)
     this.controller = new GraphController();
+    this.graphController = this.controller;
     this.inputController = this.controller;
+
     this.graph = new NodalGraph();
     this.machineBuilder = new FSABuilder(this.graph, this.controller);
     this.testingManager = new TestingManager(this.machineBuilder);
@@ -231,16 +233,25 @@ class App extends React.Component
   render()
   {
     const controller = this.controller;
+    const graphController = this.graphController;
     const inputController = this.inputController;
     const graph = this.graph;
     const machineBuilder = this.machineBuilder;
     const tester = this.testingManager;
 
-    controller.update();
+    inputController.update();
 
     return <div className="app-container" ref={ref=>this.container=ref}>
-      <Toolbar ref={ref=>this.toolbar=ref} app={this} graph={graph} machineBuilder={machineBuilder} eventManager={this.eventManager} />
-      <NotificationSystem ref={ref=>this.notification=ref} graph = {graph} machineBuilder={machineBuilder} controller={controller}/>
+      <Toolbar ref={ref=>this.toolbar=ref}
+        app={this}
+        graph={graph}
+        machineBuilder={machineBuilder}
+        eventManager={this.eventManager} />
+
+      <NotificationSystem ref={ref=>this.notification=ref}
+        graph={graph}
+        machineBuilder={machineBuilder}
+        controller={controller}/>
 
       <div className="workspace-container">
         <div className={"workspace-main" +
@@ -250,7 +261,12 @@ class App extends React.Component
             opacity: this.state.isWaitingForFile ? "0.1" : "1"
           }}>
 
-          <Workspace ref={ref=>this.workspace=ref} graph={graph} machineBuilder={machineBuilder} controller={controller} tester={tester}/>
+          <Workspace ref={ref=>this.workspace=ref}
+            graph={graph}
+            machineBuilder={machineBuilder}
+            graphController={graphController}
+            inputController={inputController}
+            tester={tester}/>
         </div>
 
         <div className={"workspace-viewport" +
@@ -259,14 +275,20 @@ class App extends React.Component
             visibility: this.shouldHideContent() ? "hidden" : "visible"
           }}>
 
-          <Viewport ref={ref=>this.viewport=ref} app={this} graph={graph} inputController={inputController} tester={tester}/>
+          <Viewport ref={ref=>this.viewport=ref}
+            app={this} graph={graph}
+            inputController={inputController}
+            tester={tester}/>
         </div>
 
         <div className={"workspace-drawer" +
           (this.state.isOpen ? " open" : "") +
           (this.state.isFullscreen ? " fullscreen" : "")}>
 
-          <Drawer ref={ref=>this.drawer=ref} app={this} graph={graph} toolbar={this.toolbar} />
+          <Drawer ref={ref=>this.drawer=ref}
+            app={this}
+            graph={graph}
+            toolbar={this.toolbar} />
         </div>
       </div>
     </div>;

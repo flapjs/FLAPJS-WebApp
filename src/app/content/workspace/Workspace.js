@@ -67,8 +67,9 @@ class Workspace extends React.Component
   render()
   {
     const graph = this.props.graph;
-    const controller = this.props.controller;
-    const pointer = controller.pointer;
+    const graphController = this.props.graphController;
+    const inputController = this.props.inputController;
+    const pointer = inputController.pointer;
     const machineBuilder = this.props.machineBuilder;
     const tester = this.props.tester;
 
@@ -86,8 +87,8 @@ class Workspace extends React.Component
       {/* Graph elements */}
       <g id="workspace-content-elements" transform={
         "translate(" +
-        controller.pointer.offsetX + " " +
-        controller.pointer.offsetY + ")"}>
+        pointer.offsetX + " " +
+        pointer.offsetY + ")"}>
 
         {/* Graph origin crosshair */}
         <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="rgba(0,0,0,0.04)"/>
@@ -105,17 +106,17 @@ class Workspace extends React.Component
         {/* Graph GUIs */}
         <g>
           {/* Initial marker and ghost */}
-          { graph.getStartNode() && (controller.ghostInitialMarker == null ?
+          { graph.getStartNode() && (graphController.ghostInitialMarker == null ?
             <InitialMarkerRenderer node={graph.getStartNode()}/> :
-            <InitialMarkerRenderer node={controller.ghostInitialMarker}/>) }
+            <InitialMarkerRenderer node={graphController.ghostInitialMarker}/>) }
 
           {/* Selected elements */}
-          { controller.selector.hasSelection() &&
-            controller.selector.getSelection().map((e, i) =>
+          { graphController.selector.hasSelection() &&
+            graphController.selector.getSelection().map((e, i) =>
               <HighlightRenderer key={e.id} className="highlight-select" target={e} type="node"/>) }
 
           {/* Selection box */}
-          <SelectionBoxRenderer src={controller.selector}/>
+          <SelectionBoxRenderer src={graphController.selector}/>
 
           {/* Node warning targets */}
           { machineBuilder.machineErrorChecker.warningNodes.map((e, i) =>
@@ -139,9 +140,9 @@ class Workspace extends React.Component
             <HighlightRenderer key={e.id} className="highlight-test graph-gui" target={e} type="node" offset="6"/>) }
 
           {/* Hover markers */}
-          { controller.pointer.target &&
-            !controller.selector.isTargetSelected(controller.pointer.target) &&
-            <HighlightRenderer className="highlight-select" target={controller.pointer.target} type={controller.pointer.targetType}/> }
+          { pointer.target &&
+            !graphController.selector.isTargetSelected(pointer.target) &&
+            <HighlightRenderer className="highlight-select" target={pointer.target} type={pointer.targetType}/> }
 
         </g>
       </g>
