@@ -12,7 +12,6 @@ class InputController
   {
     this.graph = null;
     this.workspace = null;
-    this.labelEditor = null;
 
     this.pointer = new GraphPointer(null);
 
@@ -55,12 +54,11 @@ class InputController
     this.onWheel = this.onWheel.bind(this);
   }
 
-  initialize(app, workspace)
+  initialize(graph, workspace)
   {
     //Set the graph
-    this.graph = app.graph;
-    this.pointer.graph = this.graph;
-    this.labelEditor = app.viewport.labelEditor;
+    this.graph = graph;
+    this.pointer.graph = graph;
 
     //Prepare the workspace
     this.workspace = workspace;
@@ -78,8 +76,6 @@ class InputController
 
   destroy()
   {
-    this.clearListeners();
-
     //Process mouse handlers
     this.workspace.removeEventListener('mousedown', this.onMouseDown);
     this.workspace.removeEventListener('mousemove', this.onMouseMove);

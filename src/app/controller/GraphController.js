@@ -11,6 +11,10 @@ class GraphController extends InputController
   {
     super();
 
+    //TODO: this should be passed-in
+    const input = this;
+
+    this.input = input;
     this.labelEditor = null;
     this.machineBuilder = null;
 
@@ -45,13 +49,13 @@ class GraphController extends InputController
     this.onDragMove = this.onDragMove.bind(this);
     this.onDragStop = this.onDragStop.bind(this);
 
-    this.on("inputdown", this.onInputDown);
-    this.on("inputmove", this.onInputMove);
-    this.on("inputup", this.onInputUp);
-    this.on("inputaction", this.onInputAction);
-    this.on("dragstart", this.onDragStart);
-    this.on("dragmove", this.onDragMove);
-    this.on("dragstop", this.onDragStop);
+    input.on("inputdown", this.onInputDown);
+    input.on("inputmove", this.onInputMove);
+    input.on("inputup", this.onInputUp);
+    input.on("inputaction", this.onInputAction);
+    input.on("dragstart", this.onDragStart);
+    input.on("dragmove", this.onDragMove);
+    input.on("dragstop", this.onDragStop);
 
     //The difference between controller events vs graph events is: controller has user-intent
 
@@ -130,13 +134,25 @@ class GraphController extends InputController
 
   initialize(app, workspace)
   {
-    super.initialize(app, workspace);
+    super.initialize(app.graph, workspace);
 
-    this.selector.graph = this.graph;
+    this.selector.graph = app.graph;
     this.labelEditor = app.viewport.labelEditor;
     this.machineBuilder = app.machineBuilder;
   }
 
+  destroy()
+  {
+    super();
+
+    this.input.removeEventListener("inputdown", this.onInputDown);
+    this.input.removeEventListener("inputmove", this.onInputMove);
+    this.input.removeEventListener("inputup", this.onInputUp);
+    this.input.removeEventListener("inputaction", this.onInputAction);
+    this.input.removeEventListener("dragstart", this.onDragStart);
+    this.input.removeEventListener("dragmove", this.onDragMove);
+    this.input.removeEventListener("dragstop", this.onDragStop);
+  }
 
 
   createNode(x, y)
