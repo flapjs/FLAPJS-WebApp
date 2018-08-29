@@ -79,6 +79,7 @@ action.testing.save = Save Tests
 
 action.overview.convertdfa = Convert To DFA
 action.overview.convertnfa = Convert To NFA
+action.overview.autolayout = Auto-Layout
 
 action.options.changetheme = Change Theme...
 action.options.reset = Reset to Default

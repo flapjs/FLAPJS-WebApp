@@ -21,20 +21,52 @@ class OverviewPanel extends React.Component
   {
     super(props);
 
-    this.container = React.createRef();
+    this.container = null;
 
     this.state = {
       viewFormal: false
     };
 
     this.onChangeMachineType = this.onChangeMachineType.bind(this);
+    this.onConvertToDFA = this.onConvertToDFA.bind(this);
+    this.onConvertToNFA = this.onConvertToNFA.bind(this);
+    this.onAutoLayout = this.onAutoLayout.bind(this);
+    this.onChangeAutoRename = this.onChangeAutoRename.bind(this);
+
     this.switchDefinition = this.switchDefinition.bind(this);
+  }
+
+  onConvertToDFA(e)
+  {
+    const graph = this.props.graphController.getGraph();
+    const machineBuilder = this.props.machineController.getMachineBuilder();
+    const result = convertToDFA(machineBuilder.getMachine(), new DFA());
+    graph.copyMachine(result);
+    machineBuilder.setMachineType("DFA");
+  }
+
+  onConvertToNFA(e)
+  {
+    const machineBuilder = this.props.machineController.getMachineBuilder();
+    machineBuilder.setMachineType("NFA");
+  }
+
+  onAutoLayout(e)
+  {
+    GraphLayout.applyLayout(this.props.graphController.getGraph());
+  }
+
+  onChangeAutoRename(e)
+  {
+    const machineBuilder = this.props.machineController.getMachineBuilder();
+    machineBuilder.setAutoRenameNodes(e.target.checked);
   }
 
   onChangeMachineType(e)
   {
     const value = e.target.value;
-    this.props.machineBuilder.setMachineType(value);
+    const machineBuilder = this.props.machineController.getMachineBuilder();
+    machineBuilder.setMachineType(value);
   }
 
   switchDefinition()
@@ -47,22 +79,24 @@ class OverviewPanel extends React.Component
   render()
   {
     const graphController = this.props.graphController;
-    const machineBuilder = this.props.machineBuilder;
-    const viewFormal = this.state.viewFormal;
+    const machineController = this.props.machineController;
+
+    const graph = graphController.getGraph();
+    const machineBuilder = machineController.getMachineBuilder();
 
     return <div className="panel-container" id="overview" ref={ref=>this.container=ref}>
       <div className="panel-title">
         <h1>{I18N.toString("component.overview.title")}</h1>
       </div>
         <div className="panel-content">
-          {viewFormal &&
+          {this.state.viewFormal &&
             <FormalDefinition machineBuilder={machineBuilder}/>}
 
-          {!viewFormal &&
+          {!this.state.viewFormal &&
             <div>
               <select className="machine-type panel-select"
-                      value={machineBuilder.getMachineType()}
-                      onChange={this.onChangeMachineType}>
+                value={machineBuilder.getMachineType()}
+                onChange={this.onChangeMachineType}>
                 <option value="DFA">DFA</option>
                 <option value="NFA">NFA</option>
               </select>
@@ -79,33 +113,25 @@ class OverviewPanel extends React.Component
           <hr/>
           {
             machineBuilder.getMachineType() == "DFA" ?
-              <button className="panel-button" onClick={(e) => {
-                machineBuilder.setMachineType("NFA");
-              }}>
+              <button className="panel-button" onClick={this.onConvertToNFA}>
                 {I18N.toString("action.overview.convertnfa")}
               </button>
             : machineBuilder.getMachineType() == "NFA" ?
-              <button className="panel-button" onClick={(e) => {
-                const result = convertToDFA(machineBuilder.getMachine(), new DFA());
-                machineBuilder.graph.copyMachine(result);
-                machineBuilder.setMachineType("DFA");
-              }}>
+              <button className="panel-button" onClick={this.onConvertToDFA}>
                 {I18N.toString("action.overview.convertdfa")}
               </button>
             : null
           }
-          <button className="panel-button" onClick = {() => {
-            GraphLayout.applyLayout(machineBuilder.graph)
-          }}>
-            Auto-layout
+          <button className="panel-button" onClick={this.onAutoLayout}>
+            {I18N.toString("action.overview.autolayout")}
           </button>
           <button className="panel-button" onClick={this.switchDefinition}>
-            {viewFormal ? "View Defintion" : "View Formal Definition"}
+            {this.state.viewFormal ? "View Defintion" : "View Formal Definition"}
           </button>
           <div className="panel-checkbox">
-            <input type="checkbox" id="auto-statename" onChange={(e) => {
-              machineBuilder.setAutoRenameNodes(e.target.checked);
-            }} checked={machineBuilder.shouldAutoRenameNodes()}/>
+            <input type="checkbox" id="auto-statename"
+              onChange={this.onChangeAutoRename}
+              checked={machineBuilder.shouldAutoRenameNodes()}/>
             <label htmlFor="auto-statename">{I18N.toString("options.autolabel")}</label>
           </div>
         </div>

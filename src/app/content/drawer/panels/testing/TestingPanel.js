@@ -34,16 +34,18 @@ class TestingPanel extends React.Component
   componentWillMount()
   {
     const graphController = this.props.graphController;
+    const graph = graphController.getGraph();
 
     //HACK: this should be a listener to FSABuilder, should not access graph
-    graphController.getGraph().on("markDirty", this.onGraphChange);
+    graph.on("markDirty", this.onGraphChange);
   }
 
   componentWillUnmount()
   {
     const graphController = this.props.graphController;
-    
-    graphController.getGraph().removeEventListener("markDirty", this.onGraphChange);
+    const graph = graphController.getGraph();
+
+    graph.removeEventListener("markDirty", this.onGraphChange);
   }
 
   onGraphChange(g)

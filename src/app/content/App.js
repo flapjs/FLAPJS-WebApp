@@ -75,12 +75,13 @@ class App extends React.Component
       AutoSaver.initAutoSave(this._graph);
     }
 
+    this._machineBuilder.initialize(this);
+
     //Initialize the controller to graph components
     this.inputController.initialize(this);
     this.graphController.initialize(this);
     this.machineController.initialize(this);
 
-    this._machineBuilder.initialize(this);
     this.testingManager.initialize(this);
     this.eventManager.initialize(this);
     this.hotKeys.initialize(this);
@@ -247,8 +248,6 @@ class App extends React.Component
     const graphController = this.graphController;
     const machineController = this.machineController;
 
-    const graph = this._graph;
-    const machineBuilder = this._machineBuilder;
     const tester = this.testingManager;
     const screen = this.workspace ? this.workspace.ref : null;
 
@@ -256,11 +255,11 @@ class App extends React.Component
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar ref={ref=>this.toolbar=ref}
-        graphController={graphController}
-        machineController={machineController}
         eventManager={this.eventManager}
+        notification={this.notification}
         drawer={this.drawer}
-        notification={this.notification}/>
+        graphController={graphController}
+        machineController={machineController}/>
 
       <NotificationSystem ref={ref=>this.notification=ref}
         graphController={graphController}
@@ -275,10 +274,10 @@ class App extends React.Component
           }}>
 
           <Workspace ref={ref=>this.workspace=ref}
+            tester={tester}
             graphController={graphController}
             inputController={inputController}
-            machineController={machineController}
-            tester={tester}/>
+            machineController={machineController}/>
         </div>
 
         <div className={"workspace-viewport" +
@@ -288,11 +287,11 @@ class App extends React.Component
           }}>
 
           <Viewport ref={ref=>this.viewport=ref}
+            tester={tester}
+            screen={screen}
             graphController={graphController}
             inputController={inputController}
-            machineController={machineController}
-            tester={tester}
-            screen={screen}/>
+            machineController={machineController}/>
         </div>
 
         <div className={"workspace-drawer" +
@@ -301,9 +300,9 @@ class App extends React.Component
 
           <Drawer ref={ref=>this.drawer=ref}
             app={this}
+            toolbar={this.toolbar}
             graphController={graphController}
-            machineController={machineController}
-            toolbar={this.toolbar} />
+            machineController={machineController}/>
         </div>
       </div>
     </div>;

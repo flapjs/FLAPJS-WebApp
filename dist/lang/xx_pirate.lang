@@ -80,6 +80,7 @@ action.testing.save = Save fer 'nother day
 
 action.overview.convertdfa = Convert yer charts to DFA
 action.overview.convertnfa = Convert yer charts to NFA
+action.overview.autolayout = To the shipyard!
 
 action.options.changetheme = Change yer colors...
 action.options.reset = Clean yer barnacles
