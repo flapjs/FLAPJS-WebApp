@@ -30,6 +30,23 @@ class InputController
     this.prevPinchDist = 0;
     this.pinchDist = 0;
 
+    //inputdown(input, x, y, target, targetType, event) - Called when input is starting touch/press/click
+    //event.result can be changed to decide whether to continue to process future related events
+    //by default, it is true
+    this.registerEvent("inputdown");
+    //inputmove(input, x, y, target, targetType) - Called when input moves
+    this.registerEvent("inputmove");
+    //inputup(input, x, y, target, targetType) - Called when input is released
+    this.registerEvent("inputup");
+    //inputaction(input, x, y, target, targetType) - Called when input is completed
+    this.registerEvent("inputaction");
+    //dragstart(input, x, y, target, targetType) - Called when a drag begins
+    this.registerEvent("dragstart");
+    //dragmove(input, x, y, target, targetType) - Called when a drag moves
+    this.registerEvent("dragmove");
+    //dragstop(input, x, y, target, targetType) - Called when a drag finishes
+    this.registerEvent("dragstop");
+
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
@@ -78,6 +95,11 @@ class InputController
   {
     //Smooth transition offset
     this.pointer.updateOffset();
+  }
+
+  setInputScheme(shouldActionFirst)
+  {
+    this._swapMouseScheme = !shouldActionFirst;
   }
 
   setMouseActionMode(isLeftMouse)
@@ -339,8 +361,9 @@ class InputController
     pointer.setInitialPosition(mouse.x, mouse.y);
 
     //Check whether to accept the start of input...
-    this.onInputDown(pointer.x, pointer.y,
-        pointer.initial.target, pointer.initial.targetType);
+    const event = {result: true};
+    this.emit("inputdown", this, pointer.x, pointer.y,
+        pointer.initial.target, pointer.initial.targetType, event);
 
     this.cursor._timer = setTimeout(() => {
       if (pointer.isWaitingForMoveMode())
@@ -349,7 +372,7 @@ class InputController
       }
     }, Config.LONG_TAP_TICKS);
 
-    return true;
+    return event.result;
   }
 
   doInputDownAndMove(x, y)
@@ -364,7 +387,7 @@ class InputController
       {
         //Start drag!
         pointer.dragging = true;
-        this.onDragStart(pointer.x, pointer.y,
+        this.emit("dragstart", this, pointer.x, pointer.y,
             pointer.initial.target, pointer.initial.targetType);
       }
       else
@@ -376,11 +399,11 @@ class InputController
     else
     {
       //Continue to drag...
-      this.onDragMove(pointer.x, pointer.y,
+      this.emit("dragmove", this, pointer.x, pointer.y,
           pointer.initial.target, pointer.initial.targetType);
     }
 
-    this.onInputMove(pointer.x, pointer.y,
+    this.emit("inputmove", this, pointer.x, pointer.y,
         pointer.initial.target, pointer.initial.targetType);
   }
 
@@ -398,37 +421,23 @@ class InputController
     if (pointer.dragging)
     {
       //Stop drag!
-      this.onDragStop(pointer.x, pointer.y,
+      this.emit("dragstop", this, pointer.x, pointer.y,
           pointer.initial.target, pointer.initial.targetType);
     }
     else
     {
       //Tap!
-      this.onInputAction(pointer.x, pointer.y,
+      this.emit("inputaction", this, pointer.x, pointer.y,
           pointer.initial.target, pointer.initial.targetType);
     }
 
-    this.onInputUp(pointer.x, pointer.y,
+    this.emit("inputup", this, pointer.x, pointer.y,
         pointer.initial.target, pointer.initial.targetType);
 
     //Set target as nothing since no longer interacting
     pointer.target = null;
     pointer.targetType = "none";
   }
-
-  //Returns true if should act on input, false to ignore remaining click events
-  onInputDown(x, y, target, targetType)
-  {
-    return true;
-  }
-
-  onInputMove(x, y, target, targetType) {}
-  onInputUp(x, y, target, targetType) {}
-  onInputAction(x, y, target, targetType) {}
-
-  onDragStart(x, y, target, targetType) {}
-  onDragMove(x, y, target, targetType) {}
-  onDragStop(x, y, target, targetType) {}
 }
 //Mixin Eventable
 Eventable.mixin(InputController);

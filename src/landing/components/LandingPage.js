@@ -39,7 +39,7 @@ const [CONTENT_QUOTE, CONTENT_SUBQUOTE] = QUOTES[QUOTE_INDEX];
 const TUTORIAL_LINK = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/HELP.md";
 const HELP_LINK = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/HELP.md";
 const ABOUT_LINK = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/README.md";
-const REPORT_BUG_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
+const REPORT_BUG_LINK = "https://github.com/flapjs/FLAPJS-WebApp/issues";
 const GITHUB_LINK = "https://github.com/flapjs/FLAPJS-WebApp/";
 
 const PROFMINNES_LINK = "http://cseweb.ucsd.edu/~minnes/";
