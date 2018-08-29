@@ -81,7 +81,7 @@ class App extends React.Component
 
     //Notify on create in delete mode
     const tryCreateWhileTrash = () => {
-      if (this.inputController.pointer.trashMode)
+      if (this.inputController.getPointer().trashMode)
       {
         this.notification.addWarningMessage(I18N.toString("message.warning.cannotmodify"),
           "tryCreateWhileTrash", true);

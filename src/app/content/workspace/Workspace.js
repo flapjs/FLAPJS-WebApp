@@ -28,7 +28,7 @@ class Workspace extends React.Component
   getSVGForExport(width, height)
   {
     const svg = this.ref;
-    const pointer = this.props.controller.pointer;
+    const pointer = this.props.inputController.getPointer();
     const offsetX = pointer.offsetX;
     const offsetY = pointer.offsetY;
     const bounds = this.props.graph.getBoundingRect();
@@ -69,7 +69,7 @@ class Workspace extends React.Component
     const graph = this.props.graph;
     const graphController = this.props.graphController;
     const inputController = this.props.inputController;
-    const pointer = inputController.pointer;
+    const pointer = inputController.getPointer();
     const machineBuilder = this.props.machineBuilder;
     const tester = this.props.tester;
 

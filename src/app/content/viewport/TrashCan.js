@@ -17,7 +17,7 @@ class TrashCan extends React.Component
   onTrashEnter(e)
   {
     if (this.state.staticTrash) return;
-    this.props.inputController.pointer.trashMode = true;
+    this.props.inputController.getPointer().trashMode = true;
 
     //Enable mode: dangerous
     this.props.viewport.setState((prev, props) => {
@@ -28,7 +28,7 @@ class TrashCan extends React.Component
   onTrashLeave(e)
   {
     if (this.state.staticTrash) return;
-    this.props.inputController.pointer.trashMode = false;
+    this.props.inputController.getPointer().trashMode = false;
 
     //Disable mode: dangerous
     this.props.viewport.setState((prev, props) => {
@@ -43,7 +43,7 @@ class TrashCan extends React.Component
 
     this.setState((prev, props) => {
       const result = !prev.staticTrash;
-      this.props.inputController.pointer.trashMode = result;
+      this.props.inputController.getPointer().trashMode = result;
 
       //Enable mode: dangerous
       this.props.viewport.setState((prev, props) => {
@@ -59,9 +59,11 @@ class TrashCan extends React.Component
   render()
   {
     const inputController = this.props.inputController;
+    const pointer = inputController.getPointer();
+    
     return <svg id="trash-btn"
-      className={(inputController.pointer.trashMode ? "danger " : "") +
-        (inputController.isUsingTouch() && inputController.pointer.dragging ? "hidden" : "")}
+      className={(pointer.trashMode ? "danger " : "") +
+        (inputController.isUsingTouch() && pointer.dragging ? "hidden" : "")}
       width="24" height="24"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"

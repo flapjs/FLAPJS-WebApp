@@ -13,7 +13,7 @@ class InputController
     this.graph = null;
     this.workspace = null;
 
-    this.pointer = new GraphPointer(null);
+    this._pointer = new GraphPointer(null);
 
     this.cursor = {
       _mousemove: null,
@@ -58,7 +58,7 @@ class InputController
   {
     //Set the graph
     this.graph = graph;
-    this.pointer.graph = graph;
+    this._pointer.graph = graph;
 
     //Prepare the workspace
     this.workspace = workspace;
@@ -90,12 +90,22 @@ class InputController
   update()
   {
     //Smooth transition offset
-    this.pointer.updateOffset();
+    this._pointer.updateOffset();
   }
 
   setInputScheme(shouldActionFirst)
   {
     this._swapMouseScheme = !shouldActionFirst;
+  }
+
+  getInputScheme()
+  {
+    return this._swapMouseScheme;
+  }
+
+  getPointer()
+  {
+    return this._pointer;
   }
 
   setMouseActionMode(isLeftMouse)
@@ -113,6 +123,12 @@ class InputController
     return this.cursor._touchmove || this.cursor._touchend;
   }
 
+  /*************************************************************************
+   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+   * INPUT HANDLERS
+   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+   *************************************************************************/
+
   onContextMenu(e)
   {
     e.stopPropagation();
@@ -126,14 +142,17 @@ class InputController
     e.stopPropagation();
     e.preventDefault();
 
+    const pointer = this._pointer;
+
     this.pinchDist = e.deltaY * Config.SCROLL_SENSITIVITY;
-    this.pointer.setScale(this.pointer.scale + this.pinchDist);
+    pointer.setScale(pointer.scale + this.pinchDist);
   }
 
   onTouchMove(e)
   {
+    const pointer = this._pointer;
     const mouse = getMousePosition(this.workspace, e.touches[0]);
-    this.pointer.setPosition(mouse.x, mouse.y);
+    pointer.setPosition(mouse.x, mouse.y);
   }
 
   onTouchStart(e)
@@ -220,7 +239,7 @@ class InputController
       touch1.pageX - touch2.pageX,
       touch1.pageY - touch2.pageY);
 
-    this.pointer.setScale(this.pinchDist * PINCH_SENSITIVITY);
+    this._pointer.setScale(this.pinchDist * PINCH_SENSITIVITY);
 
     return false;
   }
@@ -271,13 +290,13 @@ class InputController
 
   onMouseMove(e)
   {
-    const pointer = this.pointer;
+    const pointer = this._pointer;
     const mouse = getMousePosition(this.workspace, e.clientX, e.clientY);
-    this.pointer.setPosition(mouse.x, mouse.y);
+    pointer.setPosition(mouse.x, mouse.y);
 
     //Update target
-    this.pointer.updateTarget();
-    if (this.pointer.target != null)
+    pointer.updateTarget();
+    if (pointer.target != null)
     {
       document.body.style.cursor = "pointer";
     }
@@ -351,7 +370,7 @@ class InputController
 
   doInputDown(x, y, moveMode)
   {
-    const pointer = this.pointer;
+    const pointer = this._pointer;
     const mouse = getMousePosition(this.workspace, x, y);
     pointer.moveMode = moveMode;//If right click
     pointer.setInitialPosition(mouse.x, mouse.y);
@@ -373,7 +392,7 @@ class InputController
 
   doInputDownAndMove(x, y)
   {
-    const pointer = this.pointer;
+    const pointer = this._pointer;
     const mouse = getMousePosition(this.workspace, x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
@@ -411,7 +430,7 @@ class InputController
       this.cursor._timer = null;
     }
 
-    const pointer = this.pointer;
+    const pointer = this._pointer;
     pointer.updateTarget();
 
     if (pointer.dragging)

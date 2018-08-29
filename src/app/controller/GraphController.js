@@ -326,6 +326,8 @@ class GraphController extends InputController
 
   onInputUp(input, x, y, target, targetType)
   {
+    const pointer = input.getPointer();
+
     if (targetType === 'none')
     {
       const dx = x - this.firstEmptyX;
@@ -333,7 +335,7 @@ class GraphController extends InputController
       //If within the time to double tap...
       if (this.firstEmptyClick && (dx * dx + dy * dy) < (Config.CURSOR_RADIUS_SQU * 16) && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
       {
-        if (!input.pointer.isTrashMode(x, y))
+        if (!pointer.isTrashMode(x, y))
         {
           //Create state at position
           this.createNode(x, y);
@@ -360,7 +362,7 @@ class GraphController extends InputController
 
   onInputAction(input, x, y, target, targetType)
   {
-    const pointer = input.pointer;
+    const pointer = input.getPointer();
     const trashMode = pointer.isTrashMode(x, y);
 
     //Makes sure that user cannot toggle state while in trash mode
@@ -452,7 +454,7 @@ class GraphController extends InputController
   onDragStart(input, x, y, target, targetType)
   {
     //TODO: sometimes, pointer.target is null when it should not be...
-    const pointer = input.pointer;
+    const pointer = input.getPointer();
 
     //If is in move mode...
     if (pointer.isMoveMode())
@@ -618,7 +620,7 @@ class GraphController extends InputController
 
   onDragMove(input, x, y, target, targetType)
   {
-    const pointer = input.pointer;
+    const pointer = input.getPointer();
 
     //If is in move mode...
     if (pointer.isMoveMode())
@@ -692,7 +694,7 @@ class GraphController extends InputController
 
   onDragStop(input, x, y, target, targetType)
   {
-    const pointer = input.pointer;
+    const pointer = input.getPointer();
 
     //If is in move mode...
     if (pointer.isMoveMode())
