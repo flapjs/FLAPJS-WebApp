@@ -278,6 +278,12 @@ class GraphController extends InputController
     this.pointer.setOffset(-center.x, -center.y);
   }
 
+  /*************************************************************************
+   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+   * INPUT CONTROLS
+   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+   *************************************************************************/
+
   onInputDown(input, x, y, target, targetType, event)
   {
     //Make sure to lose focus on label editors
@@ -311,7 +317,7 @@ class GraphController extends InputController
       //If within the time to double tap...
       if (this.firstEmptyClick && (dx * dx + dy * dy) < (Config.CURSOR_RADIUS_SQU * 16) && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
       {
-        if (!this.pointer.isTrashMode(x, y))
+        if (!input.pointer.isTrashMode(x, y))
         {
           //Create state at position
           this.createNode(x, y);
@@ -338,7 +344,7 @@ class GraphController extends InputController
 
   onInputAction(input, x, y, target, targetType)
   {
-    const pointer = this.pointer;
+    const pointer = input.pointer;
     const trashMode = pointer.isTrashMode(x, y);
 
     //Makes sure that user cannot toggle state while in trash mode
@@ -430,7 +436,7 @@ class GraphController extends InputController
   onDragStart(input, x, y, target, targetType)
   {
     //TODO: sometimes, pointer.target is null when it should not be...
-    const pointer = this.pointer;
+    const pointer = input.pointer;
 
     //If is in move mode...
     if (pointer.isMoveMode())
@@ -516,8 +522,8 @@ class GraphController extends InputController
         //Reuse nodal prev pos for graph prev pos
         this.prevX = x;
         this.prevY = y;
-        this.prevOffsetX = this.pointer.offsetX;
-        this.prevOffsetY = this.pointer.offsetY;
+        this.prevOffsetX = pointer.offsetX;
+        this.prevOffsetY = pointer.offsetY;
 
         //Ready to move the graph to pointer...
         return true;
@@ -536,13 +542,13 @@ class GraphController extends InputController
       //If action dragged a node...
       if (targetType === 'node')
       {
-        if (!this.pointer.isTrashMode(x, y))
+        if (!pointer.isTrashMode(x, y))
         {
-          const edge = this.graph.newEdge(target, this.pointer, Config.STR_TRANSITION_DEFAULT_LABEL);
+          const edge = this.graph.newEdge(target, pointer, Config.STR_TRANSITION_DEFAULT_LABEL);
 
           //Redirect pointer to refer to the edge as the new target
-          this.pointer.initial.target = edge;
-          this.pointer.initial.targetType = "endpoint";
+          pointer.initial.target = edge;
+          pointer.initial.targetType = "endpoint";
           this.isNewEdge = true;
 
           //Reset previous quad values for new proxy edge
@@ -551,7 +557,7 @@ class GraphController extends InputController
           //this.prevQuad.y = 0;
 
           //Ready to move proxy edge to pointer...
-          this.pointer.moveMode = true;
+          pointer.moveMode = true;
           return true;
         }
         else
@@ -571,7 +577,7 @@ class GraphController extends InputController
         this.prevEdgeTo = target.to;
         this.isNewEdge = false;
 
-        this.pointer.moveMode = true;
+        pointer.moveMode = true;
 
         //Ready to move the edge endpoint to pointer...
         return true;
@@ -596,7 +602,7 @@ class GraphController extends InputController
 
   onDragMove(input, x, y, target, targetType)
   {
-    const pointer = this.pointer;
+    const pointer = input.pointer;
 
     //If is in move mode...
     if (pointer.isMoveMode())
@@ -641,7 +647,7 @@ class GraphController extends InputController
         //Move graph
         const dx = x - this.prevX;
         const dy = y - this.prevY;
-        this.pointer.setOffset(this.pointer.offsetX + dx, this.pointer.offsetY + dy, true);
+        pointer.setOffset(pointer.offsetX + dx, pointer.offsetY + dy, true);
         return true;
       }
       else
@@ -670,7 +676,7 @@ class GraphController extends InputController
 
   onDragStop(input, x, y, target, targetType)
   {
-    const pointer = this.pointer;
+    const pointer = input.pointer;
 
     //If is in move mode...
     if (pointer.isMoveMode())
