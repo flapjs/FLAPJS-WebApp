@@ -59,8 +59,12 @@ towards the `Trashcan Icon`.
 ### Changing the Start State 
 To change the start state `tap and drag` the triangle onto the desired start state.
 
+![startstate](dist/images/dfa5.png)
+
 ### Creating Accept States
 To create an accept state double tap to create the node and then single `tap` on the node to make it an accept state.
+
+![acceptstate](dist/images/dfa6.png)
 
 ## Drawer Essentials
 
