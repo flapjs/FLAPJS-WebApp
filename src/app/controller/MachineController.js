@@ -216,6 +216,11 @@ class MachineController
     this.emit("userRenameSymbol", this.machineBuilder, nextSymbol, prevSymbol, targets);
     this.emit("userPostRenameSymbol", this.machineBuilder, nextSymbol, prevSymbol, targets);
   }
+  
+  getCustomSymbols()
+  {
+    return this.machineBuilder._symbols;
+  }
 
   isCustomSymbol(symbol)
   {

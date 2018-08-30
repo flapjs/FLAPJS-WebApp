@@ -75,6 +75,8 @@ class FSABuilder extends MachineBuilder
 
   onGraphChange(graph)
   {
+    if (!this.tester) return;
+
     if (this._timer)
     {
       clearTimeout(this._timer);
