@@ -18,6 +18,8 @@ import UserImportGraphEventHandler from 'controller/events/UserImportGraphEventH
 import SafeGraphEventHandler from 'controller/events/SafeGraphEventHandler.js';
 
 import UserChangeMachineEventHandler from 'controller/events/UserChangeMachineEventHandler.js';
+import UserConvertMachineEventHandler from 'controller/events/UserConvertMachineEventHandler.js';
+import UserRenameMachineEventHandler from 'controller/events/UserRenameMachineEventHandler.js';
 
 class EventManager
 {
@@ -68,6 +70,8 @@ class EventManager
     this.eventHandlers.push(new SafeGraphEventHandler(events, this.graphController, "userPreChangeLayout", "userPostChangeLayout"));
 
     this.eventHandlers.push(new UserChangeMachineEventHandler(events, this.machineController));
+    this.eventHandlers.push(new UserConvertMachineEventHandler(events, this.machineController, this.graphController));
+    this.eventHandlers.push(new UserRenameMachineEventHandler(events, this.machineController));
   }
 
   destroy()

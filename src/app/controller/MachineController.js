@@ -79,10 +79,11 @@ class MachineController
 
   renameMachine(machineName)
   {
+    const prev = this.machineName;
     this.setMachineName(machineName);
 
     //Emit a user rename machine event
-    this.emit("userRenameMachine");
+    this.emit("userRenameMachine", this.machineBuilder, machineName, prev);
   }
 
   changeMachineTo(machineType)
@@ -106,14 +107,14 @@ class MachineController
 
     if (machineType == "DFA" && currentMachineType == "NFA")
     {
-      this.emit("userPrevConvertMachine", this.machineBuilder, machineType, currentMachineType);
+      this.emit("userPreConvertMachine", this.machineBuilder, machineType, currentMachineType);
 
       const result = convertToDFA(this.machineBuilder.getMachine(), new DFA());
       this.graphController.getGraph().copyMachine(result);
       this.setMachineType(machineType);
 
-      this.emit("userConvertMachine", this.machineBuilder, currentMachineType);
-      this.emit("userPostConvertMachine", this.machineBuilder, currentMachineType);
+      this.emit("userConvertMachine", this.machineBuilder, machineType, currentMachineType);
+      this.emit("userPostConvertMachine", this.machineBuilder, machineType, currentMachineType);
     }
     else if (machineType == "NFA" && currentMachineType == "DFA")
     {

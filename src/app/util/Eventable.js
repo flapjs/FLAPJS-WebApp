@@ -148,10 +148,17 @@ const Eventable = {
       if (!this.__eventListeners) return;
 
       let listeners;
-      if (ALLOW_AUTOMATIC_REGISTER && !this.__eventListeners.has(eventName))
+      if (!this.__eventListeners.has(eventName))
       {
-        listeners = [];
-        this.__eventListeners.set(eventName, listeners);
+        if (ALLOW_AUTOMATIC_REGISTER)
+        {
+          listeners = [];
+          this.__eventListeners.set(eventName, listeners);
+        }
+        else
+        {
+          throw new Error("Unable to find event \'" + eventName + "\'");
+        }
       }
       else
       {

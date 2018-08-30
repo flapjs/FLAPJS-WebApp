@@ -19,15 +19,13 @@ class UserChangeMachineEventHandler extends EventHandler
   //Override - this = event
   applyUndo(e)
   {
-    const machineBuilder = this.controller.getMachineBuilder();
-    machineBuilder.setMachineType(e.eventData.prevType);
+    this.controller.setMachineType(e.eventData.prevType);
   }
 
   //Override - this = event
   applyRedo(e)
   {
-    const machineBuilder = this.controller.getMachineBuilder();
-    machineBuilder.setMachineType(e.eventData.nextType);
+    this.controller.setMachineType(e.postData.nextType);
   }
 }
 export default UserChangeMachineEventHandler;
