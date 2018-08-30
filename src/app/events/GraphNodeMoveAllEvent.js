@@ -7,8 +7,12 @@ class GraphNodeMoveAllEvent extends Event
     super();
 
     this.graph = graph;
-    this.nodes = nodes;
 
+    this.nodeIDs = [];
+    for(const node of nodes)
+    {
+      this.nodeIDs.push(node.id);
+    }
     this.dx = dx;
     this.dy = dy;
   }
@@ -16,8 +20,15 @@ class GraphNodeMoveAllEvent extends Event
   //Override
   applyUndo()
   {
-    for(const node of this.nodes)
+    const graph = this.graph;
+    let nodeIndex = -1;
+    let node = null;
+    for(const nodeID of this.nodeIDs)
     {
+      nodeIndex = graph.getNodeIndexByID(nodeID);
+      if (nodeIndex < 0) throw new Error("Unable to find target in graph");
+      node = graph.nodes[nodeIndex];
+
       node.x -= this.dx;
       node.y -= this.dy;
     }
@@ -26,8 +37,15 @@ class GraphNodeMoveAllEvent extends Event
   //Override
   applyRedo()
   {
-    for(const node of this.nodes)
+    const graph = this.graph;
+    let nodeIndex = -1;
+    let node = null;
+    for(const nodeID of this.nodeIDs)
     {
+      nodeIndex = graph.getNodeIndexByID(nodeID);
+      if (nodeIndex < 0) throw new Error("Unable to find target in graph");
+      node = graph.nodes[nodeIndex];
+
       node.x += this.dx;
       node.y += this.dy;
     }

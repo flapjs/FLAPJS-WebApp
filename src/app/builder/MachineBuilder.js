@@ -5,10 +5,10 @@ const DEFAULT_AUTO_RENAME = true;
 
 class MachineBuilder
 {
-  constructor(graph, controller)
+  constructor(graph)
   {
     this.graph = graph;
-    this.controller = controller;
+    this.graphController = null;
 
     //TODO: this is hooked into the controller in App.js
     this.shouldAutoLabel = false;
@@ -19,6 +19,8 @@ class MachineBuilder
 
   initialize(app)
   {
+    this.graphController = app.graphController;
+
     this.setAutoRenameNodes(DEFAULT_AUTO_RENAME);
   }
 
@@ -27,7 +29,7 @@ class MachineBuilder
 
   }
 
-  onGraphNodeLabelChange()
+  onGraphNodeLabelChange(graph, node, targetNodes, prevX, prevY)
   {
     this.labeler.sortDefaultNodeLabels();
   }
@@ -38,13 +40,11 @@ class MachineBuilder
     this.shouldAutoLabel = enable;
     if (prev != enable && enable)
     {
-      this.controller.on("nodeDelete", this.onGraphNodeLabelChange);
-      this.controller.on("nodeDeleteAll", this.onGraphNodeLabelChange);
+      this.graphController.on("userDeleteNodes", this.onGraphNodeLabelChange);
     }
     else
     {
-      this.controller.removeEventListener("nodeDelete", this.onGraphNodeLabelChange);
-      this.controller.removeEventListener("nodeDeleteAll", this.onGraphNodeLabelChange);
+      this.graphController.removeEventListener("userDeleteNodes", this.onGraphNodeLabelChange);
     }
   }
 

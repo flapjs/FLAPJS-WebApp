@@ -12,45 +12,49 @@ class AlphabetList extends React.Component
   constructor(props)
   {
     super(props);
+    this.editingTag = null;
 
     this.state = {
       editing: false
     };
 
-    this.editSymbolTag = React.createRef();
-
-    this.onCreate = this.onCreate.bind(this);
-    this.disableEdit = this.disableEdit.bind(this);
+    this.onSymbolCreate = this.onSymbolCreate.bind(this);
+    this.onStopEditing = this.onStopEditing.bind(this);
   }
 
-  onCreate(e) {
+  onSymbolCreate(e)
+  {
     this.setState({editing: true}, () => {
-      this.editSymbolTag.ref.focus();
+      this.editingTag.ref.focus();
     });
   }
 
-  disableEdit() {
+  onStopEditing(e)
+  {
     this.setState({editing: false});
   }
 
   render()
   {
-    const machineBuilder = this.props.machineBuilder;
-    const alphabet = machineBuilder.getAlphabet().sort();
+    const machineController = this.props.machineController;
+    const alphabet = machineController.getAlphabet();
+
     return <InfoBlock title={I18N.toString("component.alphabetlist.title")}>
       <div className="alphalist-container">
         <div className="alphalist">
           {
             alphabet.map((e, i) => {
-              return <AlphabetTag key={e + "." + i} src={e} list={this} machine={machineBuilder} alphabet={alphabet}/>
+              return <AlphabetTag key={e + "." + i} src={e} machineController={machineController}/>
             })
           }
-          <AlphabetTag key={-1} ref={ref=>this.editSymbolTag=ref} src={""} list={this} machine={machineBuilder}
-                       alphabet={alphabet} style={{
-            display: this.state.editing ? "block" : "none"
-          }}/>
+          {
+            this.state.editing &&
+            <AlphabetTag ref={ref=>this.editingTag=ref} src={""} machineController={machineController}
+              onBlur={this.onStopEditing}/>
+          }
         </div>
-        <IconButton onClick={this.onCreate}>
+
+        <IconButton onClick={this.onSymbolCreate}>
           <BoxAddIcon/>
         </IconButton>
       </div>

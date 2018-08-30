@@ -40,7 +40,7 @@ class TransitionErrorMessage extends React.Component
         if (this.targetIndex >= targetLength) this.targetIndex = 0;
 
         //Move pointer to target
-        notification.props.controller.focusOnEdge(target);
+        notification.getGraphController().focusOnEdge(target);
       }
     }
     else if (target.value == "deleteall")
@@ -50,7 +50,7 @@ class TransitionErrorMessage extends React.Component
       //Delete all target edges
       for(const edge of targets)
       {
-        notification.props.graph.deleteEdge(edge);
+        notification.getGraphController().getGraph().deleteEdge(edge);
       }
       //Exit the message
       this.props.onExit(e);

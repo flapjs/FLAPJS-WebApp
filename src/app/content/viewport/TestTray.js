@@ -4,6 +4,7 @@ import './TestTray.css';
 import IconButton from 'icons/IconButton.js';
 import PlayIcon from 'icons/PlayIcon.js';
 import PauseIcon from 'icons/PauseIcon.js';
+import StopIcon from 'icons/StopIcon.js';
 import UndoIcon from 'icons/UndoIcon.js';
 import RedoIcon from 'icons/RedoIcon.js';
 
@@ -19,6 +20,7 @@ class TestTray extends React.Component
 
   render()
   {
+    const graphController = this.props.graphController;
     const tester = this.props.tester;
     const testList = this.props.tester.inputList;
     const testMode = this.props.tester.testMode;
@@ -45,6 +47,7 @@ class TestTray extends React.Component
       }
       </div>
       <div className="test-tray-control">
+
         <IconButton onClick={(e)=>{
           testMode.onResume();
         }} disabled={testMode.isRunning()}>
@@ -59,14 +62,28 @@ class TestTray extends React.Component
 
         <IconButton onClick = {(e)=>{
           testMode.onPreviousStep();
+          if (testMode.targets.length > 0)
+          {
+            graphController.focusOnNodes(testMode.targets);
+          }
         }} disabled={!testMode.hasPrevStep()}>
           <UndoIcon/>
         </IconButton>
 
         <IconButton onClick = {(e)=>{
-          tester.testMode.onNextStep();
+          testMode.onNextStep();
+          if (testMode.targets.length > 0)
+          {
+            graphController.focusOnNodes(testMode.targets);
+          }
         }} disabled={!tester.testMode.hasNextStep()}>
           <RedoIcon/>
+        </IconButton>
+
+        <IconButton onClick={(e)=>{
+          tester.setStepByStepMode(false);
+        }}>
+          <StopIcon/>
         </IconButton>
 
         <div className="trash-placeholder">{/*PLACEHOLDER for TRASH*/}</div>

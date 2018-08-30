@@ -12,8 +12,8 @@ class Viewport extends React.Component
   {
     super(props);
 
-    this.ref = React.createRef();
-    this.labelEditor = React.createRef();
+    this.ref = null;
+    this.labelEditor = null;
 
     this.state = {
       prevMode: Viewport.NORMAL,
@@ -23,26 +23,30 @@ class Viewport extends React.Component
 
   render()
   {
+    const inputController = this.props.inputController;
+    const graphController = this.props.graphController;
+    const machineController = this.props.machineController;
     const tester = this.props.tester;
+    const screen = this.props.screen;
+
     return <div className={"viewport-container viewport-" + this.state.mode} ref={ref=>this.ref=ref}>
-      <LabelEditor controller={this.props.controller}
-        graph={this.props.app.graph}
-        machineBuilder={this.props.app.machineBuilder}
-        screen={this.props.app.workspace.ref}
-        ref={ref=>this.labelEditor=ref}/>
+      <LabelEditor ref={ref=>this.labelEditor=ref}
+        inputController={inputController}
+        graphController={graphController}
+        machineController={machineController}
+        screen={screen}/>
       {
         tester.getStepByStepMode() ?
         <div className="anchor-bottom-left" style={{width: "100%"}}>
-          <TestTray tester={tester}/>
+          <TestTray tester={tester} graphController={graphController}/>
         </div>
         :
         <span>
           <div className="anchor-bottom-left" style={{width: "100%"}}>
-            <CursorMode controller={this.props.controller}/>
+            <CursorMode inputController={inputController}/>
           </div>
           <div className="anchor-bottom-right">
-            <TrashCan controller={this.props.controller}
-              viewport={this}/>
+            <TrashCan inputController={inputController} viewport={this}/>
           </div>
         </span>
       }

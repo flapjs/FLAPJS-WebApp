@@ -28,10 +28,10 @@ class Workspace extends React.Component
   getSVGForExport(width, height)
   {
     const svg = this.ref;
-    const pointer = this.props.controller.pointer;
+    const pointer = this.props.inputController.getPointer();
     const offsetX = pointer.offsetX;
     const offsetY = pointer.offsetY;
-    const bounds = this.props.graph.getBoundingRect();
+    const bounds = this.props.graphController.getGraph().getBoundingRect();
 
     const dx = bounds.minX + offsetX - EXPORT_PADDING_X;
     const dy = bounds.minY + offsetY - EXPORT_PADDING_Y;
@@ -66,11 +66,14 @@ class Workspace extends React.Component
 
   render()
   {
-    const graph = this.props.graph;
-    const controller = this.props.controller;
-    const pointer = controller.pointer;
-    const machineBuilder = this.props.machineBuilder;
+    const graphController = this.props.graphController;
+    const inputController = this.props.inputController;
+    const machineController = this.props.machineController;
     const tester = this.props.tester;
+
+    const graph = graphController.getGraph();
+    const machineBuilder = machineController.getMachineBuilder();
+    const pointer = inputController.getPointer();
 
     let size = Config.DEFAULT_GRAPH_SIZE * Math.max(Number.MIN_VALUE, pointer.scale);
     const halfSize = size / 2;
@@ -86,8 +89,8 @@ class Workspace extends React.Component
       {/* Graph elements */}
       <g id="workspace-content-elements" transform={
         "translate(" +
-        controller.pointer.offsetX + " " +
-        controller.pointer.offsetY + ")"}>
+        pointer.offsetX + " " +
+        pointer.offsetY + ")"}>
 
         {/* Graph origin crosshair */}
         <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="rgba(0,0,0,0.04)"/>
@@ -96,52 +99,54 @@ class Workspace extends React.Component
         {/* Graph objects */}
         <g>
           {/* Nodes */}
-          {graph.nodes.map((e, i) => <NodeRenderer key={e.id} node={e}/>)}
+          {graph.nodes.map((e, i) => <NodeRenderer key={e.id || i} node={e}/>)}
 
           {/* Edges */}
-          {graph.edges.map((e, i) => <EdgeRenderer key={e.id} edge={e}/>)}
+          {graph.edges.map((e, i) => <EdgeRenderer key={e.id || i} edge={e}/>)}
         </g>
 
         {/* Graph GUIs */}
         <g>
           {/* Initial marker and ghost */}
-          { graph.getStartNode() && (controller.ghostInitialMarker == null ?
+          { graph.getStartNode() && (graphController.ghostInitialMarker == null ?
             <InitialMarkerRenderer node={graph.getStartNode()}/> :
-            <InitialMarkerRenderer node={controller.ghostInitialMarker}/>) }
+            <InitialMarkerRenderer node={graphController.ghostInitialMarker}/>) }
 
           {/* Selected elements */}
-          { controller.selector.hasSelection() &&
-            controller.selector.getSelection().map((e, i) =>
+          { graphController.getSelector().hasSelection() &&
+            graphController.getSelector().getSelection().map((e, i) =>
               <HighlightRenderer key={e.id} className="highlight-select" target={e} type="node"/>) }
 
           {/* Selection box */}
-          <SelectionBoxRenderer src={controller.selector}/>
+          <SelectionBoxRenderer src={graphController.getSelector()}/>
 
           {/* Node warning targets */}
-          { machineBuilder.machineErrorChecker.warningNodes.map((e, i) =>
+          { machineController.getMachineBuilder().machineErrorChecker.warningNodes.map((e, i) =>
             <HighlightRenderer key={e.id} className="highlight-warning graph-gui" target={e} type="node" offset="6"/>) }
 
           {/* Edge warning targets */}
-          { machineBuilder.machineErrorChecker.warningEdges.map((e, i) =>
+          { machineController.getMachineBuilder().machineErrorChecker.warningEdges.map((e, i) =>
             <HighlightRenderer key={e.id} className="highlight-warning graph-gui" target={e} type="edge" offset="6"/>) }
 
           {/* Node error targets */}
-          { machineBuilder.machineErrorChecker.errorNodes.map((e, i) =>
+          { machineController.getMachineBuilder().machineErrorChecker.errorNodes.map((e, i) =>
             <HighlightRenderer key={e.id} className="highlight-error graph-gui" target={e} type="node" offset="6"/>) }
 
           {/* Edge error targets */}
-          { machineBuilder.machineErrorChecker.errorEdges.map((e, i) =>
+          { machineController.getMachineBuilder().machineErrorChecker.errorEdges.map((e, i) =>
             <HighlightRenderer key={e.id} className="highlight-error graph-gui" target={e} type="edge" offset="6"/>) }
 
 
           {/* Node test targets */}
-          { tester.testMode.targets.map((e, i) =>
-            <HighlightRenderer key={e.id} className="highlight-test graph-gui" target={e} type="node" offset="6"/>) }
+          { tester.testMode.targets.map((e, i) => {
+              return <HighlightRenderer key={e.id} className="highlight-test graph-gui" target={e} type="node" offset="6"/>;
+            })
+          }
 
           {/* Hover markers */}
-          { controller.pointer.target &&
-            !controller.selector.isTargetSelected(controller.pointer.target) &&
-            <HighlightRenderer className="highlight-select" target={controller.pointer.target} type={controller.pointer.targetType}/> }
+          { pointer.target &&
+            !graphController.getSelector().isTargetSelected(pointer.target) &&
+            <HighlightRenderer className="highlight-select" target={pointer.target} type={pointer.targetType}/> }
 
         </g>
       </g>

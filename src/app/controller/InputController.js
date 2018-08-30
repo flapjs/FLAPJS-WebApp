@@ -8,15 +8,13 @@ const PINCH_SENSITIVITY = 1 / 300.0;
 
 class InputController
 {
-  constructor()
+  constructor(graph)
   {
-    this.graph = null;
     this.workspace = null;
-    this.labelEditor = null;
 
-    this.pointer = new GraphPointer(null);
+    this._pointer = new GraphPointer(graph);
 
-    this.cursor = {
+    this._cursor = {
       _mousemove: null,
       _mouseup: null,
       _touchmove: null,
@@ -30,6 +28,23 @@ class InputController
     this.prevPinchDist = 0;
     this.pinchDist = 0;
 
+    //inputdown(input, x, y, target, targetType, event) - Called when input is starting touch/press/click
+    //event.result can be changed to decide whether to continue to process future related events
+    //by default, it is true
+    this.registerEvent("inputdown");
+    //inputmove(input, x, y, target, targetType) - Called when input moves
+    this.registerEvent("inputmove");
+    //inputup(input, x, y, target, targetType) - Called when input is released
+    this.registerEvent("inputup");
+    //inputaction(input, x, y, target, targetType) - Called when input is completed
+    this.registerEvent("inputaction");
+    //dragstart(input, x, y, target, targetType) - Called when a drag begins
+    this.registerEvent("dragstart");
+    //dragmove(input, x, y, target, targetType) - Called when a drag moves
+    this.registerEvent("dragmove");
+    //dragstop(input, x, y, target, targetType) - Called when a drag finishes
+    this.registerEvent("dragstop");
+
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
@@ -38,15 +53,10 @@ class InputController
     this.onWheel = this.onWheel.bind(this);
   }
 
-  initialize(app, workspace)
+  initialize(app)
   {
-    //Set the graph
-    this.graph = app.graph;
-    this.pointer.graph = this.graph;
-    this.labelEditor = app.viewport.labelEditor;
-
     //Prepare the workspace
-    this.workspace = workspace;
+    this.workspace = app.workspace.ref;
 
     //Process mouse handlers
     this.workspace.addEventListener('mousedown', this.onMouseDown);
@@ -61,8 +71,6 @@ class InputController
 
   destroy()
   {
-    this.clearListeners();
-
     //Process mouse handlers
     this.workspace.removeEventListener('mousedown', this.onMouseDown);
     this.workspace.removeEventListener('mousemove', this.onMouseMove);
@@ -77,23 +85,39 @@ class InputController
   update()
   {
     //Smooth transition offset
-    this.pointer.updateOffset();
+    this._pointer.updateOffset();
   }
 
-  setMouseActionMode(isLeftMouse)
+  setTrashMode(enabled)
   {
-    this._swapMouseScheme = isLeftMouse;
+    this._pointer.trashMode = enabled;
   }
 
-  getMouseActionMode()
+  setInputScheme(shouldActionFirst)
+  {
+    this._swapMouseScheme = !shouldActionFirst;
+  }
+
+  getInputScheme()
   {
     return this._swapMouseScheme;
   }
 
+  getPointer()
+  {
+    return this._pointer;
+  }
+
   isUsingTouch()
   {
-    return this.cursor._touchmove || this.cursor._touchend;
+    return this._cursor._touchmove || this._cursor._touchend;
   }
+
+  /*************************************************************************
+   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+   * INPUT HANDLERS
+   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+   *************************************************************************/
 
   onContextMenu(e)
   {
@@ -108,14 +132,17 @@ class InputController
     e.stopPropagation();
     e.preventDefault();
 
+    const pointer = this._pointer;
+
     this.pinchDist = e.deltaY * Config.SCROLL_SENSITIVITY;
-    this.pointer.setScale(this.pointer.scale + this.pinchDist);
+    pointer.setScale(pointer.scale + this.pinchDist);
   }
 
   onTouchMove(e)
   {
+    const pointer = this._pointer;
     const mouse = getMousePosition(this.workspace, e.touches[0]);
-    this.pointer.setPosition(mouse.x, mouse.y);
+    pointer.setPosition(mouse.x, mouse.y);
   }
 
   onTouchStart(e)
@@ -129,15 +156,15 @@ class InputController
       document.activeElement.blur();
       this.workspace.focus();
 
-      if (this.cursor._touchmove)
+      if (this._cursor._touchmove)
       {
-        document.removeEventListener('touchmove', this.cursor._touchmove);
-        this.cursor._touchmove = null;
+        document.removeEventListener('touchmove', this._cursor._touchmove);
+        this._cursor._touchmove = null;
       }
-      if (this.cursor._touchend)
+      if (this._cursor._touchend)
       {
-        document.removeEventListener('touchend', this.cursor._touchend);
-        this.cursor._touchend = null;
+        document.removeEventListener('touchend', this._cursor._touchend);
+        this._cursor._touchend = null;
       }
 
       const touch1 = e.touches[0];
@@ -146,11 +173,11 @@ class InputController
         touch1.pageX - touch2.pageX,
         touch1.pageY - touch2.pageY);
 
-      this.cursor._touchmove = this.onPinchMove.bind(this);
-      this.cursor._touchend = this.onPinchEnd.bind(this);
+      this._cursor._touchmove = this.onPinchMove.bind(this);
+      this._cursor._touchend = this.onPinchEnd.bind(this);
 
-      document.addEventListener('touchmove', this.cursor._touchmove);
-      document.addEventListener('touchend', this.cursor._touchend);
+      document.addEventListener('touchmove', this._cursor._touchmove);
+      document.addEventListener('touchend', this._cursor._touchend);
       */
 
       return false;
@@ -166,26 +193,26 @@ class InputController
 
       const touch = e.changedTouches[0];
 
-      if (this.cursor._touchmove)
+      if (this._cursor._touchmove)
       {
-        document.removeEventListener('touchmove', this.cursor._touchmove);
-        this.cursor._touchmove = null;
+        document.removeEventListener('touchmove', this._cursor._touchmove);
+        this._cursor._touchmove = null;
       }
-      if (this.cursor._touchend)
+      if (this._cursor._touchend)
       {
-        document.removeEventListener('touchend', this.cursor._touchend);
-        this.cursor._touchend = null;
+        document.removeEventListener('touchend', this._cursor._touchend);
+        this._cursor._touchend = null;
       }
 
       let moveMode = false;
       moveMode = this._swapMouseScheme ? !moveMode : moveMode;
       if (this.doInputDown(touch.clientX, touch.clientY, moveMode/* false */))//default false
       {
-        this.cursor._touchmove = this.onTouchStartAndMove.bind(this);
-        this.cursor._touchend = this.onTouchStartAndEnd.bind(this);
+        this._cursor._touchmove = this.onTouchStartAndMove.bind(this);
+        this._cursor._touchend = this.onTouchStartAndEnd.bind(this);
 
-        document.addEventListener('touchmove', this.cursor._touchmove);
-        document.addEventListener('touchend', this.cursor._touchend);
+        document.addEventListener('touchmove', this._cursor._touchmove);
+        document.addEventListener('touchend', this._cursor._touchend);
       }
     }
     else
@@ -202,22 +229,22 @@ class InputController
       touch1.pageX - touch2.pageX,
       touch1.pageY - touch2.pageY);
 
-    this.pointer.setScale(this.pinchDist * PINCH_SENSITIVITY);
+    this._pointer.setScale(this.pinchDist * PINCH_SENSITIVITY);
 
     return false;
   }
 
   onPinchEnd()
   {
-    if (this.cursor._touchmove)
+    if (this._cursor._touchmove)
     {
-      document.removeEventListener('touchmove', this.cursor._touchmove);
-      this.cursor._touchmove = null;
+      document.removeEventListener('touchmove', this._cursor._touchmove);
+      this._cursor._touchmove = null;
     }
-    if (this.cursor._touchend)
+    if (this._cursor._touchend)
     {
-      document.removeEventListener('touchend', this.cursor._touchend);
-      this.cursor._touchend = null;
+      document.removeEventListener('touchend', this._cursor._touchend);
+      this._cursor._touchend = null;
     }
 
     return false;
@@ -227,15 +254,15 @@ class InputController
   {
     const touch = e.changedTouches[0];
 
-    if (this.cursor._touchmove)
+    if (this._cursor._touchmove)
     {
-      document.removeEventListener('touchmove', this.cursor._touchmove);
-      this.cursor._touchmove = null;
+      document.removeEventListener('touchmove', this._cursor._touchmove);
+      this._cursor._touchmove = null;
     }
-    if (this.cursor._touchend)
+    if (this._cursor._touchend)
     {
-      document.removeEventListener('touchend', this.cursor._touchend);
-      this.cursor._touchend = null;
+      document.removeEventListener('touchend', this._cursor._touchend);
+      this._cursor._touchend = null;
     }
 
     this.doInputDownAndUp(touch.clientX, touch.clientY);
@@ -253,13 +280,13 @@ class InputController
 
   onMouseMove(e)
   {
-    const pointer = this.pointer;
+    const pointer = this._pointer;
     const mouse = getMousePosition(this.workspace, e.clientX, e.clientY);
-    this.pointer.setPosition(mouse.x, mouse.y);
+    pointer.setPosition(mouse.x, mouse.y);
 
     //Update target
-    this.pointer.updateTarget();
-    if (this.pointer.target != null)
+    pointer.updateTarget();
+    if (pointer.target != null)
     {
       document.body.style.cursor = "pointer";
     }
@@ -277,26 +304,26 @@ class InputController
     document.activeElement.blur();
     this.workspace.focus();
 
-    if (this.cursor._mousemove)
+    if (this._cursor._mousemove)
     {
-      document.removeEventListener('mousemove', this.cursor._mousemove);
-      this.cursor._mousemove = null;
+      document.removeEventListener('mousemove', this._cursor._mousemove);
+      this._cursor._mousemove = null;
     }
-    if (this.cursor._mouseup)
+    if (this._cursor._mouseup)
     {
-      document.removeEventListener('mouseup', this.cursor._mouseup);
-      this.cursor._mouseup = null;
+      document.removeEventListener('mouseup', this._cursor._mouseup);
+      this._cursor._mouseup = null;
     }
 
     let moveMode = (e.button == 2) || e.ctrlKey;
     moveMode = this._swapMouseScheme ? !moveMode : moveMode;
     if (this.doInputDown(e.clientX, e.clientY, moveMode))
     {
-      this.cursor._mousemove = this.onMouseDownAndMove.bind(this);
-      this.cursor._mouseup = this.onMouseDownAndUp.bind(this);
+      this._cursor._mousemove = this.onMouseDownAndMove.bind(this);
+      this._cursor._mouseup = this.onMouseDownAndUp.bind(this);
 
-      document.addEventListener('mousemove', this.cursor._mousemove);
-      document.addEventListener('mouseup', this.cursor._mouseup);
+      document.addEventListener('mousemove', this._cursor._mousemove);
+      document.addEventListener('mouseup', this._cursor._mouseup);
     }
   }
 
@@ -315,15 +342,15 @@ class InputController
     e.stopPropagation();
     e.preventDefault();
 
-    if (this.cursor._mousemove)
+    if (this._cursor._mousemove)
     {
-      document.removeEventListener('mousemove', this.cursor._mousemove);
-      this.cursor._mousemove = null;
+      document.removeEventListener('mousemove', this._cursor._mousemove);
+      this._cursor._mousemove = null;
     }
-    if (this.cursor._mouseup)
+    if (this._cursor._mouseup)
     {
-      document.removeEventListener('mouseup', this.cursor._mouseup);
-      this.cursor._mouseup = null;
+      document.removeEventListener('mouseup', this._cursor._mouseup);
+      this._cursor._mouseup = null;
     }
 
     this.doInputDownAndUp(e.clientX, e.clientY);
@@ -333,28 +360,29 @@ class InputController
 
   doInputDown(x, y, moveMode)
   {
-    const pointer = this.pointer;
+    const pointer = this._pointer;
     const mouse = getMousePosition(this.workspace, x, y);
     pointer.moveMode = moveMode;//If right click
     pointer.setInitialPosition(mouse.x, mouse.y);
 
     //Check whether to accept the start of input...
-    this.onInputDown(pointer.x, pointer.y,
-        pointer.initial.target, pointer.initial.targetType);
+    const event = {result: true};
+    this.emit("inputdown", this, pointer.x, pointer.y,
+        pointer.initial.target, pointer.initial.targetType, event);
 
-    this.cursor._timer = setTimeout(() => {
+    this._cursor._timer = setTimeout(() => {
       if (pointer.isWaitingForMoveMode())
       {
         pointer.moveMode = this._swapMouseScheme ? false : true;//default true
       }
     }, Config.LONG_TAP_TICKS);
 
-    return true;
+    return event.result;
   }
 
   doInputDownAndMove(x, y)
   {
-    const pointer = this.pointer;
+    const pointer = this._pointer;
     const mouse = getMousePosition(this.workspace, x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
@@ -364,7 +392,7 @@ class InputController
       {
         //Start drag!
         pointer.dragging = true;
-        this.onDragStart(pointer.x, pointer.y,
+        this.emit("dragstart", this, pointer.x, pointer.y,
             pointer.initial.target, pointer.initial.targetType);
       }
       else
@@ -376,59 +404,45 @@ class InputController
     else
     {
       //Continue to drag...
-      this.onDragMove(pointer.x, pointer.y,
+      this.emit("dragmove", this, pointer.x, pointer.y,
           pointer.initial.target, pointer.initial.targetType);
     }
 
-    this.onInputMove(pointer.x, pointer.y,
+    this.emit("inputmove", this, pointer.x, pointer.y,
         pointer.initial.target, pointer.initial.targetType);
   }
 
   doInputDownAndUp(x, y)
   {
-    if (this.cursor._timer)
+    if (this._cursor._timer)
     {
-      clearTimeout(this.cursor._timer);
-      this.cursor._timer = null;
+      clearTimeout(this._cursor._timer);
+      this._cursor._timer = null;
     }
 
-    const pointer = this.pointer;
+    const pointer = this._pointer;
     pointer.updateTarget();
 
     if (pointer.dragging)
     {
       //Stop drag!
-      this.onDragStop(pointer.x, pointer.y,
+      this.emit("dragstop", this, pointer.x, pointer.y,
           pointer.initial.target, pointer.initial.targetType);
     }
     else
     {
       //Tap!
-      this.onInputAction(pointer.x, pointer.y,
+      this.emit("inputaction", this, pointer.x, pointer.y,
           pointer.initial.target, pointer.initial.targetType);
     }
 
-    this.onInputUp(pointer.x, pointer.y,
+    this.emit("inputup", this, pointer.x, pointer.y,
         pointer.initial.target, pointer.initial.targetType);
 
     //Set target as nothing since no longer interacting
     pointer.target = null;
     pointer.targetType = "none";
   }
-
-  //Returns true if should act on input, false to ignore remaining click events
-  onInputDown(x, y, target, targetType)
-  {
-    return true;
-  }
-
-  onInputMove(x, y, target, targetType) {}
-  onInputUp(x, y, target, targetType) {}
-  onInputAction(x, y, target, targetType) {}
-
-  onDragStart(x, y, target, targetType) {}
-  onDragMove(x, y, target, targetType) {}
-  onDragStop(x, y, target, targetType) {}
 }
 //Mixin Eventable
 Eventable.mixin(InputController);

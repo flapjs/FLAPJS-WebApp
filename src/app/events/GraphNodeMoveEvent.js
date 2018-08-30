@@ -7,8 +7,8 @@ class GraphNodeMoveEvent extends Event
     super();
 
     this.graph = graph;
-    this.node = node;
 
+    this.nodeID = node.id;
     this.nextX = nextX;
     this.nextY = nextY;
     this.prevX = prevX;
@@ -18,15 +18,23 @@ class GraphNodeMoveEvent extends Event
   //Override
   applyUndo()
   {
-    this.node.x = this.prevX;
-    this.node.y = this.prevY;
+    const graph = this.graph;
+    const nodeIndex = graph.getNodeIndexByID(this.nodeID);
+    if (nodeIndex < 0) throw new Error("Unable to find target in graph");
+    const node = graph.nodes[nodeIndex];
+    node.x = this.prevX;
+    node.y = this.prevY;
   }
 
   //Override
   applyRedo()
   {
-    this.node.x = this.nextX;
-    this.node.y = this.nextY;
+    const graph = this.graph;
+    const nodeIndex = graph.getNodeIndexByID(this.nodeID);
+    if (nodeIndex < 0) throw new Error("Unable to find target in graph");
+    const node = graph.nodes[nodeIndex];
+    node.x = this.nextX;
+    node.y = this.nextY;
   }
 }
 

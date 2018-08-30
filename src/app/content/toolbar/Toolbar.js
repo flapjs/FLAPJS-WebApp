@@ -5,6 +5,7 @@ import Config from 'config.js';
 
 import UploadButton from "./UploadButton.js";
 import HelpButton from "./HelpButton.js";
+import MachineName from './MachineName.js';
 
 import IconButton from 'icons/IconButton.js';
 
@@ -31,59 +32,50 @@ class Toolbar extends React.Component
       langOn: false
     };
 
-    //TODO: this should be in builder!
-    this.machineName = React.createRef();
-
     this.onMachineNameChange = this.onMachineNameChange.bind(this);
+    this.onMachineNameKeyDown = this.onMachineNameKeyDown.bind(this);
     this.langOnClick = this.langOnClick.bind(this);
-  }
-
-  setMachineName(name)
-  {
-    this.machineName.value = name;
-    this.onMachineNameChange({target: this.machineName});
-  }
-
-  getMachineName()
-  {
-    return this.machineName.value;
   }
 
   onMachineNameChange(e)
   {
-    const element = document.getElementById('window-title');
-    const string = element.innerHTML;
-    const separator = string.indexOf('-');
-    if (separator !== -1)
-    {
-      element.innerHTML = e.target.value.trim() + " - " + string.substring(separator + 1).trim();
-    }
-    else
-    {
-      element.innerHTML = e.target.value.trim() + " - " + string;
-    }
+    this.props.machineController.renameMachine(e.value);
   }
 
-  langOnClick() {
+  onMachineNameKeyDown()
+  {
+
+  }
+
+  onMachineNameBlur()
+  {
+
+  }
+
+  langOnClick()
+  {
     this.setState({langOn: !this.state.langOn});
   }
 
   render()
   {
-    const app = this.props.app;
-    const drawer = app.drawer;
-    const notification = app.notification;
-    const machineBuilder = this.props.machineBuilder;
-    const graph = this.props.graph;
-    const events = this.props.eventManager.getLogger();
+    const graphController = this.props.graphController;
+    const machineController = this.props.machineController;
+    const eventManager = this.props.eventManager;
+    const notification = this.props.notification;
+    const drawer = this.props.drawer;
+
+    const graph = graphController.getGraph();
+    const machineBuilder = machineController.getMachineBuilder();
+    const events = eventManager.getLogger();
+
     const offline = navigator && navigator.onLine;
 
     return <div className="toolbar-container">
       <div className="toolbar-title">
         <div className="toolbar-title-name">
           {/*Machine Name*/}
-          <input id="machine-name" type="text" defaultValue={I18N.toString("file.untitled")}
-            onChange={this.onMachineNameChange} ref={ref=>this.machineName=ref}/>
+          <MachineName id="machine-name" value={machineController.getMachineName()} onSubmit={this.onMachineNameChange}/>
           {/*Toolbar Alt. Title*/}
           <div className="toolbar-title-alt">
             {/*Offline Button*/}
@@ -108,14 +100,10 @@ class Toolbar extends React.Component
               <OfflineIcon/>
             </IconButton>
             {/*Upload Button*/}
-            <UploadButton id="toolbar-upload-alt" title={I18N.toString("action.toolbar.uploadmachine")}
-              graph={graph}
-              onChange={(e)=>{
-                this.setMachineName(e.name);
-                events.clear();
-              }}>
+            <div id="toolbar-upload-alt"
+              title={I18N.toString("action.toolbar.uploadmachine")}>
               <MoreIcon/>
-            </UploadButton>
+            </div>
           </div>
         </div>
         {/*Machine Type*/}
@@ -133,18 +121,14 @@ class Toolbar extends React.Component
             {
               graph.deleteAll();
               events.clear();
-              this.setMachineName(I18N.toString("file.untitled"));
+              machineController.setMachineName(null);
             }
           }}>
           <CreateIcon/>
         </IconButton>
         {/*Upload Button*/}
         <UploadButton className="navicon" id="toolbar-upload" title={I18N.toString("action.toolbar.uploadmachine")}
-          graph={graph}
-          onChange={(e)=>{
-            this.setMachineName(e.name);
-            events.clear();
-          }}>
+          graphController={graphController}>
           <UploadIcon/>
         </UploadButton>
         {/*Undo Button*/}

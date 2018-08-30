@@ -12,9 +12,9 @@ import { EMPTY } from 'machine/Symbols.js';
 
 class FSABuilder extends MachineBuilder
 {
-  constructor(graph, controller)
+  constructor(graph)
   {
-    super(graph, controller);
+    super(graph);
 
     this._machine = new NFA();
     this._machineType = "DFA";
@@ -50,6 +50,7 @@ class FSABuilder extends MachineBuilder
     this.graph.on("edgeDestination", this.onGraphChange);
     this.graph.on("toggleAccept", this.onGraphChange);
     this.graph.on("newInitial", this.onGraphChange);
+    this.graph.on("markDirty", this.onGraphChange);
 
     this.onGraphChange();
   }
@@ -67,6 +68,7 @@ class FSABuilder extends MachineBuilder
     this.graph.removeEventListener("edgeDestination", this.onGraphChange);
     this.graph.removeEventListener("toggleAccept", this.onGraphChange);
     this.graph.removeEventListener("newInitial", this.onGraphChange);
+    this.graph.removeEventListener("markDirty", this.onGraphChange);
 
     super.destroy();
   }
@@ -185,6 +187,15 @@ class FSABuilder extends MachineBuilder
   removeCustomSymbol(symbol)
   {
     this._symbols.splice(this._symbols.indexOf(symbol), 1);
+
+    this.onGraphChange();
+  }
+
+  renameCustomSymbol(prevSymbol, nextSymbol)
+  {
+    const i = this._symbols.indexOf(prevSymbol);
+    if (i <= 0) throw new Error("Trying to rename unknown symbol \'" + prevSymbol + "\'");
+    this._symbols[i] = nextSymbol;
 
     this.onGraphChange();
   }

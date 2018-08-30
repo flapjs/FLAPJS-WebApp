@@ -1,14 +1,13 @@
-import { guid } from 'util/MathHelper.js';
-import { solveNFA } from 'machine/util/solveNFA.js';
-
+import Viewport from 'content/viewport/Viewport.js';
 import TestMode from './TestMode.js';
 import TestingInputList from './TestingInputList.js';
 
 class TestingManager
 {
-  constructor(machineBuilder)
+  constructor()
   {
-    this.machineBuilder = machineBuilder;
+    this.machineController = null;
+    this.viewport = null;
 
     this.inputList = new TestingInputList();
 
@@ -17,13 +16,28 @@ class TestingManager
     this.errorCheckMode = TestingManager.NO_ERROR_CHECK;
     this.stepByStepMode = false;
 
-    this.testMode = new TestMode(machineBuilder, this);
+    this.testMode = new TestMode(this);
+  }
+
+  initialize(app)
+  {
+    this.machineController = app.machineController;
+    this.viewport = app.viewport;
+
+    this.testMode.initialize(app);
+  }
+
+  destroy()
+  {
+
   }
 
   setErrorCheckMode(mode)
   {
+    const machineBuilder = this.machineController.getMachineBuilder();
+
     //Update machine builder error checker
-    this.machineBuilder.setMachineType(this.machineBuilder.getMachineType());
+    machineBuilder.setMachineType(machineBuilder.getMachineType());
 
     if (mode == TestingManager.NO_ERROR_CHECK)
     {
@@ -56,6 +70,22 @@ class TestingManager
   setStepByStepMode(mode)
   {
     this.stepByStepMode = mode ? true : false;
+
+    if (mode)
+    {
+      if (this.testMode.isStarted()) this.testMode.onStop();
+      this.testMode.onStart();
+      this.viewport.setState((prev, props) => {
+        return {prevMode: prev.mode, mode: Viewport.TESTING};
+      });
+    }
+    else
+    {
+      if (this.testMode.isStarted()) this.testMode.onStop();
+      this.viewport.setState((prev, props) => {
+        return {mode: prev.prevMode};
+      });
+    }
   }
 
   getStepByStepMode()

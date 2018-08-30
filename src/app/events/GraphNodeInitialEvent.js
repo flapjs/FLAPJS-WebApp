@@ -8,20 +8,30 @@ class GraphNodeInitialEvent extends Event
 
     this.graph = graph;
 
-    this.nextInitial = nextInitial;
-    this.prevInitial = prevInitial;
+    this.nodeID = nextInitial.id;
+    this.prevID = prevInitial.id;
   }
 
   //Override
   applyUndo()
   {
-    this.graph.setStartNode(this.prevInitial);
+    const graph = this.graph;
+    const nodeIndex = graph.getNodeIndexByID(this.prevID);
+    if (nodeIndex < 0) throw new Error("Unable to find target in graph");
+    const node = graph.nodes[nodeIndex];
+
+    this.graph.setStartNode(node);
   }
 
   //Override
   applyRedo()
   {
-    this.graph.setStartNode(this.nextInitial);
+    const graph = this.graph;
+    const nodeIndex = graph.getNodeIndexByID(this.nodeID);
+    if (nodeIndex < 0) throw new Error("Unable to find target in graph");
+    const node = graph.nodes[nodeIndex];
+
+    this.graph.setStartNode(node);
   }
 }
 

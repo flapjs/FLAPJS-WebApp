@@ -17,6 +17,19 @@ class TestingInputList
     this.inputIndex = 0;
   }
 
+  isEmpty()
+  {
+    for(const input of this.inputList)
+    {
+      if (input.value.length > 0)
+      {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   testByIndex(index, machine)
   {
     if (index < 0 || index >= this.inputList.length)

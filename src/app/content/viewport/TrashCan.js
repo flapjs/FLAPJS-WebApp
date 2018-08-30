@@ -17,7 +17,7 @@ class TrashCan extends React.Component
   onTrashEnter(e)
   {
     if (this.state.staticTrash) return;
-    this.props.controller.pointer.trashMode = true;
+    this.props.inputController.setTrashMode(true);
 
     //Enable mode: dangerous
     this.props.viewport.setState((prev, props) => {
@@ -28,7 +28,7 @@ class TrashCan extends React.Component
   onTrashLeave(e)
   {
     if (this.state.staticTrash) return;
-    this.props.controller.pointer.trashMode = false;
+    this.props.inputController.setTrashMode(false);
 
     //Disable mode: dangerous
     this.props.viewport.setState((prev, props) => {
@@ -43,7 +43,7 @@ class TrashCan extends React.Component
 
     this.setState((prev, props) => {
       const result = !prev.staticTrash;
-      this.props.controller.pointer.trashMode = result;
+      this.props.inputController.setTrashMode(result);
 
       //Enable mode: dangerous
       this.props.viewport.setState((prev, props) => {
@@ -58,16 +58,22 @@ class TrashCan extends React.Component
 
   render()
   {
+    const inputController = this.props.inputController;
+    const pointer = inputController.getPointer();
+
     return <svg id="trash-btn"
-      className={(this.props.controller.pointer.trashMode ? "danger " : "") +
-        (this.props.controller.isUsingTouch() && this.props.controller.pointer.dragging ? "hidden" : "")}
+      className={(pointer.trashMode ? "danger " : "") +
+        (inputController.isUsingTouch() && pointer.dragging ? "hidden" : "")}
       width="24" height="24"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       onMouseEnter={this.onTrashEnter.bind(this)}
       onMouseLeave={this.onTrashLeave.bind(this)}
       onClick={this.onTrashClick.bind(this)}>
-      <path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/>
+      <path d={"M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 " +
+      "1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 " +
+      "1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 " +
+      "1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"}/>
     </svg>;
   }
 }

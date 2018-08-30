@@ -19,25 +19,24 @@ class StatesList extends React.Component
 
   onStateCreate(e)
   {
-    const machineBuilder = this.props.machineBuilder;
-    const graph = machineBuilder.graph;
     const x = -100 + (Math.random() * 100 * 2);
     const y = -100 + (Math.random() * 100 * 2);
-    graph.newNode(x, y, machineBuilder.getLabeler().getNextDefaultNodeLabel());
+    this.props.graphController.createNode(x, y);
   }
 
   render()
   {
-    const controller = this.props.controller;
-    const graph = this.props.machineBuilder.graph;
+    const graphController = this.props.graphController;
+    const graph = graphController.getGraph();
     return <InfoBlock title={I18N.toString("component.stateslist.title")} defaultValue="true">
       <div className="statelist-container">
         <div className="statelist">
           <TriangleIcon/>
           {
             graph.nodes.map((e, i) => {
-              return <StateTag key={e.label} src={e} label={e.label} accept={e.accept} graph={graph}
-                onFocus={ev => controller.focusOnNode(e)}/>
+              return <StateTag key={e.label} src={e} label={e.label} accept={e.accept}
+                graphController={graphController}
+                onFocus={ev => graphController.focusOnNode(e)}/>
             })
           }
         </div>

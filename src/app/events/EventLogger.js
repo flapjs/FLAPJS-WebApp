@@ -1,4 +1,4 @@
-const MAX_HISTORY_LENGTH = 100;
+const MAX_HISTORY_LENGTH = 1000;
 
 class EventLogger
 {

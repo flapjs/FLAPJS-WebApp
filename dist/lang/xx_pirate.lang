@@ -17,13 +17,16 @@ message.offline.ready = Ye ar' ready for open waters!
 message.offline.failed = Ye ar' not ready for the ocean, me hearty. Do give 'er 'nother try!
 message.offline.nosupport = Arrr! Yer browser be soon swimmin' with the fishies.
 
-message.intro.1 = Ahoy! Welcome aboard to yer ship, cap'n!
+//message.intro.1 = Ahoy! Welcome aboard to yer ship, cap'n!
 message.intro.2 = T' find yer new sea legs, look starboard fer yer hat.
 //message.intro.3 = If ye in need o' 'nother helper, drop anchor me hearty and find yerself 'nother matey. Arrr!
 message.tutorial.1 = ==== Yer Ol' Guide ==== \n Using yer rats \n * Action = Right Rat \n * Move = Left Rat \n\n Using yer handy compass \n * Action = Tap-Hold \n * Move = Tap-Drag \n\n State = Double Tap \n Transition = Action-Drag \n Symbol = Any Tap \n\n Interactive elements be colorful when hoverin'.
 message.help.1 = Lookin' fer more swabbers? I bet some 're back at port.
 message.help.2 = Dead men tell no tales. Dead men. Tell no tales.
 message.help.3 = Keep a weather eye open, cap'n!
+
+cursor.actionmode = Plunderin' Time
+cursor.movemode = Sailin' Time
 
 component.testing.title = Parley
 component.overview.title = Swagger
@@ -50,7 +53,7 @@ options.checkerrors.mode.immediate = No quarter given!
 
 options.autolabel = Name yer powder monkeys
 options.skipwelcome = Straight t' the sea
-options.swapinputs = Hand me yer cutlass
+//options.swapinputs = Hand me yer cutlass
 
 options.testing.stepmode = Swab the deck!
 //options.testing.closure = I reckon's the Kraken
@@ -77,6 +80,7 @@ action.testing.save = Save fer 'nother day
 
 action.overview.convertdfa = Convert yer charts to DFA
 action.overview.convertnfa = Convert yer charts to NFA
+action.overview.autolayout = To the shipyard!
 
 action.options.changetheme = Change yer colors...
 action.options.reset = Clean yer barnacles

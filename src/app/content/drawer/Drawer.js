@@ -41,17 +41,19 @@ class Drawer extends React.Component
 
   setTab(index)
   {
+    const app = this.props.app;
+
     //Open drawer if it is closed
-    if (!this.props.app.state.isOpen)
+    if (!app.state.isOpen)
     {
-      this.props.app.openDrawer();
+      app.openDrawer();
     }
     //Full drawer if clicked on same one
     else
     {
       if (this.state.tabIndex === index)
       {
-        this.props.app.openDrawer(!this.props.app.state.isFullscreen);
+        app.openDrawer(!app.state.isFullscreen);
       }
     }
 
@@ -63,16 +65,22 @@ class Drawer extends React.Component
   getTab(index)
   {
     const app = this.props.app;
+    const graphController = this.props.graphController;
+    const machineController = this.props.machineController;
+
+    const graph = graphController.getGraph();
+    const machineBuilder = machineController.getMachineBuilder();
+
     switch(index)
     {
       case OVERVIEW:
-        return <OverviewPanel ref={ref=>this.panel=ref} graph={app.graph} machineBuilder={app.machineBuilder} controller={app.controller}/>;
+        return <OverviewPanel ref={ref=>this.panel=ref} graphController={graphController} machineController={machineController}/>;
       case TESTING:
-        return <TestingPanel ref={ref=>this.panel=ref} viewport={app.viewport} machineBuilder={app.machineBuilder} tester={app.testingManager}/>;
+        return <TestingPanel ref={ref=>this.panel=ref} viewport={app.viewport} tester={app.testingManager} graphController={graphController} machineController={machineController}/>;
       case EXPORTING:
-        return <ExportingPanel ref={ref=>this.panel=ref} workspace={app.workspace} graph={this.props.graph} toolbar={this.props.toolbar} controller={app.controller} />;
+        return <ExportingPanel ref={ref=>this.panel=ref} workspace={app.workspace} toolbar={this.props.toolbar} graphController={graphController} machineController={machineController}/>;
       case OPTIONS:
-        return <OptionsPanel ref={ref=>this.panel=ref} controller={app.controller}/>;
+        return <OptionsPanel ref={ref=>this.panel=ref}/>;
       default:
         throw new Error("Unknown tab index \'" + tabIndex + "\'.");
     }
@@ -215,29 +223,29 @@ class Drawer extends React.Component
   {
     const app = this.props.app;
 
-    /*
-    //Double click to expand to fullscreen and normal
-    onDoubleClick={app.state.isOpen ? app.openDrawer.bind(app, true) : app.openDrawer.bind(app, false)}
-    */
+    const tabIndex = this.state.tabIndex;
+
     return <div className={"drawer-container"} onWheel={this.onScroll}>
       <div className="drawer-content">
-        {this.getTab(this.state.tabIndex)}
+        {this.getTab(tabIndex)}
       </div>
       <div className="tab-list">
+
         <DrawerExpander app={app}/>
-        <button className={"tab-link" + (this.state.tabIndex == TESTING ? " active" : "")}
+
+        <button className={"tab-link" + (tabIndex === TESTING ? " active" : "")}
           onClick={ev=>this.setTab(TESTING)}>
           {I18N.toString("component.testing.title")}
         </button>
-        <button className={"tab-link" + (this.state.tabIndex == OVERVIEW ? " active" : "")}
+        <button className={"tab-link" + (tabIndex === OVERVIEW ? " active" : "")}
           onClick={ev=>this.setTab(OVERVIEW)}>
           {I18N.toString("component.overview.title")}
         </button>
-        <button className={"tab-link" + (this.state.tabIndex == EXPORTING ? " active" : "")}
+        <button className={"tab-link" + (tabIndex === EXPORTING ? " active" : "")}
           onClick={ev=>this.setTab(EXPORTING)}>
           {I18N.toString("component.exporting.title")}
         </button>
-        <button className={"tab-link" + (this.state.tabIndex == OPTIONS ? " active" : "")}
+        <button className={"tab-link" + (tabIndex === OPTIONS ? " active" : "")}
           onClick={ev=>this.setTab(OPTIONS)}>
           {I18N.toString("component.options.title")}
         </button>

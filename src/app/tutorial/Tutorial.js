@@ -4,19 +4,20 @@ import Config from 'config.js';
 
 class Tutorial
 {
-  constructor(app)
+  constructor()
   {
-    this.app = app;
+    this.app = null;
   }
 
-  start()
+  start(app)
   {
-    const notification = this.app.notification;
+    this.app = app;
+
+    const notification = app.notification;
     if (!AutoSaver.hasAutoSave())
     {
       notification.addMessage("message.tutorial.1");
       notification.addMessage("message.intro.2");
-      notification.addMessage("message.intro.1");
     }
   }
 }

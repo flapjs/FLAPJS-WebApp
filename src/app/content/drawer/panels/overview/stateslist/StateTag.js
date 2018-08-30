@@ -32,14 +32,13 @@ class StateTag extends React.Component
 
   onDrop(e)
   {
-    const graph = this.props.graph;
+    const graphController = this.props.graphController;
+    const graph = graphController.getGraph();
     const nodeIndex = graph.getNodeIndex(this.props.src);
     const otherIndex = graph.getNodeIndexByLabel(e.dataTransfer.getData("text"));
 
     //Swap
-    const node = graph.nodes[otherIndex];
-    graph.nodes[otherIndex] = graph.nodes[nodeIndex];
-    graph.nodes[nodeIndex] = node;
+    graphController.swapNodeByIndex(nodeIndex, otherIndex);
 
     e.preventDefault();
   }
@@ -47,8 +46,9 @@ class StateTag extends React.Component
   onFocus(e)
   {
     const target = e.target;
-    this.setState({ value: this.props.label, error: false },
-      ()=>target.select());
+    this.setState({ value: this.props.label, error: false }, () => {
+      target.select()
+    });
 
     //Call any listening focus
     if (this.props.onFocus) this.props.onFocus(e);
@@ -56,20 +56,21 @@ class StateTag extends React.Component
 
   onBlur(e)
   {
+    const graphController = this.props.graphController;
     const newLabel = this.state.value;
 
     //The value is already processed, abort
     if (newLabel != null)
     {
       const node = this.props.src;
-      const graph = this.props.graph;
+      const graph = graphController.getGraph();
       if (newLabel.length > 0)
       {
         const result = graph.getNodeByLabel(newLabel);
         if (!result)
         {
           //Valid! Rename it!
-          node.setCustomLabel(newLabel);
+          graphController.renameNode(node, newLabel);
         }
         else
         {
@@ -79,7 +80,7 @@ class StateTag extends React.Component
       else
       {
         //Delete!
-        graph.deleteNode(this.props.src);
+        graphController.deleteTargetNode(this.props.src);
       }
 
       this.setState({ value: null, error: false });
@@ -114,7 +115,7 @@ class StateTag extends React.Component
 
   onValueChange(e)
   {
-    const graph = this.props.graph;
+    const graph = this.props.graphController.getGraph();
     const value = e.target.value.trim();
     let error = false;
     if (value.length > 0)

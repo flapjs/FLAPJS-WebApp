@@ -1,6 +1,6 @@
 import React from 'react';
 
-class PauseIcon extends React.Component
+class PlayIcon extends React.Component
 {
   constructor(props)
   {
@@ -16,4 +16,4 @@ class PauseIcon extends React.Component
   }
 }
 
-export default PauseIcon;
+export default PlayIcon;

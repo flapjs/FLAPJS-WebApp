@@ -29,17 +29,24 @@ class TestingPanel extends React.Component
     this.onGraphChange = this.onGraphChange.bind(this);
     this.onTestsRunAll = this.onTestsRunAll.bind(this);
     this.onTestsClear = this.onTestsClear.bind(this);
+    this.onTestsSave = this.onTestsSave.bind(this);
   }
 
   componentWillMount()
   {
+    const graphController = this.props.graphController;
+    const graph = graphController.getGraph();
+
     //HACK: this should be a listener to FSABuilder, should not access graph
-    this.props.machineBuilder.graph.on("markDirty", this.onGraphChange);
+    graph.on("markDirty", this.onGraphChange);
   }
 
   componentWillUnmount()
   {
-    this.props.machineBuilder.graph.removeEventListener("markDirty", this.onGraphChange);
+    const graphController = this.props.graphController;
+    const graph = graphController.getGraph();
+
+    graph.removeEventListener("markDirty", this.onGraphChange);
   }
 
   onGraphChange(g)
@@ -62,8 +69,13 @@ class TestingPanel extends React.Component
   onChangeErrorCheckMode(e)
   {
     const value = e.target.value;
+
+    const graphController = this.props.graphController;
+    const machineController = this.props.machineController;
     const tester = this.props.tester;
-    const machineBuilder = this.props.machineBuilder;
+
+    const graph = graphController.getGraph();
+    const machineBuilder = machineController.getMachineBuilder();
     tester.setErrorCheckMode(value);
 
     //HACK: this should automatically be updated by testing manager on set error check mode
@@ -73,7 +85,7 @@ class TestingPanel extends React.Component
     }
     else
     {
-      machineBuilder.onGraphChange(machineBuilder.graph);
+      machineBuilder.onGraphChange(graph);
     }
 
     this.setState({errorCheckMode: value});
@@ -81,7 +93,7 @@ class TestingPanel extends React.Component
 
   onTestsRunAll(e)
   {
-    const machine = this.props.machineBuilder.getMachine();
+    const machine = this.props.machineController.getMachineBuilder().getMachine();
     const testList = this.props.tester.inputList;
     const length = testList.getTests().length;
     for(let i = 0; i < length; ++i)
@@ -95,10 +107,15 @@ class TestingPanel extends React.Component
     this.props.tester.inputList.clearTests();
   }
 
+  onTestsSave(e)
+  {
+    Downloader.downloadText(TEST_FILENAME, this.props.tester.inputList.getTestsAsStrings().join("\n"));
+  }
+
   render()
   {
     const viewport = this.props.viewport;
-    const machineBuilder = this.props.machineBuilder;
+    const machineBuilder = this.props.machineController.getMachineBuilder();
     const tester = this.props.tester;
     const testList = tester.inputList;
 
@@ -118,28 +135,35 @@ class TestingPanel extends React.Component
 
           <div className="scrollbar-container">
             <div className="test-inputlist-content">
-              {isTestInvalid &&
-                <label className="test-inputlist-content-warning">Not a valid machine!</label>}
-              {testList.getTests().map((e, i) =>
-                <TestingInput key={e.id} index={i}
-                  testList={testList}
-                  machineBuilder={machineBuilder}/>)}
+              {
+                isTestInvalid &&
+                <label className="test-inputlist-content-warning">Not a valid machine!</label>
+              }
+              {
+                testList.getTests().map((e, i) =>
+                  <TestingInput key={e.id} index={i}
+                    testList={testList}
+                    machineBuilder={machineBuilder}/>)
+              }
+
               <button className="panel-button" onClick={this.onTestsClear}>
                 {I18N.toString("action.testing.clear")}
               </button>
             </div>
           </div>
 
-          <button className="panel-button" id="test-upload" onClick={() => this.uploadInput.click()}>
+          <button className="panel-button" id="test-upload"
+            onClick={() => this.uploadInput.click()}>
             <input ref={ref=>this.uploadInput=ref}
               id="test-upload-input" type="file" name="import"
               style={{display: "none"}}
               onChange={this.onUploadFileChange} accept=".txt"/>
             {I18N.toString("action.testing.import")}
           </button>
-          <button className="panel-button" id="test-save" onClick={() => {
-            Downloader.downloadText(TEST_FILENAME, testList.getTestsAsStrings().join("\n"));
-          }}>
+
+          <button className="panel-button" id="test-save"
+            onClick={this.onTestsSave}
+            disabled={this.props.tester.inputList.isEmpty()}>
             {I18N.toString("action.testing.save")}
           </button>
         </div>
@@ -157,26 +181,11 @@ class TestingPanel extends React.Component
           </select>
         </div>
         <div className="panel-checkbox">
-          <input id="test-step" type="checkbox" onChange={(e) => {
-            //HACK: this needs to default to tester.getStepByStepMode first
-            tester.setStepByStepMode(e.target.checked);
-
-            if (tester.getStepByStepMode())
-            {
-              if (tester.testMode.isStarted()) tester.testMode.onStop();
-              tester.testMode.onStart();
-              viewport.setState((prev, props) => {
-                return {prevMode: prev.mode, mode: Viewport.TESTING};
-              });
-            }
-            else
-            {
-              if (tester.testMode.isStarted()) tester.testMode.onStop();
-              viewport.setState((prev, props) => {
-                return {mode: prev.prevMode};
-              });
-            }
-          }}/>
+          <input id="test-step" type="checkbox"
+            checked={tester.getStepByStepMode()}
+            onChange={(e) => {
+              tester.setStepByStepMode(e.target.checked);
+            }}/>
           <label htmlFor="test-step">{I18N.toString("options.testing.stepmode")}</label>
         </div>
       </div>

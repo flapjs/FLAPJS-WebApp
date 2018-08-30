@@ -14,6 +14,11 @@ class Node
     this._accept = false;
   }
 
+  setID(id)
+  {
+    this.id = id;
+  }
+
   setLabel(label)
   {
     const prevLabel = this._label;
