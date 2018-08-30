@@ -33,20 +33,28 @@ Starting from scratch on the workspace, you can choose to make a DFA or NFA by t
 under the title of the workspace. The button will expand the drawer and trigger the `Definition Panel`. Inside
 the `Definition Panel`, you can tap on the scroll button and choose either `DFA` or `NFA`.
 
+![creatingdfa](dist/images/dfa1.png)
+
 ### Creating Nodes 
 You can create a node in the workspace by `double tapping` anywhere within the workspace. By default, the first node 
 you make will be the start state. After creating the start node you can continue creating as many nodes as desired
 by `double tapping`.
 
+![creatingnodes](dist/images/dfa2.png)
+
 ### Creating Transitions
 You can create a transition between nodes by `tapping and holding` the desired starting node, and then 
 `dragging and releasing` once once the arrow is above the desired state.
+
+![creatingtransitons](dist/images/dfa3.png)
 
 ### Deleting Nodes
 As previously mentioned above you can enable `Delete Mode` by `tapping` on the `Trashcan Icon`, and then `tapping` on the 
 nodes you desire to delete. To disable `Delete Mode` tap on the Trashcan Icon again. The second way to delete one
 node or multiple nodes, is using a `selection box` to grab multiple nodes and then `tap` on the selected box and `drag`
 towards the `Trashcan Icon`.
+
+![deletingnodes](dist/images/dfa4.png)
 
 ### Changing the Start State 
 To change the start state `tap and drag` the triangle onto the desired start state.
