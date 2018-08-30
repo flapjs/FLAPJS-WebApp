@@ -97,6 +97,7 @@ class TestMode
   {
     this.targets.length = 0;
 
+    this.running = false;
     this.started = false;
   }
 
