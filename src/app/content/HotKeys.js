@@ -8,6 +8,7 @@ class HotKeys
     this.toolbar = null;
     this.events = null;
     this.graphController = null;
+    this.machineController = null;
 
     this.onKeyDown = this.onKeyDown.bind(this);
   }
@@ -18,6 +19,7 @@ class HotKeys
     this.toolbar = app.toolbar;
     this.events = app.eventManager;
     this.graphController = app.graphController;
+    this.machineController = app.machineController;
 
     window.addEventListener('keydown', this.onKeyDown);
   }
@@ -34,7 +36,7 @@ class HotKeys
     {
       //Save as machine file
       //TODO: Refer to export panel
-      Downloader.downloadText(this.toolbar.getMachineName() + '.json', JSON.stringify(this.graphController.getGraph().toJSON()));
+      Downloader.downloadText(this.machineController.getMachineName() + '.json', JSON.stringify(this.graphController.getGraph().toJSON()));
       e.preventDefault();
       e.stopPropagation();
     }
@@ -65,7 +67,7 @@ class HotKeys
       const width = workspaceDim.width;
       const height = workspaceDim.height;
       const svg = this.workspace.getSVGForExport(width, height);
-      Downloader.downloadSVG(this.toolbar.getMachineName(), 'png', svg, width, height);
+      Downloader.downloadSVG(this.machineController.getMachineName(), 'png', svg, width, height);
 
       e.preventDefault();
       e.stopPropagation();
