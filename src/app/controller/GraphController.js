@@ -59,17 +59,16 @@ class GraphController
     this.registerEvent("userPreCreateNode");//(graph, nextNodeID, x, y)
     this.registerEvent("userPostCreateNode");//(graph, node)
 
+    //userToggleNode(graph, node, prevAccept) - When user toggles the accept state
+    this.registerEvent("userToggleNode");
+
     /*
-    //userPreCreateNode(graph) - Before user creates a node
-    this.registerEvent("userPreCreateNode");
     //userDeleteNodes(graph, node, targetNodes, prevX, prevY) - When user deletes one or more nodes
     this.registerEvent("userDeleteNodes");
     //userPreDeleteNodes(graph, node, targetNodes, prevX, prevY) - Before user delets one or more nodes
     this.registerEvent("userPreDeleteNodes");
     //userMoveNodes(graph, nodes, dx, dy) - When user moves one or more nodes
     this.registerEvent("userMoveNodes");
-    //userToggleNode(graph, node, prevAccept) - When user toggles the accept state
-    this.registerEvent("userToggleNode");
     //userMoveInitial(graph, node, prevNode) - When user moves the initial marker to another
     this.registerEvent("userMoveInitial");
     //userPreCreateEdge(graph, edge) - When user is about to create an edge, before src
@@ -117,8 +116,6 @@ class GraphController
     this.registerEvent("nodeMove");
     //nodeMoveAll(targetNodes, dx, dy)
     this.registerEvent("nodeMoveAll");
-    //nodeAccept(targetNode, nextAccept, prevAccept)
-    this.registerEvent("nodeAccept");
     //nodeInitial(nextInitial, prevInitial)
     this.registerEvent("nodeInitial");
     //edgeCreate(targetEdge)
@@ -211,6 +208,17 @@ class GraphController
 
     this.emit("userPostCreateNode", this.graph, node);
     return node;
+  }
+
+  toggleNode(node)
+  {
+    const prev = node.accept;
+    const result = !node.accept;
+    //Toggle accept for selected node
+    node.accept = result;
+
+    //Emit event
+    this.emit("userToggleNode", this.graph, node, prev);
   }
 
   deleteSelectedNodes(selectedNode)
@@ -417,13 +425,7 @@ class GraphController
     {
       if (!trashMode)
       {
-        const prev = target.accept;
-        const result = !target.accept;
-        //Toggle accept for selected node
-        target.accept = result;
-
-        //Emit event
-        this.emit("nodeAccept", target, result, prev);
+        this.toggleNode(target);
         return true;
       }
     }

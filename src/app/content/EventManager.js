@@ -14,6 +14,7 @@ import GraphNodeMoveEvent from 'events/GraphNodeMoveEvent.js';
 import GraphNodeMoveAllEvent from 'events/GraphNodeMoveAllEvent.js';
 
 import UserCreateNodeEventHandler from 'controller/events/UserCreateNodeEventHandler.js';
+import UserToggleNodeEventHandler from 'controller/events/UserToggleNodeEventHandler.js';
 import UserImportGraphEventHandler from 'controller/events/UserImportGraphEventHandler.js';
 import SafeGraphEventHandler from 'controller/events/SafeGraphEventHandler.js';
 
@@ -47,8 +48,6 @@ class EventManager
       events.handleEvent(new GraphNodeMoveEvent(graph, targetNode, nextX, nextY, prevX, prevY)));
     this.graphController.on("nodeMoveAll", (targetNodes, dx, dy) =>
       events.handleEvent(new GraphNodeMoveAllEvent(graph, targetNodes, dx, dy)));
-    this.graphController.on("nodeAccept", (targetNode, nextAccept, prevAccept) =>
-      events.handleEvent(new GraphNodeAcceptEvent(graph, targetNode, nextAccept, prevAccept)));
     this.graphController.on("nodeInitial", (nextInitial, prevInitial) =>
       events.handleEvent(new GraphNodeInitialEvent(graph, nextInitial, prevInitial)));
     this.graphController.on("edgeCreate", targetEdge =>
@@ -63,6 +62,7 @@ class EventManager
       events.handleEvent(new GraphEdgeLabelEvent(graph, targetEdge, nextLabel, prevLabel)));
 
     this.eventHandlers.push(new UserCreateNodeEventHandler(events, this.graphController));
+    this.eventHandlers.push(new UserToggleNodeEventHandler(events, this.graphController));
     this.eventHandlers.push(new UserImportGraphEventHandler(events, this.graphController, this.machineController));
     this.eventHandlers.push(new SafeGraphEventHandler(events, this.graphController, "userPreChangeLayout", "userPostChangeLayout"));
 

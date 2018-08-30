@@ -99,10 +99,10 @@ class Workspace extends React.Component
         {/* Graph objects */}
         <g>
           {/* Nodes */}
-          {graph.nodes.map((e, i) => <NodeRenderer key={e.id} node={e}/>)}
+          {graph.nodes.map((e, i) => <NodeRenderer key={e.id || i} node={e}/>)}
 
           {/* Edges */}
-          {graph.edges.map((e, i) => <EdgeRenderer key={e.id} edge={e}/>)}
+          {graph.edges.map((e, i) => <EdgeRenderer key={e.id || i} edge={e}/>)}
         </g>
 
         {/* Graph GUIs */}
