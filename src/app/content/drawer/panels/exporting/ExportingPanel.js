@@ -20,49 +20,52 @@ class ExportingPanel extends React.Component
 
     this.onExportXML = this.onExportXML.bind(this);
     this.onExportJSON = this.onExportJSON.bind(this);
+    this.onExportPNG = this.onExportPNG.bind(this);
     this.onExportJPG = this.onExportJPG.bind(this);
   }
 
   onExportJSON(e)
   {
-    const toolbar = this.props.toolbar;
+    const machineName = this.props.machineController.getMachineName();
     const graph = this.props.graphController.getGraph();
 
     const jsonString = JSON.stringify(graph.toJSON());
-    Downloader.downloadText(toolbar.getMachineName() + '.json', jsonString);
+    Downloader.downloadText(machineName + '.json', jsonString);
   }
 
   onExportXML(e)
   {
-    const toolbar = this.props.toolbar;
+    const machineName = this.props.machineController.getMachineName();
     const graph = this.props.graphController.getGraph();
 
     const xmlString = new XMLSerializer().serializeToString(graph.toXML());
-    Downloader.downloadText(toolbar.getMachineName() + '.jff', xmlString);
+    Downloader.downloadText(machineName + '.jff', xmlString);
   }
 
   onExportPNG(e)
   {
-    const workspace = this.props.workspace;
-    const toolbar = this.props.toolbar;
+    const machineName = this.props.machineController.getMachineName();
 
+    const workspace = this.props.workspace;
     const workspaceDim = workspace.ref.viewBox.baseVal;
     const width = workspaceDim.width;
     const height = workspaceDim.height;
     const svg = workspace.getSVGForExport(width, height);
-    Downloader.downloadSVG(toolbar.getMachineName(), 'png', svg, width, height);
+
+    Downloader.downloadSVG(machineName, 'png', svg, width, height);
   }
 
   onExportJPG(e)
   {
-    const workspace = this.props.workspace;
-    const toolbar = this.props.toolbar;
+    const machineName = this.props.machineController.getMachineName();
 
+    const workspace = this.props.workspace;
     const workspaceDim = workspace.ref.viewBox.baseVal;
     const width = workspaceDim.width;
     const height = workspaceDim.height;
     const svg = workspace.getSVGForExport(width, height);
-    Downloader.downloadSVG(toolbar.getMachineName(), 'jpg', svg, width, height);
+
+    Downloader.downloadSVG(machineName, 'jpg', svg, width, height);
   }
 
   render()

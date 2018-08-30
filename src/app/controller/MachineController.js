@@ -6,6 +6,7 @@ class MachineController
   constructor(machineBuilder)
   {
     this.machineBuilder = machineBuilder;
+    this.machineName = null;
 
     this.graphController = null;
   }
@@ -23,6 +24,16 @@ class MachineController
   getMachineBuilder()
   {
     return this.machineBuilder;
+  }
+
+  getMachineName()
+  {
+    return this.machineName || I18N.toString("file.untitled");
+  }
+
+  setMachineName(machineName)
+  {
+    this.machineName = machineName;
   }
 
   changeMachineTo(machineType)

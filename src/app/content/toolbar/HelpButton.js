@@ -1,11 +1,6 @@
 import React from 'react';
 
-import GraphUploader from 'graph/GraphUploader.js';
-
-const FILETYPE_JSON = "application/json";
-const FILETYPE_JFLAP = ".jff";
-
-class UploadButton extends React.Component
+class HelpButton extends React.Component
 {
   constructor(props)
   {
@@ -51,4 +46,4 @@ class UploadButton extends React.Component
   }
 }
 
-export default UploadButton;
+export default HelpButton;

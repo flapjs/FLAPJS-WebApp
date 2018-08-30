@@ -19,7 +19,6 @@ import NotificationSystem from 'notification/NotificationSystem.js';
 import Tutorial from 'tutorial/Tutorial.js';
 
 import FSABuilder from 'builder/FSABuilder.js';
-import GraphUploader from 'graph/GraphUploader.js';
 import TestingManager from 'testing/TestingManager.js';
 import EventManager from './EventManager.js';
 

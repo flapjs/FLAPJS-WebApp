@@ -14,11 +14,16 @@ import GraphNodeLabelEvent from 'events/GraphNodeLabelEvent.js';
 import GraphNodeMoveEvent from 'events/GraphNodeMoveEvent.js';
 import GraphNodeMoveAllEvent from 'events/GraphNodeMoveAllEvent.js';
 
-class Events
+import UserImportGraphEventHandler from 'controller/events/UserImportGraphEventHandler.js';
+
+class EventManager
 {
   constructor()
   {
     this.graphController = null;
+    this.machineController = null;
+
+    this.eventHandlers = [];
 
     this.logger = new EventLogger();
   }
@@ -26,6 +31,8 @@ class Events
   initialize(app)
   {
     this.graphController = app.graphController;
+    this.machineController = app.machineController;
+
     const graph = this.graphController.getGraph();
     const events = this.logger;
 
@@ -56,10 +63,17 @@ class Events
     this.graphController.on("edgeLabel", (targetEdge, nextLabel, prevLabel) =>
       events.handleEvent(new GraphEdgeLabelEvent(graph, targetEdge, nextLabel, prevLabel)));
 
+    this.eventHandlers.push(new UserImportGraphEventHandler(events, this.graphController, this.machineController));
+
   }
 
   destroy()
   {
+    for(const handler of this.eventHandlers)
+    {
+      handler.destroy();
+    }
+
     //TODO: Remove all event listeners...
     this.graphController.clearEventListeners();
   }
@@ -70,4 +84,4 @@ class Events
   }
 }
 
-export default Events;
+export default EventManager;

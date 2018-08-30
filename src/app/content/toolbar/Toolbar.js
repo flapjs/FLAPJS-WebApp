@@ -31,26 +31,8 @@ class Toolbar extends React.Component
       langOn: false
     };
 
-    //TODO: this should be in builder!
-    this.machineName = null;
-
     this.onMachineNameChange = this.onMachineNameChange.bind(this);
     this.langOnClick = this.langOnClick.bind(this);
-  }
-
-  setMachineName(name)
-  {
-    if (!this.machineName) throw new Error("Trying to change label before mounting")
-
-    this.machineName.value = name;
-    this.onMachineNameChange({target: this.machineName});
-  }
-
-  getMachineName()
-  {
-    if (!this.machineName) throw new Error("Trying to access label before mounting")
-
-    return this.machineName.value;
   }
 
   onMachineNameChange(e)
@@ -66,6 +48,8 @@ class Toolbar extends React.Component
     {
       element.innerHTML = e.target.value.trim() + " - " + string;
     }
+
+    this.props.machineController.setMachineName(e.target.value || null);
   }
 
   langOnClick()
@@ -93,7 +77,7 @@ class Toolbar extends React.Component
           {/*Machine Name*/}
           <input ref={ref=>this.machineName=ref}
             id="machine-name" type="text"
-            defaultValue={I18N.toString("file.untitled")}
+            value={machineController.getMachineName()}
             onChange={this.onMachineNameChange}/>
           {/*Toolbar Alt. Title*/}
           <div className="toolbar-title-alt">
@@ -140,18 +124,14 @@ class Toolbar extends React.Component
             {
               graph.deleteAll();
               events.clear();
-              this.setMachineName(I18N.toString("file.untitled"));
+              machineController.setMachineName(null);
             }
           }}>
           <CreateIcon/>
         </IconButton>
         {/*Upload Button*/}
         <UploadButton className="navicon" id="toolbar-upload" title={I18N.toString("action.toolbar.uploadmachine")}
-          graphController={graphController}
-          onChange={(e)=>{
-            this.setMachineName(e.name);
-            events.clear();
-          }}>
+          graphController={graphController}>
           <UploadIcon/>
         </UploadButton>
         {/*Undo Button*/}

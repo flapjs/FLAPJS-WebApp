@@ -21,7 +21,7 @@ class GraphController
 
     this.labelEditor = null;
     this.selector = new SelectionBox(graph);
-    this.uploader = new Uploader(graph);
+    this.uploader = new Uploader(this);
 
     this.prevQuad = {
       radians: 0, length: 0,
@@ -54,9 +54,12 @@ class GraphController
 
     //The difference between controller events vs graph events is: controller has user-intent
 
-    /*
     //userCreateNode(graph, node) - When user creates a node
     this.registerEvent("userCreateNode");
+    this.registerEvent("userPreCreateNode");//(graph, nextNodeID, x, y)
+    this.registerEvent("userPostCreateNode");//(graph, node)
+
+    /*
     //userPreCreateNode(graph) - Before user creates a node
     this.registerEvent("userPreCreateNode");
     //userDeleteNodes(graph, node, targetNodes, prevX, prevY) - When user deletes one or more nodes
@@ -89,15 +92,18 @@ class GraphController
     this.registerEvent("userLabelEdge");
     //userDeleteMode(graph, isDeleteMode) - When user enters forced delete mode
     this.registerEvent("userDeleteMode");
+    */
 
     //Emitted by other components
     //userLabelNode(graph, node, prevLabel) - When user re-labels the node
     //userAddSymbol(grpah, symbol) - When user adds a custom symbol
     //userDeleteSymbol(graph, symbol, prevEdges) - When user delets a symbol (and affects the edges)
     //userChangeLayout(graph, prevLayout) - When user re-layouts the graph
-    //userPreImportGraph(graph) - When user starts to import a graph, before any changes
-    //userPostImportGraph(graph) - When user finishes importing a graph, after all changes
-    */
+
+    //userImportGraph(graph) - When user imports a graph
+    this.registerEvent("userImportGraph");
+    this.registerEvent("userPreImportGraph");//before any changes
+    this.registerEvent("userPostImportGraph");//after all changes
 
     //nodeCreate(targetNode) - Called when a node is created
     this.registerEvent("nodeCreate");
@@ -133,6 +139,8 @@ class GraphController
 
     this.inputController = app.inputController;
     this.machineController = app.machineController;
+
+    this.uploader.setMachineController(this.machineController);
 
     this.inputController.on("inputdown", this.onInputDown);
     this.inputController.on("inputmove", this.onInputMove);
@@ -182,11 +190,22 @@ class GraphController
   createNode(x, y)
   {
     const newNodeLabel = this.machineController.getMachineBuilder().getLabeler().getNextDefaultNodeLabel();
-    const node = this.graph.newNode(x, y, newNodeLabel);
-    node.x = x || (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
-    node.y = y || (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
 
+    if (typeof x === 'undefined') x = (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
+    if (typeof y === 'undefined') y = (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
+
+    this.emit("userPreCreateNode", this.graph, newNodeLabel, x, y);
+
+    const node = this.graph.newNode(x, y, newNodeLabel);
+    node.x = x;
+    node.y = y;
+
+    this.emit("userCreateNode", this.graph, node);
+
+    //TODO: should be deprecated
     this.emit("nodeCreate", node);
+
+    this.emit("userPostCreateNode", this.graph, node);
     return node;
   }
 
@@ -308,14 +327,14 @@ class GraphController
   focusOnNode(node)
   {
     //Center workspace at focused node; inverted due to graph-to-screen space
-    this.pointer.setOffset(-node.x, -node.y);
+    this.inputController.getPointer().setOffset(-node.x, -node.y);
   }
 
   focusOnEdge(edge)
   {
     //Center workspace at focused edge; inverted due to graph-to-screen space
     const center = edge.getCenterPoint();
-    this.pointer.setOffset(-center.x, -center.y);
+    this.inputController.getPointer().setOffset(-center.x, -center.y);
   }
 
   /*************************************************************************

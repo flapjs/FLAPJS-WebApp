@@ -5,12 +5,21 @@ const FILETYPE_JFLAP = ".jff";
 
 const JSON_EXT = ".json";
 const JFF_EXT = ".jff";
+const VALID_EXTS = [JSON_EXT, JFF_EXT];
 
 class Uploader
 {
-  constructor(graph)
+  constructor(graphController)
   {
-    this.graph = graph;
+    this.graphController = graphController;
+    this.machineController = null;
+
+    //Add notifications here for errors
+  }
+
+  setMachineController(machineController)
+  {
+    this.machineController = machineController;
   }
 
   getValidFileTypes()
@@ -28,91 +37,74 @@ class Uploader
       if (i < 0) reject("Invalid filename : missing file extension");
 
       const ext = name.substring(i);
-      if (ext == JSON_EXT)
+
+      if (VALID_EXTS.includes(ext))
       {
-        this.uploadJSONGraph(graphFileBlob).then(resolve).catch(reject);
-      }
-      else if (ext == JFF_EXT)
-      {
-        this.uploadJFFGraph(graphFileBlob).then(resolve).catch(reject);
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const data = event.target.result;
+          const name = graphFileBlob.name.substring(0, graphFileBlob.name.lastIndexOf('.'));
+          const graph = this.graphController.getGraph();
+
+          this.graphController.emit("userPreImportGraph", graph);
+
+          try
+          {
+            if (ext === JSON_EXT)
+            {
+              const dataJSON = JSON.parse(data);
+              const dst = NodalGraph.parseJSON(dataJSON);
+              graph.copyGraph(dst);
+            }
+            else if (ext === JFF_EXT)
+            {
+              const parser = new DOMParser();
+              const dataXML = parser.parseFromString(data, "text/xml");
+              const dst = NodalGraph.parseXML(dataXML);
+              graph.copyGraph(dst);
+            }
+            else
+            {
+              //There is no else... it's just not possible
+            }
+
+            this.graphController.emit("userImportGraph", graph);
+
+            if (this.machineController)
+            {
+              this.machineController.setMachineName(name);
+            }
+
+            //Callback will accepts an event object that contains:
+            //  file - file data,
+            //  name - file name,
+            //  graph - the changed graph object
+            resolve({
+              file: data,
+              name: name,
+              graph: graph
+            });
+          }
+          catch(e)
+          {
+            reader.abort();
+
+            reject(e);
+          }
+          finally
+          {
+            this.graphController.emit("userPostImportGraph", graph);
+          }
+        };
+        reader.onerror = (event) => {
+          reject(event.target.error.code);
+        };
+        reader.readAsText(graphFileBlob);
       }
       else
       {
         reject("Invalid filename : unknown file extension \'" + ext + "\'");
       }
-    });
-  }
-
-  uploadJSONGraph(jsonBlob)
-  {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const data = event.target.result;
-        try
-        {
-          const dataJSON = JSON.parse(data);
-          const dst = NodalGraph.parseJSON(dataJSON);
-          this.graph.copyGraph(dst);
-
-          //Callback will accepts an event object that contains:
-          //  file - file data,
-          //  name - file name,
-          //  graph - the changed graph object
-          resolve({
-            file: data,
-            name: jsonBlob.name.substring(0, jsonBlob.name.lastIndexOf('.')),
-            graph: this.graph
-          });
-        }
-        catch(e)
-        {
-          reader.abort();
-
-          reject(e);
-        }
-      };
-      reader.onerror = (event) => {
-        reject(event.target.error.code);
-      };
-      reader.readAsText(jsonBlob);
-    });
-  }
-
-  uploadJFFGraph(jffBlob)
-  {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const data = event.target.result;
-        try
-        {
-          let parser = new DOMParser();
-          const dataXML = parser.parseFromString(data, "text/xml");
-          const dst = NodalGraph.parseXML(dataXML);
-          this.graph.copyGraph(dst);
-
-          //Callback will accepts an event object that contains:
-          //  file - file data,
-          //  name - file name,
-          //  graph - the changed graph object
-          resolve({
-            file: data,
-            name: jffBlob.name.substring(0, jffBlob.name.lastIndexOf('.')),
-            graph: this.graph
-          });
-        }
-        catch(e)
-        {
-          reader.abort();
-
-          reject(e);
-        }
-      };
-      reader.onerror = (event) => {
-        reject(event.target.error.code);
-      };
-      reader.readAsText(jffBlob);
     });
   }
 }
