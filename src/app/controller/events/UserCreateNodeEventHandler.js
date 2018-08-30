@@ -14,7 +14,9 @@ class UserCreateNodeEventHandler extends EventHandler
       node: node,
       nodeID: node.id,
       x: node.x,
-      y: node.y
+      y: node.y,
+      label: node.label,
+      isCustom: node.hasCustomLabel()
     };
   }
 
@@ -40,6 +42,14 @@ class UserCreateNodeEventHandler extends EventHandler
       node.x = e.postData.x;
       node.y = e.postData.y;
       node.id = e.postData.nodeID;
+      if (e.postData.isCustom)
+      {
+        node.setCustomLabel(e.postData.label);
+      }
+      else
+      {
+        node.setLabel(e.postData.label);
+      }
     }
   }
 }

@@ -22,6 +22,8 @@ class EventHandler
     const result = {};
     result.applyUndo = this.applyUndo.bind(this, result);
     result.applyRedo = this.applyRedo.bind(this, result);
+    console.log("CAPTURING...", this.eventName);
+
     result.eventData = this.captureEvent(...args);
 
     if (this.postEventName)

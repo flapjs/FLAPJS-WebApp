@@ -67,9 +67,17 @@ class GraphController
     this.registerEvent("userPreDeleteNodes");
     this.registerEvent("userPostDeleteNodes");
 
+    //userDeleteEdge(graph, edge, prevTo, prevQuad) - When user deletes an edge
+    this.registerEvent("userDeleteEdge");
+    this.registerEvent("userPreDeleteEdge");
+    this.registerEvent("userPostDeleteEdge");
+
+    //userCreateEdge(graph, edge) - When user creates an edge, after naming it
+    this.registerEvent("userCreateEdge");
+    //this.registerEvent("userPreCreateEdge");
+    this.registerEvent("userPostCreateEdge");
+
     /*
-    //userPreDeleteNodes(graph, node, targetNodes, prevX, prevY) - Before user delets one or more nodes
-    this.registerEvent("userPreDeleteNodes");
     //userMoveNodes(graph, nodes, dx, dy) - When user moves one or more nodes
     this.registerEvent("userMoveNodes");
     //userMoveInitial(graph, node, prevNode) - When user moves the initial marker to another
@@ -80,12 +88,8 @@ class GraphController
     this.registerEvent("userBeginEdge");
     //userEndEdge(graph, edge, src, dst) - When user finishes creating an edge, after dst and before naming it (dst could be null for deletion)
     this.registerEvent("userEndEdge");
-    //userCreateEdge(graph, edge) - When user creates an edge, after naming it
-    this.registerEvent("userCreateEdge");
     //userPostCreateEdge(graph, edge) - When user is finished creating an edge, after dst and after quad changes
     this.registerEvent("userPostCreateEdge");
-    //userDeleteEdges(graph, edges) - When user deletes one or more edges
-    this.registerEvent("userDeleteEdges");
     //userMoveEdge(graph, edge, prevDest) - When user changes the dst of edge
     this.registerEvent("userChangeEdge");
     //userBendEdge(graph, edge, prevQuad) - When user bends the edge
@@ -123,10 +127,6 @@ class GraphController
     this.registerEvent("nodeMoveAll");
     //nodeInitial(nextInitial, prevInitial)
     this.registerEvent("nodeInitial");
-    //edgeCreate(targetEdge)
-    this.registerEvent("edgeCreate");
-    //edgeDelete(targetEdge)
-    this.registerEvent("edgeDelete");
     //edgeDestination(targetEdge, nextDestination, prevDestination, prevQuad)
     this.registerEvent("edgeDestination");
     //edgeMove(targetEdge, nextQuad, prevQuad)
@@ -278,12 +278,19 @@ class GraphController
     this.emit("userPostDeleteNodes", this.graph, target, [target], this.prevX, this.prevY);
   }
 
+  createEdge()
+  {
+
+  }
+
   deleteTargetEdge(target)
   {
+    this.emit("userPreDeleteEdge", this.graph, target, this.prevEdgeTo, this.prevQuad);
     this.graph.deleteEdge(target);
 
     //Emit event
-    this.emit("edgeDelete", target);
+    this.emit("userDeleteEdge", this.graph, target, this.prevEdgeTo, this.prevQuad);
+    this.emit("userPostDeleteEdge", this.graph, target, this.prevEdgeTo, this.prevQuad);
   }
 
   moveNodeTo(pointer, node, x, y)
@@ -355,7 +362,7 @@ class GraphController
     }
   }
 
-  openLabelEditor(target, x, y, placeholder=null, replace=true)
+  openLabelEditor(target, x, y, placeholder=null, replace=true, callback=null)
   {
     const prevLabel = placeholder || target.label;
     this.labelEditor.openEditor(target, placeholder, replace, () => {
@@ -363,6 +370,11 @@ class GraphController
       if (prevLabel.length > 0 && label != prevLabel)
       {
         this.emit("edgeLabel", target, label, prevLabel);
+      }
+
+      if (callback)
+      {
+        callback();
       }
     });
   }
@@ -671,7 +683,7 @@ class GraphController
         if (!(target instanceof Edge))
           throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Edge.");
 
-        this.copyQuadraticsTo(this.prevQuad);
+        target.copyQuadraticsTo(this.prevQuad);
         this.prevEdgeTo = target.to;
         this.isNewEdge = false;
 
@@ -942,10 +954,11 @@ class GraphController
 
           if (this.isNewEdge)
           {
-            this.isNewEdge = false;
+            //Moved below to allow openLabelEditor to check it...
+            //this.isNewEdge = false;
 
             //Emit event
-            this.emit("edgeCreate", target);
+            this.emit("userCreateEdge", this.graph, target);
           }
           else if (this.prevEdgeTo !== null)
           {
@@ -969,8 +982,21 @@ class GraphController
           //Open label editor if default edge...
           if (target.label === Config.STR_TRANSITION_DEFAULT_LABEL)
           {
-            this.openLabelEditor(target, x, y);
+            if (this.isNewEdge)
+            {
+              this.openLabelEditor(target, x, y, null, true, () => {
+                this.emit("userPostCreateEdge", this.graph, target);
+              });
+            }
+            else
+            {
+              this.openLabelEditor(target, x, y);
+            }
           }
+
+          //Moved from userCreateEdge event emit to here to allow openLabelEditor to check it
+          this.isNewEdge = false;
+
           return true;
         }
         //If hovering over anything else...
