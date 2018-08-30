@@ -33,7 +33,21 @@ class MachineController
 
   setMachineName(machineName)
   {
-    this.machineName = machineName;
+    if (!machineName || machineName.length <= 0)
+    {
+      this.machineName = null;
+    }
+    else
+    {
+      this.machineName = machineName;
+    }
+  }
+
+  renameMachine(machineName)
+  {
+    this.setMachineName(machineName);
+
+    //Emit a user rename machine event
   }
 
   changeMachineTo(machineType)

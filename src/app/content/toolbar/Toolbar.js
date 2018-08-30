@@ -49,7 +49,7 @@ class Toolbar extends React.Component
       element.innerHTML = e.target.value.trim() + " - " + string;
     }
 
-    this.props.machineController.setMachineName(e.target.value || null);
+    this.props.machineController.renameMachine(e.target.value);
   }
 
   langOnClick()
