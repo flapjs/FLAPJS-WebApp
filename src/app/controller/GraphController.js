@@ -20,6 +20,7 @@ class GraphController
     this.machineController = null;
 
     this.labelEditor = null;
+    this.tester = null;
     this.selector = new SelectionBox(graph);
     this.uploader = new Uploader(this);
 
@@ -133,6 +134,7 @@ class GraphController
   initialize(app)
   {
     this.labelEditor = app.viewport.labelEditor;
+    this.tester = app.testingManager;
 
     this.inputController = app.inputController;
     this.machineController = app.machineController;
@@ -271,11 +273,6 @@ class GraphController
     this.emit("userPostDeleteNodes", this.graph, target, [target], this.prevX, this.prevY);
   }
 
-  createEdge()
-  {
-
-  }
-
   deleteTargetEdge(target)
   {
     this.emit("userPreDeleteEdge", this.graph, target, this.prevEdgeTo, this.prevQuad);
@@ -385,6 +382,20 @@ class GraphController
     this.inputController.getPointer().setOffset(-center.x, -center.y);
   }
 
+  focusOnNodes(nodes)
+  {
+    //Center workspace at the average of focused nodes; inverted due to graph-to-screen space
+    const length = nodes.length;
+    let ax = 0;
+    let ay = 0;
+    for(const node of nodes)
+    {
+      ax += node.x;
+      ay += node.y;
+    }
+    this.inputController.getPointer().setOffset(-ax / length, -ay / length);
+  }
+
   /*************************************************************************
    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * INPUT CONTROLS
@@ -407,6 +418,12 @@ class GraphController
       {
         this.selector.clearSelection();
       }
+    }
+
+    //Disable all graph input when in step-by-step mode
+    if (this.tester.getStepByStepMode())
+    {
+      event.result = false;
     }
   }
 

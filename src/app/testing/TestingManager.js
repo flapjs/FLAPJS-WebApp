@@ -1,6 +1,4 @@
-import { guid } from 'util/MathHelper.js';
-import { solveNFA } from 'machine/util/solveNFA.js';
-
+import Viewport from 'content/viewport/Viewport.js';
 import TestMode from './TestMode.js';
 import TestingInputList from './TestingInputList.js';
 
@@ -9,6 +7,7 @@ class TestingManager
   constructor()
   {
     this.machineController = null;
+    this.viewport = null;
 
     this.inputList = new TestingInputList();
 
@@ -23,6 +22,7 @@ class TestingManager
   initialize(app)
   {
     this.machineController = app.machineController;
+    this.viewport = app.viewport;
 
     this.testMode.initialize(app);
   }
@@ -70,6 +70,22 @@ class TestingManager
   setStepByStepMode(mode)
   {
     this.stepByStepMode = mode ? true : false;
+
+    if (mode)
+    {
+      if (this.testMode.isStarted()) this.testMode.onStop();
+      this.testMode.onStart();
+      this.viewport.setState((prev, props) => {
+        return {prevMode: prev.mode, mode: Viewport.TESTING};
+      });
+    }
+    else
+    {
+      if (this.testMode.isStarted()) this.testMode.onStop();
+      this.viewport.setState((prev, props) => {
+        return {mode: prev.prevMode};
+      });
+    }
   }
 
   getStepByStepMode()

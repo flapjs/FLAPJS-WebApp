@@ -38,7 +38,7 @@ class Viewport extends React.Component
       {
         tester.getStepByStepMode() ?
         <div className="anchor-bottom-left" style={{width: "100%"}}>
-          <TestTray tester={tester}/>
+          <TestTray tester={tester} graphController={graphController}/>
         </div>
         :
         <span>

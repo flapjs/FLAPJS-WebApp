@@ -109,7 +109,7 @@ class TestingPanel extends React.Component
 
   onTestsSave(e)
   {
-    Downloader.downloadText(TEST_FILENAME, testList.getTestsAsStrings().join("\n"));
+    Downloader.downloadText(TEST_FILENAME, this.props.tester.inputList.getTestsAsStrings().join("\n"));
   }
 
   render()
@@ -181,26 +181,11 @@ class TestingPanel extends React.Component
           </select>
         </div>
         <div className="panel-checkbox">
-          <input id="test-step" type="checkbox" onChange={(e) => {
-            //HACK: this needs to default to tester.getStepByStepMode first
-            tester.setStepByStepMode(e.target.checked);
-
-            if (tester.getStepByStepMode())
-            {
-              if (tester.testMode.isStarted()) tester.testMode.onStop();
-              tester.testMode.onStart();
-              viewport.setState((prev, props) => {
-                return {prevMode: prev.mode, mode: Viewport.TESTING};
-              });
-            }
-            else
-            {
-              if (tester.testMode.isStarted()) tester.testMode.onStop();
-              viewport.setState((prev, props) => {
-                return {mode: prev.prevMode};
-              });
-            }
-          }}/>
+          <input id="test-step" type="checkbox"
+            checked={tester.getStepByStepMode()}
+            onChange={(e) => {
+              tester.setStepByStepMode(e.target.checked);
+            }}/>
           <label htmlFor="test-step">{I18N.toString("options.testing.stepmode")}</label>
         </div>
       </div>

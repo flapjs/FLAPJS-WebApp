@@ -103,7 +103,8 @@ class OptionsPanel extends React.Component
         </OptionGroup>
 
         <OptionGroup title={I18N.toString("options.category.general")} label={I18N.toString("options.category.colors")}>
-          <OptionColor label="Viewport Error Color" propName="--color-viewport-error" root={root}/>
+          <OptionColor label="Viewport Delete Color" propName="--color-viewport-error" root={root}/>
+          <OptionColor label="Viewport Testing Color" propName="--color-viewport-testing" root={root}/>
           <OptionColor label="Viewport Warning Color" propName="--color-viewport-warning" root={root}/>
           <OptionColor label="Highlight Select Color" propName="--color-highlight-select" root={root}/>
         </OptionGroup>
