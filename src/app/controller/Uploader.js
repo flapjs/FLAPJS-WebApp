@@ -1,5 +1,7 @@
 import NodalGraph from 'graph/NodalGraph.js';
 
+import * as FlapSaver from 'util/FlapSaver.js';
+
 const FILETYPE_JSON = "application/json";
 const FILETYPE_JFLAP = ".jff";
 
@@ -52,9 +54,10 @@ class Uploader
           {
             if (ext === JSON_EXT)
             {
-              const dataJSON = JSON.parse(data);
-              const dst = NodalGraph.parseJSON(dataJSON);
-              graph.copyGraph(dst);
+              FlapSaver.loadFromJSON(data, this.graphController, this.machineController);
+              //const dataJSON = JSON.parse(data);
+              //const dst = NodalGraph.parseJSON(dataJSON);
+              //graph.copyGraph(dst);
             }
             else if (ext === JFF_EXT)
             {

@@ -66,7 +66,7 @@ class TestTray extends React.Component
           {
             graphController.focusOnNodes(testMode.targets);
           }
-        }} disabled={!testMode.hasPrevStep()}>
+        }} disabled={!testMode.hasPrevStep() || testMode.isSkipping()}>
           <UndoIcon/>
         </IconButton>
 
@@ -76,7 +76,7 @@ class TestTray extends React.Component
           {
             graphController.focusOnNodes(testMode.targets);
           }
-        }} disabled={!tester.testMode.hasNextStep()}>
+        }} disabled={!tester.testMode.hasNextStep() || testMode.isSkipping()}>
           <RedoIcon/>
         </IconButton>
 

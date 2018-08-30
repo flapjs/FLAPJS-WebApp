@@ -68,10 +68,10 @@ class App extends React.Component
     //Does the browser support autosaving?
     if(AutoSaver.doesSupportLocalStorage())
     {
-      AutoSaver.loadAutoSave(this._graph);
+      AutoSaver.loadAutoSave(this.graphController, this.machineController);
 
       //Start auto-saving
-      AutoSaver.initAutoSave(this._graph);
+      AutoSaver.initAutoSave(this.graphController, this.machineController);
     }
 
     this._machineBuilder.initialize(this);

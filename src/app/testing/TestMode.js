@@ -3,6 +3,9 @@ import { solveNFA, solveNFAbyStep } from 'machine/util/solveNFA.js';
 
 import { DFA } from 'machine/DFA.js';
 
+const STEPTIME = 500;
+const SKIPTIME = 50;
+
 class TestMode
 {
   constructor(testingManager)
@@ -24,6 +27,7 @@ class TestMode
     this.checkedStates = [];
     this.running = false;
     this.started = false;
+    this.skipToEnd = false;
 
     this.timer = null;
 
@@ -58,6 +62,7 @@ class TestMode
     }*/
     this.prepareForNewTest();
     this.started = true;
+    this.skipToEnd = false;
   }
 
   onResume()
@@ -70,7 +75,6 @@ class TestMode
 
     this.running = true;
 
-    const STEPTIME = 500;
     const step = () => {
       if (this.running)
       {
@@ -99,6 +103,7 @@ class TestMode
 
     this.running = false;
     this.started = false;
+    this.skipToEnd = false;
   }
 
   isRunning()
@@ -109,6 +114,11 @@ class TestMode
   isStarted()
   {
     return this.started;
+  }
+
+  isSkipping()
+  {
+    return this.skipToEnd;
   }
 
   hasPrevStep()
@@ -169,6 +179,7 @@ class TestMode
 
     //Get next character of current test string
     this.indexofString += 1;
+
     //If no more characters to get...
     if(this.indexofString >= testInput.value.length)
     {
@@ -215,7 +226,27 @@ class TestMode
 
         if (!this.targets.includes(node)) this.targets.push(node);
       }
-      if(this.targets.length == 0) this.indexofString = testInput.value.length;
+
+      if (this.targets.length <= 0 && !this.running)
+      {
+        this.skipToEnd = true;
+        const skipFunc = () => {
+          if (this.skipToEnd)
+          {
+            this.indexofString += 1;
+            if (this.indexofString >= testInput.value.length)
+            {
+              this.skipToEnd = false;
+            }
+            else
+            {
+              setTimeout(skipFunc, SKIPTIME);
+            }
+          }
+        };
+        setTimeout(skipFunc, SKIPTIME);
+      }
+
       return true;
     }
   }
@@ -259,6 +290,8 @@ class TestMode
     this.checkedStates.length = 0;
     this.indexofString = -1;
     this.history.length = 0;
+
+    this.skipToEnd = false;
   }
 }
 
