@@ -6,15 +6,13 @@ import GraphEdgeDestinationEvent from 'events/GraphEdgeDestinationEvent.js';
 import GraphEdgeLabelEvent from 'events/GraphEdgeLabelEvent.js';
 import GraphEdgeMoveEvent from 'events/GraphEdgeMoveEvent.js';
 import GraphNodeInitialEvent from 'events/GraphNodeInitialEvent.js';
-import GraphNodeDeleteAllEvent from 'events/GraphNodeDeleteAllEvent.js';
-import GraphNodeDeleteEvent from 'events/GraphNodeDeleteEvent.js';
-import GraphNodeLabelEvent from 'events/GraphNodeLabelEvent.js';
 import GraphNodeMoveEvent from 'events/GraphNodeMoveEvent.js';
 import GraphNodeMoveAllEvent from 'events/GraphNodeMoveAllEvent.js';
 
 import UserCreateNodeEventHandler from 'controller/events/UserCreateNodeEventHandler.js';
 import UserToggleNodeEventHandler from 'controller/events/UserToggleNodeEventHandler.js';
 import UserImportGraphEventHandler from 'controller/events/UserImportGraphEventHandler.js';
+import UserDeleteNodesEventHandler from 'controller/events/UserDeleteNodesEventHandler.js';
 import UserSwapNodesEventHandler from 'controller/events/UserSwapNodesEventHandler.js';
 import UserRenameNodeEventHandler from 'controller/events/UserRenameNodeEventHandler.js';
 import SafeGraphEventHandler from 'controller/events/SafeGraphEventHandler.js';
@@ -45,10 +43,6 @@ class EventManager
 
     /*this.graphController.on("nodeCustomLabel", (targetNode, nextLabel, prevLabel) =>
       events.handleEvent(new GraphNodeLabelEvent(graph, targetNode, nextLabel, prevLabel)));*/
-    this.graphController.on("nodeDelete", (targetNode, prevX, prevY) =>
-      events.handleEvent(new GraphNodeDeleteEvent(graph, targetNode, prevX, prevY)));
-    this.graphController.on("nodeDeleteAll", (targetNodes, selectedNode, prevX, prevY) =>
-      events.handleEvent(new GraphNodeDeleteAllEvent(graph, targetNodes, selectedNode, prevX, prevY)));
     this.graphController.on("nodeMove", (targetNode, nextX, nextY, prevX, prevY) =>
       events.handleEvent(new GraphNodeMoveEvent(graph, targetNode, nextX, nextY, prevX, prevY)));
     this.graphController.on("nodeMoveAll", (targetNodes, dx, dy) =>
@@ -70,6 +64,7 @@ class EventManager
     this.eventHandlers.push(new UserRenameNodeEventHandler(events, this.graphController));
     this.eventHandlers.push(new UserSwapNodesEventHandler(events, this.graphController));
     this.eventHandlers.push(new UserToggleNodeEventHandler(events, this.graphController));
+    this.eventHandlers.push(new UserDeleteNodesEventHandler(events, this.graphController));
     this.eventHandlers.push(new UserImportGraphEventHandler(events, this.graphController, this.machineController));
     this.eventHandlers.push(new SafeGraphEventHandler(events, this.graphController, "userPreChangeLayout", "userPostChangeLayout"));
 

@@ -62,9 +62,12 @@ class GraphController
     //userToggleNode(graph, node, prevAccept) - When user toggles the accept state
     this.registerEvent("userToggleNode");
 
-    /*
     //userDeleteNodes(graph, node, targetNodes, prevX, prevY) - When user deletes one or more nodes
     this.registerEvent("userDeleteNodes");
+    this.registerEvent("userPreDeleteNodes");
+    this.registerEvent("userPostDeleteNodes");
+
+    /*
     //userPreDeleteNodes(graph, node, targetNodes, prevX, prevY) - Before user delets one or more nodes
     this.registerEvent("userPreDeleteNodes");
     //userMoveNodes(graph, nodes, dx, dy) - When user moves one or more nodes
@@ -114,10 +117,6 @@ class GraphController
     this.registerEvent("userPreImportGraph");//before any changes
     this.registerEvent("userPostImportGraph");//after all changes
 
-    //nodeDelete(targetNode, prevX, prevY) - Called when a node is deleted
-    this.registerEvent("nodeDelete");
-    //nodeDeleteAll(targetNodes, selectedNode, prevX, prevY)
-    this.registerEvent("nodeDeleteAll");
     //nodeMove(targetNode, nextX, nextY, prevX, prevY)
     this.registerEvent("nodeMove");
     //nodeMoveAll(targetNodes, dx, dy)
@@ -252,6 +251,8 @@ class GraphController
     const selector = this.selector;
     const selection = selector.getSelection().slice();
 
+    this.emit("userPreDeleteNodes", this.graph, selectedNode, selection, this.prevX, this.prevY);
+
     //Remove from graph
     for(const node of selection)
     {
@@ -262,15 +263,19 @@ class GraphController
     selector.clearSelection();
 
     //Emit event
-    this.emit("nodeDeleteAll", selection, selectedNode, this.prevX, this.prevY);
+    this.emit("userDeleteNodes", this.graph, selectedNode, selection, this.prevX, this.prevY);
+    this.emit("userPostDeleteNodes", this.graph, selectedNode, selection, this.prevX, this.prevY);
   }
 
   deleteTargetNode(target)
   {
+    this.emit("userPreDeleteNodes", this.graph, target, [target], this.prevX, this.prevY);
+
     this.graph.deleteNode(target);
 
     //Emit event
-    this.emit("nodeDelete", target, this.prevX, this.prevY);
+    this.emit("userDeleteNodes", this.graph, target, [target], this.prevX, this.prevY);
+    this.emit("userPostDeleteNodes", this.graph, target, [target], this.prevX, this.prevY);
   }
 
   deleteTargetEdge(target)

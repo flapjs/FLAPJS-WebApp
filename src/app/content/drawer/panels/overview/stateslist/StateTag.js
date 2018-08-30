@@ -32,12 +32,13 @@ class StateTag extends React.Component
 
   onDrop(e)
   {
-    const graph = this.props.graphController.getGraph();
+    const graphController = this.props.graphController;
+    const graph = graphController.getGraph();
     const nodeIndex = graph.getNodeIndex(this.props.src);
     const otherIndex = graph.getNodeIndexByLabel(e.dataTransfer.getData("text"));
 
     //Swap
-    this.props.graphController.swapNodeByIndex(nodeIndex, otherIndex);
+    graphController.swapNodeByIndex(nodeIndex, otherIndex);
 
     e.preventDefault();
   }
@@ -55,20 +56,21 @@ class StateTag extends React.Component
 
   onBlur(e)
   {
+    const graphController = this.props.graphController;
     const newLabel = this.state.value;
 
     //The value is already processed, abort
     if (newLabel != null)
     {
       const node = this.props.src;
-      const graph = this.props.graphController.getGraph();
+      const graph = graphController.getGraph();
       if (newLabel.length > 0)
       {
         const result = graph.getNodeByLabel(newLabel);
         if (!result)
         {
           //Valid! Rename it!
-          this.props.graphController.renameNode(node, newLabel);
+          graphController.renameNode(node, newLabel);
         }
         else
         {
@@ -78,7 +80,7 @@ class StateTag extends React.Component
       else
       {
         //Delete!
-        graph.deleteNode(this.props.src);
+        graphController.deleteTargetNode(this.props.src);
       }
 
       this.setState({ value: null, error: false });

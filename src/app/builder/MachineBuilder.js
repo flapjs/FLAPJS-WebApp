@@ -29,7 +29,7 @@ class MachineBuilder
 
   }
 
-  onGraphNodeLabelChange()
+  onGraphNodeLabelChange(graph, node, targetNodes, prevX, prevY)
   {
     this.labeler.sortDefaultNodeLabels();
   }
@@ -40,13 +40,11 @@ class MachineBuilder
     this.shouldAutoLabel = enable;
     if (prev != enable && enable)
     {
-      this.graphController.on("nodeDelete", this.onGraphNodeLabelChange);
-      this.graphController.on("nodeDeleteAll", this.onGraphNodeLabelChange);
+      this.graphController.on("userDeleteNodes", this.onGraphNodeLabelChange);
     }
     else
     {
-      this.graphController.removeEventListener("nodeDelete", this.onGraphNodeLabelChange);
-      this.graphController.removeEventListener("nodeDeleteAll", this.onGraphNodeLabelChange);
+      this.graphController.removeEventListener("userDeleteNodes", this.onGraphNodeLabelChange);
     }
   }
 
