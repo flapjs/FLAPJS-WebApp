@@ -28,6 +28,8 @@ class UserSwapNodesEventHandler extends EventHandler
     const node = graph.nodes[nodeIndex];
     graph.nodes[nodeIndex] = graph.nodes[otherIndex];
     graph.nodes[otherIndex] = node;
+
+    graph.markDirty();
   }
 
   //Override - this = event
@@ -42,6 +44,8 @@ class UserSwapNodesEventHandler extends EventHandler
     const node = graph.nodes[nodeIndex];
     graph.nodes[nodeIndex] = graph.nodes[otherIndex];
     graph.nodes[otherIndex] = node;
+
+    graph.markDirty();
   }
 }
 export default UserSwapNodesEventHandler;

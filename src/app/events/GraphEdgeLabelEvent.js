@@ -23,6 +23,8 @@ class GraphEdgeLabelEvent extends Event
     const edge = graph.edges[edgeIndex];
 
     edge.setLabel(this.prevLabel);
+
+    graph.markDirty();
   }
 
   //Override
@@ -34,6 +36,8 @@ class GraphEdgeLabelEvent extends Event
     const edge = graph.edges[edgeIndex];
 
     edge.setLabel(this.nextLabel);
+
+    graph.markDirty();
   }
 }
 
