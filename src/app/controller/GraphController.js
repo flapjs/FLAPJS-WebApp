@@ -484,8 +484,8 @@ class GraphController
       if (targetType === 'node')
       {
         //So that the emitted 'delete' events can use this
-        this.prevX = x;
-        this.prevY = y;
+        this.prevX = target.x;
+        this.prevY = target.y;
 
         //If there exists selected states, delete them all!
         const selector = this.selector;
@@ -564,8 +564,8 @@ class GraphController
           throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Node.");
 
         //Ready to move node(s)...
-        this.prevX = x;
-        this.prevY = y;
+        this.prevX = target.x;
+        this.prevY = target.y;
         return true;
       }
       //Moving edge center point
