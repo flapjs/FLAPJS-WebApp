@@ -7,14 +7,15 @@ import GraphEdgeLabelEvent from 'events/GraphEdgeLabelEvent.js';
 import GraphEdgeMoveEvent from 'events/GraphEdgeMoveEvent.js';
 import GraphNodeAcceptEvent from 'events/GraphNodeAcceptEvent.js';
 import GraphNodeInitialEvent from 'events/GraphNodeInitialEvent.js';
-import GraphNodeCreateEvent from 'events/GraphNodeCreateEvent.js';
 import GraphNodeDeleteAllEvent from 'events/GraphNodeDeleteAllEvent.js';
 import GraphNodeDeleteEvent from 'events/GraphNodeDeleteEvent.js';
 import GraphNodeLabelEvent from 'events/GraphNodeLabelEvent.js';
 import GraphNodeMoveEvent from 'events/GraphNodeMoveEvent.js';
 import GraphNodeMoveAllEvent from 'events/GraphNodeMoveAllEvent.js';
 
+import UserCreateNodeEventHandler from 'controller/events/UserCreateNodeEventHandler.js';
 import UserImportGraphEventHandler from 'controller/events/UserImportGraphEventHandler.js';
+import SafeGraphEventHandler from 'controller/events/SafeGraphEventHandler.js';
 
 class EventManager
 {
@@ -38,8 +39,6 @@ class EventManager
 
     /*this.graphController.on("nodeCustomLabel", (targetNode, nextLabel, prevLabel) =>
       events.handleEvent(new GraphNodeLabelEvent(graph, targetNode, nextLabel, prevLabel)));*/
-    this.graphController.on("nodeCreate", targetNode =>
-      events.handleEvent(new GraphNodeCreateEvent(graph, targetNode)));
     this.graphController.on("nodeDelete", (targetNode, prevX, prevY) =>
       events.handleEvent(new GraphNodeDeleteEvent(graph, targetNode, prevX, prevY)));
     this.graphController.on("nodeDeleteAll", (targetNodes, selectedNode, prevX, prevY) =>
@@ -63,7 +62,9 @@ class EventManager
     this.graphController.on("edgeLabel", (targetEdge, nextLabel, prevLabel) =>
       events.handleEvent(new GraphEdgeLabelEvent(graph, targetEdge, nextLabel, prevLabel)));
 
+    this.eventHandlers.push(new UserCreateNodeEventHandler(events, this.graphController));
     this.eventHandlers.push(new UserImportGraphEventHandler(events, this.graphController, this.machineController));
+    this.eventHandlers.push(new SafeGraphEventHandler(events, this.graphController, "userPreChangeLayout", "userPostChangeLayout"));
 
   }
 

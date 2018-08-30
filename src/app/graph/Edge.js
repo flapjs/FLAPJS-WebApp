@@ -25,6 +25,11 @@ class Edge
     this._label = label;
   }
 
+  setID(id)
+  {
+    this.id = id;
+  }
+
   copyQuadraticsFrom(src)
   {
     if (this.graph.shouldUseQuadCoords)

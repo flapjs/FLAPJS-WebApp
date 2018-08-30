@@ -5,7 +5,7 @@ class GraphEventHandler
     this.eventLogger = eventLogger;
     this.graphController = graphController;
     this.eventName = eventName;
-    this.postEventName = postEventName;
+    this.postEventName = postEventName || null;
 
     this.onEvent = this.onEvent.bind(this);
 
@@ -24,7 +24,7 @@ class GraphEventHandler
     result.applyRedo = this.applyRedo.bind(this, result);
     result.eventData = this.captureEvent(...args);
 
-    if (this.postEventName !== null)
+    if (this.postEventName)
     {
       //Wait for post event to finalize event
       this.graphController.once(this.postEventName, (...args) => {
@@ -35,6 +35,8 @@ class GraphEventHandler
     }
     else
     {
+      result.postData = result.eventData;
+
       //Finalize event right now
       this.eventLogger.handleEvent(result);
     }

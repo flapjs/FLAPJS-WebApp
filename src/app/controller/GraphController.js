@@ -98,15 +98,17 @@ class GraphController
     //userLabelNode(graph, node, prevLabel) - When user re-labels the node
     //userAddSymbol(grpah, symbol) - When user adds a custom symbol
     //userDeleteSymbol(graph, symbol, prevEdges) - When user delets a symbol (and affects the edges)
+
     //userChangeLayout(graph, prevLayout) - When user re-layouts the graph
+    this.registerEvent("userChangeLayout");
+    this.registerEvent("userPreChangeLayout");//before any changes
+    this.registerEvent("userPostChangeLayout");//after all changes
 
     //userImportGraph(graph) - When user imports a graph
     this.registerEvent("userImportGraph");
     this.registerEvent("userPreImportGraph");//before any changes
     this.registerEvent("userPostImportGraph");//after all changes
 
-    //nodeCreate(targetNode) - Called when a node is created
-    this.registerEvent("nodeCreate");
     //nodeDelete(targetNode, prevX, prevY) - Called when a node is deleted
     this.registerEvent("nodeDelete");
     //nodeDeleteAll(targetNodes, selectedNode, prevX, prevY)
@@ -184,7 +186,12 @@ class GraphController
 
   applyAutoLayout()
   {
+    this.emit("userPreChangeLayout", this.graph);
+
     GraphLayout.applyLayout(this.graph);
+
+    this.emit("userChangeLayout", this.graph);
+    this.emit("userPostChangeLayout", this.graph);
   }
 
   createNode(x, y)
@@ -201,9 +208,6 @@ class GraphController
     node.y = y;
 
     this.emit("userCreateNode", this.graph, node);
-
-    //TODO: should be deprecated
-    this.emit("nodeCreate", node);
 
     this.emit("userPostCreateNode", this.graph, node);
     return node;

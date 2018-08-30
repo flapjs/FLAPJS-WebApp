@@ -19,8 +19,6 @@ class NodalGraph
 
     this.shouldUseQuadCoords = false;
 
-    this._version = 0;
-
     //nodeCreate(node) - Whenever a new node is created
     this.registerEvent("nodeCreate");
     //nodeDestroy(node) - Whenever a node is destroyed (even on clear)
@@ -56,6 +54,20 @@ class NodalGraph
     }
 
     return null;
+  }
+
+  getNodeIndexByID(id)
+  {
+    const length = this.nodes.length;
+    for(let i = 0; i < length; ++i)
+    {
+      const node = this.nodes[i];
+      if (node.id == id)
+      {
+        return i;
+      }
+    }
+    return -1;
   }
 
   getNodeIndex(node)
@@ -332,7 +344,7 @@ class NodalGraph
 
     //Auto layout graph
     GraphLayout.applyLayout(this);
-    
+
     this.markDirty();
   }
 
@@ -358,6 +370,7 @@ class NodalGraph
     {
       const node = data.nodes[i];
       const newNode = new Node(result, node.x || 0, node.y || 0, node.label || "q?");
+      newNode.id = node.id;
       newNode.accept = node.accept;
       if (node.customLabel)
       {
@@ -373,6 +386,7 @@ class NodalGraph
       if (edge.from >= nodeLength || edge.from < 0) throw new Error("Invalid edge from data: node index \'" + edge.from + "\' out of bounds.");
 
       const newEdge = new Edge(result, result.nodes[edge.from], edge.to < 0 ? null : result.nodes[edge.to], edge.label || "0");
+      newEdge.id = edge.id;
 
       //Force copy all quadratic data
       newEdge.copyQuadraticsFrom(edge.quad);
@@ -481,6 +495,7 @@ class NodalGraph
     {
       const node = this.nodes[i];
       data.nodes[i] = {
+        id: node.id,
         x: node.x,
         y: node.y,
         label: node.label,
@@ -493,6 +508,7 @@ class NodalGraph
     {
       const edge = this.edges[i];
       data.edges[i] = {
+        id: edge.id,
         from: this.nodes.indexOf(edge.from),
         to: this.nodes.indexOf(edge.to),
         quad: edge.copyQuadraticsTo({}),

@@ -2,20 +2,17 @@ import GraphEventHandler from './GraphEventHandler.js';
 
 import NodalGraph from 'graph/NodalGraph.js';
 
-class UserImportGraphEventHandler extends GraphEventHandler
+class SafeGraphEventHandler extends GraphEventHandler
 {
-  constructor(eventLogger, graphController, machineController)
+  constructor(eventLogger, graphController, eventName, postEventName)
   {
-    super(eventLogger, graphController, "userPreImportGraph", "userPostImportGraph");
-
-    this.machineController = machineController;
+    super(eventLogger, graphController, eventName, postEventName);
   }
 
   //Override
   captureEvent(graph)
   {
     return {
-      graphName: this.machineController.getMachineName(),
       graphData: graph.toJSON()
     };
   }
@@ -24,7 +21,6 @@ class UserImportGraphEventHandler extends GraphEventHandler
   capturePostEvent(graph)
   {
     return {
-      graphName: this.machineController.getMachineName(),
       graphData: graph.toJSON()
     };
   }
@@ -33,16 +29,12 @@ class UserImportGraphEventHandler extends GraphEventHandler
   applyUndo(e)
   {
     NodalGraph.parseJSON(e.eventData.graphData, this.graphController.getGraph());
-
-    this.machineController.setMachineName(e.eventData.graphName);
   }
 
   //Override - this = event
   applyRedo(e)
   {
     NodalGraph.parseJSON(e.postData.graphData, this.graphController.getGraph());
-
-    this.machineController.setMachineName(e.postData.graphName);
   }
 }
-export default UserImportGraphEventHandler;
+export default SafeGraphEventHandler;
