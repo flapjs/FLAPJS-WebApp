@@ -96,14 +96,7 @@ class GraphController
     this.registerEvent("userBendEdge");
     //userLabelEdge(graph, edge, prevLabel) - When user re-labels the edge
     this.registerEvent("userLabelEdge");
-    //userDeleteMode(graph, isDeleteMode) - When user enters forced delete mode
-    this.registerEvent("userDeleteMode");
     */
-
-    //Emitted by other components
-    //userLabelNode(graph, node, prevLabel) - When user re-labels the node
-    //userAddSymbol(grpah, symbol) - When user adds a custom symbol
-    //userDeleteSymbol(graph, symbol, prevEdges) - When user delets a symbol (and affects the edges)
 
     //userSwapNodes(graph, node, otherNode) - When user swap node indices
     this.registerEvent("userSwapNodes");

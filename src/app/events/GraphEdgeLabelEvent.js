@@ -8,6 +8,7 @@ class GraphEdgeLabelEvent extends Event
 
     this.graph = graph;
     this.edge = edge;
+    this.edgeID = edge.id;
 
     this.nextLabel = nextLabel;
     this.prevLabel = prevLabel;
@@ -16,13 +17,23 @@ class GraphEdgeLabelEvent extends Event
   //Override
   applyUndo()
   {
-    this.edge.setLabel(this.prevLabel);
+    const graph = this.graph;
+    const edgeIndex = graph.getEdgeIndexByID(this.edgeID);
+    if (edgeIndex < 0) throw new Error("Unable to find target in graph");
+    const edge = graph.edges[edgeIndex];
+
+    edge.setLabel(this.prevLabel);
   }
 
   //Override
   applyRedo()
   {
-    this.edge.setLabel(this.nextLabel);
+    const graph = this.graph;
+    const edgeIndex = graph.getEdgeIndexByID(this.edgeID);
+    if (edgeIndex < 0) throw new Error("Unable to find target in graph");
+    const edge = graph.edges[edgeIndex];
+
+    edge.setLabel(this.nextLabel);
   }
 }
 

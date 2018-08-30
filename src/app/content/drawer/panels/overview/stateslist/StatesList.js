@@ -27,7 +27,7 @@ class StatesList extends React.Component
   render()
   {
     const graphController = this.props.graphController;
-    const graph = this.props.machineBuilder.graph;
+    const graph = graphController.getGraph();
     return <InfoBlock title={I18N.toString("component.stateslist.title")} defaultValue="true">
       <div className="statelist-container">
         <div className="statelist">

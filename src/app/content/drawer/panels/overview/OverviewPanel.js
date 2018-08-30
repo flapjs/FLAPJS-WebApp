@@ -95,8 +95,8 @@ class OverviewPanel extends React.Component
                 <option value="NFA">NFA</option>
               </select>
               <div className="graphinfo-important">
-                <StatesList machineBuilder={machineBuilder} graphController={graphController}/>
-                <AlphabetList machineBuilder={machineBuilder}/>
+                <StatesList graphController={graphController}/>
+                <AlphabetList machineController={machineController}/>
               </div>
               <div className="graphinfo">
                 <TransitionFunction machineBuilder={machineBuilder}/>

@@ -88,6 +88,11 @@ class InputController
     this._pointer.updateOffset();
   }
 
+  setTrashMode(enabled)
+  {
+    this._pointer.trashMode = enabled;
+  }
+
   setInputScheme(shouldActionFirst)
   {
     this._swapMouseScheme = !shouldActionFirst;

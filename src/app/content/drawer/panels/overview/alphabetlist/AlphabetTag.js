@@ -9,102 +9,107 @@ class AlphabetTag extends React.Component
   {
     super(props);
 
-    this.ref = React.createRef();
+    this.ref = null;
 
     this.state = {
       symbol: null,
       error: false
     };
 
-    this.onBlur = this.onBlur.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.onKeyUp = this.onKeyUp.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
   }
 
-  onFocus(e) {
+  onFocus(e)
+  {
+    const target = e.target;
     this.setState({
       symbol: this.props.src,
       error: false
-    });
+    }, () => target.select());
+
+    //Call any listening focus
+    if (this.props.onFocus) this.props.onFocus(e);
   }
 
-  onBlur(e) {
-    const oldSymbol = this.props.src;
+  onBlur(e)
+  {
+    const machineController = this.props.machineController;
     const newSymbol = this.state.symbol;
-    const graph = this.props.machine.graph;
-    const edges = graph.edges;
 
-    if(newSymbol == null) return;
-
-    if(newSymbol.length > 0) {
-      if(oldSymbol == newSymbol) return;
-
-      if(!this.props.alphabet.includes(newSymbol)) {
-        if(oldSymbol == "") this.props.machine.addCustomSymbol(newSymbol);
-        if(this.props.machine.isCustomSymbol(oldSymbol)) {
-          this.props.machine.removeCustomSymbol(oldSymbol);
-          this.props.machine.addCustomSymbol(newSymbol);
-        } else {
-          let edge = null;
-          for(let i = edges.length -1; i >= 0; i--) {
-            edge = edges[i];
-            let labels = edge.label.split(",");
-            for(let j = labels.length - 1; j >= 0; j--) {
-              if(labels[j] == oldSymbol) labels[j]=newSymbol;
-            }
-            edge.setLabel(labels.join(","));
+    if (newSymbol != null)
+    {
+      const oldSymbol = this.props.src;
+      if (newSymbol.length > 0)
+      {
+        const alphabet = machineController.getAlphabet();
+        if (!alphabet.includes(newSymbol))
+        {
+          if (oldSymbol)
+          {
+            //Valid! Rename it!
+            machineController.renameSymbol(oldSymbol, newSymbol);
+          }
+          else
+          {
+            //Valid! Add it to the list!
+            machineController.createSymbol(newSymbol);
           }
         }
-      }
-    } else if(this.props.alphabet.includes(oldSymbol)) {
-      let edge = null;
-      for(let i = edges.length -1; i >= 0; i--) {
-        edge = edges[i];
-        if(edge.label == oldSymbol) {
-          graph.deleteEdge(edge);
-        } else {
-          let labels = edge.label.split(",");
-          for(let j = labels.length - 1; j >= 0; j--) {
-            if(labels[j] == oldSymbol) labels.splice(j,j+1);
-          }
-          edge.setLabel(labels.join(","));
+        else
+        {
+          //Found something already named that! Ignore!
         }
       }
-      if(this.props.machine.isCustomSymbol(oldSymbol)) {
-        this.props.machine.removeCustomSymbol(oldSymbol);
+      else if (oldSymbol)
+      {
+        //Delete!
+        machineController.deleteSymbol(oldSymbol);
       }
     }
-    this.setState({
-      symbol: null,
-      error: false
-    });
-    this.props.list.disableEdit();
+
+    this.setState({symbol: null, error: false});
+
+    //Call any listening blurs
+    if (this.props.onBlur) this.props.onBlur(e);
   }
 
-  onKeyUp(e) {
-    if(e.keyCode === Config.SUBMIT_KEY) {
+  onKeyDown(e)
+  {
+    if (e.keyCode === Config.SUBMIT_KEY || e.keyCode === Config.CLEAR_KEY)
+    {
+      e.preventDefault();
+    }
+  }
+
+  onKeyUp(e)
+  {
+    if (e.keyCode === Config.SUBMIT_KEY)
+    {
       e.target.blur();
-    } else if(e.keyCode === Config.CLEAR_KEY) {
+    }
+    else if (e.keyCode === Config.CLEAR_KEY)
+    {
       const target = e.target;
-      this.setState({symbol: null}, () => {
+      this.setState({ symbol: null, error: false}, () => {
         target.blur();
       });
     }
   }
 
-  onKeyDown(e) {
-    if(e.keyCode === Config.SUBMIT_KEY || e.keyCode === Config.CLEAR_KEY) {
-      e.preventDefault();
-    }
-  }
-
-  onValueChange(e) {
+  onValueChange(e)
+  {
+    const machineController = this.props.machineController;
     const symbol = e.target.value.trim();
     let error = false;
-    if(symbol.length > 0) {
-      if(this.props.alphabet.includes(symbol) && symbol != this.props.src) {
+    if (symbol.length > 0)
+    {
+      const alphabet = machineController.getAlphabet();
+      if (alphabet.includes(symbol) && symbol != this.props.src)
+      {
         error = true;
       }
     }
@@ -118,16 +123,22 @@ class AlphabetTag extends React.Component
   render()
   {
     const symbol = this.state.symbol != null ? this.state.symbol : this.props.src;
-    return <div className={"alphatag-container"+(this.state.symbol && this.state.error ? " errortag" : "")}
-                style={this.props.style}>
+    const isUsed = false;
+    //TODO: const isUsed = this.props.src && this.props.machineController.getMachineBuilder().getMachine().getUsedAlphabet().includes(symbol);
+    return <div className={"alphatag-container" +
+      (isUsed ? " usedtag" : "") +
+      (this.props.src && (!symbol || symbol.length == 0) ? " emptytag" : "") +
+      (this.state.symbol && this.state.error ? " errortag" : "")}>
       <input type="text" ref={ref=>this.ref=ref} className="alphatag-input"
-             spellCheck="false" maxLength="1" value={symbol}
-      onChange={this.onValueChange}
-      onFocus = {this.onFocus}
-      onBlur={this.onBlur}
-      onKeyUp={this.onKeyUp}
-      onKeyDown={this.onKeyDown}/>
-    </div>
+        spellCheck="false"
+        maxLength="1"
+        value={symbol}
+        onChange={this.onValueChange}
+        onFocus = {this.onFocus}
+        onBlur={this.onBlur}
+        onKeyUp={this.onKeyUp}
+        onKeyDown={this.onKeyDown}/>
+    </div>;
   }
 }
 

@@ -191,6 +191,15 @@ class FSABuilder extends MachineBuilder
     this.onGraphChange();
   }
 
+  renameCustomSymbol(prevSymbol, nextSymbol)
+  {
+    const i = this._symbols.indexOf(prevSymbol);
+    if (i <= 0) throw new Error("Trying to rename unknown symbol \'" + prevSymbol + "\'");
+    this._symbols[i] = nextSymbol;
+
+    this.onGraphChange();
+  }
+
   isCustomSymbol(symbol)
   {
     return this._symbols.includes(symbol);

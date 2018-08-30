@@ -20,6 +20,16 @@ class MachineController
     this.registerEvent("userPostConvertMachine");//After all changes
     //userRenameMachine(machineBuilder, nextMachineName, prevMachineName) - when machine name is changed
     this.registerEvent("userRenameMachine");
+    //userCreateSymbol(machineBuilder, symbol) - When user adds a custom symbol
+    this.registerEvent("userCreateSymbol");
+    //userDeleteSymbol(machineBuilder, symbol, prevEdges) - When user delets a symbol (and affects the edges)
+    this.registerEvent("userDeleteSymbol");
+    this.registerEvent("userPreDeleteSymbol");//userPreDeleteSymbol(machineBuilder, symbol)
+    this.registerEvent("userPostDeleteSymbol");
+    //userRenameSymbol(machineBuilder, symbol, prevSymbol, targetEdges) - When user renames a used symbol (and affects the edges)
+    this.registerEvent("userRenameSymbol");
+    this.registerEvent("userPreRenameSymbol");//userPreDeleteSymbol(machineBuilder, symbol, prevSymbol)
+    this.registerEvent("userPostRenameSymbol");
   }
 
   initialize(app)
@@ -126,19 +136,90 @@ class MachineController
     }
   }
 
+  getAlphabet()
+  {
+    return this.machineBuilder.getAlphabet();
+  }
+
   createSymbol(symbol)
   {
+    this.machineBuilder.addCustomSymbol(symbol);
 
+    this.emit("userCreateSymbol", this.machineBuilder, symbol);
   }
 
   deleteSymbol(symbol)
   {
+    let edge = null;
+    let index = null;
+    let result = null;
+    const targets = [];
 
+    this.emit("userPreDeleteSymbol", this.machineBuilder, symbol);
+
+    const graph = this.graphController.getGraph();
+    for(let i = graph.edges.length - 1; i >= 0; --i)
+    {
+      edge = graph.edges[i];
+      index = edge.label.indexOf(symbol);
+      if (index >= 0)
+      {
+        result = edge.label.substring(0, index) + edge.label.substring(index + 1);
+        if (result.length > 0)
+        {
+          edge.setLabel(result);
+        }
+        else
+        {
+          edge.setLabel("");
+          graph.deleteEdge(edge);
+        }
+        targets.push(edge);
+      }
+    }
+
+    if (targets.length <= 0)
+    {
+      this.machineBuilder.removeCustomSymbol(symbol);
+    }
+
+    this.emit("userDeleteSymbol", this.machineBuilder, symbol, targets);
+    this.emit("userPostDeleteSymbol", this.machineBuilder, symbol, targets);
   }
 
-  renameSymbol(symbol)
+  renameSymbol(prevSymbol, nextSymbol)
   {
+    let edge = null;
+    let result = null;
+    const targets = [];
 
+    this.emit("userPreRenameSymbol", this.machineBuilder, nextSymbol, prevSymbol);
+
+    const graph = this.graphController.getGraph();
+    const length = graph.edges.length;
+    for(let i = 0; i < length; ++i)
+    {
+      edge = graph.edges[i];
+      let result = edge.label.replace(prevSymbol, nextSymbol);
+      if (result != edge.label)
+      {
+        targets.push(edge);
+      }
+      edge.setLabel(result);
+    }
+
+    if (targets.length <= 0)
+    {
+      this.machineBuilder.renameCustomSymbol(prevSymbol, nextSymbol);
+    }
+
+    this.emit("userRenameSymbol", this.machineBuilder, nextSymbol, prevSymbol, targets);
+    this.emit("userPostRenameSymbol", this.machineBuilder, nextSymbol, prevSymbol, targets);
+  }
+
+  isCustomSymbol(symbol)
+  {
+    return this.machineBuilder.isCustomSymbol(symbol);
   }
 }
 Eventable.mixin(MachineController);

@@ -21,6 +21,8 @@ import SafeGraphEventHandler from 'controller/events/SafeGraphEventHandler.js';
 import UserChangeMachineEventHandler from 'controller/events/UserChangeMachineEventHandler.js';
 import UserConvertMachineEventHandler from 'controller/events/UserConvertMachineEventHandler.js';
 import UserRenameMachineEventHandler from 'controller/events/UserRenameMachineEventHandler.js';
+import UserRenameSymbolEventHandler from 'controller/events/UserRenameSymbolEventHandler.js';
+import UserDeleteSymbolEventHandler from 'controller/events/UserDeleteSymbolEventHandler.js';
 
 class EventManager
 {
@@ -42,8 +44,6 @@ class EventManager
     const graph = this.graphController.getGraph();
     const events = this.logger;
 
-    /*this.graphController.on("nodeCustomLabel", (targetNode, nextLabel, prevLabel) =>
-      events.handleEvent(new GraphNodeLabelEvent(graph, targetNode, nextLabel, prevLabel)));*/
     this.graphController.on("nodeMove", (targetNode, nextX, nextY, prevX, prevY) =>
       events.handleEvent(new GraphNodeMoveEvent(graph, targetNode, nextX, nextY, prevX, prevY)));
     this.graphController.on("nodeMoveAll", (targetNodes, dx, dy) =>
@@ -72,6 +72,8 @@ class EventManager
     this.eventHandlers.push(new UserChangeMachineEventHandler(events, this.machineController));
     this.eventHandlers.push(new UserConvertMachineEventHandler(events, this.machineController, this.graphController));
     this.eventHandlers.push(new UserRenameMachineEventHandler(events, this.machineController));
+    this.eventHandlers.push(new UserRenameSymbolEventHandler(events, this.machineController, this.graphController));
+    this.eventHandlers.push(new UserDeleteSymbolEventHandler(events, this.machineController, this.graphController));
   }
 
   destroy()
