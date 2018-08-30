@@ -5,7 +5,6 @@ import GraphEdgeDeleteEvent from 'events/GraphEdgeDeleteEvent.js';
 import GraphEdgeDestinationEvent from 'events/GraphEdgeDestinationEvent.js';
 import GraphEdgeLabelEvent from 'events/GraphEdgeLabelEvent.js';
 import GraphEdgeMoveEvent from 'events/GraphEdgeMoveEvent.js';
-import GraphNodeAcceptEvent from 'events/GraphNodeAcceptEvent.js';
 import GraphNodeInitialEvent from 'events/GraphNodeInitialEvent.js';
 import GraphNodeDeleteAllEvent from 'events/GraphNodeDeleteAllEvent.js';
 import GraphNodeDeleteEvent from 'events/GraphNodeDeleteEvent.js';
@@ -17,6 +16,8 @@ import UserCreateNodeEventHandler from 'controller/events/UserCreateNodeEventHan
 import UserToggleNodeEventHandler from 'controller/events/UserToggleNodeEventHandler.js';
 import UserImportGraphEventHandler from 'controller/events/UserImportGraphEventHandler.js';
 import SafeGraphEventHandler from 'controller/events/SafeGraphEventHandler.js';
+
+import UserChangeMachineEventHandler from 'controller/events/UserChangeMachineEventHandler.js';
 
 class EventManager
 {
@@ -66,6 +67,7 @@ class EventManager
     this.eventHandlers.push(new UserImportGraphEventHandler(events, this.graphController, this.machineController));
     this.eventHandlers.push(new SafeGraphEventHandler(events, this.graphController, "userPreChangeLayout", "userPostChangeLayout"));
 
+    this.eventHandlers.push(new UserChangeMachineEventHandler(events, this.machineController));
   }
 
   destroy()

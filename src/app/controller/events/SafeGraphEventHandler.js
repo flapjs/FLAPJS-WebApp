@@ -1,8 +1,8 @@
-import GraphEventHandler from './GraphEventHandler.js';
+import EventHandler from './EventHandler.js';
 
 import NodalGraph from 'graph/NodalGraph.js';
 
-class SafeGraphEventHandler extends GraphEventHandler
+class SafeGraphEventHandler extends EventHandler
 {
   constructor(eventLogger, graphController, eventName, postEventName)
   {
@@ -28,13 +28,13 @@ class SafeGraphEventHandler extends GraphEventHandler
   //Override - this = event
   applyUndo(e)
   {
-    NodalGraph.parseJSON(e.eventData.graphData, this.graphController.getGraph());
+    NodalGraph.parseJSON(e.eventData.graphData, this.controller.getGraph());
   }
 
   //Override - this = event
   applyRedo(e)
   {
-    NodalGraph.parseJSON(e.postData.graphData, this.graphController.getGraph());
+    NodalGraph.parseJSON(e.postData.graphData, this.controller.getGraph());
   }
 }
 export default SafeGraphEventHandler;

@@ -1,20 +1,20 @@
-class GraphEventHandler
+class EventHandler
 {
-  constructor(eventLogger, graphController, eventName, postEventName)
+  constructor(eventLogger, controller, eventName, postEventName)
   {
     this.eventLogger = eventLogger;
-    this.graphController = graphController;
+    this.controller = controller;
     this.eventName = eventName;
     this.postEventName = postEventName || null;
 
     this.onEvent = this.onEvent.bind(this);
 
-    this.graphController.on(this.eventName, this.onEvent);
+    this.controller.on(this.eventName, this.onEvent);
   }
 
   destroy()
   {
-    this.graphController.removeEventListener(this.eventName, this.onEvent);
+    this.controller.removeEventListener(this.eventName, this.onEvent);
   }
 
   onEvent(...args)
@@ -27,7 +27,7 @@ class GraphEventHandler
     if (this.postEventName)
     {
       //Wait for post event to finalize event
-      this.graphController.once(this.postEventName, (...args) => {
+      this.controller.once(this.postEventName, (...args) => {
         result.postData = this.capturePostEvent(...args);
 
         this.eventLogger.handleEvent(result);
@@ -63,4 +63,4 @@ class GraphEventHandler
   }
 }
 
-export default GraphEventHandler;
+export default EventHandler;

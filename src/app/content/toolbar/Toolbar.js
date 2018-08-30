@@ -5,6 +5,7 @@ import Config from 'config.js';
 
 import UploadButton from "./UploadButton.js";
 import HelpButton from "./HelpButton.js";
+import MachineName from './MachineName.js';
 
 import IconButton from 'icons/IconButton.js';
 
@@ -32,24 +33,23 @@ class Toolbar extends React.Component
     };
 
     this.onMachineNameChange = this.onMachineNameChange.bind(this);
+    this.onMachineNameKeyDown = this.onMachineNameKeyDown.bind(this);
     this.langOnClick = this.langOnClick.bind(this);
   }
 
   onMachineNameChange(e)
   {
-    const element = document.getElementById('window-title');
-    const string = element.innerHTML;
-    const separator = string.indexOf('-');
-    if (separator !== -1)
-    {
-      element.innerHTML = e.target.value.trim() + " - " + string.substring(separator + 1).trim();
-    }
-    else
-    {
-      element.innerHTML = e.target.value.trim() + " - " + string;
-    }
+    this.props.machineController.renameMachine(e.value);
+  }
 
-    this.props.machineController.renameMachine(e.target.value);
+  onMachineNameKeyDown()
+  {
+
+  }
+
+  onMachineNameBlur()
+  {
+
   }
 
   langOnClick()
@@ -75,10 +75,7 @@ class Toolbar extends React.Component
       <div className="toolbar-title">
         <div className="toolbar-title-name">
           {/*Machine Name*/}
-          <input ref={ref=>this.machineName=ref}
-            id="machine-name" type="text"
-            value={machineController.getMachineName()}
-            onChange={this.onMachineNameChange}/>
+          <MachineName id="machine-name" value={machineController.getMachineName()} onSubmit={this.onMachineNameChange}/>
           {/*Toolbar Alt. Title*/}
           <div className="toolbar-title-alt">
             {/*Offline Button*/}
