@@ -98,6 +98,12 @@ class GraphController
     //userAddSymbol(grpah, symbol) - When user adds a custom symbol
     //userDeleteSymbol(graph, symbol, prevEdges) - When user delets a symbol (and affects the edges)
 
+    //userSwapNodes(graph, node, otherNode) - When user swap node indices
+    this.registerEvent("userSwapNodes");
+
+    //userRenameNode(graph, node, nextLabel, prevLabel, isPrevCustom) - When user sets the label of node
+    this.registerEvent("userRenameNode");
+
     //userChangeLayout(graph, prevLayout) - When user re-layouts the graph
     this.registerEvent("userChangeLayout");
     this.registerEvent("userPreChangeLayout");//before any changes
@@ -189,6 +195,26 @@ class GraphController
 
     this.emit("userChangeLayout", this.graph);
     this.emit("userPostChangeLayout", this.graph);
+  }
+
+  renameNode(node, name)
+  {
+    const prev = node.label;
+    const isPrevCustom = node.hasCustomLabel();
+
+    node.setCustomLabel(name);
+
+    this.emit("userRenameNode", this.graph, node, name, prev, isPrevCustom);
+  }
+
+  swapNodeByIndex(nodeIndex, otherNodeIndex)
+  {
+    const node = this.graph.nodes[nodeIndex];
+    const other = this.graph.nodes[otherNodeIndex];
+    this.graph.nodes[otherNodeIndex] = node;
+    this.graph.nodes[nodeIndex] = other;
+
+    this.emit("userSwapNodes", this.graph, node, other);
   }
 
   createNode(x, y)

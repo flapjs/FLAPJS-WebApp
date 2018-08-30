@@ -141,6 +141,20 @@ class NodalGraph
     this.markDirty();
   }
 
+  getEdgeIndexByID(id)
+  {
+    const length = this.edges.length;
+    for(let i = 0; i < length; ++i)
+    {
+      const edge = this.edges[i];
+      if (edge.id == id)
+      {
+        return i;
+      }
+    }
+    return -1;
+  }
+
   newEdge(from, to, label)
   {
     //TODO: This is also in GraphController!!!

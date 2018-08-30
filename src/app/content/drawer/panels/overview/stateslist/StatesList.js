@@ -19,11 +19,9 @@ class StatesList extends React.Component
 
   onStateCreate(e)
   {
-    const machineBuilder = this.props.machineBuilder;
-    const graph = machineBuilder.graph;
     const x = -100 + (Math.random() * 100 * 2);
     const y = -100 + (Math.random() * 100 * 2);
-    graph.newNode(x, y, machineBuilder.getLabeler().getNextDefaultNodeLabel());
+    this.props.graphController.createNode(x, y);
   }
 
   render()
@@ -36,7 +34,8 @@ class StatesList extends React.Component
           <TriangleIcon/>
           {
             graph.nodes.map((e, i) => {
-              return <StateTag key={e.label} src={e} label={e.label} accept={e.accept} graph={graph}
+              return <StateTag key={e.label} src={e} label={e.label} accept={e.accept}
+                graphController={graphController}
                 onFocus={ev => graphController.focusOnNode(e)}/>
             })
           }
