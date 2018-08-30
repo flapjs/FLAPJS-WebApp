@@ -99,11 +99,12 @@ class Toolbar extends React.Component
               }} disabled={offline}>
               <OfflineIcon/>
             </IconButton>
-            {/*Upload Button*/}
+            {/*Upload Button
             <div id="toolbar-upload-alt"
               title={I18N.toString("action.toolbar.uploadmachine")}>
               <MoreIcon/>
             </div>
+            */}
           </div>
         </div>
         {/*Machine Type*/}

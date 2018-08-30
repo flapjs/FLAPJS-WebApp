@@ -46,8 +46,9 @@ class MachineName extends React.Component
     if (this.state.value)
     {
       if (this.props.onSubmit) this.props.onSubmit({value: this.state.value});
-      this.setState({value: null});
     }
+
+    this.setState({value: null});
   }
 
   render()
@@ -55,7 +56,7 @@ class MachineName extends React.Component
     return <input type="text"
       className={this.props.className}
       id={this.props.id}
-      value={this.state.value || this.props.value}
+      value={this.state.value != null ? this.state.value : this.props.value}
       onChange={this.onChange}
       onKeyDown={this.onKeyDown}
       onFocus={this.onFocus}
