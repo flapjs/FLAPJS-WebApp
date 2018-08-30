@@ -32,24 +32,36 @@ export function loadFromJSON(stringData, graphController, machineController)
   const graph = graphController.getGraph();
   const machineBuilder = machineController.getMachineBuilder();
 
-  const data = JSON.parse(stringData);
-  const graphJSON = data.graphData;
-  const newGraph = NodalGraph.parseJSON(graphJSON);
-  graph.copyGraph(newGraph);
-
-  //HACK: this should be calculated elsewhere
-  const machineJSON = data.machineData;
-  const name = machineJSON.name;
-  if (name) machineController.setMachineName(name);
-  const type = machineJSON.type;
-  if (type) machineController.setMachineType(type);
-  const customSymbols = machineJSON.symbols;
-  if (customSymbols)
+  try
   {
-    machineBuilder._symbols.length = 0;
-    for(const symbol of customSymbols)
+    const data = JSON.parse(stringData);
+    const graphJSON = data.graphData;
+    const newGraph = NodalGraph.parseJSON(graphJSON);
+    graph.copyGraph(newGraph);
+
+    //HACK: this should be calculated elsewhere
+    const machineJSON = data.machineData;
+    const name = machineJSON.name;
+    if (name) machineController.setMachineName(name);
+    const type = machineJSON.type;
+    if (type) machineController.setMachineType(type);
+    const customSymbols = machineJSON.symbols;
+    if (customSymbols)
     {
-      machineBuilder._symbols.push(symbol);
+      machineBuilder._symbols.length = 0;
+      for(const symbol of customSymbols)
+      {
+        machineBuilder._symbols.push(symbol);
+      }
     }
+  }
+  catch (e)
+  {
+    if (graphController.notification)
+    {
+      graphController.notification.addMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
+    }
+    
+    console.error(e);
   }
 };
