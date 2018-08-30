@@ -11,8 +11,14 @@ class UploadButton extends React.Component
 
   onUploadFileChange(e)
   {
-    const file = e.target.files[0];
-    this.props.graphController.getUploader().uploadFileGraph(file);
+    const files = e.target.files;
+    if (files.length > 0)
+    {
+      this.props.graphController.getUploader().uploadFileGraph(files[0]);
+
+      //Makes sure you can upload the same file again.
+      e.target.value = "";
+    }
   }
 
   render()

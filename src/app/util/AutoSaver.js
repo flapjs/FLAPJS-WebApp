@@ -1,5 +1,6 @@
-import NodalGraph from 'graph/NodalGraph.js';
 import { saveConfig } from 'config.js';
+
+import { saveToJSON, loadFromJSON } from 'util/FlapSaver.js';
 
 const GRAPH_LOCAL_STORAGE_ID = "graph";
 const AUTOSAVE_INTERVAL = 1000; //unit is ms
@@ -18,29 +19,7 @@ class AutoSaver
     if (!item) return;
     try
     {
-      const graph = graphController.getGraph();
-      const machineBuilder = machineController.getMachineBuilder();
-
-      const data = JSON.parse(item);
-      const graphJSON = data.graphData;
-      const newGraph = NodalGraph.parseJSON(graphJSON);
-      graph.copyGraph(newGraph);
-
-      //HACK: this should be calculated elsewhere
-      const machineJSON = data.machineData;
-      const name = machineJSON.name;
-      if (name) machineController.setMachineName(name);
-      const type = machineJSON.type;
-      if (type) machineController.setMachineType(type);
-      const customSymbols = machineJSON.symbols;
-      if (customSymbols)
-      {
-        machineBuilder._symbols.length = 0;
-        for(const symbol of customSymbols)
-        {
-          machineBuilder._symbols.push(symbol);
-        }
-      }
+      loadFromJSON(item, graphController, machineController);
     }
     catch (e)
     {
@@ -71,21 +50,11 @@ class AutoSaver
       return;
     }
 
-    const graph = graphController.getGraph();
+    const result = saveToJSON(graphController, machineController);
 
-    if (!graph.isEmpty())
+    if (result)
     {
-      const dst = {};
-      dst.graphData = graph.toJSON();
-
-      //HACK: this should be calculated elsewhere
-      dst.machineData = {
-        name: machineController.getMachineName(),
-        type: machineController.getMachineType(),
-        symbols: machineController.getCustomSymbols()
-      };
-
-      localStorage.setItem(GRAPH_LOCAL_STORAGE_ID, JSON.stringify(dst));
+      localStorage.setItem(GRAPH_LOCAL_STORAGE_ID, result);
     }
     else
     {

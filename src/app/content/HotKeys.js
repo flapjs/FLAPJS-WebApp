@@ -1,4 +1,5 @@
 import Downloader from 'util/Downloader.js';
+import * as FlapSaver from 'util/FlapSaver.js';
 
 class HotKeys
 {
@@ -36,7 +37,12 @@ class HotKeys
     {
       //Save as machine file
       //TODO: Refer to export panel
-      Downloader.downloadText(this.machineController.getMachineName() + '.json', JSON.stringify(this.graphController.getGraph().toJSON()));
+      const jsonString = FlapSaver.saveToJSON(this.graphController, this.machineController);
+      const machineName = this.machineController.getMachineName();
+      //const graph = this.graphController.getGraph();
+      //const jsonString = JSON.stringify(graph.toJSON());
+      Downloader.downloadText(machineName + '.json', jsonString);
+
       e.preventDefault();
       e.stopPropagation();
     }
