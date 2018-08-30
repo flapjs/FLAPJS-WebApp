@@ -27,6 +27,8 @@ class UserCreateEdgeEventHandler extends EventHandler
     const edgeIndex = graph.getEdgeIndexByID(e.eventData.edgeID);
     if (edgeIndex < 0) throw new Error("Unable to find target in graph");
     graph.edges.splice(edgeIndex, 1);
+
+    graph.markDirty();
   }
 
   //Override - this = event
@@ -62,6 +64,8 @@ class UserCreateEdgeEventHandler extends EventHandler
       edge.setLabel(e.postData.label);
       edge.copyQuadraticsFrom(e.postData.quad);
     }
+
+    graph.markDirty();
   }
 }
 export default UserCreateEdgeEventHandler;

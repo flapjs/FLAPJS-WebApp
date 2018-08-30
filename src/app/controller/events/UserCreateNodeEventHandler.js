@@ -27,6 +27,8 @@ class UserCreateNodeEventHandler extends EventHandler
     const nodeIndex = graph.getNodeIndexByID(e.eventData.nodeID);
     if (nodeIndex < 0) throw new Error("Unable to find target in graph");
     graph.nodes.splice(nodeIndex, 1);
+
+    graph.markDirty();
   }
 
   //Override - this = event
@@ -51,6 +53,8 @@ class UserCreateNodeEventHandler extends EventHandler
         node.setLabel(e.postData.label);
       }
     }
+
+    graph.markDirty();
   }
 }
 export default UserCreateNodeEventHandler;
