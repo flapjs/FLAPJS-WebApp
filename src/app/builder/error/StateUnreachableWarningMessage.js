@@ -47,7 +47,7 @@ class StateUnreachableWarningMessage extends React.Component
         notification.getGraphController().getGraph().deleteNode(node);
       }
       //Sort the nodes after deleting if enabled...
-      notification.getMachineBuilder().getMachineBuilder().labeler.sortDefaultNodeLabels();
+      notification.getMachineController().getMachineBuilder().labeler.sortDefaultNodeLabels();
       //Exit the message
       this.props.onExit(e);
     }
