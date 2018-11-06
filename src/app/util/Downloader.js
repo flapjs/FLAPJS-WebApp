@@ -2,7 +2,7 @@ class Downloader
 {
   static downloadText(filename, data)
   {
-    Downloader.downloadURL(filename, 'data:text/plain; charset=utf-8,' + encodeURIComponent(data));
+    Downloader.downloadURL(filename, Downloader.getTextDataURI(data));
   }
 
   static downloadSVG(filename, filetype, svg, width, height)
@@ -43,6 +43,11 @@ class Downloader
 
     element.click();
     document.body.removeChild(element);
+  }
+  
+  static getTextDataURI(data)
+  {
+    return 'data:text/plain; charset=utf-8,' + encodeURIComponent(data);
   }
 }
 
