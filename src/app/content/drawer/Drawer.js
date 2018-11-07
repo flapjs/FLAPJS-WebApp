@@ -24,7 +24,10 @@ class Drawer extends React.Component
   {
     super(props);
 
-    this.panel = React.createRef();
+    this.overviewPanel = null;
+    this.testingPanel = null;
+    this.exportingPanel = null;
+    this.optionsPanel = null;
 
     this.state = {
       tabIndex: DEFAULT_TAB_INDEX,
@@ -62,27 +65,27 @@ class Drawer extends React.Component
     });
   }
 
-  getTab(index)
+  getTab(index=this.state.tabIndex)
   {
-    const app = this.props.app;
-    const graphController = this.props.graphController;
-    const machineController = this.props.machineController;
-
-    const graph = graphController.getGraph();
-    const machineBuilder = machineController.getMachineBuilder();
-
-    switch(index)
+    if (index == OVERVIEW)
     {
-      case OVERVIEW:
-        return <OverviewPanel ref={ref=>this.panel=ref} graphController={graphController} machineController={machineController}/>;
-      case TESTING:
-        return <TestingPanel ref={ref=>this.panel=ref} viewport={app.viewport} tester={app.testingManager} graphController={graphController} machineController={machineController}/>;
-      case EXPORTING:
-        return <ExportingPanel ref={ref=>this.panel=ref} workspace={app.workspace} toolbar={this.props.toolbar} graphController={graphController} machineController={machineController}/>;
-      case OPTIONS:
-        return <OptionsPanel ref={ref=>this.panel=ref}/>;
-      default:
-        throw new Error("Unknown tab index \'" + tabIndex + "\'.");
+      return this.overviewPanel;
+    }
+    else if (index == TESTING)
+    {
+      return this.testingPanel;
+    }
+    else if (index == EXPORTING)
+    {
+      return this.exportingPanel;
+    }
+    else if (index == OPTIONS)
+    {
+      return this.optionsPanel;
+    }
+    else
+    {
+      throw new Error("Unknown tab with index \'" + index + "\'");
     }
   }
 
@@ -212,7 +215,7 @@ class Drawer extends React.Component
 
   onScroll(e)
   {
-    if (this.panel)
+    //if (this.panel)
     {
       //TODO: this.panel.container.scrollBy(0, e.deltaY);
       //TODO: return false;
@@ -222,12 +225,17 @@ class Drawer extends React.Component
   render()
   {
     const app = this.props.app;
+    const graphController = this.props.graphController;
+    const machineController = this.props.machineController;
 
     const tabIndex = this.state.tabIndex;
 
     return <div className={"drawer-container"} onWheel={this.onScroll}>
       <div className="drawer-content">
-        {this.getTab(tabIndex)}
+        <OverviewPanel ref={ref=>this.overviewPanel=ref} style={{display: tabIndex == OVERVIEW ? "block" : "none"}} graphController={graphController} machineController={machineController}/>
+        <TestingPanel ref={ref=>this.testingPanel=ref} style={{display: tabIndex == TESTING ? "block" : "none"}} viewport={app.viewport} tester={app.testingManager} graphController={graphController} machineController={machineController}/>
+        <ExportingPanel ref={ref=>this.exportingPanel=ref} style={{display: tabIndex == EXPORTING ? "block" : "none"}} workspace={app.workspace} toolbar={this.props.toolbar} graphController={graphController} machineController={machineController}/>
+        <OptionsPanel ref={ref=>this.optionsPanel=ref} style={{display: tabIndex == OPTIONS ? "block" : "none"}}/>
       </div>
       <div className="tab-list">
 

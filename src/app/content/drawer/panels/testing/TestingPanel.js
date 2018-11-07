@@ -121,7 +121,7 @@ class TestingPanel extends React.Component
 
     const isTestInvalid = !machineBuilder.isValidMachine();
 
-    return <div className="panel-container" id="testing" ref={ref=>this.container=ref}>
+    return <div className="panel-container" id="testing" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title">
         <h1>{I18N.toString("component.testing.title")}</h1>
       </div>
