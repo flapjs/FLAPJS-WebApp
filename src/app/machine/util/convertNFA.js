@@ -4,11 +4,13 @@ import { EMPTY } from 'machine/Symbols.js';
 export function convertToDFA(nfa, dst=null)
 {
   const result = dst || new DFA();
+  /*
   if (nfa.isValidDFA())
   {
     result.copy(nfa);
     return result;
   }
+  */
 
   const alphabet = nfa.getAlphabet();
   const startState = nfa.getStartState();
@@ -35,7 +37,7 @@ export function convertToDFA(nfa, dst=null)
   }
 
   //Create trap state
-  const trapState = result.newState("qt");
+  const trapState = result.newState("{}");
   let flag = false;
 
   //Check for the new alphabet...
@@ -55,6 +57,14 @@ export function convertToDFA(nfa, dst=null)
     }
   }
 
+  const powerSetStates = nfa.getPowerSet();
+  for(const state of powerSetStates) {
+      const setState = getStateFromSet(state);
+      if(!result.hasState(setState)) {
+          newDFAStateFromNFA(result, nfa, state);
+      }
+  }
+
   //Delete the trap state if it was not used
   if (!flag)
   {
@@ -62,8 +72,9 @@ export function convertToDFA(nfa, dst=null)
     {
       result.deleteTransition(trapState, trapState, symbol);
     }
-    result.deleteState(trapState);
+    //result.deleteState(trapState);
   }
+
 
   return result;
 }
