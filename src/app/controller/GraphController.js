@@ -407,11 +407,13 @@ class GraphController
   onInputDown(inputController, x, y, target, targetType, event)
   {
     //Make sure to lose focus on label editors
-    if (this.labelEditor.inputElement === document.activeElement)
+    /*
+    if (this.labelEditor.hasFocus())
     {
-      this.labelEditor.inputElement.blur();
+      this.labelEditor.closeEditor();
       event.result = false;
     }
+    */
 
     if (this.selector.hasSelection())
     {

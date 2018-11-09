@@ -4,6 +4,8 @@ import './LabelEditor.css';
 import Config from 'config.js';
 import { EMPTY } from 'machine/Symbols.js';
 
+import FormattedInput from './FormattedInput.js';
+
 //TODO: This is equivalent to 4em for toolbar height
 const LABEL_OFFSET_Y = -64;
 const EDITOR_OFFSET_Y = -36;
@@ -34,6 +36,8 @@ class LabelEditor extends React.Component
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
     this.onContextMenu = this.onContextMenu.bind(this);
+    this.onFormat = this.onFormat.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   openEditor(targetEdge, defaultText=null, replace=true, callback=null)
@@ -51,17 +55,10 @@ class LabelEditor extends React.Component
       };
     });
 
-    this.inputElement.value = defaultText || targetEdge.label;
+    this.inputElement.resetValue(defaultText || targetEdge.label);
     this.parentElement.focus();
 
-    if (replace)
-    {
-      this.inputElement.select();
-    }
-    else
-    {
-      this.inputElement.focus();
-    }
+    this.inputElement.focus(replace);
   }
 
   closeEditor(saveOnExit=false)
@@ -102,6 +99,11 @@ class LabelEditor extends React.Component
     this.inputElement.blur();
   }
 
+  hasFocus()
+  {
+    return this.inputElement.hasFocus();
+  }
+
   isEditorOpen()
   {
     return this.state.target !== null;
@@ -113,89 +115,27 @@ class LabelEditor extends React.Component
     e.stopPropagation();
   }
 
-  onKeyDown(e)
+  appendSymbol(symbol)
   {
-    if (e.keyCode === Config.DELETE_KEY)
-    {
-      const input = this.inputElement;
-      const index = input.selectionStart - 1;
-      //If delete commas, delete the associated element too
-      if (input.value.charAt(index) === ',')
-      {
-        input.setSelectionRange(index, index);
-      }
-      //Continue to processs delete event
-    }
-    else if (e.keyCode === Config.DELETE_FORWARD_KEY)
-    {
-      const input = this.inputElement;
-      const index = input.selectionStart;
-      //If delete commas, delete the associated element too
-      if (input.value.charAt(index) === ',')
-      {
-        input.setSelectionRange(index + 1, index + 1);
-      }
-      //Continue to processs delete event
-    }
+    this.inputElement.appendValue(symbol);
+    this.inputElement.focus();
   }
 
-  onKeyUp(e)
+  onSubmit(newValue, prevValue)
   {
-    if (e.keyCode == Config.SUBMIT_KEY)
+    if (newValue != prevValue)
     {
       this.closeEditor(true);
     }
-    else if (e.keyCode == Config.CLEAR_KEY)
+    else
     {
       this.closeEditor(false);
     }
   }
 
-  onInputChange(e)
+  onFormat(value)
   {
-    //Maintain proper format
-    const target = e.target;
-    //Save cursor position for later
-    const prevStart = target.selectionStart;
-    const prevEnd = target.selectionEnd;
-    const prevLength = target.value.length;
-
-    target.value = this.props.machineController.getMachineBuilder().formatAlphabetString(target.value, true);
-
-    if (prevStart < prevLength)
-    {
-      //Set cursor back to where it was
-      target.setSelectionRange(prevStart, prevEnd);
-    }
-  }
-
-  appendSymbol(symbol)
-  {
-    const string = this.inputElement.value;
-    let result = "";
-
-    //Make sure that the transition does not already have symbol
-    const symbols = string.split(",");
-    if (!symbols.includes(symbol))
-    {
-      //Replace the selected text
-      if (this.inputElement.selectionStart === 0 &&
-        this.inputElement.selectionEnd === string.length)
-      {
-        result = symbol;
-      }
-      else
-      {
-        symbols.push(symbol);
-        //symbols.sort();
-        result = symbols.join(",");
-      }
-
-      this.inputElement.value = result;
-    }
-
-    //Redirect user to input field after button click
-    this.inputElement.focus();
+    return this.props.machineController.getMachineBuilder().formatAlphabetString(value, true);
   }
 
   render()
@@ -228,7 +168,7 @@ class LabelEditor extends React.Component
       targetStyle.top = (y + offsetY) + "px";
       targetStyle.left = (x + offsetX) + "px";
     }
-    
+
     const usedAlphabet = machineController.getMachineBuilder().getMachine().getAlphabet();
 
     return <div className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
@@ -243,10 +183,10 @@ class LabelEditor extends React.Component
         //HACK: start the timer that will exit labelEditor if not return focus
         this._timer = setTimeout(() => this.closeEditor(true), 10);
       }}>
-      <input className="label-editor-input" type="text" ref={ref=>this.inputElement=ref}
-        onKeyDown={this.onKeyDown}
-        onKeyUp={this.onKeyUp}
-        onChange={this.onInputChange}/>
+      <FormattedInput className="label-editor-input" ref={ref=>this.inputElement=ref}
+        formatter={this.onFormat}
+        onSubmit={this.onSubmit}
+        saveOnExit={true}/>
       <div className="label-editor-tray">
         {
           usedAlphabet &&
