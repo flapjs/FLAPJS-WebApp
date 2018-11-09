@@ -31,6 +31,7 @@ class GraphPointer
     this.moveMode = false;
     this.trashMode = false;
     this.dragging = false;
+    this.active = false;
   }
 
   setOffset(x, y, immediate=false)

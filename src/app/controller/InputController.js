@@ -362,6 +362,7 @@ class InputController
   {
     const pointer = this._pointer;
     const mouse = getMousePosition(this.workspace, x, y);
+    pointer.active = true;
     pointer.moveMode = moveMode;//If right click
     pointer.setInitialPosition(mouse.x, mouse.y);
 
@@ -442,6 +443,8 @@ class InputController
     //Set target as nothing since no longer interacting
     pointer.target = null;
     pointer.targetType = "none";
+
+    pointer.active = false;
   }
 }
 //Mixin Eventable

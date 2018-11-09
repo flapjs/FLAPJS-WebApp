@@ -574,6 +574,9 @@ class GraphController
         return false;
       }
 
+      //Make sure it is not in new edge mode
+      this.isNewEdge = false;
+
       //Makes sure that placeholders are not quadratics!
       if (targetType === 'edge' && target.isPlaceholder())
       {
