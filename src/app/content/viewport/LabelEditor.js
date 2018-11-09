@@ -31,10 +31,7 @@ class LabelEditor extends React.Component
       target: null,
       callback: null
     };
-
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.onKeyUp = this.onKeyUp.bind(this);
-    this.onInputChange = this.onInputChange.bind(this);
+    
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onFormat = this.onFormat.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
