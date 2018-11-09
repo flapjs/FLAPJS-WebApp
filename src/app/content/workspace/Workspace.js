@@ -115,7 +115,7 @@ class Workspace extends React.Component
           {/* Selected elements */}
           { graphController.getSelector().hasSelection() &&
             graphController.getSelector().getSelection().map((e, i) =>
-              <HighlightRenderer key={e.id} className="highlight-select" target={e} type="node"/>) }
+              <HighlightRenderer key={e.id} className={pointer.isTrashMode() ? "highlight-error" : "highlight-select"} target={e} type="node"/>) }
 
           {/* Selection box */}
           <SelectionBoxRenderer src={graphController.getSelector()}/>
@@ -146,7 +146,7 @@ class Workspace extends React.Component
           {/* Hover markers */}
           { pointer.target &&
             !graphController.getSelector().isTargetSelected(pointer.target) &&
-            <HighlightRenderer className="highlight-select" target={pointer.target} type={pointer.targetType}/> }
+            <HighlightRenderer className={pointer.isTrashMode() ? "highlight-error" : "highlight-select"} target={pointer.target} type={pointer.targetType}/> }
 
         </g>
       </g>
