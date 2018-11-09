@@ -16,7 +16,7 @@ const OPTIONS = 3;
 const DEFAULT_TAB_INDEX = TESTING;
 
 const MAX_PANEL_THRESHOLD = 50;
-const MIN_PANEL_SIZE = 180;
+const MIN_PANEL_SIZE = 300;//180
 
 class Drawer extends React.Component
 {
