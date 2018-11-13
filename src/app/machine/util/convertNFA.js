@@ -4,13 +4,6 @@ import { EMPTY } from 'machine/Symbols.js';
 export function convertToDFA(nfa, dst=null)
 {
   const result = dst || new DFA();
-  /*
-  if (nfa.isValidDFA())
-  {
-    result.copy(nfa);
-    return result;
-  }
-  */
 
   const alphabet = nfa.getAlphabet();
   const startState = nfa.getStartState();
@@ -19,21 +12,12 @@ export function convertToDFA(nfa, dst=null)
   let nextStates = nfa.doClosureTransition(startState);
   const newStartState = newDFAStateFromNFA(result, nfa, nextStates);
 
-  //Start expansion with the start state
-  const states = [];
-  states.push(newStartState);
-
-  //While there are still more states to expand from...
-  while(states.length > 0)
-  {
-    const nextState = states.shift();
-    nextStates = expandNFAStateToDFA(nextState, nfa, result);
-
-    //Push all nextStates to end of states
-    for(const s of nextStates)
-    {
-      states.push(s);
-    }
+  //For every state from the NFA's powerset, add it to DFA with correct transitions
+  const powerSetStates = nfa.getPowerSet();
+  for(const powerSetState of powerSetStates) {
+      console.log("Adding to DFA: " + getStateFromSet(powerSetState));
+      if(powerSetState.length != 0)
+        expandPowersetStateToDFA(powerSetState, nfa, result);
   }
 
   //Create trap state
@@ -57,26 +41,54 @@ export function convertToDFA(nfa, dst=null)
     }
   }
 
-  const powerSetStates = nfa.getPowerSet();
-  for(const state of powerSetStates) {
-      const setState = getStateFromSet(state);
-      if(!result.hasState(setState)) {
-          newDFAStateFromNFA(result, nfa, state);
-      }
-  }
-
-  //Delete the trap state if it was not used
-  if (!flag)
-  {
-    for(const symbol of newAlphabet)
-    {
-      result.deleteTransition(trapState, trapState, symbol);
-    }
-    //result.deleteState(trapState);
-  }
-
-
   return result;
+}
+
+/* Inspired by expandNFAStateToDFA, it takes a powerSetState, which is a set
+ * of NFA states from the powerset (e.g. [q1, q1]) and adds it to the DFA as a
+ * single state (e.g. {q1, q2}) and adds its transitions
+ */
+function expandPowersetStateToDFA(powerSetState, nfa, dfa) {
+    const result = [];
+    const alphabet = nfa.getAlphabet();
+    const state = getStateFromSet(powerSetState);
+
+    if(!dfa.hasState(state)) {
+        result.push(newDFAStateFromNFA(dfa, nfa, powerSetState));
+    }
+
+    let terminals = [];
+    let dfaState = null;
+
+    for(const symbol of alphabet)
+    {
+      //Get all closed reachable states...
+      for(const s of powerSetState)
+      {
+        nfa.doTerminalTransition(s, symbol, terminals);
+      }
+
+      //If has reachable states...
+      if (terminals.length > 0)
+      {
+        dfaState = getStateFromSet(terminals);
+
+        //Create state if it does not exist...
+        if (!dfa.hasState(dfaState))
+        {
+          dfaState = newDFAStateFromNFA(dfa, nfa, terminals);
+          result.push(dfaState);
+        }
+
+        //Create transition for reachable state
+        dfa.newTransition(state, dfaState, symbol);
+      }
+
+      //Reset list
+      terminals.length = 0;
+    }
+
+    return result;
 }
 
 function expandNFAStateToDFA(state, nfa, dfa)
