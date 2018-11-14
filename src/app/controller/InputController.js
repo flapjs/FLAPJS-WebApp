@@ -286,7 +286,9 @@ class InputController
 
     //Update target
     pointer.updateTarget();
-    if (pointer.target != null)
+
+    //HACK: to make the cursor look like a pointer when targeting
+    if (pointer.hasTarget())
     {
       document.body.style.cursor = "pointer";
     }
@@ -366,10 +368,13 @@ class InputController
     pointer.moveMode = moveMode;//If right click
     pointer.setInitialPosition(mouse.x, mouse.y);
 
+    const target = pointer.getPicker().initialTarget;
+    const targetType = pointer.getPicker().initialTargetType;
+
     //Check whether to accept the start of input...
     const event = {result: true};
     this.emit("inputdown", this, pointer.x, pointer.y,
-        pointer.initial.target, pointer.initial.targetType, event);
+      target, targetType, event);
 
     this._cursor._timer = setTimeout(() => {
       if (pointer.isWaitingForMoveMode())
@@ -387,6 +392,9 @@ class InputController
     const mouse = getMousePosition(this.workspace, x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
+    const target = pointer.getPicker().initialTarget;
+    const targetType = pointer.getPicker().initialTargetType;
+
     if (!pointer.dragging)
     {
       if (pointer.getDistanceSquToInitial() > pointer.getDraggingRadiusForTarget())
@@ -394,7 +402,7 @@ class InputController
         //Start drag!
         pointer.dragging = true;
         this.emit("dragstart", this, pointer.x, pointer.y,
-            pointer.initial.target, pointer.initial.targetType);
+            target, targetType);
       }
       else
       {
@@ -406,11 +414,11 @@ class InputController
     {
       //Continue to drag...
       this.emit("dragmove", this, pointer.x, pointer.y,
-          pointer.initial.target, pointer.initial.targetType);
+          target, targetType);
     }
 
     this.emit("inputmove", this, pointer.x, pointer.y,
-        pointer.initial.target, pointer.initial.targetType);
+        target, targetType);
   }
 
   doInputDownAndUp(x, y)
@@ -424,25 +432,27 @@ class InputController
     const pointer = this._pointer;
     pointer.updateTarget();
 
+    const target = pointer.getPicker().initialTarget;
+    const targetType = pointer.getPicker().initialTargetType;
+
     if (pointer.dragging)
     {
       //Stop drag!
       this.emit("dragstop", this, pointer.x, pointer.y,
-          pointer.initial.target, pointer.initial.targetType);
+          target, targetType);
     }
     else
     {
       //Tap!
       this.emit("inputaction", this, pointer.x, pointer.y,
-          pointer.initial.target, pointer.initial.targetType);
+          target, targetType);
     }
 
     this.emit("inputup", this, pointer.x, pointer.y,
-        pointer.initial.target, pointer.initial.targetType);
+        target, targetType);
 
     //Set target as nothing since no longer interacting
-    pointer.target = null;
-    pointer.targetType = "none";
+    pointer.clearTarget();
 
     pointer.active = false;
   }

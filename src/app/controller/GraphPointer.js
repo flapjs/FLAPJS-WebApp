@@ -1,5 +1,7 @@
 import Config from 'config.js';
 
+import GraphPicker from './GraphPicker.js';
+
 const BOUNDING_RECT_UPDATE_INTERVAL = 100;
 
 class GraphPointer
@@ -9,9 +11,7 @@ class GraphPointer
     this.graph = graph;
     this.initial = {
       x: 0, y: 0,
-      time: 0,
-      target: null,
-      targetType: null
+      time: 0
     };
     this.x = 0;
     this.y = 0;
@@ -21,12 +21,9 @@ class GraphPointer
     this.nextOffsetX = 0;
     this.nextOffsetY = 0;
 
-    this._boundingRect = null;
-    this._boundingRectTime = 0;
     this.scale = 1;
 
-    this.target = null;
-    this.targetType = null;
+    this.picker = new GraphPicker(this.graph);
 
     this.moveMode = false;
     this.trashMode = false;
@@ -58,16 +55,6 @@ class GraphPointer
 
   setScale(scale)
   {
-    //Add delay to this so it is not called every frame
-    if (Date.now() - this._boundingRectTime > BOUNDING_RECT_UPDATE_INTERVAL)
-    {
-      this._boundingRect = this.graph.getBoundingRect();
-      this._boundingRectTime = Date.now();
-    }
-
-    const rect = this._boundingRect;
-    //const dw = (Math.max(Config.DEFAULT_GRAPH_SIZE, rect.width)) / Config.DEFAULT_GRAPH_SIZE;
-    //const dh = (Math.max(Config.DEFAULT_GRAPH_SIZE, rect.height)) / Config.DEFAULT_GRAPH_SIZE;
     this.scale = Math.min(Config.MAX_SCALE, Math.max(Config.MIN_SCALE, scale));
   }
 
@@ -83,8 +70,7 @@ class GraphPointer
     this.initial.time = Date.now();
 
     this.updateTarget();
-    this.initial.target = this.target;
-    this.initial.targetType = this.targetType;
+    this.setInitialTarget(this.picker.target, this.picker.targetType);
 
     this.dragging = false;
   }
@@ -97,127 +83,35 @@ class GraphPointer
 
   updateTarget()
   {
-    if (this.target = this.getNodeByInitialMarkerAt())
-    {
-      //Clicked on initial marker
-      this.targetType = "initial";
-    }
-    else if (this.target = this.getEdgeByEndPointAt())
-    {
-      //Clicked on endpoint
-      this.targetType = "endpoint";
-    }
-    else if (this.target = this.getNodeAt())
-    {
-      //Clicked on node
-      this.targetType = "node";
-    }
-    else if (this.target = this.getEdgeAt())
-    {
-      //Clicked on edge
-      this.targetType = "edge";
-    }
-    else
-    {
-      //Clicked on graph
-      this.target = null;
-      this.targetType = "none";
-    }
-
-    return this.target;
+    this.picker.updateTarget(this.x, this.y);
   }
 
-  getNodeAt(x, y)
+  clearTarget()
   {
-    //If no arguments, then use pointer position
-    if (arguments.length == 0)
-    {
-      x = this.x;
-      y = this.y;
-    }
-
-    //Search graph
-    for(const node of this.graph.nodes)
-    {
-      const dx = x - node.x;
-      const dy = y - node.y;
-      if (dx * dx + dy * dy < Config.NODE_RADIUS_SQU)
-      {
-        return node;
-      }
-    }
-    return null;
+    this.picker.target = null;
+    this.picker.targetType = "none";
   }
 
-  getNodeByInitialMarkerAt(x, y)
+  isTarget(target)
   {
-    //If no arguments, then use pointer position
-    if (arguments.length == 0)
-    {
-      x = this.x;
-      y = this.y;
-    }
-
-    const startNode = this.graph.getStartNode();
-    if (!startNode) return null;
-
-    const dx = x - (startNode.x + Config.INITIAL_MARKER_OFFSET_X);
-    const dy = y - startNode.y;
-    if (dx * dx + dy * dy < Config.EDGE_RADIUS_SQU)
-    {
-      return startNode;
-    }
-
-    return null;
+    return this.picker.target === target;
   }
 
-  getEdgeAt(x, y)
+  setInitialTarget(target, type)
   {
-    //If no arguments, then use pointer position
-    if (arguments.length == 0)
-    {
-      x = this.x;
-      y = this.y;
-    }
-
-    //Search graph
-    for(const edge of this.graph.edges)
-    {
-      const dx = x - edge.x;
-      const dy = y - edge.y;
-      if (dx * dx + dy * dy < Config.EDGE_RADIUS_SQU)
-      {
-        return edge;
-      }
-    }
-    return null;
+    this.picker.initialTarget = target;
+    this.picker.initialTargetType = type;
   }
 
-  getEdgeByEndPointAt(x, y)
+  hasTarget()
   {
-    //If no arguments, then use pointer position
-    if (arguments.length == 0)
-    {
-      x = this.x;
-      y = this.y;
-    }
-
-    //Search graph
-    for(const edge of this.graph.edges)
-    {
-      const point = edge.getEndPoint();
-      const dx = x - point.x;
-      const dy = y - point.y;
-      if (dx * dx + dy * dy < Config.ENDPOINT_RADIUS_SQU)
-      {
-        return edge;
-      }
-    }
-    return null;
+    return this.picker.target != null;
   }
 
   getDraggingRadiusForTarget(targetType)
   {
+    return Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
+    /*
     //If no arguments, then use pointer targetType
     if (arguments.length == 0)
     {
@@ -244,6 +138,7 @@ class GraphPointer
     {
       return Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
     }
+    */
   }
 
   getDistanceSquToInitial(x, y)
@@ -282,6 +177,11 @@ class GraphPointer
     const y2 = y1 + this._trashArea.height;
     return x >= x1 && y >= y1 && x < x2 && y < y2;
     */
+  }
+
+  getPicker()
+  {
+    return this.picker;
   }
 }
 

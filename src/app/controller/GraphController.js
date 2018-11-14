@@ -2,13 +2,17 @@ import Config from 'config.js';
 
 import Eventable from 'util/Eventable.js';
 
-import SelectionBox from './SelectionBox.js';
 import Uploader from './Uploader.js';
 
 import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
 
 import GraphLayout from "graph/GraphLayout.js";
+
+import CreateNodeHandler from './handlers/CreateNodeHandler.js';
+import AcceptNodeHandler from './handlers/AcceptNodeHandler.js';
+import TrashModeHandler from './handlers/TrashModeHandler.js';
+import EditLabelHandler from './handlers/EditLabelHandler.js';
 
 class GraphController
 {
@@ -22,8 +26,12 @@ class GraphController
 
     this.labelEditor = null;
     this.tester = null;
-    this.selector = new SelectionBox(graph);
     this.uploader = new Uploader(this);
+
+    this.createNodeHandler = new CreateNodeHandler(this);
+    this.acceptNodeHandler = new AcceptNodeHandler(this);
+    this.trashModeHandler = new TrashModeHandler(this);
+    this.editLabelHandler = new EditLabelHandler(this);
 
     this.prevQuad = {
       radians: 0, length: 0,
@@ -173,11 +181,6 @@ class GraphController
     return this.labelEditor;
   }
 
-  getSelector()
-  {
-    return this.selector;
-  }
-
   getUploader()
   {
     return this.uploader;
@@ -245,8 +248,8 @@ class GraphController
 
   deleteSelectedNodes(selectedNode)
   {
-    const selector = this.selector;
-    const selection = selector.getSelection().slice();
+    const pointer = this.inputController.getPointer();
+    const selection = pointer.getPicker().getSelection().slice();
 
     this.emit("userPreDeleteNodes", this.graph, selectedNode, selection, this.prevX, this.prevY);
 
@@ -257,7 +260,7 @@ class GraphController
     }
 
     //Remove from selection
-    selector.clearSelection();
+    pointer.getPicker().clearSelection();
 
     //Emit event
     this.emit("userDeleteNodes", this.graph, selectedNode, selection, this.prevX, this.prevY);
@@ -335,7 +338,7 @@ class GraphController
   moveEndpointTo(pointer, edge, x, y)
   {
     //Get ONLY node at x and y (cannot use hover target, since it is not ONLY nodes)
-    const dst = pointer.getNodeAt(x, y) || pointer;
+    const dst = pointer.getPicker().getNodeAt(x, y) || pointer;
     edge._to = dst;
 
     //If the cursor returns to the state after leaving it...
@@ -415,12 +418,14 @@ class GraphController
     }
     */
 
-    if (this.selector.hasSelection())
+    const pointer = inputController.getPointer();
+
+    if (pointer.getPicker().hasSelection())
     {
       //Unselect everything is clicked on something other than nodes...
-      if (targetType != "node" || !this.selector.isTargetSelected(target))
+      if (targetType != "node" || !pointer.getPicker().isTargetInSelection(target))
       {
-        this.selector.clearSelection();
+        pointer.getPicker().clearSelection();
       }
     }
 
@@ -447,15 +452,7 @@ class GraphController
       //If within the time to double tap...
       if (this.firstEmptyClick && (dx * dx + dy * dy) < (Config.CURSOR_RADIUS_SQU * 16) && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
       {
-        if (!pointer.isTrashMode(x, y))
-        {
-          //Create state at position
-          this.createNode(x, y);
-        }
-        else
-        {
-          this.emit("tryCreateWhileTrash");
-        }
+        this.createNodeHandler.onDblActionEvent(pointer);
 
         this.firstEmptyClick = false;
       }
@@ -475,86 +472,19 @@ class GraphController
   onInputAction(inputController, x, y, target, targetType)
   {
     const pointer = inputController.getPointer();
-    const trashMode = pointer.isTrashMode(x, y);
-
-    //Makes sure that user cannot toggle state while in trash mode
-    if (targetType === 'node')
-    {
-      if (!trashMode)
-      {
-        this.toggleNode(target);
-        return true;
-      }
-    }
-
-    //If is in move mode...
-    /*
-    if (pointer.isMoveMode())
-    {
-      pointer.moveMode = false;
-      //this.emit("tryCreateWhileTrash");
-
-      return false;
-    }
-    //If is NOT in move mode...
-    else
-    {
-      //Do the remaining deleting code
-    }
-    */
 
     //If is in trash mode... capture all events!
-    if (trashMode)
-    {
-      //Click to delete node
-      if (targetType === 'node')
-      {
-        //So that the emitted 'delete' events can use this
-        this.prevX = target.x;
-        this.prevY = target.y;
-
-        //If there exists selected states, delete them all!
-        const selector = this.selector;
-        if (selector.hasSelection())
-        {
-          //Delete all selected nodes
-          this.deleteSelectedNodes(target);
-        }
-        else
-        {
-          //Delete a single node
-          this.deleteTargetNode(target);
-        }
-
-        return true;
-      }
-      else if (targetType === 'edge' || targetType === 'endpoint')
-      {
-        //Delete a single edge
-        this.deleteTargetEdge(target);
-        return true;
-      }
-      else
-      {
-        //Clicked on something you cannot delete
-        return false;
-      }
-    }
+    if (this.trashModeHandler.onActionEvent(pointer)) return true;
 
     //If not in Trash Mode, then events should pass through to here...
     //Otherwise, ALL events are captured to prevent ALL default behavior.
 
-    //If selected target...
-    if (targetType === 'edge')
-    {
-      //Edit label for selected edge
-      this.openLabelEditor(target, x, y);
-      return true;
-    }
-    else
-    {
-      return false;
-    }
+    //Makes sure that user cannot toggle state while in trash mode
+    if (this.acceptNodeHandler.onActionEvent(pointer)) return true;
+    //Edit label for selected edge
+    if (this.editLabelHandler.onActionEvent(pointer)) return true;
+
+    return false;
   }
 
   onDragStart(inputController, x, y, target, targetType)
@@ -674,8 +604,7 @@ class GraphController
           const edge = this.graph.newEdge(target, pointer, Config.STR_TRANSITION_DEFAULT_LABEL);
 
           //Redirect pointer to refer to the edge as the new target
-          pointer.initial.target = edge;
-          pointer.initial.targetType = "endpoint";
+          pointer.setInitialTarget(edge, "endpoint");
           this.isNewEdge = true;
 
           //Reset previous quad values for new proxy edge
@@ -713,7 +642,7 @@ class GraphController
       else if (targetType === 'none')
       {
         //Begin selection box...
-        this.selector.beginSelection(x, y);
+        pointer.getPicker().beginSelection(x, y);
         return true;
       }
       else
@@ -737,10 +666,9 @@ class GraphController
       //Continue to move node(s)
       if (targetType === 'node')
       {
-        const selector = this.selector;
-        if (selector.hasSelection())
+        if (pointer.getPicker().hasSelection())
         {
-          this.moveMultipleNodesTo(pointer, selector.getSelection(), x, y);
+          this.moveMultipleNodesTo(pointer, pointer.getPicker().getSelection(), x, y);
         }
         else
         {
@@ -764,7 +692,7 @@ class GraphController
       else if (targetType === 'initial')
       {
         //Move initial marker to node or pointer
-        const dst = pointer.getNodeAt(x, y) || pointer;
+        const dst = pointer.getPicker().getNodeAt(x, y) || pointer;
         this.ghostInitialMarker = dst;
         return true;
       }
@@ -786,12 +714,11 @@ class GraphController
     //If is NOT in move mode...
     else
     {
-      const selector = this.selector;
       //If the selection box is active...
-      if (selector.isActive())
+      if (pointer.getPicker().isSelecting())
       {
         //Update the selection box
-        this.selector.updateSelection(x, y);
+        pointer.getPicker().updateSelection(x, y);
         return true;
       }
 
@@ -815,8 +742,7 @@ class GraphController
         if (pointer.isTrashMode(x, y))
         {
           //If there exists selected states, delete them all!
-          const selector = this.selector;
-          if (selector.hasSelection())
+          if (pointer.getPicker().hasSelection())
           {
             this.deleteSelectedNodes(target);
           }
@@ -832,11 +758,11 @@ class GraphController
         else
         {
           //Do nothing, since should have moved to position
-          if (this.selector.hasSelection())
+          if (pointer.getPicker().hasSelection())
           {
             const dx = x - this.prevX;
             const dy = y - this.prevY;
-            this.emit("nodeMoveAll", this.selector.getSelection(), dx, dy);
+            this.emit("nodeMoveAll", pointer.getPicker().getSelection(), dx, dy);
           }
           else
           {
@@ -878,7 +804,7 @@ class GraphController
           //Look for an existing edge with similar from and to
           for(const edge of this.graph.edges)
           {
-            if (edge !== target && edge.from === target.from && edge.to === pointer.target)
+            if (edge !== target && edge.from === target.from && pointer.isTarget(edge.to))
             {
               let result = edge.label.split(",");
               if (target.label !== Config.STR_TRANSITION_DEFAULT_LABEL)
@@ -1072,10 +998,10 @@ class GraphController
     else
     {
       //If was trying to select...
-      if (this.selector.isActive())
+      if (pointer.getPicker().isSelecting())
       {
         //Stop selecting stuff, fool.
-        this.selector.endSelection(x, y);
+        pointer.getPicker().endSelection(x, y);
         return true;
       }
     }

@@ -74,6 +74,7 @@ class Workspace extends React.Component
     const graph = graphController.getGraph();
     const machineBuilder = machineController.getMachineBuilder();
     const pointer = inputController.getPointer();
+    const selectionBox = pointer.getPicker().getSelectionBox();
 
     let size = Config.DEFAULT_GRAPH_SIZE * Math.max(Number.MIN_VALUE, pointer.scale);
     const halfSize = size / 2;
@@ -113,12 +114,14 @@ class Workspace extends React.Component
             <InitialMarkerRenderer node={graphController.ghostInitialMarker}/>) }
 
           {/* Selected elements */}
-          { graphController.getSelector().hasSelection() &&
-            graphController.getSelector().getSelection().map((e, i) =>
+          { pointer.getPicker().hasSelection() &&
+            pointer.getPicker().getSelection().map((e, i) =>
               <HighlightRenderer key={e.id} className={pointer.isTrashMode() ? "highlight-error" : "highlight-select"} target={e} type="node"/>) }
 
           {/* Selection box */}
-          <SelectionBoxRenderer src={graphController.getSelector()}/>
+          <SelectionBoxRenderer visible={selectionBox.visible}
+            fromX={selectionBox.fromX} fromY={selectionBox.fromY}
+            toX={selectionBox.toX} toY={selectionBox.toY}/>
 
           {/* Node warning targets */}
           { machineController.getMachineBuilder().machineErrorChecker.warningNodes.map((e, i) =>
@@ -140,13 +143,12 @@ class Workspace extends React.Component
           {/* Node test targets */}
           { tester.testMode.targets.map((e, i) => {
               return <HighlightRenderer key={e.id} className="highlight-test graph-gui" target={e} type="node" offset="6"/>;
-            })
-          }
+            }) }
 
           {/* Hover markers */}
-          { pointer.target &&
-            !graphController.getSelector().isTargetSelected(pointer.target) &&
-            <HighlightRenderer className={pointer.isTrashMode() ? "highlight-error" : "highlight-select"} target={pointer.target} type={pointer.targetType}/> }
+          { pointer.hasTarget() &&
+            !pointer.getPicker().isTargetInSelection() &&
+            <HighlightRenderer className={pointer.isTrashMode() ? "highlight-error" : "highlight-select"} target={pointer.getPicker().target} type={pointer.getPicker().targetType}/> }
 
         </g>
       </g>
