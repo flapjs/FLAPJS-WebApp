@@ -4,7 +4,7 @@ import Viewport from './Viewport.js';
 
 class GraphPointer
 {
-  constructor(graph, viewport)
+  constructor(graph)
   {
     this.graph = graph;
     this.initial = {
@@ -13,8 +13,6 @@ class GraphPointer
     };
     this.x = 0;
     this.y = 0;
-
-    this.viewport = viewport;
 
     this.moveMode = false;
     this.trashMode = false;

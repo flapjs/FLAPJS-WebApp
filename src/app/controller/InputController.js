@@ -14,7 +14,7 @@ class InputController
   constructor(graph)
   {
     this._viewport = new Viewport();
-    this._pointer = new GraphPointer(graph, this._viewport);
+    this._pointer = new GraphPointer(graph);
     this._picker = new GraphPicker(graph);
 
     this._adapter = new InputAdapter(this);
