@@ -9,8 +9,11 @@ class Viewport
     this._offsetY = 0;
     this._nextOffsetX = 0;
     this._nextOffsetY = 0;
+    this._offsetDamping = 0.1;
 
-    this._scale = 1;
+    this._scaleFactor = 1;
+    this._minScale = 1;
+    this._maxScale = 1;
   }
 
   setElement(element)
@@ -18,12 +21,32 @@ class Viewport
     this._element = element;
   }
 
+  setMinScale(scale)
+  {
+    this._minScale = scale;
+    if (this._scaleFactor < this._minScale) this._scaleFactor = this._minScale;
+    return this;
+  }
+
+  setMaxScale(scale)
+  {
+    this._maxScale = scale;
+    if (this._scaleFactor > this._maxScale) this._scaleFactor = this._maxScale;
+    return this;
+  }
+
+  setOffsetDamping(damping)
+  {
+    this._offsetDamping = damping;
+    return this;
+  }
+
   update()
   {
     const dx = this._nextOffsetX - this._offsetX;
-    this._offsetX += dx * Config.SMOOTH_OFFSET_DAMPING;
+    this._offsetX += dx * this._offsetDamping;
     const dy = this._nextOffsetY - this._offsetY;
-    this._offsetY += dy * Config.SMOOTH_OFFSET_DAMPING;
+    this._offsetY += dy * this._offsetDamping;
   }
 
   transformScreenToView(clientX, clientY)
@@ -69,12 +92,15 @@ class Viewport
 
   setScale(scale)
   {
-    this._scale = Math.min(Config.MAX_SCALE, Math.max(Config.MIN_SCALE, scale));
+    this._scaleFactor = Math.min(this._maxScale, Math.max(this._minScale, scale));
   }
 
   addScale(dscale)
   {
-    this._scale += dscale;
+    this._scaleFactor += dscale;
+
+    if (this._scaleFactor > this._maxScale) this._scaleFactor = this._maxScale;
+    else if (this._scaleFactor < this._minScale) this._scaleFactor = this._minScale;
   }
 
   getOffsetX()
@@ -87,9 +113,24 @@ class Viewport
     return this._offsetY;
   }
 
+  getOffsetDamping()
+  {
+    return this._offsetDamping;
+  }
+
   getScale()
   {
-    return this._scale;
+    return this._scaleFactor;
+  }
+
+  getMinScale()
+  {
+    return this._minScale;
+  }
+
+  getMaxScale()
+  {
+    return this._maxScale;
   }
 }
 

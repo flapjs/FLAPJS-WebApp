@@ -13,7 +13,7 @@ class InputController
 {
   constructor(graph)
   {
-    this._viewport = new Viewport();
+    this._viewport = new Viewport().setMinScale(Config.MIN_SCALE).setMaxScale(Config.MAX_SCALE).setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
     this._pointer = new GraphPointer(graph);
     this._picker = new GraphPicker(graph);
 
