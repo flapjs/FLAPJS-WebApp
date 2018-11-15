@@ -15,6 +15,8 @@ class InputAdapter
       _timer: null
     };
 
+    this._dragging = false;
+
     this.prevPinchDist = 0;
     this.pinchDist = 0;
 
@@ -53,6 +55,11 @@ class InputAdapter
     //Process touch handlers
     this.workspace.removeEventListener('touchstart', this.onTouchStart);
     this.workspace.removeEventListener('touchmove', this.onTouchMove);
+  }
+
+  isDragging()
+  {
+    return this._dragging;
   }
 
   onContextMenu(e)
@@ -308,6 +315,8 @@ class InputAdapter
     const mouse = this.controller.getViewport().transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
+    this._dragging = false;
+
     pointer.moveMode = moveMode;//If right click
     pointer.beginAction();
     picker.updateTarget(pointer.x, pointer.y);
@@ -323,7 +332,7 @@ class InputAdapter
       target, targetType, event);
 
     this._cursor._timer = setTimeout(() => {
-      if (pointer.isWaitingForMoveMode())
+      if (!this._dragging)
       {
         pointer.moveMode = this.controller.getInputScheme() ? false : true;//default true
       }
@@ -343,19 +352,19 @@ class InputAdapter
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
-    if (!pointer.dragging)
+    if (!this._dragging)
     {
-      if (pointer.getDistanceSquToInitial() > pointer.getDraggingRadiusForTarget())
+      if (pointer.getDistanceSquToInitial() > pointer.getDraggingRadiusSqu())
       {
         //Start drag!
-        pointer.dragging = true;
+        this._dragging = true;
         this.controller.emit("dragstart", this.controller, pointer.x, pointer.y,
             target, targetType);
       }
       else
       {
         //Still a click or hold
-        pointer.dragging = false;
+        this._dragging = false;
       }
     }
     else
@@ -384,7 +393,7 @@ class InputAdapter
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
-    if (pointer.dragging)
+    if (this._dragging)
     {
       //Stop drag!
       this.controller.emit("dragstop", this.controller, pointer.x, pointer.y,

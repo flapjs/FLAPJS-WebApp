@@ -14,10 +14,10 @@ class InputController
   constructor(graph)
   {
     this._viewport = new Viewport().setMinScale(Config.MIN_SCALE).setMaxScale(Config.MAX_SCALE).setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
-    this._pointer = new GraphPointer(graph);
-    this._picker = new GraphPicker(graph);
-
     this._adapter = new InputAdapter(this);
+    
+    this._pointer = new GraphPointer(this._adapter);
+    this._picker = new GraphPicker(graph);
 
     //Swap left to right clicks and vice versa on anything else but Macs
     this._swapMouseScheme = true;//!navigator.platform.startsWith("Mac");
@@ -87,7 +87,7 @@ class InputController
 
   isDragging()
   {
-    return this._pointer.dragging;
+    return this._adapter.isDragging();
   }
 
   isActionMode(graphController)

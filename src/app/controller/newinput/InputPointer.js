@@ -28,7 +28,8 @@ class InputPointer
     this._x = x;
     this._y = y;
 
-    this._picker.setPosition(this._x, this._y);
+    const picker = this._controller.getPicker();
+    picker.setPosition(this._x, this._y);
   }
 
   beginAction()

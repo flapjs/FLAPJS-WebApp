@@ -1,20 +1,18 @@
 import Config from 'config.js';
 
-import Viewport from './Viewport.js';
-
 class GraphPointer
 {
-  constructor(graph)
+  constructor(adapter)
   {
-    this.graph = graph;
+    this._adapter = adapter;
+
+    this._active = false;
     this._x = 0;
     this._y = 0;
     this._initialX = 0;
     this._initialY = 0;
-    this._active = false;
 
     this.moveMode = false;
-    this.dragging = false;
   }
 
   get x()
@@ -52,23 +50,12 @@ class GraphPointer
   beginAction()
   {
     this.setInitialPosition(this._x, this._y);
-    this.dragging = false;
     this._active = true;
   }
 
   endAction()
   {
     this._active = false;
-  }
-
-  isWaitingForMoveMode()
-  {
-    return !this.dragging; //!this.moveMode
-  }
-
-  getDraggingRadiusForTarget(targetType)
-  {
-    return Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
   }
 
   getDistanceSquToInitial(x, y)
@@ -85,9 +72,19 @@ class GraphPointer
     return dx * dx + dy * dy;
   }
 
+  getDraggingRadiusSqu()
+  {
+    return Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
+  }
+
   isMoveMode()
   {
     return this.moveMode;
+  }
+
+  isDragging()
+  {
+    return this._adapter.isDragging();
   }
 
   isActive()
