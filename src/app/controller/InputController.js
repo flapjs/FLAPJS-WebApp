@@ -90,7 +90,7 @@ class InputController
 
   isActionMode(graphController)
   {
-    return this._pointer.active ?
+    return this._pointer.isActive() ?
       //Is considered an action when NOT moving or when creating a new edge...
       graphController.isNewEdge || !this._pointer.moveMode :
       //If not active, just show default action...

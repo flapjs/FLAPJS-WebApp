@@ -1,9 +1,14 @@
+import InputAdapter from './InputAdapter.js';
+import InputPointer from './InputPointer.js';
+import Viewport from './Viewport.js';
+
 class InputController
 {
   constructor()
   {
     this._adapter = new InputAdapter(this);
     this._pointer = new InputPointer(this);
+    this._viewport = new Viewport();
   }
 
   attachToElement(element)
@@ -13,6 +18,7 @@ class InputController
       this._adapter.destroy();
     }
 
+    this._viewport.setElement(element);
     this._adapter.initialize(element);
   }
 
@@ -59,6 +65,11 @@ class InputController
   getPointer()
   {
     return this._pointer;
+  }
+
+  getViewport()
+  {
+    return this._viewport;
   }
 
   getAdapter()

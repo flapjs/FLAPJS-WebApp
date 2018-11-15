@@ -308,9 +308,8 @@ class InputAdapter
     const mouse = this.controller.getViewport().transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
-    pointer.active = true;
     pointer.moveMode = moveMode;//If right click
-    pointer.setInitialPosition(mouse.x, mouse.y);
+    pointer.beginAction();
     picker.updateTarget(pointer.x, pointer.y);
     picker.setInitialTarget(picker.target, picker.targetType);
 
@@ -404,7 +403,7 @@ class InputAdapter
     //Set target as nothing since no longer interacting
     picker.clearTarget();
 
-    pointer.active = false;
+    pointer.endAction();
   }
 }
 

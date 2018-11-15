@@ -1,5 +1,3 @@
-import Config from 'config.js';
-
 class Viewport
 {
   constructor()
@@ -19,6 +17,7 @@ class Viewport
   setElement(element)
   {
     this._element = element;
+    return this;
   }
 
   setMinScale(scale)

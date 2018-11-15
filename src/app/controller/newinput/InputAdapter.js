@@ -1,8 +1,8 @@
+import Config from 'config.js';
+
 /**
  * Provides an interface for InputController to interact with a HTMLElement.
  * Each listenable element should correspond to only a single InputAdapter.
- * To attach an InputController to "handle" the adapted events, use
- * InputController.setInputAdapter(adapter).
  */
 class InputAdapter
 {
@@ -21,10 +21,10 @@ class InputAdapter
     this._dragging = false;
     this._altaction = false;
 
-    this._holdInputDelay = 500;//LONG_TAP_TICKS
-    this._dblActionDelay = 20;//DOUBLE_TAP_TICKS
-    this._scrollSensitivity = 0.5;//SCROLL_SENSITIVITY
-    this._minTapRadius = 20;//CURSOR_RADIUS_SQU * 16
+    this._holdInputDelay = Config.LONG_TAP_TICKS;
+    this._dblActionDelay = Config.DOUBLE_TAP_TICKS;
+    this._scrollSensitivity = Config.SCROLL_SENSITIVITY;
+    this._minTapRadius = Config.CURSOR_RADIUS_SQU * 16;
 
     this._prevEmptyAction = false;
     this._prevEmptyTime = 0;
@@ -109,12 +109,12 @@ class InputAdapter
 
   onMouseMove(e)
   {
+    const viewport = this._controller.getViewport();
     const pointer = this._controller.getPointer();
-    const mouse = pointer.transformScreenToWorld(this._element, e.clientX, e.clientY);
+    const mouse = viewport.transformScreenToView(e.clientX, e.clientY);
     pointer.setPosition(mouse.x, mouse.y);
 
-    //Update target for hover effects...
-    //pointer.updateTargets();
+    //Can update target here for hover effects...
   }
 
   onMouseDownThenMove(e)
@@ -163,14 +163,15 @@ class InputAdapter
     //e.stopPropagation();
     //e.preventDefault();
     const controller = this._controller;
+    const viewport = controller.getViewport();
     const pointer = controller.getPointer();
     const dy = e.deltaY * this._scrollSensitivity;
-    const prev = pointer.getScale();
+    const prev = viewport.getScale();
     const next = prev + dy;
 
     if (controller.onZoomChange(pointer, next, prev))
     {
-      pointer.setScale(next);
+      viewport.setScale(next);
     }
 
     return false;
@@ -182,7 +183,8 @@ class InputAdapter
     const cursor = this._cursor;
     const controller = this._controller;
     const pointer = controller.getPointer();
-    const mouse = pointer.transformScreenToWorld(this._element, x, y);
+    const viewport = controller.getViewport();
+    const mouse = viewport.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
     if (controller.onPreActionEvent(pointer))
@@ -206,7 +208,7 @@ class InputAdapter
     //That means the input is remaining still (like a hold)...
     if (!this._dragging)
     {
-      this._controller.getPointer().changeAction(true);
+      this._altaction = true;
     }
   }
 
@@ -214,7 +216,8 @@ class InputAdapter
   {
     const controller = this._controller;
     const pointer = controller.getPointer();
-    const mouse = pointer.transformScreenToWorld(this._element, x, y);
+    const viewport = controller.getViewport();
+    const mouse = viewport.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
     if (!this._dragging)
@@ -246,11 +249,12 @@ class InputAdapter
       cursor._timer = null;
     }
 
+    //Update pointer target to final position
     const controller = this._controller;
     const pointer = controller.getPointer();
-
-    //Update pointer target to final position
-    pointer.updateTarget();
+    const viewport = controller.getViewport();
+    const mouse = viewport.transformScreenToView(x, y);
+    pointer.setPosition(mouse.x, mouse.y);
 
     if (this._dragging)
     {
@@ -303,21 +307,6 @@ class InputAdapter
   getElement()
   {
     return this._element;
-  }
-}
-
-class ActionEvent
-{
-  constructor(pointer)
-  {
-    this._pointer = pointer;
-    this.x = 0;
-    this.y = 0;
-  }
-
-  getPointer()
-  {
-    return this._pointer;
   }
 }
 
