@@ -11,12 +11,13 @@ class TrashModeHandler
   onActionEvent(pointer, picker)
   {
     const controller = this.controller;
+    const inputController = controller.inputController;
     const x = pointer.x;
     const y = pointer.y;
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
-    if (!pointer.isTrashMode(x, y)) return false;
+    if (!inputController.isTrashMode()) return false;
 
     //Click to delete node
     if (targetType === 'node')

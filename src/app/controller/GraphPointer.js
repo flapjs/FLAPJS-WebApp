@@ -11,11 +11,10 @@ class GraphPointer
     this._y = 0;
     this._initialX = 0;
     this._initialY = 0;
+    this._active = false;
 
     this.moveMode = false;
-    this.trashMode = false;
     this.dragging = false;
-    this._active = false;
   }
 
   get x()
@@ -89,20 +88,6 @@ class GraphPointer
   isMoveMode()
   {
     return this.moveMode;
-  }
-
-  isTrashMode(x, y)
-  {
-    return this.trashMode;
-    /*
-    if (this.trashMode) return true;
-
-    const x1 = this._trashArea.x;
-    const y1 = this._trashArea.y;
-    const x2 = x1 + this._trashArea.width;
-    const y2 = y1 + this._trashArea.height;
-    return x >= x1 && y >= y1 && x < x2 && y < y2;
-    */
   }
 
   isActive()

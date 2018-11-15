@@ -161,7 +161,7 @@ class GraphAdapter
     if (pointer.isMoveMode())
     {
       //Make sure it is not in trash mode
-      if (pointer.isTrashMode(x, y))
+      if (inputController.isTrashMode())
       {
         pointer.moveMode = false;
 
@@ -264,7 +264,7 @@ class GraphAdapter
       //If action dragged a node...
       if (targetType === 'node')
       {
-        if (!pointer.isTrashMode(x, y))
+        if (!inputController.isTrashMode())
         {
           const edge = this.controller.graph.newEdge(target, pointer, Config.STR_TRANSITION_DEFAULT_LABEL);
 
@@ -406,7 +406,7 @@ class GraphAdapter
       if (targetType === 'node')
       {
         //Delete it if withing trash area...
-        if (pointer.isTrashMode(x, y))
+        if (inputController.isTrashMode())
         {
           //If there exists selected states, delete them all!
           if (picker.hasSelection())
@@ -442,7 +442,7 @@ class GraphAdapter
       else if (targetType === 'edge')
       {
         //Delete it if withing trash area...
-        if (pointer.isTrashMode(x, y))
+        if (inputController.isTrashMode())
         {
           this.controller.deleteTargetEdge(target);
         }
@@ -457,7 +457,7 @@ class GraphAdapter
       else if (targetType === 'endpoint')
       {
         //Delete it if withing trash area...
-        if (pointer.isTrashMode(x, y))
+        if (inputController.isTrashMode())
         {
           this.controller.deleteTargetEdge(target);
           return true;

@@ -8,10 +8,11 @@ class CreateNodeHandler
   onDblActionEvent(pointer, picker)
   {
     const controller = this.controller;
+    const inputController = controller.inputController;
     const x = pointer.x;
     const y = pointer.y;
 
-    if (!pointer.isTrashMode(x, y))
+    if (!inputController.isTrashMode())
     {
       //Create state at position
       controller.createNode(x, y);

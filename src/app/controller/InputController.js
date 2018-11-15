@@ -22,6 +22,8 @@ class InputController
     //Swap left to right clicks and vice versa on anything else but Macs
     this._swapMouseScheme = true;//!navigator.platform.startsWith("Mac");
 
+    this._trashMode = false;
+
     //inputdown(input, x, y, target, targetType, event) - Called when input is starting touch/press/click
     //event.result can be changed to decide whether to continue to process future related events
     //by default, it is true
@@ -65,12 +67,12 @@ class InputController
 
   setTrashMode(enabled)
   {
-    this._pointer.trashMode = enabled;
+    this._trashMode = enabled;
   }
 
   isTrashMode()
   {
-    return this._pointer.trashMode;
+    return this._trashMode;
   }
 
   setInputScheme(shouldActionFirst)
