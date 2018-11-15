@@ -28,9 +28,9 @@ class Workspace extends React.Component
   getSVGForExport(width, height)
   {
     const svg = this.ref;
-    const pointer = this.props.inputController.getPointer();
-    const offsetX = pointer.offsetX;
-    const offsetY = pointer.offsetY;
+    const viewport = this.props.inputController.getViewport();
+    const offsetX = viewport.getOffsetX();
+    const offsetY = viewport.getOffsetY();
     const bounds = this.props.graphController.getGraph().getBoundingRect();
 
     const dx = bounds.minX + offsetX - EXPORT_PADDING_X;
@@ -72,11 +72,12 @@ class Workspace extends React.Component
     const tester = this.props.tester;
 
     const graph = graphController.getGraph();
+    const viewport = inputController.getViewport();
     const machineBuilder = machineController.getMachineBuilder();
-    const pointer = inputController.getPointer();
-    const selectionBox = pointer.getPicker().getSelectionBox();
+    const picker = inputController.getPicker();
+    const selectionBox = picker.getSelectionBox();
 
-    let size = Config.DEFAULT_GRAPH_SIZE * Math.max(Number.MIN_VALUE, pointer.scale);
+    let size = Config.DEFAULT_GRAPH_SIZE * Math.max(Number.MIN_VALUE, viewport.getScale());
     const halfSize = size / 2;
 
     //Must not be a block content (must inline)
@@ -90,8 +91,8 @@ class Workspace extends React.Component
       {/* Graph elements */}
       <g id="workspace-content-elements" transform={
         "translate(" +
-        pointer.offsetX + " " +
-        pointer.offsetY + ")"}>
+        viewport.getOffsetX() + " " +
+        viewport.getOffsetY() + ")"}>
 
         {/* Graph origin crosshair */}
         <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="rgba(0,0,0,0.04)"/>
@@ -114,9 +115,9 @@ class Workspace extends React.Component
             <InitialMarkerRenderer node={graphController.ghostInitialMarker}/>) }
 
           {/* Selected elements */}
-          { pointer.getPicker().hasSelection() &&
-            pointer.getPicker().getSelection().map((e, i) =>
-              <HighlightRenderer key={e.id} className={pointer.isTrashMode() ? "highlight-error" : "highlight-select"} target={e} type="node"/>) }
+          { picker.hasSelection() &&
+            picker.getSelection().map((e, i) =>
+              <HighlightRenderer key={e.id} className={inputController.isTrashMode() ? "highlight-error" : "highlight-select"} target={e} type="node"/>) }
 
           {/* Selection box */}
           <SelectionBoxRenderer visible={selectionBox.visible}
@@ -146,9 +147,9 @@ class Workspace extends React.Component
             }) }
 
           {/* Hover markers */}
-          { pointer.hasTarget() &&
-            !pointer.getPicker().isTargetInSelection() &&
-            <HighlightRenderer className={pointer.isTrashMode() ? "highlight-error" : "highlight-select"} target={pointer.getPicker().target} type={pointer.getPicker().targetType}/> }
+          { picker.hasTarget() &&
+            !picker.isTargetInSelection() &&
+            <HighlightRenderer className={inputController.isTrashMode() ? "highlight-error" : "highlight-select"} target={picker.target} type={picker.targetType}/> }
 
         </g>
       </g>

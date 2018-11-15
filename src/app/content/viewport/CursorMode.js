@@ -16,12 +16,8 @@ class CursorMode extends React.Component
   {
     const inputController = this.props.inputController;
     const graphController = this.props.graphController;
-    const isActionMode = inputController.getPointer().active ?
-      //Is considered an action when NOT moving or when creating a new edge...
-      graphController.isNewEdge || !inputController.getPointer().moveMode :
-      //If not active, just show default action...
-      !inputController.getInputScheme();
-      
+    const isActionMode = inputController.isActionMode(graphController);
+
     return <div id="cursor-btn">
       <IconButton id="action-mode" className={isActionMode ? "active" : ""}
         onClick={() => inputController.setInputScheme(true)}

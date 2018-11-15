@@ -4,6 +4,8 @@ import './App.css';
 
 import NodalGraph from 'graph/NodalGraph.js';
 
+import InputAdapter from 'controller/newinput/InputAdapter.js';
+
 import GraphController from 'controller/GraphController.js';
 import InputController from 'controller/InputController.js';
 import MachineController from 'controller/MachineController.js';
@@ -87,7 +89,7 @@ class App extends React.Component
 
     //Notify on create in delete mode
     const tryCreateWhileTrash = () => {
-      if (this.inputController.getPointer().trashMode)
+      if (this.inputController.isTrashMode())
       {
         this.notification.addWarningMessage(I18N.toString("message.warning.cannotmodify"),
           "tryCreateWhileTrash", true);

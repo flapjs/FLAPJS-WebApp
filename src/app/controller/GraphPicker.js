@@ -19,6 +19,12 @@ class GraphPicker
     this.initialTargetType = "";
   }
 
+  setInitialTarget(target, type)
+  {
+    this.initialTarget = target;
+    this.initialTargetType = type;
+  }
+
   updateTarget(x, y)
   {
     if (this.target = this.getNodeByInitialMarkerAt(x, y))
@@ -49,6 +55,17 @@ class GraphPicker
     }
 
     return this.target;
+  }
+
+  clearTarget()
+  {
+    this.target = null;
+    this.targetType = "none";
+  }
+
+  hasTarget()
+  {
+    return this.target != null;
   }
 
   getNodeAt(x, y)

@@ -1,12 +1,10 @@
 import Config from 'config.js';
 
-import GraphPicker from './GraphPicker.js';
-
-const BOUNDING_RECT_UPDATE_INTERVAL = 100;
+import Viewport from './Viewport.js';
 
 class GraphPointer
 {
-  constructor(graph)
+  constructor(graph, viewport)
   {
     this.graph = graph;
     this.initial = {
@@ -16,46 +14,12 @@ class GraphPointer
     this.x = 0;
     this.y = 0;
 
-    this.offsetX = 0;
-    this.offsetY = 0;
-    this.nextOffsetX = 0;
-    this.nextOffsetY = 0;
-
-    this.scale = 1;
-
-    this.picker = new GraphPicker(this.graph);
+    this.viewport = viewport;
 
     this.moveMode = false;
     this.trashMode = false;
     this.dragging = false;
     this.active = false;
-  }
-
-  setOffset(x, y, immediate=false)
-  {
-    if (immediate)
-    {
-      this.nextOffsetX = this.offsetX = x;
-      this.nextOffsetY = this.offsetY = y;
-    }
-    else
-    {
-      this.nextOffsetX = x;
-      this.nextOffsetY = y;
-    }
-  }
-
-  updateOffset()
-  {
-    const dx = this.nextOffsetX - this.offsetX;
-    this.offsetX += dx * Config.SMOOTH_OFFSET_DAMPING;
-    const dy = this.nextOffsetY - this.offsetY;
-    this.offsetY += dy * Config.SMOOTH_OFFSET_DAMPING;
-  }
-
-  setScale(scale)
-  {
-    this.scale = Math.min(Config.MAX_SCALE, Math.max(Config.MIN_SCALE, scale));
   }
 
   isWaitingForMoveMode()
@@ -65,47 +29,17 @@ class GraphPointer
 
   setInitialPosition(x, y)
   {
-    this.initial.x = this.x = x - this.offsetX;
-    this.initial.y = this.y = y - this.offsetY;
+    this.initial.x = this.x;
+    this.initial.y = this.y;
     this.initial.time = Date.now();
-
-    this.updateTarget();
-    this.setInitialTarget(this.picker.target, this.picker.targetType);
 
     this.dragging = false;
   }
 
   setPosition(x, y)
   {
-    this.x = x - this.offsetX;
-    this.y = y - this.offsetY;
-  }
-
-  updateTarget()
-  {
-    this.picker.updateTarget(this.x, this.y);
-  }
-
-  clearTarget()
-  {
-    this.picker.target = null;
-    this.picker.targetType = "none";
-  }
-
-  isTarget(target)
-  {
-    return this.picker.target === target;
-  }
-
-  setInitialTarget(target, type)
-  {
-    this.picker.initialTarget = target;
-    this.picker.initialTargetType = type;
-  }
-
-  hasTarget()
-  {
-    return this.picker.target != null;
+    this.x = x;
+    this.y = y;
   }
 
   getDraggingRadiusForTarget(targetType)
@@ -177,11 +111,6 @@ class GraphPointer
     const y2 = y1 + this._trashArea.height;
     return x >= x1 && y >= y1 && x < x2 && y < y2;
     */
-  }
-
-  getPicker()
-  {
-    return this.picker;
   }
 }
 

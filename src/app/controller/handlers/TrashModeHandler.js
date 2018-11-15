@@ -8,13 +8,13 @@ class TrashModeHandler
     this.prevY = 0;
   }
 
-  onActionEvent(pointer)
+  onActionEvent(pointer, picker)
   {
     const controller = this.controller;
     const x = pointer.x;
     const y = pointer.y;
-    const target = pointer.getPicker().initialTarget;
-    const targetType = pointer.getPicker().initialTargetType;
+    const target = picker.initialTarget;
+    const targetType = picker.initialTargetType;
 
     if (!pointer.isTrashMode(x, y)) return false;
 
@@ -26,7 +26,7 @@ class TrashModeHandler
       this.prevY = target.y;
 
       //If there exists selected states, delete them all!
-      if (pointer.getPicker().hasSelection())
+      if (picker.hasSelection())
       {
         //Delete all selected nodes
         controller.deleteSelectedNodes(target);

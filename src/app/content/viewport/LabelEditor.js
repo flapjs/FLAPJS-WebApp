@@ -31,7 +31,7 @@ class LabelEditor extends React.Component
       target: null,
       callback: null
     };
-    
+
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onFormat = this.onFormat.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -138,6 +138,8 @@ class LabelEditor extends React.Component
   render()
   {
     const inputController = this.props.inputController;
+    const viewport = inputController.getViewport();
+    const pointer = inputController.getPointer();
     const graphController = this.props.graphController;//This is used in closeEditor()
     const machineController = this.props.machineController;//This is also used in callbacks
     const screen = this.props.screen;
@@ -154,9 +156,9 @@ class LabelEditor extends React.Component
 
       //Assumes target is an instance of Edge
       const center = target.getCenterPoint();
-      const screenPos = getScreenPosition(screen,
-        center.x + inputController.getPointer().offsetX,
-        center.y + inputController.getPointer().offsetY);
+      const screenPos = transformViewToScreen(screen,
+        center.x + viewport.getOffsetX(),
+        center.y + viewport.getOffsetY());
       const x = screenPos.x;
       const y = screenPos.y + LABEL_OFFSET_Y + EDITOR_OFFSET_Y;
       const offsetX = -(this.parentElement.offsetWidth / 2);
@@ -219,7 +221,7 @@ class LabelEditor extends React.Component
   }
 }
 
-function getScreenPosition(svg, x, y)
+function transformViewToScreen(svg, x, y)
 {
   const ctm = svg.getScreenCTM();
   return {

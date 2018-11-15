@@ -5,7 +5,7 @@ class CreateNodeHandler
     this.controller = controller;
   }
 
-  onDblActionEvent(pointer)
+  onDblActionEvent(pointer, picker)
   {
     const controller = this.controller;
     const x = pointer.x;
@@ -22,7 +22,7 @@ class CreateNodeHandler
       controller.emit("tryCreateWhileTrash");
       return true;
     }
-    
+
     return false;
   }
 }
