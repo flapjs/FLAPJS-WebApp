@@ -1,3 +1,7 @@
+/**
+ * Represents and handles the transformations to the interactible viewport of
+ * the SVG element.
+ */
 class Viewport
 {
   constructor()

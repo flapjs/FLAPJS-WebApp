@@ -4,8 +4,6 @@ import './App.css';
 
 import NodalGraph from 'graph/NodalGraph.js';
 
-import InputAdapter from 'controller/newinput/InputAdapter.js';
-
 import GraphController from 'controller/GraphController.js';
 import InputController from 'controller/InputController.js';
 import MachineController from 'controller/MachineController.js';

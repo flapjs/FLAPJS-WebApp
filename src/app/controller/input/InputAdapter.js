@@ -1,4 +1,5 @@
 import Config from 'config.js';
+
 import InputPointer from './InputPointer.js';
 
 /**

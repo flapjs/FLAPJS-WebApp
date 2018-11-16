@@ -1,4 +1,3 @@
-
 /**
  * Used by InputAdapter to handle input event logic.
  */

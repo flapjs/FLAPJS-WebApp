@@ -1,12 +1,11 @@
 import Config from 'config.js';
 
-import InputAdapter from './newinput/InputAdapter.js';
-import Viewport from './Viewport.js';
+import InputAdapter from './input/InputAdapter.js';
+import Viewport from './input/Viewport.js';
 
 import GraphPicker from './GraphPicker.js';
 
 import InputDownHandler from './handlers/InputDownHandler.js';
-import DblActionHandler from './handlers/DblActionHandler.js';
 import ActionHandler from './handlers/ActionHandler.js';
 import DragStartHandler from './handlers/DragStartHandler.js';
 import DragStopHandler from './handlers/DragStopHandler.js';
@@ -25,8 +24,8 @@ class InputController
       .setController(this);
 
     this._graphController = null;
+
     this.inputDownHandler = null;
-    this.dblActionHandler = null;
     this.actionHandler = null;
     this.dragStartHandler = null;
     this.dragStopHandler = null;
@@ -56,7 +55,6 @@ class InputController
     this._graphController = app.graphController;
 
     this.inputDownHandler = new InputDownHandler(this, this._graphController);
-    this.dblActionHandler = new DblActionHandler(this, this._graphController);
     this.actionHandler = new ActionHandler(this, this._graphController);
     this.dragStartHandler = new DragStartHandler(this, this._graphController);
     this.dragStopHandler = new DragStopHandler(this, this._graphController);
@@ -127,7 +125,23 @@ class InputController
   //Override
   onDblActionEvent(pointer)
   {
-    return this.dblActionHandler.onEvent(pointer);
+    const graphController = this._graphController;
+    const x = pointer.x;
+    const y = pointer.y;
+
+    if (!this.isTrashMode())
+    {
+      //Create state at position
+      graphController.createNode(x, y);
+      return true;
+    }
+    else
+    {
+      graphController.emit("tryCreateWhileTrash");
+      return true;
+    }
+
+    return false;
   }
 
   //Override
