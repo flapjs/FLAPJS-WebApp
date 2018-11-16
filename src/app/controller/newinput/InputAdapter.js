@@ -27,6 +27,7 @@ class InputAdapter
     this._dblActionDelay = Config.DOUBLE_TAP_TICKS;
     this._scrollSensitivity = Config.SCROLL_SENSITIVITY;
     this._minTapRadius = Config.CURSOR_RADIUS_SQU * 16;
+    this._draggingRadiusSqu = Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
 
     this._prevEmptyAction = false;
     this._prevEmptyTime = 0;
@@ -275,6 +276,9 @@ class InputAdapter
     const viewport = controller.getViewport();
     const mouse = viewport.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
+    
+    this._dragging = false;
+    this._altaction = button == 2;
 
     if (controller.onPreActionEvent(pointer))
     {
@@ -282,8 +286,6 @@ class InputAdapter
     }
     else
     {
-      this._dragging = false;
-      this._altaction = button == 2;
       pointer.beginAction();
 
       cursor._timer = setTimeout(this.onDelayedInputDown, this._holdInputDelay);
@@ -311,7 +313,7 @@ class InputAdapter
 
     if (!this._dragging)
     {
-      if (pointer.getDistanceSquToInitial() > pointer.getDraggingRadiusSqu())
+      if (pointer.getDistanceSquToInitial() > this._draggingRadiusSqu)
       {
         this._dragging = true;
         controller.onDragStart(pointer);
@@ -396,6 +398,11 @@ class InputAdapter
   getElement()
   {
     return this._element;
+  }
+
+  isDragging()
+  {
+    return this._dragging;
   }
 }
 

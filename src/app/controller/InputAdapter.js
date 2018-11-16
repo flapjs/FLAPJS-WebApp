@@ -156,9 +156,7 @@ class InputAdapter
         this._cursor._touchend = null;
       }
 
-      let moveMode = false;
-      moveMode = this._controller.getInputScheme() ? !moveMode : moveMode;
-      if (this.doInputDown(touch.clientX, touch.clientY, moveMode/* false */))//default false
+      if (this.doInputDown(touch.clientX, touch.clientY, 0))
       {
         this._cursor._touchmove = this.onTouchStartAndMove.bind(this);
         this._cursor._touchend = this.onTouchStartAndEnd.bind(this);
@@ -310,25 +308,20 @@ class InputAdapter
     pointer.setPosition(mouse.x, mouse.y);
 
     this._dragging = false;
+    this._altaction = button == 2;
 
-    const moveMode = button == 2;
-    pointer.moveMode = this._controller.getInputScheme() ? !moveMode : moveMode;
+    this._controller.emit("preinputdown");
+
     pointer.beginAction();
-    picker.updateTarget(pointer.x, pointer.y);
-    picker.setInitialTarget(picker.target, picker.targetType);
-
-    const target = picker.initialTarget;
-    const targetType = picker.initialTargetType;
 
     //Check whether to accept the start of input...
     const event = {result: true};
-    this._controller.emit("inputdown", this._controller, pointer.x, pointer.y,
-      target, targetType, event);
+    this._controller.emit("inputdown");
 
     this._cursor._timer = setTimeout(() => {
       if (!this._dragging)
       {
-        pointer.moveMode = this._controller.getInputScheme() ? false : true;//default true
+        this._altaction = true;
       }
     }, Config.LONG_TAP_TICKS);
 
@@ -352,8 +345,7 @@ class InputAdapter
       {
         //Start drag!
         this._dragging = true;
-        this._controller.emit("dragstart", this._controller, pointer.x, pointer.y,
-            target, targetType);
+        this._controller.emit("dragstart");
       }
       else
       {
@@ -364,12 +356,10 @@ class InputAdapter
     else
     {
       //Continue to drag...
-      this._controller.emit("dragmove", this._controller, pointer.x, pointer.y,
-          target, targetType);
+      this._controller.emit("dragmove");
     }
 
-    this._controller.emit("inputmove", this._controller, pointer.x, pointer.y,
-        target, targetType);
+    this._controller.emit("inputmove");
   }
 
   doInputDownAndUp(x, y)
@@ -390,18 +380,15 @@ class InputAdapter
     if (this._dragging)
     {
       //Stop drag!
-      this._controller.emit("dragstop", this._controller, pointer.x, pointer.y,
-          target, targetType);
+      this._controller.emit("dragstop");
     }
     else
     {
       //Tap!
-      this._controller.emit("inputaction", this._controller, pointer.x, pointer.y,
-          target, targetType);
+      this._controller.emit("inputaction");
     }
 
-    this._controller.emit("inputup", this._controller, pointer.x, pointer.y,
-        target, targetType);
+    this._controller.emit("inputup");
 
     //Set target as nothing since no longer interacting
     picker.clearTarget();

@@ -172,6 +172,11 @@ class GraphPicker
     return this.targets.includes(target || this.target);
   }
 
+  isTarget(target)
+  {
+    return this.target == target;
+  }
+
   beginSelection(x, y)
   {
     const box = this.selectionBox;

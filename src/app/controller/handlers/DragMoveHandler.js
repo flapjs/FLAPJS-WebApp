@@ -19,7 +19,7 @@ class DragMoveHandler
     const targetType = picker.initialTargetType;
 
     //If is in move mode...
-    if (pointer.isMoveMode())
+    if (inputController.isMoveMode())
     {
       //Continue to move node(s)
       if (targetType === 'node')
@@ -72,6 +72,12 @@ class DragMoveHandler
     //If is NOT in move mode...
     else
     {
+      if (inputController.isNewEdge)
+      {
+        graphController.moveEndpointTo(pointer, target, x, y);
+        return true;
+      }
+
       //If the selection box is active...
       if (picker.isSelecting())
       {

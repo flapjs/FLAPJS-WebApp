@@ -25,12 +25,12 @@ class DragStartHandler
     const viewport = inputController.getViewport();
 
     //If is in move mode...
-    if (pointer.isMoveMode())
+    if (inputController.isMoveMode())
     {
       //Make sure it is not in trash mode
       if (inputController.isTrashMode())
       {
-        pointer.moveMode = false;
+        //inputController.setMoveMode(false, true);//Set to false
 
         graphController.emit("tryCreateWhileTrash");
         return false;
@@ -42,7 +42,7 @@ class DragStartHandler
       //Makes sure that placeholders are not quadratics!
       if (targetType === 'edge' && target.isPlaceholder())
       {
-        pointer.moveMode = false;
+        //inputController.setMoveMode(false, true);//Set to false
 
         //Ignore drag event...
         return false;
@@ -69,7 +69,7 @@ class DragStartHandler
         //Makes sure that placeholders are not quadratics!
         if (target.isPlaceholder())
         {
-          pointer.moveMode = false;
+          //inputController.setMoveMode(false, true);//Set to false
           return false;
         }
 
@@ -79,22 +79,6 @@ class DragStartHandler
         //this.prevQuad.y = target.quad.y;
 
         //Ready to move the edge vertex to pointer...
-        return true;
-      }
-      //Moving edge endpoint
-      else if (targetType === 'endpoint')
-      {
-        //target MUST be an instance of Edge...
-        if (!(target instanceof Edge))
-          throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Edge.");
-
-        target.copyQuadraticsTo(graphController.prevQuad);
-        //this.prevQuad.x = target.quad.x;
-        //this.prevQuad.y = target.quad.y;
-        graphController.prevEdgeTo = target.to;
-        inputController.isNewEdge = false;
-
-        //Ready to move the edge endpoint to pointer...
         return true;
       }
       //Moving initial marker
@@ -115,13 +99,6 @@ class DragStartHandler
         //Ready to move the graph to pointer...
         return true;
       }
-      else
-      {
-        //All move drag should be handled
-        throw new Error("Unknown target type \'" + targetType + "\'.");
-      }
-
-      return true;
     }
     //If is NOT in move mode...
     else
@@ -143,30 +120,19 @@ class DragStartHandler
           //this.prevQuad.y = 0;
 
           //Ready to move proxy edge to pointer...
-          pointer.moveMode = true;
+          //inputController.setMoveMode(true, true);
           return true;
         }
         else
         {
           graphController.emit("tryCreateWhileTrash");
+          return false;
         }
       }
-      else if (targetType === 'endpoint')
+      else if (targetType == 'edge')
       {
-        //This is the same as dragging with moveMode endpoint
-
-        //target MUST be an instance of Edge...
-        if (!(target instanceof Edge))
-          throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Edge.");
-
-        target.copyQuadraticsTo(graphController.prevQuad);
-        graphController.prevEdgeTo = target.to;
-        inputController.isNewEdge = false;
-
-        pointer.moveMode = true;
-
-        //Ready to move the edge endpoint to pointer...
-        return true;
+        //Do nothing.
+        return false;
       }
       //If action dragged nothing...
       else if (targetType === 'none')
@@ -175,13 +141,25 @@ class DragStartHandler
         picker.beginSelection(x, y);
         return true;
       }
-      else
-      {
-        //Other action drags are ignored, such as:
-        // - Edges
-        return false;
-      }
     }
+
+    //In either moving or not... moving endpoints
+    if (targetType === 'endpoint')
+    {
+      //target MUST be an instance of Edge...
+      if (!(target instanceof Edge))
+        throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Edge.");
+
+      target.copyQuadraticsTo(graphController.prevQuad);
+      graphController.prevEdgeTo = target.to;
+      inputController.isNewEdge = inputController.isMoveMode() ? false : true;
+
+      //Ready to move the edge endpoint to pointer...
+      return true;
+    }
+
+    //All input should be handled
+    //throw new Error("Unknown target type \'" + targetType + "\'.");
 
     return false;
   }

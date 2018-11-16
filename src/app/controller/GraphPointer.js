@@ -10,8 +10,6 @@ class GraphPointer
     this._y = 0;
     this._initialX = 0;
     this._initialY = 0;
-
-    this.moveMode = false;
   }
 
   get x()
@@ -69,11 +67,6 @@ class GraphPointer
     const dx = this._initialX - x;
     const dy = this._initialY - y;
     return dx * dx + dy * dy;
-  }
-
-  isMoveMode()
-  {
-    return this.moveMode;
   }
 
   isDragging()

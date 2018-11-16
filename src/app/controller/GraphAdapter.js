@@ -29,6 +29,7 @@ class GraphAdapter
     this.dragStopHandler = null;
     this.dragMoveHandler = null;
 
+    this.onPreInputDown = this.onPreInputDown.bind(this);
     this.onInputDown = this.onInputDown.bind(this);
     this.onInputMove = this.onInputMove.bind(this);
     this.onInputUp = this.onInputUp.bind(this);
@@ -49,6 +50,7 @@ class GraphAdapter
     this.dragStopHandler = new DragStopHandler(this.inputController, this.controller);
     this.dragMoveHandler = new DragMoveHandler(this.inputController, this.controller);
 
+    this.inputController.on("preinputdown", this.onPreInputDown);
     this.inputController.on("inputdown", this.onInputDown);
     this.inputController.on("inputmove", this.onInputMove);
     this.inputController.on("inputup", this.onInputUp);
@@ -67,6 +69,18 @@ class GraphAdapter
     this.inputController.removeEventListener("dragstart", this.onDragStart);
     this.inputController.removeEventListener("dragmove", this.onDragMove);
     this.inputController.removeEventListener("dragstop", this.onDragStop);
+  }
+
+  onPreInputDown()
+  {
+    const inputController = this.inputController;
+    const pointer = inputController.getPointer();
+    const picker = inputController.getPicker();
+
+    picker.updateTarget(pointer.x, pointer.y);
+    picker.setInitialTarget(picker.target, picker.targetType);
+
+    return false;
   }
 
   onInputDown()

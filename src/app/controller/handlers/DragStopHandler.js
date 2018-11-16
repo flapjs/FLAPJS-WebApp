@@ -24,7 +24,7 @@ class DragStopHandler
     const targetType = picker.initialTargetType;
 
     //If is in move mode...
-    if (pointer.isMoveMode())
+    if (inputController.isMoveMode() || inputController.isNewEdge)
     {
       //If stopped dragging a node...
       if (targetType === 'node')
@@ -78,7 +78,7 @@ class DragStopHandler
         return true;
       }
       //If stopped dragging a endpoint...
-      else if (targetType === 'endpoint')
+      else if (inputController.isNewEdge || targetType === 'endpoint')
       {
         //Delete it if withing trash area...
         if (inputController.isTrashMode())

@@ -33,6 +33,7 @@ class InputController
 
     this._trashMode = false;
 
+    this.registerEvent("preinputdown");
     //inputdown(input, x, y, target, targetType, event) - Called when input is starting touch/press/click
     //event.result can be changed to decide whether to continue to process future related events
     //by default, it is true
@@ -118,6 +119,16 @@ class InputController
     return this._swapMouseScheme;
   }
 
+  isMoveMode()
+  {
+    return this._swapMouseScheme ? !this.isAltAction() : this.isAltAction();
+  }
+
+  isAltAction()
+  {
+    return this._adapter._altaction;
+  }
+
   isDragging()
   {
     return this._adapter.isDragging();
@@ -127,7 +138,7 @@ class InputController
   {
     return this._pointer.isActive() ?
       //Is considered an action when NOT moving or when creating a new edge...
-      graphController.isNewEdge || !this._pointer.moveMode :
+      graphController.isNewEdge || !this.isMoveMode() :
       //If not active, just show default action...
       !this._swapMouseScheme;
   }
