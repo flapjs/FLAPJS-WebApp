@@ -3,6 +3,7 @@ import { hot } from 'react-hot-loader';
 import './App.css';
 
 import FSAModule from 'modules/fsa/FSAModule.js';
+import TestingManager from 'modules/fsa/testing/TestingManager.js';
 
 import AutoSaver from 'util/AutoSaver.js';
 import HotKeys from './HotKeys.js';
@@ -14,7 +15,6 @@ import Viewport from './viewport/Viewport.js';
 import NotificationSystem from 'notification/NotificationSystem.js';
 import Tutorial from 'tutorial/Tutorial.js';
 
-import TestingManager from 'testing/TestingManager.js';
 import EventManager from './EventManager.js';
 
 class App extends React.Component
@@ -32,13 +32,13 @@ class App extends React.Component
     this.toolbar = null;
 
     this._module = new FSAModule();
+    this.testingManager = new TestingManager();
 
     //Must be initialized (will be called in Workspace.componentDidMount)
     this.graphController = this._module.getGraphController();
     this.inputController = this._module.getInputController();
     this.machineController = this._module.getMachineController();
 
-    this.testingManager = new TestingManager();
     this.eventManager = new EventManager();
 
     this.hotKeys = new HotKeys();

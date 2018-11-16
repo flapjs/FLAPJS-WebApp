@@ -6,7 +6,7 @@ import Viewport from 'content/viewport/Viewport.js';
 
 import Downloader from 'util/Downloader.js';
 
-import TestingManager from 'testing/TestingManager.js';
+import TestingManager from 'modules/fsa/testing/TestingManager.js';
 import TestingInput from './TestingInput.js';
 
 const TEST_FILENAME = "test.txt";
