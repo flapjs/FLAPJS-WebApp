@@ -3,9 +3,6 @@ import Eventable from 'util/Eventable.js';
 
 import GraphLayout from 'graph/GraphLayout.js';
 
-import DFA from 'machine/DFA.js';
-import NFA from 'machine/NFA.js';
-
 import Node from './Node.js';
 import Edge from './Edge.js';
 import { EMPTY } from 'machine/Symbols.js';
