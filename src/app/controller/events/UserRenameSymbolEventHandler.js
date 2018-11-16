@@ -1,6 +1,7 @@
 import EventHandler from './EventHandler.js';
 
 import NodalGraph from 'graph/NodalGraph.js';
+import NodalGraphParser from 'graph/NodalGraphParser.js';
 
 class UserRenameSymbolEventHandler extends EventHandler
 {
@@ -16,7 +17,7 @@ class UserRenameSymbolEventHandler extends EventHandler
   {
     const graph = this.graphController.getGraph();
     return {
-      graphData: graph.toJSON(),
+      graphData: NodalGraphParser.toJSON(graph),
       symbol: symbol,
       prevSymbol: prevSymbol
     };
@@ -34,7 +35,7 @@ class UserRenameSymbolEventHandler extends EventHandler
     }
 
     return {
-      graphData: graph.toJSON(),
+      graphData: NodalGraphParser.toJSON(graph),
       symbol: symbol,
       prevSymbol: prevSymbol,
       targets: targetIDs
@@ -45,14 +46,14 @@ class UserRenameSymbolEventHandler extends EventHandler
   applyUndo(e)
   {
     //TODO: restore machine custom alphabet
-    NodalGraph.parseJSON(e.eventData.graphData, this.graphController.getGraph());
+    NodalGraphParser.parseJSON(e.eventData.graphData, this.graphController.getGraph());
   }
 
   //Override - this = event
   applyRedo(e)
   {
     //TODO: restore machine custom alphabet
-    NodalGraph.parseJSON(e.postData.graphData, this.graphController.getGraph());
+    NodalGraphParser.parseJSON(e.postData.graphData, this.graphController.getGraph());
   }
 }
 export default UserRenameSymbolEventHandler;

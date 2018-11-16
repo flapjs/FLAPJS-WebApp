@@ -1,6 +1,7 @@
 import EventHandler from './EventHandler.js';
 
 import NodalGraph from 'graph/NodalGraph.js';
+import NodalGraphParser from 'graph/NodalGraphParser.js';
 
 class UserDeleteSymbolEventHandler extends EventHandler
 {
@@ -16,7 +17,7 @@ class UserDeleteSymbolEventHandler extends EventHandler
   {
     const graph = this.graphController.getGraph();
     return {
-      graphData: graph.toJSON(),
+      graphData: NodalGraphParser.toJSON(graph),
       symbol: symbol
     };
   }
@@ -33,7 +34,7 @@ class UserDeleteSymbolEventHandler extends EventHandler
     }
 
     return {
-      graphData: graph.toJSON(),
+      graphData: NodalGraphParser.toJSON(graph),
       symbol: symbol,
       targets: targetIDs
     };
@@ -43,14 +44,14 @@ class UserDeleteSymbolEventHandler extends EventHandler
   applyUndo(e)
   {
     //TODO: restore machine custom alphabet
-    NodalGraph.parseJSON(e.eventData.graphData, this.graphController.getGraph());
+    NodalGraphParser.parseJSON(e.eventData.graphData, this.graphController.getGraph());
   }
 
   //Override - this = event
   applyRedo(e)
   {
     //TODO: restore machine custom alphabet
-    NodalGraph.parseJSON(e.postData.graphData, this.graphController.getGraph());
+    NodalGraphParser.parseJSON(e.postData.graphData, this.graphController.getGraph());
   }
 }
 export default UserDeleteSymbolEventHandler;

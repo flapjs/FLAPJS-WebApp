@@ -1,6 +1,7 @@
 import EventHandler from './EventHandler.js';
 
 import NodalGraph from 'graph/NodalGraph.js';
+import NodalGraphParser from 'graph/NodalGraphParser.js';
 
 class UserConvertMachineEventHandler extends EventHandler
 {
@@ -17,7 +18,7 @@ class UserConvertMachineEventHandler extends EventHandler
     const graph = this.graphController.getGraph();
 
     return {
-      graphData: graph.toJSON(),
+      graphData: NodalGraphParser.toJSON(graph),
       prevType: prevMachineType
     };
   }
@@ -28,7 +29,7 @@ class UserConvertMachineEventHandler extends EventHandler
     const graph = this.graphController.getGraph();
 
     return {
-      graphData: graph.toJSON(),
+      graphData: NodalGraphParser.toJSON(graph),
       nextType: nextMachineType
     };
   }
@@ -36,14 +37,14 @@ class UserConvertMachineEventHandler extends EventHandler
   //Override - this = event
   applyUndo(e)
   {
-    NodalGraph.parseJSON(e.eventData.graphData, this.graphController.getGraph());
+    NodalGraphParser.parseJSON(e.eventData.graphData, this.graphController.getGraph());
     this.controller.setMachineType(e.eventData.prevType);
   }
 
   //Override - this = event
   applyRedo(e)
   {
-    NodalGraph.parseJSON(e.postData.graphData, this.graphController.getGraph());
+    NodalGraphParser.parseJSON(e.postData.graphData, this.graphController.getGraph());
     this.controller.setMachineType(e.postData.nextType);
   }
 }

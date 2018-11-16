@@ -31,7 +31,7 @@ class ExportingPanel extends React.Component
     const jsonString = FlapSaver.saveToJSON(this.props.graphController, this.props.machineController);
     const machineName = this.props.machineController.getMachineName();
     //const graph = this.props.graphController.getGraph();
-    //const jsonString = JSON.stringify(graph.toJSON());
+    //const jsonString = JSON.stringify(NodalGraphParser.toJSON(graph));
     Downloader.downloadText(machineName + '.json', jsonString);
   }
 

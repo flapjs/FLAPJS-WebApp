@@ -1,4 +1,5 @@
 import NodalGraph from 'graph/NodalGraph.js';
+import NodalGraphParser from 'graph/NodalGraphParser.js';
 
 export function saveToJSON(graphController, machineController)
 {
@@ -7,7 +8,7 @@ export function saveToJSON(graphController, machineController)
   if (!graph.isEmpty())
   {
     const dst = {};
-    dst.graphData = graph.toJSON();
+    dst.graphData = NodalGraphParser.toJSON(graph);
 
     //HACK: this should be calculated elsewhere
     dst.machineData = {
@@ -36,7 +37,7 @@ export function loadFromJSON(stringData, graphController, machineController)
   {
     const data = JSON.parse(stringData);
     const graphJSON = data.graphData;
-    const newGraph = NodalGraph.parseJSON(graphJSON);
+    const newGraph = NodalGraphParser.parseJSON(graphJSON);
     graph.copyGraph(newGraph);
 
     //HACK: this should be calculated elsewhere
@@ -61,7 +62,7 @@ export function loadFromJSON(stringData, graphController, machineController)
     {
       graphController.notification.addMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
     }
-    
+
     console.error(e);
   }
 };
