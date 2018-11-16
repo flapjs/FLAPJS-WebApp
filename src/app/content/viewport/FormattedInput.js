@@ -110,7 +110,7 @@ class FormattedInput extends React.Component
     if (newValue != null)
     {
       const result = this.formatValue(newValue);
-      this.setState({value: newValue, prevValue: newValue}, callback);
+      this.setState({value: result, prevValue: result}, callback);
     }
     else
     {
