@@ -2,8 +2,8 @@ import OverviewPanel from './panels/overview/OverviewPanel.js';
 import TestingPanel from './panels/testing/TestingPanel.js';
 
 import NodalGraph from 'graph/NodalGraph.js';
-import FSABuilder from 'builder/FSABuilder.js';
 
+import FSABuilder from './builder/FSABuilder.js';
 import MachineController from './controller/MachineController.js';
 import GraphController from './controller/GraphController.js';
 import InputController from './controller/InputController.js';
