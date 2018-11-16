@@ -68,7 +68,7 @@ class FormattedInput extends React.Component
   {
     if (this.props.saveOnExit)
     {
-      this.submitValue(this.state.value);
+      this.resetValue(this.state.value || this.props.defaultValue);
     }
     else
     {
@@ -81,8 +81,8 @@ class FormattedInput extends React.Component
     if (e.key == "Enter")
     {
       const prev = this.state.prevValue;
-      const next = e.target.value;
-      this.submitValue(next, () => {
+      const next = e.target.value || this.props.defaultValue;
+      this.resetValue(next, () => {
         if (this.props.onSubmit)
         {
           this.props.onSubmit(next, prev);
@@ -105,21 +105,11 @@ class FormattedInput extends React.Component
     }
   }
 
-  submitValue(value, callback)
-  {
-    if (!value || value.length == 0)
-    {
-      value = this.props.defaultValue || "";
-    }
-
-    const result = this.formatValue(value);
-    this.setState({value: result, prevValue: result}, callback);
-  }
-
   resetValue(newValue=null, callback)
   {
     if (newValue != null)
     {
+      const result = this.formatValue(newValue);
       this.setState({value: newValue, prevValue: newValue}, callback);
     }
     else
@@ -128,6 +118,20 @@ class FormattedInput extends React.Component
         return {value: prev.prevValue};
       }, callback);
     }
+  }
+
+  setValue(value, callback)
+  {
+    if (!value || value.length == 0)
+    {
+      value = this.props.defaultValue || "";
+    }
+    else
+    {
+      value = this.formatValue(value);
+    }
+
+    this.setState({value: value}, callback);
   }
 
   appendValue(value, separator=",")

@@ -52,10 +52,12 @@ class LabelEditor extends React.Component
       };
     });
 
-    this.inputElement.resetValue(defaultText || targetEdge.label);
-    this.parentElement.focus();
+    this.inputElement.resetValue(targetEdge.label, () => {
+      if (defaultText) this.inputElement.setValue(defaultText);
 
-    this.inputElement.focus(replace);
+      this.parentElement.focus();
+      this.inputElement.focus(replace);
+    });
   }
 
   closeEditor(saveOnExit=false)
@@ -121,7 +123,7 @@ class LabelEditor extends React.Component
   onSubmit(newValue, prevValue)
   {
     //If the value has changed or the value remained empty...
-    if (newValue != prevValue)// || newValue.length <= 0)
+    if (newValue != prevValue || newValue.length <= 0)
     {
       this.closeEditor(true);
     }
