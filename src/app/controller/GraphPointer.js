@@ -12,6 +12,7 @@ class GraphPointer
     this._initialX = 0;
     this._initialY = 0;
 
+    this._altaction = false;
     this.moveMode = false;
   }
 
@@ -72,14 +73,14 @@ class GraphPointer
     return dx * dx + dy * dy;
   }
 
-  getDraggingRadiusSqu()
-  {
-    return Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
-  }
-
   isMoveMode()
   {
     return this.moveMode;
+  }
+
+  isAltAction()
+  {
+    return this._altaction;
   }
 
   isDragging()

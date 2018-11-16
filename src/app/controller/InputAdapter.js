@@ -4,9 +4,8 @@ class InputAdapter
 {
   constructor(controller)
   {
-    this.controller = controller;
-    this.workspace = null;
-
+    this._controller = controller;
+    this._element = null;
     this._cursor = {
       _mousemove: null,
       _mouseup: null,
@@ -15,7 +14,10 @@ class InputAdapter
       _timer: null
     };
 
+    //Although dragging could be in pointer, it should be here to allow
+    //the adapter to be independent of pointer.
     this._dragging = false;
+    this._altaction = false;
 
     this.prevPinchDist = 0;
     this.pinchDist = 0;
@@ -28,38 +30,43 @@ class InputAdapter
     this.onWheel = this.onWheel.bind(this);
   }
 
-  initialize(app)
+  initialize(element)
   {
     //Prepare the workspace
-    this.workspace = app.workspace.ref;
+    this._element = element;
 
     //Process mouse handlers
-    this.workspace.addEventListener('mousedown', this.onMouseDown);
-    this.workspace.addEventListener('mousemove', this.onMouseMove);
-    this.workspace.addEventListener('contextmenu', this.onContextMenu);
-    this.workspace.addEventListener('wheel', this.onWheel);
+    this._element.addEventListener('mousedown', this.onMouseDown);
+    this._element.addEventListener('mousemove', this.onMouseMove);
+    this._element.addEventListener('contextmenu', this.onContextMenu);
+    this._element.addEventListener('wheel', this.onWheel);
 
     //Process touch handlers
-    this.workspace.addEventListener('touchstart', this.onTouchStart);
-    this.workspace.addEventListener('touchmove', this.onTouchMove);
+    this._element.addEventListener('touchstart', this.onTouchStart);
+    this._element.addEventListener('touchmove', this.onTouchMove);
   }
 
   destroy()
   {
     //Process mouse handlers
-    this.workspace.removeEventListener('mousedown', this.onMouseDown);
-    this.workspace.removeEventListener('mousemove', this.onMouseMove);
-    this.workspace.removeEventListener('contextmenu', this.onContextMenu);
-    this.workspace.removeEventListener('wheel', this.onWheel);
+    this._element.removeEventListener('mousedown', this.onMouseDown);
+    this._element.removeEventListener('mousemove', this.onMouseMove);
+    this._element.removeEventListener('contextmenu', this.onContextMenu);
+    this._element.removeEventListener('wheel', this.onWheel);
 
     //Process touch handlers
-    this.workspace.removeEventListener('touchstart', this.onTouchStart);
-    this.workspace.removeEventListener('touchmove', this.onTouchMove);
+    this._element.removeEventListener('touchstart', this.onTouchStart);
+    this._element.removeEventListener('touchmove', this.onTouchMove);
   }
 
   isDragging()
   {
     return this._dragging;
+  }
+
+  getDraggingRadiusSqu()
+  {
+    return Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
   }
 
   onContextMenu(e)
@@ -75,8 +82,8 @@ class InputAdapter
     e.stopPropagation();
     e.preventDefault();
 
-    const pointer = this.controller._pointer;
-    const viewport = this.controller.getViewport();
+    const pointer = this._controller._pointer;
+    const viewport = this._controller.getViewport();
 
     this.pinchDist = e.deltaY * Config.SCROLL_SENSITIVITY;
     viewport.addScale(this.pinchDist);
@@ -84,9 +91,9 @@ class InputAdapter
 
   onTouchMove(e)
   {
-    const pointer = this.controller._pointer;
+    const pointer = this._controller._pointer;
     const touch = e.touches[0];
-    const mouse = this.controller.getViewport().transformScreenToView(touch.clientX, touch.clientY);
+    const mouse = this._controller.getViewport().transformScreenToView(touch.clientX, touch.clientY);
     pointer.setPosition(mouse.x, mouse.y);
   }
 
@@ -99,7 +106,7 @@ class InputAdapter
       e.preventDefault();
 
       document.activeElement.blur();
-      this.workspace.focus();
+      this._element.focus();
 
       if (this._cursor._touchmove)
       {
@@ -134,7 +141,7 @@ class InputAdapter
       e.preventDefault();
 
       document.activeElement.blur();
-      this.workspace.focus();
+      this._element.focus();
 
       const touch = e.changedTouches[0];
 
@@ -150,7 +157,7 @@ class InputAdapter
       }
 
       let moveMode = false;
-      moveMode = this.controller.getInputScheme() ? !moveMode : moveMode;
+      moveMode = this._controller.getInputScheme() ? !moveMode : moveMode;
       if (this.doInputDown(touch.clientX, touch.clientY, moveMode/* false */))//default false
       {
         this._cursor._touchmove = this.onTouchStartAndMove.bind(this);
@@ -174,7 +181,7 @@ class InputAdapter
       touch1.pageX - touch2.pageX,
       touch1.pageY - touch2.pageY);
 
-    this.controller.getViewport().setScale(this.pinchDist * PINCH_SENSITIVITY);
+    this._controller.getViewport().setScale(this.pinchDist * PINCH_SENSITIVITY);
 
     return false;
   }
@@ -225,10 +232,10 @@ class InputAdapter
 
   onMouseMove(e)
   {
-    const pointer = this.controller._pointer;
-    const picker = this.controller._picker;
+    const pointer = this._controller._pointer;
+    const picker = this._controller._picker;
 
-    const mouse = this.controller.getViewport().transformScreenToView(e.clientX, e.clientY);
+    const mouse = this._controller.getViewport().transformScreenToView(e.clientX, e.clientY);
     pointer.setPosition(mouse.x, mouse.y);
 
     //Update target
@@ -251,7 +258,7 @@ class InputAdapter
     e.preventDefault();
 
     document.activeElement.blur();
-    this.workspace.focus();
+    this._element.focus();
 
     if (this._cursor._mousemove)
     {
@@ -264,9 +271,10 @@ class InputAdapter
       this._cursor._mouseup = null;
     }
 
-    let moveMode = (e.button == 2) || e.ctrlKey;
-    moveMode = this.controller.getInputScheme() ? !moveMode : moveMode;
-    if (this.doInputDown(e.clientX, e.clientY, moveMode))
+
+    //HACK: To allow Mac's to use ctrl+click as right clicks
+    const button = e.ctrlKey ? 2 : e.button;
+    if (this.doInputDown(e.clientX, e.clientY, button))
     {
       this._cursor._mousemove = this.onMouseDownAndMove.bind(this);
       this._cursor._mouseup = this.onMouseDownAndUp.bind(this);
@@ -307,34 +315,35 @@ class InputAdapter
     return false;
   }
 
-  doInputDown(x, y, moveMode)
+  doInputDown(x, y, button)
   {
-    const pointer = this.controller._pointer;
-    const picker = this.controller._picker;
+    const pointer = this._controller._pointer;
+    const picker = this._controller._picker;
 
-    const mouse = this.controller.getViewport().transformScreenToView(x, y);
+    const mouse = this._controller.getViewport().transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
     this._dragging = false;
 
-    pointer.moveMode = moveMode;//If right click
+
+    const moveMode = button == 2;
+    pointer.moveMode = this._controller.getInputScheme() ? !moveMode : moveMode;
     pointer.beginAction();
     picker.updateTarget(pointer.x, pointer.y);
     picker.setInitialTarget(picker.target, picker.targetType);
-
 
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
     //Check whether to accept the start of input...
     const event = {result: true};
-    this.controller.emit("inputdown", this.controller, pointer.x, pointer.y,
+    this._controller.emit("inputdown", this._controller, pointer.x, pointer.y,
       target, targetType, event);
 
     this._cursor._timer = setTimeout(() => {
       if (!this._dragging)
       {
-        pointer.moveMode = this.controller.getInputScheme() ? false : true;//default true
+        pointer.moveMode = this._controller.getInputScheme() ? false : true;//default true
       }
     }, Config.LONG_TAP_TICKS);
 
@@ -343,10 +352,10 @@ class InputAdapter
 
   doInputDownAndMove(x, y)
   {
-    const pointer = this.controller._pointer;
-    const picker = this.controller._picker;
+    const pointer = this._controller._pointer;
+    const picker = this._controller._picker;
 
-    const mouse = this.controller.getViewport().transformScreenToView(x, y);
+    const mouse = this._controller.getViewport().transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
     const target = picker.initialTarget;
@@ -354,11 +363,11 @@ class InputAdapter
 
     if (!this._dragging)
     {
-      if (pointer.getDistanceSquToInitial() > pointer.getDraggingRadiusSqu())
+      if (pointer.getDistanceSquToInitial() > this.getDraggingRadiusSqu())
       {
         //Start drag!
         this._dragging = true;
-        this.controller.emit("dragstart", this.controller, pointer.x, pointer.y,
+        this._controller.emit("dragstart", this._controller, pointer.x, pointer.y,
             target, targetType);
       }
       else
@@ -370,11 +379,11 @@ class InputAdapter
     else
     {
       //Continue to drag...
-      this.controller.emit("dragmove", this.controller, pointer.x, pointer.y,
+      this._controller.emit("dragmove", this._controller, pointer.x, pointer.y,
           target, targetType);
     }
 
-    this.controller.emit("inputmove", this.controller, pointer.x, pointer.y,
+    this._controller.emit("inputmove", this._controller, pointer.x, pointer.y,
         target, targetType);
   }
 
@@ -386,8 +395,8 @@ class InputAdapter
       this._cursor._timer = null;
     }
 
-    const picker = this.controller._picker;
-    const pointer = this.controller._pointer;
+    const picker = this._controller._picker;
+    const pointer = this._controller._pointer;
     picker.updateTarget(pointer.x, pointer.y);
 
     const target = picker.initialTarget;
@@ -396,17 +405,17 @@ class InputAdapter
     if (this._dragging)
     {
       //Stop drag!
-      this.controller.emit("dragstop", this.controller, pointer.x, pointer.y,
+      this._controller.emit("dragstop", this._controller, pointer.x, pointer.y,
           target, targetType);
     }
     else
     {
       //Tap!
-      this.controller.emit("inputaction", this.controller, pointer.x, pointer.y,
+      this._controller.emit("inputaction", this._controller, pointer.x, pointer.y,
           target, targetType);
     }
 
-    this.controller.emit("inputup", this.controller, pointer.x, pointer.y,
+    this._controller.emit("inputup", this._controller, pointer.x, pointer.y,
         target, targetType);
 
     //Set target as nothing since no longer interacting

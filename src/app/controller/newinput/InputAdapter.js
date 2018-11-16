@@ -8,11 +8,13 @@ class InputAdapter
 {
   constructor(controller)
   {
-    this._element = null;
     this._controller = controller;
+    this._element = null;
     this._cursor = {
       _mousemove: null,
       _mouseup: null,
+      _touchmove: null,
+      _touchend: null,
       _timer: null
     };
 
@@ -34,10 +36,15 @@ class InputAdapter
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
+    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onTouchMove = this.onTouchMove.bind(this);
     this.onWheel = this.onWheel.bind(this);
 
     this.onMouseDownThenMove = this.onMouseDownThenMove.bind(this);
     this.onMouseDownThenUp = this.onMouseDownThenUp.bind(this);
+    this.onTouchStartThenMove = this.onTouchStartThenMove.bind(this);
+    this.onTouchStartThenEnd = this.onTouchStartThenEnd.bind(this);
+
     this.onDelayedInputDown = this.onDelayedInputDown.bind(this);
   }
 
@@ -50,6 +57,8 @@ class InputAdapter
 
     this._element.addEventListener('mousedown', this.onMouseDown);
     this._element.addEventListener('mousemove', this.onMouseMove);
+    this._element.addEventListener('touchstart', this.onTouchStart);
+    this._element.addEventListener('touchmove', this.onTouchMove);
     this._element.addEventListener('contextmenu', this.onContextMenu);
     this._element.addEventListener('wheel', this.onWheel);
   }
@@ -60,6 +69,8 @@ class InputAdapter
 
     this._element.removeEventListener('mousedown', this.onMouseDown);
     this._element.removeEventListener('mousemove', this.onMouseMove);
+    this._element.removeEventListener('touchstart', this.onTouchStart);
+    this._element.removeEventListener('touchmove', this.onTouchMove);
     this._element.removeEventListener('contextmenu', this.onContextMenu);
     this._element.removeEventListener('wheel', this.onWheel);
 
@@ -147,6 +158,84 @@ class InputAdapter
     }
 
     this.onInputUp(e.clientX, e.clientY);
+
+    return false;
+  }
+
+  onTouchStart(e)
+  {
+    if (e.changedTouches.length == 1)
+    {
+      //e.stopPropagation();
+      //e.preventDefault();
+
+      const cursor = this._cursor;
+
+      //Blur any element in focus
+      document.activeElement.blur();
+      this._element.focus();
+
+      //Make sure touch move is deleted, just in case
+      if (cursor._touchmove)
+      {
+        document.removeEventListener('touchmove', cursor._touchmove);
+        cursor._touchmove = null;
+      }
+      //Make sure touch end is deleted, just in case
+      if (cursor._touchend)
+      {
+        document.removeEventListener('touchend', cursor._touchend);
+        cursor._touchend = null;
+      }
+
+      const touch = e.changedTouches[0];
+      //Is this a valid touch start?
+      if (this.onInputDown(touch.clientX, touch.clientY, 0))
+      {
+        //Start touch start logic...
+        cursor._touchmove = this.onTouchStartThenMove;
+        cursor._touchend = this.onTouchStartThenEnd;
+
+        document.addEventListener('touchmove', cursor._touchmove);
+        document.addEventListener('touchend', cursor._touchend);
+      }
+
+      return false;
+    }
+  }
+
+  onTouchStartThenEnd(e)
+  {
+    //e.stopPropagation();
+    //e.preventDefault();
+    const cursor = this._cursor;
+
+    //Make sure mouse move is deleted, just in case
+    if (cursor._touchmove)
+    {
+      document.removeEventListener('touchmove', cursor._touchmove);
+      cursor._touchmove = null;
+    }
+    //Make sure mouse up is deleted, just in case
+    if (cursor._touchend)
+    {
+      document.removeEventListener('touchend', cursor._touchend);
+      cursor._touchend = null;
+    }
+
+    const touch = e.changedTouches[0];
+    this.onInputUp(touch.clientX, touch.clientY);
+
+    return false;
+  }
+
+  onTouchStartThenMove(e)
+  {
+    //e.stopPropagation();
+    //e.preventDefault();
+
+    const touch = e.changedTouches[0];
+    this.onInputMove(touch.clientX, touch.clientY);
 
     return false;
   }

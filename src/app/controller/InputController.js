@@ -15,7 +15,7 @@ class InputController
   {
     this._viewport = new Viewport().setMinScale(Config.MIN_SCALE).setMaxScale(Config.MAX_SCALE).setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
     this._adapter = new InputAdapter(this);
-    
+
     this._pointer = new GraphPointer(this._adapter);
     this._picker = new GraphPicker(graph);
 
@@ -44,9 +44,9 @@ class InputController
 
   initialize(app)
   {
-    this._viewport.setElement(app.workspace.ref);
-
-    this._adapter.initialize(app);
+    const element = app.workspace.ref;
+    this._viewport.setElement(element);
+    this._adapter.initialize(element);
   }
 
   destroy()

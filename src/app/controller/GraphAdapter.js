@@ -80,6 +80,8 @@ class GraphAdapter
 
     const pointer = this.inputController.getPointer();
     const picker = this.inputController.getPicker();
+    const target = picker.initialTarget;
+    const targetType = picker.initialTargetType;
 
     if (picker.hasSelection())
     {
@@ -104,8 +106,10 @@ class GraphAdapter
 
   onInputUp(inputController, x, y, target, targetType)
   {
-    const pointer = inputController.getPointer();
-    const picker = inputController.getPicker();
+    const pointer = this.inputController.getPointer();
+    const picker = this.inputController.getPicker();
+    const target = picker.target;
+    const targetType = picker.targetType;
 
     if (targetType === 'none')
     {
@@ -325,6 +329,11 @@ class GraphAdapter
   {
     const pointer = inputController.getPointer();
     const picker = inputController.getPicker();
+    const x = pointer.x;
+    const y = pointer.y;
+    picker.setPosition(x, y);
+    const target = picker.initialTarget;
+    const targetType = picker.initialTargetType;
 
     //If is in move mode...
     if (pointer.isMoveMode())
@@ -398,6 +407,13 @@ class GraphAdapter
   {
     const pointer = inputController.getPointer();
     const picker = inputController.getPicker();
+    const x = pointer.x;
+    const y = pointer.y;
+
+    picker.setPosition(x, y);
+    picker.updateTarget();
+    const target = picker.initialTarget;
+    const targetType = picker.initialTargetType;
 
     //If is in move mode...
     if (pointer.isMoveMode())
