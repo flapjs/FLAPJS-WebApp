@@ -110,9 +110,9 @@ class Workspace extends React.Component
         {/* Graph GUIs */}
         <g>
           {/* Initial marker and ghost */}
-          { graph.getStartNode() && (graphController.ghostInitialMarker == null ?
+          { graph.getStartNode() && (inputController.ghostInitialMarker == null ?
             <InitialMarkerRenderer node={graph.getStartNode()}/> :
-            <InitialMarkerRenderer node={graphController.ghostInitialMarker}/>) }
+            <InitialMarkerRenderer node={inputController.ghostInitialMarker}/>) }
 
           {/* Selected elements */}
           { picker.hasSelection() &&

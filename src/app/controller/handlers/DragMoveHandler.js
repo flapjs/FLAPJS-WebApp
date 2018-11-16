@@ -7,11 +7,10 @@ class DragMoveHandler
     this.graphController = graphController;
   }
 
-  onEvent()
+  onEvent(pointer)
   {
     const inputController = this.inputController;
     const graphController = this.graphController;
-    const pointer = inputController.getPointer();
     const picker = inputController.getPicker();
     const x = pointer.x;
     const y = pointer.y;

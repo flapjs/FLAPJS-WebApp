@@ -2,7 +2,7 @@ import AcceptNodeHandler from './AcceptNodeHandler.js';
 import TrashModeHandler from './TrashModeHandler.js';
 import EditLabelHandler from './EditLabelHandler.js';
 
-class DblActionEvent
+class ActionHandler
 {
   constructor(inputController, graphController)
   {
@@ -14,11 +14,10 @@ class DblActionEvent
     this.editLabelHandler = new EditLabelHandler(graphController);
   }
 
-  onEvent()
+  onEvent(pointer)
   {
     const inputController = this.inputController;
     const graphController = this.graphController;
-    const pointer = inputController.getPointer();
     const picker = inputController.getPicker();
     picker.updateTarget(pointer.x, pointer.y);
     const target = picker.initialTarget;
@@ -39,4 +38,4 @@ class DblActionEvent
   }
 }
 
-export default DblActionEvent;
+export default ActionHandler;

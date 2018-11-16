@@ -2,9 +2,9 @@ import Config from 'config.js';
 
 import Eventable from 'util/Eventable.js';
 
-import GraphPointer from './GraphPointer.js';
+import GraphAdapter from './GraphAdapter.js';
 import GraphPicker from './GraphPicker.js';
-import InputAdapter from './InputAdapter.js';
+import InputAdapter from './newinput/InputAdapter.js';
 import Viewport from './Viewport.js';
 
 const PINCH_SENSITIVITY = 1 / 300.0;
@@ -14,9 +14,9 @@ class InputController
   constructor(graph)
   {
     this._viewport = new Viewport().setMinScale(Config.MIN_SCALE).setMaxScale(Config.MAX_SCALE).setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
-    this._adapter = new InputAdapter(this);
+    this._inputAdapter = new InputAdapter();
+    this._inputController = null;
 
-    this._pointer = new GraphPointer(this._adapter);
     this._picker = new GraphPicker(graph);
 
     this.prevPointerX = 0;
@@ -56,12 +56,15 @@ class InputController
   {
     const element = app.workspace.ref;
     this._viewport.setElement(element);
-    this._adapter.initialize(element);
+
+    this._inputController = new GraphAdapter(this, app.graphController);
+    this._inputAdapter.setController(this._inputController);
+    this._inputAdapter.initialize(element, this._viewport);
   }
 
   destroy()
   {
-    this._adapter.destroy();
+    this._inputAdapter.destroy();
   }
 
   update()
@@ -69,7 +72,7 @@ class InputController
     //Smooth transition offset
     this._viewport.update();
 
-    const pointer = this._pointer;
+    const pointer = this._inputAdapter.getPointer();
     const picker = this._picker;
     const x = pointer.x;
     const y = pointer.y;
@@ -126,26 +129,21 @@ class InputController
 
   isAltAction()
   {
-    return this._adapter._altaction;
+    return this._inputAdapter.isAltAction();
   }
 
   isDragging()
   {
-    return this._adapter.isDragging();
+    return this._inputAdapter.isDragging();
   }
 
   isActionMode(graphController)
   {
-    return this._pointer.isActive() ?
+    return this._inputAdapter.getPointer().isActive() ?
       //Is considered an action when NOT moving or when creating a new edge...
       graphController.isNewEdge || !this.isMoveMode() :
       //If not active, just show default action...
       !this._swapMouseScheme;
-  }
-
-  getPointer()
-  {
-    return this._pointer;
   }
 
   getPicker()
@@ -155,7 +153,7 @@ class InputController
 
   isUsingTouch()
   {
-    return this._adapter._cursor._touchmove || this._adapter._cursor._touchend;
+    return this._inputAdapter.isUsingTouch();
   }
 }
 //Mixin Eventable

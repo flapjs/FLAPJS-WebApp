@@ -8,14 +8,12 @@ import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
 
 import GraphLayout from "graph/GraphLayout.js";
-import GraphAdapter from './GraphAdapter.js';
 
 class GraphController
 {
   constructor(graph)
   {
     this.graph = graph;
-    this._adapter = new GraphAdapter(this);
 
     this.notification = null;
     this.inputController = null;
@@ -121,13 +119,10 @@ class GraphController
     this.machineController = app.machineController;
 
     this.uploader.setMachineController(this.machineController);
-
-    this._adapter.initialize(app);
   }
 
   destroy()
   {
-    this._adapter.destroy();
   }
 
   getGraph()

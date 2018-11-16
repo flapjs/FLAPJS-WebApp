@@ -1,8 +1,3 @@
-import Config from 'config.js';
-
-import Node from 'graph/Node.js';
-import Edge from 'graph/Edge.js';
-
 import InputDownHandler from './handlers/InputDownHandler.js';
 import DblActionHandler from './handlers/DblActionHandler.js';
 import ActionHandler from './handlers/ActionHandler.js';
@@ -12,140 +7,72 @@ import DragMoveHandler from './handlers/DragMoveHandler.js';
 
 class GraphAdapter
 {
-  constructor(controller)
+  constructor(inputController, graphController)
   {
-    this.controller = controller;
-    this.inputController = null;
+    this.inputController = inputController;
+    this.graphController = graphController;
 
-    this.firstEmptyClick = false;
-    this.firstEmptyTime = 0;
-    this.firstEmptyX = 0;
-    this.firstEmptyY = 0;
-
-    this.inputDownHandler = null;
-    this.dblActionHandler = null;
-    this.actionHandler = null;
-    this.dragStartHandler = null;
-    this.dragStopHandler = null;
-    this.dragMoveHandler = null;
-
-    this.onPreInputDown = this.onPreInputDown.bind(this);
-    this.onInputDown = this.onInputDown.bind(this);
-    this.onInputMove = this.onInputMove.bind(this);
-    this.onInputUp = this.onInputUp.bind(this);
-    this.onInputAction = this.onInputAction.bind(this);
-    this.onDragStart = this.onDragStart.bind(this);
-    this.onDragMove = this.onDragMove.bind(this);
-    this.onDragStop = this.onDragStop.bind(this);
+    this.inputDownHandler = new InputDownHandler(inputController, graphController);
+    this.dblActionHandler = new DblActionHandler(inputController, graphController);
+    this.actionHandler = new ActionHandler(inputController, graphController);
+    this.dragStartHandler = new DragStartHandler(inputController, graphController);
+    this.dragStopHandler = new DragStopHandler(inputController, graphController);
+    this.dragMoveHandler = new DragMoveHandler(inputController, graphController);
   }
 
-  initialize(app)
-  {
-    this.inputController = app.inputController;
-
-    this.inputDownHandler = new InputDownHandler(this.inputController, this.controller);
-    this.dblActionHandler = new DblActionHandler(this.inputController, this.controller);
-    this.actionHandler = new ActionHandler(this.inputController, this.controller);
-    this.dragStartHandler = new DragStartHandler(this.inputController, this.controller);
-    this.dragStopHandler = new DragStopHandler(this.inputController, this.controller);
-    this.dragMoveHandler = new DragMoveHandler(this.inputController, this.controller);
-
-    this.inputController.on("preinputdown", this.onPreInputDown);
-    this.inputController.on("inputdown", this.onInputDown);
-    this.inputController.on("inputmove", this.onInputMove);
-    this.inputController.on("inputup", this.onInputUp);
-    this.inputController.on("inputaction", this.onInputAction);
-    this.inputController.on("dragstart", this.onDragStart);
-    this.inputController.on("dragmove", this.onDragMove);
-    this.inputController.on("dragstop", this.onDragStop);
-  }
-
-  destroy()
-  {
-    this.inputController.removeEventListener("inputdown", this.onInputDown);
-    this.inputController.removeEventListener("inputmove", this.onInputMove);
-    this.inputController.removeEventListener("inputup", this.onInputUp);
-    this.inputController.removeEventListener("inputaction", this.onInputAction);
-    this.inputController.removeEventListener("dragstart", this.onDragStart);
-    this.inputController.removeEventListener("dragmove", this.onDragMove);
-    this.inputController.removeEventListener("dragstop", this.onDragStop);
-  }
-
-  onPreInputDown()
+  onPreActionEvent(pointer)
   {
     const inputController = this.inputController;
-    const pointer = inputController.getPointer();
     const picker = inputController.getPicker();
 
     picker.updateTarget(pointer.x, pointer.y);
     picker.setInitialTarget(picker.target, picker.targetType);
 
-    return false;
+    return this.inputDownHandler.onEvent(pointer);
   }
 
-  onInputDown()
+  onActionEvent(pointer)
   {
-    return this.inputDownHandler.onEvent();
+    return this.actionHandler.onEvent(pointer);
   }
 
-  onInputMove()
+  onAltActionEvent(pointer)
   {
-
+    return this.onActionEvent(pointer);
   }
 
-  onInputUp()
+  onDblActionEvent(pointer)
+  {
+    return this.dblActionHandler.onEvent(pointer);
+  }
+
+  onDragStart(pointer)
+  {
+    return this.dragStartHandler.onEvent(pointer);
+  }
+
+  onDragMove(pointer)
+  {
+    this.dragMoveHandler.onEvent(pointer);
+  }
+
+  onDragStop(pointer)
+  {
+    this.dragStopHandler.onEvent(pointer);
+  }
+
+  onPostActionEvent(pointer)
   {
     const inputController = this.inputController;
-    const graphController = this.controller;
-    const pointer = inputController.getPointer();
+    const graphController = this.graphController;
     const picker = inputController.getPicker();
-    const x = pointer.x;
-    const y = pointer.y;
-    const target = picker.target;
-    const targetType = picker.targetType;
 
-    if (targetType === 'none')
-    {
-      const dx = x - this.firstEmptyX;
-      const dy = y - this.firstEmptyY;
-      //If within the time to double tap...
-      if (this.firstEmptyClick && (dx * dx + dy * dy) < (Config.CURSOR_RADIUS_SQU * 16) && (Date.now() - this.firstEmptyTime < Config.DOUBLE_TAP_TICKS))
-      {
-        this.dblActionHandler.onEvent();
-
-        this.firstEmptyClick = false;
-      }
-      else
-      {
-        //This is the first empty click, should wait for another...
-        this.firstEmptyClick = true;
-        this.firstEmptyTime = Date.now();
-        this.firstEmptyX = x;
-        this.firstEmptyY = y;
-      }
-
-      return true;
-    }
+    picker.clearTarget();
   }
 
-  onInputAction()
+  onZoomChange(pointer, zoomValue, prevValue)
   {
-    return this.actionHandler.onEvent();
-  }
-
-  onDragStart()
-  {
-    return this.dragStartHandler.onEvent();
-  }
-
-  onDragMove()
-  {
-    return this.dragMoveHandler.onEvent();
-  }
-
-  onDragStop()
-  {
-    return this.dragStopHandler.onEvent();
+    return true;
   }
 }
 

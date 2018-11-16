@@ -10,11 +10,10 @@ class DblActionEvent
     this.createNodeHandler = new CreateNodeHandler(graphController);
   }
 
-  onEvent()
+  onEvent(pointer)
   {
     const inputController = this.inputController;
     const graphController = this.graphController;
-    const pointer = inputController.getPointer();
     const picker = inputController.getPicker();
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;

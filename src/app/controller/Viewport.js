@@ -131,6 +131,11 @@ class Viewport
   {
     return this._maxScale;
   }
+
+  getElement()
+  {
+    return this._element;
+  }
 }
 
 export default Viewport;

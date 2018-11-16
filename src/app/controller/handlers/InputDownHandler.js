@@ -6,7 +6,7 @@ class InputDownHandler
     this.graphController = graphController;
   }
 
-  onEvent()
+  onEvent(pointer)
   {
     //Make sure to lose focus on label editors
     /*
@@ -19,7 +19,6 @@ class InputDownHandler
 
     const inputController = this.inputController;
     const graphController = this.graphController;
-    const pointer = inputController.getPointer();
     const picker = inputController.getPicker();
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;

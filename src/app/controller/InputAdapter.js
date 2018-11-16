@@ -231,7 +231,6 @@ class InputAdapter
   onMouseMove(e)
   {
     const pointer = this._controller._pointer;
-    const picker = this._controller._picker;
 
     const mouse = this._controller.getViewport().transformScreenToView(e.clientX, e.clientY);
     pointer.setPosition(mouse.x, mouse.y);
@@ -370,12 +369,7 @@ class InputAdapter
       this._cursor._timer = null;
     }
 
-    const picker = this._controller._picker;
     const pointer = this._controller._pointer;
-    picker.updateTarget(pointer.x, pointer.y);
-
-    const target = picker.initialTarget;
-    const targetType = picker.initialTargetType;
 
     if (this._dragging)
     {
@@ -389,9 +383,6 @@ class InputAdapter
     }
 
     this._controller.emit("inputup");
-
-    //Set target as nothing since no longer interacting
-    picker.clearTarget();
 
     pointer.endAction();
   }

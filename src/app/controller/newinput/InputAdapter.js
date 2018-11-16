@@ -1,4 +1,5 @@
 import Config from 'config.js';
+import InputPointer from './InputPointer.js';
 
 /**
  * Provides an interface for InputController to interact with a HTMLElement.
@@ -6,10 +7,11 @@ import Config from 'config.js';
  */
 class InputAdapter
 {
-  constructor(controller)
+  constructor()
   {
-    this._controller = controller;
+    this._controller = null;
     this._element = null;
+    this._viewport = null;
     this._cursor = {
       _mousemove: null,
       _mouseup: null,
@@ -17,6 +19,8 @@ class InputAdapter
       _touchend: null,
       _timer: null
     };
+
+    this._pointer = new InputPointer();
 
     //Although dragging could be in pointer, it should be here to allow
     //the adapter to be independent of pointer.
@@ -38,7 +42,6 @@ class InputAdapter
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onTouchStart = this.onTouchStart.bind(this);
-    this.onTouchMove = this.onTouchMove.bind(this);
     this.onWheel = this.onWheel.bind(this);
 
     this.onMouseDownThenMove = this.onMouseDownThenMove.bind(this);
@@ -49,12 +52,21 @@ class InputAdapter
     this.onDelayedInputDown = this.onDelayedInputDown.bind(this);
   }
 
-  initialize(element)
+  setController(controller)
   {
-    if (!(element instanceof HTMLElement)) throw new Error("Invalid HTML DOM element for InputAdapter");
+    this._controller = controller;
+    return this;
+  }
+
+  initialize(element, viewport)
+  {
+    if (!(element instanceof SVGElement)) throw new Error("Invalid SVG element for InputAdapter");
+    if (!viewport) throw new Error("Missing viewport for InputAdapter");
+    if (viewport.getElement() != element) throw new Error("Mismatched viewport for passed-in element");
     if (this._element) throw new Error("Trying to initialize an InputAdapter already initialized");
 
     this._element = element;
+    this._viewport = viewport;
 
     this._element.addEventListener('mousedown', this.onMouseDown);
     this._element.addEventListener('mousemove', this.onMouseMove);
@@ -71,7 +83,6 @@ class InputAdapter
     this._element.removeEventListener('mousedown', this.onMouseDown);
     this._element.removeEventListener('mousemove', this.onMouseMove);
     this._element.removeEventListener('touchstart', this.onTouchStart);
-    this._element.removeEventListener('touchmove', this.onTouchMove);
     this._element.removeEventListener('contextmenu', this.onContextMenu);
     this._element.removeEventListener('wheel', this.onWheel);
 
@@ -80,8 +91,10 @@ class InputAdapter
 
   onMouseDown(e)
   {
-    //e.stopPropagation();
-    //e.preventDefault();
+    if (!this._controller) return false;
+
+    e.stopPropagation();
+    e.preventDefault();
 
     const cursor = this._cursor;
 
@@ -121,18 +134,20 @@ class InputAdapter
 
   onMouseMove(e)
   {
-    const viewport = this._controller.getViewport();
-    const pointer = this._controller.getPointer();
-    const mouse = viewport.transformScreenToView(e.clientX, e.clientY);
-    pointer.setPosition(mouse.x, mouse.y);
+    if (!this._controller) return false;
+
+    const mouse = this._viewport.transformScreenToView(e.clientX, e.clientY);
+    this._pointer.setPosition(mouse.x, mouse.y);
 
     //Can update target here for hover effects...
   }
 
   onMouseDownThenMove(e)
   {
-    //e.stopPropagation();
-    //e.preventDefault();
+    if (!this._controller) return false;
+
+    e.stopPropagation();
+    e.preventDefault();
 
     this.onInputMove(e.clientX, e.clientY);
 
@@ -141,8 +156,11 @@ class InputAdapter
 
   onMouseDownThenUp(e)
   {
-    //e.stopPropagation();
-    //e.preventDefault();
+    if (!this._controller) return false;
+
+    e.stopPropagation();
+    e.preventDefault();
+
     const cursor = this._cursor;
 
     //Make sure mouse move is deleted, just in case
@@ -165,10 +183,12 @@ class InputAdapter
 
   onTouchStart(e)
   {
+    if (!this._controller) return false;
+
     if (e.changedTouches.length == 1)
     {
-      //e.stopPropagation();
-      //e.preventDefault();
+      e.stopPropagation();
+      e.preventDefault();
 
       const cursor = this._cursor;
 
@@ -207,8 +227,11 @@ class InputAdapter
 
   onTouchStartThenEnd(e)
   {
-    //e.stopPropagation();
-    //e.preventDefault();
+    if (!this._controller) return false;
+
+    e.stopPropagation();
+    e.preventDefault();
+
     const cursor = this._cursor;
 
     //Make sure mouse move is deleted, just in case
@@ -232,8 +255,10 @@ class InputAdapter
 
   onTouchStartThenMove(e)
   {
-    //e.stopPropagation();
-    //e.preventDefault();
+    if (!this._controller) return false;
+
+    e.stopPropagation();
+    e.preventDefault();
 
     const touch = e.changedTouches[0];
     this.onInputMove(touch.clientX, touch.clientY);
@@ -243,25 +268,29 @@ class InputAdapter
 
   onContextMenu(e)
   {
-    //e.stopPropagation();
-    //e.preventDefault();
+    if (!this._controller) return false;
+
+    e.stopPropagation();
+    e.preventDefault();
+
     return false;
   }
 
   onWheel(e)
   {
-    //e.stopPropagation();
-    //e.preventDefault();
+    if (!this._controller) return false;
+
+    e.stopPropagation();
+    e.preventDefault();
+
     const controller = this._controller;
-    const viewport = controller.getViewport();
-    const pointer = controller.getPointer();
     const dy = e.deltaY * this._scrollSensitivity;
-    const prev = viewport.getScale();
+    const prev = this._viewport.getScale();
     const next = prev + dy;
 
-    if (controller.onZoomChange(pointer, next, prev))
+    if (controller.onZoomChange(this._pointer, next, prev))
     {
-      viewport.setScale(next);
+      this._viewport.setScale(next);
     }
 
     return false;
@@ -269,33 +298,31 @@ class InputAdapter
 
   onInputDown(x, y, button)
   {
+    if (!this._controller) throw new Error("Missing controller for input adapter");
+
     //Setup for hold timer...
     const cursor = this._cursor;
     const controller = this._controller;
-    const pointer = controller.getPointer();
-    const viewport = controller.getViewport();
-    const mouse = viewport.transformScreenToView(x, y);
-    pointer.setPosition(mouse.x, mouse.y);
-    
+    const mouse = this._viewport.transformScreenToView(x, y);
+    this._pointer.setPosition(mouse.x, mouse.y);
+
     this._dragging = false;
     this._altaction = button == 2;
 
-    if (controller.onPreActionEvent(pointer))
+    if (!controller.onPreActionEvent(this._pointer))
     {
-      return false;
-    }
-    else
-    {
-      pointer.beginAction();
-
+      this._pointer.beginAction();
       cursor._timer = setTimeout(this.onDelayedInputDown, this._holdInputDelay);
-
-      return controller.onActionStart(pointer);
+      return true;
     }
+
+    return false;
   }
 
   onDelayedInputDown()
   {
+    if (!this._controller) throw new Error("Missing controller for input adapter");
+
     //That means the input is remaining still (like a hold)...
     if (!this._dragging)
     {
@@ -305,18 +332,18 @@ class InputAdapter
 
   onInputMove(x, y)
   {
+    if (!this._controller) throw new Error("Missing controller for input adapter");
+
     const controller = this._controller;
-    const pointer = controller.getPointer();
-    const viewport = controller.getViewport();
-    const mouse = viewport.transformScreenToView(x, y);
-    pointer.setPosition(mouse.x, mouse.y);
+    const mouse = this._viewport.transformScreenToView(x, y);
+    this._pointer.setPosition(mouse.x, mouse.y);
 
     if (!this._dragging)
     {
-      if (pointer.getDistanceSquToInitial() > this._draggingRadiusSqu)
+      if (this._pointer.getDistanceSquToInitial() > this._draggingRadiusSqu)
       {
         this._dragging = true;
-        controller.onDragStart(pointer);
+        controller.onDragStart(this._pointer);
       }
       else
       {
@@ -326,12 +353,14 @@ class InputAdapter
     else
     {
       //Continue to drag...
-      controller.onDragMove(pointer);
+      controller.onDragMove(this._pointer);
     }
   }
 
   onInputUp(x, y)
   {
+    if (!this._controller) throw new Error("Missing controller for input adapter");
+
     const cursor = this._cursor;
     const timer = cursor._timer;
     if (timer)
@@ -342,27 +371,25 @@ class InputAdapter
 
     //Update pointer target to final position
     const controller = this._controller;
-    const pointer = controller.getPointer();
-    const viewport = controller.getViewport();
-    const mouse = viewport.transformScreenToView(x, y);
-    pointer.setPosition(mouse.x, mouse.y);
+    const mouse = this._viewport.transformScreenToView(x, y);
+    this._pointer.setPosition(mouse.x, mouse.y);
 
     if (this._dragging)
     {
       //Stop dragging!
-      controller.onDragStop(pointer);
+      controller.onDragStop(this._pointer);
     }
     else
     {
       if (this._altaction)
       {
         //Alt Tap!
-        controller.onAltActionEvent(pointer);
+        controller.onAltActionEvent(this._pointer);
       }
       else
       {
         //Tap!
-        const result = controller.onActionEvent(pointer);
+        const result = controller.onActionEvent(this._pointer);
 
         //If the action was not consumed...
         if (!result)
@@ -377,7 +404,7 @@ class InputAdapter
             dt < this._dblActionDelay)
           {
             //Double tap!
-            controller.onDblActionEvent(pointer);
+            controller.onDblActionEvent(this._pointer);
 
             this._prevEmptyAction = false;
           }
@@ -392,12 +419,34 @@ class InputAdapter
       }
     }
 
-    pointer.endAction();
+    this._pointer.endAction();
+
+    controller.onPostActionEvent(this._pointer);
   }
 
-  getElement()
+  getActiveElement()
   {
     return this._element;
+  }
+
+  getActiveViewport()
+  {
+    return this._viewport;
+  }
+
+  getPointer()
+  {
+    return this._pointer;
+  }
+
+  isUsingTouch()
+  {
+    return this._cursor._touchmove || this._cursor._touchend;
+  }
+
+  isAltAction()
+  {
+    return this._altaction;
   }
 
   isDragging()
