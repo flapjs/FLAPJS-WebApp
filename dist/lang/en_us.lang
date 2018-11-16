@@ -27,6 +27,7 @@ message.help.3 = Thank you for being awesome :3
 cursor.actionmode = Action Mode
 cursor.movemode = Move Mode
 
+component.untitled.title = Untitled
 component.testing.title = Testing
 component.overview.title = Description
 component.exporting.title = Exporting

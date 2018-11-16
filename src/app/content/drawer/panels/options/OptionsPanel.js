@@ -137,5 +137,6 @@ class OptionsPanel extends React.Component
     </div>;
   }
 }
+OptionsPanel.UNLOCALIZED_NAME = "component.options.title";
 
 export default OptionsPanel;

@@ -134,5 +134,6 @@ class OverviewPanel extends React.Component
     </div>;
   }
 }
+OverviewPanel.UNLOCALIZED_NAME = "component.overview.title";
 
 export default OverviewPanel;

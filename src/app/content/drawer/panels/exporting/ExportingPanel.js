@@ -48,7 +48,8 @@ class ExportingPanel extends React.Component
   {
     const machineName = this.props.machineController.getMachineName();
 
-    const workspace = this.props.workspace;
+    const app = this.props.app;
+    const workspace = app.workspace;
     const workspaceDim = workspace.ref.viewBox.baseVal;
     const width = workspaceDim.width;
     const height = workspaceDim.height;
@@ -61,7 +62,8 @@ class ExportingPanel extends React.Component
   {
     const machineName = this.props.machineController.getMachineName();
 
-    const workspace = this.props.workspace;
+    const app = this.props.app;
+    const workspace = app.workspace;
     const workspaceDim = workspace.ref.viewBox.baseVal;
     const width = workspaceDim.width;
     const height = workspaceDim.height;
@@ -157,5 +159,6 @@ class ExportingPanel extends React.Component
     </div>;
   }
 }
+ExportingPanel.UNLOCALIZED_NAME = "component.exporting.title";
 
 export default ExportingPanel;

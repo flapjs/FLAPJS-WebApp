@@ -21,7 +21,7 @@ class TestingPanel extends React.Component
     this.uploadInput = React.createRef();
 
     this.state = {
-      errorCheckMode: this.props.tester.getErrorCheckMode()
+      errorCheckMode: this.props.app.testingManager.getErrorCheckMode()
     };
 
     this.onChangeErrorCheckMode = this.onChangeErrorCheckMode.bind(this);
@@ -51,7 +51,9 @@ class TestingPanel extends React.Component
 
   onGraphChange(g)
   {
-    this.props.tester.inputList.resetTests();
+    const app = this.props.app;
+    const tester = app.testingManager;
+    tester.inputList.resetTests();
   }
 
   onUploadFileChange(e)
@@ -59,7 +61,9 @@ class TestingPanel extends React.Component
     const files = e.target.files;
     if (files.length > 0)
     {
-      this.props.tester.inputList.importTests(files[0]);
+      const app = this.props.app;
+      const tester = app.testingManager;
+      tester.inputList.importTests(files[0]);
 
       //Makes sure you can upload the same file again.
       e.target.value = "";
@@ -72,7 +76,8 @@ class TestingPanel extends React.Component
 
     const graphController = this.props.graphController;
     const machineController = this.props.machineController;
-    const tester = this.props.tester;
+    const app = this.props.app;
+    const tester = app.testingManager;
 
     const graph = graphController.getGraph();
     const machineBuilder = machineController.getMachineBuilder();
@@ -94,7 +99,9 @@ class TestingPanel extends React.Component
   onTestsRunAll(e)
   {
     const machine = this.props.machineController.getMachineBuilder().getMachine();
-    const testList = this.props.tester.inputList;
+    const app = this.props.app;
+    const tester = app.testingManager;
+    const testList = tester.inputList;
     const length = testList.getTests().length;
     for(let i = 0; i < length; ++i)
     {
@@ -104,20 +111,25 @@ class TestingPanel extends React.Component
 
   onTestsClear(e)
   {
-    this.props.tester.inputList.clearTests();
+    const app = this.props.app;
+    const tester = app.testingManager;
+    tester.inputList.clearTests();
   }
 
   onTestsSave(e)
   {
-    Downloader.downloadText(TEST_FILENAME, this.props.tester.inputList.getTestsAsStrings().join("\n"));
+    const app = this.props.app;
+    const tester = app.testingManager;
+    Downloader.downloadText(TEST_FILENAME, tester.inputList.getTestsAsStrings().join("\n"));
   }
 
   render()
   {
-    const viewport = this.props.viewport;
-    const machineBuilder = this.props.machineController.getMachineBuilder();
-    const tester = this.props.tester;
+    const app = this.props.app;
+    const viewport = app.viewport;
+    const tester = app.testingManager;
     const testList = tester.inputList;
+    const machineBuilder = this.props.machineController.getMachineBuilder();
 
     const isTestInvalid = !machineBuilder.isValidMachine();
 
@@ -163,7 +175,7 @@ class TestingPanel extends React.Component
 
           <button className="panel-button" id="test-save"
             onClick={this.onTestsSave}
-            disabled={this.props.tester.inputList.isEmpty()}>
+            disabled={tester.inputList.isEmpty()}>
             {I18N.toString("action.testing.save")}
           </button>
         </div>
@@ -194,5 +206,6 @@ class TestingPanel extends React.Component
     </div>;
   }
 }
+TestingPanel.UNLOCALIZED_NAME = "component.testing.title";
 
 export default TestingPanel;

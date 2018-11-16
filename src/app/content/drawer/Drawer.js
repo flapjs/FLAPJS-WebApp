@@ -1,20 +1,14 @@
 import React from 'react';
 import './Drawer.css';
 
+import DrawerExpander from './DrawerExpander.js';
+
 import ExportingPanel from './panels/exporting/ExportingPanel.js';
 import OptionsPanel from './panels/options/OptionsPanel.js';
 
-import OverviewPanel from 'modules/fsa/panels/overview/OverviewPanel.js';
-import TestingPanel from 'modules/fsa/panels/testing/TestingPanel.js';
+const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
 
-import DrawerExpander from './DrawerExpander.js';
-
-const TESTING = 0;
-const OVERVIEW = 1;
-const EXPORTING = 2;
-const OPTIONS = 3;
-
-const DEFAULT_TAB_INDEX = TESTING;
+const DEFAULT_TAB_INDEX = 1;
 
 const MAX_PANEL_THRESHOLD = 50;
 const MIN_PANEL_SIZE = 300;//180
@@ -24,11 +18,6 @@ class Drawer extends React.Component
   constructor(props)
   {
     super(props);
-
-    this.overviewPanel = null;
-    this.testingPanel = null;
-    this.exportingPanel = null;
-    this.optionsPanel = null;
 
     this.state = {
       tabIndex: DEFAULT_TAB_INDEX,
@@ -64,30 +53,6 @@ class Drawer extends React.Component
     this.setState((prev, props) => {
       return { tabIndex: index };
     });
-  }
-
-  getTab(index=this.state.tabIndex)
-  {
-    if (index == OVERVIEW)
-    {
-      return this.overviewPanel;
-    }
-    else if (index == TESTING)
-    {
-      return this.testingPanel;
-    }
-    else if (index == EXPORTING)
-    {
-      return this.exportingPanel;
-    }
-    else if (index == OPTIONS)
-    {
-      return this.optionsPanel;
-    }
-    else
-    {
-      throw new Error("Unknown tab with index \'" + index + "\'");
-    }
   }
 
   onStartDraggingDrawerBorder(x, y)
@@ -226,6 +191,7 @@ class Drawer extends React.Component
   render()
   {
     const app = this.props.app;
+    const currentModule = app.getCurrentModule();
     const graphController = this.props.graphController;
     const machineController = this.props.machineController;
 
@@ -233,32 +199,51 @@ class Drawer extends React.Component
 
     return <div className={"drawer-container"} onWheel={this.onScroll}>
       <div className="drawer-content">
-        <OverviewPanel ref={ref=>this.overviewPanel=ref} style={{display: tabIndex == OVERVIEW ? "block" : "none"}} graphController={graphController} machineController={machineController}/>
-        <TestingPanel ref={ref=>this.testingPanel=ref} style={{display: tabIndex == TESTING ? "block" : "none"}} viewport={app.viewport} tester={app.testingManager} graphController={graphController} machineController={machineController}/>
-        <ExportingPanel ref={ref=>this.exportingPanel=ref} style={{display: tabIndex == EXPORTING ? "block" : "none"}} workspace={app.workspace} toolbar={this.props.toolbar} graphController={graphController} machineController={machineController}/>
-        <OptionsPanel ref={ref=>this.optionsPanel=ref} style={{display: tabIndex == OPTIONS ? "block" : "none"}}/>
+      {
+        currentModule &&
+        currentModule.getPanels().map((PanelClass, i) => {
+          const panelID = i + 1;
+          return <PanelClass key={currentModule.getName() + ":" + panelID}
+            style={{display: tabIndex == panelID ? "block" : "none"}}
+            app={app}
+            graphController={graphController}
+            machineController={machineController}/>;
+        })
+      }
+      {
+        DEFAULT_PANELS.map((PanelClass, i) => {
+          const panelID = -(i + 1);
+          return <PanelClass key={"default:" + panelID}
+            style={{display: tabIndex == panelID ? "block" : "none"}}
+            app={app}
+            graphController={graphController}
+            machineController={machineController}/>;
+        })
+      }
       </div>
       <div className="tab-list">
-
         <DrawerExpander app={app}/>
-
-        <button className={"tab-link" + (tabIndex === TESTING ? " active" : "")}
-          onClick={ev=>this.setTab(TESTING)}>
-          {I18N.toString("component.testing.title")}
-        </button>
-        <button className={"tab-link" + (tabIndex === OVERVIEW ? " active" : "")}
-          onClick={ev=>this.setTab(OVERVIEW)}>
-          {I18N.toString("component.overview.title")}
-        </button>
-        <button className={"tab-link" + (tabIndex === EXPORTING ? " active" : "")}
-          onClick={ev=>this.setTab(EXPORTING)}>
-          {I18N.toString("component.exporting.title")}
-        </button>
-        <button className={"tab-link" + (tabIndex === OPTIONS ? " active" : "")}
-          onClick={ev=>this.setTab(OPTIONS)}>
-          {I18N.toString("component.options.title")}
-        </button>
-
+        {
+          currentModule &&
+          currentModule.getPanels().map((PanelClass, i) => {
+            const panelID = i + 1;
+            return <button key={currentModule.getName() + ":" + panelID}
+              className={"tab-link" + (tabIndex === panelID ? " active" : "")}
+              onClick={ev=>this.setTab(panelID)}>
+              {I18N.toString(PanelClass.UNLOCALIZED_NAME || "component.untitled.title")}
+            </button>;
+          })
+        }
+        {
+          DEFAULT_PANELS.map((PanelClass, i) => {
+            const panelID = -(i + 1);
+            return <button key={"default:" + panelID}
+              className={"tab-link" + (tabIndex === panelID ? " active" : "")}
+              onClick={ev=>this.setTab(panelID)}>
+              {I18N.toString(PanelClass.UNLOCALIZED_NAME || "component.untitled.title")}
+            </button>;
+          })
+        }
         <div className="tab-right"></div>
       </div>
 
