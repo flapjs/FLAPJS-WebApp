@@ -3,11 +3,6 @@ import { hot } from 'react-hot-loader';
 import './App.css';
 
 import FSAModule from 'modules/fsa/FSAModule.js';
-import NodalGraph from 'graph/NodalGraph.js';
-
-import GraphController from 'controller/GraphController.js';
-import InputController from 'controller/InputController.js';
-import MachineController from 'controller/MachineController.js';
 
 import AutoSaver from 'util/AutoSaver.js';
 import HotKeys from './HotKeys.js';
@@ -19,7 +14,6 @@ import Viewport from './viewport/Viewport.js';
 import NotificationSystem from 'notification/NotificationSystem.js';
 import Tutorial from 'tutorial/Tutorial.js';
 
-import FSABuilder from 'builder/FSABuilder.js';
 import TestingManager from 'testing/TestingManager.js';
 import EventManager from './EventManager.js';
 
@@ -38,13 +32,11 @@ class App extends React.Component
     this.toolbar = null;
 
     this._module = new FSAModule();
-    this._graph = new NodalGraph();
-    this._machineBuilder = new FSABuilder(this._graph);
 
     //Must be initialized (will be called in Workspace.componentDidMount)
-    this.graphController = new GraphController(this._graph);
-    this.inputController = new InputController(this._graph);
-    this.machineController = new MachineController(this._machineBuilder);
+    this.graphController = this._module.getGraphController();
+    this.inputController = this._module.getInputController();
+    this.machineController = this._module.getMachineController();
 
     this.testingManager = new TestingManager();
     this.eventManager = new EventManager();
@@ -76,26 +68,12 @@ class App extends React.Component
       AutoSaver.initAutoSave(this.graphController, this.machineController);
     }
 
-    this._machineBuilder.initialize(this);
-
-    //Initialize the controller to graph components
-    this.inputController.initialize(this);
-    this.graphController.initialize(this);
-    this.machineController.initialize(this);
+    //Initialize the module...
+    this._module.initialize(this);
 
     this.testingManager.initialize(this);
     this.eventManager.initialize(this);
     this.hotKeys.initialize(this);
-
-    //Notify on create in delete mode
-    const tryCreateWhileTrash = () => {
-      if (this.inputController.isTrashMode())
-      {
-        this.notification.addWarningMessage(I18N.toString("message.warning.cannotmodify"),
-          "tryCreateWhileTrash", true);
-      }
-    };
-    this.graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
 
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;
@@ -113,11 +91,7 @@ class App extends React.Component
     this.hotKeys.destroy();
     this.eventManager.destroy();
 
-    this.machineController.destroy();
-    this.graphController.destroy();
-    this.inputController.destroy();
-
-    this._machineBuilder.destroy();
+    this._module.destroy(this);
 
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;

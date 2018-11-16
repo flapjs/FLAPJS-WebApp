@@ -1,7 +1,7 @@
 import Config from 'config.js';
 
-import InputAdapter from './input/InputAdapter.js';
-import Viewport from './input/Viewport.js';
+import InputAdapter from 'input/InputAdapter.js';
+import Viewport from 'input/Viewport.js';
 
 import GraphPicker from './GraphPicker.js';
 import Node from 'graph/Node.js';
@@ -174,11 +174,10 @@ class InputController
         graphController.deleteTargetEdge(target);
         return true;
       }
-      else
-      {
-        //Clicked on something you cannot delete
-        return true;
-      }
+
+      //Clicked on something you cannot delete
+      //return true;
+      return false;
     }
 
     //If not in Trash Mode, then events should pass through to here...

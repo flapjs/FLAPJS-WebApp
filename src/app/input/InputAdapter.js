@@ -347,7 +347,16 @@ class InputAdapter
       if (pointer.getDistanceSquToInitial() > this._draggingRadiusSqu)
       {
         this._dragging = true;
-        controller.onDragStart(pointer);
+        if (!controller.onDragStart(pointer))
+        {
+          this._dragging = false;
+
+          //TODO: you could NOT cancel the event and just update the target?
+          //If so, who is the initial target then?
+
+          //Stop the input event early...
+          this.cancelInputEvent();
+        }
       }
       else
       {
@@ -424,8 +433,37 @@ class InputAdapter
       }
     }
 
-    this._pointer.endInput();
+    pointer.endInput();
+    controller.onPostInputEvent(pointer);
+  }
 
+  cancelInputEvent()
+  {
+    const controller = this._controller;
+    const pointer = this._pointer;
+    const cursor = this._cursor;
+
+    //Make sure mouse move is deleted, just in case
+    if (cursor._mousemove)
+    {
+      document.removeEventListener('mousemove', cursor._mousemove);
+      cursor._mousemove = null;
+    }
+    //Make sure mouse up is deleted, just in case
+    if (cursor._mouseup)
+    {
+      document.removeEventListener('mouseup', cursor._mouseup);
+      cursor._mouseup = null;
+    }
+
+    const timer = cursor._timer;
+    if (timer)
+    {
+      clearTimeout(timer);
+      cursor._timer = null;
+    }
+
+    pointer.endInput();
     controller.onPostInputEvent(pointer);
   }
 
