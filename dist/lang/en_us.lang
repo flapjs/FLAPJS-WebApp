@@ -28,7 +28,7 @@ cursor.actionmode = Action Mode
 cursor.movemode = Move Mode
 
 component.testing.title = Testing
-component.overview.title = Definition
+component.overview.title = Description
 component.exporting.title = Exporting
 component.options.title = Options
 component.toolbar.title = Toolbar

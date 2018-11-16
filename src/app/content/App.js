@@ -2,6 +2,7 @@ import React from 'react';
 import { hot } from 'react-hot-loader';
 import './App.css';
 
+import FSAModule from 'modules/fsa/FSAModule.js';
 import NodalGraph from 'graph/NodalGraph.js';
 
 import GraphController from 'controller/GraphController.js';
@@ -36,6 +37,7 @@ class App extends React.Component
     this.notification = null;
     this.toolbar = null;
 
+    this._module = new FSAModule();
     this._graph = new NodalGraph();
     this._machineBuilder = new FSABuilder(this._graph);
 
@@ -241,6 +243,11 @@ class App extends React.Component
   shouldHideContent()
   {
     return this.state.isFullscreen && this.state.isOpen;
+  }
+
+  getCurrentModule()
+  {
+    return this._module;
   }
 
   render()

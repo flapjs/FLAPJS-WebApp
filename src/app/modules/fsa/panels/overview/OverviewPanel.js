@@ -120,7 +120,7 @@ class OverviewPanel extends React.Component
             {I18N.toString("action.overview.autolayout")}
           </button>
           <button className="panel-button" onClick={this.switchDefinition}>
-            {this.state.viewFormal ? "View Defintion" : "View Formal Definition"}
+            {this.state.viewFormal ? "Back" : "View Definition"}
           </button>
           <div className="panel-checkbox">
             <input type="checkbox" id="auto-statename"
