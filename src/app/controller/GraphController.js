@@ -271,8 +271,9 @@ class GraphController
   moveMultipleNodesTo(pointer, nodes, x, y)
   {
     //Moves all nodes by difference between initial position with passed-in x and y
-    const dx = x - pointer.getInitialX();
-    const dy = y - pointer.getInitialY();
+    const pos = pointer.getActionPosition();
+    const dx = x - pos.x;
+    const dy = y - pos.y;
     for(const node of nodes)
     {
       node.x += dx;
@@ -280,7 +281,7 @@ class GraphController
     }
 
     //Updates initial position to passed-in x and y to maintain relative position
-    pointer.setInitialPosition(x, y);
+    pointer.changeActionPosition(x, y);
   }
 
   moveEdgeTo(pointer, edge, x, y)

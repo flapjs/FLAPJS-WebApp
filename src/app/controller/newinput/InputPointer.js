@@ -8,8 +8,8 @@ class InputPointer
     this._active = false;
     this._x = 0;
     this._y = 0;
-    this._initialX = 0;
-    this._initialY = 0;
+
+    this._actionpos = {x: 0, y: 0};
   }
 
   get x() { return this._x; }
@@ -21,20 +21,25 @@ class InputPointer
     this._y = y;
   }
 
-  getInitialX() { return this._initialX; }
-  getInitialY() { return this._initialY; }
-
-  setInitialPosition(x, y)
-  {
-    this._initialX = x;
-    this._initialY = y;
-  }
-
   beginAction()
   {
     this._active = true;
-    this._initialX = this._x;
-    this._initialY = this._y;
+    this._actionpos.x = this._x;
+    this._actionpos.y = this._y;
+  }
+
+  /**
+   * Returns the position which the action began at. This is not immutable.
+   */
+  getActionPosition()
+  {
+    return this._actionpos;
+  }
+
+  changeActionPosition(x, y)
+  {
+    this._actionpos.x = x;
+    this._actionpos.y = y;
   }
 
   endAction()
@@ -49,8 +54,9 @@ class InputPointer
 
   getDistanceSquToInitial()
   {
-    const dx = this._initialX - this._x;
-    const dy = this._initialY - this._y;
+    const pos = this._actionpos;
+    const dx = pos.x - this._x;
+    const dy = pos.y - this._y;
     return dx * dx + dy * dy;
   }
 }

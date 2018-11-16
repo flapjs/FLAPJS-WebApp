@@ -124,12 +124,8 @@ class InputController
 
   isMoveMode()
   {
-    return this._swapMouseScheme ? !this.isAltAction() : this.isAltAction();
-  }
-
-  isAltAction()
-  {
-    return this._inputAdapter.isAltAction();
+    const result = this._inputAdapter.isAltAction();
+    return this._swapMouseScheme ? !result : result;
   }
 
   isDragging()
@@ -151,9 +147,9 @@ class InputController
     return this._picker;
   }
 
-  isUsingTouch()
+  getAdapter()
   {
-    return this._inputAdapter.isUsingTouch();
+    return this._inputAdapter;
   }
 }
 //Mixin Eventable
