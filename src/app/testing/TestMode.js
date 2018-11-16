@@ -39,17 +39,18 @@ class TestMode
     this.graphController = app.graphController;
     this.machineController = app.machineController;
 
-    this.graphController.getGraph().on("nodeDestroy", this.onNodeDestroy);
+    //NOTE: This is not necessary because you can edit once in stepbystep mode
+    //this.graphController.getGraph().on("nodeDestroy", this.onNodeDestroy);
   }
 
   destroy()
   {
-    this.graphController.getGraph().removeEventListener("nodeDestroy", this.onNodeDestroy);
+    //this.graphController.getGraph().removeEventListener("nodeDestroy", this.onNodeDestroy);
   }
 
   onNodeDestroy(node)
   {
-    this.targets.splice(this.targets.indexOf(node), 1);
+    //this.targets.splice(this.targets.indexOf(node), 1);
   }
 
   onStart()

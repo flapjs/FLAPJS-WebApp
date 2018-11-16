@@ -90,7 +90,7 @@ class InputController
   }
 
   //Override
-  onPreActionEvent(pointer)
+  onPreInputEvent(pointer)
   {
     const inputController = this;
     const graphController = this._graphController;
@@ -131,7 +131,7 @@ class InputController
   }
 
   //Override
-  onActionEvent(pointer)
+  onInputEvent(pointer)
   {
     const inputController = this;
     const graphController = this._graphController;
@@ -151,8 +151,8 @@ class InputController
       if (targetType === 'node')
       {
         //So that the emitted 'delete' events can use this
-        this.graphController.prevX = target.x;
-        this.graphController.prevY = target.y;
+        graphController.prevX = target.x;
+        graphController.prevY = target.y;
 
         //If there exists selected states, delete them all!
         if (picker.hasSelection())
@@ -201,13 +201,13 @@ class InputController
   }
 
   //Override
-  onAltActionEvent(pointer)
+  onAltInputEvent(pointer)
   {
-    return this.onActionEvent(pointer);
+    return this.onInputEvent(pointer);
   }
 
   //Override
-  onDblActionEvent(pointer)
+  onDblInputEvent(pointer)
   {
     const graphController = this._graphController;
     const x = pointer.x;
@@ -321,7 +321,7 @@ class InputController
     //If is NOT in move mode...
     else
     {
-      //If action dragged a node...
+      //If input dragged a node...
       if (targetType === 'node')
       {
         if (!inputController.isTrashMode())
@@ -352,7 +352,7 @@ class InputController
         //Do nothing.
         return false;
       }
-      //If action dragged nothing...
+      //If input dragged nothing...
       else if (targetType === 'none')
       {
         //Begin selection box...
@@ -462,7 +462,7 @@ class InputController
         return true;
       }
 
-      //Otherwise, don't do anything. Cause even action drags will become move drags.
+      //Otherwise, don't do anything. Cause even input drags will become move drags.
     }
   }
 
@@ -757,13 +757,14 @@ class InputController
   }
 
   //Override
-  onPostActionEvent(pointer)
+  onPostInputEvent(pointer)
   {
     const inputController = this;
     const graphController = this._graphController;
     const picker = inputController.getPicker();
 
     picker.clearTarget();
+    picker.updateTarget(pointer.x, pointer.y);
   }
 
   //Override
@@ -787,9 +788,9 @@ class InputController
     return this._trashMode;
   }
 
-  setInputScheme(shouldActionFirst)
+  setInputScheme(shouldInputFirst)
   {
-    this._swapMouseScheme = !shouldActionFirst;
+    this._swapMouseScheme = !shouldInputFirst;
   }
 
   getInputScheme()
@@ -799,7 +800,7 @@ class InputController
 
   isMoveMode()
   {
-    const result = this._inputAdapter.isAltAction();
+    const result = this._inputAdapter.isAltInput();
     return this._swapMouseScheme ? !result : result;
   }
 
@@ -811,9 +812,9 @@ class InputController
   isActionMode(graphController)
   {
     return this._inputAdapter.getPointer().isActive() ?
-      //Is considered an action when NOT moving or when creating a new edge...
+      //Is considered an input when NOT moving or when creating a new edge...
       graphController.isNewEdge || !this.isMoveMode() :
-      //If not active, just show default action...
+      //If not active, just show default input...
       !this._swapMouseScheme;
   }
 

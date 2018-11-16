@@ -4,9 +4,6 @@ import Eventable from 'util/Eventable.js';
 
 import Uploader from './Uploader.js';
 
-import Node from 'graph/Node.js';
-import Edge from 'graph/Edge.js';
-
 import GraphLayout from "graph/GraphLayout.js";
 
 class GraphController
@@ -271,7 +268,7 @@ class GraphController
   moveMultipleNodesTo(pointer, nodes, x, y)
   {
     //Moves all nodes by difference between initial position with passed-in x and y
-    const pos = pointer.getActionPosition();
+    const pos = pointer.getInputEventPosition();
     const dx = x - pos.x;
     const dy = y - pos.y;
     for(const node of nodes)
@@ -281,7 +278,7 @@ class GraphController
     }
 
     //Updates initial position to passed-in x and y to maintain relative position
-    pointer.changeActionPosition(x, y);
+    pointer.changeInputEventPosition(x, y);
   }
 
   moveEdgeTo(pointer, edge, x, y)

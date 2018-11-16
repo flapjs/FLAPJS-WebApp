@@ -26,15 +26,15 @@ class InputAdapter
     //Although dragging could be in pointer, it should be here to allow
     //the adapter to be independent of pointer.
     this._dragging = false;
-    this._altaction = false;
+    this._altinput = false;
 
     this._holdInputDelay = Config.LONG_TAP_TICKS;
-    this._dblActionDelay = Config.DOUBLE_TAP_TICKS;
+    this._dblInputDelay = Config.DOUBLE_TAP_TICKS;
     this._scrollSensitivity = Config.SCROLL_SENSITIVITY;
     this._minTapRadius = Config.CURSOR_RADIUS_SQU * 16;
     this._draggingRadiusSqu = Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
 
-    this._prevEmptyAction = false;
+    this._prevEmptyInput = false;
     this._prevEmptyTime = 0;
     this._prevEmptyX = 0;
     this._prevEmptyY = 0;
@@ -310,11 +310,11 @@ class InputAdapter
     pointer.setPosition(mouse.x, mouse.y);
 
     this._dragging = false;
-    this._altaction = button == 2;
+    this._altinput = button == 2;
 
-    if (!controller.onPreActionEvent(pointer))
+    if (!controller.onPreInputEvent(pointer))
     {
-      pointer.beginAction();
+      pointer.beginInput();
       cursor._timer = setTimeout(this.onDelayedInputDown, this._holdInputDelay);
       return true;
     }
@@ -329,7 +329,7 @@ class InputAdapter
     //That means the input is remaining still (like a hold)...
     if (!this._dragging)
     {
-      this._altaction = true;
+      this._altinput = true;
     }
   }
 
@@ -386,17 +386,17 @@ class InputAdapter
     }
     else
     {
-      if (this._altaction)
+      if (this._altinput)
       {
         //Alt Tap!
-        controller.onAltActionEvent(pointer);
+        controller.onAltInputEvent(pointer);
       }
       else
       {
         //Tap!
-        const result = controller.onActionEvent(pointer);
+        const result = controller.onInputEvent(pointer);
 
-        //If the action was not consumed...
+        //If the input was not consumed...
         if (!result)
         {
           //Try for double tap...
@@ -404,18 +404,18 @@ class InputAdapter
           const dy = y - this._prevEmptyY;
           const dist = dx * dx + dy * dy;
           const dt = Date.now() - this._prevEmptyTime;
-          if (this._prevEmptyAction &&
+          if (this._prevEmptyInput &&
             dist < this._minTapRadius &&
-            dt < this._dblActionDelay)
+            dt < this._dblInputDelay)
           {
             //Double tap!
-            controller.onDblActionEvent(pointer);
+            controller.onDblInputEvent(pointer);
 
-            this._prevEmptyAction = false;
+            this._prevEmptyInput = false;
           }
           else
           {
-            this._prevEmptyAction = true;
+            this._prevEmptyInput = true;
             this._prevEmptyTime = Date.now();
             this._prevEmptyX = x;
             this._prevEmptyY = y;
@@ -424,9 +424,9 @@ class InputAdapter
       }
     }
 
-    this._pointer.endAction();
+    this._pointer.endInput();
 
-    controller.onPostActionEvent(pointer);
+    controller.onPostInputEvent(pointer);
   }
 
   getActiveElement()
@@ -449,9 +449,9 @@ class InputAdapter
     return this._cursor._touchmove || this._cursor._touchend;
   }
 
-  isAltAction()
+  isAltInput()
   {
-    return this._altaction;
+    return this._altinput;
   }
 
   isDragging()

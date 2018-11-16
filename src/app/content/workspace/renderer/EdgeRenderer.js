@@ -2,8 +2,6 @@ import React from 'react';
 
 import Config from 'config.js';
 
-import Node from 'graph/Node.js';
-
 class EdgeRenderer extends React.Component
 {
   constructor(props)

@@ -9,7 +9,7 @@ class InputPointer
     this._x = 0;
     this._y = 0;
 
-    this._actionpos = {x: 0, y: 0};
+    this._inputpos = {x: 0, y: 0};
   }
 
   get x() { return this._x; }
@@ -21,28 +21,28 @@ class InputPointer
     this._y = y;
   }
 
-  beginAction()
+  beginInput()
   {
     this._active = true;
-    this._actionpos.x = this._x;
-    this._actionpos.y = this._y;
+    this._inputpos.x = this._x;
+    this._inputpos.y = this._y;
   }
 
   /**
-   * Returns the position which the action began at. This is not immutable.
+   * Returns the position which the input began at. This is not immutable.
    */
-  getActionPosition()
+  getInputEventPosition()
   {
-    return this._actionpos;
+    return this._inputpos;
   }
 
-  changeActionPosition(x, y)
+  changeInputEventPosition(x, y)
   {
-    this._actionpos.x = x;
-    this._actionpos.y = y;
+    this._inputpos.x = x;
+    this._inputpos.y = y;
   }
 
-  endAction()
+  endInput()
   {
     this._active = false;
   }
@@ -54,7 +54,7 @@ class InputPointer
 
   getDistanceSquToInitial()
   {
-    const pos = this._actionpos;
+    const pos = this._inputpos;
     const dx = pos.x - this._x;
     const dy = pos.y - this._y;
     return dx * dx + dy * dy;

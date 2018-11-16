@@ -16,15 +16,15 @@ class CursorMode extends React.Component
   {
     const inputController = this.props.inputController;
     const graphController = this.props.graphController;
-    const isActionMode = inputController.isActionMode(graphController);
+    const actionMode = inputController.isActionMode(graphController);
 
     return <div id="cursor-btn">
-      <IconButton id="action-mode" className={isActionMode ? "active" : ""}
+      <IconButton id="action-mode" className={actionMode ? "active" : ""}
         onClick={() => inputController.setInputScheme(true)}
         title={I18N.toString("cursor.actionmode")}>
         <CreateIcon/>
       </IconButton>
-      <IconButton id="move-mode" className={!isActionMode ? "active" : ""}
+      <IconButton id="move-mode" className={!actionMode ? "active" : ""}
         onClick={() => inputController.setInputScheme(false)}
         title={I18N.toString("cursor.movemode")}>
         <MoveIcon/>
