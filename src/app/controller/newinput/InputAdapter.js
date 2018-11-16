@@ -284,11 +284,12 @@ class InputAdapter
     e.preventDefault();
 
     const controller = this._controller;
+    const pointer = this._pointer;
     const dy = e.deltaY * this._scrollSensitivity;
     const prev = this._viewport.getScale();
     const next = prev + dy;
 
-    if (controller.onZoomChange(this._pointer, next, prev))
+    if (controller.onZoomChange(pointer, next, prev))
     {
       this._viewport.setScale(next);
     }
@@ -303,15 +304,16 @@ class InputAdapter
     //Setup for hold timer...
     const cursor = this._cursor;
     const controller = this._controller;
+    const pointer = this._pointer;
     const mouse = this._viewport.transformScreenToView(x, y);
-    this._pointer.setPosition(mouse.x, mouse.y);
+    pointer.setPosition(mouse.x, mouse.y);
 
     this._dragging = false;
     this._altaction = button == 2;
 
-    if (!controller.onPreActionEvent(this._pointer))
+    if (!controller.onPreActionEvent(pointer))
     {
-      this._pointer.beginAction();
+      pointer.beginAction();
       cursor._timer = setTimeout(this.onDelayedInputDown, this._holdInputDelay);
       return true;
     }
@@ -335,15 +337,16 @@ class InputAdapter
     if (!this._controller) throw new Error("Missing controller for input adapter");
 
     const controller = this._controller;
+    const pointer = this._pointer;
     const mouse = this._viewport.transformScreenToView(x, y);
-    this._pointer.setPosition(mouse.x, mouse.y);
+    pointer.setPosition(mouse.x, mouse.y);
 
     if (!this._dragging)
     {
-      if (this._pointer.getDistanceSquToInitial() > this._draggingRadiusSqu)
+      if (pointer.getDistanceSquToInitial() > this._draggingRadiusSqu)
       {
         this._dragging = true;
-        controller.onDragStart(this._pointer);
+        controller.onDragStart(pointer);
       }
       else
       {
@@ -353,7 +356,7 @@ class InputAdapter
     else
     {
       //Continue to drag...
-      controller.onDragMove(this._pointer);
+      controller.onDragMove(pointer);
     }
   }
 
@@ -371,25 +374,26 @@ class InputAdapter
 
     //Update pointer target to final position
     const controller = this._controller;
+    const pointer = this._pointer;
     const mouse = this._viewport.transformScreenToView(x, y);
-    this._pointer.setPosition(mouse.x, mouse.y);
+    pointer.setPosition(mouse.x, mouse.y);
 
     if (this._dragging)
     {
       //Stop dragging!
-      controller.onDragStop(this._pointer);
+      controller.onDragStop(pointer);
     }
     else
     {
       if (this._altaction)
       {
         //Alt Tap!
-        controller.onAltActionEvent(this._pointer);
+        controller.onAltActionEvent(pointer);
       }
       else
       {
         //Tap!
-        const result = controller.onActionEvent(this._pointer);
+        const result = controller.onActionEvent(pointer);
 
         //If the action was not consumed...
         if (!result)
@@ -404,7 +408,7 @@ class InputAdapter
             dt < this._dblActionDelay)
           {
             //Double tap!
-            controller.onDblActionEvent(this._pointer);
+            controller.onDblActionEvent(pointer);
 
             this._prevEmptyAction = false;
           }
@@ -421,7 +425,7 @@ class InputAdapter
 
     this._pointer.endAction();
 
-    controller.onPostActionEvent(this._pointer);
+    controller.onPostActionEvent(pointer);
   }
 
   getActiveElement()

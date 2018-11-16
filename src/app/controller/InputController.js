@@ -1,21 +1,36 @@
 import Config from 'config.js';
 
-import Eventable from 'util/Eventable.js';
-
-import GraphAdapter from './GraphAdapter.js';
-import GraphPicker from './GraphPicker.js';
 import InputAdapter from './newinput/InputAdapter.js';
 import Viewport from './Viewport.js';
 
-const PINCH_SENSITIVITY = 1 / 300.0;
+import GraphPicker from './GraphPicker.js';
+
+import InputDownHandler from './handlers/InputDownHandler.js';
+import DblActionHandler from './handlers/DblActionHandler.js';
+import ActionHandler from './handlers/ActionHandler.js';
+import DragStartHandler from './handlers/DragStartHandler.js';
+import DragStopHandler from './handlers/DragStopHandler.js';
+import DragMoveHandler from './handlers/DragMoveHandler.js';
 
 class InputController
 {
   constructor(graph)
   {
-    this._viewport = new Viewport().setMinScale(Config.MIN_SCALE).setMaxScale(Config.MAX_SCALE).setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
-    this._inputAdapter = new InputAdapter();
-    this._inputController = null;
+    this._viewport = new Viewport()
+      .setMinScale(Config.MIN_SCALE)
+      .setMaxScale(Config.MAX_SCALE)
+      .setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
+
+    this._inputAdapter = new InputAdapter()
+      .setController(this);
+
+    this._graphController = null;
+    this.inputDownHandler = null;
+    this.dblActionHandler = null;
+    this.actionHandler = null;
+    this.dragStartHandler = null;
+    this.dragStopHandler = null;
+    this.dragMoveHandler = null;
 
     this._picker = new GraphPicker(graph);
 
@@ -32,33 +47,21 @@ class InputController
     this._swapMouseScheme = true;//!navigator.platform.startsWith("Mac");
 
     this._trashMode = false;
-
-    this.registerEvent("preinputdown");
-    //inputdown(input, x, y, target, targetType, event) - Called when input is starting touch/press/click
-    //event.result can be changed to decide whether to continue to process future related events
-    //by default, it is true
-    this.registerEvent("inputdown");
-    //inputmove(input, x, y, target, targetType) - Called when input moves
-    this.registerEvent("inputmove");
-    //inputup(input, x, y, target, targetType) - Called when input is released
-    this.registerEvent("inputup");
-    //inputaction(input, x, y, target, targetType) - Called when input is completed
-    this.registerEvent("inputaction");
-    //dragstart(input, x, y, target, targetType) - Called when a drag begins
-    this.registerEvent("dragstart");
-    //dragmove(input, x, y, target, targetType) - Called when a drag moves
-    this.registerEvent("dragmove");
-    //dragstop(input, x, y, target, targetType) - Called when a drag finishes
-    this.registerEvent("dragstop");
   }
 
   initialize(app)
   {
     const element = app.workspace.ref;
     this._viewport.setElement(element);
+    this._graphController = app.graphController;
 
-    this._inputController = new GraphAdapter(this, app.graphController);
-    this._inputAdapter.setController(this._inputController);
+    this.inputDownHandler = new InputDownHandler(this, this._graphController);
+    this.dblActionHandler = new DblActionHandler(this, this._graphController);
+    this.actionHandler = new ActionHandler(this, this._graphController);
+    this.dragStartHandler = new DragStartHandler(this, this._graphController);
+    this.dragStopHandler = new DragStopHandler(this, this._graphController);
+    this.dragMoveHandler = new DragMoveHandler(this, this._graphController);
+
     this._inputAdapter.initialize(element, this._viewport);
   }
 
@@ -95,6 +98,70 @@ class InputController
         document.body.style.cursor = "auto";
       }
     }
+  }
+
+  //Override
+  onPreActionEvent(pointer)
+  {
+    const inputController = this;
+    const picker = inputController.getPicker();
+
+    picker.updateTarget(pointer.x, pointer.y);
+    picker.setInitialTarget(picker.target, picker.targetType);
+
+    return this.inputDownHandler.onEvent(pointer);
+  }
+
+  //Override
+  onActionEvent(pointer)
+  {
+    return this.actionHandler.onEvent(pointer);
+  }
+
+  //Override
+  onAltActionEvent(pointer)
+  {
+    return this.onActionEvent(pointer);
+  }
+
+  //Override
+  onDblActionEvent(pointer)
+  {
+    return this.dblActionHandler.onEvent(pointer);
+  }
+
+  //Override
+  onDragStart(pointer)
+  {
+    return this.dragStartHandler.onEvent(pointer);
+  }
+
+  //Override
+  onDragMove(pointer)
+  {
+    this.dragMoveHandler.onEvent(pointer);
+  }
+
+  //Override
+  onDragStop(pointer)
+  {
+    this.dragStopHandler.onEvent(pointer);
+  }
+
+  //Override
+  onPostActionEvent(pointer)
+  {
+    const inputController = this;
+    const graphController = this._graphController;
+    const picker = inputController.getPicker();
+
+    picker.clearTarget();
+  }
+
+  //Override
+  onZoomChange(pointer, zoomValue, prevValue)
+  {
+    return true;
   }
 
   getViewport()
@@ -152,7 +219,5 @@ class InputController
     return this._inputAdapter;
   }
 }
-//Mixin Eventable
-Eventable.mixin(InputController);
 
 export default InputController;
