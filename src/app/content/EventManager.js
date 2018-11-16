@@ -7,22 +7,22 @@ import GraphNodeInitialEvent from 'events/GraphNodeInitialEvent.js';
 import GraphNodeMoveEvent from 'events/GraphNodeMoveEvent.js';
 import GraphNodeMoveAllEvent from 'events/GraphNodeMoveAllEvent.js';
 
-import UserCreateNodeEventHandler from 'controller/events/UserCreateNodeEventHandler.js';
-import UserToggleNodeEventHandler from 'controller/events/UserToggleNodeEventHandler.js';
-import UserDeleteNodesEventHandler from 'controller/events/UserDeleteNodesEventHandler.js';
-import UserSwapNodesEventHandler from 'controller/events/UserSwapNodesEventHandler.js';
-import UserRenameNodeEventHandler from 'controller/events/UserRenameNodeEventHandler.js';
+import UserCreateNodeEventHandler from 'modules/fsa/controller/events/UserCreateNodeEventHandler.js';
+import UserToggleNodeEventHandler from 'modules/fsa/controller/events/UserToggleNodeEventHandler.js';
+import UserDeleteNodesEventHandler from 'modules/fsa/controller/events/UserDeleteNodesEventHandler.js';
+import UserSwapNodesEventHandler from 'modules/fsa/controller/events/UserSwapNodesEventHandler.js';
+import UserRenameNodeEventHandler from 'modules/fsa/controller/events/UserRenameNodeEventHandler.js';
 
-import UserCreateEdgeEventHandler from 'controller/events/UserCreateEdgeEventHandler.js';
-import UserDeleteEdgeEventHandler from 'controller/events/UserDeleteEdgeEventHandler.js';
-import UserImportGraphEventHandler from 'controller/events/UserImportGraphEventHandler.js';
-import SafeGraphEventHandler from 'controller/events/SafeGraphEventHandler.js';
+import UserCreateEdgeEventHandler from 'modules/fsa/controller/events/UserCreateEdgeEventHandler.js';
+import UserDeleteEdgeEventHandler from 'modules/fsa/controller/events/UserDeleteEdgeEventHandler.js';
+import UserImportGraphEventHandler from 'modules/fsa/controller/events/UserImportGraphEventHandler.js';
+import SafeGraphEventHandler from 'modules/fsa/controller/events/SafeGraphEventHandler.js';
 
-import UserChangeMachineEventHandler from 'controller/events/UserChangeMachineEventHandler.js';
-import UserConvertMachineEventHandler from 'controller/events/UserConvertMachineEventHandler.js';
-import UserRenameMachineEventHandler from 'controller/events/UserRenameMachineEventHandler.js';
-import UserRenameSymbolEventHandler from 'controller/events/UserRenameSymbolEventHandler.js';
-import UserDeleteSymbolEventHandler from 'controller/events/UserDeleteSymbolEventHandler.js';
+import UserChangeMachineEventHandler from 'modules/fsa/controller/events/UserChangeMachineEventHandler.js';
+import UserConvertMachineEventHandler from 'modules/fsa/controller/events/UserConvertMachineEventHandler.js';
+import UserRenameMachineEventHandler from 'modules/fsa/controller/events/UserRenameMachineEventHandler.js';
+import UserRenameSymbolEventHandler from 'modules/fsa/controller/events/UserRenameSymbolEventHandler.js';
+import UserDeleteSymbolEventHandler from 'modules/fsa/controller/events/UserDeleteSymbolEventHandler.js';
 
 class EventManager
 {
