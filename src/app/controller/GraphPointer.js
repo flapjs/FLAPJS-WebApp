@@ -1,4 +1,3 @@
-import Config from 'config.js';
 
 class GraphPointer
 {
@@ -12,7 +11,6 @@ class GraphPointer
     this._initialX = 0;
     this._initialY = 0;
 
-    this._altaction = false;
     this.moveMode = false;
   }
 
@@ -76,11 +74,6 @@ class GraphPointer
   isMoveMode()
   {
     return this.moveMode;
-  }
-
-  isAltAction()
-  {
-    return this._altaction;
   }
 
   isDragging()

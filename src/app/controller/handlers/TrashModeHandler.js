@@ -1,8 +1,8 @@
 class TrashModeHandler
 {
-  constructor(controller)
+  constructor(graphController)
   {
-    this.controller = controller;
+    this.controller = graphController;
 
     this.prevX = 0;
     this.prevY = 0;
@@ -10,8 +10,8 @@ class TrashModeHandler
 
   onActionEvent(pointer, picker)
   {
-    const controller = this.controller;
-    const inputController = controller.inputController;
+    const graphController = this.controller;
+    const inputController = graphController.inputController;
     const x = pointer.x;
     const y = pointer.y;
     const target = picker.initialTarget;
@@ -30,12 +30,12 @@ class TrashModeHandler
       if (picker.hasSelection())
       {
         //Delete all selected nodes
-        controller.deleteSelectedNodes(target);
+        graphController.deleteSelectedNodes(target);
       }
       else
       {
         //Delete a single node
-        controller.deleteTargetNode(target);
+        graphController.deleteTargetNode(target);
       }
 
       return true;
@@ -43,7 +43,7 @@ class TrashModeHandler
     else if (targetType === 'edge' || targetType === 'endpoint')
     {
       //Delete a single edge
-      controller.deleteTargetEdge(target);
+      graphController.deleteTargetEdge(target);
       return true;
     }
     else

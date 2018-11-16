@@ -1,4 +1,3 @@
-import GraphPicker from './GraphPicker.js';
 
 class InputPointer
 {

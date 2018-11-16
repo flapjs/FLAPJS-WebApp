@@ -19,6 +19,15 @@ class InputController
     this._pointer = new GraphPointer(this._adapter);
     this._picker = new GraphPicker(graph);
 
+    this.prevPointerX = 0;
+    this.prevPointerY = 0;
+
+    //Make sure this is always false when moving endpoints
+    this.isNewEdge = false;
+
+    this.ghostInitialMarker = null;
+    this.shouldDestroyPointlessEdges = Config.DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
+
     //Swap left to right clicks and vice versa on anything else but Macs
     this._swapMouseScheme = true;//!navigator.platform.startsWith("Mac");
 
@@ -58,6 +67,30 @@ class InputController
   {
     //Smooth transition offset
     this._viewport.update();
+
+    const pointer = this._pointer;
+    const picker = this._picker;
+    const x = pointer.x;
+    const y = pointer.y;
+
+    if (x != this.prevPointerX || y != this.prevPointerY)
+    {
+      this.prevPointerX = x;
+      this.prevPointerY = y;
+
+      //Update target
+      picker.updateTarget(x, y);
+
+      //HACK: to make the cursor look like a pointer when targeting
+      if (picker.hasTarget())
+      {
+        document.body.style.cursor = "pointer";
+      }
+      else
+      {
+        document.body.style.cursor = "auto";
+      }
+    }
   }
 
   getViewport()

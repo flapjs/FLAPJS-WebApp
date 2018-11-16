@@ -237,19 +237,6 @@ class InputAdapter
 
     const mouse = this._controller.getViewport().transformScreenToView(e.clientX, e.clientY);
     pointer.setPosition(mouse.x, mouse.y);
-
-    //Update target
-    picker.updateTarget(pointer.x, pointer.y);
-
-    //HACK: to make the cursor look like a pointer when targeting
-    if (picker.hasTarget())
-    {
-      document.body.style.cursor = "pointer";
-    }
-    else
-    {
-      document.body.style.cursor = "auto";
-    }
   }
 
   onMouseDown(e)
@@ -270,7 +257,6 @@ class InputAdapter
       document.removeEventListener('mouseup', this._cursor._mouseup);
       this._cursor._mouseup = null;
     }
-
 
     //HACK: To allow Mac's to use ctrl+click as right clicks
     const button = e.ctrlKey ? 2 : e.button;
@@ -324,7 +310,6 @@ class InputAdapter
     pointer.setPosition(mouse.x, mouse.y);
 
     this._dragging = false;
-
 
     const moveMode = button == 2;
     pointer.moveMode = this._controller.getInputScheme() ? !moveMode : moveMode;

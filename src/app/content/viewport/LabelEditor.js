@@ -121,7 +121,7 @@ class LabelEditor extends React.Component
   onSubmit(newValue, prevValue)
   {
     //If the value has changed or the value remained empty...
-    if (newValue != prevValue || newValue.length <= 0)
+    if (newValue != prevValue)// || newValue.length <= 0)
     {
       this.closeEditor(true);
     }
