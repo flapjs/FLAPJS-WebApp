@@ -48,6 +48,11 @@ class MachineController
 
   }
 
+  getLabelFormatter()
+  {
+    return this._module.getLabelFormatter();
+  }
+
   getMachineBuilder()
   {
     return this._module.getMachineBuilder();

@@ -35,6 +35,11 @@ class FSAModule
     return this._machineBuilder;
   }
 
+  getLabelFormatter()
+  {
+    return this._machineBuilder.formatAlphabetString.bind(this._machineBuilder);
+  }
+
   getPanels()
   {
     return PANELS;
