@@ -646,7 +646,7 @@ class InputController
 
             if (flag)
             {
-              target.setQuadVector(-Math.PI / 2, Config.NODE_RADIUS + 10);
+              target.setQuadratic(-Math.PI / 2, Config.NODE_RADIUS + 10);
             }
             else
             {
@@ -676,8 +676,8 @@ class InputController
             if ((edge.to === target.from && edge.from === target.to))
             {
               const HALFPI = Math.PI / 2;
-              target.setQuadVector(HALFPI, Config.PARALLEL_EDGE_HEIGHT);
-              edge.setQuadVector(HALFPI, Config.PARALLEL_EDGE_HEIGHT);
+              target.setQuadratic(HALFPI, Config.PARALLEL_EDGE_HEIGHT);
+              edge.setQuadratic(HALFPI, Config.PARALLEL_EDGE_HEIGHT);
             }
           }
 

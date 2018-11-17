@@ -7,6 +7,9 @@ class EdgeRenderer extends React.Component
   constructor(props)
   {
     super(props);
+
+    //Used as cache by edge to convert to coords
+    this._quadCoords = { x: 0, y: 0 };
   }
 
   render()
@@ -19,7 +22,7 @@ class EdgeRenderer extends React.Component
     const end = edge.getEndPoint();
     const center = edge.getCenterPoint();
     const label = edge.label;
-    const quadCoords = edge.getQuadCoords();
+    const quadCoords = edge.getQuadCoords(this._quadCoords);
 
     //Calculate curved lines...
     let quadLine = null;

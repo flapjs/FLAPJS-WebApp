@@ -17,9 +17,6 @@ class Edge
       radians: 0,
       length: 0
     };
-    //x = the distance in x from midpoint
-    //y = the distance in y from midpoint
-    this._quadCoords = {x: 0, y: 0};
 
     this._to = to;
     this._label = label;
@@ -32,93 +29,31 @@ class Edge
 
   copyQuadraticsFrom(src)
   {
-    if (this.graph.shouldUseQuadCoords)
-    {
-      this._quadCoords.x = src.x;
-      this._quadCoords.y = src.y;
-    }
-    else
-    {
-      this._quad.radians = src.radians;
-      this._quad.length = src.length;
-    }
+    this._quad.radians = src.radians;
+    this._quad.length = src.length;
   }
 
   copyQuadraticsTo(dst)
   {
-    if (this.graph.shouldUseQuadCoords)
-    {
-      dst.x = this._quadCoords.x;
-      dst.y = this._quadCoords.y;
-    }
-    else
-    {
-      dst.radians = this._quad.radians;
-      dst.length = this._quad.length;
-    }
-
+    dst.radians = this._quad.radians;
+    dst.length = this._quad.length;
     return dst;
+  }
+
+  setQuadratic(radians, length)
+  {
+    this._quad.radians = radians;
+    this._quad.length = length;
   }
 
   getQuadratic()
   {
-    return this.graph.shouldUseQuadCoords ? this._quadCoords : this._quad;
+    return this._quad;
   }
 
-  setQuadVector(radians, length)
+  getQuadCoords(dst={x: 0, y: 0})
   {
-    if (this.graph.shouldUseQuadCoords)
-    {
-      toQuadCoords(this, radians, length, this._quadCoords);
-    }
-    else
-    {
-      this._quad.radians = radians;
-      this._quad.length = length;
-    }
-  }
-
-  getQuadVector()
-  {
-    if (this.graph.shouldUseQuadCoords)
-    {
-      return toQuadVector(this, this._quadCoords.x, this._quadCoords.y, this._quad);
-    }
-    else
-    {
-      return this._quad;
-    }
-  }
-
-  setQuadCoords(x, y)
-  {
-    if (this.graph.shouldUseQuadCoords)
-    {
-      this._quad.x = x;
-      this._quad.y = y;
-    }
-    else
-    {
-      toQuadVector(this, x, y, this._quad);
-    }
-  }
-
-  getQuadCoords()
-  {
-    if (this.graph.shouldUseQuadCoords)
-    {
-      return this._quadCoords;
-    }
-    else
-    {
-      return toQuadCoords(this, this._quad.radians, this._quad.length, this._quadCoords);
-    }
-  }
-
-  getPlaceholderCoords()
-  {
-    if (!this.isPlaceholder()) return null;
-    return this._quadCoords;
+    return toQuadCoords(this, this._quad.radians, this._quad.length, dst);
   }
 
   getStartPoint()
@@ -129,12 +64,13 @@ class Edge
     if (!from) throw new Error("Source of edge cannot be null.");
     if (!to)
     {
-      //Make sure to use quadCoords for placeholder direction (not magnitude)
-      const placeholderCoords = this.getPlaceholderCoords();
+      //Make sure to use quad for placeholder direction (not magnitude)
+      const px = Math.cos(this._quad.radians);
+      const py = Math.sin(this._quad.radians);
       const placeholderLength = Config.NODE_RADIUS;
       return {
-        x: from.x + placeholderCoords.x * placeholderLength,
-        y: from.y + placeholderCoords.y * placeholderLength
+        x: from.x + px * placeholderLength,
+        y: from.y + py * placeholderLength
       };
     }
 
@@ -174,11 +110,12 @@ class Edge
     if (!to)
     {
       //Make sure to use quadCoords for placeholder direction (not magnitude)
-      const placeholderCoords = this.getPlaceholderCoords();
+      const px = Math.cos(this._quad.radians);
+      const py = Math.sin(this._quad.radians);
       const placeholderLength = Config.NODE_RADIUS + Config.PLACEHOLDER_LENGTH;
       return {
-        x: from.x + placeholderCoords.x * placeholderLength,
-        y: from.y + placeholderCoords.y * placeholderLength
+        x: from.x + px * placeholderLength,
+        y: from.y + py * placeholderLength
       };
     }
 
@@ -226,12 +163,13 @@ class Edge
     if (!to)
     {
       //Make sure to use quad for placeholder direction (not magnitude)
-      const placeholderCoords = this.getPlaceholderCoords();
+      const px = Math.cos(this._quad.radians);
+      const py = Math.sin(this._quad.radians);
       const placeholderLength = Config.NODE_RADIUS + Config.PLACEHOLDER_LENGTH / 2;
 
       return {
-        x: from.x + placeholderCoords.x * placeholderLength,
-        y: from.y + placeholderCoords.y * placeholderLength
+        x: from.x + px * placeholderLength,
+        y: from.y + py * placeholderLength
       };
     }
 
@@ -275,56 +213,44 @@ class Edge
     const midpointx = fromx + dx / 2;
     const midpointy = fromy + dy / 2;
 
-    if (this.graph.shouldUseQuadCoords)
+    //Remember: y-axis is flipped because canvas coord-space is -y => +y
+    //Therefore, dy needs to be flipped
+    const angleOffset = Math.atan2(-dy, dx);
+    dx = x - midpointx;
+    dy = y - midpointy;
+
+    const PI = Math.PI;
+    const PI2 = PI * 2;
+    const HALFPI = PI / 2;
+    //0 rad = to the right
+    //Also: angleOffset is the offset from midpoint angle, the orthogonal base vector
+    //This is because the from and to could be flipped, and
+    //therefore give a negative, or at least a reversed angle.
+    let radians = Math.atan2(dy, dx) + angleOffset;
+    let length = Math.sqrt(dx * dx + dy * dy);
+    if (length < 0) length = 0;
+
+    const outrad = radians - (-HALFPI);//-PI / 2 is outward
+    const inrad = radians - (HALFPI);//PI / 2 is inward
+    //TODO: Should be dependent on length
+    const maxdr = PI / 20;
+
+    if (Math.abs(length) < 8)
     {
-      dx = x - midpointx;
-      dy = y - midpointy;
-      if (Math.abs(dx) < 8) dx = 0;
-      if (Math.abs(dy) < 8) dy = 0;
-      this._quadCoords.x = dx;
-      this._quadCoords.y = dy;
+      radians = 0;
+      length = 0;
     }
-    else
+    else if (outrad < maxdr && outrad > -maxdr)
     {
-      //Remember: y-axis is flipped because canvas coord-space is -y => +y
-      //Therefore, dy needs to be flipped
-      const angleOffset = Math.atan2(-dy, dx);
-      dx = x - midpointx;
-      dy = y - midpointy;
-
-      const PI = Math.PI;
-      const PI2 = PI * 2;
-      const HALFPI = PI / 2;
-      //0 rad = to the right
-      //Also: angleOffset is the offset from midpoint angle, the orthogonal base vector
-      //This is because the from and to could be flipped, and
-      //therefore give a negative, or at least a reversed angle.
-      let radians = Math.atan2(dy, dx) + angleOffset;
-      let length = Math.sqrt(dx * dx + dy * dy);
-      if (length < 0) length = 0;
-
-      const outrad = radians - (-HALFPI);//-PI / 2 is outward
-      const inrad = radians - (HALFPI);//PI / 2 is inward
-      //TODO: Should be dependent on length
-      const maxdr = PI / 20;
-
-      if (Math.abs(length) < 8)
-      {
-        radians = 0;
-        length = 0;
-      }
-      else if (outrad < maxdr && outrad > -maxdr)
-      {
-        radians = -HALFPI;//-PI / 2 is outward
-      }
-      else if (-inrad < maxdr && -inrad > -maxdr)
-      {
-        radians = HALFPI;//PI / 2 is inward
-      }
-
-      this._quad.radians = radians;
-      this._quad.length = length;
+      radians = -HALFPI;//-PI / 2 is outward
     }
+    else if (-inrad < maxdr && -inrad > -maxdr)
+    {
+      radians = HALFPI;//PI / 2 is inward
+    }
+
+    this._quad.radians = radians;
+    this._quad.length = length;
   }
 
   setLabel(label)
@@ -352,9 +278,7 @@ class Edge
     this._to = value;
 
     //Default
-    this._quad.length = 0;
-    this._quadCoords.x = 0;
-    this._quadCoords.y = 0;//this.from.y - SELF_LOOP_HEIGHT;
+    this._quad.length = Config.PLACEHOLDER_LENGTH;
 
     if (prevDst !== this._to)
     {
@@ -401,15 +325,20 @@ class Edge
       //throw new Error("Must already be a placeholder to makePlaceholder");
     }
 
-    const dx = prev ? this.from.x - prev.x : -1;
-    const dy = prev ? this.from.y - prev.y : 0;
-    const angle = -Math.atan2(dx, dy) - (Math.PI / 2);
-
     //Quad is re-used to determine edge angle for placeholder
-    //This is used specifically for quadCoords since regular quadCoords is
+    //This is used specifically for quad since regular quad is
     //dependent on this.to != null
-    this._quadCoords.x = Math.cos(angle);
-    this._quadCoords.y = Math.sin(angle);
+    if (prev)
+    {
+      const dx = prev ? this.from.x - prev.x : -1;
+      const dy = prev ? this.from.y - prev.y : 0;
+      const angle = -Math.atan2(dx, dy) - (Math.PI / 2);
+      this._quad.radians = angle;
+    }
+    else
+    {
+      this._quad.radians = 0;
+    }
   }
 
   isPlaceholder()
@@ -424,7 +353,7 @@ class Edge
 
   isQuadratic()
   {
-    return !this.isPlaceholder() && (this.graph.shouldUseQuadCoords ? (this._quadCoords.x != 0 || this._quadCoords.y != 0) : this._quad.length != 0);
+    return !this.isPlaceholder() && this._quad.length != 0;
   }
 }
 

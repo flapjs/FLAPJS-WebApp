@@ -14,8 +14,6 @@ class NodalGraph
     this.nodes = nodes;
     this.edges = edges;
 
-    this.shouldUseQuadCoords = false;
-
     //nodeCreate(node) - Whenever a new node is created
     this.registerEvent("nodeCreate");
     //nodeDestroy(node) - Whenever a node is destroyed (even on clear)
@@ -183,8 +181,8 @@ class NodalGraph
       if ((edge.to === result.from && edge.from === result.to))
       {
         const HALFPI = Math.PI / 2;
-        result.setQuadVector(HALFPI, Config.PARALLEL_EDGE_HEIGHT);
-        edge.setQuadVector(HALFPI, Config.PARALLEL_EDGE_HEIGHT);
+        result.setQuadratic(HALFPI, Config.PARALLEL_EDGE_HEIGHT);
+        edge.setQuadratic(HALFPI, Config.PARALLEL_EDGE_HEIGHT);
       }
     }
 

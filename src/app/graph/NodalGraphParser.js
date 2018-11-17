@@ -14,7 +14,6 @@ class NodalGraphParser
 
     if (dst) dst.deleteAll();
     const result = dst || new NodalGraph(new Array(nodeLength), new Array(edgeLength));
-    result.shouldUseQuadCoords = data.shouldUseQuadCoords || false;
 
     //The initial node is always saved/loaded first!
     for(let i = 0; i < nodeLength; ++i)
@@ -138,8 +137,7 @@ class NodalGraphParser
       nodeCount: nodeLength,
       nodes: new Array(nodeLength),
       edgeCount: edgeLength,
-      edges: new Array(edgeLength),
-      shouldUseQuadCoords: graph.shouldUseQuadCoords
+      edges: new Array(edgeLength)
     };
 
     for(let i = 0; i < nodeLength; ++i)
