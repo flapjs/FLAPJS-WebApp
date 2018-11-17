@@ -115,7 +115,9 @@ class FormattedInput extends React.Component
     else
     {
       this.setState((prev, props) => {
-        return {value: prev.prevValue};
+        //NOTE: Although you CAN assume prev is valid, but what about when prev does not exist?
+        const result = this.formatValue(prev.prevValue);
+        return {value: result};
       }, callback);
     }
   }
