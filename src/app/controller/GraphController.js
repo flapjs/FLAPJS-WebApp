@@ -8,9 +8,9 @@ import GraphLayout from 'graph/GraphLayout.js';
 
 class GraphController
 {
-  constructor(graph)
+  constructor()
   {
-    this.graph = graph;
+    this._module = null;
 
     this.notification = null;
     this.inputController = null;
@@ -106,6 +106,11 @@ class GraphController
     this.registerEvent("tryCreateWhileTrash");
   }
 
+  setModule(module)
+  {
+    this._module = module;
+  }
+
   initialize(app)
   {
     this.labelEditor = app.viewport.labelEditor;
@@ -124,7 +129,7 @@ class GraphController
 
   getGraph()
   {
-    return this.graph;
+    return this._module.getGraph();
   }
 
   getLabelEditor()
@@ -139,12 +144,12 @@ class GraphController
 
   applyAutoLayout()
   {
-    this.emit("userPreChangeLayout", this.graph);
+    this.emit("userPreChangeLayout", this.getGraph());
 
-    GraphLayout.applyLayout(this.graph);
+    GraphLayout.applyLayout(this.getGraph());
 
-    this.emit("userChangeLayout", this.graph);
-    this.emit("userPostChangeLayout", this.graph);
+    this.emit("userChangeLayout", this.getGraph());
+    this.emit("userPostChangeLayout", this.getGraph());
   }
 
   renameNode(node, name)
@@ -154,17 +159,17 @@ class GraphController
 
     node.setCustomLabel(name);
 
-    this.emit("userRenameNode", this.graph, node, name, prev, isPrevCustom);
+    this.emit("userRenameNode", this.getGraph(), node, name, prev, isPrevCustom);
   }
 
   swapNodeByIndex(nodeIndex, otherNodeIndex)
   {
-    const node = this.graph.nodes[nodeIndex];
-    const other = this.graph.nodes[otherNodeIndex];
-    this.graph.nodes[otherNodeIndex] = node;
-    this.graph.nodes[nodeIndex] = other;
+    const node = this.getGraph().nodes[nodeIndex];
+    const other = this.getGraph().nodes[otherNodeIndex];
+    this.getGraph().nodes[otherNodeIndex] = node;
+    this.getGraph().nodes[nodeIndex] = other;
 
-    this.emit("userSwapNodes", this.graph, node, other);
+    this.emit("userSwapNodes", this.getGraph(), node, other);
   }
 
   createNode(x, y)
@@ -174,15 +179,15 @@ class GraphController
     if (typeof x === 'undefined') x = (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
     if (typeof y === 'undefined') y = (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
 
-    this.emit("userPreCreateNode", this.graph, newNodeLabel, x, y);
+    this.emit("userPreCreateNode", this.getGraph(), newNodeLabel, x, y);
 
-    const node = this.graph.newNode(x, y, newNodeLabel);
+    const node = this.getGraph().newNode(x, y, newNodeLabel);
     node.x = x;
     node.y = y;
 
-    this.emit("userCreateNode", this.graph, node);
+    this.emit("userCreateNode", this.getGraph(), node);
 
-    this.emit("userPostCreateNode", this.graph, node);
+    this.emit("userPostCreateNode", this.getGraph(), node);
     return node;
   }
 
@@ -194,54 +199,54 @@ class GraphController
     node.accept = result;
 
     //Emit event
-    this.emit("userToggleNode", this.graph, node, prev);
+    this.emit("userToggleNode", this.getGraph(), node, prev);
   }
 
   deleteSelectedNodes(selectedNode)
   {
     const picker = this.inputController.getPicker();
-    const selection = picker.getSelection().slice();
+    const selection = picker.getSelection(this.getGraph()).slice();
 
-    this.emit("userPreDeleteNodes", this.graph, selectedNode, selection, this.prevX, this.prevY);
+    this.emit("userPreDeleteNodes", this.getGraph(), selectedNode, selection, this.prevX, this.prevY);
 
     //Remove from graph
     for(const node of selection)
     {
-      this.graph.deleteNode(node);
+      this.getGraph().deleteNode(node);
     }
 
     //Remove from selection
     picker.clearSelection();
 
     //Emit event
-    this.emit("userDeleteNodes", this.graph, selectedNode, selection, this.prevX, this.prevY);
-    this.emit("userPostDeleteNodes", this.graph, selectedNode, selection, this.prevX, this.prevY);
+    this.emit("userDeleteNodes", this.getGraph(), selectedNode, selection, this.prevX, this.prevY);
+    this.emit("userPostDeleteNodes", this.getGraph(), selectedNode, selection, this.prevX, this.prevY);
   }
 
   deleteTargetNode(target)
   {
-    this.emit("userPreDeleteNodes", this.graph, target, [target], this.prevX, this.prevY);
+    this.emit("userPreDeleteNodes", this.getGraph(), target, [target], this.prevX, this.prevY);
 
-    this.graph.deleteNode(target);
+    this.getGraph().deleteNode(target);
 
     //Emit event
-    this.emit("userDeleteNodes", this.graph, target, [target], this.prevX, this.prevY);
-    this.emit("userPostDeleteNodes", this.graph, target, [target], this.prevX, this.prevY);
+    this.emit("userDeleteNodes", this.getGraph(), target, [target], this.prevX, this.prevY);
+    this.emit("userPostDeleteNodes", this.getGraph(), target, [target], this.prevX, this.prevY);
   }
 
   deleteTargetEdge(target)
   {
-    this.emit("userPreDeleteEdge", this.graph, target, this.prevEdgeTo, this.prevQuad);
-    this.graph.deleteEdge(target);
+    this.emit("userPreDeleteEdge", this.getGraph(), target, this.prevEdgeTo, this.prevQuad);
+    this.getGraph().deleteEdge(target);
 
     //Emit event
-    this.emit("userDeleteEdge", this.graph, target, this.prevEdgeTo, this.prevQuad);
-    this.emit("userPostDeleteEdge", this.graph, target, this.prevEdgeTo, this.prevQuad);
+    this.emit("userDeleteEdge", this.getGraph(), target, this.prevEdgeTo, this.prevQuad);
+    this.emit("userPostDeleteEdge", this.getGraph(), target, this.prevEdgeTo, this.prevQuad);
   }
 
   moveNodeTo(pointer, node, x, y)
   {
-    for(const other of this.graph.nodes)
+    for(const other of this.getGraph().nodes)
     {
       //Update node collision
       if (node === other) continue;
@@ -290,7 +295,7 @@ class GraphController
   {
     //Get ONLY node at x and y (cannot use hover target, since it is not ONLY nodes)
     const picker = this.inputController.getPicker();
-    const dst = picker.getNodeAt(x, y) || pointer;
+    const dst = picker.getNodeAt(this.getGraph(), x, y) || pointer;
     edge._to = dst;
 
     //If the cursor returns to the state after leaving it...

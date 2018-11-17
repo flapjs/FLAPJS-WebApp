@@ -9,8 +9,10 @@ import Edge from 'graph/Edge.js';
 
 class InputController
 {
-  constructor(graph)
+  constructor()
   {
+    this._module = null;
+
     //TODO: Should this live here?
     this._viewport = new Viewport()
       .setMinScale(Config.MIN_SCALE)
@@ -21,7 +23,7 @@ class InputController
     this._inputAdapter = new InputAdapter()
       .setController(this);
 
-    this._picker = new GraphPicker(graph);
+    this._picker = new GraphPicker();
 
     this._graphController = null;
 
@@ -45,6 +47,11 @@ class InputController
     this._trashMode = false;
   }
 
+  setModule(module)
+  {
+    this._module = module;
+  }
+
   initialize(app)
   {
     const element = app.workspace.ref;
@@ -64,6 +71,7 @@ class InputController
     //Smooth transition offset
     this._viewport.update();
 
+    const graph = this._graphController.getGraph();
     const pointer = this._inputAdapter.getPointer();
     const picker = this._picker;
     const x = pointer.x;
@@ -75,7 +83,7 @@ class InputController
       this.prevPointerY = y;
 
       //Update target
-      picker.updateTarget(x, y);
+      picker.updateTarget(graph, x, y);
 
       //HACK: to make the cursor look like a pointer when targeting
       if (picker.hasTarget())
@@ -95,8 +103,9 @@ class InputController
     const inputController = this;
     const graphController = this._graphController;
 
+    const graph = graphController.getGraph();
     const picker = inputController.getPicker();
-    picker.updateTarget(pointer.x, pointer.y);
+    picker.updateTarget(graph, pointer.x, pointer.y);
     picker.setInitialTarget(picker.target, picker.targetType);
 
     const target = picker.initialTarget;
@@ -139,8 +148,9 @@ class InputController
     const x = pointer.x;
     const y = pointer.y;
 
+    const graph = graphController.getGraph();
     const picker = inputController.getPicker();
-    picker.updateTarget(x, y);
+    picker.updateTarget(graph, x, y);
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
@@ -233,6 +243,7 @@ class InputController
     const inputController = this;
     const graphController = this._graphController;
 
+    const graph = graphController.getGraph();
     const picker = inputController.getPicker();
     const x = pointer.x;
     const y = pointer.y;
@@ -325,7 +336,7 @@ class InputController
       {
         if (!inputController.isTrashMode())
         {
-          const edge = graphController.graph.newEdge(target, pointer, Config.STR_TRANSITION_DEFAULT_LABEL);
+          const edge = graph.newEdge(target, pointer, Config.STR_TRANSITION_DEFAULT_LABEL);
 
           //Redirect pointer to refer to the edge as the new target
           picker.setInitialTarget(edge, "endpoint");
@@ -355,7 +366,7 @@ class InputController
       else if (targetType === 'none')
       {
         //Begin selection box...
-        picker.beginSelection(x, y);
+        picker.beginSelection(graph, x, y);
         return true;
       }
     }
@@ -386,6 +397,7 @@ class InputController
   {
     const inputController = this;
     const graphController = this._graphController;
+    const graph = graphController.getGraph();
 
     const picker = inputController.getPicker();
     const x = pointer.x;
@@ -401,7 +413,7 @@ class InputController
       {
         if (picker.hasSelection())
         {
-          graphController.moveMultipleNodesTo(pointer, picker.getSelection(), x, y);
+          graphController.moveMultipleNodesTo(pointer, picker.getSelection(graph), x, y);
         }
         else
         {
@@ -425,7 +437,7 @@ class InputController
       else if (targetType === 'initial')
       {
         //Move initial marker to node or pointer
-        const dst = picker.getNodeAt(x, y) || pointer;
+        const dst = picker.getNodeAt(graph, x, y) || pointer;
         inputController.ghostInitialMarker = dst;
         return true;
       }
@@ -471,10 +483,11 @@ class InputController
     const inputController = this;
     const graphController = this._graphController;
 
+    const graph = graphController.getGraph();
     const picker = inputController.getPicker();
     const x = pointer.x;
     const y = pointer.y;
-    picker.updateTarget(x, y);
+    picker.updateTarget(graph, x, y);
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
@@ -508,7 +521,7 @@ class InputController
           {
             const dx = x - graphController.prevX;
             const dy = y - graphController.prevY;
-            graphController.emit("nodeMoveAll", picker.getSelection(), dx, dy);
+            graphController.emit("nodeMoveAll", picker.getSelection(graph), dx, dy);
           }
           else
           {
@@ -548,7 +561,7 @@ class InputController
 
           //TODO: this is the same in graph.newEdge
           //Look for an existing edge with similar from and to
-          for(const edge of graphController.graph.edges)
+          for(const edge of graph.edges)
           {
             if (edge !== target && edge.from === target.from && picker.isTarget(edge.to))
             {
@@ -562,7 +575,7 @@ class InputController
               graphController.openLabelEditor(edge, x, y, result.join(","), false);
 
               //Delete the merged label
-              graphController.graph.deleteEdge(target);
+              graph.deleteEdge(target);
               return true;
             }
           }
@@ -607,7 +620,7 @@ class InputController
               vertical = true;
             }
 
-            for(const node of graphController.graph.nodes)
+            for(const node of graph.nodes)
             {
               if(node === target.from || node === target.to) continue;
 
@@ -647,7 +660,7 @@ class InputController
             //inputController.isNewEdge = false;
 
             //Emit event
-            graphController.emit("userCreateEdge", graphController.graph, target);
+            graphController.emit("userCreateEdge", graph, target);
           }
           else if (graphController.prevEdgeTo !== null)
           {
@@ -657,7 +670,7 @@ class InputController
 
           //TODO: this is the same in graph.newEdge
           //Bend away if there is another edge not bent with the same src/dst
-          for(const edge of graphController.graph.edges)
+          for(const edge of graph.edges)
           {
             if (edge.isQuadratic()) continue;
             if ((edge.to === target.from && edge.from === target.to))
@@ -674,7 +687,7 @@ class InputController
             if (inputController.isNewEdge)
             {
               graphController.openLabelEditor(target, x, y, null, true, () => {
-                graphController.emit("userPostCreateEdge", graphController.graph, target);
+                graphController.emit("userPostCreateEdge", graph, target);
               });
             }
             else
@@ -694,7 +707,7 @@ class InputController
           //Destroy any edge that no longer have a destination
           if (inputController.shouldDestroyPointlessEdges)
           {
-            graphController.graph.deleteEdge(target);
+            graph.deleteEdge(target);
             return true;
           }
           //Keep edges as placeholders (used in DFA's)
@@ -716,10 +729,10 @@ class InputController
         //If valid initial object to mark...
         if (inputController.ghostInitialMarker instanceof Node)
         {
-          const prevInitial = graphController.graph.getStartNode();
+          const prevInitial = graph.getStartNode();
 
           //Set the new object as the initial node
-          graphController.graph.setStartNode(inputController.ghostInitialMarker);
+          graph.setStartNode(inputController.ghostInitialMarker);
 
           //Emit event
           graphController.emit("nodeInitial", inputController.ghostInitialMarker, prevInitial);
@@ -747,7 +760,7 @@ class InputController
       if (picker.isSelecting())
       {
         //Stop selecting stuff, fool.
-        picker.endSelection(x, y);
+        picker.endSelection(graph, x, y);
         return true;
       }
     }
@@ -760,10 +773,11 @@ class InputController
   {
     const inputController = this;
     const graphController = this._graphController;
+    const graph = graphController.getGraph();
     const picker = inputController.getPicker();
 
     picker.clearTarget();
-    picker.updateTarget(pointer.x, pointer.y);
+    picker.updateTarget(graph, pointer.x, pointer.y);
   }
 
   //Override

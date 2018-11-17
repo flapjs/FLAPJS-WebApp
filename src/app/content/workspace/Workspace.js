@@ -116,7 +116,7 @@ class Workspace extends React.Component
 
           {/* Selected elements */}
           { picker.hasSelection() &&
-            picker.getSelection().map((e, i) =>
+            picker.getSelection(graph).map((e, i) =>
               <HighlightRenderer key={e.id} className={inputController.isTrashMode() ? "highlight-error" : "highlight-select"} target={e} type="node"/>) }
 
           {/* Selection box */}

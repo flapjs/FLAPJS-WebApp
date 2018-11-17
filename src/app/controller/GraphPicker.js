@@ -2,9 +2,8 @@ import Config from 'config.js';
 
 class GraphPicker
 {
-  constructor(graph)
+  constructor()
   {
-    this.graph = graph;
     this.selectionBox = {
       fromX: 0, fromY: 0,
       toX: 0, toY: 0,
@@ -25,24 +24,24 @@ class GraphPicker
     this.initialTargetType = type;
   }
 
-  updateTarget(x, y)
+  updateTarget(graph, x, y)
   {
-    if (this.target = this.getNodeByInitialMarkerAt(x, y))
+    if (this.target = this.getNodeByInitialMarkerAt(graph, x, y))
     {
       //Clicked on initial marker
       this.targetType = "initial";
     }
-    else if (this.target = this.getEdgeByEndPointAt(x, y))
+    else if (this.target = this.getEdgeByEndPointAt(graph, x, y))
     {
       //Clicked on endpoint
       this.targetType = "endpoint";
     }
-    else if (this.target = this.getNodeAt(x, y))
+    else if (this.target = this.getNodeAt(graph, x, y))
     {
       //Clicked on node
       this.targetType = "node";
     }
-    else if (this.target = this.getEdgeAt(x, y))
+    else if (this.target = this.getEdgeAt(graph, x, y))
     {
       //Clicked on edge
       this.targetType = "edge";
@@ -68,17 +67,10 @@ class GraphPicker
     return this.target != null;
   }
 
-  getNodeAt(x, y)
+  getNodeAt(graph, x, y)
   {
-    //If no arguments, then use pointer position
-    if (arguments.length == 0)
-    {
-      x = this.x;
-      y = this.y;
-    }
-
     //Search graph
-    for(const node of this.graph.nodes)
+    for(const node of graph.nodes)
     {
       const dx = x - node.x;
       const dy = y - node.y;
@@ -90,9 +82,9 @@ class GraphPicker
     return null;
   }
 
-  getNodeByInitialMarkerAt(x, y)
+  getNodeByInitialMarkerAt(graph, x, y)
   {
-    const startNode = this.graph.getStartNode();
+    const startNode = graph.getStartNode();
     if (!startNode) return null;
 
     const dx = x - (startNode.x + Config.INITIAL_MARKER_OFFSET_X);
@@ -105,10 +97,10 @@ class GraphPicker
     return null;
   }
 
-  getEdgeAt(x, y)
+  getEdgeAt(graph, x, y)
   {
     //Search graph
-    for(const edge of this.graph.edges)
+    for(const edge of graph.edges)
     {
       const dx = x - edge.x;
       const dy = y - edge.y;
@@ -120,10 +112,10 @@ class GraphPicker
     return null;
   }
 
-  getEdgeByEndPointAt(x, y)
+  getEdgeByEndPointAt(graph, x, y)
   {
     //Search graph
-    for(const edge of this.graph.edges)
+    for(const edge of graph.edges)
     {
       const point = edge.getEndPoint();
       const dx = x - point.x;
@@ -141,7 +133,7 @@ class GraphPicker
     return this.selectionBox;
   }
 
-  getSelection(forceUpdate=false)
+  getSelection(graph, forceUpdate=false)
   {
     if (forceUpdate)
     {
@@ -151,7 +143,7 @@ class GraphPicker
       const lx = Math.min(box.toX, box.fromX);
       const ly = Math.min(box.toY, box.fromY);
       this.clearSelection();
-      getNodesWithin(this.graph, lx, ly, mx, my, this.targets);
+      getNodesWithin(graph, lx, ly, mx, my, this.targets);
     }
 
     return this.targets;
@@ -177,7 +169,7 @@ class GraphPicker
     return this.target == target;
   }
 
-  beginSelection(x, y)
+  beginSelection(graph, x, y)
   {
     const box = this.selectionBox;
     box.fromX = box.toX = x;
@@ -187,20 +179,20 @@ class GraphPicker
     box.visible = true;
   }
 
-  updateSelection(x, y)
+  updateSelection(graph, x, y)
   {
     const box = this.selectionBox;
     box.toX = x;
     box.toY = y;
-    this.getSelection(true);
+    this.getSelection(graph, true);
   }
 
-  endSelection(x, y)
+  endSelection(graph, x, y)
   {
     const box = this.selectionBox;
     box.toX = x;
     box.toY = y;
-    this.getSelection(true);
+    this.getSelection(graph, true);
 
     box.visible = false;
   }

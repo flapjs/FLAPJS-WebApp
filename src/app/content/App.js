@@ -4,6 +4,9 @@ import './App.css';
 
 import FSAModule from 'modules/fsa/FSAModule.js';
 import TestingManager from 'modules/fsa/testing/TestingManager.js';
+import MachineController from 'controller/MachineController.js';
+import GraphController from 'controller/GraphController.js';
+import InputController from 'controller/InputController.js';
 
 import AutoSaver from 'util/AutoSaver.js';
 import HotKeys from './HotKeys.js';
@@ -34,10 +37,13 @@ class App extends React.Component
     this._module = new FSAModule();
     this.testingManager = new TestingManager();
 
-    //Must be initialized (will be called in Workspace.componentDidMount)
-    this.graphController = this._module.getGraphController();
-    this.inputController = this._module.getInputController();
-    this.machineController = this._module.getMachineController();
+    this.inputController = new InputController();
+    this.graphController = new GraphController();
+    this.machineController = new MachineController();
+
+    this.inputController.setModule(this._module);
+    this.graphController.setModule(this._module);
+    this.machineController.setModule(this._module);
 
     this.eventManager = new EventManager();
 
@@ -55,6 +61,8 @@ class App extends React.Component
     this.onDragEnter = this.onDragEnter.bind(this);
     this.onDragLeave = this.onDragLeave.bind(this);
     this.onFileDrop = this.onFileDrop.bind(this);
+
+    this._init = false;
   }
 
   componentDidMount()
@@ -71,6 +79,21 @@ class App extends React.Component
     //Initialize the module...
     this._module.initialize(this);
 
+    //Initialize the controller to graph components
+    this.inputController.initialize(this);
+    this.graphController.initialize(this);
+    this.machineController.initialize(this);
+
+    //Notify on create in delete mode
+    const tryCreateWhileTrash = () => {
+      if (this.inputController.isTrashMode())
+      {
+        app.notification.addWarningMessage(I18N.toString("message.warning.cannotmodify"),
+          "tryCreateWhileTrash", true);
+      }
+    };
+    this.graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
+
     this.testingManager.initialize(this);
     this.eventManager.initialize(this);
     this.hotKeys.initialize(this);
@@ -84,12 +107,18 @@ class App extends React.Component
 
     //Begin tutorial
     this.tutorial.start(this);
+
+    this._init = true;
   }
 
   componentWillUnmount()
   {
     this.hotKeys.destroy();
     this.eventManager.destroy();
+
+    this.machineController.destroy();
+    this.graphController.destroy();
+    this.inputController.destroy();
 
     this._module.destroy(this);
 
@@ -99,6 +128,8 @@ class App extends React.Component
     workspaceDOM.removeEventListener("dragover", this.onDragOver);
     workspaceDOM.removeEventListener("dragenter", this.onDragEnter);
     workspaceDOM.removeEventListener("dragleave", this.onDragLeave);
+
+    this._init = false;
   }
 
   //Called to prevent default file open
@@ -233,7 +264,10 @@ class App extends React.Component
     const tester = this.testingManager;
     const screen = this.workspace ? this.workspace.ref : null;
 
-    inputController.update();
+    if (this._init)
+    {
+      inputController.update();
+    }
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar ref={ref=>this.toolbar=ref}
