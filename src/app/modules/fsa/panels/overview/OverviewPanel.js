@@ -116,6 +116,24 @@ class OverviewPanel extends React.Component
               </button>
             : null
           }
+          <hr/>
+
+          {/*Optimize*/}
+          <div style={{paddingBottom: "0.5em"}}>
+            <h3>Optimizations</h3>
+            <div style={{paddingBottom: "0.5em"}}>
+              <div>
+                <input id="opt-unreach"type="checkbox"/><label htmlFor="opt-unreach">Unreachables</label>
+              </div>
+              <div>
+                <input id="opt-unreach"type="checkbox"/><label htmlFor="opt-unreach">Redundant States</label>
+              </div>
+            </div>
+            <button className="panel-button" disabled="true">Optimize</button>
+          </div>
+
+          <hr/>
+
           <button className="panel-button" onClick={this.onAutoLayout}>
             {I18N.toString("action.overview.autolayout")}
           </button>
