@@ -21,7 +21,6 @@ class FormalDefinition extends React.Component {
     let isNFA = machineBuilder.getMachineType() == "NFA";
     return <div className="formaldef-container">
       <h2>{"M = (Q, \u03A3, \u03b4, q0, F)"}</h2>
-      <hr/>
       <div>
         <h3>Q =</h3>
         <span className="formaldef-values">

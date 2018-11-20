@@ -1,9 +1,19 @@
 .formaldef-container div.error {
   color: var(--color-drawer-error);
 }
-.formaldef-container > div {
+.formaldef-container {
+  margin-bottom: 10px;
+}
+.formaldef-container > h2 {
+  color: darkgray;
+  margin: 0;
   padding-bottom: 5px;
   border-bottom: 1px solid black;
+}
+.formaldef-container > div {
+  padding-bottom: 5px;
+  padding-left: 10px;
+  border-bottom: 1px dashed gray;
 }
 .formaldef-container h3 {
   display: inline-block;
