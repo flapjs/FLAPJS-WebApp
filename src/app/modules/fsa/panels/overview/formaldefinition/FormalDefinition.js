@@ -4,6 +4,9 @@ import { EMPTY } from 'machine/Symbols.js';
 
 import { EMPTY_SET, ARROW } from 'machine/Symbols.js';
 
+const EQUAL = "=";
+const DELTA = "\u03b4";
+
 class FormalDefinition extends React.Component {
   constructor(props) {
     super(props);
@@ -32,7 +35,7 @@ class FormalDefinition extends React.Component {
         </span>
       </div>
       <div>
-        <h3>{"\u03b4"}</h3>
+        <h3>{DELTA}</h3>
         <div className="formaldef-values">
           {
             states.map((state, i) => {
@@ -53,7 +56,7 @@ class FormalDefinition extends React.Component {
                 }
                 trans = isNFA ? "{" + trans + "}" : "" + trans;
                 return <div key={""+state+symbol} className={className}>
-                      {"(" + state + "," + symbol + ")" + " " + ARROW + " " + trans}
+                      {DELTA + "((" + state + "," + symbol + "))" + " " + EQUAL + " " + trans}
                 </div>
               });
 
@@ -66,7 +69,7 @@ class FormalDefinition extends React.Component {
                 transitions.unshift(
                     <div key={""+state+EMPTY}
                          className={empclassName}>
-                      {"(" + state + "," + EMPTY + ")" + " " + ARROW + " " + emptrans}
+                      {DELTA + "((" + state + "," + EMPTY + "))" + " " + EQUAL + " " + emptrans}
                     </div>
                 );
               }
@@ -74,7 +77,7 @@ class FormalDefinition extends React.Component {
             })
           }
           {
-            isNFA && <div>{"otherwise" + " " + ARROW + " " + EMPTY_SET}</div>
+            isNFA && <div>{"otherwise" + " " + EQUAL + " " + EMPTY_SET}</div>
           }
         </div>
       </div>
