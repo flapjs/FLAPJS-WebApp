@@ -120,7 +120,7 @@ class OverviewPanel extends React.Component
 
           {/*Optimize*/}
           <div style={{paddingBottom: "0.5em"}}>
-            <h3>Optimizations</h3>
+            <h3 style={{marginBottom: "0"}}>Optimizations</h3>
             <div style={{paddingBottom: "0.5em"}}>
               <div>
                 <input id="opt-unreach"type="checkbox"/><label htmlFor="opt-unreach">Unreachables</label>
@@ -130,6 +130,31 @@ class OverviewPanel extends React.Component
               </div>
             </div>
             <button className="panel-button" disabled="true">Optimize</button>
+          </div>
+
+          <hr/>
+
+          {/*State Labeling*/}
+          <div style={{paddingBottom: "0.5em"}}>
+            <h3 style={{marginBottom: "0"}}>State Labels</h3>
+            <div style={{display: "flex", flexDirection: "row"}}>
+              <div className="statetag-container">
+                <input type="text" defaultValue="q" style={{width: "4em"}} disabled="true"/>
+              </div>
+              <select style={{
+                  background: "none",
+                  outline: "none",
+                  border: "none",
+                  padding: "0",
+                  margin: "0",
+                  appearance: "none",
+                  color: "white"
+                }}>
+                <option>{"0-9"}</option>
+                <option>{"a-z"}</option>
+                <option>{"A-Z"}</option>
+              </select>
+            </div>
           </div>
 
           <hr/>
