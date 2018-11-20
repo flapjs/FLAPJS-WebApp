@@ -88,91 +88,92 @@ class OverviewPanel extends React.Component
 
           {!this.state.viewFormal &&
             <div>
-              <select className="machine-type panel-select"
-                value={machineBuilder.getMachineType()}
-                onChange={this.onChangeMachineType}>
-                <option value="DFA">DFA</option>
-                <option value="NFA">NFA</option>
-              </select>
-              <div className="graphinfo-important">
-                <StatesList graphController={graphController}/>
-                <AlphabetList machineController={machineController}/>
+              <div>
+                <select className="machine-type panel-select"
+                  value={machineBuilder.getMachineType()}
+                  onChange={this.onChangeMachineType}>
+                  <option value="DFA">DFA</option>
+                  <option value="NFA">NFA</option>
+                </select>
+                <div className="graphinfo-important">
+                  <StatesList graphController={graphController}/>
+                  <AlphabetList machineController={machineController}/>
+                </div>
+                <div className="graphinfo">
+                  <TransitionFunction machineBuilder={machineBuilder}/>
+                  <TransitionTable machineBuilder={machineBuilder}/>
+                </div>
               </div>
-              <div className="graphinfo">
-                <TransitionFunction machineBuilder={machineBuilder}/>
-                <TransitionTable machineBuilder={machineBuilder}/>
-              </div>
+
+                <hr/>
+                {
+                  machineBuilder.getMachineType() == "DFA" ?
+                    <button className="panel-button" onClick={this.onConvertToNFA}>
+                      {I18N.toString("action.overview.convertnfa")}
+                    </button>
+                  : machineBuilder.getMachineType() == "NFA" ?
+                    <button className="panel-button" onClick={this.onConvertToDFA}>
+                      {I18N.toString("action.overview.convertdfa")}
+                    </button>
+                  : null
+                }
+                <hr/>
+
+                {/*Optimize*/}
+                <div style={{paddingBottom: "0.5em"}}>
+                  <h3 style={{marginBottom: "0"}}>Optimizations</h3>
+                  <div style={{paddingBottom: "0.5em"}}>
+                    <div>
+                      <input id="opt-unreach"type="checkbox"/><label htmlFor="opt-unreach">Unreachables</label>
+                    </div>
+                    <div>
+                      <input id="opt-redund"type="checkbox"/><label htmlFor="opt-redund">Redundant States</label>
+                    </div>
+                  </div>
+                  <button className="panel-button" disabled="true">Optimize</button>
+                </div>
+
+                <hr/>
+
+                {/*State Labeling*/}
+                <div style={{paddingBottom: "0.5em"}}>
+                  <h3 style={{marginBottom: "0"}}>State Labels</h3>
+                  <div style={{display: "flex", flexDirection: "row"}}>
+                    <div className="statetag-container">
+                      <input type="text" defaultValue="q" style={{width: "4em"}} disabled="true"/>
+                    </div>
+                    <select style={{
+                        background: "none",
+                        outline: "none",
+                        border: "none",
+                        padding: "0",
+                        margin: "0",
+                        appearance: "none",
+                        color: "white"
+                      }}>
+                      <option>{"0-9"}</option>
+                      <option>{"a-z"}</option>
+                      <option>{"A-Z"}</option>
+                    </select>
+                  </div>
+                  <div className="panel-checkbox">
+                    <input type="checkbox" id="auto-statename"
+                      onChange={this.onChangeAutoRename}
+                      checked={machineBuilder.shouldAutoRenameNodes()}/>
+                    <label htmlFor="auto-statename">{I18N.toString("options.autolabel")}</label>
+                  </div>
+                </div>
+
+                <hr/>
+
+                <button className="panel-button" onClick={this.onAutoLayout}>
+                  {I18N.toString("action.overview.autolayout")}
+                </button>
             </div>}
-
-          <hr/>
-          {
-            machineBuilder.getMachineType() == "DFA" ?
-              <button className="panel-button" onClick={this.onConvertToNFA}>
-                {I18N.toString("action.overview.convertnfa")}
-              </button>
-            : machineBuilder.getMachineType() == "NFA" ?
-              <button className="panel-button" onClick={this.onConvertToDFA}>
-                {I18N.toString("action.overview.convertdfa")}
-              </button>
-            : null
-          }
-          <hr/>
-
-          {/*Optimize*/}
-          <div style={{paddingBottom: "0.5em"}}>
-            <h3 style={{marginBottom: "0"}}>Optimizations</h3>
-            <div style={{paddingBottom: "0.5em"}}>
-              <div>
-                <input id="opt-unreach"type="checkbox"/><label htmlFor="opt-unreach">Unreachables</label>
-              </div>
-              <div>
-                <input id="opt-unreach"type="checkbox"/><label htmlFor="opt-unreach">Redundant States</label>
-              </div>
-            </div>
-            <button className="panel-button" disabled="true">Optimize</button>
+            <button className="panel-button" onClick={this.switchDefinition}>
+              {this.state.viewFormal ? "Back" : "View Definition"}
+            </button>
           </div>
-
-          <hr/>
-
-          {/*State Labeling*/}
-          <div style={{paddingBottom: "0.5em"}}>
-            <h3 style={{marginBottom: "0"}}>State Labels</h3>
-            <div style={{display: "flex", flexDirection: "row"}}>
-              <div className="statetag-container">
-                <input type="text" defaultValue="q" style={{width: "4em"}} disabled="true"/>
-              </div>
-              <select style={{
-                  background: "none",
-                  outline: "none",
-                  border: "none",
-                  padding: "0",
-                  margin: "0",
-                  appearance: "none",
-                  color: "white"
-                }}>
-                <option>{"0-9"}</option>
-                <option>{"a-z"}</option>
-                <option>{"A-Z"}</option>
-              </select>
-            </div>
-          </div>
-
-          <hr/>
-
-          <button className="panel-button" onClick={this.onAutoLayout}>
-            {I18N.toString("action.overview.autolayout")}
-          </button>
-          <button className="panel-button" onClick={this.switchDefinition}>
-            {this.state.viewFormal ? "Back" : "View Definition"}
-          </button>
-          <div className="panel-checkbox">
-            <input type="checkbox" id="auto-statename"
-              onChange={this.onChangeAutoRename}
-              checked={machineBuilder.shouldAutoRenameNodes()}/>
-            <label htmlFor="auto-statename">{I18N.toString("options.autolabel")}</label>
-          </div>
-        </div>
-
       <div className="panel-bottom"></div>
     </div>;
   }

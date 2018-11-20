@@ -54,9 +54,9 @@ class FormalDefinition extends React.Component {
                   className = "error";
                   trans = "{ " + trans + " }"
                 }
-                trans = isNFA ? "{" + trans + "}" : "" + trans;
+                trans = isNFA ? "{ " + trans + " }" : "" + trans;
                 return <div key={""+state+symbol} className={className}>
-                      {DELTA + "((" + state + "," + symbol + "))" + " " + EQUAL + " " + trans}
+                      {DELTA + "( ( " + state + ", " + symbol + " ) )" + " " + EQUAL + " " + trans}
                 </div>
               });
 
@@ -65,11 +65,10 @@ class FormalDefinition extends React.Component {
                   empclassName = "error";
                 }
                 const addBrac = isNFA || emptrans.length > 1;
-                emptrans = addBrac ? "{" + emptrans + "}" : "" + emptrans;
+                emptrans = addBrac ? "{ " + emptrans + " }" : "" + emptrans;
                 transitions.unshift(
-                    <div key={""+state+EMPTY}
-                         className={empclassName}>
-                      {DELTA + "((" + state + "," + EMPTY + "))" + " " + EQUAL + " " + emptrans}
+                    <div key={"" + state + EMPTY} className={empclassName}>
+                      {DELTA + "( ( " + state + ", " + EMPTY + " ) )" + " " + EQUAL + " " + emptrans}
                     </div>
                 );
               }
