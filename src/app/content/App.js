@@ -10,6 +10,7 @@ import InputController from 'controller/InputController.js';
 
 import AutoSaver from 'util/AutoSaver.js';
 import HotKeys from './HotKeys.js';
+import LocalSave from 'system/localsave/LocalSave.js';
 
 import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
@@ -108,11 +109,15 @@ class App extends React.Component
     //Begin tutorial
     this.tutorial.start(this);
 
+    LocalSave.initialize();
+
     this._init = true;
   }
 
   componentWillUnmount()
   {
+    LocalSave.terminate();
+
     this.hotKeys.destroy();
     this.eventManager.destroy();
 

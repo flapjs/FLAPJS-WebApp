@@ -41,7 +41,7 @@ class StyleOption
    */
   resetStyle()
   {
-    this._value = this._defaultValue;
+    this.setStyle(this._defaultValue);
   }
 
   /**
@@ -60,6 +60,11 @@ class StyleOption
   getStyle()
   {
     return this._value;
+  }
+
+  isDefaultStyle()
+  {
+    return this._value == this._defaultValue;
   }
 }
 
@@ -167,6 +172,11 @@ class StyleOptionRegistry
   getPropsByGroup(groupName)
   {
     return this._groups.get(groupName) || [];
+  }
+
+  getOptions()
+  {
+    return this._options.values();
   }
 
   isEmpty()

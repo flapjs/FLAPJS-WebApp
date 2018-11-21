@@ -6,6 +6,7 @@ import Storage from 'util/Storage.js';
 import Config from 'config.js';
 import { saveConfig } from 'config.js';
 
+import LocalSave from 'system/localsave/LocalSave.js';
 import ColorHelper from 'util/ColorHelper.js';
 import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
 import StyleInput from 'system/styleopt/components/StyleInput.js';
@@ -154,11 +155,44 @@ class OptionsPanel extends React.Component
     opts.registerStyleOption(root, "--color-highlight-select", "color", "viewport");
 
     opts.initialize();
+
+    LocalSave.registerHandler(this);
+    this.onLoadSave();
   }
 
   componentWillUnmount()
   {
     registry.terminate();
+
+    LocalSave.unregisterHandler(this);
+  }
+
+  onLoadSave()
+  {
+    const opts = this.styleOpts;
+    const data = LocalSave.loadFromStorage("prefs-color");
+    for(let prop in data)
+    {
+      const opt = opts.getOptionByProp(prop);
+      if (opt)
+      {
+        opt.setStyle(data[prop]);
+      }
+    }
+  }
+
+  onAutoSave()
+  {
+    const opts = this.styleOpts;
+    const data = {};
+    for(let opt of opts.getOptions())
+    {
+      if (!opt.isDefaultStyle())
+      {
+        data[opt.prop] = opt.getStyle();
+      }
+    }
+    LocalSave.saveToStorage("prefs-color", data);
   }
 
   render()
@@ -243,12 +277,10 @@ class OptionsPanel extends React.Component
         </div>
 
         <button className="panel-button" onClick={(e) => {
-          Config._resetOnLoad = true;
-          //TODO: This is currently only used to make sure a config file is saved
-          //TODO: Remove this when there is a 'save config' button!
-          saveConfig();
-
-          location.reload();
+          for(let option of this.styleOpts.getOptions())
+          {
+            option.resetStyle();
+          }
         }}>{I18N.toString("action.options.reset")}</button>
 
 
