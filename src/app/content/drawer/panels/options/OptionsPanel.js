@@ -31,6 +31,7 @@ class OptionsPanel extends React.Component
     };
   }
 
+  //Override
   componentDidMount()
   {
     const root = document.getElementById("root");
@@ -160,11 +161,10 @@ class OptionsPanel extends React.Component
     this.onLoadSave();
   }
 
+  //Override
   componentWillUnmount()
   {
     registry.terminate();
-
-    LocalSave.unregisterHandler(this);
   }
 
   onLoadSave()

@@ -1,7 +1,7 @@
 const LocalSave = {
   _handlers: new Set(),
   _intervalID: null,
-  _intervalMillis: 3000,
+  _intervalMillis: 1000,
   setAutoSaveInterval: function(millis)
   {
     if (!millis || millis <= 0) throw new Error("AutoSave interval must be greater than 0");
@@ -92,6 +92,11 @@ const LocalSave = {
     {
       localStorage.removeItem(saveKey);
     }
+  },
+  existsInStorage: function(saveKey)
+  {
+    if (!this.doesSupportLocalStorage()) return false;
+    return localStorage.getItem(saveKey) != null;
   },
   clearStorage: function()
   {

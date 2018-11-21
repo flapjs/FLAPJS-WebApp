@@ -8,9 +8,9 @@ import MachineController from 'controller/MachineController.js';
 import GraphController from 'controller/GraphController.js';
 import InputController from 'controller/InputController.js';
 
-import AutoSaver from 'util/AutoSaver.js';
 import HotKeys from './HotKeys.js';
 import LocalSave from 'system/localsave/LocalSave.js';
+import * as FlapSaver from 'util/FlapSaver.js';
 
 import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
@@ -68,15 +68,6 @@ class App extends React.Component
 
   componentDidMount()
   {
-    //Does the browser support autosaving?
-    if(AutoSaver.doesSupportLocalStorage())
-    {
-      AutoSaver.loadAutoSave(this.graphController, this.machineController);
-
-      //Start auto-saving
-      AutoSaver.initAutoSave(this.graphController, this.machineController);
-    }
-
     //Initialize the module...
     this._module.initialize(this);
 
@@ -109,7 +100,9 @@ class App extends React.Component
     //Begin tutorial
     this.tutorial.start(this);
 
+    LocalSave.registerHandler(this);
     LocalSave.initialize();
+    this.onLoadSave();
 
     this._init = true;
   }
@@ -135,6 +128,21 @@ class App extends React.Component
     workspaceDOM.removeEventListener("dragleave", this.onDragLeave);
 
     this._init = false;
+  }
+
+  onLoadSave()
+  {
+    const data = LocalSave.loadFromStorage("graph");
+    if (data)
+    {
+      FlapSaver.loadFromJSON(data, this.graphController, this.machineController);
+    }
+  }
+
+  onAutoSave()
+  {
+    const data = FlapSaver.saveToJSON(this.graphController, this.machineController);
+    LocalSave.saveToStorage("graph", data);
   }
 
   //Called to prevent default file open
