@@ -179,7 +179,7 @@ class FormattedInput extends React.Component
   render()
   {
     return <input
-      className={this.props.className} id={this.props.id}
+      id={this.props.id} className={this.props.className} style={this.props.style}
       ref={ref=>this.element=ref}
       type="text" value={this.state.value}
       onChange={this.onChange}

@@ -4,7 +4,7 @@ import './LabelEditor.css';
 import Config from 'config.js';
 import { EMPTY } from 'machine/Symbols.js';
 
-import FormattedInput from './FormattedInput.js';
+import FormattedInput from 'system/formattedinput/FormattedInput.js';
 
 //TODO: This is equivalent to 4em for toolbar height
 const LABEL_OFFSET_Y = -64;
