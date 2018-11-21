@@ -83,8 +83,22 @@ const LocalSave = {
       return;
     }
 
+    let flag = jsonData;
+    if (flag)
+    {
+      //Don't save empty objects, cause that is wasteful.
+      for(let key in jsonData)
+      {
+        if (jsonData.hasOwnProperty(key))
+        {
+          flag = false;
+          break;
+        }
+      }
+    }
+
     //Save or remove the data...
-    if (jsonData)
+    if (flag)
     {
       localStorage.setItem(saveKey, JSON.stringify(jsonData));
     }
