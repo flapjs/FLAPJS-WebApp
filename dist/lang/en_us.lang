@@ -32,6 +32,8 @@ component.testing.title = Testing
 component.overview.title = Description
 component.exporting.title = Exporting
 component.options.title = Options
+component.analysis.title = Analysis
+
 component.toolbar.title = Toolbar
 component.workspace.title = Workspace
 component.drawer.title = Drawer
@@ -45,6 +47,44 @@ component.labeleditor.title = Label Editor
 options.category.colors = Colors
 options.category.shortcuts = Shortcuts
 options.category.general = General
+
+//Toolbar
+options.--color-toolbar-main = Main Color
+options.--color-toolbar-accent = Accent Color
+options.--color-toolbar-text = Text Color
+
+//Drawer
+options.--color-drawer-main = Main
+options.--color-drawer-accent = Accent
+options.--color-drawer-text = Text
+options.--color-drawer-error = Error
+
+//Testing
+options.--color-testing-success = Success
+options.--color-testing-failure = Failure
+options.--color-testing-working = Working
+options.--color-testing-text = Text
+
+//Notification
+options.--color-notification-text = Notification Text
+options.--color-notification-info = Notification Info
+options.--color-notification-error = Notification Error
+options.--color-notification-warning = Notification Warning
+
+//Workspace
+options.--color-graph-node = Graph Node
+options.--color-workspace-text = Workspace Text
+options.--color-workspace-main = Main Color
+
+//Label editor
+options.--color-labeleditor-text = Label Editor Text
+options.--color-labeleditor-main = Label Editor Main
+
+//Viewport
+options.--color-viewport-error = Viewport Delete
+options.--color-viewport-testing = Viewport Testing
+options.--color-viewport-warning = Viewport Warning
+options.--color-highlight-select = Highlight Select
 
 options.checkerrors = Error Checking
 options.checkerrors.mode.none = None
