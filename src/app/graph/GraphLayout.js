@@ -6,7 +6,13 @@ class GraphLayout
 
     //handle for too much nodes case
     const numOfNode = graph.nodes.length;
-    const radius = (numOfNode/5) * 40 + 10;
+    var radius;
+    if(numOfNode < 10){
+      radius = numOfNode/4 * 50 + 10;
+    }
+    else{
+      radius = (numOfNode/5) * 40 + 10;
+    }
     const degree = 2* Math.PI/numOfNode;
     let currentStep = 0;
     for(let i = 0; i < numOfNode; i++)
