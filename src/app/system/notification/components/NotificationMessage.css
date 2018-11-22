@@ -41,6 +41,7 @@
   background: white;
 }
 .notification-message-container button:hover {
+  color: white;
   background: rgba(0,0,0,0.2);
 }
 .notification-message-container button:disabled {

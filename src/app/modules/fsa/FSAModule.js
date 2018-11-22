@@ -1,11 +1,12 @@
 import OverviewPanel from './panels/overview/OverviewPanel.js';
 import TestingPanel from './panels/testing/TestingPanel.js';
+import AnalysisPanel from './panels/analysis/AnalysisPanel.js';
 
 import NodalGraph from 'graph/NodalGraph.js';
 
 import FSABuilder from './builder/FSABuilder.js';
 
-const PANELS = [TestingPanel, OverviewPanel];
+const PANELS = [TestingPanel, OverviewPanel, AnalysisPanel];
 
 class FSAModule
 {
