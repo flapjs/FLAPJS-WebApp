@@ -1,0 +1,54 @@
+.notification-message-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: 12em;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  color: var(--color-notification-text);
+
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+
+  border-top: 6px solid var(--color-notification-info-dark);
+  background: var(--color-notification-info);
+}
+
+.notification-message-type-default {
+  /* Already styled by message-container*/
+}
+.notification-message-type-error {
+  border-color: var(--color-notification-error-dark)!important;
+  background-color: var(--color-notification-error)!important;
+}
+.notification-message-type-warning {
+  border-color: var(--color-notification-warning-dark)!important;
+  background-color: var(--color-notification-warning)!important;
+}
+.notification-message-type-success {
+  border-color: var(--color-notification-success-dark)!important;
+  background-color: var(--color-notification-success)!important;
+}
+
+.notification-message-container button {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  color: black;
+  background: white;
+}
+.notification-message-container button:hover {
+  background: rgba(0,0,0,0.2);
+}
+.notification-message-container button:disabled {
+  cursor: auto;
+  color: gray;
+  background: rgba(0,0,0,0.1);
+}
+.notification-message-container p {
+  margin: 0;
+  margin-bottom: 5px;
+}

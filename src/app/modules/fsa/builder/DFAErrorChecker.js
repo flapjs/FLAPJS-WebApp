@@ -1,11 +1,11 @@
 import Config from 'config.js';
 import { EMPTY } from 'machine/Symbols.js';
 
-import StateUnreachableWarningMessage from './error/StateUnreachableWarningMessage.js';
-import StateMissingTransitionErrorMessage from './error/StateMissingTransitionErrorMessage.js';
-import TransitionErrorMessage from './error/TransitionErrorMessage.js';
-import StateErrorMessage from './error/StateErrorMessage.js';
-import SuccessMessage from 'notification/SuccessMessage.js';
+import Notification from 'system/notification/Notification.js';
+import StateUnreachableWarningMessage from 'modules/fsa/notifications/StateUnreachableWarningMessage.js';
+import StateMissingTransitionErrorMessage from 'modules/fsa/notifications/StateMissingTransitionErrorMessage.js';
+import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
+import StateErrorMessage from 'modules/fsa/notifications/StateErrorMessage.js';
 
 class DFAErrorChecker
 {
@@ -28,7 +28,7 @@ class DFAErrorChecker
     this.warningEdges.length = 0;
   }
 
-  checkErrors(notification=null)
+  checkErrors(shouldNotifyErrors=false, graphController=null, machineController=null)
   {
     //This should only run for "DFA" machine types...
     if (this.machineBuilder.getMachineType() != "DFA")
@@ -150,36 +150,49 @@ class DFAErrorChecker
       warnNodes.length == 0 && warnEdges.length == 0);
 
     //Callbacks for all collected errors
-    if (notification)
+    if (shouldNotifyErrors)
     {
       const messageTag = Config.MACHINE_ERRORS_MESSAGE_TAG;
       //Clear the existing messages
-      notification.clearMessage(messageTag);
+      Notification.clearMessages(messageTag);
 
       //No errors!
       if (!result)
       {
-        notification.addMessage(I18N.toString("message.error.none"), messageTag, SuccessMessage, false);
+        Notification.addMessage(I18N.toString("message.error.none"), "success", messageTag, null, null, false);
       }
       //There are some errors/warnings...
       else
       {
+        const props = {graphController: graphController, machineController: machineController};
         //Add new warning messages
-        if (unReachedNode.length > 0) notification.addMessage(
-          unReachedNode, messageTag, StateUnreachableWarningMessage, false);
+        if (unReachedNode.length > 0)
+        {
+          Notification.addMessage(unReachedNode,
+            "warning", messageTag, StateUnreachableWarningMessage, props, false);
+        }
 
         //Add new error messages
-        if (placeholderEdges.length > 0) notification.addMessage(
-          {text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
-          messageTag, TransitionErrorMessage, false);
-        if (emptyEdges.length > 0) notification.addMessage(
-          {text: I18N.toString("message.error.empty"), targets: emptyEdges},
-          messageTag, TransitionErrorMessage, false);
-        if (dupeEdges.length > 0) notification.addMessage(
-          {text: I18N.toString("message.error.dupe"), targets: dupeEdges},
-          messageTag, TransitionErrorMessage, false);
-        if (missingNodes.length > 0) notification.addMessage(
-          missingNodes, messageTag, StateMissingTransitionErrorMessage, false);
+        if (placeholderEdges.length > 0)
+        {
+          Notification.addMessage({text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
+            "error", messageTag, TransitionErrorMessage, props, false);
+        }
+        if (emptyEdges.length > 0)
+        {
+          Notification.addMessage({text: I18N.toString("message.error.empty"), targets: emptyEdges},
+            "error", messageTag, TransitionErrorMessage, props, false);
+        }
+        if (dupeEdges.length > 0)
+        {
+          Notification.addMessage({text: I18N.toString("message.error.dupe"), targets: dupeEdges},
+            "error", messageTag, TransitionErrorMessage, false);
+        }
+        if (missingNodes.length > 0)
+        {
+          Notification.addMessage(missingNodes,
+            "error", messageTag, StateMissingTransitionErrorMessage, false);
+        }
       }
     }
 

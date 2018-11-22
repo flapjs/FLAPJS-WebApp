@@ -62,7 +62,6 @@ class Toolbar extends React.Component
     const graphController = this.props.graphController;
     const machineController = this.props.machineController;
     const eventManager = this.props.eventManager;
-    const notification = this.props.notification;
     const drawer = this.props.drawer;
 
     const graph = graphController.getGraph();
@@ -153,8 +152,7 @@ class Toolbar extends React.Component
         {/*Right Alt. Toolbar*/}
         <div className="toolbar-tray-alt">
           {/*Help Button*/}
-          <HelpButton className="navicon" id="toolbar-help" title={I18N.toString("action.toolbar.help")}
-            notification={notification}>
+          <HelpButton className="navicon" id="toolbar-help" title={I18N.toString("action.toolbar.help")}>
             <HelpIcon/>
           </HelpButton>
           {/*Language Button*/}

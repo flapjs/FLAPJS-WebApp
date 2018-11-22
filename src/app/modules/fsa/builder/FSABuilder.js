@@ -27,7 +27,9 @@ class FSABuilder extends MachineBuilder
 
     this.machineErrorChecker = new DFAErrorChecker(this, graph);
     this.tester = null;
-    this.notification = null;
+
+    this.graphController = null;
+    this.machineController = null;
 
     this.onGraphChange = this.onGraphChange.bind(this);
     this.onDelayedGraphChange = this.onDelayedGraphChange.bind(this);
@@ -39,7 +41,8 @@ class FSABuilder extends MachineBuilder
     super.initialize(app);
 
     this.tester = app.testingManager;
-    this.notification = app.notification;
+    this.graphController = app.graphController;
+    this.machineController = app.machineController;
 
     this.graph.on("nodeCreate", this.onGraphChange);
     this.graph.on("nodeDestroy", this.onGraphChange);
@@ -109,7 +112,7 @@ class FSABuilder extends MachineBuilder
   {
     if (!this.tester.shouldCheckError) return;
 
-    this.machineErrorChecker.checkErrors(this.notification);
+    this.machineErrorChecker.checkErrors(true, this.graphController, this.machineController);
   }
 
   formatAlphabetString(string, allowNull=false)

@@ -1,9 +1,9 @@
 import Config from 'config.js';
 import { EMPTY } from 'machine/Symbols.js';
 
-import StateUnreachableWarningMessage from './error/StateUnreachableWarningMessage.js';
-import TransitionErrorMessage from './error/TransitionErrorMessage.js';
-import SuccessMessage from 'notification/SuccessMessage.js';
+import Notification from 'system/notification/Notification.js';
+import StateUnreachableWarningMessage from 'modules/fsa/notifications/StateUnreachableWarningMessage.js';
+import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
 
 class NFAErrorChecker
 {
@@ -26,7 +26,7 @@ class NFAErrorChecker
     this.warningEdges.length = 0;
   }
 
-  checkErrors(notification=null)
+  checkErrors(shouldNotifyErrors=false, graphController=null, machineController=null)
   {
     const machine = this.machineBuilder.getMachine();
     const graph = this.graph;
@@ -63,7 +63,7 @@ class NFAErrorChecker
         for(const label of labels)
         {
           //remove to from unReachedNode list
-          if(unReachedNode.includes(to)) unReachedNode.splice(unReachedNode.indexOf(to),1);
+          if (unReachedNode.includes(to)) unReachedNode.splice(unReachedNode.indexOf(to),1);
         }
       }
     }
@@ -82,24 +82,31 @@ class NFAErrorChecker
     {
       const messageTag = Config.MACHINE_ERRORS_MESSAGE_TAG;
       //Clear the existing messages
-      notification.clearMessage(messageTag);
+      Notification.clearMessages(messageTag);
 
       //No errors!
       if (!result)
       {
-        notification.addMessage(I18N.toString("message.error.none"), messageTag, SuccessMessage, false);
+        Notification.addMessage(I18N.toString("message.error.none"), "success", messageTag, null, null, false);
       }
       //There are some errors/warnings...
       else
       {
+        const props = {graphController: graphController, machineController: machineController};
+
         //Add new warning messages
-        if (unReachedNode.length > 0) notification.addMessage(
-          unReachedNode, messageTag, StateUnreachableWarningMessage, false);
+        if (unReachedNode.length > 0)
+        {
+          Notification.addMessage(unReachedNode,
+            "warning", messageTag, StateUnreachableWarningMessage, props, false);
+        }
 
         //Add new error messages
-        if (placeholderEdges.length > 0) notification.addMessage(
-          {text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
-          messageTag, TransitionErrorMessage, false);
+        if (placeholderEdges.length > 0)
+        {
+          Notification.addMessage({text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
+            "error", messageTag, TransitionErrorMessage, props, false);
+        }
       }
     }
 

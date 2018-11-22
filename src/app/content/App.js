@@ -16,8 +16,10 @@ import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
 import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
-import NotificationSystem from 'notification/NotificationSystem.js';
 import Tutorial from 'tutorial/Tutorial.js';
+
+import Notification from 'system/notification/Notification.js';
+import NotificationView from 'system/notification/components/NotificationView.js';
 
 import EventManager from './EventManager.js';
 
@@ -32,7 +34,6 @@ class App extends React.Component
     this.workspace = null;
     this.viewport = null;
     this.drawer = null;
-    this.notification = null;
     this.toolbar = null;
 
     this._module = new FSAModule();
@@ -80,8 +81,7 @@ class App extends React.Component
     const tryCreateWhileTrash = () => {
       if (this.inputController.isTrashMode())
       {
-        app.notification.addWarningMessage(I18N.toString("message.warning.cannotmodify"),
-          "tryCreateWhileTrash", true);
+        Notification.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
       }
     };
     this.graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
@@ -288,14 +288,11 @@ class App extends React.Component
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar ref={ref=>this.toolbar=ref}
         eventManager={this.eventManager}
-        notification={this.notification}
         drawer={this.drawer}
         graphController={graphController}
         machineController={machineController}/>
 
-      <NotificationSystem ref={ref=>this.notification=ref}
-        graphController={graphController}
-        machineController={machineController}/>
+      <NotificationView notificationManager={Notification}/>
 
       <div className="workspace-container">
         <div className={"workspace-main" +

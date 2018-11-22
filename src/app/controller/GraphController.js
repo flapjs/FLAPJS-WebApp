@@ -12,7 +12,6 @@ class GraphController
   {
     this._module = null;
 
-    this.notification = null;
     this.inputController = null;
     this.machineController = null;
 
@@ -115,7 +114,6 @@ class GraphController
   {
     this.labelEditor = app.viewport.labelEditor;
     this.tester = app.testingManager;
-    this.notification = app.notification;
 
     this.inputController = app.inputController;
     this.machineController = app.machineController;
