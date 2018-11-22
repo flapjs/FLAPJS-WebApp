@@ -165,6 +165,8 @@ class OptionsPanel extends React.Component
   componentWillUnmount()
   {
     registry.terminate();
+
+    LocalSave.unregisterHandler(this);
   }
 
   onLoadSave()
@@ -195,6 +197,7 @@ class OptionsPanel extends React.Component
     LocalSave.saveToStorage("prefs-color", data);
   }
 
+  //Override
   render()
   {
     const root = document.getElementById("root");

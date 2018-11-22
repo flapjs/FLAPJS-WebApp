@@ -100,8 +100,9 @@ class App extends React.Component
     //Begin tutorial
     this.tutorial.start(this);
 
-    LocalSave.registerHandler(this);
     LocalSave.initialize();
+
+    LocalSave.registerHandler(this);
     this.onLoadSave();
 
     this._init = true;
@@ -109,6 +110,8 @@ class App extends React.Component
 
   componentWillUnmount()
   {
+    LocalSave.unregisterHandler(this);
+
     LocalSave.terminate();
 
     this.hotKeys.destroy();
