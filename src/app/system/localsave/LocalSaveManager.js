@@ -1,4 +1,4 @@
-class LocalSaveSystem
+class LocalSaveManager
 {
   constructor()
   {
@@ -160,4 +160,4 @@ class LocalSaveSystem
     return typeof Storage !== 'undefined';
   }
 }
-export default LocalSaveSystem;
+export default LocalSaveManager;

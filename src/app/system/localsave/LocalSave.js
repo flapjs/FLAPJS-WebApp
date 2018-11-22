@@ -1,5 +1,5 @@
-import LocalSaveSystem from './LocalSaveSystem.js';
+import LocalSaveManager from './LocalSaveManager.js';
 
 //Singleton pattern (I know, I'm sorry. But we must.)
-const INSTANCE = new LocalSaveSystem();
+const INSTANCE = new LocalSaveManager();
 export default INSTANCE;
