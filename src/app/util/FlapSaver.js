@@ -1,6 +1,11 @@
 import NodalGraph from 'graph/NodalGraph.js';
 import NodalGraphParser from 'graph/NodalGraphParser.js';
 
+import Notification from 'system/notification/Notification.js';
+import SemanticVersion from 'util/SemanticVersion.js';
+
+const CURRENT_VERSION = new SemanticVersion(0, 2, 0);
+
 export function saveToJSON(graphController, machineController)
 {
   const graph = graphController.getGraph();
@@ -8,6 +13,7 @@ export function saveToJSON(graphController, machineController)
   if (!graph.isEmpty())
   {
     const dst = {};
+    dst.metadata = {version: SemanticVersion.stringify(CURRENT_VERSION)};
     dst.graphData = NodalGraphParser.toJSON(graph);
 
     //HACK: this should be calculated elsewhere
@@ -36,6 +42,15 @@ export function loadFromJSON(stringData, graphController, machineController)
   try
   {
     const data = JSON.parse(stringData);
+    const metadata = data.metadata;
+    if (typeof metadata == 'object')
+    {
+      const dataVersion = SemanticVersion.parse(metadata.version);
+      if (!CURRENT_VERSION.isCompatibleWith(dataVersion))
+      {
+        return;
+      }
+    }
     const graphJSON = data.graphData;
     const newGraph = NodalGraphParser.parseJSON(graphJSON);
     graph.copyGraph(newGraph);
@@ -58,10 +73,7 @@ export function loadFromJSON(stringData, graphController, machineController)
   }
   catch (e)
   {
-    if (graphController.notification)
-    {
-      graphController.notification.addMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
-    }
+    Notification.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
 
     console.error(e);
   }
