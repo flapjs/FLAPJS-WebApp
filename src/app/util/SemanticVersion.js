@@ -14,15 +14,15 @@ class SemanticVersion
   isCompatibleWith(otherVersion)
   {
     return this.major == otherVersion.major &&
-      this.minor < otherVersion.minor ||
-      (this.minor == otherVersion.minor && this.patch <= otherVersion.patch);
+      (this.minor < otherVersion.minor ||
+      (this.minor == otherVersion.minor && this.patch <= otherVersion.patch));
   }
 
   static stringify(semanticVersion)
   {
     return semanticVersion.major + "." +
       semanticVersion.minor + "." +
-      semantivVersion.patch;
+      semanticVersion.patch;
   }
 
   static parse(string)
@@ -44,9 +44,7 @@ class SemanticVersion
       throw e;
     }
 
-    this.major = major;
-    this.minor = minor;
-    this.patch = patch;
+    return new SemanticVersion(major, minor, patch);
   }
 }
 

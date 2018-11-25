@@ -49,6 +49,7 @@ export function loadFromJSON(stringData, graphController, machineController)
       const dataVersion = SemanticVersion.parse(metadata.version);
       if (!CURRENT_VERSION.isCompatibleWith(dataVersion))
       {
+        Notification.addErrorMessage("ERROR: Unable to load invalid JSON file - invalid version.", "errorUpload");
         return;
       }
     }
