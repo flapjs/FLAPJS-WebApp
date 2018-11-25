@@ -2,7 +2,6 @@ import React from 'react';
 import '../Panel.css';
 import './OptionsPanel.css';
 
-import Storage from 'util/Storage.js';
 import Config from 'config.js';
 import { saveConfig } from 'config.js';
 
@@ -27,7 +26,7 @@ class OptionsPanel extends React.Component
     this.styleOpts = new StyleOptionRegistry();
 
     this.state = {
-      skipWelcome: Storage.loadFromLocalStorage(LOCAL_STORAGE_ID) == "true"
+      skipWelcome: LocalSave.getStringFromStorage(LOCAL_STORAGE_ID) == "true"
     };
   }
 
@@ -274,7 +273,7 @@ class OptionsPanel extends React.Component
           onChange={(e) => {
             const result = e.target.checked;
             this.setState({skipWelcome: e.target.checked});
-            Storage.saveToLocalStorage("skipWelcome", result);
+            LocalSave.setStringToStorage(LOCAL_STORAGE_ID, result);
           }}/>
           <label htmlFor="option-skipwelcome">{I18N.toString("options.skipwelcome")}</label>
         </div>

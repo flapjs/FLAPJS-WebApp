@@ -77,10 +77,28 @@ class LocalSaveManager
     }
   }
 
+  setStringToStorage(saveKey, stringData)
+  {
+    if (!this.doesSupportLocalStorage()) return;
+    if (stringData.length > 0)
+    {
+      localStorage.setItem(saveKey, stringData);
+    }
+    else
+    {
+      localStorage.removeItem(saveKey);
+    }
+  }
+
+  getStringFromStorage(saveKey)
+  {
+    if (!this.doesSupportLocalStorage()) return "";
+    return localStorage.getItem(saveKey) || "";
+  }
+
   loadFromStorage(saveKey)
   {
     if (!this.doesSupportLocalStorage()) return {};
-
     const item = JSON.parse(localStorage.getItem(saveKey));
     return item ? item : null;
   }
@@ -114,30 +132,47 @@ class LocalSaveManager
       return;
     }
 
-    let flag = jsonData;
-    if (flag)
+    if (typeof jsonData == 'object')
     {
-      flag = false;
-
-      //Don't save empty objects, cause that is wasteful.
-      for(let key in jsonData)
+      let flag = jsonData;
+      if (flag)
       {
-        if (jsonData.hasOwnProperty(key))
+        flag = false;
+
+        //Don't save empty objects, cause that is wasteful.
+        for(let key in jsonData)
         {
-          flag = true;
-          break;
+          if (jsonData.hasOwnProperty(key))
+          {
+            flag = true;
+            break;
+          }
         }
       }
-    }
 
-    //Save or remove the data...
-    if (flag)
-    {
-      localStorage.setItem(saveKey, JSON.stringify(jsonData));
+      //Save or remove the data...
+      if (flag)
+      {
+        localStorage.setItem(saveKey, JSON.stringify(jsonData));
+      }
+      else
+      {
+        localStorage.removeItem(saveKey);
+      }
     }
-    else
+    else if (typeof jsonData == 'string')
     {
-      localStorage.removeItem(saveKey);
+      const flag = jsonData.length <= 0;
+
+      //Save or remove the data...
+      if (flag)
+      {
+        localStorage.setItem(saveKey, jsonData);
+      }
+      else
+      {
+        localStorage.removeItem(saveKey);
+      }
     }
   }
 
