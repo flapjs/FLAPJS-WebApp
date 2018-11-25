@@ -337,8 +337,6 @@ class FSA
   toJSON()
   {
     const result = {};
-    result._version = "1.0.0";
-
     if (this instanceof DFA) result.type = "DFA";
     else if (this instanceof NFA) result.type = "NFA";
     else result.type = "FSA";

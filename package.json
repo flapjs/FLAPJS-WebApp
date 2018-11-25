@@ -1,6 +1,6 @@
 {
   "name": "flap.js",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "Repository for flap.js web app project",
   "main": "./dist/debug/bundle.js",
   "scripts": {

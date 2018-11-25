@@ -40,34 +40,46 @@ To make a program that is more accessible and intuitive to use, so we can all be
   - [ ] Safari
   - [ ] Opera
 
+(Although it may work on other unchecked platforms, it is not completely tested)
+
 ## Features
-### 1.0.0 (alpha)
+### 0.1.0
 - [x] Deterministic Finite Automaton
 - [x] Nondeterministic Finite Automaton
-- [ ] Pushdown Automaton
-- [ ] Turing Machine
 - [x] Nodal Graphing
   - [x] Basic layout
   - [x] Component creation
   - [x] Component deletion
   - [x] Edge redirection
   - [x] Label editing
+  - [x] Formal Definition summary
+    - [x] States
+    - [x] Symbols
+    - [x] Transitions
+    - [x] Start State
+    - [x] Final States
+  - [x] String testing
+    - [x] DFA
+    - [x] NFA
+  - [x] Export to image
+  - [x] Circular auto-layout
+  - [x] Step-By-Step Mode
+
+### 0.2.0
+- [x] Graph Optimizations
+- [x] Google Drive Exporting
+- [x] Bug Reporting
+
+### 1.0.0 (Future)
+- [ ] Pushdown Automaton
+- [ ] Turing Machine
 - [ ] Formal Definition summary
-  - [x] States
-  - [x] Symbols
-  - [x] Transitions
-  - [x] Start State
-  - [x] Final States
   - [ ] Tape Symbols
   - [ ] q_acc
   - [ ] q_rej
-- [ ] String testing
-  - [ ] DFA
-  - [x] NFA
 - [ ] Tape/Stack testing
   - [ ] PDA
   - [ ] TM
-- [x] Export to image
 
 ---
 

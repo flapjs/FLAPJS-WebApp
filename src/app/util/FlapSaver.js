@@ -4,7 +4,8 @@ import NodalGraphParser from 'graph/NodalGraphParser.js';
 import Notification from 'system/notification/Notification.js';
 import SemanticVersion from 'util/SemanticVersion.js';
 
-const CURRENT_VERSION = new SemanticVersion(0, 2, 0);
+export const CURRENT_VERSION = new SemanticVersion(0, 2, 0);
+export const CURRENT_VERSION_STRING = SemanticVersion.stringify(CURRENT_VERSION);
 
 export function saveToJSON(graphController, machineController)
 {
@@ -13,7 +14,7 @@ export function saveToJSON(graphController, machineController)
   if (!graph.isEmpty())
   {
     const dst = {};
-    dst.metadata = {version: SemanticVersion.stringify(CURRENT_VERSION)};
+    dst.metadata = {version: CURRENT_VERSION_STRING};
     dst.graphData = NodalGraphParser.toJSON(graph);
 
     //HACK: this should be calculated elsewhere

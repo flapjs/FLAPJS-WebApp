@@ -2,6 +2,8 @@ import NodalGraph from './NodalGraph.js';
 import Node from './Node.js';
 import Edge from './Edge.js';
 
+import FlapSaver from 'util/FlapSaver.js';
+
 class NodalGraphParser
 {
   static parseJSON(data, dst=null)
@@ -170,7 +172,7 @@ class NodalGraphParser
 
   static toXML(graph)
   {
-    const header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!--Created with flap.js 1.0.0.--><structure></structure>";
+    const header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!--Created with flap.js " + FlapSaver.CURRENT_VERSION_STRING + "--><structure></structure>";
     let parser = new DOMParser();
     const doc = parser.parseFromString(header, "application/xml");
 
