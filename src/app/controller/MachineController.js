@@ -5,9 +5,10 @@ import DFA from 'machine/DFA.js';
 
 class MachineController
 {
-  constructor(machineBuilder)
+  constructor()
   {
-    this.machineBuilder = machineBuilder;
+    this._module = null;
+
     this.machineName = null;
 
     this.graphController = null;
@@ -32,6 +33,11 @@ class MachineController
     this.registerEvent("userPostRenameSymbol");
   }
 
+  setModule(module)
+  {
+    this._module = module;
+  }
+
   initialize(app)
   {
     this.graphController = app.graphController;
@@ -42,19 +48,24 @@ class MachineController
 
   }
 
+  getLabelFormatter()
+  {
+    return this._module.getLabelFormatter();
+  }
+
   getMachineBuilder()
   {
-    return this.machineBuilder;
+    return this._module.getMachineBuilder();
   }
 
   getMachineType()
   {
-    return this.machineBuilder.getMachineType();
+    return this.getMachineBuilder().getMachineType();
   }
 
   setMachineType(machineType)
   {
-    this.machineBuilder.setMachineType(machineType);
+    this.getMachineBuilder().setMachineType(machineType);
   }
 
   getMachineName()
@@ -93,18 +104,18 @@ class MachineController
     this.setMachineName(machineName);
 
     //Emit a user rename machine event
-    this.emit("userRenameMachine", this.machineBuilder, machineName, prev);
+    this.emit("userRenameMachine", this.getMachineBuilder(), machineName, prev);
   }
 
   changeMachineTo(machineType)
   {
-    const prev = this.machineBuilder.getMachineType();
+    const prev = this.getMachineBuilder().getMachineType();
     if (prev != machineType)
     {
       this.setMachineType(machineType);
 
       //Emit event
-      this.emit("userChangeMachine", this.machineBuilder, machineType, prev);
+      this.emit("userChangeMachine", this.getMachineBuilder(), machineType, prev);
     }
   }
 
@@ -117,14 +128,14 @@ class MachineController
 
     if (machineType == "DFA" && currentMachineType == "NFA")
     {
-      this.emit("userPreConvertMachine", this.machineBuilder, machineType, currentMachineType);
+      this.emit("userPreConvertMachine", this.getMachineBuilder(), machineType, currentMachineType);
 
-      const result = convertToDFA(this.machineBuilder.getMachine(), new DFA());
+      const result = convertToDFA(this.getMachineBuilder().getMachine(), new DFA());
       this.graphController.getGraph().copyMachine(result);
       this.setMachineType(machineType);
 
-      this.emit("userConvertMachine", this.machineBuilder, machineType, currentMachineType);
-      this.emit("userPostConvertMachine", this.machineBuilder, machineType, currentMachineType);
+      this.emit("userConvertMachine", this.getMachineBuilder(), machineType, currentMachineType);
+      this.emit("userPostConvertMachine", this.getMachineBuilder(), machineType, currentMachineType);
     }
     else if (machineType == "NFA" && currentMachineType == "DFA")
     {
@@ -138,14 +149,14 @@ class MachineController
 
   getAlphabet()
   {
-    return this.machineBuilder.getAlphabet();
+    return this.getMachineBuilder().getAlphabet();
   }
 
   createSymbol(symbol)
   {
-    this.machineBuilder.addCustomSymbol(symbol);
+    this.getMachineBuilder().addCustomSymbol(symbol);
 
-    this.emit("userCreateSymbol", this.machineBuilder, symbol);
+    this.emit("userCreateSymbol", this.getMachineBuilder(), symbol);
   }
 
   deleteSymbol(symbol)
@@ -155,7 +166,7 @@ class MachineController
     let result = null;
     const targets = [];
 
-    this.emit("userPreDeleteSymbol", this.machineBuilder, symbol);
+    this.emit("userPreDeleteSymbol", this.getMachineBuilder(), symbol);
 
     const graph = this.graphController.getGraph();
     for(let i = graph.edges.length - 1; i >= 0; --i)
@@ -180,11 +191,11 @@ class MachineController
 
     if (targets.length <= 0)
     {
-      this.machineBuilder.removeCustomSymbol(symbol);
+      this.getMachineBuilder().removeCustomSymbol(symbol);
     }
 
-    this.emit("userDeleteSymbol", this.machineBuilder, symbol, targets);
-    this.emit("userPostDeleteSymbol", this.machineBuilder, symbol, targets);
+    this.emit("userDeleteSymbol", this.getMachineBuilder(), symbol, targets);
+    this.emit("userPostDeleteSymbol", this.getMachineBuilder(), symbol, targets);
   }
 
   renameSymbol(prevSymbol, nextSymbol)
@@ -193,7 +204,7 @@ class MachineController
     let result = null;
     const targets = [];
 
-    this.emit("userPreRenameSymbol", this.machineBuilder, nextSymbol, prevSymbol);
+    this.emit("userPreRenameSymbol", this.getMachineBuilder(), nextSymbol, prevSymbol);
 
     const graph = this.graphController.getGraph();
     const length = graph.edges.length;
@@ -210,21 +221,21 @@ class MachineController
 
     if (targets.length <= 0)
     {
-      this.machineBuilder.renameCustomSymbol(prevSymbol, nextSymbol);
+      this.getMachineBuilder().renameCustomSymbol(prevSymbol, nextSymbol);
     }
 
-    this.emit("userRenameSymbol", this.machineBuilder, nextSymbol, prevSymbol, targets);
-    this.emit("userPostRenameSymbol", this.machineBuilder, nextSymbol, prevSymbol, targets);
+    this.emit("userRenameSymbol", this.getMachineBuilder(), nextSymbol, prevSymbol, targets);
+    this.emit("userPostRenameSymbol", this.getMachineBuilder(), nextSymbol, prevSymbol, targets);
   }
-  
+
   getCustomSymbols()
   {
-    return this.machineBuilder._symbols;
+    return this.getMachineBuilder()._symbols;
   }
 
   isCustomSymbol(symbol)
   {
-    return this.machineBuilder.isCustomSymbol(symbol);
+    return this.getMachineBuilder().isCustomSymbol(symbol);
   }
 }
 Eventable.mixin(MachineController);

@@ -40,7 +40,7 @@ class HotKeys
       const jsonString = FlapSaver.saveToJSON(this.graphController, this.machineController);
       const machineName = this.machineController.getMachineName();
       //const graph = this.graphController.getGraph();
-      //const jsonString = JSON.stringify(graph.toJSON());
+      //const jsonString = JSON.stringify(NodalGraphParser.toJSON(graph));
       Downloader.downloadText(machineName + '.json', jsonString);
 
       e.preventDefault();

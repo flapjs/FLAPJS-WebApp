@@ -2,6 +2,15 @@
   width: 100%;
   text-overflow: ellipsis;
 }
+.export-google {
+  margin: 5px;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.export-google label {
+  margin-left: 5px;
+}
 .export-button {
   text-align: left;
   color: var(--color-drawer-text);

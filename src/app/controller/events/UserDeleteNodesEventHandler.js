@@ -1,6 +1,7 @@
 import EventHandler from './EventHandler.js';
 
 import NodalGraph from 'graph/NodalGraph.js';
+import NodalGraphParser from 'graph/NodalGraphParser.js';
 
 class UserDeleteNodesEventHandler extends EventHandler
 {
@@ -21,7 +22,7 @@ class UserDeleteNodesEventHandler extends EventHandler
     const dy = node.y - prevY;
 
     return {
-      graphData: graph.toJSON(),
+      graphData: NodalGraphParser.toJSON(graph),
       targets: targets,
       dx: dx,
       dy: dy
@@ -32,7 +33,7 @@ class UserDeleteNodesEventHandler extends EventHandler
   capturePostEvent(graph, node, targetNodes, prevX, prevY)
   {
     return {
-      graphData: graph.toJSON()
+      graphData: NodalGraphParser.toJSON(graph)
     };
   }
 
@@ -40,7 +41,7 @@ class UserDeleteNodesEventHandler extends EventHandler
   applyUndo(e)
   {
     const graph = this.controller.getGraph();
-    NodalGraph.parseJSON(e.eventData.graphData, this.controller.getGraph());
+    NodalGraphParser.parseJSON(e.eventData.graphData, this.controller.getGraph());
     for(const targetID of e.eventData.targets)
     {
       const nodeIndex = graph.getNodeIndexByID(targetID);
@@ -53,7 +54,7 @@ class UserDeleteNodesEventHandler extends EventHandler
   //Override - this = event
   applyRedo(e)
   {
-    NodalGraph.parseJSON(e.postData.graphData, this.controller.getGraph());
+    NodalGraphParser.parseJSON(e.postData.graphData, this.controller.getGraph());
   }
 }
 export default UserDeleteNodesEventHandler;

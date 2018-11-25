@@ -28,10 +28,13 @@ message.help.3 = Keep a weather eye open, cap'n!
 cursor.actionmode = Plunderin' Time
 cursor.movemode = Sailin' Time
 
+component.untitled.title = Arrr!
 component.testing.title = Parley
 component.overview.title = Swagger
 component.exporting.title = Plunder
 component.options.title = Grog
+component.analysis.title = Mutiny
+
 component.toolbar.title = Jolly Roger
 component.workspace.title = Poop Deck
 component.drawer.title = Cap'n's Cabin

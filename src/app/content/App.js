@@ -2,24 +2,25 @@ import React from 'react';
 import { hot } from 'react-hot-loader';
 import './App.css';
 
-import NodalGraph from 'graph/NodalGraph.js';
-
+import FSAModule from 'modules/fsa/FSAModule.js';
+import TestingManager from 'modules/fsa/testing/TestingManager.js';
+import MachineController from 'controller/MachineController.js';
 import GraphController from 'controller/GraphController.js';
 import InputController from 'controller/InputController.js';
-import MachineController from 'controller/MachineController.js';
 
-import AutoSaver from 'util/AutoSaver.js';
 import HotKeys from './HotKeys.js';
+import LocalSave from 'system/localsave/LocalSave.js';
+import * as FlapSaver from 'util/FlapSaver.js';
 
 import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
 import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
-import NotificationSystem from 'notification/NotificationSystem.js';
 import Tutorial from 'tutorial/Tutorial.js';
 
-import FSABuilder from 'builder/FSABuilder.js';
-import TestingManager from 'testing/TestingManager.js';
+import Notification from 'system/notification/Notification.js';
+import NotificationView from 'system/notification/components/NotificationView.js';
+
 import EventManager from './EventManager.js';
 
 class App extends React.Component
@@ -33,18 +34,19 @@ class App extends React.Component
     this.workspace = null;
     this.viewport = null;
     this.drawer = null;
-    this.notification = null;
     this.toolbar = null;
 
-    this._graph = new NodalGraph();
-    this._machineBuilder = new FSABuilder(this._graph);
-
-    //Must be initialized (will be called in Workspace.componentDidMount)
-    this.graphController = new GraphController(this._graph);
-    this.inputController = new InputController(this._graph);
-    this.machineController = new MachineController(this._machineBuilder);
-
+    this._module = new FSAModule();
     this.testingManager = new TestingManager();
+
+    this.inputController = new InputController();
+    this.graphController = new GraphController();
+    this.machineController = new MachineController();
+
+    this.inputController.setModule(this._module);
+    this.graphController.setModule(this._module);
+    this.machineController.setModule(this._module);
+
     this.eventManager = new EventManager();
 
     this.hotKeys = new HotKeys();
@@ -61,39 +63,32 @@ class App extends React.Component
     this.onDragEnter = this.onDragEnter.bind(this);
     this.onDragLeave = this.onDragLeave.bind(this);
     this.onFileDrop = this.onFileDrop.bind(this);
+
+    this._init = false;
   }
 
   componentDidMount()
   {
-    //Does the browser support autosaving?
-    if(AutoSaver.doesSupportLocalStorage())
-    {
-      AutoSaver.loadAutoSave(this.graphController, this.machineController);
-
-      //Start auto-saving
-      AutoSaver.initAutoSave(this.graphController, this.machineController);
-    }
-
-    this._machineBuilder.initialize(this);
+    //Initialize the module...
+    this._module.initialize(this);
 
     //Initialize the controller to graph components
     this.inputController.initialize(this);
     this.graphController.initialize(this);
     this.machineController.initialize(this);
 
-    this.testingManager.initialize(this);
-    this.eventManager.initialize(this);
-    this.hotKeys.initialize(this);
-
     //Notify on create in delete mode
     const tryCreateWhileTrash = () => {
-      if (this.inputController.getPointer().trashMode)
+      if (this.inputController.isTrashMode())
       {
-        this.notification.addWarningMessage(I18N.toString("message.warning.cannotmodify"),
-          "tryCreateWhileTrash", true);
+        Notification.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
       }
     };
     this.graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
+
+    this.testingManager.initialize(this);
+    this.eventManager.initialize(this);
+    this.hotKeys.initialize(this);
 
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;
@@ -104,10 +99,21 @@ class App extends React.Component
 
     //Begin tutorial
     this.tutorial.start(this);
+
+    LocalSave.initialize();
+
+    LocalSave.registerHandler(this);
+    this.onLoadSave();
+
+    this._init = true;
   }
 
   componentWillUnmount()
   {
+    LocalSave.unregisterHandler(this);
+
+    LocalSave.terminate();
+
     this.hotKeys.destroy();
     this.eventManager.destroy();
 
@@ -115,7 +121,7 @@ class App extends React.Component
     this.graphController.destroy();
     this.inputController.destroy();
 
-    this._machineBuilder.destroy();
+    this._module.destroy(this);
 
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;
@@ -123,6 +129,23 @@ class App extends React.Component
     workspaceDOM.removeEventListener("dragover", this.onDragOver);
     workspaceDOM.removeEventListener("dragenter", this.onDragEnter);
     workspaceDOM.removeEventListener("dragleave", this.onDragLeave);
+
+    this._init = false;
+  }
+
+  onLoadSave()
+  {
+    const data = LocalSave.loadFromStorage("graph");
+    if (data)
+    {
+      FlapSaver.loadFromJSON(data, this.graphController, this.machineController);
+    }
+  }
+
+  onAutoSave()
+  {
+    const data = FlapSaver.saveToJSON(this.graphController, this.machineController);
+    LocalSave.saveToStorage("graph", data);
   }
 
   //Called to prevent default file open
@@ -243,6 +266,11 @@ class App extends React.Component
     return this.state.isFullscreen && this.state.isOpen;
   }
 
+  getCurrentModule()
+  {
+    return this._module;
+  }
+
   render()
   {
     const inputController = this.inputController;
@@ -252,19 +280,19 @@ class App extends React.Component
     const tester = this.testingManager;
     const screen = this.workspace ? this.workspace.ref : null;
 
-    inputController.update();
+    if (this._init)
+    {
+      inputController.update();
+    }
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar ref={ref=>this.toolbar=ref}
         eventManager={this.eventManager}
-        notification={this.notification}
         drawer={this.drawer}
         graphController={graphController}
         machineController={machineController}/>
 
-      <NotificationSystem ref={ref=>this.notification=ref}
-        graphController={graphController}
-        machineController={machineController}/>
+      <NotificationView notificationManager={Notification}/>
 
       <div className="workspace-container">
         <div className={"workspace-main" +

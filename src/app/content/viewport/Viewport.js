@@ -43,7 +43,7 @@ class Viewport extends React.Component
         :
         <span>
           <div className="anchor-bottom-left" style={{width: "100%"}}>
-            <CursorMode inputController={inputController}/>
+            <CursorMode inputController={inputController} graphController={graphController}/>
           </div>
           <div className="anchor-bottom-right">
             <TrashCan inputController={inputController} viewport={this}/>
