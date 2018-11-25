@@ -6,6 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --mode development --config webpack.config.js",
     "build": "webpack --mode production --config webpack.config.js",
+    "devbuild": "webpack --mode development --config webpack.config.js",
     "test": "webpack --config webpack.test.config.js && node ./dist/debug/bundle.js"
   },
   "repository": {
