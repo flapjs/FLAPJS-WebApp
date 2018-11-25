@@ -14,36 +14,32 @@ export function saveToJSON(graphController, machineController)
   if (!graph.isEmpty())
   {
     const dst = {};
-    dst.metadata = {version: CURRENT_VERSION_STRING};
-    dst.graphData = NodalGraphParser.toJSON(graph);
+    dst["metadata"] = {version: CURRENT_VERSION_STRING};
+    dst["graphData"] = NodalGraphParser.toJSON(graph);
 
     //HACK: this should be calculated elsewhere
-    dst.machineData = {
+    dst["machineData"] = {
       name: machineController.getMachineName(),
       type: machineController.getMachineType(),
       symbols: machineController.getCustomSymbols()
     };
 
-    return JSON.stringify(dst);
+    return dst;
   }
   else
   {
-    return "";
+    return {};
   }
-
-  //Save if changes were made
-  saveConfig();
 };
 
-export function loadFromJSON(stringData, graphController, machineController)
+export function loadFromJSON(jsonData, graphController, machineController)
 {
   const graph = graphController.getGraph();
   const machineBuilder = machineController.getMachineBuilder();
 
   try
   {
-    const data = JSON.parse(stringData);
-    const metadata = data.metadata;
+    const metadata = jsonData.metadata;
     if (typeof metadata == 'object')
     {
       const dataVersion = SemanticVersion.parse(metadata.version);
@@ -53,12 +49,12 @@ export function loadFromJSON(stringData, graphController, machineController)
         return;
       }
     }
-    const graphJSON = data.graphData;
+    const graphJSON = jsonData.graphData;
     const newGraph = NodalGraphParser.parseJSON(graphJSON);
     graph.copyGraph(newGraph);
 
     //HACK: this should be calculated elsewhere
-    const machineJSON = data.machineData;
+    const machineJSON = jsonData.machineData;
     const name = machineJSON.name;
     if (name) machineController.setMachineName(name);
     const type = machineJSON.type;

@@ -28,7 +28,7 @@ class ExportingPanel extends React.Component
 
   onExportJSON(e)
   {
-    const jsonString = FlapSaver.saveToJSON(this.props.graphController, this.props.machineController);
+    const jsonString = JSON.stringify(FlapSaver.saveToJSON(this.props.graphController, this.props.machineController));
     const machineName = this.props.machineController.getMachineName();
     Downloader.downloadText(machineName + '.json', jsonString);
   }
@@ -72,7 +72,7 @@ class ExportingPanel extends React.Component
 
   onExportGoogleDrive(e)
   {
-    const jsonString = FlapSaver.saveToJSON(this.props.graphController, this.props.machineController);
+    const jsonString = JSON.stringify(FlapSaver.saveToJSON(this.props.graphController, this.props.machineController));
     const machineName = this.props.machineController.getMachineName();
     e.target.setAttribute("data-src", Downloader.getTextDataURI(jsonString));
     e.target.setAttribute("data-filename", machineName + ".json");

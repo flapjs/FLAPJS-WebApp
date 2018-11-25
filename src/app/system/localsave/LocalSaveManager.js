@@ -98,9 +98,24 @@ class LocalSaveManager
 
   loadFromStorage(saveKey)
   {
-    if (!this.doesSupportLocalStorage()) return {};
-    const item = JSON.parse(localStorage.getItem(saveKey));
-    return item ? item : null;
+    if (!this.doesSupportLocalStorage()) return null;
+    try
+    {
+      const value = localStorage.getItem(saveKey);
+      if (value && value.length > 0)
+      {
+        return JSON.parse(value);
+      }
+      else
+      {
+        return null;
+      }
+    }
+    catch(e)
+    {
+      console.error(e);
+      return {};
+    }
   }
 
   saveToStorage(saveKey, jsonData)
@@ -132,47 +147,54 @@ class LocalSaveManager
       return;
     }
 
-    if (typeof jsonData == 'object')
+    try
     {
-      let flag = jsonData;
-      if (flag)
+      if (typeof jsonData == 'object')
       {
-        flag = false;
-
-        //Don't save empty objects, cause that is wasteful.
-        for(let key in jsonData)
+        let flag = jsonData;
+        if (flag)
         {
-          if (jsonData.hasOwnProperty(key))
+          flag = false;
+
+          //Don't save empty objects, cause that is wasteful.
+          for(let key in jsonData)
           {
-            flag = true;
-            break;
+            if (jsonData.hasOwnProperty(key))
+            {
+              flag = true;
+              break;
+            }
           }
         }
-      }
 
-      //Save or remove the data...
-      if (flag)
-      {
-        localStorage.setItem(saveKey, JSON.stringify(jsonData));
+        //Save or remove the data...
+        if (flag)
+        {
+          localStorage.setItem(saveKey, JSON.stringify(jsonData));
+        }
+        else
+        {
+          localStorage.removeItem(saveKey);
+        }
       }
-      else
+      else if (typeof jsonData == 'string')
       {
-        localStorage.removeItem(saveKey);
+        const flag = jsonData.length <= 0;
+
+        //Save or remove the data...
+        if (flag)
+        {
+          localStorage.setItem(saveKey, jsonData);
+        }
+        else
+        {
+          localStorage.removeItem(saveKey);
+        }
       }
     }
-    else if (typeof jsonData == 'string')
+    catch(e)
     {
-      const flag = jsonData.length <= 0;
-
-      //Save or remove the data...
-      if (flag)
-      {
-        localStorage.setItem(saveKey, jsonData);
-      }
-      else
-      {
-        localStorage.removeItem(saveKey);
-      }
+      console.error(e);
     }
   }
 

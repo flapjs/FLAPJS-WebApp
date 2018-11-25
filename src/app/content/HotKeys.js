@@ -37,7 +37,7 @@ class HotKeys
     {
       //Save as machine file
       //TODO: Refer to export panel
-      const jsonString = FlapSaver.saveToJSON(this.graphController, this.machineController);
+      const jsonString = JSON.stringify(FlapSaver.saveToJSON(this.graphController, this.machineController));
       const machineName = this.machineController.getMachineName();
       Downloader.downloadText(machineName + '.json', jsonString);
 
