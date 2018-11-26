@@ -24,6 +24,8 @@ class TestingPanel extends React.Component
       errorCheckMode: this.props.app.testingManager.getErrorCheckMode()
     };
 
+    this.stepByStepModeChecked = false;
+
     this.onChangeErrorCheckMode = this.onChangeErrorCheckMode.bind(this);
     this.onUploadFileChange = this.onUploadFileChange.bind(this);
     this.onGraphChange = this.onGraphChange.bind(this);
@@ -103,6 +105,7 @@ class TestingPanel extends React.Component
     const tester = app.testingManager;
     const testList = tester.inputList;
     const length = testList.getTests().length;
+    tester.setStepByStepMode(this.stepByStepModeChecked);
     for(let i = 0; i < length; ++i)
     {
       testList.testByIndex(i, machine);
@@ -196,9 +199,9 @@ class TestingPanel extends React.Component
 
           <div className="panel-checkbox">
             <input id="test-step" type="checkbox"
-              checked={tester.getStepByStepMode()}
+              checked={this.stepByStepModeChecked}
               onChange={(e) => {
-                tester.setStepByStepMode(e.target.checked);
+                this.stepByStepModeChecked = e.target.checked;
               }}/>
             <label htmlFor="test-step">{I18N.toString("options.testing.stepmode")}</label>
           </div>
