@@ -202,6 +202,7 @@ class TestingPanel extends React.Component
               checked={this.stepByStepModeChecked}
               onChange={(e) => {
                 this.stepByStepModeChecked = e.target.checked;
+                if(!this.stepByStepModeChecked) tester.setStepByStepMode(false);
               }}/>
             <label htmlFor="test-step">{I18N.toString("options.testing.stepmode")}</label>
           </div>
