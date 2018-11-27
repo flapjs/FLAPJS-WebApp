@@ -469,7 +469,7 @@ class InputController
       if (picker.isSelecting())
       {
         //Update the selection box
-        picker.updateSelection(x, y);
+        picker.updateSelection(graph, x, y);
         return true;
       }
 
