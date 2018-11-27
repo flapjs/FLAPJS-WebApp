@@ -57,7 +57,7 @@ class NodalGraph
     for(let i = 0; i < length; ++i)
     {
       const node = this.nodes[i];
-      if (node.id == id)
+      if (node.getGraphElementID() == id)
       {
         return i;
       }
@@ -142,7 +142,7 @@ class NodalGraph
     for(let i = 0; i < length; ++i)
     {
       const edge = this.edges[i];
-      if (edge.id == id)
+      if (edge.getGraphElementID() == id)
       {
         return i;
       }

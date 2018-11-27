@@ -18,10 +18,10 @@ class NodalGraphRenderer extends React.Component
     const inputController = this.props.inputController;
     return <g>
       {/* Nodes */}
-      {graph.nodes.map((e, i) => <NodeRenderer key={e.id || i} node={e}/>)}
+      {graph.nodes.map((e, i) => <NodeRenderer key={e.getGraphElementID() || i} node={e}/>)}
 
       {/* Edges */}
-      {graph.edges.map((e, i) => <EdgeRenderer key={e.id || i} edge={e}/>)}
+      {graph.edges.map((e, i) => <EdgeRenderer key={e.getGraphElementID() || i} edge={e}/>)}
 
       {/* Initial marker and ghost */}
       { graph.getStartNode() && (inputController.ghostInitialMarker == null ?

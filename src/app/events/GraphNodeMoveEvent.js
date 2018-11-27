@@ -8,7 +8,7 @@ class GraphNodeMoveEvent extends Event
 
     this.graph = graph;
 
-    this.nodeID = node.id;
+    this.nodeID = node.getGraphElementID();
     this.nextX = nextX;
     this.nextY = nextY;
     this.prevX = prevX;

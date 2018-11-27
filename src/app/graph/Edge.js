@@ -1,15 +1,17 @@
+import GraphElement from 'graph/GraphElement.js';
 import Config from 'config.js';
 
 import { guid } from 'util/MathHelper.js';
 import Node from './Node.js';
 
-class Edge
+class Edge extends GraphElement
 {
   constructor(graph, from, to, label)
   {
+    super(guid());
+
     this.graph = graph;
     this.from = from;
-    this.id = guid();
 
     //radians = the angle in radians, where 0 is the normal of midpoint
     //length = the distance from midpoint
@@ -20,11 +22,6 @@ class Edge
 
     this._to = to;
     this._label = label;
-  }
-
-  setID(id)
-  {
-    this.id = id;
   }
 
   copyQuadraticsFrom(src)

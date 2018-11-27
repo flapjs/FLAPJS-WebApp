@@ -16,7 +16,7 @@ class UserDeleteNodesEventHandler extends EventHandler
     const targets = [];
     for(const target of targetNodes)
     {
-      targets.push(target.id);
+      targets.push(target.getGraphElementID());
     }
     const dx = node.x - prevX;
     const dy = node.y - prevY;

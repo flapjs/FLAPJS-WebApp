@@ -22,7 +22,7 @@ class NodalGraphParser
     {
       const node = data.nodes[i];
       const newNode = new Node(result, node.x || 0, node.y || 0, node.label || "q?");
-      newNode.id = node.id;
+      newNode.setGraphElementID(node.nodeID);
       newNode.accept = node.accept;
       if (node.customLabel)
       {
@@ -38,7 +38,7 @@ class NodalGraphParser
       if (edge.from >= nodeLength || edge.from < 0) throw new Error("Invalid edge from data: node index \'" + edge.from + "\' out of bounds.");
 
       const newEdge = new Edge(result, result.nodes[edge.from], edge.to < 0 ? null : result.nodes[edge.to], edge.label || "0");
-      newEdge.id = edge.id;
+      newEdge.setGraphElementID(edge.edgeID);
 
       //Force copy all quadratic data
       newEdge.copyQuadraticsFrom(edge.quad);
@@ -146,7 +146,7 @@ class NodalGraphParser
     {
       const node = graph.nodes[i];
       data.nodes[i] = {
-        id: node.id,
+        nodeID: node.getGraphElementID(),
         x: node.x,
         y: node.y,
         label: node.label,
@@ -159,7 +159,7 @@ class NodalGraphParser
     {
       const edge = graph.edges[i];
       data.edges[i] = {
-        id: edge.id,
+        edgeID: edge.getGraphElementID(),
         from: graph.nodes.indexOf(edge.from),
         to: graph.nodes.indexOf(edge.to),
         quad: edge.copyQuadraticsTo({}),

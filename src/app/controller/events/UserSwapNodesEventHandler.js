@@ -11,8 +11,8 @@ class UserSwapNodesEventHandler extends EventHandler
   captureEvent(graph, node, otherNode)
   {
     return {
-      nodeID: node.id,
-      otherID: otherNode.id
+      nodeID: node.getGraphElementID(),
+      otherID: otherNode.getGraphElementID()
     };
   }
 

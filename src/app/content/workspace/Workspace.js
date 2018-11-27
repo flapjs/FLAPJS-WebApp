@@ -104,7 +104,7 @@ class Workspace extends React.Component
           {/* Selected elements */}
           { picker.hasSelection() &&
             picker.getSelection(graph).map((e, i) =>
-              <HighlightRenderer key={e.id} className={inputController.isTrashMode() ? "highlight-error" : "highlight-select"} target={e} type="node"/>) }
+              <HighlightRenderer key={e.getGraphElementID()} className={inputController.isTrashMode() ? "highlight-error" : "highlight-select"} target={e} type="node"/>) }
 
           {/* Selection box */}
           <SelectionBoxRenderer visible={selectionBox.visible}
@@ -113,24 +113,24 @@ class Workspace extends React.Component
 
           {/* Node warning targets */}
           { machineController.getMachineBuilder().machineErrorChecker.warningNodes.map((e, i) =>
-            <HighlightRenderer key={e.id} className="highlight-warning graph-gui" target={e} type="node" offset="6"/>) }
+            <HighlightRenderer key={e.getGraphElementID()} className="highlight-warning graph-gui" target={e} type="node" offset="6"/>) }
 
           {/* Edge warning targets */}
           { machineController.getMachineBuilder().machineErrorChecker.warningEdges.map((e, i) =>
-            <HighlightRenderer key={e.id} className="highlight-warning graph-gui" target={e} type="edge" offset="6"/>) }
+            <HighlightRenderer key={e.getGraphElementID()} className="highlight-warning graph-gui" target={e} type="edge" offset="6"/>) }
 
           {/* Node error targets */}
           { machineController.getMachineBuilder().machineErrorChecker.errorNodes.map((e, i) =>
-            <HighlightRenderer key={e.id} className="highlight-error graph-gui" target={e} type="node" offset="6"/>) }
+            <HighlightRenderer key={e.getGraphElementID()} className="highlight-error graph-gui" target={e} type="node" offset="6"/>) }
 
           {/* Edge error targets */}
           { machineController.getMachineBuilder().machineErrorChecker.errorEdges.map((e, i) =>
-            <HighlightRenderer key={e.id} className="highlight-error graph-gui" target={e} type="edge" offset="6"/>) }
+            <HighlightRenderer key={e.getGraphElementID()} className="highlight-error graph-gui" target={e} type="edge" offset="6"/>) }
 
 
           {/* Node test targets */}
           { tester.testMode.targets.map((e, i) => {
-              return <HighlightRenderer key={e.id} className="highlight-test graph-gui" target={e} type="node" offset="6"/>;
+              return <HighlightRenderer key={e.getGraphElementID()} className="highlight-test graph-gui" target={e} type="node" offset="6"/>;
             }) }
 
           {/* Hover markers */}

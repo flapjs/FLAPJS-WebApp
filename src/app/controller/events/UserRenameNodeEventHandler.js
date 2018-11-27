@@ -12,7 +12,7 @@ class UserRenameNodeEventHandler extends EventHandler
   {
     return {
       node: node,
-      nodeID: node.id,
+      nodeID: node.getGraphElementID(),
       nextLabel: nextLabel,
       prevLabel: prevLabel,
       prevCustom: isPrevCustom

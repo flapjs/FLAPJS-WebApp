@@ -1,22 +1,19 @@
+import GraphElement from 'graph/GraphElement.js';
 import { guid } from 'util/MathHelper.js';
 
-class Node
+class Node extends GraphElement
 {
   constructor(graph, x=0, y=0, label="q")
   {
+    super(guid());
+
     this.graph = graph;
     this.x = x;
     this.y = y;
     this.customLabel = false;
-    this.id = guid();
 
     this._label = label;
     this._accept = false;
-  }
-
-  setID(id)
-  {
-    this.id = id;
   }
 
   setLabel(label)

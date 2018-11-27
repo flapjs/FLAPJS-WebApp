@@ -12,7 +12,7 @@ class UserCreateNodeEventHandler extends EventHandler
   {
     return {
       node: node,
-      nodeID: node.id,
+      nodeID: node.getGraphElementID(),
       x: node.x,
       y: node.y,
       label: node.label,
@@ -43,7 +43,7 @@ class UserCreateNodeEventHandler extends EventHandler
 
       node.x = e.postData.x;
       node.y = e.postData.y;
-      node.id = e.postData.nodeID;
+      node.setNodeID(e.postData.nodeID);
       if (e.postData.isCustom)
       {
         node.setCustomLabel(e.postData.label);

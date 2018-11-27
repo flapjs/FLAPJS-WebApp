@@ -12,9 +12,9 @@ class UserDeleteEdgeEventHandler extends EventHandler
   {
     return {
       edge: edge,
-      edgeID: edge.id,
-      fromID: edge.from.id,
-      toID: prevTo ? prevTo.id : null,
+      edgeID: edge.getGraphElementID(),
+      fromID: edge.from.getGraphElementID(),
+      toID: prevTo ? prevTo.getGraphElementID() : null,
       quad: Object.assign({}, prevQuad)
     };
   }

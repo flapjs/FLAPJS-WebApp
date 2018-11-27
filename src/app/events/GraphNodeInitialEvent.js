@@ -8,8 +8,8 @@ class GraphNodeInitialEvent extends Event
 
     this.graph = graph;
 
-    this.nodeID = nextInitial.id;
-    this.prevID = prevInitial.id;
+    this.nodeID = nextInitial.getGraphElementID();
+    this.prevID = prevInitial.getGraphElementID();
   }
 
   //Override

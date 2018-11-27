@@ -53,7 +53,7 @@ class EdgeRenderer extends React.Component
     */
     return <g className="graph-edge-container">
       //Draw lines
-      <path className="graph-edge" id={"edge:" + edge.id}
+      <path className="graph-edge" id={"edge:" + edge.getGraphElementID()}
         d={
           "M " + start.x + " " + start.y + " " +
           quadLine + " " +

@@ -11,7 +11,7 @@ class SemanticVersion
     this.patch = patch;
   }
 
-  isCompatibleWith(otherVersion)
+  canSupportVersion(otherVersion)
   {
     return this.major == otherVersion.major &&
       (this.minor < otherVersion.minor ||
