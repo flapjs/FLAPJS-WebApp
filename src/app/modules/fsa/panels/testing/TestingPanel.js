@@ -66,6 +66,7 @@ class TestingPanel extends React.Component
       const app = this.props.app;
       const tester = app.testingManager;
       tester.inputList.importTests(files[0]);
+      document.getElementById("test-name").innerHTML = files[0].name;
 
       //Makes sure you can upload the same file again.
       e.target.value = "";
@@ -146,7 +147,7 @@ class TestingPanel extends React.Component
       </div>
 
       <button className="panel-button" id="test-new"
-        onClick={() => {this.onTestsClear(); this.showTestInputList();}}>
+        onClick={() => {this.onTestsClear(); this.showTestInputList(); document.getElementById("test-name").innerHTML = "";}}>
         {I18N.toString("action.testing.new")}
       </button>
 
@@ -165,6 +166,7 @@ class TestingPanel extends React.Component
 
 
           <div className="scrollbar-container">
+            <h3 id="test-name">Test Name</h3>
             <div className="test-inputlist-content">
               {
                 isTestInvalid &&
