@@ -44,7 +44,7 @@ class StateUnreachableWarningMessage extends React.Component
       //Delete all target nodes
       for(const node of this.props.message)
       {
-        notification.getGraphController.getGraph().deleteNode(node);
+        notification.getGraphController().getGraph().deleteNode(node);
       }
       //Sort the nodes after deleting if enabled...
       notification.getMachineBuilder().getMachineBuilder().labeler.sortDefaultNodeLabels();

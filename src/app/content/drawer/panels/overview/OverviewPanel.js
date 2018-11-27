@@ -28,8 +28,18 @@ class OverviewPanel extends React.Component
     this.onAutoLayout = this.onAutoLayout.bind(this);
 
     this.onChangeAutoRename = this.onChangeAutoRename.bind(this);
-
+    this.onDeleteAllUnreachable = this.onDeleteAllUnreachable.bind(this);
     this.switchDefinition = this.switchDefinition.bind(this);
+  }
+
+  onDeleteAllUnreachable(e) {
+    const machineController = this.props.machineController;
+    const unreachableArray = machineController.getMachineBuilder().machineErrorChecker.getUnreachableNodes();
+    for(let node of unreachableArray) {
+      if(node != machineController.graphController.getGraph().getStartNode() ) {
+        machineController.graphController.getGraph().deleteNode(node);
+      }
+    }
   }
 
   onConvertToDFA(e)
@@ -121,6 +131,9 @@ class OverviewPanel extends React.Component
           </button>
           <button className="panel-button" onClick={this.switchDefinition}>
             {this.state.viewFormal ? "View Defintion" : "View Formal Definition"}
+          </button>
+          <button className="delete-button panel-button" onClick={this.onDeleteAllUnreachable}>
+             Delete Unreachable Nodes
           </button>
           <div className="panel-checkbox">
             <input type="checkbox" id="auto-statename"
