@@ -54,10 +54,8 @@ class Uploader
           {
             if (ext === JSON_EXT)
             {
-              FlapSaver.loadFromJSON(data, this.graphController, this.machineController);
-              //const dataJSON = JSON.parse(data);
-              //const dst = NodalGraph.parseJSON(dataJSON);
-              //graph.copyGraph(dst);
+              const jsonData = JSON.parse(data);
+              FlapSaver.loadFromJSON(jsonData, this.graphController, this.machineController);
             }
             else if (ext === JFF_EXT)
             {

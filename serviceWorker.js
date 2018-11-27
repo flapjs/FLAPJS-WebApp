@@ -8,7 +8,7 @@
 //TODO: Don't forget to remove \/dist\/ from isValidCachePath
 
 const CONFIG = {
-  version: '0.0.0',         //Change this to invalidate user caches
+  version: '0.2.0',         //Change this to invalidate user caches, refer to CURRENT_VERSION
   forceNetworkFirst: true,  //For debuggin' purposes, force load everything!
   networkPriority: [
     'content'
