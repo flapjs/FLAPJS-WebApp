@@ -114,8 +114,10 @@ file.export.jff.hint = Export machine as .jff
 //TODO: Actions should probably be labeled by context...
 
 action.testing.runall = Run All Tests
-action.testing.clear = Clear
+action.testing.clear = Clear Tests
+action.testing.add = Add Test
 action.testing.import = Import Tests
+action.testing.new = New Test
 action.testing.save = Save Tests
 
 action.overview.convertdfa = Convert To DFA

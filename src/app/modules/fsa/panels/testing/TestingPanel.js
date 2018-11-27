@@ -24,6 +24,8 @@ class TestingPanel extends React.Component
       errorCheckMode: this.props.app.testingManager.getErrorCheckMode()
     };
 
+    this.stepByStepModeChecked = false;
+
     this.onChangeErrorCheckMode = this.onChangeErrorCheckMode.bind(this);
     this.onUploadFileChange = this.onUploadFileChange.bind(this);
     this.onGraphChange = this.onGraphChange.bind(this);
@@ -64,6 +66,7 @@ class TestingPanel extends React.Component
       const app = this.props.app;
       const tester = app.testingManager;
       tester.inputList.importTests(files[0]);
+      document.getElementById("test-name").innerHTML = files[0].name;
 
       //Makes sure you can upload the same file again.
       e.target.value = "";
@@ -103,6 +106,7 @@ class TestingPanel extends React.Component
     const tester = app.testingManager;
     const testList = tester.inputList;
     const length = testList.getTests().length;
+    tester.setStepByStepMode(this.stepByStepModeChecked);
     for(let i = 0; i < length; ++i)
     {
       testList.testByIndex(i, machine);
@@ -123,6 +127,10 @@ class TestingPanel extends React.Component
     Downloader.downloadText(TEST_FILENAME, tester.inputList.getTestsAsStrings().join("\n"));
   }
 
+  showTestInputList() {
+      document.getElementById("test-inputlist-container").style.display = "block";
+  }
+
   render()
   {
     const app = this.props.app;
@@ -138,14 +146,27 @@ class TestingPanel extends React.Component
         <h1>{I18N.toString("component.testing.title")}</h1>
       </div>
 
+      <button className="panel-button" id="test-new"
+        onClick={() => {this.onTestsClear(); this.showTestInputList(); document.getElementById("test-name").innerHTML = "";}}>
+        {I18N.toString("action.testing.new")}
+      </button>
+
+      <button className="panel-button" id="test-upload"
+        onClick={() => {this.uploadInput.click(); this.showTestInputList();}}>
+        <input ref={ref=>this.uploadInput=ref}
+          id="test-upload-input" type="file" name="import"
+          style={{display: "none"}}
+          onChange={this.onUploadFileChange} accept=".txt"/>
+        {I18N.toString("action.testing.import")}
+      </button>
+
       <div className="panel-content">
 
-        <div className="test-inputlist-container">
-          <button className="panel-button" onClick={this.onTestsRunAll}>
-            {I18N.toString("action.testing.runall")}
-          </button>
+        <div className="test-inputlist-container" id="test-inputlist-container" style={{"display": "none"}}>
+
 
           <div className="scrollbar-container">
+            <h3 id="test-name">Test Name</h3>
             <div className="test-inputlist-content">
               {
                 isTestInvalid &&
@@ -158,26 +179,36 @@ class TestingPanel extends React.Component
                     machineBuilder={machineBuilder}/>)
               }
 
+              <button className="panel-button" onClick={() => testList.addInput("")}>
+                {I18N.toString("action.testing.add")}
+              </button>
+
               <button className="panel-button" onClick={this.onTestsClear}>
                 {I18N.toString("action.testing.clear")}
+              </button>
+
+              <button className="panel-button" id="test-save"
+                onClick={this.onTestsSave}
+                disabled={tester.inputList.isEmpty()}>
+                {I18N.toString("action.testing.save")}
               </button>
             </div>
           </div>
 
-          <button className="panel-button" id="test-upload"
-            onClick={() => this.uploadInput.click()}>
-            <input ref={ref=>this.uploadInput=ref}
-              id="test-upload-input" type="file" name="import"
-              style={{display: "none"}}
-              onChange={this.onUploadFileChange} accept=".txt"/>
-            {I18N.toString("action.testing.import")}
+          <button className="panel-button" onClick={this.onTestsRunAll}>
+            {I18N.toString("action.testing.runall")}
           </button>
 
-          <button className="panel-button" id="test-save"
-            onClick={this.onTestsSave}
-            disabled={tester.inputList.isEmpty()}>
-            {I18N.toString("action.testing.save")}
-          </button>
+          <div className="panel-checkbox">
+            <input id="test-step" type="checkbox"
+              checked={this.stepByStepModeChecked}
+              onChange={(e) => {
+                this.stepByStepModeChecked = e.target.checked;
+                if(!this.stepByStepModeChecked) tester.setStepByStepMode(false);
+              }}/>
+            <label htmlFor="test-step">{I18N.toString("options.testing.stepmode")}</label>
+          </div>
+
         </div>
 
         <hr />
@@ -192,14 +223,7 @@ class TestingPanel extends React.Component
             <option value={TestingManager.IMMEDIATE_ERROR_CHECK}>{I18N.toString("options.checkerrors.mode.immediate")}</option>
           </select>
         </div>
-        <div className="panel-checkbox">
-          <input id="test-step" type="checkbox"
-            checked={tester.getStepByStepMode()}
-            onChange={(e) => {
-              tester.setStepByStepMode(e.target.checked);
-            }}/>
-          <label htmlFor="test-step">{I18N.toString("options.testing.stepmode")}</label>
-        </div>
+
       </div>
 
       <div className="panel-bottom"></div>
