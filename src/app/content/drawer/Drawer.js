@@ -201,9 +201,9 @@ class Drawer extends React.Component
       <div className="drawer-content">
       {
         currentModule &&
-        currentModule.getPanels().map((PanelClass, i) => {
+        currentModule.getModulePanels().map((PanelClass, i) => {
           const panelID = i + 1;
-          return <PanelClass key={currentModule.getName() + ":" + panelID}
+          return <PanelClass key={currentModule.getModuleName() + ":" + panelID}
             style={{display: tabIndex == panelID ? "block" : "none"}}
             app={app}
             graphController={graphController}
@@ -225,9 +225,9 @@ class Drawer extends React.Component
         <DrawerExpander app={app}/>
         {
           currentModule &&
-          currentModule.getPanels().map((PanelClass, i) => {
+          currentModule.getModulePanels().map((PanelClass, i) => {
             const panelID = i + 1;
-            return <button key={currentModule.getName() + ":" + panelID}
+            return <button key={currentModule.getModuleName() + ":" + panelID}
               className={"tab-link" + (tabIndex === panelID ? " active" : "")}
               onClick={ev=>this.setTab(panelID)}>
               {I18N.toString(PanelClass.UNLOCALIZED_NAME || "component.untitled.title")}

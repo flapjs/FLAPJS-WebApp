@@ -5,10 +5,8 @@ import Config from 'config.js';
 
 import Subtitle from './Subtitle.js';
 
-import NodeRenderer from './renderer/NodeRenderer.js';
-import EdgeRenderer from './renderer/EdgeRenderer.js';
+import NodalGraphRenderer from 'graph/renderer/NodalGraphRenderer.js';
 import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
-import InitialMarkerRenderer from './renderer/InitialMarkerRenderer.js';
 import HighlightRenderer from './renderer/HighlightRenderer.js';
 
 const WORKSPACE_OFFSET_X = 0;
@@ -99,21 +97,10 @@ class Workspace extends React.Component
         <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="rgba(0,0,0,0.04)"/>
 
         {/* Graph objects */}
-        <g>
-          {/* Nodes */}
-          {graph.nodes.map((e, i) => <NodeRenderer key={e.id || i} node={e}/>)}
-
-          {/* Edges */}
-          {graph.edges.map((e, i) => <EdgeRenderer key={e.id || i} edge={e}/>)}
-        </g>
+        <NodalGraphRenderer graph={graph} inputController={inputController}/>
 
         {/* Graph GUIs */}
         <g>
-          {/* Initial marker and ghost */}
-          { graph.getStartNode() && (inputController.ghostInitialMarker == null ?
-            <InitialMarkerRenderer node={graph.getStartNode()}/> :
-            <InitialMarkerRenderer node={inputController.ghostInitialMarker}/>) }
-
           {/* Selected elements */}
           { picker.hasSelection() &&
             picker.getSelection(graph).map((e, i) =>
