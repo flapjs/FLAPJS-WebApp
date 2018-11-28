@@ -5,10 +5,13 @@ import NodalGraphParser from 'graph/NodalGraphParser.js';
 
 const FILETYPE_JSON = "application/json";
 const FILETYPE_JFLAP = ".jff";
+const FILETYPE_XML = ".xml";
+const VALID_FILETYPES = [FILETYPE_JSON, FILETYPE_JFLAP, FILETYPE_XML];
 
 const JSON_EXT = ".json";
 const JFF_EXT = ".jff";
-const VALID_EXTS = [JSON_EXT, JFF_EXT];
+const XML_EXT = ".xml";
+const VALID_EXTS = [JSON_EXT, JFF_EXT, XML_EXT];
 
 class Uploader
 {
@@ -27,7 +30,7 @@ class Uploader
 
   getValidFileTypes()
   {
-    return [FILETYPE_JSON, FILETYPE_JFLAP];
+    return VALID_FILETYPES;
   }
 
   uploadFileGraph(graphFileBlob)
@@ -58,7 +61,7 @@ class Uploader
               const jsonData = JSON.parse(data);
               FlapSaver.loadFromJSON(jsonData, this.graphController, this.machineController);
             }
-            else if (ext === JFF_EXT)
+            else if (ext === JFF_EXT || ext === XML_EXT)
             {
               const parser = new DOMParser();
               const dataXML = parser.parseFromString(data, "text/xml");
