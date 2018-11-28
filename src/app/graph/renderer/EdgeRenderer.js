@@ -19,7 +19,10 @@ class EdgeRenderer extends React.Component
     const end = edge.getEndPoint();
     const center = edge.getCenterPoint();
     const label = edge.getEdgeLabel();
+    const quad = edge.getQuadratic();
     const quadCoords = edge.getQuadraticAsCoords();
+    const edgeDir = edge.getEdgeDirection();
+    const flipLabel = quadCoords.y > 0;
 
     //Calculate curved lines...
     let quadLine = null;
@@ -43,11 +46,9 @@ class EdgeRenderer extends React.Component
     const labels = label.split(",");
     let dy = 0;
 
-    /*
-    <textPath startOffset="50%" textAnchor="middle" alignmentBaseline="top" href={"#" + edgeID}>
-      {str}
-    </textPath>
-    */
+    const cx = (center && center.x || 0);
+    const cy = (center && center.y || 0);
+
     return <g className="graph-edge-container">
       //Draw lines
       <path className="graph-edge" id={"edge:" + edge.getGraphElementID()}
@@ -66,18 +67,15 @@ class EdgeRenderer extends React.Component
         stroke="#000000"/>
 
       {/*Draw labels*/}
+      <g transform={"translate(" + (cx) + "," + (cy) + ") rotate(" + (edgeDir * 180 / Math.PI) + ")"}>
       { labels.length > 0 && labels.map((str, i) => {
-          const cx = (center && center.x || 0);
-          const cy = (center && center.y || 0);
-          const signy = (quadCoords && Math.sign(quadCoords.y)) || -1;
-          const xx = cx;
-          const yy = cy + ((i + 1) * signy * 15);
+          const yy = (i + 1) * -15;
 
           //TODO: ctx.clearRect(xx - cx - 2, yy - 5, (cx * 2) + 4, 10);
           return <text
             key={str + "." + i}
             className="graph-edge-label"
-            x={xx} y={yy}
+            transform={"translate(0, " + yy + ")" + (flipLabel ? " scale(-1, -1)" : "")}
             alignmentBaseline="central"
             pointerEvents="none"
             style={{userSelect: "none"}}
@@ -85,6 +83,7 @@ class EdgeRenderer extends React.Component
             {str}
           </text>;
       })}
+      </g>
     </g>;
   }
 }

@@ -672,7 +672,7 @@ class InputController
           //Bend away if there is another edge not bent with the same src/dst
           for(const edge of graph.edges)
           {
-            if (edge.isQuadratic()) continue;
+            if (edge.isQuadratic() && Math.abs(edge.getQuadratic().length) >= Config.PARALLEL_EDGE_HEIGHT * 2) continue;
             if ((edge.to === target.from && edge.from === target.to))
             {
               const HALFPI = Math.PI / 2;

@@ -82,6 +82,23 @@ class Edge extends GraphEdge
   }
 
   //Override
+  getEdgeDirection()
+  {
+    let result = 0;
+    if (this.isQuadratic())
+    {
+      const coords = this.getQuadraticAsCoords();
+      result = Math.atan2(coords.y, coords.x) + Math.PI / 2;
+    }
+    else
+    {
+      result = super.getEdgeDirection();
+    }
+
+    return result;
+  }
+
+  //Override
   getStartPoint()
   {
     const from = this.from;

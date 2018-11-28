@@ -47,6 +47,32 @@ class GraphEdge extends GraphElement
     return this._label;
   }
 
+  getEdgeDirection()
+  {
+    const from = this._from;
+    const to = this._to;
+    const HALFPI = Math.PI / 2;
+    let result = 0;
+
+    if (this.isPlaceholder())
+    {
+      result = Math.PI / 4;
+    }
+    else
+    {
+      const dy = to.y - from.y;
+      const dx = to.x - from.x;
+      result = Math.atan2(dy, dx);
+    }
+
+    if (result > HALFPI || result < -HALFPI)
+    {
+      result += Math.PI;
+    }
+
+    return result;
+  }
+
   getStartPoint(dst={x: 0, y: 0})
   {
     const from = this._from;
