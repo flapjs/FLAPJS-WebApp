@@ -10,6 +10,7 @@ export const CURRENT_VERSION_STRING = SemanticVersion.stringify(CURRENT_VERSION)
 export function saveToJSON(graphController, machineController)
 {
   const graph = graphController.getGraph();
+  const machineBuilder = machineController.getMachineBuilder();
 
   if (!graph.isEmpty())
   {
@@ -21,7 +22,8 @@ export function saveToJSON(graphController, machineController)
     dst["machineData"] = {
       name: machineController.getMachineName(),
       type: machineController.getMachineType(),
-      symbols: machineController.getCustomSymbols()
+      symbols: machineController.getCustomSymbols(),
+      statePrefix: machineBuilder.getLabeler().prefix
     };
 
     return dst;
@@ -68,6 +70,8 @@ export function loadFromJSON(jsonData, graphController, machineController)
         machineBuilder._symbols.push(symbol);
       }
     }
+    const statePrefix = machineJSON.statePrefix;
+    if (statePrefix) machineBuilder.getLabeler().prefix = statePrefix;
   }
   catch (e)
   {

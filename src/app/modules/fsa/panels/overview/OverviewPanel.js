@@ -56,7 +56,11 @@ class OverviewPanel extends React.Component
   onSubmitAutoStatePrefix(next, prev)
   {
     const labeler = this.props.machineController.getMachineBuilder().getLabeler();
-    labeler.prefix = next;
+    if (labeler.prefix != next)
+    {
+      labeler.prefix = next;
+      labeler.sortDefaultNodeLabels();
+    }
   }
 
   onAutoStateFormat(value)

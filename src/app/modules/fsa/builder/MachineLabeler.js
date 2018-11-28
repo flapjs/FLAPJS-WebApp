@@ -6,6 +6,9 @@ class MachineLabeler
   {
     this.graph = graph;
     this.prefix = Config.STR_STATE_LABEL;
+
+    //TODO: this is hooked into the controller in App.js
+    this.shouldAutoLabel = false;
   }
 
   sortDefaultNodeLabels()
@@ -41,6 +44,8 @@ class MachineLabeler
 
   getNextDefaultNodeLabel()
   {
+    //if (!this.shouldAutoLabel) return this.prefix;
+
     let nodeIndex = 0;
     let result = this.getDefaultNodeLabelByIndex(nodeIndex);
     while(!this.isUniqueNodeLabel(result))

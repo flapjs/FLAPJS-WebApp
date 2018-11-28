@@ -10,8 +10,6 @@ class MachineBuilder
     this.graph = graph;
     this.graphController = null;
 
-    //TODO: this is hooked into the controller in App.js
-    this.shouldAutoLabel = false;
     this.labeler = new MachineLabeler(graph);
 
     this.onGraphNodeLabelChange = this.onGraphNodeLabelChange.bind(this);
@@ -36,8 +34,8 @@ class MachineBuilder
 
   setAutoRenameNodes(enable)
   {
-    const prev = this.shouldAutoLabel;
-    this.shouldAutoLabel = enable;
+    const prev = this.labeler.shouldAutoLabel;
+    this.labeler.shouldAutoLabel = enable;
     if (prev != enable && enable)
     {
       this.graphController.on("userDeleteNodes", this.onGraphNodeLabelChange);
@@ -50,7 +48,7 @@ class MachineBuilder
 
   shouldAutoRenameNodes()
   {
-    return this.shouldAutoLabel;
+    return this.labeler.shouldAutoLabel;
   }
 
   getLabeler()
