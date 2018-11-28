@@ -4,6 +4,7 @@ import './ExportingPanel.css';
 
 import Downloader from 'util/Downloader.js';
 import * as FlapSaver from 'util/FlapSaver.js';
+import NodalGraphParser from 'graph/NodalGraphParser.js';
 
 import IconButton from 'icons/IconButton.js';
 import PNGIcon from 'icons/flat/PNGIcon.js';
@@ -38,7 +39,7 @@ class ExportingPanel extends React.Component
     const machineName = this.props.machineController.getMachineName();
     const graph = this.props.graphController.getGraph();
 
-    const xmlString = new XMLSerializer().serializeToString(graph.toXML());
+    const xmlString = new XMLSerializer().serializeToString(NodalGraphParser.toXML());
     Downloader.downloadText(machineName + '.jff', xmlString);
   }
 
