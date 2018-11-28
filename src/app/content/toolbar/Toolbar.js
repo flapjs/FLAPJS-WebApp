@@ -22,6 +22,8 @@ import LanguageIcon from 'icons/LanguageIcon.js';
 import OfflineIcon from 'icons/OfflineIcon.js';
 import OfflinePinIcon from 'icons/OfflinePinIcon.js';
 
+import Drawer from 'content/drawer/Drawer.js';
+
 class Toolbar extends React.Component
 {
   constructor(props)
@@ -108,7 +110,7 @@ class Toolbar extends React.Component
         </div>
         {/*Machine Type*/}
         <label id="machine-type"
-          onClick={()=>drawer.setTab(1)}>
+          onClick={()=>drawer.setTab(2)}>
           {machineBuilder.getMachineType()}
         </label>
       </div>
@@ -145,7 +147,7 @@ class Toolbar extends React.Component
         </IconButton>
         {/*Save Button*/}
         <IconButton className="navicon" id="toolbar-save" title={I18N.toString("action.toolbar.save")}
-          onClick={()=>drawer.setTab(2)} disabled={graph.isEmpty()}>
+          onClick={()=>drawer.setTab(Drawer.EXPORTING_PANEL_TAB_INDEX)} disabled={graph.isEmpty()}>
           <SaveIcon/>
         </IconButton>
 
