@@ -7,7 +7,6 @@ import ExportingPanel from './panels/exporting/ExportingPanel.js';
 import OptionsPanel from './panels/options/OptionsPanel.js';
 
 const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
-
 const DEFAULT_TAB_INDEX = 1;
 
 const MAX_PANEL_THRESHOLD = 50;
@@ -323,5 +322,7 @@ function updatePanelSize(app, x, y)
   //Set panel size
   container.style.setProperty("--panel-size", size + "px");
 }
+Drawer.EXPORTING_PANEL_TAB_INDEX = -1;
+Drawer.OPTIONS_PANEL_TAB_INDEX = -2;
 
 export default Drawer;
