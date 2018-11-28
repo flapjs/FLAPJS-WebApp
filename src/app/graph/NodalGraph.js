@@ -42,7 +42,7 @@ class NodalGraph
   {
     for(const node of this.nodes)
     {
-      if (node.label == label)
+      if (node.getNodeLabel() == label)
       {
         return node;
       }
@@ -83,7 +83,7 @@ class NodalGraph
     for(let i = this.nodes.length - 1; i >= 0; --i)
     {
       const node = this.nodes[i];
-      if (node.label == label)
+      if (node.getNodeLabel() == label)
       {
         return i;
       }
@@ -158,7 +158,7 @@ class NodalGraph
     {
       if (edge.from === from && edge.to === to)
       {
-        let result = edge.label.split(",");
+        let result = edge.getEdgeLabel().split(",");
         if (label && label.length > 0)
         {
           result = result.concat(label.split(","));

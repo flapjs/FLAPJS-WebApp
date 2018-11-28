@@ -1,6 +1,7 @@
 import NodalGraph from 'graph/NodalGraph.js';
 
 import * as FlapSaver from 'util/FlapSaver.js';
+import NodalGraphParser from 'graph/NodalGraphParser.js';
 
 const FILETYPE_JSON = "application/json";
 const FILETYPE_JFLAP = ".jff";
@@ -61,7 +62,7 @@ class Uploader
             {
               const parser = new DOMParser();
               const dataXML = parser.parseFromString(data, "text/xml");
-              const dst = NodalGraph.parseXML(dataXML);
+              const dst = NodalGraphParser.parseXML(dataXML);
               graph.copyGraph(dst);
             }
             else

@@ -15,7 +15,7 @@ class UserCreateEdgeEventHandler extends EventHandler
       edgeID: edge.getGraphElementID(),
       fromID: edge.from.getGraphElementID(),
       toID: edge.to ? edge.to.getGraphElementID() : null,
-      label: edge.label,
+      label: edge.getEdgeLabel(),
       quad: edge.copyQuadraticsTo({})
     };
   }

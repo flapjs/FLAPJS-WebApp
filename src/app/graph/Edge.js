@@ -1,33 +1,41 @@
-import GraphElement from 'graph/GraphElement.js';
+import GraphEdge from 'graph/GraphEdge.js';
 import Config from 'config.js';
 
 import { guid } from 'util/MathHelper.js';
 import Node from './Node.js';
 
-class Edge extends GraphElement
+class Edge extends GraphEdge
 {
   constructor(graph, from, to, label)
   {
-    super(guid());
+    super(guid(), from, to);
 
     this.graph = graph;
-    this.from = from;
 
     //radians = the angle in radians, where 0 is the normal of midpoint
     //length = the distance from midpoint
     this._quad = {
       radians: 0,
-      length: 0
+      length: 0,
+      _coords: {x: 0, y: 0}
     };
 
-    this._to = to;
     this._label = label;
+  }
+
+  get from()
+  {
+    return this.getSourceNode();
+  }
+
+  set from(value)
+  {
+    this.setSourceNode(value);
   }
 
   copyQuadraticsFrom(src)
   {
-    this._quad.radians = src.radians;
-    this._quad.length = src.length;
+    this.setQuadratic(src.radians, src.length);
   }
 
   copyQuadraticsTo(dst)
@@ -48,11 +56,32 @@ class Edge extends GraphElement
     return this._quad;
   }
 
-  getQuadCoords(dst={x: 0, y: 0})
+  getQuadraticAsCoords()
   {
-    return toQuadCoords(this, this._quad.radians, this._quad.length, dst);
+    const from = this.from;
+    const to = this._to;
+    const dst = this._quad._coords;
+    if (from == null || to == null)
+    {
+      dst.x = 0;
+      dst.y = 0;
+    }
+    else
+    {
+      /*
+      _capture: {
+        fx: 0, fy: 0,
+        tx: 0, ty: 0,
+        ql: 0, qr: 0
+      }
+      */
+      getDirectionalVector(from.x, from.y, to.x, to.y,
+        this._quad.length, this._quad.radians, dst);
+    }
+    return dst;
   }
 
+  //Override
   getStartPoint()
   {
     const from = this.from;
@@ -87,7 +116,7 @@ class Edge extends GraphElement
     else
     {
       const midpoint = getMidPoint(fromx, fromy, tox, toy);
-      const qcoords = this.getQuadCoords();
+      const qcoords = this.getQuadraticAsCoords();
       const qx = midpoint.x + qcoords.x;
       const qy = midpoint.y + qcoords.y;
       const dir = getDirectionalVector(fromx, fromy, qx, qy,
@@ -98,6 +127,7 @@ class Edge extends GraphElement
     }
   }
 
+  //Override
   getEndPoint()
   {
     const from = this.from;
@@ -139,7 +169,7 @@ class Edge extends GraphElement
     else
     {
       const midpoint = getMidPoint(fromx, fromy, tox, toy);
-      const qcoords = this.getQuadCoords();
+      const qcoords = this.getQuadraticAsCoords();
       const qx = midpoint.x + qcoords.x;
       const qy = midpoint.y + qcoords.y;
 
@@ -151,6 +181,7 @@ class Edge extends GraphElement
     }
   }
 
+  //Override
   getCenterPoint()
   {
     const from = this.from;
@@ -179,7 +210,7 @@ class Edge extends GraphElement
 
     if (this.isQuadratic())
     {
-      const qcoords = this.getQuadCoords();
+      const qcoords = this.getQuadraticAsCoords();
       const qx = qcoords.x;
       const qy = qcoords.y;
       midpoint.x += qx;
@@ -336,16 +367,6 @@ class Edge extends GraphElement
     {
       this._quad.radians = 0;
     }
-  }
-
-  isPlaceholder()
-  {
-    return !this.to;
-  }
-
-  isSelfLoop()
-  {
-    return this.from === this.to;
   }
 
   isQuadratic()

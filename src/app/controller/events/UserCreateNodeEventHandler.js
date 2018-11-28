@@ -15,7 +15,7 @@ class UserCreateNodeEventHandler extends EventHandler
       nodeID: node.getGraphElementID(),
       x: node.x,
       y: node.y,
-      label: node.label,
+      label: node.getNodeLabel(),
       isCustom: node.hasCustomLabel()
     };
   }

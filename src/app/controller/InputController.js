@@ -565,10 +565,10 @@ class InputController
           {
             if (edge !== target && edge.from === target.from && picker.isTarget(edge.to))
             {
-              let result = edge.label.split(",");
-              if (target.label !== Config.STR_TRANSITION_DEFAULT_LABEL)
+              let result = edge.getEdgeLabel().split(",");
+              if (target.getEdgeLabel() !== Config.STR_TRANSITION_DEFAULT_LABEL)
               {
-                result = result.concat(target.label.split(","));
+                result = result.concat(target.getEdgeLabel().split(","));
               }
 
               //Allow the user to edit the merged labels
@@ -682,7 +682,7 @@ class InputController
           }
 
           //Open label editor if default edge...
-          if (target.label === Config.STR_TRANSITION_DEFAULT_LABEL)
+          if (target.getEdgeLabel() === Config.STR_TRANSITION_DEFAULT_LABEL)
           {
             if (inputController.isNewEdge)
             {
@@ -716,7 +716,7 @@ class InputController
             target.makePlaceholder();
 
             //Open label editor if default edge...
-            if (target.label === Config.STR_TRANSITION_DEFAULT_LABEL)
+            if (target.getEdgeLabel() === Config.STR_TRANSITION_DEFAULT_LABEL)
             {
               graphController.openLabelEditor(target, x, y);
             }

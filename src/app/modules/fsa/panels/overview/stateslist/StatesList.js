@@ -34,7 +34,7 @@ class StatesList extends React.Component
           <TriangleIcon/>
           {
             graph.nodes.map((e, i) => {
-              return <StateTag key={e.label} src={e} label={e.label} accept={e.accept}
+              return <StateTag key={e.getGraphElementID()} src={e} label={e.getNodeLabel()} accept={e.accept}
                 graphController={graphController}
                 onFocus={ev => graphController.focusOnNode(e)}/>
             })

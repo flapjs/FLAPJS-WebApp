@@ -262,7 +262,7 @@ function fillFSA(graph, fsa)
   {
     try
     {
-      let state = node.label;
+      let state = node.getNodeLabel();
       fsa.newState(state);
 
       //Set final state
@@ -286,12 +286,12 @@ function fillFSA(graph, fsa)
     const to = edge.to;
     if (from instanceof Node && to instanceof Node)
     {
-      const labels = edge.label.split(",");
+      const labels = edge.getEdgeLabel().split(",");
       for(const label of labels)
       {
         try
         {
-          fsa.newTransition(from.label, to.label, label);
+          fsa.newTransition(from.getNodeLabel(), to.getNodeLabel(), label);
         }
         catch(e)
         {
@@ -302,7 +302,7 @@ function fillFSA(graph, fsa)
   }
 
   //Set start state
-  let startState = graph.getStartNode().label;
+  let startState = graph.getStartNode().getNodeLabel();
   fsa.setStartState(startState);
 
   return fsa;

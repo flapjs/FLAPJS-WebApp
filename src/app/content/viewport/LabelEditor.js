@@ -52,7 +52,7 @@ class LabelEditor extends React.Component
       };
     });
 
-    this.inputElement.resetValue(targetEdge.label, () => {
+    this.inputElement.resetValue(targetEdge.getEdgeLabel(), () => {
       if (defaultText) this.inputElement.setValue(defaultText);
 
       this.parentElement.focus();
@@ -80,7 +80,7 @@ class LabelEditor extends React.Component
       }
       else
       {
-        if (!this.state.target.label)
+        if (!this.state.target.getEdgeLabel())
         {
           this.state.target.setLabel(EMPTY);
 

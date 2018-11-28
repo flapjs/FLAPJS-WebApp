@@ -172,10 +172,10 @@ class MachineController
     for(let i = graph.edges.length - 1; i >= 0; --i)
     {
       edge = graph.edges[i];
-      index = edge.label.indexOf(symbol);
+      index = edge.getEdgeLabel().indexOf(symbol);
       if (index >= 0)
       {
-        result = edge.label.substring(0, index) + edge.label.substring(index + 1);
+        result = edge.getEdgeLabel().substring(0, index) + edge.getEdgeLabel().substring(index + 1);
         if (result.length > 0)
         {
           edge.setLabel(result);
@@ -211,8 +211,8 @@ class MachineController
     for(let i = 0; i < length; ++i)
     {
       edge = graph.edges[i];
-      let result = edge.label.replace(prevSymbol, nextSymbol);
-      if (result != edge.label)
+      let result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
+      if (result != edge.getEdgeLabel())
       {
         targets.push(edge);
       }
