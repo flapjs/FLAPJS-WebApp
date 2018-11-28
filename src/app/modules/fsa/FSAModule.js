@@ -3,6 +3,7 @@ import BaseModule from 'modules/base/BaseModule.js';
 import OverviewPanel from './panels/overview/OverviewPanel.js';
 import TestingPanel from './panels/testing/TestingPanel.js';
 import AnalysisPanel from './panels/analysis/AnalysisPanel.js';
+import AboutPanel from './panels/about/AboutPanel.js';
 
 import NodalGraph from 'graph/NodalGraph.js';
 
@@ -46,6 +47,11 @@ class FSAModule extends BaseModule
   getLabelFormatter()
   {
     return this._machineBuilder.formatAlphabetString.bind(this._machineBuilder);
+  }
+
+  getModuleInfoPanel()
+  {
+    return AboutPanel;
   }
 
   //Override

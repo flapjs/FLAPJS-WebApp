@@ -7,7 +7,7 @@ import ExportingPanel from './panels/exporting/ExportingPanel.js';
 import OptionsPanel from './panels/options/OptionsPanel.js';
 
 const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
-const DEFAULT_TAB_INDEX = 1;
+const DEFAULT_TAB_INDEX = 1;//TODO: Should be 0, try it :)
 
 const MAX_PANEL_THRESHOLD = 50;
 const MIN_PANEL_SIZE = 300;//180
@@ -195,6 +195,7 @@ class Drawer extends React.Component
     const machineController = this.props.machineController;
 
     const tabIndex = this.state.tabIndex;
+    const InfoPanel = currentModule ? currentModule.getModuleInfoPanel() : null;
 
     return <div className={"drawer-container"} onWheel={this.onScroll}>
       <div className="drawer-content">
@@ -208,6 +209,10 @@ class Drawer extends React.Component
             graphController={graphController}
             machineController={machineController}/>;
         })
+      }
+      {
+        tabIndex == 0 && InfoPanel != null &&
+        <InfoPanel app={app}/>
       }
       {
         DEFAULT_PANELS.map((PanelClass, i) => {
