@@ -75,7 +75,7 @@ class FormalDefinition extends React.Component {
             })
           }
           {
-            isNFA && <div>{"otherwise" + " " + EQUAL + " " + EMPTY_SET}</div>
+            isNFA && <div>{"For other inputs (q, x), " + DELTA + "( (q, x) )" + " " + EQUAL + " " + EMPTY_SET}</div>
           }
         </div>
       </div>

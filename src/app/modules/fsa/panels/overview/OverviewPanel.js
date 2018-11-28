@@ -4,6 +4,8 @@ import './OverviewPanel.css';
 
 import Config from 'config.js';
 
+import FormattedInput from 'system/formattedinput/FormattedInput.js';
+
 import StatesList from './stateslist/StatesList.js';
 import AlphabetList from './alphabetlist/AlphabetList.js';
 import TransitionTable from './transitiontable/TransitionTable.js';
@@ -26,6 +28,8 @@ class OverviewPanel extends React.Component
     this.onAutoLayout = this.onAutoLayout.bind(this);
 
     this.onChangeAutoRename = this.onChangeAutoRename.bind(this);
+    this.onSubmitAutoStatePrefix = this.onSubmitAutoStatePrefix.bind(this);
+    this.onAutoStateFormat = this.onAutoStateFormat.bind(this);
 
     this.switchDefinition = this.switchDefinition.bind(this);
   }
@@ -47,6 +51,17 @@ class OverviewPanel extends React.Component
   {
     const machineBuilder = this.props.machineController.getMachineBuilder();
     machineBuilder.setAutoRenameNodes(e.target.checked);
+  }
+
+  onSubmitAutoStatePrefix(next, prev)
+  {
+    const labeler = this.props.machineController.getMachineBuilder().getLabeler();
+    labeler.prefix = next;
+  }
+
+  onAutoStateFormat(value)
+  {
+    return value && value.length > 0 ? value : Config.STR_STATE_LABEL;
   }
 
   switchDefinition()
@@ -98,7 +113,7 @@ class OverviewPanel extends React.Component
                 <h3 style={{marginBottom: "0"}}>State Labels</h3>
                 <div style={{display: "flex", flexDirection: "row"}}>
                   <div className="statetag-container">
-                    <input type="text" defaultValue="q" style={{width: "4em"}} disabled="true"/>
+                    <FormattedInput defaultValue={machineBuilder.getLabeler().prefix} style={{width: "4em"}} formatter={this.onAutoStateFormat} saveOnExit="true" onSubmit={this.onSubmitAutoStatePrefix}/>
                   </div>
                   <select style={{
                       background: "none",
@@ -108,13 +123,14 @@ class OverviewPanel extends React.Component
                       margin: "0",
                       appearance: "none",
                       color: "white"
-                    }}>
+                    }} disabled="true">
                     <option>{"0-9"}</option>
                     <option>{"a-z"}</option>
                     <option>{"A-Z"}</option>
                   </select>
                 </div>
                 <div className="panel-checkbox">
+
                   <input type="checkbox" id="auto-statename"
                     onChange={this.onChangeAutoRename}
                     checked={machineBuilder.shouldAutoRenameNodes()}/>

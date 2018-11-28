@@ -7,6 +7,7 @@ class FormattedInput extends React.Component
     super(props);
 
     this.element = null;
+    this.ignoreSaveOnExit = false;
 
     const defaultValue = props.defaultValue || "";
     this.state = {
@@ -20,6 +21,7 @@ class FormattedInput extends React.Component
 
     //props:
     //  filter - a filter function
+    //  formatter - a format function
     //  saveOnExit - whether to save on blur
     //  defaultValue - the default value for input
   }
@@ -66,9 +68,22 @@ class FormattedInput extends React.Component
 
   onBlur(e)
   {
+    if (this.ignoreSaveOnExit)
+    {
+      this.ignoreSaveOnExit = false;
+      return;
+    }
+
     if (this.props.saveOnExit)
     {
-      this.resetValue(this.state.value || this.props.defaultValue);
+      const prev = this.state.prevValue;
+      const next = e.target.value || this.props.defaultValue;
+      this.resetValue(next, () => {
+        if (this.props.onSubmit)
+        {
+          this.props.onSubmit(next, prev);
+        }
+      });
     }
     else
     {
@@ -83,6 +98,8 @@ class FormattedInput extends React.Component
       const prev = this.state.prevValue;
       const next = e.target.value || this.props.defaultValue;
       this.resetValue(next, () => {
+        this.ignoreSaveOnExit = true;
+
         if (this.props.onSubmit)
         {
           this.props.onSubmit(next, prev);
@@ -95,6 +112,8 @@ class FormattedInput extends React.Component
     {
       const prev = this.state.prevValue;
       this.resetValue(prev, () => {
+        this.ignoreSaveOnExit = true;
+
         if (this.props.onSubmit)
         {
           this.props.onSubmit(prev, prev);

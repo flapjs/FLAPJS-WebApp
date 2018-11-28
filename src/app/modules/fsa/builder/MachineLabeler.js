@@ -5,6 +5,7 @@ class MachineLabeler
   constructor(graph)
   {
     this.graph = graph;
+    this.prefix = Config.STR_STATE_LABEL;
   }
 
   sortDefaultNodeLabels()
@@ -52,7 +53,7 @@ class MachineLabeler
 
   getDefaultNodeLabelByIndex(index)
   {
-    return Config.STR_STATE_LABEL + (index);
+    return this.prefix + (index);
   }
 
   isUniqueNodeLabel(newLabel)
