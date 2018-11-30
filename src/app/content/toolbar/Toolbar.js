@@ -21,6 +21,7 @@ import HelpIcon from 'icons/HelpIcon.js';
 import LanguageIcon from 'icons/LanguageIcon.js';
 import OfflineIcon from 'icons/OfflineIcon.js';
 import OfflinePinIcon from 'icons/OfflinePinIcon.js';
+import BugIcon from 'icons/BugIcon.js';
 
 class Toolbar extends React.Component
 {
@@ -152,6 +153,11 @@ class Toolbar extends React.Component
 
         {/*Right Alt. Toolbar*/}
         <div className="toolbar-tray-alt">
+        {/*Report a Bug Button*/}
+        <IconButton className="navicon" id="bug" title={I18N.toString("action.toolbar.bug")}
+          >
+          <BugIcon/>
+        </IconButton>
           {/*Help Button*/}
           <HelpButton className="navicon" id="toolbar-help" title={I18N.toString("action.toolbar.help")}
             notification={notification}>

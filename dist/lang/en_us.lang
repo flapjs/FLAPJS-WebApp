@@ -87,6 +87,7 @@ action.toolbar.savemachine = Save Machine File
 action.toolbar.saveimage = Export to Image
 
 action.toolbar.save = Save
+action.toolbar.bug = Report a Bug
 action.toolbar.help = Help
 action.toolbar.newmachine = New
 action.toolbar.uploadmachine = Upload
