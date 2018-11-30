@@ -261,17 +261,15 @@ class PDA
   toJSON()
   {
     const result = {};
-    result._version = "1.0.0";
-
-    if (this instanceof DFA) result.type = "DFA";
-    else if (this instanceof NFA) result.type = "NFA";
-    else result.type = "FSA";
+    result.type = "PDA";
+    /*
     result.states = this._states.slice();
     result.alphabet = this._customAlphabet.slice();
     result.usedAlphabet = this.getUsedAlphabet();
     result.transitions = this._transitions.slice();
     result.startState = this.getStartState();
     result.finalStates = this._finalStates.slice();
+    */
 
     return result;
   }

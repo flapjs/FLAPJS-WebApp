@@ -7,8 +7,7 @@ import ExportingPanel from './panels/exporting/ExportingPanel.js';
 import OptionsPanel from './panels/options/OptionsPanel.js';
 
 const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
-
-const DEFAULT_TAB_INDEX = 1;
+const DEFAULT_TAB_INDEX = 1;//TODO: Should be 0, try it :)
 
 const MAX_PANEL_THRESHOLD = 50;
 const MIN_PANEL_SIZE = 300;//180
@@ -196,19 +195,24 @@ class Drawer extends React.Component
     const machineController = this.props.machineController;
 
     const tabIndex = this.state.tabIndex;
+    const InfoPanel = currentModule ? currentModule.getModuleInfoPanel() : null;
 
     return <div className={"drawer-container"} onWheel={this.onScroll}>
       <div className="drawer-content">
       {
         currentModule &&
-        currentModule.getPanels().map((PanelClass, i) => {
+        currentModule.getModulePanels().map((PanelClass, i) => {
           const panelID = i + 1;
-          return <PanelClass key={currentModule.getName() + ":" + panelID}
+          return <PanelClass key={currentModule.getModuleName() + ":" + panelID}
             style={{display: tabIndex == panelID ? "block" : "none"}}
             app={app}
             graphController={graphController}
             machineController={machineController}/>;
         })
+      }
+      {
+        tabIndex == 0 && InfoPanel != null &&
+        <InfoPanel app={app}/>
       }
       {
         DEFAULT_PANELS.map((PanelClass, i) => {
@@ -225,9 +229,9 @@ class Drawer extends React.Component
         <DrawerExpander app={app}/>
         {
           currentModule &&
-          currentModule.getPanels().map((PanelClass, i) => {
+          currentModule.getModulePanels().map((PanelClass, i) => {
             const panelID = i + 1;
-            return <button key={currentModule.getName() + ":" + panelID}
+            return <button key={currentModule.getModuleName() + ":" + panelID}
               className={"tab-link" + (tabIndex === panelID ? " active" : "")}
               onClick={ev=>this.setTab(panelID)}>
               {I18N.toString(PanelClass.UNLOCALIZED_NAME || "component.untitled.title")}
@@ -323,5 +327,7 @@ function updatePanelSize(app, x, y)
   //Set panel size
   container.style.setProperty("--panel-size", size + "px");
 }
+Drawer.EXPORTING_PANEL_TAB_INDEX = -1;
+Drawer.OPTIONS_PANEL_TAB_INDEX = -2;
 
 export default Drawer;

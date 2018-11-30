@@ -39,10 +39,10 @@ class NodeRenderer extends React.Component
         pointerEvents="none"
         style={{
           userSelect: "none",
-          fontSize: (1 - Math.min(Math.max(node.label.length - 2, 0) / 6, 0.5)) + "em"
+          fontSize: (1 - Math.min(Math.max(node.getNodeLabel().length - 2, 0) / 6, 0.5)) + "em"
         }}
         textAnchor="middle">
-        {node.label}
+        {node.getNodeLabel()}
       </text>
     </g>;
   }

@@ -4,6 +4,7 @@ import './ExportingPanel.css';
 
 import Downloader from 'util/Downloader.js';
 import * as FlapSaver from 'util/FlapSaver.js';
+import NodalGraphParser from 'graph/NodalGraphParser.js';
 
 import IconButton from 'icons/IconButton.js';
 import PNGIcon from 'icons/flat/PNGIcon.js';
@@ -28,10 +29,8 @@ class ExportingPanel extends React.Component
 
   onExportJSON(e)
   {
-    const jsonString = FlapSaver.saveToJSON(this.props.graphController, this.props.machineController);
+    const jsonString = JSON.stringify(FlapSaver.saveToJSON(this.props.graphController, this.props.machineController));
     const machineName = this.props.machineController.getMachineName();
-    //const graph = this.props.graphController.getGraph();
-    //const jsonString = JSON.stringify(NodalGraphParser.toJSON(graph));
     Downloader.downloadText(machineName + '.json', jsonString);
   }
 
@@ -40,7 +39,7 @@ class ExportingPanel extends React.Component
     const machineName = this.props.machineController.getMachineName();
     const graph = this.props.graphController.getGraph();
 
-    const xmlString = new XMLSerializer().serializeToString(graph.toXML());
+    const xmlString = new XMLSerializer().serializeToString(NodalGraphParser.toXML());
     Downloader.downloadText(machineName + '.jff', xmlString);
   }
 
@@ -74,7 +73,7 @@ class ExportingPanel extends React.Component
 
   onExportGoogleDrive(e)
   {
-    const jsonString = FlapSaver.saveToJSON(this.props.graphController, this.props.machineController);
+    const jsonString = JSON.stringify(FlapSaver.saveToJSON(this.props.graphController, this.props.machineController));
     const machineName = this.props.machineController.getMachineName();
     e.target.setAttribute("data-src", Downloader.getTextDataURI(jsonString));
     e.target.setAttribute("data-filename", machineName + ".json");

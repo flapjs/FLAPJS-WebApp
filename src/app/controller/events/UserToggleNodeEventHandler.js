@@ -11,7 +11,7 @@ class UserToggleNodeEventHandler extends EventHandler
   captureEvent(graph, node, prevAccept)
   {
     return {
-      nodeID: node.id,
+      nodeID: node.getGraphElementID(),
       prevAccept: prevAccept
     };
   }

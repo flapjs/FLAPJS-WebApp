@@ -8,7 +8,7 @@ class GraphEdgeLabelEvent extends Event
 
     this.graph = graph;
     this.edge = edge;
-    this.edgeID = edge.id;
+    this.edgeID = edge.getGraphElementID();
 
     this.nextLabel = nextLabel;
     this.prevLabel = prevLabel;

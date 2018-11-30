@@ -58,7 +58,7 @@ class NFAErrorChecker
       {
         const from = edge.from;
         const to = edge.to;
-        const labels = edge.label.split(",");
+        const labels = edge.getEdgeLabel().split(",");
 
         for(const label of labels)
         {

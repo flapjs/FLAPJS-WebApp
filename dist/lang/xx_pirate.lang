@@ -77,9 +77,12 @@ file.export.jff.hint = Export yer charts as .jff
 //TODO: Actions should probably be labeled by context...
 
 action.testing.runall = Sing yer sea shanties!
+action.testing.stoprun = Stop!
 action.testing.clear = Feed the fishes!
 action.testing.import = More landlubbers...
 action.testing.save = Save fer 'nother day
+action.testing.add = 'Nother landlubber
+action.testing.new = Raise the anchor!
 
 action.overview.convertdfa = Convert yer charts to DFA
 action.overview.convertnfa = Convert yer charts to NFA

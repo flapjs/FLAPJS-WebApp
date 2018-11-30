@@ -11,7 +11,7 @@ class GraphNodeMoveAllEvent extends Event
     this.nodeIDs = [];
     for(const node of nodes)
     {
-      this.nodeIDs.push(node.id);
+      this.nodeIDs.push(node.getGraphElementID());
     }
     this.dx = dx;
     this.dy = dy;

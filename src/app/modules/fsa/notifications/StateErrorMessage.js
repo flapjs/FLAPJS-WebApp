@@ -15,7 +15,7 @@ class StateErrorMessage extends React.Component
       {
         this.targetLabel += ", ";
       }
-      this.targetLabel += target.label;
+      this.targetLabel += target.getNodeLabel();
     }
 
     this.onClick = this.onClick.bind(this);

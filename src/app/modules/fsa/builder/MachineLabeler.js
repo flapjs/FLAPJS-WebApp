@@ -19,7 +19,7 @@ class MachineLabeler
     {
       if (node.hasCustomLabel())
       {
-        customLabels.push(node.label);
+        customLabels.push(node.getNodeLabel());
       }
       else
       {
@@ -59,7 +59,7 @@ class MachineLabeler
   {
     for(const node of this.graph.nodes)
     {
-      if (node.label == newLabel)
+      if (node.getNodeLabel() == newLabel)
       {
         return false;
       }

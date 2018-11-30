@@ -1,13 +1,17 @@
 import NodalGraph from 'graph/NodalGraph.js';
 
 import * as FlapSaver from 'util/FlapSaver.js';
+import NodalGraphParser from 'graph/NodalGraphParser.js';
 
 const FILETYPE_JSON = "application/json";
 const FILETYPE_JFLAP = ".jff";
+const FILETYPE_XML = ".xml";
+const VALID_FILETYPES = [FILETYPE_JSON, FILETYPE_JFLAP, FILETYPE_XML];
 
 const JSON_EXT = ".json";
 const JFF_EXT = ".jff";
-const VALID_EXTS = [JSON_EXT, JFF_EXT];
+const XML_EXT = ".xml";
+const VALID_EXTS = [JSON_EXT, JFF_EXT, XML_EXT];
 
 class Uploader
 {
@@ -26,7 +30,7 @@ class Uploader
 
   getValidFileTypes()
   {
-    return [FILETYPE_JSON, FILETYPE_JFLAP];
+    return VALID_FILETYPES;
   }
 
   uploadFileGraph(graphFileBlob)
@@ -54,16 +58,14 @@ class Uploader
           {
             if (ext === JSON_EXT)
             {
-              FlapSaver.loadFromJSON(data, this.graphController, this.machineController);
-              //const dataJSON = JSON.parse(data);
-              //const dst = NodalGraphParser.parseJSON(dataJSON);
-              //graph.copyGraph(dst);
+              const jsonData = JSON.parse(data);
+              FlapSaver.loadFromJSON(jsonData, this.graphController, this.machineController);
             }
-            else if (ext === JFF_EXT)
+            else if (ext === JFF_EXT || ext === XML_EXT)
             {
               const parser = new DOMParser();
               const dataXML = parser.parseFromString(data, "text/xml");
-              const dst = NodalGraph.parseXML(dataXML);
+              const dst = NodalGraphParser.parseXML(dataXML);
               graph.copyGraph(dst);
             }
             else

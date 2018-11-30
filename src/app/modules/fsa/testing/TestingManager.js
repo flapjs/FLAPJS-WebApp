@@ -70,13 +70,22 @@ class TestingManager
   setStepByStepMode(mode)
   {
     this.stepByStepMode = mode ? true : false;
-
     if (mode)
     {
       if (this.testMode.isStarted()) this.testMode.onStop();
       this.testMode.onStart();
       this.viewport.setState((prev, props) => {
-        return {prevMode: prev.mode, mode: Viewport.TESTING};
+        if (prev.mode != Viewport.TESTING)
+        {
+          return {
+            prevMode: prev.mode,
+            mode: Viewport.TESTING
+          };
+        }
+        else
+        {
+          //It's already the correct viewport mode
+        }
       });
     }
     else

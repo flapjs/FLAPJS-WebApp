@@ -1,6 +1,10 @@
+import Config from 'config.js';
+
 import NodalGraph from './NodalGraph.js';
 import Node from './Node.js';
 import Edge from './Edge.js';
+
+import FlapSaver from 'util/FlapSaver.js';
 
 class NodalGraphParser
 {
@@ -18,28 +22,28 @@ class NodalGraphParser
     //The initial node is always saved/loaded first!
     for(let i = 0; i < nodeLength; ++i)
     {
-      const node = data.nodes[i];
-      const newNode = new Node(result, node.x || 0, node.y || 0, node.label || "q?");
-      newNode.id = node.id;
-      newNode.accept = node.accept;
-      if (node.customLabel)
+      const nodeData = data.nodes[i];
+      const newNode = new Node(result, nodeData.x || 0, nodeData.y || 0, nodeData.label || "q?");
+      newNode.setGraphElementID(nodeData.id);
+      newNode.accept = nodeData.accept;
+      if (nodeData.customLabel)
       {
-        newNode.setCustomLabel(newNode.label);
+        newNode.setCustomLabel(newNode.getNodeLabel());
       }
       result.nodes[i] = newNode;
     }
 
     for(let i = 0; i < edgeLength; ++i)
     {
-      const edge = data.edges[i];
+      const edgeData = data.edges[i];
 
-      if (edge.from >= nodeLength || edge.from < 0) throw new Error("Invalid edge from data: node index \'" + edge.from + "\' out of bounds.");
+      if (edgeData.from >= nodeLength || edgeData.from < 0) throw new Error("Invalid edge from data: node index \'" + edgeData.from + "\' out of bounds.");
 
-      const newEdge = new Edge(result, result.nodes[edge.from], edge.to < 0 ? null : result.nodes[edge.to], edge.label || "0");
-      newEdge.id = edge.id;
+      const newEdge = new Edge(result, result.nodes[edgeData.from], edgeData.to < 0 ? null : result.nodes[edgeData.to], edgeData.label || "0");
+      newEdge.setGraphElementID(edgeData.id);
 
       //Force copy all quadratic data
-      newEdge.copyQuadraticsFrom(edge.quad);
+      newEdge.copyQuadraticsFrom(edgeData.quad);
       result.edges[i] = newEdge;
     }
 
@@ -144,10 +148,10 @@ class NodalGraphParser
     {
       const node = graph.nodes[i];
       data.nodes[i] = {
-        id: node.id,
+        id: node.getGraphElementID(),
         x: node.x,
         y: node.y,
-        label: node.label,
+        label: node.getNodeLabel(),
         accept: node.accept,
         customLabel: node.hasCustomLabel()
       };
@@ -157,11 +161,11 @@ class NodalGraphParser
     {
       const edge = graph.edges[i];
       data.edges[i] = {
-        id: edge.id,
+        id: edge.getGraphElementID(),
         from: graph.nodes.indexOf(edge.from),
         to: graph.nodes.indexOf(edge.to),
         quad: edge.copyQuadraticsTo({}),
-        label: edge.label
+        label: edge.getEdgeLabel()
       };
     }
 
@@ -170,7 +174,7 @@ class NodalGraphParser
 
   static toXML(graph)
   {
-    const header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!--Created with flap.js 1.0.0.--><structure></structure>";
+    const header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!--Created with flap.js " + FlapSaver.CURRENT_VERSION_STRING + "--><structure></structure>";
     let parser = new DOMParser();
     const doc = parser.parseFromString(header, "application/xml");
 
@@ -191,7 +195,7 @@ class NodalGraphParser
       //state tag
       state = doc.createElement("state");
       state.id = "" + i;
-      state.setAttribute("name", node.label);
+      state.setAttribute("name", node.getNodeLabel());
       automaton.appendChild(state);
 
       //x tag
@@ -220,7 +224,7 @@ class NodalGraphParser
     let transition, from, to, read, symbols;
     for(let edge of graph.edges)
     {
-      symbols = edge.label.split(",");
+      symbols = edge.getEdgeLabel().split(",");
       for(let symbol of symbols)
       {
         //transition tag

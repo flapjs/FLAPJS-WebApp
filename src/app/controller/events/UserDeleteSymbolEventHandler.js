@@ -30,7 +30,7 @@ class UserDeleteSymbolEventHandler extends EventHandler
 
     for(const target of targets)
     {
-      targetIDs.push(target.id);
+      targetIDs.push(target.getGraphElementID());
     }
 
     return {

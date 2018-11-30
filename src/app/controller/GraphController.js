@@ -152,7 +152,7 @@ class GraphController
 
   renameNode(node, name)
   {
-    const prev = node.label;
+    const prev = node.getNodeLabel();
     const isPrevCustom = node.hasCustomLabel();
 
     node.setCustomLabel(name);
@@ -314,9 +314,9 @@ class GraphController
 
   openLabelEditor(target, x, y, placeholder=null, replace=true, callback=null)
   {
-    const prevLabel = placeholder || target.label;
+    const prevLabel = placeholder || target.getEdgeLabel();
     this.labelEditor.openEditor(target, placeholder, replace, () => {
-      const label = target.label;
+      const label = target.getEdgeLabel();
       if (prevLabel.length > 0 && label != prevLabel)
       {
         this.emit("edgeLabel", target, label, prevLabel);

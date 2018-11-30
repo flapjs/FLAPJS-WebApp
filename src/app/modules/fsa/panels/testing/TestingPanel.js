@@ -115,12 +115,19 @@ class TestingPanel extends React.Component
     const machine = this.props.machineController.getMachineBuilder().getMachine();
     const app = this.props.app;
     const tester = app.testingManager;
-    const testList = tester.inputList;
-    const length = testList.getTests().length;
-    tester.setStepByStepMode(this.stepByStepModeChecked);
-    for(let i = 0; i < length; ++i)
+    if (tester.testMode.isStarted())
     {
-      testList.testByIndex(i, machine);
+      tester.setStepByStepMode(false);
+    }
+    else
+    {
+      const testList = tester.inputList;
+      const length = testList.getTests().length;
+      tester.setStepByStepMode(this.stepByStepModeChecked);
+      for(let i = 0; i < length; ++i)
+      {
+        testList.testByIndex(i, machine);
+      }
     }
   }
 
@@ -239,7 +246,7 @@ class TestingPanel extends React.Component
           </div>
 
           <button className="panel-button" onClick={this.onTestsRunAll}>
-            {I18N.toString("action.testing.runall")}
+            {tester.testMode.isStarted() ? I18N.toString("action.testing.stoprun") : I18N.toString("action.testing.runall")}
           </button>
 
           <div className="panel-checkbox">
@@ -248,7 +255,8 @@ class TestingPanel extends React.Component
               onChange={(e) => {
                 this.stepByStepModeChecked = e.target.checked;
                 if(!this.stepByStepModeChecked) tester.setStepByStepMode(false);
-              }}/>
+              }}
+              disabled={tester.testMode.isStarted()}/>
             <label htmlFor="test-step">{I18N.toString("options.testing.stepmode")}</label>
           </div>
 
