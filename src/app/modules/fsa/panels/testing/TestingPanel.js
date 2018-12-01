@@ -159,7 +159,6 @@ class TestingPanel extends React.Component
   onTestsUpload(e)
   {
       this.onTestsNew();
-      this.uploadInput.click();
       this.showTestInputList();
   }
 
@@ -191,19 +190,11 @@ class TestingPanel extends React.Component
       </div>
 
       <div className="test-icon-row">
-          {this.state.noTestMode ?
-              //Display New Test Button when test input list is gone
-              <IconButton className="testicon" id="testing-new" title={I18N.toString("action.testing.new")}
-                onClick={this.onTestsNew}>
-                <CreateIcon/>
-              </IconButton>
-              :
-              //Display Clear Tests Button when test input list is visible
-              <IconButton className="testicon" id="testing-clear" title={I18N.toString("action.testing.clear")}
-                onClick={this.onTestsClear}>
-                <CloseIcon/>
-              </IconButton>
-          }
+
+          <IconButton className="testicon" id="testing-new" title={I18N.toString("action.testing.new")}
+            onClick={this.onTestsNew}>
+            <CreateIcon/>
+          </IconButton>
 
           {/*Import Test Button*/}
           <UploadTestButton className="testicon" id="testing-upload" title={I18N.toString("action.testing.import")}
@@ -215,6 +206,11 @@ class TestingPanel extends React.Component
           <IconButton className="testicon" id="testing-save" title={I18N.toString("action.testing.save")}
             onClick={this.onTestsSave} disabled={tester.inputList.isEmpty()}>
             <SaveIcon/>
+          </IconButton>
+
+          <IconButton className="testicon" id="testing-clear" title={I18N.toString("action.testing.clear")}
+            onClick={this.onTestsClear} style={this.state.noTestMode ? {visibility: 'hidden'} : {visiblity: 'visible'}}>
+            <CloseIcon/>
           </IconButton>
 
       </div>
