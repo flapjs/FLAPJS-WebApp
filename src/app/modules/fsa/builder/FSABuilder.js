@@ -10,6 +10,8 @@ import Node from 'graph/Node.js';
 
 import { EMPTY } from 'machine/Symbols.js';
 
+const EDGE_SYMBOL_SEPARATOR = ",";
+
 class FSABuilder extends MachineBuilder
 {
   constructor(graph)
@@ -117,7 +119,7 @@ class FSABuilder extends MachineBuilder
 
   formatAlphabetString(string, allowNull=false)
   {
-    const symbols = string.split(",");
+    const symbols = string.split(EDGE_SYMBOL_SEPARATOR);
     const result = new Set();
 
     let symbol = "";
@@ -153,7 +155,7 @@ class FSABuilder extends MachineBuilder
 
     //If it is an empty string...
     if (result.size === 0) return allowNull ? null : EMPTY;
-    return Array.from(result).join(",");
+    return Array.from(result).join(EDGE_SYMBOL_SEPARATOR);
   }
 
   setMachineType(machineType)
@@ -286,7 +288,7 @@ function fillFSA(graph, fsa)
     const to = edge.to;
     if (from instanceof Node && to instanceof Node)
     {
-      const labels = edge.getEdgeLabel().split(",");
+      const labels = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
       for(const label of labels)
       {
         try

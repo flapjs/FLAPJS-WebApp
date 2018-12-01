@@ -52,38 +52,61 @@ for(let i = 0; i < length; ++i)
 console.error("- - - - - - - - - - - - - - - - - -\n");
 
 //End of program
-
-export function out(msg)
+function format(element, depth=0)
 {
-  testBuffer.push(msg);
+  if (depth > 100) return element;
+
+  if (!element)
+  {
+    return element;
+  }
+  else if (typeof element === 'string')
+  {
+    return element;
+  }
+  else if (typeof element === 'object')
+  {
+    if (Array.isArray(element) || typeof element[Symbol.iterator] === 'function')
+    {
+      const className = element.constructor.name || "Iterator";
+      let msg = "[";
+      for(const e of element)
+      {
+        if (msg.length > 1) msg += ", ";
+        msg += format(e, depth + 1);
+      }
+      msg += "]";
+      return className + msg;
+    }
+    else
+    {
+      return JSON.stringify(element, null, 2);
+    }
+  }
+  else
+  {
+    return element;
+  }
+}
+
+export function out(...msg)
+{
+  for(let i = 0, len = msg.length; i < len; ++i)
+  {
+    const element = msg[i];
+    msg[i] = format(element);
+  }
+  testBuffer.push(msg.join(", "));
 }
 
 export function assertNotNull(value, msg=null)
 {
-  if (!value)
-  {
-    ++testFailures;
-    testBuffer.push("= Failed: Value is null" + (msg ? " - " + msg : "."));
-  }
-  else
-  {
-    ++testSuccesses;
-    testBuffer.push("= Passed!");
-  }
+  assert(value, "null check - " + msg);
 }
 
 export function assertEquals(expected, value, msg=null)
 {
-  if (expected != value)
-  {
-    ++testFailures;
-    testBuffer.push("= Failed: Expected \'" + expected + ", but found \'" + value + "\'" + (msg ? " - " + msg : "."));
-  }
-  else
-  {
-    ++testSuccesses;
-    testBuffer.push("= Passed!");
-  }
+  assert(value == expected, msg);
 }
 
 export function assert(condition, msg=null)

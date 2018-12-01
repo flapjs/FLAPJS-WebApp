@@ -6,6 +6,8 @@ import Edge from './Edge.js';
 
 import FlapSaver from 'util/FlapSaver.js';
 
+const EDGE_SYMBOL_SEPARATOR = ",";
+
 class NodalGraphParser
 {
   static parseJSON(data, dst=null)
@@ -224,7 +226,7 @@ class NodalGraphParser
     let transition, from, to, read, symbols;
     for(let edge of graph.edges)
     {
-      symbols = edge.getEdgeLabel().split(",");
+      symbols = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
       for(let symbol of symbols)
       {
         //transition tag

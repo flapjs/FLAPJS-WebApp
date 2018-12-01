@@ -33,7 +33,7 @@ class TestList extends React.Component
       const data = event.target.result;
       try
       {
-        const testInputs = data.replace(/\n/g, ",").split(",");
+        const testInputs = data.split("\n");
         if (testInputs.length <= 0)
         {
           tester.addTestInput("");

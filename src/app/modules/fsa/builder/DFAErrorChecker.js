@@ -7,6 +7,8 @@ import StateMissingTransitionErrorMessage from 'modules/fsa/notifications/StateM
 import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
 import StateErrorMessage from 'modules/fsa/notifications/StateErrorMessage.js';
 
+const EDGE_SYMBOL_SEPARATOR = ",";
+
 class DFAErrorChecker
 {
   constructor(machineBuilder, graph)
@@ -66,7 +68,7 @@ class DFAErrorChecker
       {
         const from = edge.from;
         const to = edge.to;
-        const labels = edge.getEdgeLabel().split(",");
+        const labels = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
 
         for(const label of labels)
         {

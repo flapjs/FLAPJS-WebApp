@@ -7,6 +7,8 @@ import GraphPicker from './GraphPicker.js';
 import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
 
+const EDGE_SYMBOL_SEPARATOR = ",";
+
 class InputController
 {
   constructor()
@@ -565,14 +567,14 @@ class InputController
           {
             if (edge !== target && edge.from === target.from && picker.isTarget(edge.to))
             {
-              let result = edge.getEdgeLabel().split(",");
+              let result = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
               if (target.getEdgeLabel() !== Config.STR_TRANSITION_DEFAULT_LABEL)
               {
-                result = result.concat(target.getEdgeLabel().split(","));
+                result = result.concat(target.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR));
               }
 
               //Allow the user to edit the merged labels
-              graphController.openLabelEditor(edge, x, y, result.join(","), false);
+              graphController.openLabelEditor(edge, x, y, result.join(EDGE_SYMBOL_SEPARATOR), false);
 
               //Delete the merged label
               graph.deleteEdge(target);

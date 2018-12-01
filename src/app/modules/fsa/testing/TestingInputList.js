@@ -55,7 +55,7 @@ class TestingInputList
         this.inputList.length = 0;
         this.inputIndex = 0;
 
-        const testInputs = event.target.result.replace(/\n/g, ",").split(",");
+        const testInputs = event.target.result.split("\n");
         for(let testInput of testInputs)
         {
           testInput = testInput.trim();

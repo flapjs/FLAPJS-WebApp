@@ -7,6 +7,8 @@ import Node from './Node.js';
 import Edge from './Edge.js';
 import { EMPTY } from 'machine/Symbols.js';
 
+const EDGE_SYMBOL_SEPARATOR = ",";
+
 class NodalGraph
 {
   constructor(nodes=[], edges=[])
@@ -158,11 +160,11 @@ class NodalGraph
     {
       if (edge.from === from && edge.to === to)
       {
-        let result = edge.getEdgeLabel().split(",");
+        let result = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
         if (label && label.length > 0)
         {
-          result = result.concat(label.split(","));
-          edge.setLabel(result.join(","));
+          result = result.concat(label.split(EDGE_SYMBOL_SEPARATOR));
+          edge.setLabel(result.join(EDGE_SYMBOL_SEPARATOR));
           this.markDirty();
         }
 

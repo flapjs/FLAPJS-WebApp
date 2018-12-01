@@ -15,6 +15,8 @@ const DELETE_FORWARD_KEY = 46;
 const RECOMMENDED_SYMBOLS = ["0", "1"];
 const DEFAULT_SYMBOLS = [EMPTY];
 
+const EDGE_SYMBOL_SEPARATOR = ",";
+
 class LabelEditor extends React.Component
 {
   constructor(props)
@@ -116,7 +118,7 @@ class LabelEditor extends React.Component
 
   appendSymbol(symbol)
   {
-    this.inputElement.appendValue(symbol);
+    this.inputElement.appendValue(symbol, EDGE_SYMBOL_SEPARATOR);
     this.inputElement.focus();
   }
 
