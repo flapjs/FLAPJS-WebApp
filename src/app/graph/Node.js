@@ -53,11 +53,6 @@ class Node extends GraphNode
     return this.customLabel;
   }
 
-  get label() { return this._label; }
-  set label(value) {
-    throw new Error("Deprecated!");
-  }
-
   get accept() { return this._accept; }
   set accept(value) {
     let prevAccept = this._accept;
