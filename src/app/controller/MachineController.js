@@ -178,11 +178,11 @@ class MachineController
         result = edge.getEdgeLabel().substring(0, index) + edge.getEdgeLabel().substring(index + 1);
         if (result.length > 0)
         {
-          edge.setLabel(result);
+          edge.setEdgeLabel(result);
         }
         else
         {
-          edge.setLabel("");
+          edge.setEdgeLabel("");
           graph.deleteEdge(edge);
         }
         targets.push(edge);
@@ -216,7 +216,7 @@ class MachineController
       {
         targets.push(edge);
       }
-      edge.setLabel(result);
+      edge.setEdgeLabel(result);
     }
 
     if (targets.length <= 0)

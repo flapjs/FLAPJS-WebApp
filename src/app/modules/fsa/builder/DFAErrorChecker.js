@@ -66,8 +66,8 @@ class DFAErrorChecker
       }
       else
       {
-        const from = edge.from;
-        const to = edge.to;
+        const from = edge.getSourceNode();
+        const to = edge.getDestinationNode();
         const labels = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
 
         for(const label of labels)

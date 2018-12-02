@@ -9,9 +9,10 @@ class FormattedInput extends React.Component
     this.element = null;
     this.ignoreSaveOnExit = false;
 
+    const defaultValue = props.defaultValue || "";
     this.state = {
-      value: null,
-      prevValue: null
+      value: defaultValue,
+      prevValue: defaultValue
     };
 
     this.onChange = this.onChange.bind(this);
@@ -23,6 +24,16 @@ class FormattedInput extends React.Component
     //  formatter - a format function
     //  saveOnExit - whether to save on blur
     //  defaultValue - the default value for input
+  }
+
+  //Override
+  componentWillReceiveProps(nextProps)
+  {
+    //TODO: This is a way to update the value if it is suppose to be the default value...
+    if (!this.state.value || this.state.value.length <= 0 || this.state.value === this.props.defaultValue)
+    {
+      this.setState({value: nextProps.defaultValue});
+    }
   }
 
   get value()
@@ -199,7 +210,7 @@ class FormattedInput extends React.Component
     return <input
       id={this.props.id} className={this.props.className} style={this.props.style}
       ref={ref=>this.element=ref}
-      type="text" value={this.state.value == null ? this.props.defaultValue : this.state.value}
+      type="text" value={this.state.value}
       onChange={this.onChange}
       onBlur={this.onBlur}
       onKeyUp={this.onKeyUp}/>;

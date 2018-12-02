@@ -1,4 +1,5 @@
 import GraphNode from 'graph/GraphNode.js';
+import Config from 'config.js';
 import { guid } from 'util/MathHelper.js';
 
 class Node extends GraphNode
@@ -14,10 +15,17 @@ class Node extends GraphNode
     this._accept = false;
   }
 
-  setLabel(label)
+  //Override
+  getNodeSize()
+  {
+    return Config.NODE_RADIUS;
+  }
+
+  //Override
+  setNodeLabel(label)
   {
     const prevLabel = this._label;
-    this._label = label;
+    super.setNodeLabel(label);
     this.customLabel = false;
 
     if (prevLabel != label)

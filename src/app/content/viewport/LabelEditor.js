@@ -78,13 +78,13 @@ class LabelEditor extends React.Component
         let value = this.inputElement.value;
         if (!value) value = EMPTY;
 
-        this.state.target.setLabel(value);
+        this.state.target.setEdgeLabel(value);
       }
       else
       {
         if (!this.state.target.getEdgeLabel())
         {
-          this.state.target.setLabel(EMPTY);
+          this.state.target.setEdgeLabel(EMPTY);
 
           //Delete it since it is not a valid edge
           this.props.graphController.getGraph().deleteEdge(this.state.target);

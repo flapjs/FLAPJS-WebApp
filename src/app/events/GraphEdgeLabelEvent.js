@@ -22,7 +22,7 @@ class GraphEdgeLabelEvent extends Event
     if (edgeIndex < 0) throw new Error("Unable to find target in graph");
     const edge = graph.edges[edgeIndex];
 
-    edge.setLabel(this.prevLabel);
+    edge.setEdgeLabel(this.prevLabel);
 
     graph.markDirty();
   }
@@ -35,7 +35,7 @@ class GraphEdgeLabelEvent extends Event
     if (edgeIndex < 0) throw new Error("Unable to find target in graph");
     const edge = graph.edges[edgeIndex];
 
-    edge.setLabel(this.nextLabel);
+    edge.setEdgeLabel(this.nextLabel);
 
     graph.markDirty();
   }

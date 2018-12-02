@@ -38,7 +38,7 @@ class MachineLabeler
       while(customLabels.includes(
         defaultName = this.getDefaultNodeLabelByIndex(index++))) {}
 
-      node.setLabel(defaultName);
+      node.setNodeLabel(defaultName);
     }
   }
 

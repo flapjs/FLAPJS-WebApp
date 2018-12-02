@@ -46,6 +46,7 @@ class StateTag extends React.Component
   onFocus(e)
   {
     const target = e.target;
+    //This is a prop, refer to StateList for the actual node.getNodeLabel()
     this.setState({ value: this.props.label, error: false }, () => {
       target.select()
     });

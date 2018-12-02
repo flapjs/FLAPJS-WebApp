@@ -17,7 +17,7 @@ class TransitionErrorMessage extends React.Component
       {
         this.targetLabel += ", ";
       }
-      this.targetLabel += "(" + target.from.getNodeLabel() + ", " + target.to.getNodeLabel() + ") " + ARROW + " " + target.getEdgeLabel();
+      this.targetLabel += "(" + target.getSourceNode().getNodeLabel() + ", " + target.getDestinationNode().getNodeLabel() + ") " + ARROW + " " + target.getEdgeLabel();
     }
 
     this.onClick = this.onClick.bind(this);

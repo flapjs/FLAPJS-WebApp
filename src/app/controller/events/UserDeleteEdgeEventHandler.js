@@ -13,7 +13,7 @@ class UserDeleteEdgeEventHandler extends EventHandler
     return {
       edge: edge,
       edgeID: edge.getGraphElementID(),
-      fromID: edge.from.getGraphElementID(),
+      fromID: edge.getSourceNode().getGraphElementID(),
       toID: prevTo ? prevTo.getGraphElementID() : null,
       quad: Object.assign({}, prevQuad)
     };
@@ -32,7 +32,7 @@ class UserDeleteEdgeEventHandler extends EventHandler
       const fromIndex = graph.getNodeIndexByID(e.eventData.fromID);
       if (fromIndex >= 0)
       {
-        edge.from = graph.nodes[fromIndex];
+        edge.setSourceNode(graph.nodes[fromIndex]);
       }
       else
       {
@@ -42,14 +42,14 @@ class UserDeleteEdgeEventHandler extends EventHandler
       const toIndex = graph.getNodeIndexByID(e.eventData.toID);
       if (toIndex >= 0)
       {
-        edge.to = graph.nodes[toIndex];
+        edge.changeDestinationNode(graph.nodes[toIndex]);
       }
       else
       {
-        edge.to = null;
+        edge.changeDestinationNode(null);
       }
 
-      edge.copyQuadraticsFrom(e.eventData.quad);
+      edge.setQuadratic(e.eventData.quad.radians, e.eventData.quad.length);
     }
 
     graph.markDirty();

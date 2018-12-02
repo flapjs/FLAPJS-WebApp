@@ -10,19 +10,21 @@ class UserCreateEdgeEventHandler extends EventHandler
   //Override
   captureEvent(graph, edge)
   {
+    const edgeQuad = edge.getQuadratic();
     return {
       edge: edge,
       edgeID: edge.getGraphElementID(),
-      fromID: edge.from.getGraphElementID(),
-      toID: edge.to ? edge.to.getGraphElementID() : null,
+      fromID: edge.getSourceNode().getGraphElementID(),
+      toID: edge.getDestinationNode() ? edge.getDestinationNode().getGraphElementID() : null,
       label: edge.getEdgeLabel(),
-      quad: edge.copyQuadraticsTo({})
+      quad: { radians: edgeQuad.radians, length: edgeQuad.length }
     };
   }
 
   //Override - this = event
   applyUndo(e)
   {
+    //TODO: when formatting edges change an edge different than this one, it does not revert them.
     const graph = this.controller.getGraph();
     const edgeIndex = graph.getEdgeIndexByID(e.eventData.edgeID);
     if (edgeIndex < 0) throw new Error("Unable to find target in graph");
@@ -44,7 +46,7 @@ class UserCreateEdgeEventHandler extends EventHandler
       const fromIndex = graph.getNodeIndexByID(e.postData.fromID);
       if (fromIndex >= 0)
       {
-        edge.from = graph.nodes[fromIndex];
+        edge.setSourceNode(graph.nodes[fromIndex]);
       }
       else
       {
@@ -54,15 +56,15 @@ class UserCreateEdgeEventHandler extends EventHandler
       const toIndex = graph.getNodeIndexByID(e.postData.toID);
       if (toIndex >= 0)
       {
-        edge.to = graph.nodes[toIndex];
+        edge.setDestinationNode(graph.nodes[toIndex]);
       }
       else
       {
-        edge.to = null;
+        edge.setDestinationNode(null);
       }
 
-      edge.setLabel(e.postData.label);
-      edge.copyQuadraticsFrom(e.postData.quad);
+      edge.setEdgeLabel(e.postData.label);
+      edge.setQuadratic(e.postData.quad.radians, e.postData.quad.length);
     }
 
     graph.markDirty();

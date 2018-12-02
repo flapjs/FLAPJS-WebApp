@@ -16,13 +16,13 @@ class GraphEdgeMoveEvent extends Event
   //Override
   applyUndo()
   {
-    this.edge.copyQuadraticsFrom(this.prevQuad);
+    this.edge.setQuadratic(this.prevQuad.radians, this.prevQuad.length);
   }
 
   //Override
   applyRedo()
   {
-    this.edge.copyQuadraticsFrom(this.nextQuad);
+    this.edge.setQuadratic(this.nextQuad.radians, this.nextQuad.length);
   }
 }
 

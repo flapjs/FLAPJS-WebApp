@@ -50,7 +50,7 @@ class UserCreateNodeEventHandler extends EventHandler
       }
       else
       {
-        node.setLabel(e.postData.label);
+        node.setNodeLabel(e.postData.label);
       }
     }
 

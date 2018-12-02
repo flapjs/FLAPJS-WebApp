@@ -27,6 +27,12 @@ class GraphEdge extends GraphElement
     return this._from;
   }
 
+  setDestinationNode(node)
+  {
+    this._to = node;
+    return this;
+  }
+
   changeDestinationNode(node)
   {
     this._to = node;
@@ -87,8 +93,9 @@ class GraphEdge extends GraphElement
     const to = this._to;
     if (this.isPlaceholder())
     {
-      dst.x = from.x + from.getNodeSize() / 2;
-      dst.y = from.y + from.getNodeSize() / 2;
+      const halfPlaceholderLength = this.getPlaceholderLength() / 2;
+      dst.x = from.x + halfPlaceholderLength;
+      dst.y = from.y + halfPlaceholderLength;
     }
     else
     {
@@ -103,8 +110,9 @@ class GraphEdge extends GraphElement
     if (this.isPlaceholder())
     {
       const from = this._from;
-      dst.x = from.x + from.getNodeSize();
-      dst.y = from.y + from.getNodeSize();
+      const placeholderLength = getPlaceholderLength();
+      dst.x = from.x + placeholderLength;
+      dst.y = from.y + placeholderLength;
     }
     else
     {
@@ -115,14 +123,19 @@ class GraphEdge extends GraphElement
     return dst;
   }
 
+  getPlaceholderLength()
+  {
+    return this._from.getNodeSize();
+  }
+
   isPlaceholder()
   {
-    return this.to == null;
+    return !this._to;
   }
 
   isSelfLoop()
   {
-    return this.from == this.to;
+    return this._from === this._to;
   }
 }
 

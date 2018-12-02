@@ -99,11 +99,14 @@ class GraphPicker
 
   getEdgeAt(graph, x, y)
   {
+    const center = {x: 0, y: 0};
+    
     //Search graph
     for(const edge of graph.edges)
     {
-      const dx = x - edge.x;
-      const dy = y - edge.y;
+      edge.getCenterPoint(center);
+      const dx = x - center.x;
+      const dy = y - center.y;
       if (dx * dx + dy * dy < Config.EDGE_RADIUS_SQU)
       {
         return edge;
@@ -114,12 +117,13 @@ class GraphPicker
 
   getEdgeByEndPointAt(graph, x, y)
   {
+    const end = {x: 0, y: 0};
     //Search graph
     for(const edge of graph.edges)
     {
-      const point = edge.getEndPoint();
-      const dx = x - point.x;
-      const dy = y - point.y;
+      edge.getEndPoint(end);
+      const dx = x - end.x;
+      const dy = y - end.y;
       if (dx * dx + dy * dy < Config.ENDPOINT_RADIUS_SQU)
       {
         return edge;

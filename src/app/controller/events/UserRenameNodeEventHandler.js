@@ -32,7 +32,7 @@ class UserRenameNodeEventHandler extends EventHandler
     }
     else
     {
-      node.setLabel(e.eventData.prevLabel);
+      node.setNodeLabel(e.eventData.prevLabel);
     }
   }
 

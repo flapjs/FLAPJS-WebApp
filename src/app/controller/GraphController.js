@@ -6,6 +6,8 @@ import Uploader from './Uploader.js';
 
 import GraphLayout from 'graph/GraphLayout.js';
 
+const EDGE_SYMBOL_SEPARATOR = ",";
+
 class GraphController
 {
   constructor()
@@ -286,7 +288,7 @@ class GraphController
 
   moveEdgeTo(pointer, edge, x, y)
   {
-    edge.setQuadraticByPosition(x, y);
+    edge.setQuadraticByCoords(x, y);
   }
 
   moveEndpointTo(pointer, edge, x, y)
@@ -294,21 +296,24 @@ class GraphController
     //Get ONLY node at x and y (cannot use hover target, since it is not ONLY nodes)
     const picker = this.inputController.getPicker();
     const dst = picker.getNodeAt(this.getGraph(), x, y) || pointer;
-    edge._to = dst;
+
+    edge.changeDestinationNode(dst);
 
     //If the cursor returns to the state after leaving it...
     if (edge.isSelfLoop())
     {
       //Make it a self loop
-      const dx = edge.from.x - x;
-      const dy = edge.from.y - y;
-      const angle = Math.atan2(dy, dx);
-      edge.makeSelfLoop(angle);
+      const sourceNode = edge.getSourceNode();
+      const dx = sourceNode.x - x;
+      const dy = sourceNode.y - y;
+      const radians = Math.atan2(dy, dx) + Math.PI;
+      edge.setQuadratic(radians);
     }
     //Otherwise, maintain original curve
     else
     {
-      edge.copyQuadraticsFrom(this.prevQuad);
+      //TODO: This also causes self-loops to act weird when no longer a self loop
+      edge.setQuadratic(this.prevQuad.radians, this.prevQuad.length);
     }
   }
 
@@ -362,10 +367,10 @@ Eventable.mixin(GraphController);
 function moveNodesOutOfEdges(target, graph)
 {
 
-  const x1 = target.from.x;
-  const y1 = target.from.y;
-  const x2 = target.to.x;
-  const y2 = target.to.y;
+  const x1 = target.getSourceNode().x;
+  const y1 = target.getSourceNode().y;
+  const x2 = target.getDestinationNode().x;
+  const y2 = target.getDestinationNode().y;
   const dist12sq = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
   let vertical = false;
   let m = 0;
@@ -382,7 +387,7 @@ function moveNodesOutOfEdges(target, graph)
 
   for(const node of graph.nodes)
   {
-    if(node === target.from || node === target.to) continue;
+    if(node === target.getSourceNode() || node === target.getDestinationNode()) continue;
 
     const x0 = node.x;
     const y0 = node.y;

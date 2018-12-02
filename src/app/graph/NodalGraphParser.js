@@ -4,7 +4,7 @@ import NodalGraph from './NodalGraph.js';
 import Node from './Node.js';
 import Edge from './Edge.js';
 
-import FlapSaver from 'util/FlapSaver.js';
+import { CURRENT_VERSION_STRING } from 'util/FlapSaver.js';
 
 const EDGE_SYMBOL_SEPARATOR = ",";
 
@@ -45,7 +45,7 @@ class NodalGraphParser
       newEdge.setGraphElementID(edgeData.id);
 
       //Force copy all quadratic data
-      newEdge.copyQuadraticsFrom(edgeData.quad);
+      newEdge.setQuadratic(edgeData.quad.radians, edgeData.quad.length);
       result.edges[i] = newEdge;
     }
 
@@ -124,7 +124,9 @@ class NodalGraphParser
       //check valid from and to node
       if(result.nodes[indexOfEdgeFrom] || (startNodeID == edgeFrom && result.nodes[0]) || (edgeFrom == 0 && result.nodes[startNodeID]) )
       {
-        result.newEdge(result.nodes[indexOfEdgeFrom], edgeTo < 0 ? null : result.nodes[indexOfEdgeTo], edgeLabel || "0");
+        const newEdge = result.newEdge(result.nodes[indexOfEdgeFrom], edgeTo < 0 ? null : result.nodes[indexOfEdgeTo], edgeLabel || "0");
+        const formattedEdge = result.formatEdge(newEdge);
+        if (newEdge != formattedEdge) result.deleteEdge(newEdge);
       }
       else
       {
@@ -162,11 +164,12 @@ class NodalGraphParser
     for(let i = 0; i < edgeLength; ++i)
     {
       const edge = graph.edges[i];
+      const edgeQuad = edge.getQuadratic();
       data.edges[i] = {
         id: edge.getGraphElementID(),
-        from: graph.nodes.indexOf(edge.from),
-        to: graph.nodes.indexOf(edge.to),
-        quad: edge.copyQuadraticsTo({}),
+        from: graph.nodes.indexOf(edge.getSourceNode()),
+        to: graph.nodes.indexOf(edge.getDestinationNode()),
+        quad: { radians: edgeQuad.radians, length: edgeQuad.length },
         label: edge.getEdgeLabel()
       };
     }
@@ -176,7 +179,7 @@ class NodalGraphParser
 
   static toXML(graph)
   {
-    const header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!--Created with flap.js " + FlapSaver.CURRENT_VERSION_STRING + "--><structure></structure>";
+    const header = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!--Created with flap.js " + CURRENT_VERSION_STRING + "--><structure></structure>";
     let parser = new DOMParser();
     const doc = parser.parseFromString(header, "application/xml");
 
@@ -235,12 +238,12 @@ class NodalGraphParser
 
         //from tag
         from = doc.createElement("from");
-        from.innerHTML = graph.nodes.indexOf(edge.from);
+        from.innerHTML = graph.nodes.indexOf(edge.getSourceNode());
         transition.appendChild(from);
 
         //to tag
         to = doc.createElement("to");
-        to.innerHTML = graph.nodes.indexOf(edge.to);
+        to.innerHTML = graph.nodes.indexOf(edge.getDestinationNode());
         transition.appendChild(to);
 
         //read tag
