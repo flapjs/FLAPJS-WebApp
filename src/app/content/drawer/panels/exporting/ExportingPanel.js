@@ -39,7 +39,7 @@ class ExportingPanel extends React.Component
     const machineName = this.props.machineController.getMachineName();
     const graph = this.props.graphController.getGraph();
 
-    const xmlString = new XMLSerializer().serializeToString(NodalGraphParser.toXML());
+    const xmlString = new XMLSerializer().serializeToString(NodalGraphParser.toXML(graph));
     Downloader.downloadText(machineName + '.jff', xmlString);
   }
 
