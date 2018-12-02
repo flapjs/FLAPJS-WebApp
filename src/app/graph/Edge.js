@@ -1,10 +1,8 @@
-import GraphCurvedEdge from 'graph/GraphCurvedEdge.js';
-import Config from 'config.js';
+import QuadraticEdge from 'graph/QuadraticEdge.js';
 
 import { guid } from 'util/MathHelper.js';
-import Node from './Node.js';
 
-class Edge extends GraphCurvedEdge
+class Edge extends QuadraticEdge
 {
   constructor(graph, from, to, label)
   {
