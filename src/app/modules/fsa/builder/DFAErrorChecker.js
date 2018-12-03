@@ -188,12 +188,12 @@ class DFAErrorChecker
         if (dupeEdges.length > 0)
         {
           Notification.addMessage({text: I18N.toString("message.error.dupe"), targets: dupeEdges},
-            "error", messageTag, TransitionErrorMessage, false);
+            "error", messageTag, TransitionErrorMessage, props, false);
         }
         if (missingNodes.length > 0)
         {
           Notification.addMessage({targets: missingNodes},
-            "error", messageTag, StateMissingTransitionErrorMessage, false);
+            "error", messageTag, StateMissingTransitionErrorMessage, props, false);
         }
       }
     }
