@@ -1,7 +1,7 @@
 import Config from 'config.js';
 
-import InputAdapter from 'input/InputAdapter.js';
-import Viewport from 'input/Viewport.js';
+import InputAdapter from 'system/input/InputAdapter.js';
+import Viewport from 'system/input/Viewport.js';
 
 import GraphPicker from './GraphPicker.js';
 import Node from 'graph/Node.js';
