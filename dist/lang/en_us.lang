@@ -127,7 +127,7 @@ action.overview.convertdfa = Convert To DFA
 action.overview.convertnfa = Convert To NFA
 action.overview.autolayout = Auto-Layout
 
-action.options.changetheme = Change Theme...
+action.options.changetheme = Customize Theme
 action.options.reset = Reset to Default
 action.toolbar.savemachine = Save Machine File
 action.toolbar.saveimage = Export to Image

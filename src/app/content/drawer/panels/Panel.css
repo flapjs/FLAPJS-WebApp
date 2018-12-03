@@ -66,3 +66,9 @@
 .panel-select:hover {
   background: var(--color-drawer-text-subtle);
 }
+.panel-select:disabled {
+  cursor: default;
+  opacity: 0.5;
+  background: var(--color-drawer-text);
+  transition: none;
+}

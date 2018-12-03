@@ -26,8 +26,12 @@ class OptionsPanel extends React.Component
     this.styleOpts = new StyleOptionRegistry();
 
     this.state = {
+      theme: "default",
+      customTheme: false,
       skipWelcome: LocalSave.getStringFromStorage(LOCAL_STORAGE_ID) == "true"
     };
+
+    this.onChangeTheme = this.onChangeTheme.bind(this);
   }
 
   //Override
@@ -196,6 +200,24 @@ class OptionsPanel extends React.Component
     LocalSave.saveToStorage("prefs-color", data);
   }
 
+  onChangeTheme(e)
+  {
+    const prevTheme = this.state.theme;
+    const theme = e.target.value;
+    console.log(prevTheme, theme);
+    if (prevTheme === theme) return;
+
+    if (theme === "default")
+    {
+      for(let option of this.styleOpts.getOptions())
+      {
+        option.resetStyle();
+      }
+    }
+
+    this.setState({theme: theme});
+  }
+
   //Override
   render()
   {
@@ -208,10 +230,6 @@ class OptionsPanel extends React.Component
       </div>
       <div className="panel-content">
 
-        <button className="panel-button" disabled="true">{I18N.toString("action.options.changetheme")}</button>
-
-        <hr/>
-
         <OptionGroup title={I18N.toString("component.workspace.title")} label={I18N.toString("options.category.shortcuts")}>
           <OptionHotkey label={I18N.toString("action.toolbar.savemachine")} keyName="Ctrl + S"/>
           <OptionHotkey label={I18N.toString("action.toolbar.undo.label")} keyName="Ctrl + Z"/>
@@ -222,51 +240,83 @@ class OptionsPanel extends React.Component
         <OptionGroup title={I18N.toString("component.testing.title")} label={I18N.toString("options.category.shortcuts")}>
           <OptionHotkey label={I18N.toString("action.workspace.submit.label")} keyName="Enter"/>
           <OptionHotkey label={I18N.toString("action.workspace.cancel.label")} keyName="Escape"/>
-        </OptionGroup>
-
-        <OptionGroup title={I18N.toString("component.toolbar.title")} label={I18N.toString("options.category.colors")}>
-        { opts.getPropsByGroup("toolbar").map(e => <div key={e}>
-            <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
-          </div>) }
-        </OptionGroup>
-
-        <OptionGroup title={I18N.toString("component.drawer.title")} label={I18N.toString("options.category.colors")}>
-        { opts.getPropsByGroup("drawer").map(e => <div key={e}>
-            <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
-          </div>) }
-        </OptionGroup>
-
-        <OptionGroup title={I18N.toString("component.testing.title")} label={I18N.toString("options.category.colors")}>
-        { opts.getPropsByGroup("testing").map(e => <div key={e}>
-            <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
-          </div>) }
-        </OptionGroup>
-
-        <OptionGroup title={I18N.toString("component.notification.title")} label={I18N.toString("options.category.colors")}>
-        { opts.getPropsByGroup("notification").map(e => <div key={e}>
-            <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
-          </div>) }
-        </OptionGroup>
-
-        <OptionGroup title={I18N.toString("component.graph.title")} label={I18N.toString("options.category.colors")}>
-        { opts.getPropsByGroup("workspace").map(e => <div key={e}>
-            <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
-          </div>) }
-        </OptionGroup>
-
-        <OptionGroup title={I18N.toString("component.labeleditor.title")} label={I18N.toString("options.category.colors")}>
-        { opts.getPropsByGroup("labeleditor").map(e => <div key={e}>
-            <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
-          </div>) }
-        </OptionGroup>
-
-        <OptionGroup title={I18N.toString("options.category.general")} label={I18N.toString("options.category.colors")}>
-        { opts.getPropsByGroup("viewport").map(e => <div key={e}>
-            <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
-          </div>) }
+          <OptionHotkey label={"Add test input"} keyName="Enter"/>
+          <OptionHotkey label={"Run test input"} keyName="Shift + Enter"/>
         </OptionGroup>
 
         <hr/>
+
+        <div>
+          <div id="options-theme-select-container">
+            <label htmlFor="options-theme-select">Theme</label>
+            <select id="options-theme-select" className="panel-select" value={this.state.theme} onChange={this.onChangeTheme} disabled={this.state.customTheme}>
+              <option value="default">Default</option>
+              <option value="ucsd" disabled="true">UC San Diego (Coming Soon)</option>
+              <option value="duke" disabled="true">Duke University (Coming Soon)</option>
+            </select>
+            {
+              !this.state.customTheme &&
+              <button className="panel-button" onClick={() => this.setState({customTheme: true})}>
+                {I18N.toString("action.options.changetheme")}
+              </button>
+            }
+          </div>
+          {
+            this.state.customTheme && <div>
+              <OptionGroup title={I18N.toString("component.toolbar.title")} label={I18N.toString("options.category.colors")}>
+              { opts.getPropsByGroup("toolbar").map(e => <div key={e}>
+                  <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
+                </div>) }
+              </OptionGroup>
+
+              <OptionGroup title={I18N.toString("component.drawer.title")} label={I18N.toString("options.category.colors")}>
+              { opts.getPropsByGroup("drawer").map(e => <div key={e}>
+                  <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
+                </div>) }
+              </OptionGroup>
+
+              <OptionGroup title={I18N.toString("component.testing.title")} label={I18N.toString("options.category.colors")}>
+              { opts.getPropsByGroup("testing").map(e => <div key={e}>
+                  <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
+                </div>) }
+              </OptionGroup>
+
+              <OptionGroup title={I18N.toString("component.notification.title")} label={I18N.toString("options.category.colors")}>
+              { opts.getPropsByGroup("notification").map(e => <div key={e}>
+                  <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
+                </div>) }
+              </OptionGroup>
+
+              <OptionGroup title={I18N.toString("component.graph.title")} label={I18N.toString("options.category.colors")}>
+              { opts.getPropsByGroup("workspace").map(e => <div key={e}>
+                  <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
+                </div>) }
+              </OptionGroup>
+
+              <OptionGroup title={I18N.toString("component.labeleditor.title")} label={I18N.toString("options.category.colors")}>
+              { opts.getPropsByGroup("labeleditor").map(e => <div key={e}>
+                  <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
+                </div>) }
+              </OptionGroup>
+
+              <OptionGroup title={I18N.toString("options.category.general")} label={I18N.toString("options.category.colors")}>
+              { opts.getPropsByGroup("viewport").map(e => <div key={e}>
+                  <StyleInput className="option-container" value={opts.getOptionByProp(e)} title={I18N.toString("options." + e)}/>
+                </div>) }
+              </OptionGroup>
+
+              <button className="panel-button" onClick={(e) => {
+                for(let option of this.styleOpts.getOptions())
+                {
+                  option.resetStyle();
+                }
+                this.setState({customTheme: false});
+              }}>{I18N.toString("action.options.reset")}</button>
+            </div>
+          }
+
+          <hr/>
+        </div>
 
         <div className="panel-checkbox">
           <input id="option-skipwelcome" type="checkbox" checked={this.state.skipWelcome}
@@ -277,14 +327,6 @@ class OptionsPanel extends React.Component
           }}/>
           <label htmlFor="option-skipwelcome">{I18N.toString("options.skipwelcome")}</label>
         </div>
-
-        <button className="panel-button" onClick={(e) => {
-          for(let option of this.styleOpts.getOptions())
-          {
-            option.resetStyle();
-          }
-        }}>{I18N.toString("action.options.reset")}</button>
-
 
       </div>
 
