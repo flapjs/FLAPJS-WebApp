@@ -25,3 +25,10 @@
   margin: 0;
   margin-left: 5px;
 }
+
+#formaldef-otherinputs {
+  color: var(--color-drawer-text-subtle);
+}
+#formaldef-otherinputs > *:not(:first-child) {
+  margin-left: 5px;
+}
