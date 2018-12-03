@@ -7,9 +7,26 @@ class AnalysisPanel extends React.Component
     super(props);
 
     this.container = null;
-    
+    this.optimizeUnreachOption = null;
+    this.optimizeRedundOption = null;
+
     this.onConvertToDFA = this.onConvertToDFA.bind(this);
     this.onConvertToNFA = this.onConvertToNFA.bind(this);
+
+    this.onOptimizeMachine = this.onOptimizeMachine.bind(this);
+  }
+
+  onDeleteAllUnreachable(e)
+  {
+    const machineController = this.props.machineController;
+    const unreachableArray = machineController.getMachineBuilder().machineErrorChecker.getUnreachableNodes();
+    for(let node of unreachableArray)
+    {
+      if(node != machineController.graphController.getGraph().getStartNode())
+      {
+        machineController.graphController.getGraph().deleteNode(node);
+      }
+    }
   }
 
   onConvertToDFA(e)
@@ -22,6 +39,14 @@ class AnalysisPanel extends React.Component
   {
     const machineController = this.props.machineController;
     machineController.convertMachineTo("NFA");
+  }
+
+  onOptimizeMachine(e)
+  {
+    if (this.optimizeUnreachOption.checked)
+    {
+      this.onDeleteAllUnreachable(e);
+    }
   }
 
   render()
@@ -41,13 +66,15 @@ class AnalysisPanel extends React.Component
           <h3 style={{marginBottom: "0"}}>Optimizations</h3>
           <div style={{paddingBottom: "0.5em"}}>
             <div>
-              <input id="opt-unreach"type="checkbox"/><label htmlFor="opt-unreach">Unreachables</label>
+              <input ref={ref=>this.optimizeUnreachOption=ref} id="opt-unreach" type="checkbox"/>
+              <label htmlFor="opt-unreach">Unreachables</label>
             </div>
             <div>
-              <input id="opt-redund"type="checkbox"/><label htmlFor="opt-redund">Redundant States</label>
+              <input ref={ref=>this.optimizeRedundOption=ref} id="opt-redund" type="checkbox" disabled="true"/>
+              <label htmlFor="opt-redund">Redundant States</label>
             </div>
           </div>
-          <button className="panel-button" disabled="true">Optimize</button>
+          <button className="panel-button" onClick={this.onOptimizeMachine}>Optimize</button>
         </div>
 
         <hr/>

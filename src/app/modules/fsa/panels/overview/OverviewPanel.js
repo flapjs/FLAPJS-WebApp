@@ -30,7 +30,7 @@ class OverviewPanel extends React.Component
     this.onChangeAutoRename = this.onChangeAutoRename.bind(this);
     this.onSubmitAutoStatePrefix = this.onSubmitAutoStatePrefix.bind(this);
     this.onAutoStateFormat = this.onAutoStateFormat.bind(this);
-
+    
     this.switchDefinition = this.switchDefinition.bind(this);
   }
 
