@@ -5,6 +5,7 @@ import IconButton from 'icons/IconButton.js';
 import SuccessIcon from 'icons/SuccessIcon.js';
 import FailureIcon from 'icons/FailureIcon.js';
 import WorkingIcon from 'icons/WorkingIcon.js';
+import RunningManIcon from 'icons/RunningManIcon.js';
 
 class StatusButton extends React.Component
 {
@@ -37,7 +38,7 @@ class StatusButton extends React.Component
       //Pending icon
       return <IconButton className={"status-icon" + (active ? " active" : "")}
         onClick={this.props.onClick}>
-        <WorkingIcon/>
+        <RunningManIcon/>
       </IconButton>;
     }
   }

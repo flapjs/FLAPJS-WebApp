@@ -9,6 +9,14 @@ import Downloader from 'util/Downloader.js';
 import TestingManager from 'modules/fsa/testing/TestingManager.js';
 import TestingInput from './TestingInput.js';
 
+import IconButton from 'icons/IconButton.js';
+import UploadTestButton from './components/UploadTestButton.js';
+
+import UploadIcon from 'icons/UploadIcon.js';
+import CreateIcon from 'icons/PageNewIcon.js';
+import SaveIcon from 'icons/SaveIcon.js';
+import CloseIcon from 'icons/CloseIcon.js';
+
 const TEST_FILENAME = "test.txt";
 
 class TestingPanel extends React.Component
@@ -21,7 +29,8 @@ class TestingPanel extends React.Component
     this.uploadInput = React.createRef();
 
     this.state = {
-      errorCheckMode: this.props.app.testingManager.getErrorCheckMode()
+      errorCheckMode: this.props.app.testingManager.getErrorCheckMode(),
+      noTestMode: true
     };
 
     this.stepByStepModeChecked = false;
@@ -32,6 +41,8 @@ class TestingPanel extends React.Component
     this.onTestsRunAll = this.onTestsRunAll.bind(this);
     this.onTestsClear = this.onTestsClear.bind(this);
     this.onTestsSave = this.onTestsSave.bind(this);
+    this.onTestsNew = this.onTestsNew.bind(this);
+    this.onTestsUpload = this.onTestsUpload.bind(this);
   }
 
   componentWillMount()
@@ -125,6 +136,9 @@ class TestingPanel extends React.Component
     const app = this.props.app;
     const tester = app.testingManager;
     tester.inputList.clearTests();
+    this.clearTestName();
+    this.hideTestInputList();
+    this.setState({noTestMode: true});
   }
 
   onTestsSave(e)
@@ -134,9 +148,30 @@ class TestingPanel extends React.Component
     Downloader.downloadText(TEST_FILENAME, tester.inputList.getTestsAsStrings().join("\n"));
   }
 
-  showTestInputList()
+  onTestsNew(e)
   {
-    document.getElementById("test-inputlist-container").style.display = "block";
+      this.onTestsClear();
+      this.showTestInputList();
+      this.clearTestName();
+      this.setState({noTestMode: false});
+  }
+
+  onTestsUpload(e)
+  {
+      this.onTestsNew();
+      this.showTestInputList();
+  }
+
+  showTestInputList() {
+      document.getElementById("test-inputlist-container").style.display = "block";
+  }
+
+  hideTestInputList() {
+      document.getElementById("test-inputlist-container").style.display = "none";
+  }
+
+  clearTestName() {
+      document.getElementById("test-name").innerHTML = "";
   }
 
   render()
@@ -154,19 +189,31 @@ class TestingPanel extends React.Component
         <h1>{I18N.toString("component.testing.title")}</h1>
       </div>
 
-      <button className="panel-button" id="test-new"
-        onClick={() => {this.onTestsClear(); this.showTestInputList(); document.getElementById("test-name").innerHTML = "";}}>
-        {I18N.toString("action.testing.new")}
-      </button>
+      <div className="test-icon-row">
 
-      <button className="panel-button" id="test-upload"
-        onClick={() => {this.uploadInput.click(); this.showTestInputList();}}>
-        <input ref={ref=>this.uploadInput=ref}
-          id="test-upload-input" type="file" name="import"
-          style={{display: "none"}}
-          onChange={this.onUploadFileChange} accept=".txt"/>
-        {I18N.toString("action.testing.import")}
-      </button>
+          <IconButton className="testicon" id="testing-new" title={I18N.toString("action.testing.new")}
+            onClick={this.onTestsNew}>
+            <CreateIcon/>
+          </IconButton>
+
+          {/*Import Test Button*/}
+          <UploadTestButton className="testicon" id="testing-upload" title={I18N.toString("action.testing.import")}
+            onClick={this.onTestsUpload} onChange={this.onUploadFileChange}>
+            <UploadIcon/>
+          </UploadTestButton>
+
+          {/*Save Test Button*/}
+          <IconButton className="testicon" id="testing-save" title={I18N.toString("action.testing.save")}
+            onClick={this.onTestsSave} disabled={tester.inputList.isEmpty()}>
+            <SaveIcon/>
+          </IconButton>
+
+          <IconButton className="testicon" id="testing-clear" title={I18N.toString("action.testing.clear")}
+            onClick={this.onTestsClear} style={this.state.noTestMode ? {visibility: 'hidden'} : {visiblity: 'visible'}}>
+            <CloseIcon/>
+          </IconButton>
+
+      </div>
 
       <div className="panel-content">
 
@@ -191,15 +238,6 @@ class TestingPanel extends React.Component
                 {I18N.toString("action.testing.add")}
               </button>
 
-              <button className="panel-button" onClick={this.onTestsClear}>
-                {I18N.toString("action.testing.clear")}
-              </button>
-
-              <button className="panel-button" id="test-save"
-                onClick={this.onTestsSave}
-                disabled={tester.inputList.isEmpty()}>
-                {I18N.toString("action.testing.save")}
-              </button>
             </div>
           </div>
 
