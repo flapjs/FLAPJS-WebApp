@@ -192,7 +192,7 @@ class DFAErrorChecker
         }
         if (missingNodes.length > 0)
         {
-          Notification.addMessage(missingNodes,
+          Notification.addMessage({targets: missingNodes},
             "error", messageTag, StateMissingTransitionErrorMessage, false);
         }
       }
