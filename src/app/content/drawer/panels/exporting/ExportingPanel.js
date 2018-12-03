@@ -143,14 +143,8 @@ class ExportingPanel extends React.Component
           <label>{I18N.toString("file.export.jff")}</label>
         </IconButton>
         <hr/>
-        {/*Google Drive*/}
-        <div className="export-google">
-          <button className="g-savetodrive"
-            data-src="Here is a string"
-            data-filename={this.props.machineController.getMachineName() + ".json"}
-            data-sitename="flap.js">
-          </button>
-          <label>{"Save to Google Drive"}</label>
+        {/*Save to E-mail*/}
+        <div className="export-email">
         </div>
       </div>
 

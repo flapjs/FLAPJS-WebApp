@@ -11,7 +11,6 @@ class BugReportIcon extends React.Component
   render()
   {
     return <svg className="bugreport-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-      <path fill="none" d="M0 0h24v24H0V0z"/>
       <path d={"M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 " +
       "3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 " +
       "4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 " +

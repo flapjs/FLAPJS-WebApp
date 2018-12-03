@@ -200,6 +200,28 @@ class DFAErrorChecker
 
     return result;
   }
+
+
+  getUnreachableNodes() {
+
+    const graph = this.graph;
+
+    let unReachedNodes = graph.nodes.slice();
+
+    //keep start state
+    //unReachedNodes.splice(unReachedNodes.indexOf(unReachedNode.getStartNode()), 1);
+    for(const edge of graph.edges) {
+      const labels = edge.label.split(",");
+      for(const label of labels) {
+
+        const from = edge.from;
+        const to = edge.to;
+        //remove to from unReachedNode list
+        if(unReachedNodes.includes(to)) unReachedNodes.splice(unReachedNodes.indexOf(to),1);
+      }
+    }
+    return unReachedNodes;
+  }
 }
 
 export default DFAErrorChecker;
