@@ -1,4 +1,8 @@
 import React from 'react';
+import Config from 'config.js';
+
+import Notification from 'system/notification/Notification.js';
+import NFAToDFAConversionWarningMessage from 'modules/fsa/notifications/NFAToDFAConversionWarningMessage.js';
 
 class AnalysisPanel extends React.Component
 {
@@ -32,7 +36,14 @@ class AnalysisPanel extends React.Component
   onConvertToDFA(e)
   {
     const machineController = this.props.machineController;
-    machineController.convertMachineTo("DFA");
+    const graphController = this.props.graphController;
+    const props = {graphController: graphController, machineController: machineController};
+    const messageTag = Config.MACHINE_ERRORS_MESSAGE_TAG;
+
+    Notification.addMessage(I18N.toString("message.warning.convertNFAToDFA"),
+      "warning", messageTag, NFAToDFAConversionWarningMessage, props, false);
+
+    //machineController.convertMachineTo("DFA");
   }
 
   onConvertToNFA(e)

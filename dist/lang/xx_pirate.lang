@@ -8,10 +8,12 @@ message.error.dupe = Yarr! Found these duplicate transitions
 message.error.missing = Fool! Thar be missing transitions fer some states
 message.warning.unreachable = Avast ye! Thar states will soon be shark bait
 message.warning.cannotmodify = Well shave me belly with a rusty razor! Ye know ye can't change states or edges while deletin'.
+message.warning.convertNFAToDFA = Beware! Convertin' thar machine be explodin'!
 
 message.action.locate = Whar be the loot?
 message.action.deleteall = More fer the fishes!
 message.action.close = Get out o' me way, seadog!
+message.action.convert = Set sail, ye landlubbers!
 message.workspace.empty = Ahoy matey! All hands on deck!
 message.offline.ready = Ye ar' ready for open waters!
 message.offline.failed = Ye ar' not ready for the ocean, me hearty. Do give 'er 'nother try!
