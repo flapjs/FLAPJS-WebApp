@@ -33,7 +33,7 @@ class TransitionErrorMessage extends React.Component
     {
       case "locate":
       {
-        const targets = message.value;
+        const targets = message.value.targets;
         const targetLength = targets.length;
         if (targetLength > 0 && this.targetIndex < targetLength)
         {
