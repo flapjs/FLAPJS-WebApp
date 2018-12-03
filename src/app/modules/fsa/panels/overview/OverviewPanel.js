@@ -30,7 +30,7 @@ class OverviewPanel extends React.Component
     this.onChangeAutoRename = this.onChangeAutoRename.bind(this);
     this.onSubmitAutoStatePrefix = this.onSubmitAutoStatePrefix.bind(this);
     this.onAutoStateFormat = this.onAutoStateFormat.bind(this);
-    
+
     this.switchDefinition = this.switchDefinition.bind(this);
   }
 
@@ -88,6 +88,13 @@ class OverviewPanel extends React.Component
         <h1>{I18N.toString("component.overview.title")}</h1>
       </div>
         <div className="panel-content">
+          <select className="machine-type panel-select"
+            value={machineBuilder.getMachineType()}
+            onChange={this.onChangeMachineType}>
+            <option value="DFA">DFA</option>
+            <option value="NFA">NFA</option>
+          </select>
+          
           {this.state.viewFormal &&
             <FormalDefinition machineBuilder={machineBuilder}/>}
 
@@ -95,12 +102,6 @@ class OverviewPanel extends React.Component
             !this.state.viewFormal &&
             <div>
               <div>
-                <select className="machine-type panel-select"
-                  value={machineBuilder.getMachineType()}
-                  onChange={this.onChangeMachineType}>
-                  <option value="DFA">DFA</option>
-                  <option value="NFA">NFA</option>
-                </select>
                 <div className="graphinfo-important">
                   <StatesList graphController={graphController}/>
                   <AlphabetList machineController={machineController}/>

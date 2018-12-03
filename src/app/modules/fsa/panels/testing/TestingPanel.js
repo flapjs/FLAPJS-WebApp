@@ -13,7 +13,7 @@ import IconButton from 'icons/IconButton.js';
 import UploadTestButton from './components/UploadTestButton.js';
 
 import UploadIcon from 'icons/UploadIcon.js';
-import CreateIcon from 'icons/PageNewIcon.js';
+import CreateIcon from 'icons/PageNewContentIcon.js';
 import SaveIcon from 'icons/SaveIcon.js';
 import CloseIcon from 'icons/CloseIcon.js';
 

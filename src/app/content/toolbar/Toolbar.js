@@ -111,7 +111,7 @@ class Toolbar extends React.Component
         </div>
         {/*Machine Type*/}
         <label id="machine-type"
-          onClick={()=>drawer.setTab(2)}>
+          onClick={()=>drawer.setTab(0)}>
           {machineBuilder.getMachineType()}
         </label>
       </div>
@@ -154,11 +154,10 @@ class Toolbar extends React.Component
 
         {/*Right Alt. Toolbar*/}
         <div className="toolbar-tray-alt">
-        {/*Report a Bug Button*/}
-        <IconButton className="navicon" id="bug" title={I18N.toString("action.toolbar.bug")}
-          >
-          <BugReportIcon/>
-        </IconButton>
+          {/*Report a Bug Button*/}
+          <IconButton className="navicon" id="toolbar-bug" title={I18N.toString("action.toolbar.bug")}>
+            <BugReportIcon/>
+          </IconButton>
           {/*Help Button*/}
           <HelpButton className="navicon" id="toolbar-help" title={I18N.toString("action.toolbar.help")}>
             <HelpIcon/>

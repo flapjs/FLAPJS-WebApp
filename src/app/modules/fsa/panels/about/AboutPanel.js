@@ -17,7 +17,8 @@ class AboutPanel extends React.Component
         <h1>Finite State Automata</h1>
       </div>
       <div className="panel-content">
-        <p>Brought to you with love by the Flap.js team.</p>
+        <p>{"Brought to you with \u2764 by the Flap.js team."}</p>
+        <p>{"<- Tap on a tab to begin!"}</p>
       </div>
       <div className="panel-bottom"></div>
     </div>;
