@@ -209,7 +209,8 @@ class TestingPanel extends React.Component
           </IconButton>
 
           <IconButton className="testicon" id="testing-clear" title={I18N.toString("action.testing.clear")}
-            onClick={this.onTestsClear} style={this.state.noTestMode ? {visibility: 'hidden'} : {visiblity: 'visible'}}>
+            onClick={this.onTestsClear}
+            disabled={this.state.noTestMode}>
             <CloseIcon/>
           </IconButton>
 
@@ -233,11 +234,13 @@ class TestingPanel extends React.Component
                     testList={testList}
                     machineBuilder={machineBuilder}/>)
               }
-
-              <button className="panel-button" onClick={() => testList.addInput("")}>
-                {I18N.toString("action.testing.add")}
-              </button>
-
+              {
+                /*
+                <button className="panel-button" onClick={() => testList.addInput("")}>
+                  {I18N.toString("action.testing.add")}
+                </button>
+                */
+              }
             </div>
           </div>
 

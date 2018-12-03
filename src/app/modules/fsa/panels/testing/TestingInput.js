@@ -47,7 +47,10 @@ class TestingInput extends React.Component
       const src = this.getInput();
 
       //Add test input to list
-      this.props.testList.addInput(src.value);
+      const newTest = this.props.testList.addInput(src.value);
+      //Copy result to new test (should not be setResult)
+      newTest.result = src.result;
+      newTest.dirty = src.dirty;
 
       //Delete already processed test
       src.value = "";
@@ -105,10 +108,10 @@ class TestingInput extends React.Component
   {
     if (e.keyCode === Config.SUBMIT_KEY)
     {
-      const shouldCopyToList = e.shiftKey;
+      const shouldTestOnly = e.shiftKey;
 
       //Should try to add and NOT run
-      if (this.isInputFirst() && shouldCopyToList)
+      if (this.isInputFirst() && !shouldTestOnly)
       {
         const src = this.getInput();
 

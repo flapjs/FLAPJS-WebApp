@@ -42,16 +42,16 @@
   margin-right: 5px;
 }
 .testinginput-container .status-icon:hover, .testinginput-container .status-icon:focus {
-  fill: var(--color-drawer-text);
+  fill: var(--color-drawer-accent);
 }
 
 .testinginput-submit {
   margin-left: 5px;
   margin-right: 5px;
 
-  fill: var(--color-drawer-text-subtle);
+  fill: var(--color-drawer-text);
   float: right;
 }
 .testinginput-submit:hover, .testinginput-submit:focus {
-  fill: var(--color-drawer-text);
+  fill: var(--color-drawer-accent);
 }
