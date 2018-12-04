@@ -99,7 +99,6 @@ class NodalGraph
     reachable.push(startNode);
     for(let i = 0; i < reachable.length; i++)
     {
-      console.log(reachable)
       for (const edge of this.edges)
       {
         if(edge.from == reachable[i])

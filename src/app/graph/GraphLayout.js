@@ -11,7 +11,6 @@ class GraphLayout
     }
     const unreachableNode = graph.nodes.filter(unreachable)
 
-    console.log(reachableNode)
     //get num of nodes
     const numOfReachable = reachableNode.length;
     const numOfUnreachable = unreachableNode.length;
