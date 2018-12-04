@@ -24,7 +24,6 @@ class ExportingPanel extends React.Component
     this.onExportJSON = this.onExportJSON.bind(this);
     this.onExportPNG = this.onExportPNG.bind(this);
     this.onExportJPG = this.onExportJPG.bind(this);
-    this.onExportGoogleDrive = this.onExportGoogleDrive.bind(this);
   }
 
   onExportJSON(e)
@@ -69,42 +68,6 @@ class ExportingPanel extends React.Component
     const svg = workspace.getSVGForExport(width, height);
 
     Downloader.downloadSVG(machineName, 'jpg', svg, width, height);
-  }
-
-  onExportGoogleDrive(e)
-  {
-    const jsonString = JSON.stringify(FlapSaver.saveToJSON(this.props.graphController, this.props.machineController));
-    const machineName = this.props.machineController.getMachineName();
-    e.target.setAttribute("data-src", Downloader.getTextDataURI(jsonString));
-    e.target.setAttribute("data-filename", machineName + ".json");
-    e.target.setAttribute("data-sitename", "flap.js");
-    console.log("YAY!");
-  }
-
-  componentDidMount()
-  {
-    const script = document.createElement("script");
-    script.setAttribute("src", "https://apis.google.com/js/platform.js");
-    script.setAttribute("async", "");
-    script.setAttribute("defer", "");
-    document.body.appendChild(script);
-    /*
-    <div style="position: fixed; z-index: 10000; left: 0; top: 0;"
-    onclick="console.log('WOO')">
-      <button class="g-savetodrive" id="export-gdrive-content"
-         data-src=""
-         data-filename="My Statement.pdf"
-         data-sitename="My Company Name">
-      </button>
-
-      <script>
-        {
-          const node = document.getElementById("export-gdrive-content");
-          node.setAttribute("data-src", "//example.com/text.pdf");
-        }
-      </script>
-    </div>
-    */
   }
 
   render()
