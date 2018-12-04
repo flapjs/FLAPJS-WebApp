@@ -16,7 +16,7 @@ class GraphLayout
     const numOfReachable = reachableNode.length;
     const numOfUnreachable = unreachableNode.length;
     const numOfNode = graph.nodes.length;
-    //const maxNum = Math.max(numOfReachable, numOfUnreachable)
+    const maxNum = Math.max(numOfReachable, numOfUnreachable)
     //set radius
     var radius;
     if(numOfReachable < 10 && numOfUnreachable < 10){
