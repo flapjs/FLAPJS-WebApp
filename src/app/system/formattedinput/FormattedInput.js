@@ -87,7 +87,7 @@ class FormattedInput extends React.Component
     if (this.props.saveOnExit)
     {
       const prev = this.state.prevValue;
-      const next = e.target.value || this.props.defaultValue;
+      const next = e.target.value || this.props.defaultValue || "";
       this.resetValue(next, () => {
         if (this.props.onSubmit)
         {
@@ -106,7 +106,7 @@ class FormattedInput extends React.Component
     if (e.key == "Enter")
     {
       const prev = this.state.prevValue;
-      const next = e.target.value || this.props.defaultValue;
+      const next = e.target.value || this.props.defaultValue || "";
       this.resetValue(next, () => {
         this.ignoreSaveOnExit = true;
 
@@ -126,7 +126,7 @@ class FormattedInput extends React.Component
 
         if (this.props.onSubmit)
         {
-          this.props.onSubmit(prev, prev);
+          this.props.onSubmit(prev || "", prev);
         }
         this.element.blur();
       });

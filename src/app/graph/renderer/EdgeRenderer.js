@@ -2,7 +2,7 @@ import React from 'react';
 
 import Config from 'config.js';
 
-const EDGE_SYMBOL_SEPARATOR = ",";
+const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class EdgeRenderer extends React.Component
 {

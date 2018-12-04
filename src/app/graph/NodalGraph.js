@@ -7,7 +7,7 @@ import Node from './Node.js';
 import Edge from './Edge.js';
 import { EMPTY } from 'machine/Symbols.js';
 
-const EDGE_SYMBOL_SEPARATOR = ",";
+const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class NodalGraph
 {

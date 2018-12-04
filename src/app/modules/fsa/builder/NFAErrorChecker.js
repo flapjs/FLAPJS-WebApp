@@ -5,7 +5,7 @@ import Notification from 'system/notification/Notification.js';
 import StateUnreachableWarningMessage from 'modules/fsa/notifications/StateUnreachableWarningMessage.js';
 import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
 
-const EDGE_SYMBOL_SEPARATOR = ",";
+const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class NFAErrorChecker
 {

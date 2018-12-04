@@ -6,7 +6,7 @@ import Edge from './Edge.js';
 
 import { CURRENT_VERSION_STRING } from 'util/FlapSaver.js';
 
-const EDGE_SYMBOL_SEPARATOR = ",";
+const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class NodalGraphParser
 {

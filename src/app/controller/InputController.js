@@ -7,7 +7,7 @@ import GraphPicker from './GraphPicker.js';
 import Node from 'graph/Node.js';
 import Edge from 'graph/Edge.js';
 
-const EDGE_SYMBOL_SEPARATOR = ",";
+const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class InputController
 {

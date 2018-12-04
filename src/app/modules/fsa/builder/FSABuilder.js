@@ -10,7 +10,7 @@ import Node from 'graph/Node.js';
 
 import { EMPTY } from 'machine/Symbols.js';
 
-const EDGE_SYMBOL_SEPARATOR = ",";
+const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class FSABuilder extends MachineBuilder
 {

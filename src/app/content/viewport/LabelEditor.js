@@ -15,7 +15,7 @@ const DELETE_FORWARD_KEY = 46;
 const RECOMMENDED_SYMBOLS = ["0", "1"];
 const DEFAULT_SYMBOLS = [EMPTY];
 
-const EDGE_SYMBOL_SEPARATOR = ",";
+const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class LabelEditor extends React.Component
 {
@@ -119,7 +119,7 @@ class LabelEditor extends React.Component
   appendSymbol(symbol)
   {
     this.inputElement.appendValue(symbol, EDGE_SYMBOL_SEPARATOR);
-    this.inputElement.focus();
+    this.inputElement.focus(false);
   }
 
   onSubmit(newValue, prevValue)
@@ -127,11 +127,13 @@ class LabelEditor extends React.Component
     //If the value has changed or the value remained empty...
     if (newValue != prevValue)
     {
+      console.log(newValue);
       this.closeEditor(true);
     }
     else
     {
-      this.closeEditor(false);
+      //Will close due to timer...
+      //this.closeEditor(false);
     }
   }
 

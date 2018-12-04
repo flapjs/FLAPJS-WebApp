@@ -7,7 +7,7 @@ import StateMissingTransitionErrorMessage from 'modules/fsa/notifications/StateM
 import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
 import StateErrorMessage from 'modules/fsa/notifications/StateErrorMessage.js';
 
-const EDGE_SYMBOL_SEPARATOR = ",";
+const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class DFAErrorChecker
 {
