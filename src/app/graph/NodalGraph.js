@@ -94,6 +94,28 @@ class NodalGraph
     return -1;
   }
 
+  getReachableState()
+  {
+    let reachable = []
+    let startNode = this.getStartNode();
+    reachable.push(startNode);
+    for(let i = 0; i < reachable.length; i++)
+    {
+      console.log(reachable)
+      for (const edge of this.edges)
+      {
+        if(edge.from == reachable[i])
+        {
+          if(!reachable.includes(edge.to))
+          {
+            reachable.push(edge.to);
+          }
+        }
+      }
+    }
+    return reachable
+  }
+
   newNode(x, y, label)
   {
     const result = new Node(this, x, y, label);

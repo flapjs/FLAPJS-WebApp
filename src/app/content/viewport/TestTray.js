@@ -62,20 +62,20 @@ class TestTray extends React.Component
 
         <IconButton onClick = {(e)=>{
           testMode.onPreviousStep();
-          if (testMode.targets.length > 0)
+          /*if (testMode.targets.length > 0)
           {
             graphController.focusOnNodes(testMode.targets);
-          }
+          }*/
         }} disabled={!testMode.hasPrevStep() || testMode.isSkipping()}>
           <UndoIcon/>
         </IconButton>
 
         <IconButton onClick = {(e)=>{
           testMode.onNextStep();
-          if (testMode.targets.length > 0)
+          /*if (testMode.targets.length > 0)
           {
             graphController.focusOnNodes(testMode.targets);
-          }
+          }*/
         }} disabled={!tester.testMode.hasNextStep() || testMode.isSkipping()}>
           <RedoIcon/>
         </IconButton>
