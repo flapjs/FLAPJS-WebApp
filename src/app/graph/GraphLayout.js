@@ -16,7 +16,7 @@ class GraphLayout
     const numOfReachable = reachableNode.length;
     const numOfUnreachable = unreachableNode.length;
     const numOfNode = graph.nodes.length;
-    const maxNum = Math.max(numOfReachable, numOfUnreachable)
+    //const maxNum = Math.max(numOfReachable, numOfUnreachable)
     //set radius
     var radius;
     if(numOfReachable < 10 && numOfUnreachable < 10){
@@ -41,14 +41,14 @@ class GraphLayout
     for(const node of reachableNode)
     {
       node.y = Math.sin(degree_re*currentStep + Math.PI)*radius;
-      node.x = Math.cos(degree_re*currentStep + Math.PI)*radius - 2*radius;
+      node.x = Math.cos(degree_re*currentStep + Math.PI)*radius;
       currentStep += 1
     }
     currentStep = 0
     for(const node of unreachableNode)
     {
-      node.y = Math.sin(degree_un*currentStep + Math.PI)*radius;
-      node.x = Math.cos(degree_un*currentStep + Math.PI)*radius + 2*radius;
+      node.y = Math.sin(degree_un*currentStep + Math.PI)*(radius + 100);
+      node.x = Math.cos(degree_un*currentStep + Math.PI)*(radius + 100);
       currentStep += 1
     }
     /*for(const node of graph.nodes)
