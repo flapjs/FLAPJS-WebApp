@@ -49,6 +49,8 @@ const DAVID_LINK = "https://www.linkedin.com/in/osunadavid/";
 const ERIK_LINK = "https://www.linkedin.com/in/xuanqiang-zhao-364225153/";
 const LIXUAN_LINK = "https://www.linkedin.com/in/lixuan-lang-3ba206143/";
 const ANDREW_LINK = "https://www.linkedin.com/in/andrew-kuo-790243132/";
+const SETH_LINK = "";
+const RAVNEET_LINK = "";
 
 class LandingPage extends React.Component
 {
@@ -210,12 +212,15 @@ class LandingPage extends React.Component
           </span>
           <span className="right">
             <div>Developers</div>
+            <a onClick={()=>window.open(ANDREW_LINK, '_blank').focus()}>Andrew</a>
+            <a onClick={()=>window.open(LIXUAN_LINK, '_blank').focus()}>Lixuan</a>
+            <a onClick={()=>window.open(RAVNEET_LINK, '_blank').focus()}>Ravneet</a>
+            <a onClick={()=>window.open(SETH_LINK, '_blank').focus()}>Seth</a>
+            <div>+</div>
             <a onClick={()=>window.open(MAYA_LINK, '_blank').focus()}>Maya</a>
             <a onClick={()=>window.open(NOAH_LINK, '_blank').focus()}>Noah</a>
             <a onClick={()=>window.open(DAVID_LINK, '_blank').focus()}>David</a>
             <a onClick={()=>window.open(ERIK_LINK, '_blank').focus()}>Erik</a>
-            <a onClick={()=>window.open(LIXUAN_LINK, '_blank').focus()}>Lixuan</a>
-            <a onClick={()=>window.open(ANDREW_LINK, '_blank').focus()}>Andrew</a>
           </span>
           <span className="space"></span>
         </div>
