@@ -22,13 +22,16 @@ class FormattedInput extends React.Component
     //props:
     //  filter - a filter function
     //  formatter - a format function
-    //  saveOnExit - whether to save on blur
+    //  captureOnExit - what to capture on blur (none, save, reset)
     //  defaultValue - the default value for input
   }
 
   //Override
   componentWillReceiveProps(nextProps)
   {
+    //Don't overwrite user input...
+    if (this.hasFocus()) return;
+
     //TODO: This is a way to update the value if it is suppose to be the default value...
     if (!this.state.value || this.state.value.length <= 0 || this.state.value === this.props.defaultValue)
     {
@@ -78,13 +81,18 @@ class FormattedInput extends React.Component
 
   onBlur(e)
   {
-    if (this.ignoreSaveOnExit)
+    if (this.ignoreSaveOnExit || this.props.captureOnExit == "none")
     {
+      //For those you choose to handle exit, it's value should remain correct.
+      const result = this.formatValue(e.target.value);
+      this.setState({value: result});
+
+      //Don't ignore it for the future.
       this.ignoreSaveOnExit = false;
       return;
     }
 
-    if (this.props.saveOnExit)
+    if (this.props.captureOnExit == "save")
     {
       const prev = this.state.prevValue;
       const next = e.target.value || this.props.defaultValue || "";
@@ -95,7 +103,7 @@ class FormattedInput extends React.Component
         }
       });
     }
-    else
+    else if (this.props.captureOnExit == "reset")
     {
       this.resetValue(null);
     }

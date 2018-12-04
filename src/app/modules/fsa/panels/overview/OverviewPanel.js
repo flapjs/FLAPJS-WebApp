@@ -94,7 +94,7 @@ class OverviewPanel extends React.Component
             <option value="DFA">DFA</option>
             <option value="NFA">NFA</option>
           </select>
-          
+
           {this.state.viewFormal &&
             <FormalDefinition machineBuilder={machineBuilder}/>}
 
@@ -118,7 +118,7 @@ class OverviewPanel extends React.Component
                 <h3 style={{marginBottom: "0"}}>State Labels</h3>
                 <div style={{display: "flex", flexDirection: "row"}}>
                   <div className="statetag-container">
-                    <FormattedInput defaultValue={machineBuilder.getLabeler().prefix} style={{width: "4em"}} formatter={this.onAutoStateFormat} saveOnExit="true" onSubmit={this.onSubmitAutoStatePrefix}/>
+                    <FormattedInput defaultValue={machineBuilder.getLabeler().prefix} style={{width: "4em"}} formatter={this.onAutoStateFormat} captureOnExit="save" onSubmit={this.onSubmitAutoStatePrefix}/>
                   </div>
                   <select style={{
                       background: "none",

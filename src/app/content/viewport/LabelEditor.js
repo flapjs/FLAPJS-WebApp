@@ -28,6 +28,7 @@ class LabelEditor extends React.Component
 
     //HACK: this is so if the click is focused back to the label editor, then it will NOT close
     this._timer = null;
+    this._prevValue = "";
 
     this.state = {
       target: null,
@@ -57,6 +58,7 @@ class LabelEditor extends React.Component
     this.inputElement.resetValue(targetEdge.getEdgeLabel(), () => {
       if (defaultText) this.inputElement.setValue(defaultText);
 
+      this._prevValue = targetEdge.getEdgeLabel();
       this.parentElement.focus();
       this.inputElement.focus(replace);
     });
@@ -124,11 +126,11 @@ class LabelEditor extends React.Component
 
   onSubmit(newValue, prevValue)
   {
+    //this._prevValue = newValue;
     //If the value has changed or the value remained empty...
     if (newValue != prevValue)
     {
-      console.log(newValue);
-      this.closeEditor(true);
+      //this.closeEditor(true);
     }
     else
     {
@@ -192,7 +194,7 @@ class LabelEditor extends React.Component
       <FormattedInput className="label-editor-input" ref={ref=>this.inputElement=ref}
         formatter={this.onFormat}
         onSubmit={this.onSubmit}
-        saveOnExit={true}/>
+        captureOnExit={"none"}/>
       <div className="label-editor-tray">
         {
           usedAlphabet &&
