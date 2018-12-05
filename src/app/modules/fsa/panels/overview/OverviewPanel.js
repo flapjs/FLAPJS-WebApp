@@ -145,7 +145,7 @@ class OverviewPanel extends React.Component
 
               <hr/>
 
-              <button className="panel-button" onClick={this.onAutoLayout}>
+              <button className="panel-button" onClick={this.onAutoLayout} disabled={graph.isEmpty()}>
                 {I18N.toString("action.overview.autolayout")}
               </button>
             </div>
