@@ -447,6 +447,8 @@ class NodalGraph
       read = transition[1];
       to = this.getNodeByLabel(transition[2]);
       edge = this.newEdge(from, to, read);
+      const formattedEdge = this.formatEdge(edge);
+      if (edge != formattedEdge) this.deleteEdge(edge);
     }
 
     //Set start state
