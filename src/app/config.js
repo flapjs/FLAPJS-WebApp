@@ -22,6 +22,7 @@ export default cfg;
 
 //General
 cfg.MACHINE_ERRORS_MESSAGE_TAG = "machineError";
+cfg.MACHINE_CONVERSION_MESSAGE_TAG = "machineConversion";
 
 cfg.ERROR_CHECK_INTERVAL = 2000;
 cfg.GRAPH_IMMEDIATE_INTERVAL = 50;

@@ -80,35 +80,32 @@ class NFAErrorChecker
       warnNodes.length == 0 && warnEdges.length == 0);
 
     //Callbacks for all collected errors
-    if (notification)
+    const messageTag = Config.MACHINE_ERRORS_MESSAGE_TAG;
+    //Clear the existing messages
+    Notification.clearMessages(messageTag);
+
+    //No errors!
+    if (!result)
     {
-      const messageTag = Config.MACHINE_ERRORS_MESSAGE_TAG;
-      //Clear the existing messages
-      Notification.clearMessages(messageTag);
+      Notification.addMessage(I18N.toString("message.error.none"), "success", messageTag, null, null, false);
+    }
+    //There are some errors/warnings...
+    else
+    {
+      const props = {graphController: graphController, machineController: machineController};
 
-      //No errors!
-      if (!result)
+      //Add new warning messages
+      if (unReachedNode.length > 0)
       {
-        Notification.addMessage(I18N.toString("message.error.none"), "success", messageTag, null, null, false);
+        Notification.addMessage(unReachedNode,
+          "warning", messageTag, StateUnreachableWarningMessage, props, false);
       }
-      //There are some errors/warnings...
-      else
+
+      //Add new error messages
+      if (placeholderEdges.length > 0)
       {
-        const props = {graphController: graphController, machineController: machineController};
-
-        //Add new warning messages
-        if (unReachedNode.length > 0)
-        {
-          Notification.addMessage(unReachedNode,
-            "warning", messageTag, StateUnreachableWarningMessage, props, false);
-        }
-
-        //Add new error messages
-        if (placeholderEdges.length > 0)
-        {
-          Notification.addMessage({text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
-            "error", messageTag, TransitionErrorMessage, props, false);
-        }
+        Notification.addMessage({text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
+          "error", messageTag, TransitionErrorMessage, props, false);
       }
     }
 

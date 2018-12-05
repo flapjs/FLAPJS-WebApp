@@ -203,7 +203,6 @@ class DFAErrorChecker
 
 
   getUnreachableNodes() {
-
     const graph = this.graph;
 
     let unReachedNodes = graph.nodes.slice();
@@ -211,11 +210,11 @@ class DFAErrorChecker
     //keep start state
     //unReachedNodes.splice(unReachedNodes.indexOf(unReachedNode.getStartNode()), 1);
     for(const edge of graph.edges) {
-      const labels = edge.label.split(",");
+      const labels = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
       for(const label of labels) {
 
-        const from = edge.from;
-        const to = edge.to;
+        const from = edge.getSourceNode();
+        const to = edge.getDestinationNode();
         //remove to from unReachedNode list
         if(unReachedNodes.includes(to)) unReachedNodes.splice(unReachedNodes.indexOf(to),1);
       }

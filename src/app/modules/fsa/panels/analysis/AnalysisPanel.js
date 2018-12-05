@@ -38,12 +38,11 @@ class AnalysisPanel extends React.Component
     const machineController = this.props.machineController;
     const graphController = this.props.graphController;
     const props = {graphController: graphController, machineController: machineController};
-    const messageTag = Config.MACHINE_ERRORS_MESSAGE_TAG;
-
-    Notification.addMessage(I18N.toString("message.warning.convertNFAToDFA"),
-      "warning", messageTag, NFAToDFAConversionWarningMessage, props, false);
+    const messageTag = Config.MACHINE_CONVERSION_MESSAGE_TAG;
 
     //machineController.convertMachineTo("DFA");
+    Notification.addMessage(I18N.toString("message.warning.convertNFAToDFA"),
+      "warning", messageTag, NFAToDFAConversionWarningMessage, props);
   }
 
   onConvertToNFA(e)
@@ -58,6 +57,12 @@ class AnalysisPanel extends React.Component
     {
       this.onDeleteAllUnreachable(e);
     }
+  }
+
+  canOptimize()
+  {
+    return (this.optimizeRedundOption && this.optimizeRedundOption.checked) ||
+    (this.optimizeUnreachOption && this.optimizeUnreachOption.checked);
   }
 
   render()
@@ -85,7 +90,7 @@ class AnalysisPanel extends React.Component
               <label htmlFor="opt-redund">Redundant States</label>
             </div>
           </div>
-          <button className="panel-button" onClick={this.onOptimizeMachine}>Optimize</button>
+          <button className="panel-button" onClick={this.onOptimizeMachine} disabled={!this.canOptimize()}>Optimize</button>
         </div>
 
         <hr/>
