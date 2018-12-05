@@ -238,10 +238,13 @@ class OptionsPanel extends React.Component
         </OptionGroup>
 
         <OptionGroup title={I18N.toString("component.testing.title")} label={I18N.toString("options.category.shortcuts")}>
-          <OptionHotkey label={I18N.toString("action.workspace.submit.label")} keyName="Enter"/>
-          <OptionHotkey label={I18N.toString("action.workspace.cancel.label")} keyName="Escape"/>
           <OptionHotkey label={"Add test input"} keyName="Enter"/>
           <OptionHotkey label={"Run test input"} keyName="Shift + Enter"/>
+        </OptionGroup>
+
+        <OptionGroup title={I18N.toString("component.labeleditor.title")} label={I18N.toString("options.category.shortcuts")}>
+          <OptionHotkey label={I18N.toString("action.workspace.submit.label")} keyName="Enter"/>
+          <OptionHotkey label={I18N.toString("action.workspace.cancel.label")} keyName="Escape"/>
         </OptionGroup>
 
         <hr/>
