@@ -344,6 +344,10 @@ class NodalGraph
 
   getBoundingRect()
   {
+    if (this.nodes.length <= 0) return {
+      minX: 0, minY: 0, maxX: 1, maxY: 1, width: 1, height: 1
+    };
+
     var minNX = Number.MAX_VALUE;
     var minNY = Number.MAX_VALUE;
     var maxNX = Number.MIN_VALUE;

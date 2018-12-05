@@ -30,14 +30,12 @@ class Workspace extends React.Component
     const offsetX = viewport.getOffsetX();
     const offsetY = viewport.getOffsetY();
     const bounds = this.props.graphController.getGraph().getBoundingRect();
-
     const dx = bounds.minX + offsetX - EXPORT_PADDING_X;
     const dy = bounds.minY + offsetY - EXPORT_PADDING_Y;
     const w = bounds.width + EXPORT_PADDING_X * 2;
     const h = bounds.height + EXPORT_PADDING_Y * 2;
     const clone = svg.cloneNode(true);
-    clone.setAttribute('viewBox',
-      dx + " " + dy + " " + w + " " + h);
+    clone.setAttribute('viewBox', dx + " " + dy + " " + w + " " + h);
     clone.setAttribute('width', width);
     clone.setAttribute('height', height);
 
