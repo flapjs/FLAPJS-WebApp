@@ -9,7 +9,7 @@ class Downloader
   {
     const serializer = new XMLSerializer();
     const svgString = serializer.serializeToString(svg);
-    const blob = new Blob([svgString], {type:'image/svg+xml;charset=utf-8'});
+    const blob = new Blob([svgString], {type:'image/svg+xml'});
     const url = URL.createObjectURL(blob);
 
     const canvas = document.createElement('canvas');
@@ -22,19 +22,21 @@ class Downloader
     ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
     const image = new Image();
-    image.onload = function() {
+    image.onload = () => {
       ctx.drawImage(image, 0, 0);
       URL.revokeObjectURL(url);
 
-      const imageURI = canvas.toDataURL('image/'+filetype).replace('image'+filetype, 'image/octet-stream');
-      Downloader.downloadURL(filename+'.'+filetype, imageURI);
-    }
+      const imageURI = canvas.toDataURL('image/' + filetype).replace('image/' + filetype, 'image/octet-stream');
+      Downloader.downloadURL(filename + '.' + filetype, imageURI);
+    };
     image.src = url;
   }
 
   static downloadURL(filename, url)
   {
     const element = document.createElement('a');
+    const headerIndex = url.indexOf(";");
+    url = url.substring(0, headerIndex + 1) + "headers=Content-Disposition%3A%20attachment%3B%20filename=" + filename + ";" + url.substring(headerIndex + 1);
     element.setAttribute('href', url);
     element.setAttribute('download', filename);
 
@@ -44,7 +46,7 @@ class Downloader
     element.click();
     document.body.removeChild(element);
   }
-  
+
   static getTextDataURI(data)
   {
     return 'data:text/plain; charset=utf-8,' + encodeURIComponent(data);
