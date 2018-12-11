@@ -48,9 +48,7 @@ class DFAErrorChecker
     this.clear();
 
     let nodeTransitionMap = new Map();
-    let unReachedNode = graph.nodes.slice();
     let startNode = graph.getStartNode();
-    unReachedNode.splice(unReachedNode.indexOf(startNode),1);
 
     const placeholderEdges = [];
     const emptyEdges = [];
@@ -72,9 +70,6 @@ class DFAErrorChecker
 
         for(const label of labels)
         {
-          //remove to from unReachedNode list
-          if(unReachedNode.includes(to)) unReachedNode.splice(unReachedNode.indexOf(to),1);
-
           //check for empty transitions
           if(label == EMPTY)
           {
@@ -106,12 +101,6 @@ class DFAErrorChecker
           }
         }
       }
-    }
-
-    //check disconnect states
-    for (const node of unReachedNode)
-    {
-      if (warnNodes.indexOf(node) == -1) warnNodes.push(node);
     }
 
     const missingNodes = [];
@@ -168,9 +157,10 @@ class DFAErrorChecker
       {
         const props = {graphController: graphController, machineController: machineController};
         //Add new warning messages
-        if (unReachedNode.length > 0)
+        const unReachedNodes = getUnreachableNodes();
+        if (unReachedNodes.length > 0)
         {
-          Notification.addMessage(unReachedNode,
+          Notification.addMessage(unReachedNodes,
             "warning", messageTag, StateUnreachableWarningMessage, props, false);
         }
 
@@ -201,25 +191,35 @@ class DFAErrorChecker
     return result;
   }
 
-
   getUnreachableNodes() {
     const graph = this.graph;
+    const machine = this.machineBuilder.getMachine();
 
-    let unReachedNodes = graph.nodes.slice();
+    const states = [];
+    const stateSet = new Set();
+    stateSet.add(graph.getStartNode());
 
-    //keep start state
-    //unReachedNodes.splice(unReachedNodes.indexOf(unReachedNode.getStartNode()), 1);
-    for(const edge of graph.edges) {
-      const labels = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
-      for(const label of labels) {
+    const states = graph.nodes.slice();
+    const nextStates = [];
+    nextStates.push(states[0]);
+    states.splice(0, 1);
 
-        const from = edge.getSourceNode();
-        const to = edge.getDestinationNode();
-        //remove to from unReachedNode list
-        if(unReachedNodes.includes(to)) unReachedNodes.splice(unReachedNodes.indexOf(to),1);
+    while(nextStates.length > 0)
+    {
+      const state = nextStates.pop();
+      const i = states.indexOf(state);
+      if (i >= 0)
+      {
+        states.splice(i, 1);
+        const result = machine.getOutgoingTransitions(state);
+        for(const state of result)
+        {
+          nextStates.push(state);
+        }
       }
     }
-    return unReachedNodes;
+
+    return states;
   }
 }
 
