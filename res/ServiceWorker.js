@@ -76,7 +76,7 @@ const GENERATED_HASH = global.serviceWorkerOption.hash;
 //Active caches...(be sure to append them to ACTIVE_CACHES)
 //- unique cache name (must ALWAYS be different from any prior versions)
 //- assets to cache (every asset list must be disjoint from one another)
-const APP_CACHE = new ServiceCache('app-' + process.env.VERSION + (USE_CACHE_BUILD_HASH ? '_' + GENERATED_HASH : ''))
+const APP_CACHE = new ServiceCache(process.env.TITLE + '-' + process.env.VERSION + (USE_CACHE_BUILD_HASH ? '_' + GENERATED_HASH : ''))
   //Essential app files
   .register('./') //Always include the root
   //.register('./index.html')

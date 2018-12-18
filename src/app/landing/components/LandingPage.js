@@ -82,8 +82,12 @@ class LandingPage extends React.Component
       ) - window.innerHeight;
       let scroll = window.pageYOffset;
       const value = Math.round(height - scroll) / 5;
-      this.footer.style.bottom = value + "px";
-      this.returnHome.style.opacity = (scroll / height);
+
+      if (this.footer && this.returnHome)
+      {
+        this.footer.style.bottom = value + "px";
+        this.returnHome.style.opacity = (scroll / height);
+      }
     };
   }
 
