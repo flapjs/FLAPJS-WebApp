@@ -128,7 +128,7 @@ class OverviewPanel extends React.Component
                       margin: "0",
                       appearance: "none",
                       color: "white"
-                    }} disabled="true">
+                    }} disabled={true}>
                     <option>{"0-9"}</option>
                     <option>{"a-z"}</option>
                     <option>{"A-Z"}</option>

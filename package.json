@@ -2,39 +2,42 @@
   "name": "flap.js",
   "version": "0.2.0",
   "description": "Repository for flap.js web app project",
-  "main": "./dist/debug/bundle.js",
   "scripts": {
-    "start": "webpack-dev-server --mode development --config webpack.config.js",
-    "build": "webpack --mode production --config webpack.config.js",
-    "devbuild": "webpack --mode development --config webpack.config.js",
-    "test": "webpack --config webpack.test.config.js && node ./dist/debug/bundle.js"
+    "start": "NODE_ENV=development webpack-dev-server --mode development --config webpack.config.js",
+    "build": "NODE_ENV=production webpack --mode production --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/flapjs/FLAPJS-WebApp.git"
   },
   "author": "Noah, Maya, David, Erik, Lixuan, Andrew",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/flapjs/FLAPJS-WebApp/issues"
   },
   "homepage": "https://github.com/flapjs/FLAPJS-WebApp#readme",
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "css-loader": "^0.28.11",
-    "file-loader": "^1.1.11",
-    "style-loader": "^0.21.0",
-    "webpack": "^4.13.0",
-    "webpack-cli": "^3.0.8",
-    "webpack-dev-server": "^3.1.4"
-  },
   "dependencies": {
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-hot-loader": "^4.3.3"
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-hot-loader": "^4.6.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "clean-webpack-plugin": "^1.0.0",
+    "copy-webpack-plugin": "^4.6.0",
+    "css-loader": "^2.0.1",
+    "html-webpack-harddisk-plugin": "^1.0.1",
+    "html-webpack-plugin": "^3.2.0",
+    "serviceworker-webpack-plugin": "^1.0.1",
+    "style-loader": "^0.23.1",
+    "terser-webpack-plugin": "^1.1.0",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
   }
 }

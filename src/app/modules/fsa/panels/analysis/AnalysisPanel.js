@@ -86,7 +86,7 @@ class AnalysisPanel extends React.Component
               <label htmlFor="opt-unreach">Unreachables</label>
             </div>
             <div>
-              <input ref={ref=>this.optimizeRedundOption=ref} id="opt-redund" type="checkbox" disabled="true"/>
+              <input ref={ref=>this.optimizeRedundOption=ref} id="opt-redund" type="checkbox" disabled={true}/>
               <label htmlFor="opt-redund">Redundant States</label>
             </div>
           </div>

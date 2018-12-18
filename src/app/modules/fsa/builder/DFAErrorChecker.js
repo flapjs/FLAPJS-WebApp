@@ -194,7 +194,7 @@ class DFAErrorChecker
   getUnreachableNodes() {
     const graph = this.graph;
     const machine = this.machineBuilder.getMachine();
-    
+
     const states = graph.nodes.slice();
     const nextStates = [];
     nextStates.push(states[0]);
