@@ -1,5 +1,5 @@
 import React from 'react';
-import { hot } from 'react-hot-loader';
+import { hot } from 'react-hot-loader/root';
 import './App.css';
 
 import FSAModule from 'modules/fsa/FSAModule.js';
@@ -339,4 +339,4 @@ class App extends React.Component
 }
 
 //For hotloading this class
-export default hot(module)(App);
+export default hot(App);

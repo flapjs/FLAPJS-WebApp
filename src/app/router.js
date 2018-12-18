@@ -1,30 +1,12 @@
 const ROUTER = {
-  pathname: "/",
-  _pages: new Map(),
-  _404: null,
-  registerPage: function(path, page) {
-    if (path && path != "/404")
-    {
-      ROUTER._pages.set(path, page);
-    }
-    else
-    {
-      ROUTER._404 = page;
-    }
+  _current: null,
+  routeTo(component)
+  {
+    this._current = component;
   },
-  getPage: function() {
-    const path = ROUTER.pathname;
-    if (ROUTER._pages.has(path))
-    {
-      return ROUTER._pages.get(path);
-    }
-    else
-    {
-      return ROUTER._404;
-    }
-  },
-  routeTo(path) {
-    ROUTER.pathname = path;
+  getCurrentPage()
+  {
+    return this._current;
   }
 };
 

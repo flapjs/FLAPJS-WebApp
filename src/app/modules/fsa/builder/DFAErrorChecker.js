@@ -195,10 +195,6 @@ class DFAErrorChecker
     const graph = this.graph;
     const machine = this.machineBuilder.getMachine();
 
-    const states = [];
-    const stateSet = new Set();
-    stateSet.add(graph.getStartNode());
-
     const states = graph.nodes.slice();
     const nextStates = [];
     nextStates.push(states[0]);
