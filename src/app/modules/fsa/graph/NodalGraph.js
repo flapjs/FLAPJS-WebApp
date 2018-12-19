@@ -412,7 +412,7 @@ class NodalGraph
       node = this.newNode(0, 0, state);
       if (machine.isFinalState(state))
       {
-        node.accept = true;
+        node.setNodeAccept(true);
       }
     }
 

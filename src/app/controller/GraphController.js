@@ -193,10 +193,10 @@ class GraphController
 
   toggleNode(node)
   {
-    const prev = node.accept;
-    const result = !node.accept;
+    const prev = node.getNodeAccept();
+    const result = !prev;
     //Toggle accept for selected node
-    node.accept = result;
+    node.setNodeAccept(result);
 
     //Emit event
     this.emit("userToggleNode", this.getGraph(), node, prev);

@@ -27,7 +27,7 @@ class NodalGraphParser
       const nodeData = data.nodes[i];
       const newNode = new Node(result, nodeData.x || 0, nodeData.y || 0, nodeData.label || "q?");
       newNode.setGraphElementID(nodeData.id);
-      newNode.accept = nodeData.accept;
+      newNode.setNodeAccept(nodeData.accept);
       if (nodeData.customLabel)
       {
         newNode.setCustomLabel(newNode.getNodeLabel());
@@ -79,7 +79,7 @@ class NodalGraphParser
       let nodeStart = node.getElementsByTagName("initial");
       if(nodeStart && nodeStart.length > 0) startNodeID = nodeID;//TODO: allow JFLAP names to be id
       let newNode = new Node(result, nodeX , nodeY , Config.STR_STATE_LABEL + (nodeID));
-      newNode.accept = (nodeAccept != null && nodeAccept.length > 0);
+      newNode.setNodeAccept(nodeAccept != null && nodeAccept.length > 0);
       if(nodeStart && nodeStart.length > 0)
       {
         if(result.nodes[0])
@@ -156,7 +156,7 @@ class NodalGraphParser
         x: node.x,
         y: node.y,
         label: node.getNodeLabel(),
-        accept: node.accept,
+        accept: node.getNodeAccept(),
         customLabel: node.hasCustomLabel()
       };
     }
@@ -193,9 +193,9 @@ class NodalGraphParser
     structure.appendChild(automaton);
 
     let node, state, x, y;
-    for(let i = 0; i < graph.nodes.length; ++i)
+    for(let i = 0; i < graph.getNodes().length; ++i)
     {
-      node = graph.nodes[i];
+      node = graph.getNodes()[i];
 
       //state tag
       state = doc.createElement("state");
@@ -220,14 +220,14 @@ class NodalGraphParser
       }
 
       //final tag
-      if (node.accept)
+      if (node.getNodeAccept())
       {
         state.appendChild(doc.createElement("final"));
       }
     }
 
     let transition, from, to, read, symbols;
-    for(let edge of graph.edges)
+    for(let edge of graph.getEdges())
     {
       symbols = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
       for(let symbol of symbols)
@@ -238,12 +238,12 @@ class NodalGraphParser
 
         //from tag
         from = doc.createElement("from");
-        from.innerHTML = graph.nodes.indexOf(edge.getSourceNode());
+        from.innerHTML = graph.getNodes().indexOf(edge.getSourceNode());
         transition.appendChild(from);
 
         //to tag
         to = doc.createElement("to");
-        to.innerHTML = graph.nodes.indexOf(edge.getDestinationNode());
+        to.innerHTML = graph.getNodes().indexOf(edge.getDestinationNode());
         transition.appendChild(to);
 
         //read tag

@@ -22,7 +22,7 @@ class UserToggleNodeEventHandler extends EventHandler
     const graph = this.controller.getGraph();
     const nodeIndex = graph.getNodeIndexByID(e.eventData.nodeID);
     if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-    graph.nodes[nodeIndex].accept = e.eventData.prevAccept;
+    graph.nodes[nodeIndex].setNodeAccept(e.eventData.prevAccept);
 
     //graph.markDirty();
   }
@@ -33,7 +33,7 @@ class UserToggleNodeEventHandler extends EventHandler
     const graph = this.controller.getGraph();
     const nodeIndex = graph.getNodeIndexByID(e.eventData.nodeID);
     if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-    graph.nodes[nodeIndex].accept = !e.eventData.prevAccept;
+    graph.nodes[nodeIndex].setNodeAccept(!e.eventData.prevAccept);
 
     //graph.markDirty();
   }

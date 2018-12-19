@@ -51,12 +51,17 @@ class Node extends GraphNode
     return this.customLabel;
   }
 
-  get accept() { return this._accept; }
-  set accept(value) {
-    let prevAccept = this._accept;
-    this._accept = value;
-    if (prevAccept != value)
+  getNodeAccept()
+  {
+    return this._accept;
+  }
+
+  setNodeAccept(value)
+  {
+    const prev = this._accept;
+    if (prev != value)
     {
+      this._accept = value;
       this.graph.markDirty();
     }
   }

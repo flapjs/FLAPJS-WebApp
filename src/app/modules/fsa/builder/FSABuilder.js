@@ -247,7 +247,7 @@ function fillFSA(graph, fsa)
       fsa.newState(state);
 
       //Set final state
-      if (node.accept)
+      if (node.getNodeAccept())
       {
         fsa.setFinalState(state, true);
       }

@@ -24,7 +24,7 @@ class NodeRenderer extends React.Component
         stroke="#000000"/>
 
       {/*Inner circle*/}
-      {node.accept &&
+      {node.getNodeAccept() &&
         <circle className="graph-node-inner"
           cx={node.x}
           cy={node.y}
