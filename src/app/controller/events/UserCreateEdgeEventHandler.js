@@ -28,7 +28,7 @@ class UserCreateEdgeEventHandler extends EventHandler
     const graph = this.controller.getGraph();
     const edgeIndex = graph.getEdgeIndexByID(e.eventData.edgeID);
     if (edgeIndex < 0) throw new Error("Unable to find target in graph");
-    graph.edges.splice(edgeIndex, 1);
+    graph.getEdges().splice(edgeIndex, 1);
 
     graph.markDirty();
   }

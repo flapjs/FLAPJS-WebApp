@@ -31,6 +31,16 @@ class NodalGraph
     this._callbacks.splice(this._callbacks.indexOf(callback), 1);
   }
 
+  getEdges()
+  {
+    return this.edges;
+  }
+
+  getNodes()
+  {
+    return this.nodes;
+  }
+
   getNodeByLabel(label)
   {
     for(const node of this.nodes)

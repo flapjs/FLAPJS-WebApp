@@ -385,7 +385,7 @@ function moveNodesOutOfEdges(target, graph)
     vertical = true;
   }
 
-  for(const node of graph.nodes)
+  for(const node of graph.getNodes())
   {
     if(node === target.getSourceNode() || node === target.getDestinationNode()) continue;
 

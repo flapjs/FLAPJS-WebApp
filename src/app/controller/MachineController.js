@@ -169,9 +169,9 @@ class MachineController
     this.emit("userPreDeleteSymbol", this.getMachineBuilder(), symbol);
 
     const graph = this.graphController.getGraph();
-    for(let i = graph.edges.length - 1; i >= 0; --i)
+    for(let i = graph.getEdges().length - 1; i >= 0; --i)
     {
-      edge = graph.edges[i];
+      edge = graph.getEdges()[i];
       index = edge.getEdgeLabel().indexOf(symbol);
       if (index >= 0)
       {

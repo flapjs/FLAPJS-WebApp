@@ -70,7 +70,7 @@ class GraphPicker
   getNodeAt(graph, x, y)
   {
     //Search graph
-    for(const node of graph.nodes)
+    for(const node of graph.getNodes())
     {
       const dx = x - node.x;
       const dy = y - node.y;
@@ -100,9 +100,9 @@ class GraphPicker
   getEdgeAt(graph, x, y)
   {
     const center = {x: 0, y: 0};
-    
+
     //Search graph
-    for(const edge of graph.edges)
+    for(const edge of graph.getEdges())
     {
       edge.getCenterPoint(center);
       const dx = x - center.x;
@@ -119,7 +119,7 @@ class GraphPicker
   {
     const end = {x: 0, y: 0};
     //Search graph
-    for(const edge of graph.edges)
+    for(const edge of graph.getEdges())
     {
       edge.getEndPoint(end);
       const dx = x - end.x;
@@ -214,7 +214,7 @@ function getNodesWithin(graph, x1, y1, x2, y2, dst)
   const toX = Math.max(x1, x2);
   const toY = Math.max(y1, y2);
 
-  for(const node of graph.nodes)
+  for(const node of graph.getNodes())
   {
     if (node.x >= fromX && node.x < toX &&
         node.y >= fromY && node.y < toY)
