@@ -157,7 +157,7 @@ class DFAErrorChecker
       {
         const props = {graphController: graphController, machineController: machineController};
         //Add new warning messages
-        const unReachedNodes = getUnreachableNodes();
+        const unReachedNodes = this.getUnreachableNodes();
         if (unReachedNodes.length > 0)
         {
           Notifications.addMessage(unReachedNodes,

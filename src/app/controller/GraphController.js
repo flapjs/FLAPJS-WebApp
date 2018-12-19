@@ -234,6 +234,23 @@ class GraphController
     this.emit("userPostDeleteNodes", this.getGraph(), target, [target], this.prevX, this.prevY);
   }
 
+  deleteTargetNodes(targets)
+  {
+    if (!targets || targets.length <= 0) return;
+
+    this.emit("userPreDeleteNodes", this.getGraph(), targets[0], targets, this.prevX, this.prevY);
+
+    const graph = this.getGraph();
+    for(const node of targets)
+    {
+      graph.deleteNode(node);
+    }
+
+    //Emit event
+    this.emit("userDeleteNodes", this.getGraph(), targets[0], targets, this.prevX, this.prevY);
+    this.emit("userPostDeleteNodes", this.getGraph(), targets[0], targets, this.prevX, this.prevY);
+  }
+
   deleteTargetEdge(target)
   {
     this.emit("userPreDeleteEdge", this.getGraph(), target, this.prevEdgeTo, this.prevQuad);
@@ -242,6 +259,16 @@ class GraphController
     //Emit event
     this.emit("userDeleteEdge", this.getGraph(), target, this.prevEdgeTo, this.prevQuad);
     this.emit("userPostDeleteEdge", this.getGraph(), target, this.prevEdgeTo, this.prevQuad);
+  }
+
+  deleteTargetEdges(targets)
+  {
+    if (!targets || targets.length <= 0) return;
+
+    for(const target of targets)
+    {
+      this.deleteTargetEdge(target);
+    }
   }
 
   moveNodeTo(pointer, node, x, y)

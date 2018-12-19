@@ -303,6 +303,7 @@ class App extends React.Component
           }}>
 
           <Workspace ref={ref=>this.workspace=ref}
+            app={this}
             tester={tester}
             graphController={graphController}
             inputController={inputController}

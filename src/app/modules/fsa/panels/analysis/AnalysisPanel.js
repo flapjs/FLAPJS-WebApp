@@ -24,13 +24,8 @@ class AnalysisPanel extends React.Component
   {
     const machineController = this.props.machineController;
     const unreachableArray = machineController.getMachineBuilder().machineErrorChecker.getUnreachableNodes();
-    for(let node of unreachableArray)
-    {
-      if(node != machineController.graphController.getGraph().getStartNode())
-      {
-        machineController.graphController.getGraph().deleteNode(node);
-      }
-    }
+    const graphController = machineController.graphController;
+    graphController.deleteTargetNodes(unreachableArray);
   }
 
   onConvertToDFA(e)

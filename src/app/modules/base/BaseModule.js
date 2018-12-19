@@ -8,6 +8,11 @@ class BaseModule
 
   destroy(app) {}
 
+  getModuleTitlePanel()
+  {
+    return null;
+  }
+
   getModulePanels()
   {
     return DEFAULT_PANELS;

@@ -5,7 +5,6 @@ import Config from 'config.js';
 
 import Subtitle from './Subtitle.js';
 
-import NodalGraphRenderer from 'modules/fsa/graph/renderer/NodalGraphRenderer.js';
 import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
 import HighlightRenderer from './renderer/HighlightRenderer.js';
 
@@ -20,12 +19,14 @@ class Workspace extends React.Component
   {
     super(props);
 
-    this.ref = React.createRef();
+    this.ref = null;
   }
 
   getSVGForExport(width, height)
   {
     const svg = this.ref;
+    if (!svg) return null;
+
     const viewport = this.props.inputController.getViewport();
     const offsetX = viewport.getOffsetX();
     const offsetY = viewport.getOffsetY();
@@ -62,11 +63,13 @@ class Workspace extends React.Component
 
   render()
   {
+    const module = this.props.app.getCurrentModule();
     const graphController = this.props.graphController;
     const inputController = this.props.inputController;
     const machineController = this.props.machineController;
     const tester = this.props.tester;
 
+    const GraphRenderer = module.getGraphRenderer();
     const graph = graphController.getGraph();
     const viewport = inputController.getViewport();
     const machineBuilder = machineController.getMachineBuilder();
@@ -95,7 +98,7 @@ class Workspace extends React.Component
         <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="rgba(0,0,0,0.04)"/>
 
         {/* Graph objects */}
-        <NodalGraphRenderer graph={graph} inputController={inputController}/>
+        <GraphRenderer graph={graph} inputController={inputController}/>
 
         {/* Graph GUIs */}
         <g>

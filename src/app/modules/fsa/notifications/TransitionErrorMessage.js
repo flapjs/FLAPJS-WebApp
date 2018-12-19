@@ -17,7 +17,7 @@ class TransitionErrorMessage extends React.Component
       {
         this.targetLabel += ", ";
       }
-      this.targetLabel += "(" + target.getSourceNode().getNodeLabel() + ", " + target.getDestinationNode().getNodeLabel() + ") " + ARROW + " " + target.getEdgeLabel();
+      this.targetLabel += "(" + target.getSourceNode().getNodeLabel() + ", " + (target.getDestinationNode() ? target.getDestinationNode().getNodeLabel() : "null") + ") " + ARROW + " " + target.getEdgeLabel();
     }
 
     this.onClick = this.onClick.bind(this);
@@ -50,10 +50,8 @@ class TransitionErrorMessage extends React.Component
       {
         const targets = message.value.targets;
         //Delete all target edges
-        for(const edge of targets)
-        {
-          graphController.getGraph().deleteEdge(edge);
-        }
+        graphController.deleteTargetEdges(targets);
+
         //Exit the message
         message.close();
       }

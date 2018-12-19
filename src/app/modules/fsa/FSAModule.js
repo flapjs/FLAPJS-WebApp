@@ -5,7 +5,8 @@ import TestingPanel from './panels/testing/TestingPanel.js';
 import AnalysisPanel from './panels/analysis/AnalysisPanel.js';
 import AboutPanel from './panels/about/AboutPanel.js';
 
-import NodalGraph from 'modules/fsa/graph/NodalGraph.js';
+import NodalGraphRenderer from './graph/renderer/NodalGraphRenderer.js';
+import NodalGraph from './graph/NodalGraph.js';
 
 import FSABuilder from './builder/FSABuilder.js';
 
@@ -39,6 +40,11 @@ class FSAModule extends BaseModule
     return this._graph;
   }
 
+  getGraphRenderer()
+  {
+    return NodalGraphRenderer;
+  }
+
   getMachineBuilder()
   {
     return this._machineBuilder;
@@ -49,7 +55,8 @@ class FSAModule extends BaseModule
     return this._machineBuilder.formatAlphabetString.bind(this._machineBuilder);
   }
 
-  getModuleInfoPanel()
+  //Override
+  getModuleTitlePanel()
   {
     return AboutPanel;
   }
