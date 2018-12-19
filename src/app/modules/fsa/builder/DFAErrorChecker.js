@@ -1,7 +1,7 @@
 import Config from 'config.js';
 import { EMPTY } from 'machine/Symbols.js';
 
-import Notification from 'system/notification/Notification.js';
+import Notifications from 'system/notification/Notifications.js';
 import StateUnreachableWarningMessage from 'modules/fsa/notifications/StateUnreachableWarningMessage.js';
 import StateMissingTransitionErrorMessage from 'modules/fsa/notifications/StateMissingTransitionErrorMessage.js';
 import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
@@ -145,12 +145,12 @@ class DFAErrorChecker
     {
       const messageTag = Config.MACHINE_ERRORS_MESSAGE_TAG;
       //Clear the existing messages
-      Notification.clearMessages(messageTag);
+      Notifications.clearMessages(messageTag);
 
       //No errors!
       if (!result)
       {
-        Notification.addMessage(I18N.toString("message.error.none"), "success", messageTag, null, null, false);
+        Notifications.addMessage(I18N.toString("message.error.none"), "success", messageTag, null, null, false);
       }
       //There are some errors/warnings...
       else
@@ -160,29 +160,29 @@ class DFAErrorChecker
         const unReachedNodes = getUnreachableNodes();
         if (unReachedNodes.length > 0)
         {
-          Notification.addMessage(unReachedNodes,
+          Notifications.addMessage(unReachedNodes,
             "warning", messageTag, StateUnreachableWarningMessage, props, false);
         }
 
         //Add new error messages
         if (placeholderEdges.length > 0)
         {
-          Notification.addMessage({text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
+          Notifications.addMessage({text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
             "error", messageTag, TransitionErrorMessage, props, false);
         }
         if (emptyEdges.length > 0)
         {
-          Notification.addMessage({text: I18N.toString("message.error.empty"), targets: emptyEdges},
+          Notifications.addMessage({text: I18N.toString("message.error.empty"), targets: emptyEdges},
             "error", messageTag, TransitionErrorMessage, props, false);
         }
         if (dupeEdges.length > 0)
         {
-          Notification.addMessage({text: I18N.toString("message.error.dupe"), targets: dupeEdges},
+          Notifications.addMessage({text: I18N.toString("message.error.dupe"), targets: dupeEdges},
             "error", messageTag, TransitionErrorMessage, props, false);
         }
         if (missingNodes.length > 0)
         {
-          Notification.addMessage({targets: missingNodes},
+          Notifications.addMessage({targets: missingNodes},
             "error", messageTag, StateMissingTransitionErrorMessage, props, false);
         }
       }

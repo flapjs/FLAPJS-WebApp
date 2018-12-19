@@ -18,7 +18,7 @@ import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
 import Tutorial from 'tutorial/Tutorial.js';
 
-import Notification from 'system/notification/Notification.js';
+import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
 
 import EventManager from './EventManager.js';
@@ -81,7 +81,7 @@ class App extends React.Component
     const tryCreateWhileTrash = () => {
       if (this.inputController.isTrashMode())
       {
-        Notification.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
+        Notifications.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
       }
     };
     this.graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);

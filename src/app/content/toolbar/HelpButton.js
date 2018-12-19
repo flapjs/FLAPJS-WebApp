@@ -1,5 +1,5 @@
 import React from 'react';
-import Notification from 'system/notification/Notification.js';
+import Notifications from 'system/notification/Notifications.js';
 
 class HelpButton extends React.Component
 {
@@ -12,14 +12,14 @@ class HelpButton extends React.Component
 
   onClick(e)
   {
-    if (Notification.hasMessages())
+    if (Notifications.hasMessages())
     {
-      Notification.addMessage(I18N.toString("message.help.3"));
-      Notification.addMessage(I18N.toString("message.help.1"));
+      Notifications.addMessage(I18N.toString("message.help.3"));
+      Notifications.addMessage(I18N.toString("message.help.1"));
     }
     else
     {
-      Notification.addMessage(I18N.toString("message.help.2"));
+      Notifications.addMessage(I18N.toString("message.help.2"));
     }
 
     //The tutorial

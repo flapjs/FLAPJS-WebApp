@@ -1,7 +1,7 @@
 import NodalGraph from 'graph/NodalGraph.js';
 import NodalGraphParser from 'graph/NodalGraphParser.js';
 
-import Notification from 'system/notification/Notification.js';
+import Notifications from 'system/notification/Notifications.js';
 import SemanticVersion from 'util/SemanticVersion.js';
 
 export const CURRENT_VERSION = new SemanticVersion(0, 2, 0);
@@ -47,7 +47,7 @@ export function loadFromJSON(jsonData, graphController, machineController)
       const dataVersion = SemanticVersion.parse(metadata.version);
       if (!CURRENT_VERSION.canSupportVersion(dataVersion))
       {
-        Notification.addErrorMessage("ERROR: Unable to load invalid JSON file - invalid version.", "errorUpload");
+        Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file - invalid version.", "errorUpload");
         return;
       }
     }
@@ -75,7 +75,7 @@ export function loadFromJSON(jsonData, graphController, machineController)
   }
   catch (e)
   {
-    Notification.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
+    Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
 
     console.error(e);
   }
