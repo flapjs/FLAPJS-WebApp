@@ -51,7 +51,7 @@ class TestingPanel extends React.Component
     const graph = graphController.getGraph();
 
     //HACK: this should be a listener to FSABuilder, should not access graph
-    graph.on("markDirty", this.onGraphChange);
+    graph.addGraphCallback(this.onGraphChange);
   }
 
   componentWillUnmount()
@@ -59,7 +59,7 @@ class TestingPanel extends React.Component
     const graphController = this.props.graphController;
     const graph = graphController.getGraph();
 
-    graph.removeEventListener("markDirty", this.onGraphChange);
+    graph.removeGraphCallback(this.onGraphChange);
   }
 
   onGraphChange(g)

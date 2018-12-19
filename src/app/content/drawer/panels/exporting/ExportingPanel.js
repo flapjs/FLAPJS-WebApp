@@ -20,14 +20,31 @@ class ExportingPanel extends React.Component
 
     this.container = null;
 
-    this.onExportXML = this.onExportXML.bind(this);
     this.onExportJSON = this.onExportJSON.bind(this);
+    this.onExportXML = this.onExportXML.bind(this);
+
     this.onExportPNG = this.onExportPNG.bind(this);
     this.onExportJPG = this.onExportJPG.bind(this);
   }
 
   onExportJSON(e)
   {
+    /*
+    //TODO: We need to write FSAGraphParser first, which requires to know
+    //what NodalGraph looks like...
+    const module = this.props.app.getCurrentModule();
+    const parser = module.getGraphParser();
+    const graphData = parser.JSON.objectify(module.getGraph());
+    const machineData = this.props.machineController.getMetadata();
+    const data = {
+      graph: graphData,
+      machine: machineData
+    };
+    const result = JSON.stringify(FlapSaver.saveToJSON(data));
+    const machineName = this.props.machineController.getMachineName();
+    Downloader.downloadText(machineName + '.json', result);
+    */
+
     const jsonString = JSON.stringify(FlapSaver.saveToJSON(this.props.graphController, this.props.machineController));
     const machineName = this.props.machineController.getMachineName();
     Downloader.downloadText(machineName + '.json', jsonString);

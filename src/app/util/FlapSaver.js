@@ -1,4 +1,3 @@
-import NodalGraph from 'modules/fsa/graph/NodalGraph.js';
 import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
 
 import Notifications from 'system/notification/Notifications.js';
@@ -7,6 +6,7 @@ import SemanticVersion from 'util/SemanticVersion.js';
 export const CURRENT_VERSION = new SemanticVersion(0, 2, 0);
 export const CURRENT_VERSION_STRING = SemanticVersion.stringify(CURRENT_VERSION);
 
+//TODO: Should really only write metadata that is ambiguous to module
 export function saveToJSON(graphController, machineController)
 {
   const graph = graphController.getGraph();

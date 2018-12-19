@@ -16,28 +16,19 @@ class NodalGraph
     this.nodes = nodes;
     this.edges = edges;
 
-    //nodeCreate(node) - Whenever a new node is created
-    this.registerEvent("nodeCreate");
-    //nodeDestroy(node) - Whenever a node is destroyed (even on clear)
-    this.registerEvent("nodeDestroy");
-    //nodeLabel(node, newLabel, oldLabel) - Whenever a node label changes
-    this.registerEvent("nodeLabel");
-    //nodeCustomLabel(node, newLabel, oldLabel) - Whenever a node custom label changes
-    this.registerEvent("nodeCustomLabel");
-    //edgeCreate(edge) - Whenever a new edge is created
-    this.registerEvent("edgeCreate");
-    //edgeDestroy(edge) - Whenever an edge is destroyed (even on clear)
-    this.registerEvent("edgeDestroy");
-    //edgeLabel(edge, newLabel, oldLabel) - Whenever a node label changes
-    this.registerEvent("edgeLabel");
-    //edgeDestination(edge, newDestination, oldDestination) - Whenever a node changes destination
-    this.registerEvent("edgeDestination");
-    //toggleAccept(node) - Whenever a node changes to an accept state, or vice versa
-    this.registerEvent("toggleAccept");
-    //newInitial(node, oldNode) - Whenever a node becomes the initial state; oldNode could be null
-    this.registerEvent("newInitial");
-    //markDirty(graph) - Whenever the graph is marked dirty
-    this.registerEvent("markDirty");
+    this._dirty = false;
+    this._callbacks = [];
+    this._timeout = null;
+  }
+
+  addGraphCallback(callback)
+  {
+    this._callbacks.push(callback);
+  }
+
+  removeGraphCallback(callback)
+  {
+    this._callbacks.splice(this._callbacks.indexOf(callback), 1);
   }
 
   getNodeByLabel(label)
@@ -118,12 +109,7 @@ class NodalGraph
   newNode(x, y, label)
   {
     const result = new Node(this, x, y, label);
-    if (this.nodes.length == 0)
-    {
-      this.emit("newInitial", result, null);
-    }
     this.nodes.push(result);
-    this.emit("nodeCreate", result);
 
     this.markDirty();
     return result;
@@ -140,7 +126,6 @@ class NodalGraph
       {
         //Delete any edges that have this node as a source
         this.edges.splice(i, 1);
-        this.emit("edgeDestroy", edge);
       }
       else if (edge.getDestinationNode() == node)
       {
@@ -150,11 +135,6 @@ class NodalGraph
     }
     let nodeIndex = this.nodes.indexOf(node);
     this.nodes.splice(nodeIndex, 1);
-    if (nodeIndex == 0)
-    {
-      this.emit("newInitial", this.getStartNode(), node);
-    }
-    this.emit("nodeDestroy", node);
 
     this.markDirty();
   }
@@ -177,8 +157,6 @@ class NodalGraph
   {
     const result = new Edge(this, from, to, label);
     this.edges.push(result);
-
-    this.emit("edgeCreate", result);
 
     this.markDirty();
     return result;
@@ -298,23 +276,13 @@ class NodalGraph
   deleteEdge(edge)
   {
     this.edges.splice(this.edges.indexOf(edge), 1);
-    this.emit("edgeDestroy", edge);
 
     this.markDirty();
   }
 
   deleteAll()
   {
-    for(let node of this.nodes)
-    {
-      this.emit("nodeDestroy", node);
-    }
     this.nodes.length = 0;
-
-    for(let edge of this.edges)
-    {
-      this.emit("edgeDestroy", edge);
-    }
     this.edges.length = 0;
 
     this.markDirty();
@@ -332,7 +300,6 @@ class NodalGraph
     this.nodes.splice(this.nodes.indexOf(node), 1);
     const prevNode = this.nodes[0];
     this.nodes.unshift(node);
-    this.emit("newInitial", node, prevNode);
 
     this.markDirty();
   }
@@ -463,23 +430,12 @@ class NodalGraph
 
   markDirty()
   {
-    this.emit("markDirty", this);
-  }
-
-  toDFA(dst=null)
-  {
-    throw new Error("DEPRECATED!");
-  }
-
-  toNFA(dst=null)
-  {
-    throw new Error("DEPRECATED!");
-  }
-
-  //TODO: NEVER CALL THIS DIRECTLY (Only FSABuilder is allowed.) Will be deprecated later.
-  _toNFA(dst=null)
-  {
-    throw new Error("DEPRECATED!");
+    this._dirty = true;
+    for(const callback of this._callbacks)
+    {
+      callback(this);
+    }
+    this._dirty = false;
   }
 }
 //Mixin Eventable

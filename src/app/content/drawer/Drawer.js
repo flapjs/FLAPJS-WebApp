@@ -7,7 +7,7 @@ import ExportingPanel from './panels/exporting/ExportingPanel.js';
 import OptionsPanel from './panels/options/OptionsPanel.js';
 
 const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
-const DEFAULT_TAB_INDEX = 1;//TODO: Should be 0, try it :)
+const DEFAULT_TAB_INDEX = 0;
 
 const MAX_PANEL_THRESHOLD = 50;
 const MIN_PANEL_SIZE = 300;//180

@@ -1,6 +1,5 @@
 import EventHandler from './EventHandler.js';
 
-import NodalGraph from 'modules/fsa/graph/NodalGraph.js';
 import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
 
 class UserConvertMachineEventHandler extends EventHandler

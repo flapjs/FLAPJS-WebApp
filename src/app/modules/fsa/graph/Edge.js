@@ -20,8 +20,6 @@ class Edge extends QuadraticEdge
 
     if (prevLabel != label)
     {
-      this.graph.emit("edgeLabel", this, label, prevLabel);
-
       this.graph.markDirty();
     }
   }

@@ -5,7 +5,6 @@ import DFAErrorChecker from './DFAErrorChecker.js';
 import NFAErrorChecker from './NFAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
-import NodalGraph from 'modules/fsa/graph/NodalGraph';
 import Node from 'modules/fsa/graph/Node.js';
 
 import { EMPTY } from 'machine/Symbols.js';
@@ -46,34 +45,14 @@ class FSABuilder extends MachineBuilder
     this.graphController = app.graphController;
     this.machineController = app.machineController;
 
-    this.graph.on("nodeCreate", this.onGraphChange);
-    this.graph.on("nodeDestroy", this.onGraphChange);
-    this.graph.on("nodeLabel", this.onGraphChange);
-    this.graph.on("edgeCreate", this.onGraphChange);
-    this.graph.on("edgeDestroy", this.onGraphChange);
-    this.graph.on("edgeLabel", this.onGraphChange);
-    this.graph.on("edgeDestination", this.onGraphChange);
-    this.graph.on("toggleAccept", this.onGraphChange);
-    this.graph.on("newInitial", this.onGraphChange);
-    this.graph.on("markDirty", this.onGraphChange);
-
+    this.graph.addGraphCallback(this.onGraphChange);
     this.onGraphChange();
   }
 
   destroy()
   {
     this.onGraphChange();
-
-    this.graph.removeEventListener("nodeCreate", this.onGraphChange);
-    this.graph.removeEventListener("nodeDestroy", this.onGraphChange);
-    this.graph.removeEventListener("nodeLabel", this.onGraphChange);
-    this.graph.removeEventListener("edgeCreate", this.onGraphChange);
-    this.graph.removeEventListener("edgeDestroy", this.onGraphChange);
-    this.graph.removeEventListener("edgeLabel", this.onGraphChange);
-    this.graph.removeEventListener("edgeDestination", this.onGraphChange);
-    this.graph.removeEventListener("toggleAccept", this.onGraphChange);
-    this.graph.removeEventListener("newInitial", this.onGraphChange);
-    this.graph.removeEventListener("markDirty", this.onGraphChange);
+    this.graph.removeGraphCallback(this.onGraphChange);
 
     super.destroy();
   }

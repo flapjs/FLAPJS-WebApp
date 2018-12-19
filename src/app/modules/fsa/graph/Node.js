@@ -30,7 +30,6 @@ class Node extends GraphNode
 
     if (prevLabel != label)
     {
-      this.graph.emit("nodeLabel", this, this._label, prevLabel);
       this.graph.markDirty();
     }
   }
@@ -43,7 +42,6 @@ class Node extends GraphNode
 
     if (prevLabel != label)
     {
-      this.graph.emit("nodeCustomLabel", this, this._label, prevLabel);
       this.graph.markDirty();
     }
   }
@@ -59,7 +57,6 @@ class Node extends GraphNode
     this._accept = value;
     if (prevAccept != value)
     {
-      this.graph.emit("toggleAccept", this, this._accept, prevAccept);
       this.graph.markDirty();
     }
   }

@@ -1,5 +1,3 @@
-import NodalGraph from 'modules/fsa/graph/NodalGraph.js';
-
 import * as FlapSaver from 'util/FlapSaver.js';
 import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
 
