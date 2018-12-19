@@ -1,7 +1,7 @@
 import Config from 'config.js';
 import Eventable from 'util/Eventable.js';
 
-import GraphLayout from 'graph/GraphLayout.js';
+import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 
 import Node from './Node.js';
 import Edge from './Edge.js';

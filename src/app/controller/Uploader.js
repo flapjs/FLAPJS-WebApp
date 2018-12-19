@@ -1,7 +1,7 @@
-import NodalGraph from 'graph/NodalGraph.js';
+import NodalGraph from 'modules/fsa/graph/NodalGraph.js';
 
 import * as FlapSaver from 'util/FlapSaver.js';
-import NodalGraphParser from 'graph/NodalGraphParser.js';
+import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
 
 const FILETYPE_JSON = "application/json";
 const FILETYPE_JFLAP = ".jff";

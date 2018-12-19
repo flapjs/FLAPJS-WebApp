@@ -4,8 +4,8 @@ import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import Viewport from 'system/inputadapter/Viewport.js';
 
 import GraphPicker from './GraphPicker.js';
-import Node from 'graph/Node.js';
-import Edge from 'graph/Edge.js';
+import Node from 'modules/fsa/graph/Node.js';
+import Edge from 'modules/fsa/graph/Edge.js';
 
 const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 

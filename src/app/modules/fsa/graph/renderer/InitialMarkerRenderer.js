@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Node from 'graph/Node.js';
+import Node from 'modules/fsa/graph/Node.js';
 
 import Config from 'config.js';
 

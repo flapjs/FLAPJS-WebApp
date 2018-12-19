@@ -4,7 +4,7 @@ import './ExportingPanel.css';
 
 import Downloader from 'util/Downloader.js';
 import * as FlapSaver from 'util/FlapSaver.js';
-import NodalGraphParser from 'graph/NodalGraphParser.js';
+import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
 
 import IconButton from 'icons/IconButton.js';
 import PNGIcon from 'icons/flat/PNGIcon.js';

@@ -292,7 +292,7 @@ class App extends React.Component
         graphController={graphController}
         machineController={machineController}/>
 
-      <NotificationView notificationManager={Notification}/>
+      <NotificationView notificationManager={Notifications}/>
 
       <div className="workspace-container">
         <div className={"workspace-main" +

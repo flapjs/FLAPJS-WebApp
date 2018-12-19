@@ -5,7 +5,7 @@ import TestingPanel from './panels/testing/TestingPanel.js';
 import AnalysisPanel from './panels/analysis/AnalysisPanel.js';
 import AboutPanel from './panels/about/AboutPanel.js';
 
-import NodalGraph from 'graph/NodalGraph.js';
+import NodalGraph from 'modules/fsa/graph/NodalGraph.js';
 
 import FSABuilder from './builder/FSABuilder.js';
 

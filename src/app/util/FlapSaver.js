@@ -1,5 +1,5 @@
-import NodalGraph from 'graph/NodalGraph.js';
-import NodalGraphParser from 'graph/NodalGraphParser.js';
+import NodalGraph from 'modules/fsa/graph/NodalGraph.js';
+import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
 
 import Notifications from 'system/notification/Notifications.js';
 import SemanticVersion from 'util/SemanticVersion.js';

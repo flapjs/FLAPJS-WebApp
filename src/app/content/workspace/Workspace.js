@@ -5,7 +5,7 @@ import Config from 'config.js';
 
 import Subtitle from './Subtitle.js';
 
-import NodalGraphRenderer from 'graph/renderer/NodalGraphRenderer.js';
+import NodalGraphRenderer from 'modules/fsa/graph/renderer/NodalGraphRenderer.js';
 import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
 import HighlightRenderer from './renderer/HighlightRenderer.js';
 

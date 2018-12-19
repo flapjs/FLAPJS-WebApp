@@ -4,7 +4,7 @@ import Eventable from 'util/Eventable.js';
 
 import Uploader from './Uploader.js';
 
-import GraphLayout from 'graph/GraphLayout.js';
+import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 
 const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
