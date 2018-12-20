@@ -39,12 +39,12 @@ class UserCreateEdgeEventHandler extends EventHandler
     if (edgeIndex < 0)
     {
       const edge = e.postData.edge;
-      graph.edges.push(edge);
+      graph.getEdges().push(edge);
 
       const fromIndex = graph.getNodeIndexByID(e.postData.fromID);
       if (fromIndex >= 0)
       {
-        edge.setSourceNode(graph.nodes[fromIndex]);
+        edge.setSourceNode(graph.getNodes()[fromIndex]);
       }
       else
       {
@@ -54,7 +54,7 @@ class UserCreateEdgeEventHandler extends EventHandler
       const toIndex = graph.getNodeIndexByID(e.postData.toID);
       if (toIndex >= 0)
       {
-        edge.setDestinationNode(graph.nodes[toIndex]);
+        edge.setDestinationNode(graph.getNodes()[toIndex]);
       }
       else
       {

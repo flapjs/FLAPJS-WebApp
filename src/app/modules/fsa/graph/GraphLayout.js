@@ -31,12 +31,12 @@ class GraphLayout
     {
       return !reachableNode.includes(node)
     }
-    const unreachableNode = graph.nodes.filter(unreachable)
+    const unreachableNode = graph.getNodes().filter(unreachable)
 
     //get num of nodes
     const numOfReachable = reachableNode.length;
     const numOfUnreachable = unreachableNode.length;
-    const numOfNode = graph.nodes.length;
+    const numOfNode = graph.getNodes().length;
     const maxNum = Math.max(numOfReachable, numOfUnreachable)
     if(numOfNode == 0)
     {
@@ -76,7 +76,7 @@ class GraphLayout
       node.x = Math.cos(degree_un*currentStep + Math.PI)*(radius + 100);
       currentStep += 1
     }
-    /*for(const node of graph.nodes)
+    /*for(const node of graph.getNodes())
     {
       node.y = Math.sin(degree*currentStep + Math.PI)*radius;
       node.x = Math.cos(degree*currentStep + Math.PI)*radius;

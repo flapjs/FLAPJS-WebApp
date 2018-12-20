@@ -25,7 +25,7 @@ class UserRenameNodeEventHandler extends EventHandler
     const graph = this.controller.getGraph();
     const nodeIndex = graph.getNodeIndexByID(e.eventData.nodeID);
     if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-    const node = graph.nodes[nodeIndex];
+    const node = graph.getNodes()[nodeIndex];
     node.setNodeLabel(e.eventData.prevLabel);
     node.setNodeCustom(e.eventData.prevCustom);
   }
@@ -36,7 +36,7 @@ class UserRenameNodeEventHandler extends EventHandler
     const graph = this.controller.getGraph();
     const nodeIndex = graph.getNodeIndexByID(e.eventData.nodeID);
     if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-    const node = graph.nodes[nodeIndex];
+    const node = graph.getNodes()[nodeIndex];
     node.setNodeLabel(e.eventData.nextLabel);
     node.setNodeCustom(true);
   }

@@ -53,7 +53,7 @@ class DFAErrorChecker
     const placeholderEdges = [];
     const emptyEdges = [];
     const dupeEdges = [];
-    for(const edge of graph.edges)
+    for(const edge of graph.getEdges())
     {
       //check incomplete edges
       if (edge.isPlaceholder())
@@ -105,7 +105,7 @@ class DFAErrorChecker
 
     const missingNodes = [];
     //Check for missing transitions
-    for(const node of graph.nodes)
+    for(const node of graph.getNodes())
     {
       const nodeTransitions = nodeTransitionMap.get(node);
       if (!nodeTransitions && alphabet.length != 0 ||
@@ -195,7 +195,7 @@ class DFAErrorChecker
     const graph = this.graph;
     const machine = this.machineBuilder.getMachine();
 
-    const states = graph.nodes.slice();
+    const states = graph.getNodes().slice();
     const nextStates = [];
     nextStates.push(states[0]);
     states.splice(0, 1);

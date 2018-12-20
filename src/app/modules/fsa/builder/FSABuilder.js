@@ -249,9 +249,9 @@ class FSABuilder extends MachineBuilder
 
 function fillFSA(graph, fsa)
 {
-  if (graph.nodes.length <= 0) return fsa;
+  if (graph.getNodes().length <= 0) return fsa;
   //Create all the nodes
-  for(const node of graph.nodes)
+  for(const node of graph.getNodes())
   {
     try
     {
@@ -271,7 +271,7 @@ function fillFSA(graph, fsa)
   }
 
   //Create all the edges
-  for(const edge of graph.edges)
+  for(const edge of graph.getEdges())
   {
     //Ignore any incomplete edges
     if (edge.isPlaceholder()) continue;

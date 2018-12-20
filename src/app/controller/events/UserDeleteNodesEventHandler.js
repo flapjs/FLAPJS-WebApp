@@ -45,8 +45,8 @@ class UserDeleteNodesEventHandler extends EventHandler
     {
       const nodeIndex = graph.getNodeIndexByID(targetID);
       if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-      graph.nodes[nodeIndex].x -= e.eventData.dx;
-      graph.nodes[nodeIndex].y -= e.eventData.dy;
+      graph.getNodes()[nodeIndex].x -= e.eventData.dx;
+      graph.getNodes()[nodeIndex].y -= e.eventData.dy;
     }
   }
 

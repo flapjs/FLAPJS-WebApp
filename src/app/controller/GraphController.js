@@ -165,10 +165,10 @@ class GraphController
 
   swapNodeByIndex(nodeIndex, otherNodeIndex)
   {
-    const node = this.getGraph().nodes[nodeIndex];
-    const other = this.getGraph().nodes[otherNodeIndex];
-    this.getGraph().nodes[otherNodeIndex] = node;
-    this.getGraph().nodes[nodeIndex] = other;
+    const node = this.getGraph().getNodes()[nodeIndex];
+    const other = this.getGraph().getNodes()[otherNodeIndex];
+    this.getGraph().getNodes()[otherNodeIndex] = node;
+    this.getGraph().getNodes()[nodeIndex] = other;
 
     this.emit("userSwapNodes", this.getGraph(), node, other);
   }
@@ -274,7 +274,7 @@ class GraphController
 
   moveNodeTo(pointer, node, x, y)
   {
-    for(const other of this.getGraph().nodes)
+    for(const other of this.getGraph().getNodes())
     {
       //Update node collision
       if (node === other) continue;

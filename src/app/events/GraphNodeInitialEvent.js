@@ -18,7 +18,7 @@ class GraphNodeInitialEvent extends Event
     const graph = this.graph;
     const nodeIndex = graph.getNodeIndexByID(this.prevID);
     if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-    const node = graph.nodes[nodeIndex];
+    const node = graph.getNodes()[nodeIndex];
 
     this.graph.setStartNode(node);
   }
@@ -29,7 +29,7 @@ class GraphNodeInitialEvent extends Event
     const graph = this.graph;
     const nodeIndex = graph.getNodeIndexByID(this.nodeID);
     if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-    const node = graph.nodes[nodeIndex];
+    const node = graph.getNodes()[nodeIndex];
 
     this.graph.setStartNode(node);
   }

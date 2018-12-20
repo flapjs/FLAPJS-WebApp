@@ -26,7 +26,7 @@ class UserCreateNodeEventHandler extends EventHandler
     const graph = this.controller.getGraph();
     const nodeIndex = graph.getNodeIndexByID(e.eventData.nodeID);
     if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-    graph.nodes.splice(nodeIndex, 1);
+    graph.getNodes().splice(nodeIndex, 1);
   }
 
   //Override - this = event
@@ -37,7 +37,7 @@ class UserCreateNodeEventHandler extends EventHandler
     if (nodeIndex < 0)
     {
       const node = e.postData.node;
-      graph.nodes.push(node);
+      graph.getNodes().push(node);
 
       node.x = e.postData.x;
       node.y = e.postData.y;

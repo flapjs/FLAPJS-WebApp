@@ -30,7 +30,7 @@ class NodalGraphParser
       newNode.setNodeLabel(nodeData.label || "q?");
       newNode.setNodeAccept(nodeData.accept);
       newNode.setNodeCustom(nodeData.customLabel);
-      result.nodes[i] = newNode;
+      result.getNodes()[i] = newNode;
     }
 
     for(let i = 0; i < edgeLength; ++i)
@@ -39,12 +39,12 @@ class NodalGraphParser
 
       if (edgeData.from >= nodeLength || edgeData.from < 0) throw new Error("Invalid edge from data: node index \'" + edgeData.from + "\' out of bounds.");
 
-      const newEdge = new Edge(edgeData.id, result.nodes[edgeData.from], edgeData.to < 0 ? null : result.nodes[edgeData.to]);
+      const newEdge = new Edge(edgeData.id, result.getNodes()[edgeData.from], edgeData.to < 0 ? null : result.getNodes()[edgeData.to]);
       newEdge.setEdgeLabel(edgeData.label || "0");
 
       //Force copy all quadratic data
       newEdge.setQuadratic(edgeData.quad.radians, edgeData.quad.length);
-      result.edges[i] = newEdge;
+      result.getEdges()[i] = newEdge;
     }
 
     return result;
@@ -81,31 +81,29 @@ class NodalGraphParser
       newNode.setNodeAccept(nodeAccept != null && nodeAccept.length > 0);
       if(nodeStart && nodeStart.length > 0)
       {
-        if(result.nodes[0])
+        if(result.getNodes()[0])
         {
-          result.nodes[i] = result.nodes[0];
+          result.getNodes()[i] = result.getNodes()[0];
           nodeIDMap.set(nodeList[0].attributes[0].nodeValue, i);
-          result.nodes[0] = newNode;
+          result.getNodes()[0] = newNode;
           nodeIDMap.set(nodeID, 0);
         }
         else
         {
-          result.nodes[0] = newNode;
+          result.getNodes()[0] = newNode;
           nodeIDMap.set(nodeID, 0);
         }
       }
-      result.nodes[i] = newNode;
+      result.getNodes()[i] = newNode;
       nodeIDMap.set(nodeID, i);
     }
     const boundingRect = result.getBoundingRect();
     const width = boundingRect.width;
     const height = boundingRect.height;
-    for(var i = 0; i < result.nodes.length; i++)
+    for(var i = 0; i < result.getNodes().length; i++)
     {
-      result.nodes[i].x -= boundingRect.minX + width / 2;
-      result.nodes[i].y -= boundingRect.minY + height / 2;
-      //result.nodes[i].x = parseFloat(result.nodes[i].x) + width/2;
-      //result.nodes[i].y = -height/2 - parseFloat(result.nodes[i].y);
+      result.getNodes()[i].x -= boundingRect.minX + width / 2;
+      result.getNodes()[i].y -= boundingRect.minY + height / 2;
     }
 
     //create edge lists
@@ -121,9 +119,9 @@ class NodalGraphParser
       const indexOfEdgeTo = nodeIDMap.get(edgeTo);
 
       //check valid from and to node
-      if(result.nodes[indexOfEdgeFrom] || (startNodeID == edgeFrom && result.nodes[0]) || (edgeFrom == 0 && result.nodes[startNodeID]) )
+      if(result.getNodes()[indexOfEdgeFrom] || (startNodeID == edgeFrom && result.getNodes()[0]) || (edgeFrom == 0 && result.getNodes()[startNodeID]) )
       {
-        const newEdge = result.newEdge(result.nodes[indexOfEdgeFrom], edgeTo < 0 ? null : result.nodes[indexOfEdgeTo], edgeLabel || "0");
+        const newEdge = result.newEdge(result.getNodes()[indexOfEdgeFrom], edgeTo < 0 ? null : result.getNodes()[indexOfEdgeTo], edgeLabel || "0");
         const formattedEdge = result.formatEdge(newEdge);
         if (newEdge != formattedEdge) result.deleteEdge(newEdge);
       }
@@ -137,8 +135,8 @@ class NodalGraphParser
 
   static toJSON(graph)
   {
-    const nodeLength = graph.nodes.length;
-    const edgeLength = graph.edges.length;
+    const nodeLength = graph.getNodes().length;
+    const edgeLength = graph.getEdges().length;
 
     const data = {
       nodeCount: nodeLength,
@@ -149,7 +147,7 @@ class NodalGraphParser
 
     for(let i = 0; i < nodeLength; ++i)
     {
-      const node = graph.nodes[i];
+      const node = graph.getNodes()[i];
       data.nodes[i] = {
         id: node.getGraphElementID(),
         x: node.x,
@@ -162,12 +160,12 @@ class NodalGraphParser
 
     for(let i = 0; i < edgeLength; ++i)
     {
-      const edge = graph.edges[i];
+      const edge = graph.getEdges()[i];
       const edgeQuad = edge.getQuadratic();
       data.edges[i] = {
         id: edge.getGraphElementID(),
-        from: graph.nodes.indexOf(edge.getSourceNode()),
-        to: graph.nodes.indexOf(edge.getDestinationNode()),
+        from: graph.getNodes().indexOf(edge.getSourceNode()),
+        to: graph.getNodes().indexOf(edge.getDestinationNode()),
         quad: { radians: edgeQuad.radians, length: edgeQuad.length },
         label: edge.getEdgeLabel()
       };

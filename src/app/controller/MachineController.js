@@ -207,10 +207,10 @@ class MachineController
     this.emit("userPreRenameSymbol", this.getMachineBuilder(), nextSymbol, prevSymbol);
 
     const graph = this.graphController.getGraph();
-    const length = graph.edges.length;
+    const length = graph.getEdges().length;
     for(let i = 0; i < length; ++i)
     {
-      edge = graph.edges[i];
+      edge = graph.getEdges()[i];
       let result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
       if (result != edge.getEdgeLabel())
       {

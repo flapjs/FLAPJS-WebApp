@@ -27,12 +27,12 @@ class UserDeleteEdgeEventHandler extends EventHandler
     if (edgeIndex < 0)
     {
       const edge = e.eventData.edge;
-      graph.edges.push(edge);
+      graph.getEdges().push(edge);
 
       const fromIndex = graph.getNodeIndexByID(e.eventData.fromID);
       if (fromIndex >= 0)
       {
-        edge.setSourceNode(graph.nodes[fromIndex]);
+        edge.setSourceNode(graph.getNodes()[fromIndex]);
       }
       else
       {
@@ -42,7 +42,7 @@ class UserDeleteEdgeEventHandler extends EventHandler
       const toIndex = graph.getNodeIndexByID(e.eventData.toID);
       if (toIndex >= 0)
       {
-        edge.changeDestinationNode(graph.nodes[toIndex]);
+        edge.changeDestinationNode(graph.getNodes()[toIndex]);
       }
       else
       {

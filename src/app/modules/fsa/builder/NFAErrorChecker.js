@@ -40,14 +40,14 @@ class NFAErrorChecker
     this.clear();
 
     let nodeTransitionMap = new Map();
-    let unReachedNode = graph.nodes.slice();
+    let unReachedNode = graph.getNodes().slice();
     let startNode = graph.getStartNode();
     unReachedNode.splice(unReachedNode.indexOf(startNode),1);
 
     const placeholderEdges = [];
     const emptyEdges = [];
     const dupeEdges = [];
-    for(const edge of graph.edges)
+    for(const edge of graph.getEdges())
     {
       //check incomplete edges
       if (edge.isPlaceholder())
@@ -116,11 +116,11 @@ class NFAErrorChecker
 
     const graph = this.graph;
 
-    let unReachedNodes = graph.nodes.slice();
+    let unReachedNodes = graph.getNodes().slice();
 
     //keep start state
     //unReachedNodes.splice(unReachedNodes.indexOf(unReachedNode.getStartNode()), 1);
-    for(const edge of graph.edges) {
+    for(const edge of graph.getEdges()) {
       const labels = edge.label.split(",");
       for(const label of labels) {
 

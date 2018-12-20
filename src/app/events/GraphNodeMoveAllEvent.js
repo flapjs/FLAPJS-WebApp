@@ -27,7 +27,7 @@ class GraphNodeMoveAllEvent extends Event
     {
       nodeIndex = graph.getNodeIndexByID(nodeID);
       if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-      node = graph.nodes[nodeIndex];
+      node = graph.getNodes()[nodeIndex];
 
       node.x -= this.dx;
       node.y -= this.dy;
@@ -44,7 +44,7 @@ class GraphNodeMoveAllEvent extends Event
     {
       nodeIndex = graph.getNodeIndexByID(nodeID);
       if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-      node = graph.nodes[nodeIndex];
+      node = graph.getNodes()[nodeIndex];
 
       node.x += this.dx;
       node.y += this.dy;

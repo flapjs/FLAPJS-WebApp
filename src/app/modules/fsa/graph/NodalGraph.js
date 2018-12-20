@@ -21,11 +21,8 @@ class NodalGraph
     this._timeout = null;
   }
 
-  get nodes() { return this._nodes; }
-  get edges() { return this._edges; }
-
-  getEdges(){return this._edges;}
-  getNodes(){return this._nodes;}
+  getEdges() {return this._edges;}
+  getNodes() {return this._nodes;}
 
   getNodeByLabel(label)
   {
@@ -313,15 +310,15 @@ class NodalGraph
   copyGraph(graph)
   {
     this.deleteAll();
-    this._nodes = this._nodes.concat(graph.nodes);
-    this._edges = this._edges.concat(graph.edges);
+    this._nodes = this._nodes.concat(graph.getNodes());
+    this._edges = this._edges.concat(graph.getEdges());
 
     //Reassign all nodes and edges to new graph
-    for(const node of graph.nodes)
+    for(const node of graph.getNodes())
     {
       node.graph = this;
     }
-    for(const edge of graph.edges)
+    for(const edge of graph.getEdges())
     {
       edge.graph = this;
     }

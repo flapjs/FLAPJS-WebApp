@@ -19,7 +19,7 @@ class MachineLabeler
 
     const defaultNodes = [];
     const customLabels = [];
-    for(const node of this.graph.nodes)
+    for(const node of this.graph.getNodes())
     {
       if (node.getNodeCustom())
       {
@@ -63,7 +63,7 @@ class MachineLabeler
 
   isUniqueNodeLabel(newLabel)
   {
-    for(const node of this.graph.nodes)
+    for(const node of this.graph.getNodes())
     {
       if (node.getNodeLabel() == newLabel)
       {
