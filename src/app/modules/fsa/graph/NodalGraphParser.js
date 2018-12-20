@@ -28,10 +28,7 @@ class NodalGraphParser
       const newNode = new Node(result, nodeData.x || 0, nodeData.y || 0, nodeData.label || "q?");
       newNode.setGraphElementID(nodeData.id);
       newNode.setNodeAccept(nodeData.accept);
-      if (nodeData.customLabel)
-      {
-        newNode.setCustomLabel(newNode.getNodeLabel());
-      }
+      newNode.setNodeCustom(nodeData.customLabel);
       result.nodes[i] = newNode;
     }
 
@@ -64,7 +61,7 @@ class NodalGraphParser
 
     if (dst) dst.deleteAll();
     //HACK: call newEdge to auto layout the graph, therefore a fixed length array cannot be allocated.
-    const result = dst || new NodalGraph(new Array(nodeLength), []);
+    const result = dst || new NodalGraph(new Array(nodeLength));
     let nodeIDMap = new Map();
     let startNodeID;
     //create nodes list
@@ -157,7 +154,7 @@ class NodalGraphParser
         y: node.y,
         label: node.getNodeLabel(),
         accept: node.getNodeAccept(),
-        customLabel: node.hasCustomLabel()
+        customLabel: node.getNodeCustom()
       };
     }
 

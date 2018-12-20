@@ -136,7 +136,7 @@ class StateTag extends React.Component
 
   render()
   {
-    const isCustom = this.props.src.hasCustomLabel();
+    const isCustom = this.props.src.getNodeCustom();
     const value = this.state.value != null ? this.state.value : this.props.label;
     return <div className={"statetag-container" +
       (isCustom ? " customtag" : "") +

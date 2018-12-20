@@ -16,7 +16,7 @@ class UserCreateNodeEventHandler extends EventHandler
       x: node.x,
       y: node.y,
       label: node.getNodeLabel(),
-      isCustom: node.hasCustomLabel()
+      isCustom: node.getNodeCustom()
     };
   }
 
@@ -44,14 +44,8 @@ class UserCreateNodeEventHandler extends EventHandler
       node.x = e.postData.x;
       node.y = e.postData.y;
       node.setNodeID(e.postData.nodeID);
-      if (e.postData.isCustom)
-      {
-        node.setCustomLabel(e.postData.label);
-      }
-      else
-      {
-        node.setNodeLabel(e.postData.label);
-      }
+      node.setNodeLabel(e.postData.label);
+      node.setNodeCustom(e.postData.isCustom);
     }
 
     graph.markDirty();

@@ -26,7 +26,6 @@ class Node extends GraphNode
   {
     const prevLabel = this._label;
     super.setNodeLabel(label);
-    this.customLabel = false;
 
     if (prevLabel != label)
     {
@@ -34,26 +33,14 @@ class Node extends GraphNode
     }
   }
 
-  setCustomLabel(label)
+  setNodeCustom(value)
   {
-    const prevLabel = this._label;
-    this._label = label;
-    this.customLabel = true;
-
-    if (prevLabel != label)
-    {
-      this.graph.markDirty();
-    }
+    this.customLabel = value;
   }
 
-  hasCustomLabel()
+  getNodeCustom()
   {
     return this.customLabel;
-  }
-
-  getNodeAccept()
-  {
-    return this._accept;
   }
 
   setNodeAccept(value)
@@ -64,6 +51,11 @@ class Node extends GraphNode
       this._accept = value;
       this.graph.markDirty();
     }
+  }
+
+  getNodeAccept()
+  {
+    return this._accept;
   }
 }
 

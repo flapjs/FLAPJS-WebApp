@@ -15,13 +15,13 @@ class MachineLabeler
   {
     const startNode = this.graph.getStartNode();
     if (!startNode) return;
-    const isDefaultInitial = !startNode.hasCustomLabel();
+    const isDefaultInitial = !startNode.getNodeCustom();
 
     const defaultNodes = [];
     const customLabels = [];
     for(const node of this.graph.nodes)
     {
-      if (node.hasCustomLabel())
+      if (node.getNodeCustom())
       {
         customLabels.push(node.getNodeLabel());
       }

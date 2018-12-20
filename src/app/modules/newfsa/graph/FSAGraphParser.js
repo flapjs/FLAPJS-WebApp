@@ -19,6 +19,7 @@ export const JSON = {
       const node = dst.createNode(nodeData['x'] || 0, nodeData['y'] || 0, nodeData['id']);
       node.setNodeLabel(nodeData['label'] || "");
       node.setNodeAccept(nodeData['accept'] || false);
+      node.setNodeCustom(nodeData['custom'] || false);
 
       nodeIndices.set(i, node);
     }
@@ -61,7 +62,8 @@ export const JSON = {
           id: elementID,
           x: node.x || 0, y: node.y || 0,
           label: node.getNodeLabel() || "",
-          accept: node.getNodeAccept() || false
+          accept: node.getNodeAccept() || false,
+          custom: node.getNodeCustom() || false
         };
       }
     }

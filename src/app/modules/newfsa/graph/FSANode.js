@@ -7,6 +7,9 @@ class FSANode extends GraphNode
     super(id, x, y);
 
     this._accept = false;
+
+    //this is not saved to hash since it is an aesthetic option
+    this._custom = false;
   }
 
   setNodeAccept(value)
@@ -17,6 +20,16 @@ class FSANode extends GraphNode
   getNodeAccept()
   {
     return this._accept;
+  }
+
+  setNodeCustom(value)
+  {
+    this._custom = value;
+  }
+
+  getNodeCustom()
+  {
+    return this._custom;
   }
 
   //Override

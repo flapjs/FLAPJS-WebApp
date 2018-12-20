@@ -7,6 +7,7 @@ class GraphCurvedEdge extends GraphEdge
   {
     super(id, from, null);
 
+    //this is not saved to hash since it is an aesthetic option
     //radians = the angle in radians, where 0 is the normal of midpoint
     //length = the distance from midpoint
     this._quad = {

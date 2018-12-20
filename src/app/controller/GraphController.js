@@ -155,9 +155,10 @@ class GraphController
   renameNode(node, name)
   {
     const prev = node.getNodeLabel();
-    const isPrevCustom = node.hasCustomLabel();
+    const isPrevCustom = node.getNodeCustom();
 
-    node.setCustomLabel(name);
+    node.setNodeLabel(name);
+    node.setNodeCustom(true);
 
     this.emit("userRenameNode", this.getGraph(), node, name, prev, isPrevCustom);
   }

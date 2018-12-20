@@ -13,37 +13,25 @@ class NodalGraph
 {
   constructor(nodes=[], edges=[])
   {
-    this.nodes = nodes;
-    this.edges = edges;
+    this._nodes = nodes;
+    this._edges = edges;
 
     this._dirty = false;
     this._callbacks = [];
     this._timeout = null;
   }
 
-  addGraphCallback(callback)
-  {
-    this._callbacks.push(callback);
-  }
+  get nodes() { return this._nodes; }
+  get edges() { return this._edges; }
 
-  removeGraphCallback(callback)
-  {
-    this._callbacks.splice(this._callbacks.indexOf(callback), 1);
-  }
-
-  getEdges()
-  {
-    return this.edges;
-  }
-
-  getNodes()
-  {
-    return this.nodes;
-  }
+  addGraphCallback(callback) { this._callbacks.push(callback); }
+  removeGraphCallback(callback){ this._callbacks.splice(this._callbacks.indexOf(callback), 1);}
+  getEdges(){return this._edges;}
+  getNodes(){return this._nodes;}
 
   getNodeByLabel(label)
   {
-    for(const node of this.nodes)
+    for(const node of this._nodes)
     {
       if (node.getNodeLabel() == label)
       {
@@ -56,10 +44,10 @@ class NodalGraph
 
   getNodeIndexByID(id)
   {
-    const length = this.nodes.length;
+    const length = this._nodes.length;
     for(let i = 0; i < length; ++i)
     {
-      const node = this.nodes[i];
+      const node = this._nodes[i];
       if (node.getGraphElementID() == id)
       {
         return i;
@@ -70,9 +58,9 @@ class NodalGraph
 
   getNodeIndex(node)
   {
-    for(let i = this.nodes.length - 1; i >= 0; --i)
+    for(let i = this._nodes.length - 1; i >= 0; --i)
     {
-      const other = this.nodes[i];
+      const other = this._nodes[i];
       if (node === other)
       {
         return i;
@@ -83,9 +71,9 @@ class NodalGraph
 
   getNodeIndexByLabel(label)
   {
-    for(let i = this.nodes.length - 1; i >= 0; --i)
+    for(let i = this._nodes.length - 1; i >= 0; --i)
     {
-      const node = this.nodes[i];
+      const node = this._nodes[i];
       if (node.getNodeLabel() == label)
       {
         return i;
@@ -102,7 +90,7 @@ class NodalGraph
     reachable.push(startNode);
     for(let i = 0; i < reachable.length; i++)
     {
-      for (const edge of this.edges)
+      for (const edge of this._edges)
       {
         if(edge.from == reachable[i])
         {
@@ -119,7 +107,7 @@ class NodalGraph
   newNode(x, y, label)
   {
     const result = new Node(this, x, y, label);
-    this.nodes.push(result);
+    this._nodes.push(result);
 
     this.markDirty();
     return result;
@@ -129,13 +117,13 @@ class NodalGraph
   {
     //Make sure that any connections to this node are resolved before removal
     let edge = null;
-    for(let i = this.edges.length - 1; i >= 0; --i)
+    for(let i = this._edges.length - 1; i >= 0; --i)
     {
-      edge = this.edges[i];
+      edge = this._edges[i];
       if (edge.getSourceNode() == node)
       {
         //Delete any edges that have this node as a source
-        this.edges.splice(i, 1);
+        this._edges.splice(i, 1);
       }
       else if (edge.getDestinationNode() == node)
       {
@@ -143,18 +131,18 @@ class NodalGraph
         edge.changeDestinationNode(null);
       }
     }
-    let nodeIndex = this.nodes.indexOf(node);
-    this.nodes.splice(nodeIndex, 1);
+    let nodeIndex = this._nodes.indexOf(node);
+    this._nodes.splice(nodeIndex, 1);
 
     this.markDirty();
   }
 
   getEdgeIndexByID(id)
   {
-    const length = this.edges.length;
+    const length = this._edges.length;
     for(let i = 0; i < length; ++i)
     {
-      const edge = this.edges[i];
+      const edge = this._edges[i];
       if (edge.getGraphElementID() == id)
       {
         return i;
@@ -166,7 +154,7 @@ class NodalGraph
   newEdge(from, to, label)
   {
     const result = new Edge(this, from, to, label);
-    this.edges.push(result);
+    this._edges.push(result);
 
     this.markDirty();
     return result;
@@ -181,7 +169,7 @@ class NodalGraph
     const edgeLabel = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
 
     //Look for an existing edge with similar from and to
-    for(const otherEdge of this.edges)
+    for(const otherEdge of this._edges)
     {
       if (otherEdge === edge) continue;
       if (otherEdge.getSourceNode() === edgeSource && otherEdge.getDestinationNode() === edgeDestination)
@@ -207,7 +195,7 @@ class NodalGraph
       //Bend away if there is another edge not bent with the same src/dst
       const parallelEdgeHeight = Config.PARALLEL_EDGE_HEIGHT;
       const HALFPI = Math.PI / 2;
-      for(const otherEdge of this.edges)
+      for(const otherEdge of this._edges)
       {
         if (otherEdge.isQuadratic() && Math.abs(otherEdge.getQuadratic().length) >= parallelEdgeHeight * 2) continue;
         if ((otherEdge.getDestinationNode() === edgeSource && otherEdge.getSourceNode() === edgeDestination))
@@ -248,7 +236,7 @@ class NodalGraph
           vertical = true;
         }
 
-        for(const node of this.nodes)
+        for(const node of this._nodes)
         {
           if(node === edgeSource || node === edgeDestination) continue;
 
@@ -285,43 +273,43 @@ class NodalGraph
 
   deleteEdge(edge)
   {
-    this.edges.splice(this.edges.indexOf(edge), 1);
+    this._edges.splice(this._edges.indexOf(edge), 1);
 
     this.markDirty();
   }
 
   deleteAll()
   {
-    this.nodes.length = 0;
-    this.edges.length = 0;
+    this._nodes.length = 0;
+    this._edges.length = 0;
 
     this.markDirty();
   }
 
   isEmpty()
   {
-    return this.nodes.length <= 0;
+    return this._nodes.length <= 0;
   }
 
   setStartNode(node)
   {
-    if (this.nodes.length <= 1) return;
+    if (this._nodes.length <= 1) return;
 
-    this.nodes.splice(this.nodes.indexOf(node), 1);
-    const prevNode = this.nodes[0];
-    this.nodes.unshift(node);
+    this._nodes.splice(this._nodes.indexOf(node), 1);
+    const prevNode = this._nodes[0];
+    this._nodes.unshift(node);
 
     this.markDirty();
   }
 
   getStartNode()
   {
-    return this.nodes.length > 0 ? this.nodes[0] : null;
+    return this._nodes.length > 0 ? this._nodes[0] : null;
   }
 
   getBoundingRect()
   {
-    if (this.nodes.length <= 0) return {
+    if (this._nodes.length <= 0) return {
       minX: 0, minY: 0, maxX: 1, maxY: 1, width: 1, height: 1
     };
 
@@ -330,7 +318,7 @@ class NodalGraph
     var maxNX = Number.MIN_VALUE;
     var maxNY = Number.MIN_VALUE;
 
-    this.nodes.forEach(function (node) {
+    this._nodes.forEach(function (node) {
       const x = node.x;
       const y = node.y;
 
@@ -350,7 +338,7 @@ class NodalGraph
     var minEY = Number.MAX_VALUE;
     var maxEX = Number.MIN_VALUE;
     var maxEY = Number.MIN_VALUE;
-    this.edges.forEach(function (edge) {
+    this._edges.forEach(function (edge) {
       const startpoint = edge.getStartPoint();
       const endpoint = edge.getEndPoint();
       const center = edge.getCenterPoint();
@@ -385,8 +373,8 @@ class NodalGraph
   copyGraph(graph)
   {
     this.deleteAll();
-    this.nodes = this.nodes.concat(graph.nodes);
-    this.edges = this.edges.concat(graph.edges);
+    this._nodes = this._nodes.concat(graph.nodes);
+    this._edges = this._edges.concat(graph.edges);
 
     //Reassign all nodes and edges to new graph
     for(const node of graph.nodes)
