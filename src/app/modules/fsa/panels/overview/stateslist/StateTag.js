@@ -45,8 +45,8 @@ class StateTag extends React.Component
       const graph = graphController.getGraph();
       if (newLabel.length > 0)
       {
-        const result = graph.getNodeByLabel(newLabel);
-        if (!result)
+        const nodes = graph.getNodesByLabel(newLabel);
+        if (nodes.length <= 0)
         {
           //Valid! Rename it!
           graphController.renameNode(node, newLabel);
@@ -99,10 +99,15 @@ class StateTag extends React.Component
     let error = false;
     if (value.length > 0)
     {
-      const node = graph.getNodeByLabel(value);
-      if (node != null && node != this.props.src)
+      const nodes = graph.getNodesByLabel(value);
+      if (nodes.length > 0)
       {
-        error = true;
+        //If there are more than 1 that have the same name
+        //OR if it is NOT the one we have...
+        if (nodes.length > 1 || nodes[0] !== this.props.src)
+        {
+          error = true;
+        }
       }
     }
 

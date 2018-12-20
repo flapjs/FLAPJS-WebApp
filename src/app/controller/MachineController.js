@@ -120,6 +120,19 @@ class MachineController
     }
   }
 
+  getFirstGraphNodeByLabel(graph, label)
+  {
+    for(const node of graph.getNodes())
+    {
+      if (node.getNodeLabel() == label)
+      {
+        return node;
+      }
+    }
+
+    return null;
+  }
+
   setGraphToMachine(graph, machine)
   {
     graph.clear();
@@ -140,9 +153,9 @@ class MachineController
     let edge, from, to, read, labels, flag;
     for(let transition of machine.getTransitions())
     {
-      from = graph.getNodeByLabel(transition[0]);
+      from = this.getFirstGraphNodeByLabel(graph, transition[0]);
       read = transition[1];
-      to = graph.getNodeByLabel(transition[2]);
+      to = this.getFirstGraphNodeByLabel(graph, transition[2]);
       edge = graph.createEdge(from, to);
       edge.setEdgeLabel(read);
       const formattedEdge = graph.formatEdge(edge);
@@ -151,7 +164,7 @@ class MachineController
 
     //Set start state
     const startState = machine.getStartState();
-    graph.setStartNode(graph.getNodeByLabel(startState));
+    graph.setStartNode(this.getFirstGraphNodeByLabel(graph, startState));
 
     //Auto layout graph
     GraphLayout.applyLayout(graph);

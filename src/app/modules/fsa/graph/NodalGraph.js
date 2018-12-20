@@ -15,24 +15,7 @@ class NodalGraph
   {
     this._nodes = nodes;
     this._edges = edges;
-
-    this._timeout = null;
   }
-
-  getNodeByLabel(label)
-  {
-    for(const node of this._nodes)
-    {
-      if (node.getNodeLabel() == label)
-      {
-        return node;
-      }
-    }
-
-    return null;
-  }
-
-
 
   getNodeByElementID(elementID)
   {
@@ -63,6 +46,14 @@ class NodalGraph
   getEdges() {return this._edges;}
   getNodes() {return this._nodes;}
 
+  getNodesByLabel(label, dst=[])
+  {
+    for(const node of this._nodes)
+    {
+      if (node.getNodeLabel() == label) dst.push(node);
+    }
+    return dst;
+  }
 
   createNode(x=0, y=0, id=null)
   {

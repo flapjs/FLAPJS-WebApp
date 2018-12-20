@@ -222,7 +222,7 @@ class TestMode
 
       for(const state of this.cachedStates)
       {
-        let node = this.graphController.getGraph().getNodeByLabel(state.state);
+        let node = this.machineController.getFirstGraphNodeByLabel(this.graphController.getGraph(), state.state);
         if (!node) throw new Error("Found null target");
 
         if (!this.targets.includes(node)) this.targets.push(node);
@@ -282,7 +282,7 @@ class TestMode
     for (let curr_state of machine.doClosureTransition(startState))
     {
       this.cachedStates.push({state: curr_state, index: 0});
-      const node = graph.getNodeByLabel(curr_state);
+      const node = this.machineController.getFirstGraphNodeByLabel(graph, curr_state);
       if (!node) throw new Error("Found null target");
       this.targets.push(node);
     }
