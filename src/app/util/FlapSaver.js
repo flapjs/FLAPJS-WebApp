@@ -52,8 +52,7 @@ export function loadFromJSON(jsonData, graphController, machineController)
       }
     }
     const graphJSON = jsonData.graphData;
-    const newGraph = NodalGraphParser.parseJSON(graphJSON);
-    graph.copyGraph(newGraph);
+    const newGraph = NodalGraphParser.parseJSON(graphJSON, graph);
 
     //HACK: this should be calculated elsewhere
     const machineJSON = jsonData.machineData;

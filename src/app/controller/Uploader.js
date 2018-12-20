@@ -63,8 +63,7 @@ class Uploader
             {
               const parser = new DOMParser();
               const dataXML = parser.parseFromString(data, "text/xml");
-              const dst = NodalGraphParser.parseXML(dataXML);
-              graph.copyGraph(dst);
+              NodalGraphParser.parseXML(dataXML, graph);
             }
             else
             {

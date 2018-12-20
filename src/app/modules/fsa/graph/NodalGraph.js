@@ -1,8 +1,6 @@
 import Config from 'config.js';
 import Eventable from 'util/Eventable.js';
 
-import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
-
 import Node from 'modules/newfsa/graph/FSANode.js';
 import Edge from 'modules/newfsa/graph/FSAEdge.js';
 import { EMPTY } from 'machine/Symbols.js';
@@ -219,7 +217,7 @@ class NodalGraph
     this._edges.splice(this._edges.indexOf(edge), 1);
   }
 
-  deleteAll()
+  clear()
   {
     this._nodes.length = 0;
     this._edges.length = 0;
@@ -305,58 +303,6 @@ class NodalGraph
     result.width = result.maxX - result.minX;
     result.height = result.maxY - result.minY;
     return result;
-  }
-
-  copyGraph(graph)
-  {
-    this.deleteAll();
-    this._nodes = this._nodes.concat(graph.getNodes());
-    this._edges = this._edges.concat(graph.getEdges());
-
-    //Reassign all nodes and edges to new graph
-    for(const node of graph.getNodes())
-    {
-      node.graph = this;
-    }
-    for(const edge of graph.getEdges())
-    {
-      edge.graph = this;
-    }
-  }
-
-  copyMachine(machine)
-  {
-    this.deleteAll();
-
-    //Add all states
-    let node;
-    for(const state of machine.getStates())
-    {
-      node = this.newNode(0, 0, state);
-      if (machine.isFinalState(state))
-      {
-        node.setNodeAccept(true);
-      }
-    }
-
-    //Add all transitions
-    let edge, from, to, read, labels, flag;
-    for(let transition of machine.getTransitions())
-    {
-      from = this.getNodeByLabel(transition[0]);
-      read = transition[1];
-      to = this.getNodeByLabel(transition[2]);
-      edge = this.newEdge(from, to, read);
-      const formattedEdge = this.formatEdge(edge);
-      if (edge != formattedEdge) this.deleteEdge(edge);
-    }
-
-    //Set start state
-    const startState = machine.getStartState();
-    this.setStartNode(this.getNodeByLabel(startState));
-
-    //Auto layout graph
-    GraphLayout.applyLayout(this);
   }
 
   getHashCode(usePosition=true)

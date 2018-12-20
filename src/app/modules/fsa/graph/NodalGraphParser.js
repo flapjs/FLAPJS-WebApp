@@ -19,7 +19,7 @@ class NodalGraphParser
     if (nodeLength < 0) throw new Error("Invalid graph data: negative number of nodes.");
     if (edgeLength < 0) throw new Error("Invalid graph data: negative number of edges.");
 
-    if (dst) dst.deleteAll();
+    if (dst) dst.clear();
     const result = dst || new NodalGraph(new Array(nodeLength), new Array(edgeLength));
 
     //The initial node is always saved/loaded first!
@@ -60,7 +60,7 @@ class NodalGraphParser
     if (nodeLength < 0) throw new Error("Invalid graph data: negative number of nodes.");
     if (edgeLength < 0) throw new Error("Invalid graph data: negative number of edges.");
 
-    if (dst) dst.deleteAll();
+    if (dst) dst.clear();
     //HACK: call newEdge to auto layout the graph, therefore a fixed length array cannot be allocated.
     const result = dst || new NodalGraph(new Array(nodeLength));
     let nodeIDMap = new Map();

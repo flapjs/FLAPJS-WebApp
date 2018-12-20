@@ -1,5 +1,6 @@
 import Eventable from 'util/Eventable.js';
 
+import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import { convertToDFA } from 'machine/util/convertNFA.js';
 import DFA from 'machine/DFA.js';
 
@@ -119,6 +120,41 @@ class MachineController
     }
   }
 
+  setGraphToMachine(graph, machine)
+  {
+    graph.clear();
+
+    //Add all states
+    let node;
+    for(const state of machine.getStates())
+    {
+      node = graph.newNode(0, 0, state);
+      if (machine.isFinalState(state))
+      {
+        node.setNodeAccept(true);
+      }
+    }
+
+    //Add all transitions
+    let edge, from, to, read, labels, flag;
+    for(let transition of machine.getTransitions())
+    {
+      from = graph.getNodeByLabel(transition[0]);
+      read = transition[1];
+      to = graph.getNodeByLabel(transition[2]);
+      edge = graph.newEdge(from, to, read);
+      const formattedEdge = graph.formatEdge(edge);
+      if (edge != formattedEdge) graph.deleteEdge(edge);
+    }
+
+    //Set start state
+    const startState = machine.getStartState();
+    graph.setStartNode(graph.getNodeByLabel(startState));
+
+    //Auto layout graph
+    GraphLayout.applyLayout(graph);
+  }
+
   convertMachineTo(machineType)
   {
     const currentMachineType = this.getMachineType();
@@ -131,7 +167,7 @@ class MachineController
       this.emit("userPreConvertMachine", this.getMachineBuilder(), machineType, currentMachineType);
 
       const result = convertToDFA(this.getMachineBuilder().getMachine(), new DFA());
-      this.graphController.getGraph().copyMachine(result);
+      this.setGraphToMachine(this.graphController.getGraph(), result);
       this.setMachineType(machineType);
 
       this.emit("userConvertMachine", this.getMachineBuilder(), machineType, currentMachineType);

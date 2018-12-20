@@ -122,7 +122,7 @@ class Toolbar extends React.Component
           onClick={() => {
             if (window.confirm(I18N.toString("alert.graph.clear")))
             {
-              graph.deleteAll();
+              graph.clear();
               events.clear();
               machineController.setMachineName(null);
             }
