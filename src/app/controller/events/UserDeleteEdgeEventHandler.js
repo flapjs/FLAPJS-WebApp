@@ -51,8 +51,6 @@ class UserDeleteEdgeEventHandler extends EventHandler
 
       edge.setQuadratic(e.eventData.quad.radians, e.eventData.quad.length);
     }
-
-    graph.markDirty();
   }
 
   //Override - this = event
@@ -61,9 +59,7 @@ class UserDeleteEdgeEventHandler extends EventHandler
     const graph = this.controller.getGraph();
     const edgeIndex = graph.getEdgeIndexByID(e.postData.edgeID);
     if (edgeIndex < 0) throw new Error("Unable to find target in graph");
-    graph.edges.splice(edgeIndex, 1);
-
-    graph.markDirty();
+    graph.getEdges().splice(edgeIndex, 1);
   }
 }
 export default UserDeleteEdgeEventHandler;

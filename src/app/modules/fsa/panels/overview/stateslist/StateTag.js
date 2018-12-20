@@ -19,28 +19,6 @@ class StateTag extends React.Component
     this.onBlur = this.onBlur.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
-
-    this.onDragStart = this.onDragStart.bind(this);
-    this.onDrop = this.onDrop.bind(this);
-  }
-
-  onDragStart(e)
-  {
-    //Drag all of it
-    e.target.select();
-  }
-
-  onDrop(e)
-  {
-    const graphController = this.props.graphController;
-    const graph = graphController.getGraph();
-    const nodeIndex = graph.getNodeIndex(this.props.src);
-    const otherIndex = graph.getNodeIndexByLabel(e.dataTransfer.getData("text"));
-
-    //Swap
-    graphController.swapNodeByIndex(nodeIndex, otherIndex);
-
-    e.preventDefault();
   }
 
   onFocus(e)
@@ -144,16 +122,13 @@ class StateTag extends React.Component
       (this.state.value && this.state.error ? " errortag" : "")}>
       <input type="text" className={(this.props.accept ? " accept" : "")}
         spellCheck="false"
-        draggable="true"
         style={{width: value.length + "ch"}}
         value={value}
         onChange={this.onValueChange}
         onFocus={this.onFocus}
         onBlur={this.onBlur}
         onKeyUp={this.onKeyUp}
-        onKeyDown={this.onKeyDown}
-        onDragStart={this.onDragStart}
-        onDrop={this.onDrop}/>
+        onKeyDown={this.onKeyDown}/>
     </div>;
   }
 }

@@ -1,4 +1,5 @@
 import GraphNode from 'graph/GraphNode.js';
+import Config from 'config.js';
 
 class FSANode extends GraphNode
 {
@@ -39,9 +40,9 @@ class FSANode extends GraphNode
   }
 
   //Override
-  getHashCode()
+  getHashString(usePosition=true)
   {
-    return (super.getHashCode() << 1) | (this._accept ? 1 : 0);
+    return super.getHashString(usePosition) + ":" + (this._accept ? "1" : "0");
   }
 }
 

@@ -25,11 +25,9 @@ class UserSwapNodesEventHandler extends EventHandler
     const otherIndex = graph.getNodeIndexByID(e.eventData.otherID);
     if (otherIndex < 0) throw new Error("Unable to find other target in graph");
 
-    const node = graph.nodes[nodeIndex];
-    graph.nodes[nodeIndex] = graph.nodes[otherIndex];
-    graph.nodes[otherIndex] = node;
-
-    graph.markDirty();
+    const node = graph.getNodes()[nodeIndex];
+    graph.getNodes()[nodeIndex] = graph.getNodes()[otherIndex];
+    graph.getNodes()[otherIndex] = node;
   }
 
   //Override - this = event
@@ -41,11 +39,9 @@ class UserSwapNodesEventHandler extends EventHandler
     const otherIndex = graph.getNodeIndexByID(e.eventData.otherID);
     if (otherIndex < 0) throw new Error("Unable to find other target in graph");
 
-    const node = graph.nodes[nodeIndex];
-    graph.nodes[nodeIndex] = graph.nodes[otherIndex];
-    graph.nodes[otherIndex] = node;
-
-    graph.markDirty();
+    const node = graph.getNodes()[nodeIndex];
+    graph.getNodes()[nodeIndex] = graph.getNodes()[otherIndex];
+    graph.getNodes()[otherIndex] = node;
   }
 }
 export default UserSwapNodesEventHandler;

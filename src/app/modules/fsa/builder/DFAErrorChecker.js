@@ -190,7 +190,7 @@ class DFAErrorChecker
 
     return result;
   }
-
+  
   getUnreachableNodes() {
     const graph = this.graph;
     const machine = this.machineBuilder.getMachine();

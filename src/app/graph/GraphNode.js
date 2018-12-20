@@ -1,5 +1,4 @@
 import GraphElement from 'graph/GraphElement.js';
-import { stringHash } from 'util/MathHelper.js';
 
 class GraphNode extends GraphElement
 {
@@ -30,9 +29,16 @@ class GraphNode extends GraphElement
   }
 
   //Override
-  getHashCode()
+  getHashString(usePosition=true)
   {
-    return stringHash(this._id + "." + Math.floor(this.x) + "," + Math.floor(this.y) + "." + this._label);
+    if (usePosition)
+    {
+      return super.getHashString(usePosition) + ":" + Math.floor(this.x) + "," + Math.floor(this.y) + "." + this._label;
+    }
+    else
+    {
+      return super.getHashString(usePosition) + ":" + this._label;
+    }
   }
 }
 

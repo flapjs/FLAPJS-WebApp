@@ -17,7 +17,7 @@ export function stringHash(value="")
   let hash = 0;
   for(let i = 0, len = value.length; i < len; i++)
   {
-    hash = Math.imul(31, h) + value.charCodeAt(i) | 0;
+    hash = Math.imul(31, hash) + value.charCodeAt(i) | 0;
   }
   return hash;
 };

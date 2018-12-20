@@ -1,5 +1,4 @@
 import GraphElement from 'graph/GraphElement.js';
-import { stringHash } from 'util/MathHelper.js';
 
 class GraphEdge extends GraphElement
 {
@@ -140,11 +139,11 @@ class GraphEdge extends GraphElement
   }
 
   //Override
-  getHashCode()
+  getHashString(usePosition=true)
   {
-    const hasSrc = this.from ? "1" : "0";
-    const hasDst = this.to ? "1" : "0";
-    return stringHash(this._id + "." + hasSrc + hasDst + "." + this._label);
+    const src = this._from ? this._from.getHashString(usePosition) : 0;
+    const dst = this._to ? this._to.getHashString(usePosition) : 0;
+    return super.getHashString(usePosition) + ":" + src + "," + dst + "." + this._label;
   }
 }
 

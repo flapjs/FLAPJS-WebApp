@@ -1,10 +1,32 @@
+
+function getReachableState(graph)
+{
+  let reachable = [];
+  let startNode = graph.getStartNode();
+  reachable.push(startNode);
+  for(let i = 0; i < reachable.length; i++)
+  {
+    for (const edge of graph.getEdges())
+    {
+      if(edge.from == reachable[i])
+      {
+        if(!reachable.includes(edge.to))
+        {
+          reachable.push(edge.to);
+        }
+      }
+    }
+  }
+  return reachable;
+}
+
 class GraphLayout
 {
   static applyLayout(graph, type="circle")
   {
     if (type != "circle") throw new Error("Invalid layout type");
     //seperate node to reachable and unreachable
-    const reachableNode= graph.getReachableState()
+    const reachableNode= getReachableState(graph);
     function unreachable(node)
     {
       return !reachableNode.includes(node)

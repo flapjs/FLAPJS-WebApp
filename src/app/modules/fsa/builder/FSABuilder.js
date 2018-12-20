@@ -5,7 +5,7 @@ import DFAErrorChecker from './DFAErrorChecker.js';
 import NFAErrorChecker from './NFAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
-import Node from 'modules/fsa/graph/Node.js';
+import Node from 'modules/newfsa/graph/FSANode.js';
 
 import { EMPTY } from 'machine/Symbols.js';
 
@@ -22,6 +22,8 @@ class FSABuilder extends MachineBuilder
     this._machineValidDFA = false;
     this._alphabet = [];
     this._symbols = [];
+
+    this._savedGraphHash = 0;
 
     this._timer = null;
     this._errorTimer = null;
@@ -45,16 +47,26 @@ class FSABuilder extends MachineBuilder
     this.graphController = app.graphController;
     this.machineController = app.machineController;
 
-    this.graph.addGraphCallback(this.onGraphChange);
+    this._savedGraphHash = this.graph.getHashCode(false);
     this.onGraphChange();
   }
 
   destroy()
   {
+    this._savedGraphHash = this.graph.getHashCode(false);
     this.onGraphChange();
-    this.graph.removeGraphCallback(this.onGraphChange);
 
     super.destroy();
+  }
+
+  update()
+  {
+    const graphHash = this.graph.getHashCode(false);
+    if (graphHash !== this._savedGraphHash)
+    {
+      this._savedGraphHash = graphHash;
+      this.onGraphChange(this.graph);
+    }
   }
 
   onGraphChange(graph)

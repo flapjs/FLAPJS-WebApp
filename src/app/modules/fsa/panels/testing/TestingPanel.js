@@ -19,6 +19,9 @@ import CloseIcon from 'icons/CloseIcon.js';
 
 const TEST_FILENAME = "test.txt";
 
+//TODO: This is faster, since it's pretty easy to tell latency here. But really it shouldn't.
+const REFRESH_TEST_TICKS = 30;
+
 class TestingPanel extends React.Component
 {
   constructor(props)
@@ -33,6 +36,8 @@ class TestingPanel extends React.Component
       noTestMode: true
     };
 
+    this._savedGraphHash = 0;
+    this._ticksSinceHash = 0;
     this.stepByStepModeChecked = false;
 
     this.onChangeErrorCheckMode = this.onChangeErrorCheckMode.bind(this);
@@ -50,16 +55,16 @@ class TestingPanel extends React.Component
     const graphController = this.props.graphController;
     const graph = graphController.getGraph();
 
-    //HACK: this should be a listener to FSABuilder, should not access graph
-    graph.addGraphCallback(this.onGraphChange);
+    //HACK: this should be in FSABuilder and listen for machine changes instead
+    this._savedGraphHash = graph.getHashCode();
+    this._ticksSinceHash = 0;
   }
 
   componentWillUnmount()
   {
     const graphController = this.props.graphController;
     const graph = graphController.getGraph();
-
-    graph.removeGraphCallback(this.onGraphChange);
+    this._savedGraphHash = 0;
   }
 
   onGraphChange(g)
@@ -183,6 +188,18 @@ class TestingPanel extends React.Component
     const machineBuilder = this.props.machineController.getMachineBuilder();
 
     const isTestInvalid = !machineBuilder.isValidMachine();
+
+    if (--this._ticksSinceHash <= 0)
+    {
+      this._ticksSinceHash = REFRESH_TEST_TICKS;
+      const graph = this.props.graphController.getGraph();
+      const graphHash = graph.getHashCode();
+      if (this._savedGraphHash !== graphHash)
+      {
+        this.onGraphChange(graph);
+        this._savedGraphHash = graphHash;
+      }
+    }
 
     return <div className="panel-container" id="testing" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title">

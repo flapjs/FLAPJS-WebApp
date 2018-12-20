@@ -19,6 +19,9 @@ class FSAModule extends BaseModule
     super();
     this._graph = new NodalGraph();
     this._machineBuilder = new FSABuilder(this._graph);
+
+    this._refreshRate = 60;
+    this._ticks = 0;
   }
 
   //Override
@@ -33,6 +36,15 @@ class FSAModule extends BaseModule
   {
     this._machineBuilder.destroy();
     super.destroy(app);
+  }
+
+  update(app)
+  {
+    if (--this._ticks <= 0)
+    {
+      this._machineBuilder.update();
+      this._ticks = this._refreshRate;
+    }
   }
 
   getGraph()

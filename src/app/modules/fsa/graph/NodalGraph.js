@@ -3,9 +3,11 @@ import Eventable from 'util/Eventable.js';
 
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 
-import Node from './Node.js';
-import Edge from './Edge.js';
+import Node from 'modules/newfsa/graph/FSANode.js';
+import Edge from 'modules/newfsa/graph/FSAEdge.js';
 import { EMPTY } from 'machine/Symbols.js';
+
+import { guid, stringHash } from 'util/MathHelper.js';
 
 const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
@@ -16,16 +18,12 @@ class NodalGraph
     this._nodes = nodes;
     this._edges = edges;
 
-    this._dirty = false;
-    this._callbacks = [];
     this._timeout = null;
   }
 
   get nodes() { return this._nodes; }
   get edges() { return this._edges; }
 
-  addGraphCallback(callback) { this._callbacks.push(callback); }
-  removeGraphCallback(callback){ this._callbacks.splice(this._callbacks.indexOf(callback), 1);}
   getEdges(){return this._edges;}
   getNodes(){return this._nodes;}
 
@@ -56,60 +54,11 @@ class NodalGraph
     return -1;
   }
 
-  getNodeIndex(node)
-  {
-    for(let i = this._nodes.length - 1; i >= 0; --i)
-    {
-      const other = this._nodes[i];
-      if (node === other)
-      {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  getNodeIndexByLabel(label)
-  {
-    for(let i = this._nodes.length - 1; i >= 0; --i)
-    {
-      const node = this._nodes[i];
-      if (node.getNodeLabel() == label)
-      {
-        return i;
-      }
-    }
-
-    return -1;
-  }
-
-  getReachableState()
-  {
-    let reachable = []
-    let startNode = this.getStartNode();
-    reachable.push(startNode);
-    for(let i = 0; i < reachable.length; i++)
-    {
-      for (const edge of this._edges)
-      {
-        if(edge.from == reachable[i])
-        {
-          if(!reachable.includes(edge.to))
-          {
-            reachable.push(edge.to);
-          }
-        }
-      }
-    }
-    return reachable
-  }
-
   newNode(x, y, label)
   {
-    const result = new Node(this, x, y, label);
+    const result = new Node(guid(), x, y);
+    result.setNodeLabel(label);
     this._nodes.push(result);
-
-    this.markDirty();
     return result;
   }
 
@@ -133,8 +82,6 @@ class NodalGraph
     }
     let nodeIndex = this._nodes.indexOf(node);
     this._nodes.splice(nodeIndex, 1);
-
-    this.markDirty();
   }
 
   getEdgeIndexByID(id)
@@ -153,10 +100,9 @@ class NodalGraph
 
   newEdge(from, to, label)
   {
-    const result = new Edge(this, from, to, label);
+    const result = new Edge(guid(), from, to);
+    result.setEdgeLabel(label);
     this._edges.push(result);
-
-    this.markDirty();
     return result;
   }
 
@@ -274,16 +220,12 @@ class NodalGraph
   deleteEdge(edge)
   {
     this._edges.splice(this._edges.indexOf(edge), 1);
-
-    this.markDirty();
   }
 
   deleteAll()
   {
     this._nodes.length = 0;
     this._edges.length = 0;
-
-    this.markDirty();
   }
 
   isEmpty()
@@ -298,8 +240,6 @@ class NodalGraph
     this._nodes.splice(this._nodes.indexOf(node), 1);
     const prevNode = this._nodes[0];
     this._nodes.unshift(node);
-
-    this.markDirty();
   }
 
   getStartNode()
@@ -385,8 +325,6 @@ class NodalGraph
     {
       edge.graph = this;
     }
-
-    this.markDirty();
   }
 
   copyMachine(machine)
@@ -422,18 +360,21 @@ class NodalGraph
 
     //Auto layout graph
     GraphLayout.applyLayout(this);
-
-    this.markDirty();
   }
 
-  markDirty()
+  getHashCode(usePosition=true)
   {
-    this._dirty = true;
-    for(const callback of this._callbacks)
+    let string = "";
+    for(const node of this._nodes)
     {
-      callback(this);
+      string += node.getHashString(usePosition) + ",";
     }
-    this._dirty = false;
+    string += "|";
+    for(const edge of this._edges)
+    {
+      string += edge.getHashString(usePosition) + ",";
+    }
+    return stringHash(string);
   }
 }
 //Mixin Eventable

@@ -2,8 +2,6 @@ import GraphNode from './GraphNode.js';
 import GraphEdge from './GraphEdge.js';
 import { guid, stringHash } from 'util/MathHelper.js';
 
-const HASH_TIME_BITSHIFT_AMT = 14;//refresh about every 16 secs = [(2^n)/1000]
-
 class NodalGraph
 {
   constructor()
@@ -145,24 +143,19 @@ class NodalGraph
     return result;
   }
 
-  //Gets a hash of the graph's current state. Can assume the hash will change
-  //within a few cycles if the graph's content has changed (including nodes and
-  //edges). The hash is also guaranteed to change at regular intervals,
-  //regardless of whether the content has changed to ensure no changes go stale.
-  getHashCode()
+  //Gets a hash of the graph's current state. Can generally assume the hash will
+  //change if the graph's content has changed (including nodes and edges).
+  getHashCode(usePosition=true)
   {
-    const date = new Date();
-    //Signed shift right
-    const time = date.getMilliseconds() >>> HASH_TIME_BITSHIFT_AMT;
-    let string = time + ".";
+    let string = "";
     for(const node of this._nodes)
     {
-      string += node.getHashCode() + ",";
+      string += node.getHashString(usePosition) + ",";
     }
-    string += ".";
+    string += "|";
     for(const edge of this._edges)
     {
-      string += edge.getHashCode() + ",";
+      string += edge.getHashString(usePosition) + ",";
     }
     return stringHash(string);
   }

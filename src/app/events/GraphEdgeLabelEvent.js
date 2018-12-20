@@ -20,11 +20,9 @@ class GraphEdgeLabelEvent extends Event
     const graph = this.graph;
     const edgeIndex = graph.getEdgeIndexByID(this.edgeID);
     if (edgeIndex < 0) throw new Error("Unable to find target in graph");
-    const edge = graph.edges[edgeIndex];
+    const edge = graph.getEdges()[edgeIndex];
 
     edge.setEdgeLabel(this.prevLabel);
-
-    graph.markDirty();
   }
 
   //Override
@@ -33,11 +31,9 @@ class GraphEdgeLabelEvent extends Event
     const graph = this.graph;
     const edgeIndex = graph.getEdgeIndexByID(this.edgeID);
     if (edgeIndex < 0) throw new Error("Unable to find target in graph");
-    const edge = graph.edges[edgeIndex];
+    const edge = graph.getEdges()[edgeIndex];
 
     edge.setEdgeLabel(this.nextLabel);
-
-    graph.markDirty();
   }
 }
 

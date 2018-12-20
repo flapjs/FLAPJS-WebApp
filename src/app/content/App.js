@@ -273,6 +273,7 @@ class App extends React.Component
 
   render()
   {
+    const module = this._module;
     const inputController = this.inputController;
     const graphController = this.graphController;
     const machineController = this.machineController;
@@ -283,6 +284,7 @@ class App extends React.Component
     if (this._init)
     {
       inputController.update();
+      module.update(this);
     }
 
     return <div className="app-container" ref={ref=>this.container=ref}>

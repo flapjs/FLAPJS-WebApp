@@ -1,5 +1,4 @@
 import GraphEdge from 'graph/GraphEdge.js';
-import { stringHash } from 'util/MathHelper.js';
 
 class GraphCurvedEdge extends GraphEdge
 {
@@ -7,7 +6,6 @@ class GraphCurvedEdge extends GraphEdge
   {
     super(id, from, null);
 
-    //this is not saved to hash since it is an aesthetic option
     //radians = the angle in radians, where 0 is the normal of midpoint
     //length = the distance from midpoint
     this._quad = {
@@ -301,10 +299,16 @@ class GraphCurvedEdge extends GraphEdge
   }
 
   //Override
-  getHashCode()
+  getHashString(usePosition=true)
   {
-    //Will not change has for quad, since it is only decorative
-    return super.getHashCode();
+    if (usePosition)
+    {
+      return super.getHashString(usePosition) + ":" + this._quad.radians + "," + this._quad.length;
+    }
+    else
+    {
+      return super.getHashString(usePosition);
+    }
   }
 }
 

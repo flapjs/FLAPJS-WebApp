@@ -1,8 +1,9 @@
 import Config from 'config.js';
 
 import NodalGraph from './NodalGraph.js';
-import Node from './Node.js';
-import Edge from './Edge.js';
+import Node from 'modules/newfsa/graph/FSANode.js';
+import Edge from 'modules/newfsa/graph/FSAEdge.js';
+import { guid } from 'util/MathHelper.js';
 
 import { CURRENT_VERSION_STRING } from 'util/FlapSaver.js';
 
@@ -25,8 +26,8 @@ class NodalGraphParser
     for(let i = 0; i < nodeLength; ++i)
     {
       const nodeData = data.nodes[i];
-      const newNode = new Node(result, nodeData.x || 0, nodeData.y || 0, nodeData.label || "q?");
-      newNode.setGraphElementID(nodeData.id);
+      const newNode = new Node(nodeData.id, nodeData.x || 0, nodeData.y || 0);
+      newNode.setNodeLabel(nodeData.label || "q?");
       newNode.setNodeAccept(nodeData.accept);
       newNode.setNodeCustom(nodeData.customLabel);
       result.nodes[i] = newNode;
@@ -38,8 +39,8 @@ class NodalGraphParser
 
       if (edgeData.from >= nodeLength || edgeData.from < 0) throw new Error("Invalid edge from data: node index \'" + edgeData.from + "\' out of bounds.");
 
-      const newEdge = new Edge(result, result.nodes[edgeData.from], edgeData.to < 0 ? null : result.nodes[edgeData.to], edgeData.label || "0");
-      newEdge.setGraphElementID(edgeData.id);
+      const newEdge = new Edge(edgeData.id, result.nodes[edgeData.from], edgeData.to < 0 ? null : result.nodes[edgeData.to]);
+      newEdge.setEdgeLabel(edgeData.label || "0");
 
       //Force copy all quadratic data
       newEdge.setQuadratic(edgeData.quad.radians, edgeData.quad.length);
@@ -75,7 +76,8 @@ class NodalGraphParser
       let nodeAccept = node.getElementsByTagName("final");
       let nodeStart = node.getElementsByTagName("initial");
       if(nodeStart && nodeStart.length > 0) startNodeID = nodeID;//TODO: allow JFLAP names to be id
-      let newNode = new Node(result, nodeX , nodeY , Config.STR_STATE_LABEL + (nodeID));
+      let newNode = new Node(guid(), nodeX || 0, nodeY || 0);
+      newNode.setNodeLabel(Config.STR_STATE_LABEL + (nodeID));
       newNode.setNodeAccept(nodeAccept != null && nodeAccept.length > 0);
       if(nodeStart && nodeStart.length > 0)
       {
