@@ -32,39 +32,34 @@ class NodalGraph
     return null;
   }
 
-  getNodeIndexByID(id)
+
+
+  getNodeByElementID(elementID)
   {
     const length = this._nodes.length;
     for(let i = 0; i < length; ++i)
     {
       const node = this._nodes[i];
-      if (node.getGraphElementID() == id)
+      if (node.getGraphElementID() === elementID)
       {
-        return i;
+        return node;
       }
     }
-    return -1;
+    return null;
   }
-
-  getEdgeIndexByID(id)
+  getEdgeByElementID(elementID)
   {
     const length = this._edges.length;
     for(let i = 0; i < length; ++i)
     {
       const edge = this._edges[i];
-      if (edge.getGraphElementID() == id)
+      if (edge.getGraphElementID() === elementID)
       {
-        return i;
+        return edge;
       }
     }
-    return -1;
+    return null;
   }
-
-
-
-
-
-
   getEdges() {return this._edges;}
   getNodes() {return this._nodes;}
 

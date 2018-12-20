@@ -26,44 +26,34 @@ class UserCreateEdgeEventHandler extends EventHandler
   {
     //TODO: when formatting edges change an edge different than this one, it does not revert them.
     const graph = this.controller.getGraph();
-    const edgeIndex = graph.getEdgeIndexByID(e.eventData.edgeID);
-    if (edgeIndex < 0) throw new Error("Unable to find target in graph");
-    graph.getEdges().splice(edgeIndex, 1);
+    const edge = graph.getEdgeByElementID(e.eventData.edgeID);
+    if (!edge) throw new Error("Unable to find target in graph");
+
+    graph.deleteEdge(edge);
   }
 
   //Override - this = event
   applyRedo(e)
   {
     const graph = this.controller.getGraph();
-    const edgeIndex = graph.getEdgeIndexByID(e.postData.edgeID);
-    if (edgeIndex < 0)
+    let edge = graph.getEdgeByElementID(e.postData.edgeID);
+
+    const from = graph.getNodeByElementID(e.postData.fromID);
+    if (!from) throw new Error("Trying to create a sourceless edge");
+    const to = graph.getNodeByElementID(e.postData.toID) || null;
+
+    if (!edge)
     {
-      const edge = e.postData.edge;
-      graph.getEdges().push(edge);
-
-      const fromIndex = graph.getNodeIndexByID(e.postData.fromID);
-      if (fromIndex >= 0)
-      {
-        edge.setSourceNode(graph.getNodes()[fromIndex]);
-      }
-      else
-      {
-        throw new Error("Trying to create a sourceless edge");
-      }
-
-      const toIndex = graph.getNodeIndexByID(e.postData.toID);
-      if (toIndex >= 0)
-      {
-        edge.setDestinationNode(graph.getNodes()[toIndex]);
-      }
-      else
-      {
-        edge.setDestinationNode(null);
-      }
-
-      edge.setEdgeLabel(e.postData.label);
-      edge.setQuadratic(e.postData.quad.radians, e.postData.quad.length);
+      edge = graph.createEdge(from, to, e.postData.edgeID);
     }
+    else
+    {
+      edge.setSourceNode(from);
+      edge.changeDestinationNode(to);
+    }
+
+    edge.setEdgeLabel(e.postData.label);
+    edge.setQuadratic(e.postData.quad.radians, e.postData.quad.length);
   }
 }
 export default UserCreateEdgeEventHandler;

@@ -11,12 +11,12 @@ class UserCreateNodeEventHandler extends EventHandler
   captureEvent(graph, node)
   {
     return {
-      node: node,
       nodeID: node.getGraphElementID(),
       x: node.x,
       y: node.y,
+      accept: node.getNodeAccept(),
       label: node.getNodeLabel(),
-      isCustom: node.getNodeCustom()
+      custom: node.getNodeCustom()
     };
   }
 
@@ -24,27 +24,29 @@ class UserCreateNodeEventHandler extends EventHandler
   applyUndo(e)
   {
     const graph = this.controller.getGraph();
-    const nodeIndex = graph.getNodeIndexByID(e.eventData.nodeID);
-    if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-    graph.getNodes().splice(nodeIndex, 1);
+    const node = graph.getNodeByElementID(e.eventData.nodeID);
+    if (!node) throw new Error("Unable to find target in graph");
+
+    graph.deleteNode(node);
   }
 
   //Override - this = event
   applyRedo(e)
   {
     const graph = this.controller.getGraph();
-    const nodeIndex = graph.getNodeIndexByID(e.postData.nodeID);
-    if (nodeIndex < 0)
+    let node = graph.getNodeByElementID(e.eventData.nodeID);
+    if (!node)
     {
-      const node = e.postData.node;
-      graph.getNodes().push(node);
-
+      node = graph.createNode(e.postData.x, e.postData.y, e.postData.nodeID);
+    }
+    else
+    {
       node.x = e.postData.x;
       node.y = e.postData.y;
-      node.setGraphElementID(e.postData.nodeID);
-      node.setNodeLabel(e.postData.label);
-      node.setNodeCustom(e.postData.isCustom);
     }
+    node.setNodeLabel(e.postData.label);
+    node.setNodeAccept(e.postData.accept);
+    node.setNodeCustom(e.postData.custom);
   }
 }
 export default UserCreateNodeEventHandler;

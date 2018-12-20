@@ -21,9 +21,8 @@ class GraphEdgeDestinationEventHandler extends EventHandler
   applyUndo(e)
   {
     const graph = this.controller.getGraph();
-    const nodeIndex = graph.getNodeIndexByID(e.eventData.prevID);
-    if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-    const node = graph.getNodes()[nodeIndex];
+    const node = graph.getNodeByElementID(e.eventData.prevID);
+    if (!node) throw new Error("Unable to find target in graph");
 
     graph.setStartNode(node);
   }
@@ -32,9 +31,8 @@ class GraphEdgeDestinationEventHandler extends EventHandler
   applyRedo(e)
   {
     const graph = this.controller.getGraph();
-    const nodeIndex = graph.getNodeIndexByID(e.eventData.nodeID);
-    if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-    const node = graph.getNodes()[nodeIndex];
+    const node = graph.getNodeByElementID(e.eventData.nodeID);
+    if (!node) throw new Error("Unable to find target in graph");
 
     graph.setStartNode(node);
   }

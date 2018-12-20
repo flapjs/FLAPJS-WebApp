@@ -23,9 +23,9 @@ class UserRenameNodeEventHandler extends EventHandler
   applyUndo(e)
   {
     const graph = this.controller.getGraph();
-    const nodeIndex = graph.getNodeIndexByID(e.eventData.nodeID);
-    if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-    const node = graph.getNodes()[nodeIndex];
+    const node = graph.getNodeByElementID(e.eventData.nodeID);
+    if (!node) throw new Error("Unable to find target in graph");
+
     node.setNodeLabel(e.eventData.prevLabel);
     node.setNodeCustom(e.eventData.prevCustom);
   }
@@ -34,9 +34,9 @@ class UserRenameNodeEventHandler extends EventHandler
   applyRedo(e)
   {
     const graph = this.controller.getGraph();
-    const nodeIndex = graph.getNodeIndexByID(e.eventData.nodeID);
-    if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-    const node = graph.getNodes()[nodeIndex];
+    const node = graph.getNodeByElementID(e.eventData.nodeID);
+    if (!node) throw new Error("Unable to find target in graph");
+
     node.setNodeLabel(e.eventData.nextLabel);
     node.setNodeCustom(true);
   }

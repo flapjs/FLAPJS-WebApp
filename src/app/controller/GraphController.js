@@ -75,9 +75,6 @@ class GraphController
     this.registerEvent("userLabelEdge");
     */
 
-    //userSwapNodes(graph, node, otherNode) - When user swap node indices
-    this.registerEvent("userSwapNodes");
-
     //userRenameNode(graph, node, nextLabel, prevLabel, isPrevCustom) - When user sets the label of node
     this.registerEvent("userRenameNode");
 
@@ -161,16 +158,6 @@ class GraphController
     node.setNodeCustom(true);
 
     this.emit("userRenameNode", this.getGraph(), node, name, prev, isPrevCustom);
-  }
-
-  swapNodeByIndex(nodeIndex, otherNodeIndex)
-  {
-    const node = this.getGraph().getNodes()[nodeIndex];
-    const other = this.getGraph().getNodes()[otherNodeIndex];
-    this.getGraph().getNodes()[otherNodeIndex] = node;
-    this.getGraph().getNodes()[nodeIndex] = other;
-
-    this.emit("userSwapNodes", this.getGraph(), node, other);
   }
 
   createNode(x, y)

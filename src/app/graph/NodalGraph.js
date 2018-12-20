@@ -8,22 +8,36 @@ class NodalGraph
   {
     this._nodes = [];
     this._edges = [];
+    this._nodeMapping = new Map();
+    this._edgeMapping = new Map();
   }
 
   /** NODES **/
 
-  createNode(x=0, y=0, id=guid())
+  createNode(x=0, y=0, id=null)
   {
-    const result = new GraphNode(id, x, y);
+    const result = new GraphNode(id || guid(), x, y);
+    const i = this._nodes.length;
     this._nodes.push(result);
+    this._nodeMapping.set(result.getGraphElementID(), i);
     return result;
   }
   deleteNode(node)
   {
-    const i = this._nodes.indexOf(node);
-    if (i >= 0) this._nodes.splice(1, i);
+    const elementID = node.getGraphElementID();
+    const i = this._nodeMapping.get(elementID);
+    if (i >= 0)
+    {
+      this._nodes.splice(1, i);
+      this._nodeMapping.delete(elementID);
+    }
   }
-  clearNodes() { this._nodes.length = 0; }
+  clearNodes() { this._nodes.length = 0; this._nodeMapping.clear(); }
+  getNodeByElementID(elementID)
+  {
+    const index = this._nodeMapping.get(elementID);
+    return index >= 0 ? this._nodes[index] : null;
+  }
   getNodesByLabel(label, dst=[])
   {
     for(const node of this._nodes)
@@ -37,18 +51,30 @@ class NodalGraph
 
   /** EDGES **/
 
-  createEdge(from, to=null, id=guid())
+  createEdge(from, to=null, id=null)
   {
-    const result = new GraphEdge(id, from, to);
+    const result = new GraphEdge(id || guid(), from, to);
+    const i = this._edges.length;
     this._edges.push(result);
+    this._edgeMapping.set(result.getGraphElementID(), i);
     return result;
   }
   deleteEdge(edge)
   {
-    const i = this._edges.indexOf(edge);
-    if (i >= 0) this._edges.splice(1, i);
+    const elementID = edge.getGraphElementID();
+    const i = this._edgeMapping.get(elementID);
+    if (i >= 0)
+    {
+      this._edges.splice(1, i);
+      this._edgeMapping.delete(elementID);
+    }
   }
-  clearEdges() { this._edges.length = 0; }
+  clearEdges() { this._edges.length = 0; this._edgeMapping.clear(); }
+  getEdgeByElementID(elementID)
+  {
+    const index = this._edgeMapping.get(elementID);
+    return index >= 0 ? this._edges[index] : null;
+  }
   getEdges() { return this._edges; }
   getEdgeCount() { return this._edges.length; }
 

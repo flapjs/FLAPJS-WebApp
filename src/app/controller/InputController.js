@@ -612,7 +612,14 @@ class InputController
           //Destroy any edge that no longer have a destination
           if (inputController.shouldDestroyPointlessEdges)
           {
-            graph.deleteEdge(target);
+            if (!inputController.isNewEdge)
+            {
+              graphController.deleteTargetEdge(target);
+            }
+            else
+            {
+              graph.deleteEdge(target);
+            }
             return true;
           }
           //Keep edges as placeholders (used in DFA's)

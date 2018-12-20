@@ -22,13 +22,11 @@ class GraphNodeMoveAllEventHandler extends EventHandler
   applyUndo(e)
   {
     const graph = this.controller.getGraph();
-    let nodeIndex = -1;
     let node = null;
     for(const nodeID of e.eventData.nodeIDs)
     {
-      nodeIndex = graph.getNodeIndexByID(nodeID);
-      if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-      node = graph.getNodes()[nodeIndex];
+      node = graph.getNodeByElementID(nodeID);
+      if (!node) throw new Error("Unable to find target in graph");
 
       node.x -= e.eventData.dx;
       node.y -= e.eventData.dy;
@@ -39,13 +37,11 @@ class GraphNodeMoveAllEventHandler extends EventHandler
   applyRedo(e)
   {
     const graph = this.controller.getGraph();
-    let nodeIndex = -1;
     let node = null;
     for(const nodeID of e.eventData.nodeIDs)
     {
-      nodeIndex = graph.getNodeIndexByID(nodeID);
-      if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-      node = graph.getNodes()[nodeIndex];
+      node = graph.getNodeByElementID(nodeID);
+      if (!node) throw new Error("Unable to find target in graph");
 
       node.x += e.eventData.dx;
       node.y += e.eventData.dy;

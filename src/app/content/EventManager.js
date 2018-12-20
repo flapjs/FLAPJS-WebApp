@@ -10,7 +10,6 @@ import GraphEdgeLabelEventHandler from 'controller/events/GraphEdgeLabelEventHan
 import UserCreateNodeEventHandler from 'controller/events/UserCreateNodeEventHandler.js';
 import UserToggleNodeEventHandler from 'controller/events/UserToggleNodeEventHandler.js';
 import UserDeleteNodesEventHandler from 'controller/events/UserDeleteNodesEventHandler.js';
-import UserSwapNodesEventHandler from 'controller/events/UserSwapNodesEventHandler.js';
 import UserRenameNodeEventHandler from 'controller/events/UserRenameNodeEventHandler.js';
 
 import UserCreateEdgeEventHandler from 'controller/events/UserCreateEdgeEventHandler.js';
@@ -53,7 +52,6 @@ class EventManager
 
     this.eventHandlers.push(new UserCreateNodeEventHandler(events, this.graphController));
     this.eventHandlers.push(new UserRenameNodeEventHandler(events, this.graphController));
-    this.eventHandlers.push(new UserSwapNodesEventHandler(events, this.graphController));
     this.eventHandlers.push(new UserToggleNodeEventHandler(events, this.graphController));
     this.eventHandlers.push(new UserDeleteNodesEventHandler(events, this.graphController));
 

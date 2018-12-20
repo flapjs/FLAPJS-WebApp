@@ -43,10 +43,11 @@ class UserDeleteNodesEventHandler extends EventHandler
     NodalGraphParser.parseJSON(e.eventData.graphData, this.controller.getGraph());
     for(const targetID of e.eventData.targets)
     {
-      const nodeIndex = graph.getNodeIndexByID(targetID);
-      if (nodeIndex < 0) throw new Error("Unable to find target in graph");
-      graph.getNodes()[nodeIndex].x -= e.eventData.dx;
-      graph.getNodes()[nodeIndex].y -= e.eventData.dy;
+      const node = graph.getNodeByElementID(targetID);
+      if (!node) throw new Error("Unable to find target in graph");
+      
+      node.x -= e.eventData.dx;
+      node.y -= e.eventData.dy;
     }
   }
 

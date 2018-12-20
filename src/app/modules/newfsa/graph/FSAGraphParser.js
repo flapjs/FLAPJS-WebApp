@@ -10,6 +10,7 @@ export const JSON = {
     const nodeCount = Math.min(nodeDatas.length || 0, data['nodeCount'] || 0);
     const edgeDatas = data['edges'] || [];
     const edgeCount = Math.min(edgeDatas.length || 0, data['edgeCount'] || 0);
+    const initialIndex = data['initial'] || 0;
 
     const nodeIndices = new Map();
     for(let i = 0; i < nodeCount; ++i)
@@ -22,6 +23,12 @@ export const JSON = {
       node.setNodeCustom(nodeData['custom'] || false);
 
       nodeIndices.set(i, node);
+    }
+
+    const initialNode = nodeIndices.get(initialIndex);
+    if (initialNode)
+    {
+      dst.setStartNode(initialNode);
     }
 
     for(let i = 0; i < edgeCount; ++i)
@@ -46,6 +53,7 @@ export const JSON = {
     const nodeCount = nodes.length || 0;
     const graphEdges = graph.getEdges() || [];
     const edgeCount = edge.length || 0;
+    const graphInitial = graph.getStartNode();
 
     const nodeDatas = new Array(nodeCount);
     const nodeIndices = new Map();
@@ -90,11 +98,14 @@ export const JSON = {
       }
     }
 
+    const initialIndex = nodeIndices.get(graphInitial) || 0;
+
     return {
       nodeCount: nodeCount,
       nodes: nodeDatas,
       edgeCount: edgesCount,
-      edges: edgeDatas
+      edges: edgeDatas,
+      initial: initialIndex
     };
   }
 };
