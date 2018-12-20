@@ -118,6 +118,7 @@ class GraphController
     this.machineController = app.machineController;
 
     this.uploader.setMachineController(this.machineController);
+    this.uploader.setApp(app);
   }
 
   destroy()

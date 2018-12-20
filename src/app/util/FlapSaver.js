@@ -1,40 +1,28 @@
-import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
-
 import Notifications from 'system/notification/Notifications.js';
 import SemanticVersion from 'util/SemanticVersion.js';
 
-export const CURRENT_VERSION = new SemanticVersion(0, 2, 0);
-export const CURRENT_VERSION_STRING = SemanticVersion.stringify(CURRENT_VERSION);
-
 //TODO: Should really only write metadata that is ambiguous to module
-export function saveToJSON(graphController, machineController)
+export function saveToJSON(graphData, graphController, machineController)
 {
   const graph = graphController.getGraph();
   const machineBuilder = machineController.getMachineBuilder();
 
-  if (!graph.isEmpty())
-  {
-    const dst = {};
-    dst["metadata"] = {version: CURRENT_VERSION_STRING};
-    dst["graphData"] = NodalGraphParser.toJSON(graph);
+  const dst = {};
+  dst["metadata"] = {version: process.env.VERSION};
+  dst["graphData"] = graphData;
 
-    //HACK: this should be calculated elsewhere
-    dst["machineData"] = {
-      name: machineController.getMachineName(),
-      type: machineController.getMachineType(),
-      symbols: machineController.getCustomSymbols(),
-      statePrefix: machineBuilder.getLabeler().prefix
-    };
+  //HACK: this should be calculated elsewhere
+  dst["machineData"] = {
+    name: machineController.getMachineName(),
+    type: machineController.getMachineType(),
+    symbols: machineController.getCustomSymbols(),
+    statePrefix: machineBuilder.getLabeler().prefix
+  };
 
-    return dst;
-  }
-  else
-  {
-    return {};
-  }
+  return dst;
 };
 
-export function loadFromJSON(jsonData, graphController, machineController)
+export function loadFromJSON(jsonData, jsonParser, graphController, machineController)
 {
   const graph = graphController.getGraph();
   const machineBuilder = machineController.getMachineBuilder();
@@ -42,17 +30,8 @@ export function loadFromJSON(jsonData, graphController, machineController)
   try
   {
     const metadata = jsonData.metadata;
-    if (typeof metadata == 'object')
-    {
-      const dataVersion = SemanticVersion.parse(metadata.version);
-      if (!CURRENT_VERSION.canSupportVersion(dataVersion))
-      {
-        Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file - invalid version.", "errorUpload");
-        return;
-      }
-    }
     const graphJSON = jsonData.graphData;
-    const newGraph = NodalGraphParser.parseJSON(graphJSON, graph);
+    const newGraph = jsonParser.parse(graphJSON, graph);
 
     //HACK: this should be calculated elsewhere
     const machineJSON = jsonData.machineData;

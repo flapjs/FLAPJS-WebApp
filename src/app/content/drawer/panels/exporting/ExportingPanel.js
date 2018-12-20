@@ -4,7 +4,6 @@ import './ExportingPanel.css';
 
 import Downloader from 'util/Downloader.js';
 import * as FlapSaver from 'util/FlapSaver.js';
-import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
 
 import IconButton from 'icons/IconButton.js';
 import PNGIcon from 'icons/flat/PNGIcon.js';
@@ -29,33 +28,21 @@ class ExportingPanel extends React.Component
 
   onExportJSON(e)
   {
-    /*
-    //TODO: We need to write FSAGraphParser first, which requires to know
-    //what NodalGraph looks like...
     const module = this.props.app.getCurrentModule();
     const parser = module.getGraphParser();
     const graphData = parser.JSON.objectify(module.getGraph());
-    const machineData = this.props.machineController.getMetadata();
-    const data = {
-      graph: graphData,
-      machine: machineData
-    };
-    const result = JSON.stringify(FlapSaver.saveToJSON(data));
-    const machineName = this.props.machineController.getMachineName();
-    Downloader.downloadText(machineName + '.json', result);
-    */
-
-    const jsonString = JSON.stringify(FlapSaver.saveToJSON(this.props.graphController, this.props.machineController));
+    const jsonString = JSON.stringify(FlapSaver.saveToJSON(graphData, this.props.graphController, this.props.machineController));
     const machineName = this.props.machineController.getMachineName();
     Downloader.downloadText(machineName + '.json', jsonString);
   }
 
   onExportXML(e)
   {
+    const module = this.props.app.getCurrentModule();
+    const parser = module.getGraphParser();
+    const graphData = parser.XML.objectify(module.getGraph());
+    const xmlString = new XMLSerializer().serializeToString(graphData);
     const machineName = this.props.machineController.getMachineName();
-    const graph = this.props.graphController.getGraph();
-
-    const xmlString = new XMLSerializer().serializeToString(NodalGraphParser.toXML(graph));
     Downloader.downloadText(machineName + '.jff', xmlString);
   }
 

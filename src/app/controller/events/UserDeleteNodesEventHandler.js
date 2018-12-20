@@ -1,6 +1,6 @@
 import EventHandler from './EventHandler.js';
 
-import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
+import * as FSAGraphParser from 'modules/newfsa/graph/FSAGraphParser.js';
 
 class UserDeleteNodesEventHandler extends EventHandler
 {
@@ -21,7 +21,7 @@ class UserDeleteNodesEventHandler extends EventHandler
     const dy = node.y - prevY;
 
     return {
-      graphData: NodalGraphParser.toJSON(graph),
+      graphData: FSAGraphParser.JSON.objectify(graph),
       targets: targets,
       dx: dx,
       dy: dy
@@ -32,7 +32,7 @@ class UserDeleteNodesEventHandler extends EventHandler
   capturePostEvent(graph, node, targetNodes, prevX, prevY)
   {
     return {
-      graphData: NodalGraphParser.toJSON(graph)
+      graphData: FSAGraphParser.JSON.objectify(graph)
     };
   }
 
@@ -40,12 +40,12 @@ class UserDeleteNodesEventHandler extends EventHandler
   applyUndo(e)
   {
     const graph = this.controller.getGraph();
-    NodalGraphParser.parseJSON(e.eventData.graphData, this.controller.getGraph());
+    FSAGraphParser.JSON.parse(e.eventData.graphData, this.controller.getGraph());
     for(const targetID of e.eventData.targets)
     {
       const node = graph.getNodeByElementID(targetID);
       if (!node) throw new Error("Unable to find target in graph");
-      
+
       node.x -= e.eventData.dx;
       node.y -= e.eventData.dy;
     }
@@ -54,7 +54,7 @@ class UserDeleteNodesEventHandler extends EventHandler
   //Override - this = event
   applyRedo(e)
   {
-    NodalGraphParser.parseJSON(e.postData.graphData, this.controller.getGraph());
+    FSAGraphParser.JSON.parse(e.postData.graphData, this.controller.getGraph());
   }
 }
 export default UserDeleteNodesEventHandler;

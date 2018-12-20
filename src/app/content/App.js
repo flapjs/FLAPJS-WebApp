@@ -138,13 +138,15 @@ class App extends React.Component
     const data = LocalSave.loadFromStorage("graph");
     if (data)
     {
-      FlapSaver.loadFromJSON(data, this.graphController, this.machineController);
+      FlapSaver.loadFromJSON(data, this.getCurrentModule().getGraphParser().JSON, this.graphController, this.machineController);
     }
   }
 
   onAutoSave()
   {
-    const data = FlapSaver.saveToJSON(this.graphController, this.machineController);
+    const graph = this.graphController.getGraph();
+    const graphData = this.getCurrentModule().getGraphParser().JSON.objectify(graph);
+    const data = FlapSaver.saveToJSON(graphData, this.graphController, this.machineController);
     LocalSave.saveToStorage("graph", data);
   }
 

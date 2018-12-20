@@ -1,6 +1,6 @@
 import EventHandler from './EventHandler.js';
 
-import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
+import * as FSAGraphParser from 'modules/newfsa/graph/FSAGraphParser.js';
 
 class UserRenameSymbolEventHandler extends EventHandler
 {
@@ -16,7 +16,7 @@ class UserRenameSymbolEventHandler extends EventHandler
   {
     const graph = this.graphController.getGraph();
     return {
-      graphData: NodalGraphParser.toJSON(graph),
+      graphData: FSAGraphParser.JSON.objectify(graph),
       symbol: symbol,
       prevSymbol: prevSymbol
     };
@@ -34,7 +34,7 @@ class UserRenameSymbolEventHandler extends EventHandler
     }
 
     return {
-      graphData: NodalGraphParser.toJSON(graph),
+      graphData: FSAGraphParser.JSON.objectify(graph),
       symbol: symbol,
       prevSymbol: prevSymbol,
       targets: targetIDs
@@ -45,14 +45,14 @@ class UserRenameSymbolEventHandler extends EventHandler
   applyUndo(e)
   {
     //TODO: restore machine custom alphabet
-    NodalGraphParser.parseJSON(e.eventData.graphData, this.graphController.getGraph());
+    FSAGraphParser.JSON.parse(e.eventData.graphData, this.graphController.getGraph());
   }
 
   //Override - this = event
   applyRedo(e)
   {
     //TODO: restore machine custom alphabet
-    NodalGraphParser.parseJSON(e.postData.graphData, this.graphController.getGraph());
+    FSAGraphParser.JSON.parse(e.postData.graphData, this.graphController.getGraph());
   }
 }
 export default UserRenameSymbolEventHandler;

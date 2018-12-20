@@ -22,7 +22,7 @@ class FSAGraph extends NodalGraph
   }
 
   //Override
-  createEdge(from, to=null, id=null)//, format=true)
+  createEdge(from, to=null, id=null)
   {
     const result = new FSAEdge(id || guid(), from, to);
     this._edges.push(result);

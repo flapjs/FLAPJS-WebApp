@@ -187,4 +187,4 @@ class NodalGraph
   }
 }
 
-export default FSAGraph;
+export default NodalGraph;

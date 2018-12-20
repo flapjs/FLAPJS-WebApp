@@ -6,7 +6,8 @@ import AnalysisPanel from './panels/analysis/AnalysisPanel.js';
 import AboutPanel from './panels/about/AboutPanel.js';
 
 import NodalGraphRenderer from './graph/renderer/NodalGraphRenderer.js';
-import NodalGraph from './graph/NodalGraph.js';
+import FSAGraph from 'modules/newfsa/graph/FSAGraph.js';
+import * as FSAGraphParser from 'modules/newfsa/graph/FSAGraphParser.js';
 
 import FSABuilder from './builder/FSABuilder.js';
 
@@ -17,7 +18,7 @@ class FSAModule extends BaseModule
   constructor()
   {
     super();
-    this._graph = new NodalGraph();
+    this._graph = new FSAGraph();
     this._machineBuilder = new FSABuilder(this._graph);
 
     this._refreshRate = 60;
@@ -55,6 +56,11 @@ class FSAModule extends BaseModule
   getGraphRenderer()
   {
     return NodalGraphRenderer;
+  }
+
+  getGraphParser()
+  {
+    return FSAGraphParser;
   }
 
   getMachineBuilder()

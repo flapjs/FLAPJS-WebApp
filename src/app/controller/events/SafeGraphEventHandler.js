@@ -1,6 +1,6 @@
 import EventHandler from './EventHandler.js';
 
-import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
+import * as FSAGraphParser from 'modules/newfsa/graph/FSAGraphParser.js';
 
 class SafeGraphEventHandler extends EventHandler
 {
@@ -13,7 +13,7 @@ class SafeGraphEventHandler extends EventHandler
   captureEvent(graph)
   {
     return {
-      graphData: NodalGraphParser.toJSON(graph)
+      graphData: FSAGraphParser.JSON.objectify(graph)
     };
   }
 
@@ -21,20 +21,20 @@ class SafeGraphEventHandler extends EventHandler
   capturePostEvent(graph)
   {
     return {
-      graphData: NodalGraphParser.toJSON(graph)
+      graphData: FSAGraphParser.JSON.objectify(graph)
     };
   }
 
   //Override - this = event
   applyUndo(e)
   {
-    NodalGraphParser.parseJSON(e.eventData.graphData, this.controller.getGraph());
+    FSAGraphParser.JSON.parse(e.eventData.graphData, this.controller.getGraph());
   }
 
   //Override - this = event
   applyRedo(e)
   {
-    NodalGraphParser.parseJSON(e.postData.graphData, this.controller.getGraph());
+    FSAGraphParser.JSON.parse(e.postData.graphData, this.controller.getGraph());
   }
 }
 export default SafeGraphEventHandler;

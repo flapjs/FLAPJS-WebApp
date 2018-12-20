@@ -1,6 +1,6 @@
 import EventHandler from './EventHandler.js';
 
-import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
+import * as FSAGraphParser from 'modules/newfsa/graph/FSAGraphParser.js';
 
 class UserImportGraphEventHandler extends EventHandler
 {
@@ -16,7 +16,7 @@ class UserImportGraphEventHandler extends EventHandler
   {
     return {
       graphName: this.machineController.getMachineName(),
-      graphData: NodalGraphParser.toJSON(graph)
+      graphData: FSAGraphParser.JSON.objectify(graph)
     };
   }
 
@@ -25,14 +25,14 @@ class UserImportGraphEventHandler extends EventHandler
   {
     return {
       graphName: this.machineController.getMachineName(),
-      graphData: NodalGraphParser.toJSON(graph)
+      graphData: FSAGraphParser.JSON.objectify(graph)
     };
   }
 
   //Override - this = event
   applyUndo(e)
   {
-    NodalGraphParser.parseJSON(e.eventData.graphData, this.controller.getGraph());
+    FSAGraphParser.JSON.parse(e.eventData.graphData, this.controller.getGraph());
 
     this.machineController.setMachineName(e.eventData.graphName);
   }
@@ -40,7 +40,7 @@ class UserImportGraphEventHandler extends EventHandler
   //Override - this = event
   applyRedo(e)
   {
-    NodalGraphParser.parseJSON(e.postData.graphData, this.controller.getGraph());
+    FSAGraphParser.JSON.parse(e.postData.graphData, this.controller.getGraph());
 
     this.machineController.setMachineName(e.postData.graphName);
   }

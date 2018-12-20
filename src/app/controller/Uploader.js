@@ -1,5 +1,4 @@
 import * as FlapSaver from 'util/FlapSaver.js';
-import NodalGraphParser from 'modules/fsa/graph/NodalGraphParser.js';
 
 const FILETYPE_JSON = "application/json";
 const FILETYPE_JFLAP = ".jff";
@@ -15,10 +14,16 @@ class Uploader
 {
   constructor(graphController)
   {
+    this.app = null;
     this.graphController = graphController;
     this.machineController = null;
 
     //Add notifications here for errors
+  }
+
+  setApp(app)
+  {
+    this.app = app;
   }
 
   setMachineController(machineController)
@@ -33,6 +38,9 @@ class Uploader
 
   uploadFileGraph(graphFileBlob)
   {
+    const app = this.app;
+    const graphController = this.graphController;
+    const machineController = this.machineController;
     return new Promise((resolve, reject) => {
       if (!graphFileBlob) reject("Invalid file data : null");
 
@@ -48,33 +56,32 @@ class Uploader
         reader.onload = (event) => {
           const data = event.target.result;
           const name = graphFileBlob.name.substring(0, graphFileBlob.name.lastIndexOf('.'));
-          const graph = this.graphController.getGraph();
+          const graph = graphController.getGraph();
 
-          this.graphController.emit("userPreImportGraph", graph);
+          graphController.emit("userPreImportGraph", graph);
 
           try
           {
             if (ext === JSON_EXT)
             {
               const jsonData = JSON.parse(data);
-              FlapSaver.loadFromJSON(jsonData, this.graphController, this.machineController);
+              FlapSaver.loadFromJSON(jsonData, app.getCurrentModule().getGraphParser().JSON, graphController, machineController);
             }
             else if (ext === JFF_EXT || ext === XML_EXT)
             {
-              const parser = new DOMParser();
-              const dataXML = parser.parseFromString(data, "text/xml");
-              NodalGraphParser.parseXML(dataXML, graph);
+              const xmlData = new DOMParser().parseFromString(data, "text/xml");
+              app.getCurrentModule().getGraphParser().XML.parse(xmlData, graph);
             }
             else
             {
-              //There is no else... it's just not possible
+              //There is none else... it's just not possible
             }
 
-            this.graphController.emit("userImportGraph", graph);
+            graphController.emit("userImportGraph", graph);
 
-            if (this.machineController)
+            if (machineController)
             {
-              this.machineController.setMachineName(name);
+              machineController.setMachineName(name);
             }
 
             //Callback will accepts an event object that contains:
@@ -95,7 +102,7 @@ class Uploader
           }
           finally
           {
-            this.graphController.emit("userPostImportGraph", graph);
+            graphController.emit("userPostImportGraph", graph);
           }
         };
         reader.onerror = (event) => {

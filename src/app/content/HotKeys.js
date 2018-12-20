@@ -5,6 +5,7 @@ class HotKeys
 {
   constructor(events)
   {
+    this.app = null;
     this.workspace = null;
     this.toolbar = null;
     this.events = null;
@@ -16,6 +17,7 @@ class HotKeys
 
   initialize(app)
   {
+    this.app = app;
     this.workspace = app.workspace;
     this.toolbar = app.toolbar;
     this.events = app.eventManager;
@@ -37,7 +39,9 @@ class HotKeys
     {
       //Save as machine file
       //TODO: Refer to export panel
-      const jsonString = JSON.stringify(FlapSaver.saveToJSON(this.graphController, this.machineController));
+      const graph = this.graphController.getGraph();
+      const graphData = this.app.getCurrentModule().getGraphParser().JSON.objectify(graph);
+      const jsonString = JSON.stringify(FlapSaver.saveToJSON(graphData, this.graphController, this.machineController));
       const machineName = this.machineController.getMachineName();
       Downloader.downloadText(machineName + '.json', jsonString);
 
