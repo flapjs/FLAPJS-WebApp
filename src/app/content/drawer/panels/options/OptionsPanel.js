@@ -254,8 +254,8 @@ class OptionsPanel extends React.Component
             <label htmlFor="options-theme-select">Theme</label>
             <select id="options-theme-select" className="panel-select" value={this.state.theme} onChange={this.onChangeTheme} disabled={this.state.customTheme}>
               <option value="default">Default</option>
-              <option value="ucsd" disabled="true">UC San Diego (Coming Soon)</option>
-              <option value="duke" disabled="true">Duke University (Coming Soon)</option>
+              <option value="ucsd" disabled={true}>UC San Diego (Coming Soon)</option>
+              <option value="duke" disabled={true}>Duke University (Coming Soon)</option>
             </select>
             {
               !this.state.customTheme &&
