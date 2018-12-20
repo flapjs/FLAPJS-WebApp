@@ -1,9 +1,9 @@
 import GraphEdge from 'graph/GraphEdge.js';
-import { guid } from 'util/MathHelper.js';
+import { stringHash } from 'util/MathHelper.js';
 
 class GraphCurvedEdge extends GraphEdge
 {
-  constructor(id, from, to)
+  constructor(id, from, to=null)
   {
     super(id, from, null);
 
@@ -297,6 +297,13 @@ class GraphCurvedEdge extends GraphEdge
     }
 
     return dst;
+  }
+
+  //Override
+  getHashCode()
+  {
+    //Will not change has for quad, since it is only decorative
+    return super.getHashCode();
   }
 }
 

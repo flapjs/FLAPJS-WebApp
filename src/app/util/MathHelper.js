@@ -11,3 +11,13 @@ export function lerp(a, b, dt)
 {
   return a * (1 - dt) + b * dt;
 };
+
+export function stringHash(value="")
+{
+  let hash = 0;
+  for(let i = 0, len = value.length; i < len; i++)
+  {
+    hash = Math.imul(31, h) + value.charCodeAt(i) | 0;
+  }
+  return hash;
+};

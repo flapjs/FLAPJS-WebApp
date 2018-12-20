@@ -1,6 +1,6 @@
 import GraphNode from 'graph/GraphNode.js';
 
-class FSANodeElement extends GraphNode
+class FSANode extends GraphNode
 {
   constructor(id, x, y)
   {
@@ -24,6 +24,12 @@ class FSANodeElement extends GraphNode
   {
     return Config.NODE_RADIUS;
   }
+
+  //Override
+  getHashCode()
+  {
+    return (super.getHashCode() << 1) | (this._accept ? 1 : 0);
+  }
 }
 
-export default FSANodeElement;
+export default FSANode;

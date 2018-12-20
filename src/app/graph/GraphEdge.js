@@ -1,8 +1,9 @@
 import GraphElement from 'graph/GraphElement.js';
+import { stringHash } from 'util/MathHelper.js';
 
 class GraphEdge extends GraphElement
 {
-  constructor(id, from, to)
+  constructor(id, from, to=null)
   {
     super(id);
 
@@ -136,6 +137,14 @@ class GraphEdge extends GraphElement
   isSelfLoop()
   {
     return this._from === this._to;
+  }
+
+  //Override
+  getHashCode()
+  {
+    const hasSrc = this.from ? "1" : "0";
+    const hasDst = this.to ? "1" : "0";
+    return stringHash(this._id + "." + hasSrc + hasDst + "." + this._label);
   }
 }
 
