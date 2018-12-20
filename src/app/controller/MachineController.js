@@ -128,7 +128,8 @@ class MachineController
     let node;
     for(const state of machine.getStates())
     {
-      node = graph.newNode(0, 0, state);
+      node = graph.createNode(0, 0);
+      node.setNodeLabel(state);
       if (machine.isFinalState(state))
       {
         node.setNodeAccept(true);
@@ -142,7 +143,8 @@ class MachineController
       from = graph.getNodeByLabel(transition[0]);
       read = transition[1];
       to = graph.getNodeByLabel(transition[2]);
-      edge = graph.newEdge(from, to, read);
+      edge = graph.createEdge(from, to);
+      edge.setEdgeLabel(read);
       const formattedEdge = graph.formatEdge(edge);
       if (edge != formattedEdge) graph.deleteEdge(edge);
     }

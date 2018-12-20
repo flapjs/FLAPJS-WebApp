@@ -121,7 +121,8 @@ class NodalGraphParser
       //check valid from and to node
       if(result.getNodes()[indexOfEdgeFrom] || (startNodeID == edgeFrom && result.getNodes()[0]) || (edgeFrom == 0 && result.getNodes()[startNodeID]) )
       {
-        const newEdge = result.newEdge(result.getNodes()[indexOfEdgeFrom], edgeTo < 0 ? null : result.getNodes()[indexOfEdgeTo], edgeLabel || "0");
+        const newEdge = result.createEdge(result.getNodes()[indexOfEdgeFrom], edgeTo < 0 ? null : result.getNodes()[indexOfEdgeTo]);
+        newEdge.setEdgeLabel(edgeLabel || "0");
         const formattedEdge = result.formatEdge(newEdge);
         if (newEdge != formattedEdge) result.deleteEdge(newEdge);
       }

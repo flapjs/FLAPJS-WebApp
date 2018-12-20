@@ -338,7 +338,8 @@ class InputController
       {
         if (!inputController.isTrashMode())
         {
-          const edge = graph.newEdge(target, pointer, Config.STR_TRANSITION_DEFAULT_LABEL);
+          const edge = graph.createEdge(target, pointer);
+          edge.setEdgeLabel(Config.STR_TRANSITION_DEFAULT_LABEL);
 
           //Redirect pointer to refer to the edge as the new target
           picker.setInitialTarget(edge, "endpoint");

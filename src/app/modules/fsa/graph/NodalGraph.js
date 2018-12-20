@@ -19,9 +19,6 @@ class NodalGraph
     this._timeout = null;
   }
 
-  getEdges() {return this._edges;}
-  getNodes() {return this._nodes;}
-
   getNodeByLabel(label)
   {
     for(const node of this._nodes)
@@ -49,10 +46,32 @@ class NodalGraph
     return -1;
   }
 
-  newNode(x, y, label)
+  getEdgeIndexByID(id)
   {
-    const result = new Node(guid(), x, y);
-    result.setNodeLabel(label);
+    const length = this._edges.length;
+    for(let i = 0; i < length; ++i)
+    {
+      const edge = this._edges[i];
+      if (edge.getGraphElementID() == id)
+      {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+
+
+
+
+
+  getEdges() {return this._edges;}
+  getNodes() {return this._nodes;}
+
+
+  createNode(x=0, y=0, id=null)
+  {
+    const result = new Node(id || guid(), x, y);
     this._nodes.push(result);
     return result;
   }
@@ -79,24 +98,9 @@ class NodalGraph
     this._nodes.splice(nodeIndex, 1);
   }
 
-  getEdgeIndexByID(id)
+  createEdge(from, to=null, id=null)
   {
-    const length = this._edges.length;
-    for(let i = 0; i < length; ++i)
-    {
-      const edge = this._edges[i];
-      if (edge.getGraphElementID() == id)
-      {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  newEdge(from, to, label)
-  {
-    const result = new Edge(guid(), from, to);
-    result.setEdgeLabel(label);
+    const result = new Edge(id || guid(), from, to);
     this._edges.push(result);
     return result;
   }

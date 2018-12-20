@@ -29,6 +29,32 @@ class FSAGraph extends NodalGraph
     return result;
   }
 
+  setStartNode(node)
+  {
+    if (this._nodes.length <= 0) throw new Error("Cannot set start node to empty graph");
+
+    //There is only one node, and that is already the start node
+    if (this._nodes.length === 1) return;
+
+    const i = this._nodes.indexOf(node);
+    if (i > 0)
+    {
+      //This does a swap; we could do a prepend but that's more costly...
+      const prev = this._nodes[0];
+      this._nodes[0] = node;
+      this._nodes[i] = prev;
+    }
+    else if (i < 0)
+    {
+      throw new Error("Cannot set start node for unknown node");
+    }
+  }
+
+  getStartNode()
+  {
+    return this._nodes.length > 0 ? this._nodes[0] : null;
+  }
+
   //This is more like addEdge() without adding it to the graph and just returns the result
   //This should only be called once when completing an edge
   formatEdge(edge)

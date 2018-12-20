@@ -182,9 +182,8 @@ class GraphController
 
     this.emit("userPreCreateNode", this.getGraph(), newNodeLabel, x, y);
 
-    const node = this.getGraph().newNode(x, y, newNodeLabel);
-    node.x = x;
-    node.y = y;
+    const node = this.getGraph().createNode(x, y);
+    node.setNodeLabel(newNodeLabel);
 
     this.emit("userCreateNode", this.getGraph(), node);
 

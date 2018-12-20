@@ -41,7 +41,7 @@ class UserCreateNodeEventHandler extends EventHandler
 
       node.x = e.postData.x;
       node.y = e.postData.y;
-      node.setNodeID(e.postData.nodeID);
+      node.setGraphElementID(e.postData.nodeID);
       node.setNodeLabel(e.postData.label);
       node.setNodeCustom(e.postData.isCustom);
     }

@@ -141,8 +141,9 @@ class GraphEdge extends GraphElement
   //Override
   getHashString(usePosition=true)
   {
-    const src = this._from ? this._from.getHashString(usePosition) : 0;
-    const dst = this._to ? this._to.getHashString(usePosition) : 0;
+    const src = this._from ? this._from.getHashString(usePosition) : "";
+    //HACK: to may be a pointer, which is not a node, so getHashString does not exist.
+    const dst = this._to ? this._to.getHashString ? this._to.getHashString(usePosition) : "0" : "";
     return super.getHashString(usePosition) + ":" + src + "," + dst + "." + this._label;
   }
 }
