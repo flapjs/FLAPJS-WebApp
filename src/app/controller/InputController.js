@@ -527,11 +527,11 @@ class InputController
           {
             const dx = x - graphController.prevX;
             const dy = y - graphController.prevY;
-            graphController.emit("nodeMoveAll", picker.getSelection(graph), dx, dy);
+            graphController.emit("nodeMoveAll", graph, picker.getSelection(graph), dx, dy);
           }
           else
           {
-            graphController.emit("nodeMove", target, x, y, graphController.prevX, graphController.prevY);
+            graphController.emit("nodeMove", graph, target, x, y, graphController.prevX, graphController.prevY);
           }
           return true;
         }
@@ -547,7 +547,7 @@ class InputController
         else
         {
           //Do nothing, since should have moved to position
-          graphController.emit("edgeMove", target, target.getQuadratic(), graphController.prevQuad);
+          graphController.emit("edgeMove", graph, target, target.getQuadratic(), graphController.prevQuad);
         }
         return true;
       }
@@ -601,7 +601,7 @@ class InputController
           else if (graphController.prevEdgeTo !== null)
           {
             //Emit event
-            graphController.emit("edgeDestination", target, target.getDestinationNode(), graphController.prevEdgeTo, graphController.prevQuad);
+            graphController.emit("edgeDestination", graph, target, target.getDestinationNode(), graphController.prevEdgeTo, graphController.prevQuad);
           }
 
           return true;
@@ -640,7 +640,7 @@ class InputController
           graph.setStartNode(inputController.ghostInitialMarker);
 
           //Emit event
-          graphController.emit("nodeInitial", inputController.ghostInitialMarker, prevInitial);
+          graphController.emit("nodeInitial", graph, inputController.ghostInitialMarker, prevInitial);
         }
 
         //Reset ghost initial marker

@@ -1,11 +1,11 @@
-import EventLogger from 'events/EventLogger.js';
+import EventLogger from 'controller/events/EventLogger.js';
 
-import GraphEdgeDestinationEvent from 'events/GraphEdgeDestinationEvent.js';
-import GraphEdgeLabelEvent from 'events/GraphEdgeLabelEvent.js';
-import GraphEdgeMoveEvent from 'events/GraphEdgeMoveEvent.js';
-import GraphNodeInitialEvent from 'events/GraphNodeInitialEvent.js';
-import GraphNodeMoveEvent from 'events/GraphNodeMoveEvent.js';
-import GraphNodeMoveAllEvent from 'events/GraphNodeMoveAllEvent.js';
+import GraphNodeInitialEventHandler from 'controller/events/GraphNodeInitialEventHandler.js';
+import GraphNodeMoveEventHandler from 'controller/events/GraphNodeMoveEventHandler.js';
+import GraphNodeMoveAllEventHandler from 'controller/events/GraphNodeMoveAllEventHandler.js';
+import GraphEdgeMoveEventHandler from 'controller/events/GraphEdgeMoveEventHandler.js';
+import GraphEdgeDestinationEventHandler from 'controller/events/GraphEdgeDestinationEventHandler.js';
+import GraphEdgeLabelEventHandler from 'controller/events/GraphEdgeLabelEventHandler.js';
 
 import UserCreateNodeEventHandler from 'controller/events/UserCreateNodeEventHandler.js';
 import UserToggleNodeEventHandler from 'controller/events/UserToggleNodeEventHandler.js';
@@ -44,18 +44,12 @@ class EventManager
     const graph = this.graphController.getGraph();
     const events = this.logger;
 
-    this.graphController.on("nodeMove", (targetNode, nextX, nextY, prevX, prevY) =>
-      events.handleEvent(new GraphNodeMoveEvent(graph, targetNode, nextX, nextY, prevX, prevY)));
-    this.graphController.on("nodeMoveAll", (targetNodes, dx, dy) =>
-      events.handleEvent(new GraphNodeMoveAllEvent(graph, targetNodes, dx, dy)));
-    this.graphController.on("nodeInitial", (nextInitial, prevInitial) =>
-      events.handleEvent(new GraphNodeInitialEvent(graph, nextInitial, prevInitial)));
-    this.graphController.on("edgeDestination", (targetEdge, nextDestination, prevDestination, prevQuad) =>
-      events.handleEvent(new GraphEdgeDestinationEvent(graph, targetEdge, nextDestination, prevDestination, prevQuad)));
-    this.graphController.on("edgeMove", (targetEdge, nextX, nextY, prevX, prevY) =>
-      events.handleEvent(new GraphEdgeMoveEvent(graph, targetEdge, nextX, nextY, prevX, prevY)));
-    this.graphController.on("edgeLabel", (targetEdge, nextLabel, prevLabel) =>
-      events.handleEvent(new GraphEdgeLabelEvent(graph, targetEdge, nextLabel, prevLabel)));
+    this.eventHandlers.push(new GraphNodeMoveEventHandler(events, this.graphController));
+    this.eventHandlers.push(new GraphNodeMoveAllEventHandler(events, this.graphController));
+    this.eventHandlers.push(new GraphEdgeMoveEventHandler(events, this.graphController));
+    this.eventHandlers.push(new GraphEdgeDestinationEventHandler(events, this.graphController));
+    this.eventHandlers.push(new GraphNodeInitialEventHandler(events, this.graphController));
+    this.eventHandlers.push(new GraphEdgeLabelEventHandler(events, this.graphController));
 
     this.eventHandlers.push(new UserCreateNodeEventHandler(events, this.graphController));
     this.eventHandlers.push(new UserRenameNodeEventHandler(events, this.graphController));

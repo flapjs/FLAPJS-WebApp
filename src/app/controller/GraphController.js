@@ -351,7 +351,7 @@ class GraphController
       const label = target.getEdgeLabel();
       if (prevLabel.length > 0 && label != prevLabel)
       {
-        this.emit("edgeLabel", target, label, prevLabel);
+        this.emit("edgeLabel", this.getGraph(), target, label, prevLabel);
       }
 
       if (callback)
