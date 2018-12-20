@@ -13,7 +13,7 @@ import StyleInput from 'system/styleopt/components/StyleInput.js';
 import OptionGroup from './OptionGroup.js';
 import OptionHotkey from './OptionHotkey.js';
 
-//This should be the same as the one referred to by index.html
+//This should be the same as the one referred to by index.js
 const LOCAL_STORAGE_ID = "skipWelcome";
 
 class OptionsPanel extends React.Component
@@ -326,7 +326,7 @@ class OptionsPanel extends React.Component
           onChange={(e) => {
             const result = e.target.checked;
             this.setState({skipWelcome: e.target.checked});
-            LocalSave.setStringToStorage(LOCAL_STORAGE_ID, result);
+            LocalSave.setStringToStorage(LOCAL_STORAGE_ID, "" + result);
           }}/>
           <label htmlFor="option-skipwelcome">{I18N.toString("options.skipwelcome")}</label>
         </div>

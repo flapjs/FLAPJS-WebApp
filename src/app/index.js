@@ -3,10 +3,14 @@ import ReactDOM from 'react-dom';
 
 //Router: imports
 import Router from 'router.js';
+import App from 'content/App.js';
+import LandingPage from 'landing/components/LandingPage.js';
 //Config: imports
 import Config from 'config.js';
 import { loadConfig, saveConfig } from 'config.js';
 const AUTOSAVE_CONFIG = true;
+//LocalSave: imports
+import LocalSave from 'system/localsave/LocalSave.js';
 
 const SHOULD_WARN_USERS_ON_EXIT = true;
 
@@ -53,9 +57,17 @@ function loadApplication()
 {
   loadConfig();
   root = document.getElementById("root");
-  import(/* webpackChunkName: "landing" */ 'landing/components/LandingPage.js').then(({ default: _ }) => {
-    Router.routeTo( _ );
-  });
+  //import(/* webpackChunkName: "landing" */ 'landing/components/LandingPage.js').then(({ default: _ }) => Router.routeTo( _ ));
+
+  //This should be the same as the one referred to by OptionsPanel
+  if (LocalSave.getStringFromStorage("skipWelcome") == "true")
+  {
+    Router.routeTo(App);
+  }
+  else
+  {
+    Router.routeTo(LandingPage);
+  }
 }
 
 //Update application
