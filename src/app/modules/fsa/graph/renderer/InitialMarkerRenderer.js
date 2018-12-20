@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Node from 'modules/newfsa/graph/FSANode.js';
+import Node from 'modules/fsa/graph/FSANode.js';
 
 import Config from 'config.js';
 

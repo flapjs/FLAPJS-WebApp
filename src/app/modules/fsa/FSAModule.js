@@ -6,10 +6,11 @@ import AnalysisPanel from './panels/analysis/AnalysisPanel.js';
 import AboutPanel from './panels/about/AboutPanel.js';
 
 import NodalGraphRenderer from './graph/renderer/NodalGraphRenderer.js';
-import FSAGraph from 'modules/newfsa/graph/FSAGraph.js';
-import * as FSAGraphParser from 'modules/newfsa/graph/FSAGraphParser.js';
+import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
+import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
 
 import FSABuilder from './builder/FSABuilder.js';
+import GraphLayout from './graph/GraphLayout.js';
 
 const PANELS = [TestingPanel, OverviewPanel, AnalysisPanel];
 
@@ -51,6 +52,11 @@ class FSAModule extends BaseModule
   getGraph()
   {
     return this._graph;
+  }
+
+  getGraphLayout()
+  {
+    return GraphLayout;
   }
 
   getGraphRenderer()

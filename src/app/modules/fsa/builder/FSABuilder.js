@@ -5,7 +5,7 @@ import DFAErrorChecker from './DFAErrorChecker.js';
 import NFAErrorChecker from './NFAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
-import Node from 'modules/newfsa/graph/FSANode.js';
+import Node from 'modules/fsa/graph/FSANode.js';
 
 import { EMPTY } from 'machine/Symbols.js';
 

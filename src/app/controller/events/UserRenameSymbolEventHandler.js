@@ -1,6 +1,6 @@
 import EventHandler from './EventHandler.js';
 
-import * as FSAGraphParser from 'modules/newfsa/graph/FSAGraphParser.js';
+import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
 
 class UserRenameSymbolEventHandler extends EventHandler
 {
