@@ -32,6 +32,7 @@ class OptionsPanel extends React.Component
     };
 
     this.onChangeTheme = this.onChangeTheme.bind(this);
+    this.onChangeModule = this.onChangeModule.bind(this);
   }
 
   //Override
@@ -218,6 +219,11 @@ class OptionsPanel extends React.Component
     this.setState({theme: theme});
   }
 
+  onChangeModule(e)
+  {
+    //Nothing yet...
+  }
+
   //Override
   render()
   {
@@ -246,6 +252,16 @@ class OptionsPanel extends React.Component
           <OptionHotkey label={I18N.toString("action.workspace.submit.label")} keyName="Enter"/>
           <OptionHotkey label={I18N.toString("action.workspace.cancel.label")} keyName="Escape"/>
         </OptionGroup>
+
+        <div className="panel-checkbox" style={{marginTop: "10px"}}>
+          <input id="option-skipwelcome" type="checkbox" checked={this.state.skipWelcome}
+          onChange={(e) => {
+            const result = e.target.checked;
+            this.setState({skipWelcome: e.target.checked});
+            LocalSave.setStringToStorage(LOCAL_STORAGE_ID, "" + result);
+          }}/>
+          <label htmlFor="option-skipwelcome">{I18N.toString("options.skipwelcome")}</label>
+        </div>
 
         <hr/>
 
@@ -317,18 +333,21 @@ class OptionsPanel extends React.Component
               }}>{I18N.toString("action.options.reset")}</button>
             </div>
           }
-
-          <hr/>
         </div>
 
-        <div className="panel-checkbox">
-          <input id="option-skipwelcome" type="checkbox" checked={this.state.skipWelcome}
-          onChange={(e) => {
-            const result = e.target.checked;
-            this.setState({skipWelcome: e.target.checked});
-            LocalSave.setStringToStorage(LOCAL_STORAGE_ID, "" + result);
-          }}/>
-          <label htmlFor="option-skipwelcome">{I18N.toString("options.skipwelcome")}</label>
+        <hr/>
+
+        <div>
+          <h2>Experimental</h2>
+          <label htmlFor="options-experimental-modules">Module</label>
+          <select id="options-experimental-modules" className="panel-select" value={this.props.app.getCurrentModule().getModuleName()} onChange={this.onChangeModule}>
+            <option value="fsa">Finite State Automata</option>
+            <option value="pda" disabled={true}>Pushdown Automata (Coming Soon)</option>
+            <option value="cfg" disabled={true}>Context-Free Grammar (Future)</option>
+            <option value="tm" disabled={true}>Turing Machine (Future)</option>
+            <option value="rdt" disabled={true}>Red-Black Tree (Future)</option>
+            <option value="hlsm" disabled={true}>High Level State Machine (Future)</option>
+          </select>
         </div>
 
       </div>

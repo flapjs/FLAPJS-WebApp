@@ -10,7 +10,6 @@ import InputController from 'controller/InputController.js';
 
 import HotKeys from './HotKeys.js';
 import LocalSave from 'system/localsave/LocalSave.js';
-import * as FlapSaver from 'util/FlapSaver.js';
 
 import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
@@ -135,19 +134,23 @@ class App extends React.Component
 
   onLoadSave()
   {
-    const data = LocalSave.loadFromStorage("graph");
+    const moduleName = this._module.getModuleName();
+
+    const data = LocalSave.loadFromStorage("graph-" + moduleName);
     if (data)
     {
-      FlapSaver.loadFromJSON(data, this.getCurrentModule().getGraphParser().JSON, this.graphController, this.machineController);
+      const exporter = this._module.getDefaultGraphExporter();
+      exporter.importFromData(data, this);
     }
   }
 
   onAutoSave()
   {
-    const graph = this.graphController.getGraph();
-    const graphData = this.getCurrentModule().getGraphParser().JSON.objectify(graph);
-    const data = FlapSaver.saveToJSON(graphData, this.graphController, this.machineController);
-    LocalSave.saveToStorage("graph", data);
+    const moduleName = this._module.getModuleName();
+
+    const exporter = this._module.getDefaultGraphExporter();
+    const data = exporter.exportToData(this);
+    LocalSave.saveToStorage("graph-" + moduleName, data);
   }
 
   //Called to prevent default file open

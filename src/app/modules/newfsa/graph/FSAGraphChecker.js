@@ -1,3 +1,5 @@
+const EDGE_SYMBOL_SEPARATOR = ' ';
+
 export function checkErrors(graph)
 {
   const errors = [];
@@ -18,57 +20,74 @@ export function getUnreachableStates(graph)
 
 export function getMissingTransitions(graph)
 {
-  for(const node of graph.getNodes())
-  {
-    
-  }
-  for(const state of fsa.getStates())
-  {
-
-  }
+  
 }
 
 export function getDuplicateStates(graph)
 {
-  const result = new Map();
-  const stateLabels = new Set();
-  for(const state of fsa.getStates())
+  const nodeMapping = new Map();
+  const nodeLabels = new Set();
+  for(const node of graph.getNodes())
   {
-    const label = state.getStateLabel();
-    if (stateLabels.has(label))
+    const label = node.getNodeLabel();
+    if (nodeLabels.has(label))
     {
-      if (result.has(label))
+      let nodes;
+      if (nodeMapping.has(label))
       {
-        const states = result.get(label);
-        states.push(state);
+        nodes = nodeMapping.get(label);
       }
       else
       {
-        const states = [state];
-        result.set(label, states);
+        nodeMapping.set(label, nodes = []);
       }
+      nodes.push(state);
     }
     else
     {
-      stateLabels.add(label);
+      nodeLabels.add(label);
     }
   }
-  return result;
+  return nodeMapping;
 }
 
 export function getDuplicateTransitions(graph)
 {
+  const result = [];
+  const edgeMapping = new Map();
+  for(const edge of graph.getEdges())
+  {
+    const source = edge.getSourceNode();
+    const symbols = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
+    for(const symbol of symbols)
+    {
+      let edgeSources;
+      if (edgeMapping.has(symbol))
+      {
+        edgeSources = edgeMapping.get(symbol);
+      }
+      else
+      {
+        edgeMapping.set(symbol, edgeSources = new Set());
+      }
 
+      if (edgeSources.has(source))
+      {
+        result.push([edge, symbol]);
+      }
+    }
+    //TODO: ...
+  }
 }
 
 export function getEmptyTransitions(graph)
 {
   const result = [];
-  for(const transition of fsa.getTransitions())
+  for(const edge of graph.getEdges())
   {
-    if (transition.hasSymbol(FSA.EMPTY_SYMBOL))
+    if (edge.getEdgeLabel().includes(FSA.EMPTY_SYMBOL))
     {
-      result.push(transition);
+      result.push(edge);
     }
   }
   return result;
@@ -77,11 +96,11 @@ export function getEmptyTransitions(graph)
 export function getPlaceholderTransitions(graph)
 {
   const result = [];
-  for(const transition of fsa.getTransitions())
+  for(const edge of graph.getEdges())
   {
-    if (transition.getDestin)
+    if (!edge.getDestinationNode())
     {
-      result.push(transition);
+      result.push(edge);
     }
   }
   return result;
@@ -116,9 +135,6 @@ class FSAErrorChecker
   checkDFAErrors()
   {
     this._errors.length = 0;
-
-    const nodeTransitions = new Map();
-
     return this._errors;
   }
 
@@ -128,4 +144,5 @@ class FSAErrorChecker
     return this._errors;
   }
 }
+
 export default FSAErrorChecker;
