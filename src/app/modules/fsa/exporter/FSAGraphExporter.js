@@ -5,7 +5,7 @@ import * as FlapSaver from 'util/FlapSaver.js';
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import Downloader from 'util/Downloader.js';
 
-class DefaultGraphExporter extends GraphExporter
+class FSAGraphExporter extends GraphExporter
 {
   constructor() { super(); }
 
@@ -33,7 +33,53 @@ class DefaultGraphExporter extends GraphExporter
   //Override
   importFromFile(fileBlob, app)
   {
+    return new Promise((resolve, reject) => {
+      const filename = fileBlob.name;
+      if (!filename.endsWith(this.getFileType()))
+      {
+        throw new Error("Trying to import invalid file type for \'" + this.getFileType() + "\': " + filename);
+      }
+      
+      const reader = new FileReader();
+      reader.onload = e => {
+        const data = e.target.result;
+        const name = filename.substring(0, filename.length - this.getFileType().length - 1);
+        const graph = app.graphController.getGraph();
 
+        //TODO: this should not be here, this should exist somewhere in graphController
+        app.graphController.emit("userPreImportGraph", graph);
+
+        try
+        {
+          const jsonData = JSON.parse(data);
+          FlapSaver.loadFromJSON(jsonData, JSONGraphParser, app.graphController, app.machineController);
+
+          app.graphController.emit("userImportGraph", graph);
+
+          if (app.machineController)
+          {
+            app.machineController.setMachineName(name);
+          }
+
+          resolve();
+        }
+        catch (e)
+        {
+          reader.abort();
+          reject(e);
+        }
+        finally
+        {
+          app.graphController.emit("userPostImportGraph", graph);
+        }
+      };
+
+      reader.onerror = e => {
+        reject(new Error("Unable to import file: " + e.target.error.code));
+      }
+
+      reader.readAsText(fileBlob);
+    });
   }
 
   //Override
@@ -49,9 +95,9 @@ class DefaultGraphExporter extends GraphExporter
       timestamp: new Date().toString()
     };
     */
-    
+
     const jsonString = JSON.stringify(FlapSaver.saveToJSON(graphData, app.graphController, app.machineController));
-    Downloader.downloadText(filename + '.' + this.getFileType(), jsonString);
+    Downloader.downloadText(filename + '.fsa.' + this.getFileType(), jsonString);
   }
 
   //Override
@@ -81,7 +127,7 @@ class DefaultGraphExporter extends GraphExporter
   //Override
   getFileType()
   {
-    return "fsa.json";
+    return "json";
   }
 
   //Override
@@ -91,4 +137,4 @@ class DefaultGraphExporter extends GraphExporter
   }
 }
 
-export default DefaultGraphExporter;
+export default FSAGraphExporter;

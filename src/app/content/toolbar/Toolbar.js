@@ -62,6 +62,7 @@ class Toolbar extends React.Component
 
   render()
   {
+    const app = this.props.app;
     const graphController = this.props.graphController;
     const machineController = this.props.machineController;
     const eventManager = this.props.eventManager;
@@ -131,6 +132,7 @@ class Toolbar extends React.Component
         </IconButton>
         {/*Upload Button*/}
         <UploadButton className="navicon" id="toolbar-upload" title={I18N.toString("action.toolbar.uploadmachine")}
+          app={app}
           graphController={graphController}>
           <UploadIcon/>
         </UploadButton>

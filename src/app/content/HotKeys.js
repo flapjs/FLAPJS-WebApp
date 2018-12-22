@@ -1,6 +1,3 @@
-import Downloader from 'util/Downloader.js';
-import * as FlapSaver from 'util/FlapSaver.js';
-
 class HotKeys
 {
   constructor(events)
@@ -38,12 +35,9 @@ class HotKeys
     if (event.which == 83 && (event.metaKey || event.ctrlKey))
     {
       //Save as machine file
-      //TODO: Refer to export panel
-      const graph = this.graphController.getGraph();
-      const graphData = this.app.getCurrentModule().getGraphParser().JSON.objectify(graph);
-      const jsonString = JSON.stringify(FlapSaver.saveToJSON(graphData, this.graphController, this.machineController));
+      const exporter = this.app.getCurrentModule().getDefaultGraphExporter();
       const machineName = this.machineController.getMachineName();
-      Downloader.downloadText(machineName + '.json', jsonString);
+      exporter.exportToFile(machineName, this.app);
 
       e.preventDefault();
       e.stopPropagation();
@@ -70,12 +64,9 @@ class HotKeys
     else if (event.which == 80 && (event.metaKey || event.ctrlKey))
     {
       //Export to PNG
-      //TODO: Refer to export panel
-      const workspaceDim = this.workspace.ref.viewBox.baseVal;
-      const width = workspaceDim.width;
-      const height = workspaceDim.height;
-      const svg = this.workspace.getSVGForExport(width, height);
-      Downloader.downloadSVG(this.machineController.getMachineName(), 'png', svg, width, height);
+      const exporter = this.app.getCurrentModule().getDefaultImageExporter();
+      const machineName = this.machineController.getMachineName();
+      exporter.exportToFile(machineName, this.app);
 
       e.preventDefault();
       e.stopPropagation();

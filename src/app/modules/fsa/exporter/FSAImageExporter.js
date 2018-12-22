@@ -4,7 +4,7 @@ import PNGIcon from 'icons/flat/PNGIcon.js';
 import JPGIcon from 'icons/flat/JPGIcon.js';
 import Downloader from 'util/Downloader.js';
 
-class ImageGraphExporter extends GraphExporter
+class FSAImageExporter extends GraphExporter
 {
   constructor(imageType='png')
   {
@@ -70,4 +70,4 @@ class ImageGraphExporter extends GraphExporter
   }
 }
 
-export default ImageGraphExporter;
+export default FSAImageExporter;

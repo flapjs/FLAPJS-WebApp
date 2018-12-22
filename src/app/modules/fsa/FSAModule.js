@@ -12,16 +12,16 @@ import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
 import FSABuilder from './builder/FSABuilder.js';
 import GraphLayout from './graph/GraphLayout.js';
 
-import DefaultGraphExporter from './exporter/DefaultGraphExporter.js';
+import FSAGraphExporter from './exporter/FSAGraphExporter.js';
+import FSAImageExporter from './exporter/FSAImageExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
-import ImageGraphExporter from './exporter/ImageGraphExporter.js';
 
 const VERSION = "0.0.1";
 const PANELS = [TestingPanel, OverviewPanel, AnalysisPanel];
 const EXPORTERS = [
-  new DefaultGraphExporter(),
-  new ImageGraphExporter('png'),
-  new ImageGraphExporter('jpg'),
+  new FSAGraphExporter(),
+  new FSAImageExporter('png'),
+  new FSAImageExporter('jpg'),
   new JFLAPGraphExporter()
 ];
 
@@ -75,16 +75,6 @@ class FSAModule extends BaseModule
     return NodalGraphRenderer;
   }
 
-  getDefaultGraphExporter()
-  {
-    return EXPORTERS[0];
-  }
-
-  getGraphExporters()
-  {
-    return EXPORTERS;
-  }
-
   getGraphParser()
   {
     return FSAGraphParser;
@@ -100,6 +90,25 @@ class FSAModule extends BaseModule
     return this._machineBuilder.formatAlphabetString.bind(this._machineBuilder);
   }
 
+  //Override
+  getDefaultGraphExporter()
+  {
+    return EXPORTERS[0];
+  }
+
+  //Override
+  getDefaultImageExporter()
+  {
+    return EXPORTERS[1];
+  }
+
+  //Override
+  getGraphExporters()
+  {
+    return EXPORTERS;
+  }
+
+  //Override
   getModuleVersion()
   {
     return VERSION;

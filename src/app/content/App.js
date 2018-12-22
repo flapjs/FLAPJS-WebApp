@@ -211,8 +211,7 @@ class App extends React.Component
         const file = ev.dataTransfer.items[0];
         if (file.kind === 'file')
         {
-          const data = file.getAsFile();
-          this.graphController.getUploader().uploadFileGraph(data);
+          this.props.app.getCurrentModule().tryImportFromFile(file.getAsFile(), this);
         }
       }
     }
@@ -223,8 +222,7 @@ class App extends React.Component
       //Just get the first one
       if (length >= 1)
       {
-        const data = ev.dataTransfer.files[0];
-        this.graphController.getUploader().uploadFileGraph(data);
+        this.props.app.getCurrentModule().tryImportFromFile(ev.dataTransfer.files[0], this);
       }
     }
 
@@ -294,6 +292,7 @@ class App extends React.Component
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar ref={ref=>this.toolbar=ref}
+        app={this}
         eventManager={this.eventManager}
         drawer={this.drawer}
         graphController={graphController}

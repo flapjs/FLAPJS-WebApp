@@ -2,8 +2,6 @@ import Config from 'config.js';
 
 import Eventable from 'util/Eventable.js';
 
-import Uploader from './Uploader.js';
-
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 
 const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
@@ -19,7 +17,6 @@ class GraphController
 
     this.labelEditor = null;
     this.tester = null;
-    this.uploader = new Uploader(this);
 
     this.prevQuad = {
       radians: 0, length: 0,
@@ -116,9 +113,6 @@ class GraphController
 
     this.inputController = app.inputController;
     this.machineController = app.machineController;
-
-    this.uploader.setMachineController(this.machineController);
-    this.uploader.setApp(app);
   }
 
   destroy()
@@ -133,11 +127,6 @@ class GraphController
   getLabelEditor()
   {
     return this.labelEditor;
-  }
-
-  getUploader()
-  {
-    return this.uploader;
   }
 
   applyAutoLayout()
