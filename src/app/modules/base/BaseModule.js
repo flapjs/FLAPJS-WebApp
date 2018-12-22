@@ -1,34 +1,22 @@
+import GraphImporter from './GraphImporter.js';
+
 const DEFAULT_PANELS = [];
 const DEFAULT_EXPORTERS = [];
 
 class BaseModule
 {
-  constructor() {}
+  constructor()
+  {
+    this._importer = new GraphImporter(this);
+  }
 
   initialize(app) {}
 
   destroy(app) {}
 
-  tryImportFromFile(fileBlob, app)
+  getGraphImporter()
   {
-    if (!fileBlob) throw new Error("Unable to import null file");
-    if (!(fileBlob instanceof File)) throw new Error("Unable to import object as file");
-
-    let result = Promise.reject();
-    const fileName = fileBlob.name;
-    const exporters = this.getGraphExporters();
-
-    for(const exporter of exporters)
-    {
-      if (exporter.canImport() && exporter.doesSupportFile() && fileName.endsWith(exporter.getFileType()))
-      {
-        result = result.catch(e => exporter.importFromFile(fileBlob, app));
-      }
-    }
-
-    return result.catch(e => {
-      throw new Error("Cannot find valid exporter for file: " + fileName);
-    });
+    return this._importer;
   }
 
   getDefaultGraphExporter()

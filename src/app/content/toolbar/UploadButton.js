@@ -14,7 +14,7 @@ class UploadButton extends React.Component
     const files = e.target.files;
     if (files.length > 0)
     {
-      this.props.app.getCurrentModule().tryImportFromFile(files[0], this.props.app);
+      this.props.app.getCurrentModule().getGraphImporter().importFile(files[0], this.props.app);
 
       //Makes sure you can upload the same file again.
       e.target.value = "";
@@ -23,10 +23,6 @@ class UploadButton extends React.Component
 
   render()
   {
-    const validFileExts = this.props.app.getCurrentModule().getGraphExporters().map(e => {
-      if (!e.canImport() || !e.doesSupportFile()) return null;
-      return '.' + e.getFileType();
-    });
     const inputID = this.props.id + "-input";
     return <button
       className={"icon-button button-upload " + this.props.className}
@@ -38,7 +34,7 @@ class UploadButton extends React.Component
       <input id={inputID} type="file" name="import"
         style={{display:"none"}}
         onChange={this.onUploadFileChange}
-        accept={validFileExts.join(",")}/>
+        accept={this.props.app.getCurrentModule().getGraphImporter().getImportFileTypes().join(",")}/>
       <label htmlFor={inputID}>
         {this.props.children}
       </label>
