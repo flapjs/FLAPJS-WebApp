@@ -3,6 +3,7 @@ import './LabelEditor.css';
 
 import Config from 'config.js';
 import { EMPTY } from 'machine/Symbols.js';
+import { SYMBOL_SEPARATOR } from 'modules/fsa/graph/FSAEdge.js';
 
 import FormattedInput from 'system/formattedinput/FormattedInput.js';
 
@@ -14,8 +15,6 @@ const DELETE_FORWARD_KEY = 46;
 
 const RECOMMENDED_SYMBOLS = ["0", "1"];
 const DEFAULT_SYMBOLS = [EMPTY];
-
-const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class LabelEditor extends React.Component
 {
@@ -120,7 +119,7 @@ class LabelEditor extends React.Component
 
   appendSymbol(symbol)
   {
-    this.inputElement.appendValue(symbol, EDGE_SYMBOL_SEPARATOR);
+    this.inputElement.appendValue(symbol, SYMBOL_SEPARATOR);
     this.inputElement.focus(false);
   }
 

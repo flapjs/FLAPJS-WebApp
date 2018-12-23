@@ -7,8 +7,6 @@ import StateMissingTransitionErrorMessage from 'modules/fsa/notifications/StateM
 import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
 import StateErrorMessage from 'modules/fsa/notifications/StateErrorMessage.js';
 
-const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
-
 class DFAErrorChecker
 {
   constructor(machineBuilder, graph)
@@ -66,7 +64,7 @@ class DFAErrorChecker
       {
         const from = edge.getSourceNode();
         const to = edge.getDestinationNode();
-        const labels = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
+        const labels = edge.getEdgeSymbolsFromLabel();
 
         for(const label of labels)
         {
@@ -190,7 +188,7 @@ class DFAErrorChecker
 
     return result;
   }
-  
+
   getUnreachableNodes() {
     const graph = this.graph;
     const machine = this.machineBuilder.getMachine();

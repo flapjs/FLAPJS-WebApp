@@ -2,8 +2,6 @@ import React from 'react';
 
 import Config from 'config.js';
 
-const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
-
 class EdgeRenderer extends React.Component
 {
   constructor(props)
@@ -45,7 +43,7 @@ class EdgeRenderer extends React.Component
     }
 
     //Draw multiple labels
-    const labels = label.split(EDGE_SYMBOL_SEPARATOR);
+    const labels = edge.getEdgeSymbolsFromLabel();
     let dy = 0;
 
     const cx = (center && center.x || 0);

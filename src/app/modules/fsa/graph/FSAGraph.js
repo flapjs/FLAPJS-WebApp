@@ -1,9 +1,8 @@
 import NodalGraph from 'graph/NodalGraph.js';
 import FSANode from './FSANode.js';
-import FSAEdge from './FSAEdge.js';
+import FSAEdge, { SYMBOL_SEPARATOR } from './FSAEdge.js';
 import { guid } from 'util/MathHelper.js';
 
-const EDGE_SYMBOL_SEPARATOR = ' ';
 const PARALLEL_EDGE_HEIGHT = 10;
 
 class FSAGraph extends NodalGraph
@@ -61,7 +60,7 @@ class FSAGraph extends NodalGraph
   {
     const edgeSource = edge.getSourceNode();
     const edgeDestination = edge.getDestinationNode();
-    const edgeLabel = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
+    const edgeLabel = edge.getEdgeSymbolsFromLabel();
 
     //Look for an existing edge with similar from and to
     for(const otherEdge of this._edges)
@@ -69,11 +68,11 @@ class FSAGraph extends NodalGraph
       if (otherEdge === edge) continue;
       if (otherEdge.getSourceNode() === edgeSource && otherEdge.getDestinationNode() === edgeDestination)
       {
-        const otherEdgeLabel = otherEdge.getEdgeLabel();
+        const otherSymbols = otherEdge.getEdgeSymbolsFromLabel();
         if (edgeLabel.length > 0)
         {
-          const result = otherEdgeLabel.split(EDGE_SYMBOL_SEPARATOR).concat(edgeLabel);
-          otherEdge.setEdgeLabel(result.join(EDGE_SYMBOL_SEPARATOR));
+          const result = otherSymbols.concat(edgeLabel);
+          otherEdge.setEdgeLabel(result.join(SYMBOL_SEPARATOR));
         }
 
         //Merged with newfound edge...

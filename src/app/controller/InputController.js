@@ -7,8 +7,6 @@ import GraphPicker from './GraphPicker.js';
 import Node from 'modules/fsa/graph/FSANode.js';
 import Edge from 'modules/fsa/graph/FSAEdge.js';
 
-const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
-
 class InputController
 {
   constructor()

@@ -1,7 +1,7 @@
 import FSAGraph from './FSAGraph.js';
+import { SYMBOL_SEPARATOR } from './FSAEdge.js';
 
 const GRAPH_PARSER_VERSION = "1.0.0";
-const EDGE_SYMBOL_SEPARATOR = ' ';
 
 export const JSON = {
   parse(data, dst=null)
@@ -293,7 +293,7 @@ export const XML = {
         }
       }
 
-      const transitionID = sourceID + " " + destinationID;
+      const transitionID = sourceID + "\n" + destinationID;
       let symbols;
       if (transitionMapping.has(transitionID))
       {
@@ -309,11 +309,11 @@ export const XML = {
 
     for(const transitionKey of transitionMapping.keys())
     {
-      const key = transitionKey.split(" ");
+      const key = transitionKey.split("\n");
       if (key.length !== 2) continue;
 
       const symbols = transitionMapping.get(transitionKey);
-      const label = symbols.join(EDGE_SYMBOL_SEPARATOR);
+      const label = symbols.join(SYMBOL_SEPARATOR);
       //Should never be null, since it was checked before...
       const sourceNode = nodeElementIDs.get(key[0]);
       const destinationNode = nodeElementIDs.get(key[1]);
@@ -384,7 +384,7 @@ export const XML = {
 
     for(let edge of graphEdges)
     {
-      const symbols = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
+      const symbols = edge.getEdgeSymbolsFromLabel();
       for(let symbol of symbols)
       {
         //transition tag

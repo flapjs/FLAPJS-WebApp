@@ -1,5 +1,3 @@
-const EDGE_SYMBOL_SEPARATOR = ' ';
-
 export function checkErrors(graph)
 {
   const errors = [];
@@ -20,7 +18,7 @@ export function getUnreachableStates(graph)
 
 export function getMissingTransitions(graph)
 {
-  
+
 }
 
 export function getDuplicateStates(graph)
@@ -58,7 +56,7 @@ export function getDuplicateTransitions(graph)
   for(const edge of graph.getEdges())
   {
     const source = edge.getSourceNode();
-    const symbols = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
+    const symbols = edge.getEdgeSymbolsFromLabel();
     for(const symbol of symbols)
     {
       let edgeSources;

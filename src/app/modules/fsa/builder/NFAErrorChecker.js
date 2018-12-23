@@ -5,8 +5,6 @@ import Notifications from 'system/notification/Notifications.js';
 import StateUnreachableWarningMessage from 'modules/fsa/notifications/StateUnreachableWarningMessage.js';
 import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
 
-const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
-
 class NFAErrorChecker
 {
   constructor(machineBuilder, graph)
@@ -60,7 +58,7 @@ class NFAErrorChecker
       {
         const from = edge.getSourceNode();
         const to = edge.getDestinationNode();
-        const labels = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
+        const labels = edge.getEdgeSymbolsFromLabel();
 
         for(const label of labels)
         {

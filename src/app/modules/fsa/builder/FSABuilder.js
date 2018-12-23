@@ -6,10 +6,8 @@ import NFAErrorChecker from './NFAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
 import Node from 'modules/fsa/graph/FSANode.js';
-
+import { SYMBOL_SEPARATOR } from 'modules/fsa/graph/FSAEdge.js';
 import { EMPTY } from 'machine/Symbols.js';
-
-const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class FSABuilder extends MachineBuilder
 {
@@ -110,7 +108,7 @@ class FSABuilder extends MachineBuilder
 
   formatAlphabetString(string, allowNull=false)
   {
-    const symbols = string.split(EDGE_SYMBOL_SEPARATOR);
+    const symbols = string.split(SYMBOL_SEPARATOR);
     const result = new Set();
 
     let symbol = "";
@@ -146,7 +144,7 @@ class FSABuilder extends MachineBuilder
 
     //If it is an empty string...
     if (result.size === 0) return allowNull ? null : EMPTY;
-    return Array.from(result).join(EDGE_SYMBOL_SEPARATOR);
+    return Array.from(result).join(SYMBOL_SEPARATOR);
   }
 
   setMachineType(machineType)
@@ -279,7 +277,7 @@ function fillFSA(graph, fsa)
     const to = edge.getDestinationNode();
     if (from instanceof Node && to instanceof Node)
     {
-      const labels = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
+      const labels = edge.getEdgeSymbolsFromLabel();
       for(const label of labels)
       {
         try
