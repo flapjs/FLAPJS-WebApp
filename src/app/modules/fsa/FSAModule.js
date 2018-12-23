@@ -13,21 +13,18 @@ import FSABuilder from './builder/FSABuilder.js';
 import GraphLayout from './graph/GraphLayout.js';
 
 import FSAGraphExporter from './exporter/FSAGraphExporter.js';
-import FSAImageExporter from './exporter/FSAImageExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
 
 const VERSION = "0.0.1";
 const PANELS = [TestingPanel, OverviewPanel, AnalysisPanel];
 const EXPORTERS = [
   new FSAGraphExporter(),
-  new FSAImageExporter('png'),
-  new FSAImageExporter('jpg'),
   new JFLAPGraphExporter()
 ];
 
 class FSAModule extends BaseModule
 {
-  constructor()
+  constructor(app)
   {
     super();
     this._graph = new FSAGraph();
@@ -35,6 +32,10 @@ class FSAModule extends BaseModule
 
     this._refreshRate = 60;
     this._ticks = 0;
+
+    this._machineController = app.machineController;
+    this._graphController = app.graphController;
+    this._inputController = app.inputController;
   }
 
   //Override
@@ -91,15 +92,27 @@ class FSAModule extends BaseModule
   }
 
   //Override
-  getDefaultGraphExporter()
+  getInputController()
   {
-    return EXPORTERS[0];
+    return this._inputController;
   }
 
   //Override
-  getDefaultImageExporter()
+  getGraphController()
   {
-    return EXPORTERS[1];
+    return this._graphController;
+  }
+
+  //Override
+  getMachineController()
+  {
+    return this._machineController;
+  }
+
+  //Override
+  getDefaultGraphExporter()
+  {
+    return EXPORTERS[0];
   }
 
   //Override
@@ -115,7 +128,7 @@ class FSAModule extends BaseModule
   }
 
   //Override
-  getModuleTitlePanel()
+  getDefaultModulePanel()
   {
     return AboutPanel;
   }

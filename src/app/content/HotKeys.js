@@ -64,9 +64,17 @@ class HotKeys
     else if (event.which == 80 && (event.metaKey || event.ctrlKey))
     {
       //Export to PNG
-      const exporter = this.app.getCurrentModule().getDefaultImageExporter();
-      const machineName = this.machineController.getMachineName();
-      exporter.exportToFile(machineName, this.app);
+      const imageExporters = this.app.getCurrentModule().getImageExporters();
+      if (imageExporter.length >= 1)
+      {
+        const exporter = imageExporters[0];
+        const machineName = this.machineController.getMachineName();
+        exporter.exportToFile(machineName, this.app);
+      }
+      else
+      {
+        throw new Error("Unable to find valid image exporter for module \'" + this.app.getCurrentModule().getModuleName() + "\'");
+      }
 
       e.preventDefault();
       e.stopPropagation();

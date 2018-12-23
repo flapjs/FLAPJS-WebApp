@@ -12,10 +12,29 @@ class ExportingPanel extends React.Component
 
     this.container = null;
   }
-  
+
+  renderExporterButton(exporter)
+  {
+    if (!exporter.doesSupportFile()) return null;
+    return <IconButton key={exporter.getFileType()}
+      className="export-button"
+      id={"export-" + exporter.getFileType()}
+      title={exporter.getTitle()}
+      onClick={() => {
+        const filename = this.props.machineController.getMachineName();
+        exporter.exportToFile(filename, this.props.app);
+      }}>
+      { React.createElement(exporter.getIconComponentClass()) }
+      <label>{ exporter.getLabel() }</label>
+    </IconButton>;
+  }
+
+  //Override
   render()
   {
-    const exporters = this.props.app.getCurrentModule().getGraphExporters();
+    const module = this.props.app.getCurrentModule();
+    const graphExporters = module.getGraphExporters();
+    const imageExporters = module.getImageExporters();
 
     return <div className="panel-container" id="exporting" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title">
@@ -23,20 +42,10 @@ class ExportingPanel extends React.Component
       </div>
       <div className="panel-content">
       {
-        this.props.app.getCurrentModule().getGraphExporters().map(e => {
-          if (!e.doesSupportFile()) return null;
-          return <IconButton key={e.getFileType()}
-            className="export-button"
-            id={"export-" + e.getFileType()}
-            title={e.getTitle()}
-            onClick={() => {
-              const filename = this.props.machineController.getMachineName();
-              e.exportToFile(filename, this.props.app);
-            }}>
-            { React.createElement(e.getIconComponentClass()) }
-            <label>{ e.getLabel() }</label>
-          </IconButton>;
-        })
+        graphExporters.map(e => this.renderExporterButton(e))
+      }
+      {
+        imageExporters.map(e => this.renderExporterButton(e))
       }
         <hr/>
         {/*Save to E-mail*/}

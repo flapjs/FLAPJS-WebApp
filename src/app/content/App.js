@@ -35,12 +35,12 @@ class App extends React.Component
     this.drawer = null;
     this.toolbar = null;
 
-    this._module = new FSAModule();
     this.testingManager = new TestingManager();
 
     this.inputController = new InputController();
     this.graphController = new GraphController();
     this.machineController = new MachineController();
+    this._module = new FSAModule(this);
 
     this.inputController.setModule(this._module);
     this.graphController.setModule(this._module);

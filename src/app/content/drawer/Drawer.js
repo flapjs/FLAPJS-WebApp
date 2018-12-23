@@ -195,7 +195,7 @@ class Drawer extends React.Component
     const machineController = this.props.machineController;
 
     const tabIndex = this.state.tabIndex;
-    const InfoPanel = currentModule ? currentModule.getModuleTitlePanel() : null;
+    const InfoPanel = currentModule ? currentModule.getDefaultModulePanel() : null;
 
     return <div className={"drawer-container"} onWheel={this.onScroll}>
       <div className="drawer-content">

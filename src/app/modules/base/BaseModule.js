@@ -1,7 +1,12 @@
 import GraphImporter from './exporter/GraphImporter.js';
+import GraphImageExporter from './exporter/GraphImageExporter.js';
 
 const DEFAULT_PANELS = [];
-const DEFAULT_EXPORTERS = [];
+const DEFAULT_GRAPH_EXPORTERS = [];
+const DEFAULT_IMAGE_EXPORTERS = [
+  new GraphImageExporter('png'),
+  new GraphImageExporter('jpg')
+];
 
 class BaseModule
 {
@@ -14,6 +19,21 @@ class BaseModule
 
   destroy(app) {}
 
+  getInputController()
+  {
+    throw new Error("Missing input controller for module \'" + this.getModuleName() + "\'");
+  }
+
+  getGraphController()
+  {
+    throw new Error("Missing graph controller for module \'" + this.getModuleName() + "\'");
+  }
+
+  getMachineController()
+  {
+    throw new Error("Missing machine controller for module \'" + this.getModuleName() + "\'");
+  }
+
   getGraphImporter()
   {
     return this._importer;
@@ -21,20 +41,23 @@ class BaseModule
 
   getDefaultGraphExporter()
   {
+    const exporters = this.getGraphExporters();
+    if (exporters.length >= 0) return exporters[0];
+
     throw new Error("Missing default graph exporter for module \'" + this.getModuleName() + "\'");
   }
 
-  getDefaultImageExporter()
+  getImageExporters()
   {
-    throw new Error("Missing default image exporter for module \'" + this.getModuleName() + "\'");
+    return DEFAULT_IMAGE_EXPORTERS;
   }
 
   getGraphExporters()
   {
-    return DEFAULT_EXPORTERS;
+    return DEFAULT_GRAPH_EXPORTERS;
   }
 
-  getModuleTitlePanel()
+  getDefaultModulePanel()
   {
     return null;
   }

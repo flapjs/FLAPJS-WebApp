@@ -42,7 +42,8 @@ window.addEventListener('beforeunload', (event) => {
 window.isUpdateAvailable.then(hasUpdate => {
   if (hasUpdate)
   {
-    window.alert("*** Update " + process.env.VERSION + " is here! *** \n Please restart the browser.");
+    console.log("[App] Found update for version " + process.env.VERSION + "...");
+    window.alert("*** New update available! *** \n Please restart the browser.");
   }
 });
 
