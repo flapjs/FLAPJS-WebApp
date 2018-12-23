@@ -201,6 +201,7 @@ class App extends React.Component
       };
     });
 
+    let fileBlob = null;
     if (ev.dataTransfer.items)
     {
       const length = ev.dataTransfer.items.length;
@@ -211,7 +212,7 @@ class App extends React.Component
         const file = ev.dataTransfer.items[0];
         if (file.kind === 'file')
         {
-          this.props.app.getCurrentModule().getGraphImporter().importFile(file.getAsFile(), this);
+          fileBlob = file.getAsFile();
         }
       }
     }
@@ -222,8 +223,16 @@ class App extends React.Component
       //Just get the first one
       if (length >= 1)
       {
-        this.props.app.getCurrentModule().getGraphImporter().importFile(ev.dataTransfer.files[0], this);
+        fileBlob = ev.dataTransfer.files[0];
       }
+    }
+
+    if (fileBlob)
+    {
+      this.props.app.getCurrentModule().getGraphImporter().importFile(fileBlob, this)
+        .catch((e) => {
+          Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
+        });
     }
 
     if (ev.dataTransfer.items)

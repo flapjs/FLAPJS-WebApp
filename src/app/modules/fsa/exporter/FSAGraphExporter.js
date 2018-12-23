@@ -1,7 +1,6 @@
 import GraphExporter from 'modules/base/exporter/GraphExporter.js';
 
 import JSONIcon from 'icons/flat/JSONIcon.js';
-import * as FlapSaver from 'util/FlapSaver.js';
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import Downloader from 'util/Downloader.js';
 
@@ -9,10 +8,64 @@ class FSAGraphExporter extends GraphExporter
 {
   constructor() { super(); }
 
+  fromJSON(data, app)
+  {
+    const graphController = app.graphController;
+    const machineController = app.machineController;
+    const machineBuilder = machineController.getMachineBuilder();
+    const graph = graphController.getGraph();
+
+    const metadata = '_metadata' in data ? data['_metadata'] : {};
+    const newGraph = JSONGraphParser.parse(data.graphData, graph);
+
+    //HACK: this should be calculated elsewhere
+    const machineData = data.machineData;
+    const machineName = machineData.name;
+    if (machineName) machineController.setMachineName(machineName);
+    const machineType = machineData.type;
+    if (machineType) machineController.setMachineType(machineType);
+    const customSymbols = machineData.symbols;
+    if (customSymbols)
+    {
+      machineBuilder._symbols.length = 0;
+      for(const symbol of customSymbols)
+      {
+        machineBuilder._symbols.push(symbol);
+      }
+    }
+    const statePrefix = machineData.statePrefix;
+    if (statePrefix) machineBuilder.getLabeler().prefix = statePrefix;
+
+    return newGraph;
+  }
+
+  toJSON(graphData, app)
+  {
+    const module = app.getCurrentModule();
+    const graphController = app.graphController;
+    const machineController = app.machineController;
+    const machineBuilder = machineController.getMachineBuilder();
+
+    const dst = {};
+    dst["_metadata"] = {
+      module: module.getModuleName(),
+      version: process.env.VERSION + ":" + module.getModuleVersion(),
+      timestamp: new Date().toString()
+    };
+    dst["graphData"] = graphData;
+    dst["machineData"] = {
+      name: machineController.getMachineName(),
+      type: machineController.getMachineType(),
+      symbols: machineController.getCustomSymbols(),
+      statePrefix: machineBuilder.getLabeler().prefix
+    };
+    return dst;
+  }
+
   //Override
   importFromData(data, app)
   {
-    FlapSaver.loadFromJSON(data, JSONGraphParser, app.graphController, app.machineController);
+    this.fromJSON(data, app);
   }
 
   //Override
@@ -20,8 +73,8 @@ class FSAGraphExporter extends GraphExporter
   {
     const graph = app.graphController.getGraph();
     const graphData = JSONGraphParser.objectify(graph);
-    const data = FlapSaver.saveToJSON(graphData, app.graphController, app.machineController);
-    return data;
+    const result = this.toJSON(graphData, app);
+    return result;
   }
 
   //Override
@@ -39,7 +92,7 @@ class FSAGraphExporter extends GraphExporter
       {
         throw new Error("Trying to import invalid file type for \'" + this.getFileType() + "\': " + filename);
       }
-      
+
       const reader = new FileReader();
       reader.onload = e => {
         const data = e.target.result;
@@ -52,7 +105,8 @@ class FSAGraphExporter extends GraphExporter
         try
         {
           const jsonData = JSON.parse(data);
-          FlapSaver.loadFromJSON(jsonData, JSONGraphParser, app.graphController, app.machineController);
+
+          this.fromJSON(jsonData, app);
 
           app.graphController.emit("userImportGraph", graph);
 
@@ -87,16 +141,8 @@ class FSAGraphExporter extends GraphExporter
   {
     const graph = app.graphController.getGraph();
     const graphData = JSONGraphParser.objectify(graph);
-
-    /*
-    result['_metadata'] = {
-      module: module.getModuleName(),
-      version: process.env.VERSION + ":" + module.getModuleVersion(),
-      timestamp: new Date().toString()
-    };
-    */
-
-    const jsonString = JSON.stringify(FlapSaver.saveToJSON(graphData, app.graphController, app.machineController));
+    const dst = this.toJSON(graphData, app);
+    const jsonString = JSON.stringify(dst);
     Downloader.downloadText(filename + '.fsa.' + this.getFileType(), jsonString);
   }
 

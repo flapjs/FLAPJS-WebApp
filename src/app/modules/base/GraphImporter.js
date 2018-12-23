@@ -23,6 +23,7 @@ class GraphImporter
     }
 
     return result.catch(e => {
+      console.error(e);
       throw new Error("Cannot find valid exporter for file: " + fileName);
     });
   }

@@ -1,7 +1,6 @@
 import GraphExporter from 'modules/base/exporter/GraphExporter.js';
 
 import XMLIcon from 'icons/flat/XMLIcon.js';
-import * as FlapSaver from 'util/FlapSaver.js';
 import { XML as XMLGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import Downloader from 'util/Downloader.js';
 

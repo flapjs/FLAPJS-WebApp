@@ -65,7 +65,7 @@ class FSAModule extends BaseModule
     return this._graph;
   }
 
-  getGraphLayout()
+  getDefaultGraphLayout()
   {
     return GraphLayout;
   }
