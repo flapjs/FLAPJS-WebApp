@@ -39,6 +39,11 @@ class MachineController
     this._module = module;
   }
 
+  getModule()
+  {
+    return this._module;
+  }
+
   initialize(app)
   {
     this.graphController = app.graphController;

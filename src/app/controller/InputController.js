@@ -54,6 +54,11 @@ class InputController
     this._module = module;
   }
 
+  getModule()
+  {
+    return this._module;
+  }
+
   initialize(app)
   {
     const element = app.workspace.ref;

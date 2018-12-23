@@ -1,10 +1,10 @@
-import GraphExporter from 'modules/base/exporter/GraphExporter.js';
+import AbstractGraphExporter from 'modules/base/exporter/AbstractGraphExporter.js';
 
 import XMLIcon from 'icons/flat/XMLIcon.js';
 import { XML as XMLGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import Downloader from 'util/Downloader.js';
 
-class JFLAPGraphExporter extends GraphExporter
+class JFLAPGraphExporter extends AbstractGraphExporter
 {
   constructor() { super(); }
 

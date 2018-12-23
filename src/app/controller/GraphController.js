@@ -106,6 +106,11 @@ class GraphController
     this._module = module;
   }
 
+  getModule()
+  {
+    return this._module;
+  }
+
   initialize(app)
   {
     this.labelEditor = app.viewport.labelEditor;

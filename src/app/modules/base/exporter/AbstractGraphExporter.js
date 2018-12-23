@@ -1,4 +1,4 @@
-class GraphExporter
+class AbstractGraphExporter
 {
   constructor() {}
 
@@ -58,4 +58,4 @@ class GraphExporter
   }
 }
 
-export default GraphExporter;
+export default AbstractGraphExporter;

@@ -1,10 +1,10 @@
-import GraphExporter from 'modules/base/exporter/GraphExporter.js';
+import AbstractGraphExporter from 'modules/base/exporter/AbstractGraphExporter.js';
 
 import JSONIcon from 'icons/flat/JSONIcon.js';
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import Downloader from 'util/Downloader.js';
 
-class FSAGraphExporter extends GraphExporter
+class FSAGraphExporter extends AbstractGraphExporter
 {
   constructor() { super(); }
 

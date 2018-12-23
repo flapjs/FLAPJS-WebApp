@@ -1,4 +1,4 @@
-import GraphImporter from './GraphImporter.js';
+import GraphImporter from './exporter/GraphImporter.js';
 
 const DEFAULT_PANELS = [];
 const DEFAULT_EXPORTERS = [];

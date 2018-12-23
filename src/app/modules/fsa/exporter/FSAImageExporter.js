@@ -1,10 +1,10 @@
-import GraphExporter from 'modules/base/exporter/GraphExporter.js';
+import AbstractGraphExporter from 'modules/base/exporter/AbstractGraphExporter.js';
 
 import PNGIcon from 'icons/flat/PNGIcon.js';
 import JPGIcon from 'icons/flat/JPGIcon.js';
 import Downloader from 'util/Downloader.js';
 
-class FSAImageExporter extends GraphExporter
+class FSAImageExporter extends AbstractGraphExporter
 {
   constructor(imageType='png')
   {
