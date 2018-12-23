@@ -286,9 +286,9 @@ class App extends React.Component
   render()
   {
     const module = this._module;
-    const inputController = this.inputController;
-    const graphController = this.graphController;
-    const machineController = this.machineController;
+    const inputController = module.getInputController();
+    const graphController = module.getGraphController();
+    const machineController = module.getMachineController();
 
     const tester = this.testingManager;
     const screen = this.workspace ? this.workspace.ref : null;

@@ -4,7 +4,7 @@ import NodeRenderer from './NodeRenderer.js';
 import EdgeRenderer from './EdgeRenderer.js';
 import InitialMarkerRenderer from './InitialMarkerRenderer.js';
 
-class NodalGraphRenderer extends React.Component
+class FSAGraphRenderer extends React.Component
 {
   constructor(props)
   {
@@ -31,4 +31,4 @@ class NodalGraphRenderer extends React.Component
   }
 }
 
-export default NodalGraphRenderer;
+export default FSAGraphRenderer;

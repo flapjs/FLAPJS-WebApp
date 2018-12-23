@@ -68,8 +68,8 @@ class Workspace extends React.Component
     const inputController = this.props.inputController;
     const machineController = this.props.machineController;
     const tester = this.props.tester;
-
     const GraphRenderer = module.getGraphRenderer();
+    
     const graph = graphController.getGraph();
     const viewport = inputController.getViewport();
     const machineBuilder = machineController.getMachineBuilder();

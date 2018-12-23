@@ -5,9 +5,8 @@ import TestingPanel from './panels/testing/TestingPanel.js';
 import AnalysisPanel from './panels/analysis/AnalysisPanel.js';
 import AboutPanel from './panels/about/AboutPanel.js';
 
-import NodalGraphRenderer from './graph/renderer/NodalGraphRenderer.js';
+import FSAGraphRenderer from './graph/renderer/FSAGraphRenderer.js';
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
-import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
 
 import FSABuilder from './builder/FSABuilder.js';
 import GraphLayout from './graph/GraphLayout.js';
@@ -71,16 +70,6 @@ class FSAModule extends BaseModule
     return GraphLayout;
   }
 
-  getGraphRenderer()
-  {
-    return NodalGraphRenderer;
-  }
-
-  getGraphParser()
-  {
-    return FSAGraphParser;
-  }
-
   getMachineBuilder()
   {
     return this._machineBuilder;
@@ -92,57 +81,24 @@ class FSAModule extends BaseModule
   }
 
   //Override
-  getInputController()
-  {
-    return this._inputController;
-  }
-
+  getGraphRenderer() { return FSAGraphRenderer; }
   //Override
-  getGraphController()
-  {
-    return this._graphController;
-  }
-
+  getInputController() { return this._inputController; }
   //Override
-  getMachineController()
-  {
-    return this._machineController;
-  }
-
+  getGraphController() { return this._graphController; }
   //Override
-  getDefaultGraphExporter()
-  {
-    return EXPORTERS[0];
-  }
-
+  getMachineController() { return this._machineController; }
   //Override
-  getGraphExporters()
-  {
-    return EXPORTERS;
-  }
-
+  getDefaultGraphExporter() { return EXPORTERS[0]; }
   //Override
-  getModuleVersion()
-  {
-    return VERSION;
-  }
-
+  getGraphExporters() { return EXPORTERS; }
   //Override
-  getDefaultModulePanel()
-  {
-    return AboutPanel;
-  }
-
+  getModuleVersion() { return VERSION; }
   //Override
-  getModulePanels()
-  {
-    return PANELS;
-  }
-
+  getDefaultModulePanel() { return AboutPanel; }
   //Override
-  getModuleName()
-  {
-    return "fsa";
-  }
+  getModulePanels() { return PANELS; }
+  //Override
+  getModuleName() { return "fsa"; }
 }
 export default FSAModule;

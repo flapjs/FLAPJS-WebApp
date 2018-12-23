@@ -34,11 +34,6 @@ class BaseModule
     throw new Error("Missing machine controller for module \'" + this.getModuleName() + "\'");
   }
 
-  getGraphImporter()
-  {
-    return this._importer;
-  }
-
   getDefaultGraphExporter()
   {
     const exporters = this.getGraphExporters();
@@ -55,6 +50,16 @@ class BaseModule
   getGraphExporters()
   {
     return DEFAULT_GRAPH_EXPORTERS;
+  }
+
+  getGraphImporter()
+  {
+    return this._importer;
+  }
+
+  getGraphRenderer()
+  {
+    throw new Error("Missing graph renderer for module \'" + this.getModuleName() + "\'");
   }
 
   getDefaultModulePanel()
