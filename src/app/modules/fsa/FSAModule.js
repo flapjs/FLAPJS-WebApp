@@ -14,6 +14,7 @@ import FSAGraphRenderer from './graph/renderer/FSAGraphRenderer.js';
 import FSABuilder from './builder/FSABuilder.js';
 import GraphLayout from './graph/GraphLayout.js';
 import EventManager from './EventManager.js';
+import LabelEditor from './editor/LabelEditor.js';
 
 import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
@@ -100,6 +101,11 @@ class FSAModule extends BaseModule
   getLabelFormatter()
   {
     return this._machineBuilder.formatAlphabetString.bind(this._machineBuilder);
+  }
+
+  getLabelEditor()
+  {
+    return LabelEditor;
   }
 
   //Override

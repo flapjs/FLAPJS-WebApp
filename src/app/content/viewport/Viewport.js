@@ -1,7 +1,6 @@
 import React from 'react';
 import './Viewport.css';
 
-import LabelEditor from './LabelEditor.js';
 import TrashCan from './TrashCan.js';
 import TestTray from './TestTray.js';
 import CursorMode from './CursorMode.js';
@@ -28,6 +27,7 @@ class Viewport extends React.Component
     const machineController = this.props.machineController;
     const tester = this.props.tester;
     const screen = this.props.screen;
+    const LabelEditor = this.props.app.getCurrentModule().getLabelEditor();
 
     return <div className={"viewport-container viewport-" + this.state.mode} ref={ref=>this.ref=ref}>
       <LabelEditor ref={ref=>this.labelEditor=ref}

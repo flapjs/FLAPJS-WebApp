@@ -90,16 +90,7 @@ class InputController extends AbstractInputController
 
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
-
-    //Make sure to lose focus on label editors
-    /*
-    if (this.labelEditor.hasFocus())
-    {
-      this.labelEditor.closeEditor();
-      event.result = false;
-    }
-    */
-
+    
     if (picker.hasSelection())
     {
       //Unselect everything is clicked on something other than nodes...

@@ -14,6 +14,7 @@ const DELETE_FORWARD_KEY = 46;
 
 const RECOMMENDED_SYMBOLS = ["0", "1"];
 const DEFAULT_SYMBOLS = [EMPTY_CHAR];
+const DELETE_ON_EMPTY = true;
 
 class LabelEditor extends React.Component
 {
@@ -76,18 +77,20 @@ class LabelEditor extends React.Component
       if (saveOnExit)
       {
         let value = this.inputElement.value;
-        if (!value) value = EMPTY_CHAR;
-
         this.state.target.setEdgeLabel(value);
       }
       else
       {
         if (!this.state.target.getEdgeLabel())
         {
-          this.state.target.setEdgeLabel(EMPTY_CHAR);
+          //Make sure its empty (and let edge handle default labels)
+          this.state.target.setEdgeLabel(null);
 
           //Delete it since it is not a valid edge
-          this.props.graphController.getGraph().deleteEdge(this.state.target);
+          if (DELETE_ON_EMPTY)
+          {
+            this.props.graphController.getGraph().deleteEdge(this.state.target);
+          }
         }
       }
 
@@ -132,8 +135,9 @@ class LabelEditor extends React.Component
     }
     else
     {
+      //TODO: This was commented out for some reason...
       //Will close due to timer...
-      //this.closeEditor(false);
+      this.closeEditor(false);
     }
   }
 

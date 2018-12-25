@@ -113,11 +113,6 @@ class GraphController extends AbstractGraphController
   {
   }
 
-  getLabelEditor()
-  {
-    return this.labelEditor;
-  }
-
   applyAutoLayout()
   {
     this.emit("userPreChangeLayout", this.getGraph());

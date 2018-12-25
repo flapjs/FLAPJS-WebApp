@@ -354,6 +354,7 @@ class App extends React.Component
           }}>
 
           <Viewport ref={ref=>this.viewport=ref}
+            app={this}
             tester={tester}
             screen={screen}
             graphController={graphController}

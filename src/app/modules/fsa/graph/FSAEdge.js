@@ -10,6 +10,19 @@ class FSAEdge extends QuadraticEdge
     super(id, from, to);
   }
 
+  //Override
+  setEdgeLabel(label)
+  {
+    if (typeof label === 'string')
+    {
+      super.setEdgeLabel(label);
+    }
+    else
+    {
+      super.setEdgeLabel(EMPTY_CHAR);
+    }
+  }
+
   getEdgeSymbolsFromLabel()
   {
     return this.getEdgeLabel().split(SYMBOL_SEPARATOR);
