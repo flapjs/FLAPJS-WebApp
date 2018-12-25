@@ -1,6 +1,6 @@
 import * as TEST from '../Tester.js';
 
-import FSA from 'modules/fsa/machine/FSA.js';
+import FSA, { EMPTY_SYMBOL } from 'modules/fsa/machine/FSA.js';
 import { solveFSA } from 'modules/fsa/machine/solveFSA.js';
 
 //Regex: 1*
@@ -34,8 +34,8 @@ import { solveFSA } from 'modules/fsa/machine/solveFSA.js';
   const state2 = machine.createState("q2");
   machine.addTransition(state0, state1, "0");
   machine.addTransition(state0, state2, "1");
-  machine.addTransition(state1, state2, FSA.EMPTY_SYMBOL);
-  machine.addTransition(state1, state0, FSA.EMPTY_SYMBOL);
+  machine.addTransition(state1, state2, EMPTY_SYMBOL);
+  machine.addTransition(state1, state0, EMPTY_SYMBOL);
   machine.addTransition(state1, state1, "0");
   machine.addTransition(state1, state1, "1");
   machine.setStartState(state0);

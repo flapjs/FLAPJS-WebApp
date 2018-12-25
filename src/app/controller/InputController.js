@@ -59,11 +59,11 @@ class InputController
 
   initialize(app)
   {
-    const element = app.workspace.ref;
-    this._viewport.setElement(element);
     this._graphController = app.graphController;
 
-    this._inputAdapter.initialize(element, this._viewport);
+    const element = app.workspace.ref;
+    this._viewport.setElement(element);
+    this._inputAdapter.initialize(this._viewport);
   }
 
   destroy()
@@ -77,10 +77,9 @@ class InputController
     this._viewport.update();
 
     const graph = this._graphController.getGraph();
-    const pointer = this._inputAdapter.getPointer();
     const picker = this._picker;
-    const x = pointer.x;
-    const y = pointer.y;
+    const x = this._inputAdapter.getPointerX();
+    const y = this._inputAdapter.getPointerY();
 
     if (x != this.prevPointerX || y != this.prevPointerY)
     {

@@ -1,6 +1,7 @@
 import QuadraticEdge from 'graph/QuadraticEdge.js';
 
 export const SYMBOL_SEPARATOR = ' ';
+export const EMPTY_CHAR = '\u03B5';
 
 class FSAEdge extends QuadraticEdge
 {

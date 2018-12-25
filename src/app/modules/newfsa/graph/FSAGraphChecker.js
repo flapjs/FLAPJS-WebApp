@@ -1,3 +1,5 @@
+import FSA, { EMPTY_SYMBOL } from 'modules/fsa/machine/FSA.js';
+
 export function checkErrors(graph)
 {
   const errors = [];
@@ -83,7 +85,7 @@ export function getEmptyTransitions(graph)
   const result = [];
   for(const edge of graph.getEdges())
   {
-    if (edge.getEdgeLabel().includes(FSA.EMPTY_SYMBOL))
+    if (edge.getEdgeLabel().includes(EMPTY_SYMBOL))
     {
       result.push(edge);
     }

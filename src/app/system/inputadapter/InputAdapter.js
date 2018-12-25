@@ -20,8 +20,7 @@ class InputAdapter
       _touchend: null,
       _timer: null
     };
-
-    this._pointer = new InputPointer();
+    this._pointer = null;
 
     //Although dragging could be in pointer, it should be here to allow
     //the adapter to be independent of pointer.
@@ -59,15 +58,17 @@ class InputAdapter
     return this;
   }
 
-  initialize(element, viewport)
+  initialize(viewport)
   {
+    const element = viewport.getElement();
+    
     if (!(element instanceof SVGElement)) throw new Error("Invalid SVG element for InputAdapter");
     if (!viewport) throw new Error("Missing viewport for InputAdapter");
-    if (viewport.getElement() != element) throw new Error("Mismatched viewport for passed-in element");
     if (this._element) throw new Error("Trying to initialize an InputAdapter already initialized");
 
     this._element = element;
     this._viewport = viewport;
+    this._pointer = new InputPointer(this, element, viewport);
 
     this._element.addEventListener('mousedown', this.onMouseDown);
     this._element.addEventListener('mousemove', this.onMouseMove);
@@ -477,9 +478,14 @@ class InputAdapter
     return this._viewport;
   }
 
-  getPointer()
+  getPointerX()
   {
-    return this._pointer;
+    return this._pointer ? this._pointer.x : 0;
+  }
+
+  getPointerY()
+  {
+    return this._pointer ? this._pointer.y : 0;
   }
 
   isUsingTouch()
