@@ -738,7 +738,7 @@ class InputController
 
   isActionMode(graphController)
   {
-    return this._inputAdapter.getPointer().isActive() ?
+    return this._inputAdapter.isPointerActive() ?
       //Is considered an input when NOT moving or when creating a new edge...
       graphController.isNewEdge || !this.isMoveMode() :
       //If not active, just show default input...

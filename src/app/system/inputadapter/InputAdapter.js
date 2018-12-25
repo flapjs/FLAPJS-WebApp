@@ -61,7 +61,7 @@ class InputAdapter
   initialize(viewport)
   {
     const element = viewport.getElement();
-    
+
     if (!(element instanceof SVGElement)) throw new Error("Invalid SVG element for InputAdapter");
     if (!viewport) throw new Error("Missing viewport for InputAdapter");
     if (this._element) throw new Error("Trying to initialize an InputAdapter already initialized");
@@ -486,6 +486,11 @@ class InputAdapter
   getPointerY()
   {
     return this._pointer ? this._pointer.y : 0;
+  }
+
+  isPointerActive()
+  {
+    return this._pointer ? this._pointer.isActive() : false;
   }
 
   isUsingTouch()
