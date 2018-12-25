@@ -2,7 +2,7 @@
  * Represents and handles the transformations to the interactible viewport of
  * the SVG element.
  */
-class Viewport
+class ViewportAdapter
 {
   constructor()
   {
@@ -142,4 +142,4 @@ class Viewport
   }
 }
 
-export default Viewport;
+export default ViewportAdapter;

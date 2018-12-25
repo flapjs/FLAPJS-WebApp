@@ -1,7 +1,7 @@
 import Config from 'config.js';
 
 import InputAdapter from 'system/inputadapter/InputAdapter.js';
-import Viewport from 'system/inputadapter/Viewport.js';
+import ViewportAdapter from 'system/inputadapter/ViewportAdapter.js';
 
 import GraphPicker from './GraphPicker.js';
 import Node from 'modules/fsa/graph/FSANode.js';
@@ -14,7 +14,7 @@ class InputController
     this._module = module;
 
     //TODO: Should this live here?
-    this._viewport = new Viewport()
+    this._viewport = new ViewportAdapter()
       .setMinScale(Config.MIN_SCALE)
       .setMaxScale(Config.MAX_SCALE)
       .setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
@@ -692,7 +692,7 @@ class InputController
 
   getViewport()
   {
-    return this._viewport;
+    return this._inputAdapter.getViewport();
   }
 
   setTrashMode(enabled)

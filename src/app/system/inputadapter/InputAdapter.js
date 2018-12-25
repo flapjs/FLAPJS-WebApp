@@ -473,7 +473,7 @@ class InputAdapter
     return this._element;
   }
 
-  getActiveViewport()
+  getViewport()
   {
     return this._viewport;
   }
