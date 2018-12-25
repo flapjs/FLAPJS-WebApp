@@ -1,25 +1,25 @@
-import GraphNodeInitialEventHandler from 'controller/events/GraphNodeInitialEventHandler.js';
-import GraphNodeMoveEventHandler from 'controller/events/GraphNodeMoveEventHandler.js';
-import GraphNodeMoveAllEventHandler from 'controller/events/GraphNodeMoveAllEventHandler.js';
-import GraphEdgeMoveEventHandler from 'controller/events/GraphEdgeMoveEventHandler.js';
-import GraphEdgeDestinationEventHandler from 'controller/events/GraphEdgeDestinationEventHandler.js';
-import GraphEdgeLabelEventHandler from 'controller/events/GraphEdgeLabelEventHandler.js';
+import GraphNodeInitialEventHandler from './controller/events/GraphNodeInitialEventHandler.js';
+import GraphNodeMoveEventHandler from './controller/events/GraphNodeMoveEventHandler.js';
+import GraphNodeMoveAllEventHandler from './controller/events/GraphNodeMoveAllEventHandler.js';
+import GraphEdgeMoveEventHandler from './controller/events/GraphEdgeMoveEventHandler.js';
+import GraphEdgeDestinationEventHandler from './controller/events/GraphEdgeDestinationEventHandler.js';
+import GraphEdgeLabelEventHandler from './controller/events/GraphEdgeLabelEventHandler.js';
 
-import UserCreateNodeEventHandler from 'controller/events/UserCreateNodeEventHandler.js';
-import UserToggleNodeEventHandler from 'controller/events/UserToggleNodeEventHandler.js';
-import UserDeleteNodesEventHandler from 'controller/events/UserDeleteNodesEventHandler.js';
-import UserRenameNodeEventHandler from 'controller/events/UserRenameNodeEventHandler.js';
+import UserCreateNodeEventHandler from './controller/events/UserCreateNodeEventHandler.js';
+import UserToggleNodeEventHandler from './controller/events/UserToggleNodeEventHandler.js';
+import UserDeleteNodesEventHandler from './controller/events/UserDeleteNodesEventHandler.js';
+import UserRenameNodeEventHandler from './controller/events/UserRenameNodeEventHandler.js';
 
-import UserCreateEdgeEventHandler from 'controller/events/UserCreateEdgeEventHandler.js';
-import UserDeleteEdgeEventHandler from 'controller/events/UserDeleteEdgeEventHandler.js';
-import UserImportGraphEventHandler from 'controller/events/UserImportGraphEventHandler.js';
-import SafeGraphEventHandler from 'controller/events/SafeGraphEventHandler.js';
+import UserCreateEdgeEventHandler from './controller/events/UserCreateEdgeEventHandler.js';
+import UserDeleteEdgeEventHandler from './controller/events/UserDeleteEdgeEventHandler.js';
+import UserImportGraphEventHandler from './controller/events/UserImportGraphEventHandler.js';
+import SafeGraphEventHandler from './controller/events/SafeGraphEventHandler.js';
 
-import UserChangeMachineEventHandler from 'controller/events/UserChangeMachineEventHandler.js';
-import UserConvertMachineEventHandler from 'controller/events/UserConvertMachineEventHandler.js';
-import UserRenameMachineEventHandler from 'controller/events/UserRenameMachineEventHandler.js';
-import UserRenameSymbolEventHandler from 'controller/events/UserRenameSymbolEventHandler.js';
-import UserDeleteSymbolEventHandler from 'controller/events/UserDeleteSymbolEventHandler.js';
+import UserChangeMachineEventHandler from './controller/events/UserChangeMachineEventHandler.js';
+import UserConvertMachineEventHandler from './controller/events/UserConvertMachineEventHandler.js';
+import UserRenameMachineEventHandler from './controller/events/UserRenameMachineEventHandler.js';
+import UserRenameSymbolEventHandler from './controller/events/UserRenameSymbolEventHandler.js';
+import UserDeleteSymbolEventHandler from './controller/events/UserDeleteSymbolEventHandler.js';
 
 class EventManager
 {

@@ -21,8 +21,6 @@ import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
 
-import EventManager from './EventManager.js';
-
 class App extends React.Component
 {
   constructor(props)
@@ -38,7 +36,7 @@ class App extends React.Component
 
     this.testingManager = new TestingManager();
 
-    //This needs to be initialized before module
+    //These need to be initialized before module
     this.inputAdapter = new InputAdapter()
       .setController(this);
     this.inputAdapter.getViewport()
@@ -46,10 +44,9 @@ class App extends React.Component
       .setMaxScale(Config.MAX_SCALE)
       .setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
 
-    this._module = new FSAModule(this);
-
     this.undoManager = new UndoManager();
-    this.eventManager = new EventManager(this.undoManager);
+
+    this._module = new FSAModule(this);
 
     this.hotKeys = new HotKeys();
     this.tutorial = new Tutorial();
@@ -90,7 +87,6 @@ class App extends React.Component
     module.getGraphController().on("tryCreateWhileTrash", tryCreateWhileTrash);
 
     this.testingManager.initialize(this);
-    this.eventManager.initialize(this);
     this.hotKeys.initialize(this);
 
     //Upload drop zone
@@ -118,7 +114,6 @@ class App extends React.Component
     LocalSave.terminate();
 
     this.hotKeys.destroy();
-    this.eventManager.destroy();
 
     this._module.destroy(this);
 

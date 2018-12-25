@@ -13,6 +13,7 @@ import FSAGraphRenderer from './graph/renderer/FSAGraphRenderer.js';
 
 import FSABuilder from './builder/FSABuilder.js';
 import GraphLayout from './graph/GraphLayout.js';
+import EventManager from './EventManager.js';
 
 import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
@@ -38,6 +39,8 @@ class FSAModule extends BaseModule
     this._machineController = new MachineController(this);
 
     this._machineBuilder = new FSABuilder(this._graphController.getGraph());
+
+    this._eventManager = new EventManager(app.getUndoManager());
   }
 
   //Override
@@ -50,11 +53,15 @@ class FSAModule extends BaseModule
     this._machineController.initialize(app);
 
     this._machineBuilder.initialize(app);
+
+    this._eventManager.initialize(this);
   }
 
   //Override
   destroy(app)
   {
+    this._eventManager.destroy();
+
     this._machineBuilder.destroy();
 
     this._machineController.destroy();
