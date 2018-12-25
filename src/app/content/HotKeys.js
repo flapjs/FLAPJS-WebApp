@@ -1,11 +1,11 @@
 class HotKeys
 {
-  constructor(events)
+  constructor()
   {
     this.app = null;
     this.workspace = null;
     this.toolbar = null;
-    this.events = null;
+    this.undoManager = null;
     this.graphController = null;
     this.machineController = null;
 
@@ -17,7 +17,7 @@ class HotKeys
     this.app = app;
     this.workspace = app.workspace;
     this.toolbar = app.toolbar;
-    this.events = app.eventManager;
+    this.undoManager = app.getUndoManager();
     this.graphController = app.getGraphController();
     this.machineController = app.getMachineController();
 
@@ -48,14 +48,12 @@ class HotKeys
       if (event.shiftKey)
       {
         //Redo
-        //TODO: Refer to toolbar
-        this.events.getLogger().redo();
+        this.undoManager.redo();
       }
       else
       {
         //Undo
-        //TODO: Refer to toolbar
-        this.events.getLogger().undo();
+        this.undoManager.undo();
       }
       e.preventDefault();
       e.stopPropagation();

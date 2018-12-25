@@ -1,6 +1,6 @@
 const MAX_HISTORY_LENGTH = 1000;
 
-class EventLogger
+class UndoManager
 {
   constructor()
   {
@@ -8,7 +8,13 @@ class EventLogger
     this.offsetIndex = 0;
   }
 
-  captureEvent(event)
+  clear()
+  {
+    this.history.length = 0;
+    this.offsetIndex = 0;
+  }
+
+  captureEvent(eventHandler)
   {
     //Pop it all until current event
     while(this.offsetIndex > 0)
@@ -18,7 +24,7 @@ class EventLogger
     }
 
     //Push the current event to the stack
-    this.history.push(event);
+    this.history.push(eventHandler);
 
     while(this.history.length > MAX_HISTORY_LENGTH)
     {
@@ -26,17 +32,11 @@ class EventLogger
     }
   }
 
-  clear()
-  {
-    this.history.length = 0;
-    this.offsetIndex = 0;
-  }
-
   undo()
   {
     if (!this.canUndo())
     {
-      //Already the oldeset recorded event!
+      //Already the oldest recorded event!
       return;
     }
 
@@ -44,6 +44,11 @@ class EventLogger
     ++this.offsetIndex;
 
     event.applyUndo();
+  }
+
+  canUndo()
+  {
+    return this.offsetIndex < this.history.length;
   }
 
   redo()
@@ -60,15 +65,10 @@ class EventLogger
     event.applyRedo();
   }
 
-  canUndo()
-  {
-    return this.offsetIndex < this.history.length;
-  }
-
   canRedo()
   {
     return this.offsetIndex > 0;
   }
 }
 
-export default EventLogger;
+export default UndoManager;

@@ -31,7 +31,7 @@ class EventHandler
       this.controller.once(this.postEventName, (...args) => {
         result.postData = this.capturePostEvent(...args);
 
-        this.eventLogger.handleEvent(result);
+        this.eventLogger.captureEvent(result);
       });
     }
     else
@@ -39,7 +39,7 @@ class EventHandler
       result.postData = result.eventData;
 
       //Finalize event right now
-      this.eventLogger.handleEvent(result);
+      this.eventLogger.captureEvent(result);
     }
   }
 

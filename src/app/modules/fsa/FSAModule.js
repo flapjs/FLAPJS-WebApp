@@ -5,9 +5,9 @@ import TestingPanel from './panels/testing/TestingPanel.js';
 import AnalysisPanel from './panels/analysis/AnalysisPanel.js';
 import AboutPanel from './panels/about/AboutPanel.js';
 
-import MachineController from 'controller/MachineController.js';
-import GraphController from 'controller/GraphController.js';
-import InputController from 'controller/InputController.js';
+import InputController from './controller/InputController.js';
+import GraphController from './controller/GraphController.js';
+import MachineController from './controller/MachineController.js';
 
 import FSAGraphRenderer from './graph/renderer/FSAGraphRenderer.js';
 

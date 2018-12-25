@@ -65,12 +65,11 @@ class Toolbar extends React.Component
     const app = this.props.app;
     const graphController = this.props.graphController;
     const machineController = this.props.machineController;
-    const eventManager = this.props.eventManager;
+    const undoManager = this.props.undoManager;
     const drawer = this.props.drawer;
 
     const graph = graphController.getGraph();
     const machineBuilder = machineController.getMachineBuilder();
-    const events = eventManager.getLogger();
 
     const offline = navigator && navigator.onLine;
 
@@ -124,7 +123,7 @@ class Toolbar extends React.Component
             if (window.confirm(I18N.toString("alert.graph.clear")))
             {
               graph.clear();
-              events.clear();
+              undoManager.clear();
               machineController.setMachineName(null);
             }
           }}>
@@ -138,14 +137,14 @@ class Toolbar extends React.Component
         </UploadButton>
         {/*Undo Button*/}
         <IconButton className="navicon" id="toolbar-undo" title={I18N.toString("action.toolbar.undo")}
-          disabled={!events.canUndo()}
-          onClick={()=>events.undo()}>
+          disabled={!undoManager.canUndo()}
+          onClick={()=>undoManager.undo()}>
           <UndoIcon/>
         </IconButton>
         {/*Redo Button*/}
         <IconButton className="navicon" id="toolbar-redo" title={I18N.toString("action.toolbar.redo")}
-          disabled={!events.canRedo()}
-          onClick={()=>events.redo()}>
+          disabled={!undoManager.canRedo()}
+          onClick={()=>undoManager.redo()}>
           <RedoIcon/>
         </IconButton>
         {/*Save Button*/}

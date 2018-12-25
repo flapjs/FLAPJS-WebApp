@@ -19,6 +19,7 @@ import Tutorial from 'tutorial/Tutorial.js';
 import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
+import UndoManager from 'system/undomanager/UndoManager.js';
 
 import EventManager from './EventManager.js';
 
@@ -47,7 +48,8 @@ class App extends React.Component
 
     this._module = new FSAModule(this);
 
-    this.eventManager = new EventManager();
+    this.undoManager = new UndoManager();
+    this.eventManager = new EventManager(this.undoManager);
 
     this.hotKeys = new HotKeys();
     this.tutorial = new Tutorial();
@@ -303,6 +305,11 @@ class App extends React.Component
     return this.inputAdapter;
   }
 
+  getUndoManager()
+  {
+    return this.undoManager;
+  }
+
   render()
   {
     const module = this._module;
@@ -322,7 +329,7 @@ class App extends React.Component
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar ref={ref=>this.toolbar=ref}
         app={this}
-        eventManager={this.eventManager}
+        undoManager={this.undoManager}
         drawer={this.drawer}
         graphController={graphController}
         machineController={machineController}/>

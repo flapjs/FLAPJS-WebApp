@@ -1,5 +1,3 @@
-import EventLogger from 'controller/events/EventLogger.js';
-
 import GraphNodeInitialEventHandler from 'controller/events/GraphNodeInitialEventHandler.js';
 import GraphNodeMoveEventHandler from 'controller/events/GraphNodeMoveEventHandler.js';
 import GraphNodeMoveAllEventHandler from 'controller/events/GraphNodeMoveAllEventHandler.js';
@@ -25,14 +23,14 @@ import UserDeleteSymbolEventHandler from 'controller/events/UserDeleteSymbolEven
 
 class EventManager
 {
-  constructor()
+  constructor(undoManager)
   {
     this.graphController = null;
     this.machineController = null;
 
     this.eventHandlers = [];
 
-    this.logger = new EventLogger();
+    this.undoManager = undoManager;
   }
 
   initialize(app)
@@ -41,7 +39,7 @@ class EventManager
     this.machineController = app.getMachineController();
 
     const graph = this.graphController.getGraph();
-    const events = this.logger;
+    const events = this.undoManager;
 
     this.eventHandlers.push(new GraphNodeMoveEventHandler(events, this.graphController));
     this.eventHandlers.push(new GraphNodeMoveAllEventHandler(events, this.graphController));
@@ -77,11 +75,6 @@ class EventManager
 
     //TODO: Remove all event listeners...
     this.graphController.clearEventListeners();
-  }
-
-  getLogger()
-  {
-    return this.logger;
   }
 }
 
