@@ -18,8 +18,8 @@ class HotKeys
     this.workspace = app.workspace;
     this.toolbar = app.toolbar;
     this.events = app.eventManager;
-    this.graphController = app.graphController;
-    this.machineController = app.machineController;
+    this.graphController = app.getGraphController();
+    this.machineController = app.getMachineController();
 
     window.addEventListener('keydown', this.onKeyDown);
   }

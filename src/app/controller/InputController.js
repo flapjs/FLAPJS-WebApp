@@ -59,7 +59,7 @@ class InputController
 
   initialize(app)
   {
-    this._graphController = app.graphController;
+    this._graphController = app.getGraphController();
 
     const element = app.workspace.ref;
     this._viewport.setElement(element);

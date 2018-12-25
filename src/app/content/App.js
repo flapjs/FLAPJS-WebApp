@@ -37,14 +37,14 @@ class App extends React.Component
 
     this.testingManager = new TestingManager();
 
-    this.inputController = new InputController();
-    this.graphController = new GraphController();
-    this.machineController = new MachineController();
+    this._inputController = new InputController();
+    this._graphController = new GraphController();
+    this._machineController = new MachineController();
     this._module = new FSAModule(this);
 
-    this.inputController.setModule(this._module);
-    this.graphController.setModule(this._module);
-    this.machineController.setModule(this._module);
+    this._inputController.setModule(this._module);
+    this._graphController.setModule(this._module);
+    this._machineController.setModule(this._module);
 
     this.eventManager = new EventManager();
 
@@ -66,24 +66,39 @@ class App extends React.Component
     this._init = false;
   }
 
+  getInputController()
+  {
+    return this._inputController;
+  }
+
+  getGraphController()
+  {
+    return this._graphController;
+  }
+
+  getMachineController()
+  {
+    return this._machineController;
+  }
+
   componentDidMount()
   {
     //Initialize the module...
     this._module.initialize(this);
 
     //Initialize the controller to graph components
-    this.inputController.initialize(this);
-    this.graphController.initialize(this);
-    this.machineController.initialize(this);
+    this._inputController.initialize(this);
+    this._graphController.initialize(this);
+    this._machineController.initialize(this);
 
     //Notify on create in delete mode
     const tryCreateWhileTrash = () => {
-      if (this.inputController.isTrashMode())
+      if (this._inputController.isTrashMode())
       {
         Notifications.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
       }
     };
-    this.graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
+    this._graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
 
     this.testingManager.initialize(this);
     this.eventManager.initialize(this);
@@ -116,9 +131,9 @@ class App extends React.Component
     this.hotKeys.destroy();
     this.eventManager.destroy();
 
-    this.machineController.destroy();
-    this.graphController.destroy();
-    this.inputController.destroy();
+    this._machineController.destroy();
+    this._graphController.destroy();
+    this._inputController.destroy();
 
     this._module.destroy(this);
 

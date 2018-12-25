@@ -10,8 +10,8 @@ class FSAGraphExporter extends AbstractGraphExporter
 
   fromJSON(data, app)
   {
-    const graphController = app.graphController;
-    const machineController = app.machineController;
+    const graphController = app.getGraphController();
+    const machineController = app.getMachineController();
     const machineBuilder = machineController.getMachineBuilder();
     const graph = graphController.getGraph();
 
@@ -42,8 +42,8 @@ class FSAGraphExporter extends AbstractGraphExporter
   toJSON(graphData, app)
   {
     const module = app.getCurrentModule();
-    const graphController = app.graphController;
-    const machineController = app.machineController;
+    const graphController = app.getGraphController();
+    const machineController = app.getMachineController();
     const machineBuilder = machineController.getMachineBuilder();
 
     const dst = {};
@@ -71,7 +71,7 @@ class FSAGraphExporter extends AbstractGraphExporter
   //Override
   exportToData(app)
   {
-    const graph = app.graphController.getGraph();
+    const graph = app.getGraphController().getGraph();
     const graphData = JSONGraphParser.objectify(graph);
     const result = this.toJSON(graphData, app);
     return result;
@@ -95,12 +95,14 @@ class FSAGraphExporter extends AbstractGraphExporter
 
       const reader = new FileReader();
       reader.onload = e => {
+        const graphController = app.getGraphController();
+        const machineController = app.getMachineController();
         const data = e.target.result;
         const name = filename.substring(0, filename.length - this.getFileType().length - 1);
-        const graph = app.graphController.getGraph();
+        const graph = graphController.getGraph();
 
         //TODO: this should not be here, this should exist somewhere in graphController
-        app.graphController.emit("userPreImportGraph", graph);
+        graphController.emit("userPreImportGraph", graph);
 
         try
         {
@@ -108,11 +110,11 @@ class FSAGraphExporter extends AbstractGraphExporter
 
           this.fromJSON(jsonData, app);
 
-          app.graphController.emit("userImportGraph", graph);
+          graphController.emit("userImportGraph", graph);
 
-          if (app.machineController)
+          if (machineController)
           {
-            app.machineController.setMachineName(name);
+            machineController.setMachineName(name);
           }
 
           resolve();
@@ -124,7 +126,7 @@ class FSAGraphExporter extends AbstractGraphExporter
         }
         finally
         {
-          app.graphController.emit("userPostImportGraph", graph);
+          graphController.emit("userPostImportGraph", graph);
         }
       };
 
@@ -139,7 +141,7 @@ class FSAGraphExporter extends AbstractGraphExporter
   //Override
   exportToFile(filename, app)
   {
-    const graph = app.graphController.getGraph();
+    const graph = app.getGraphController().getGraph();
     const graphData = JSONGraphParser.objectify(graph);
     const dst = this.toJSON(graphData, app);
     const jsonString = JSON.stringify(dst);

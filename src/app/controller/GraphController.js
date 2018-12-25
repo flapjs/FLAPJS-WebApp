@@ -1,7 +1,7 @@
+import AbstractGraphController from 'modules/base/AbstractGraphController.js';
+
 import Config from 'config.js';
-
 import Eventable from 'util/Eventable.js';
-
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 
 class GraphController
@@ -114,8 +114,8 @@ class GraphController
     this.labelEditor = app.viewport.labelEditor;
     this.tester = app.testingManager;
 
-    this.inputController = app.inputController;
-    this.machineController = app.machineController;
+    this.inputController = app.getInputController();
+    this.machineController = app.getMachineController();
   }
 
   destroy()

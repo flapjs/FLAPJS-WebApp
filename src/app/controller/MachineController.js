@@ -46,7 +46,7 @@ class MachineController
 
   initialize(app)
   {
-    this.graphController = app.graphController;
+    this.graphController = app.getGraphController();
   }
 
   destroy()

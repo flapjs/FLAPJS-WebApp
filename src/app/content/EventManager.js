@@ -37,8 +37,8 @@ class EventManager
 
   initialize(app)
   {
-    this.graphController = app.graphController;
-    this.machineController = app.machineController;
+    this.graphController = app.getGraphController();
+    this.machineController = app.getMachineController();
 
     const graph = this.graphController.getGraph();
     const events = this.logger;

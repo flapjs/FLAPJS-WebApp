@@ -20,23 +20,25 @@ class JFLAPGraphExporter extends AbstractGraphExporter
 
       const reader = new FileReader();
       reader.onload = e => {
+        const graphController = app.getGraphController();
+        const machineController = app.getMachineController();
         const data = e.target.result;
         const name = filename.substring(0, filename.length - this.getFileType().length - 1);
-        const graph = app.graphController.getGraph();
+        const graph = graphController.getGraph();
 
         //TODO: this should not be here, this should exist somewhere in graphController
-        app.graphController.emit("userPreImportGraph", graph);
+        graphController.emit("userPreImportGraph", graph);
 
         try
         {
           const xmlData = new DOMParser().parseFromString(data, "text/xml");
           XMLGraphParser.parse(xmlData, graph);
 
-          app.graphController.emit("userImportGraph", graph);
+          graphController.emit("userImportGraph", graph);
 
-          if (app.machineController)
+          if (machineController)
           {
-            app.machineController.setMachineName(name);
+            machineController.setMachineName(name);
           }
 
           resolve();
@@ -48,7 +50,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
         }
         finally
         {
-          app.graphController.emit("userPostImportGraph", graph);
+          graphController.emit("userPostImportGraph", graph);
         }
       };
 
@@ -63,7 +65,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
   //Override
   exportToFile(filename, app)
   {
-    const graph = app.graphController.getGraph();
+    const graph = app.getGraphController().getGraph();
     const graphData = XMLGraphParser.objectify(graph);
     const xmlString = new XMLSerializer().serializeToString(graphData);
     Downloader.downloadText(filename + '.' + this.getFileType(), xmlString);

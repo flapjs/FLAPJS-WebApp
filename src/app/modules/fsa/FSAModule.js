@@ -32,9 +32,9 @@ class FSAModule extends BaseModule
     this._refreshRate = 60;
     this._ticks = 0;
 
-    this._machineController = app.machineController;
-    this._graphController = app.graphController;
-    this._inputController = app.inputController;
+    this._machineController = app.getMachineController();
+    this._graphController = app.getGraphController();
+    this._inputController = app.getInputController();
   }
 
   //Override

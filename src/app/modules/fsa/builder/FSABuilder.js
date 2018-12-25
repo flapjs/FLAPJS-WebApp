@@ -42,8 +42,8 @@ class FSABuilder extends MachineBuilder
     super.initialize(app);
 
     this.tester = app.testingManager;
-    this.graphController = app.graphController;
-    this.machineController = app.machineController;
+    this.graphController = app.getGraphController();
+    this.machineController = app.getMachineController();
 
     this._savedGraphHash = this.graph.getHashCode(false);
     this.onGraphChange();

@@ -36,8 +36,8 @@ class TestMode
 
   initialize(app)
   {
-    this.graphController = app.graphController;
-    this.machineController = app.machineController;
+    this.graphController = app.getGraphController();
+    this.machineController = app.getMachineController();
 
     //NOTE: This is not necessary because you can edit once in stepbystep mode
     //this.graphController.getGraph().on("nodeDestroy", this.onNodeDestroy);

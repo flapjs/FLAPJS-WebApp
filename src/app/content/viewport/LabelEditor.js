@@ -2,8 +2,7 @@ import React from 'react';
 import './LabelEditor.css';
 
 import Config from 'config.js';
-import { EMPTY } from 'machine/Symbols.js';
-import { SYMBOL_SEPARATOR } from 'modules/fsa/graph/FSAEdge.js';
+import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
 
 import FormattedInput from 'system/formattedinput/FormattedInput.js';
 
@@ -14,7 +13,7 @@ const DELETE_KEY = 8;
 const DELETE_FORWARD_KEY = 46;
 
 const RECOMMENDED_SYMBOLS = ["0", "1"];
-const DEFAULT_SYMBOLS = [EMPTY];
+const DEFAULT_SYMBOLS = [EMPTY_CHAR];
 
 class LabelEditor extends React.Component
 {
@@ -77,7 +76,7 @@ class LabelEditor extends React.Component
       if (saveOnExit)
       {
         let value = this.inputElement.value;
-        if (!value) value = EMPTY;
+        if (!value) value = EMPTY_CHAR;
 
         this.state.target.setEdgeLabel(value);
       }
@@ -85,7 +84,7 @@ class LabelEditor extends React.Component
       {
         if (!this.state.target.getEdgeLabel())
         {
-          this.state.target.setEdgeLabel(EMPTY);
+          this.state.target.setEdgeLabel(EMPTY_CHAR);
 
           //Delete it since it is not a valid edge
           this.props.graphController.getGraph().deleteEdge(this.state.target);
