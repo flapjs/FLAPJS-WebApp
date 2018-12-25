@@ -38,6 +38,25 @@ class NodalGraph
       {
         this._nodeMapping.set(this._nodes[j].getGraphElementID(), j);
       }
+
+      const nullSourceEdges = [];
+
+      //Remove connected edges
+      for(const edge of this._edges)
+      {
+        if (edge.getSourceNode() === node)
+        {
+          nullSourceEdges.push(edge);
+        }
+        else if (edge.getDestinationNode() === node)
+        {
+          edge.changeDestinationNode(null);
+        }
+      }
+      for(const edge of nullSourceEdges)
+      {
+        this.deleteEdge(edge);
+      }
     }
   }
   addNode(node)
