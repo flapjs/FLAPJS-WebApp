@@ -59,7 +59,7 @@ class TrashCan extends React.Component
   render()
   {
     const inputController = this.props.inputController;
-    const inputAdapter = inputController.getAdapter();
+    const inputAdapter = inputController.getInputAdapter();
 
     return <svg id="trash-btn"
       className={(inputController.isTrashMode() ? "danger " : "") +

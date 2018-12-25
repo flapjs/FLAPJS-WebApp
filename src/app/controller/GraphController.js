@@ -329,14 +329,14 @@ class GraphController extends AbstractGraphController
   focusOnNode(node)
   {
     //Center workspace at focused node; inverted due to graph-to-screen space
-    this.inputController.getViewport().setOffset(-node.x, -node.y);
+    this.inputController.getInputAdapter().getViewport().setOffset(-node.x, -node.y);
   }
 
   focusOnEdge(edge)
   {
     //Center workspace at focused edge; inverted due to graph-to-screen space
     const center = edge.getCenterPoint();
-    this.inputController.getViewport().setOffset(-center.x, -center.y);
+    this.inputController.getInputAdapter().getViewport().setOffset(-center.x, -center.y);
   }
 
   focusOnNodes(nodes)
@@ -350,7 +350,7 @@ class GraphController extends AbstractGraphController
       ax += node.x;
       ay += node.y;
     }
-    this.inputController.getViewport().setOffset(-ax / length, -ay / length);
+    this.inputController.getInputAdapter().getViewport().setOffset(-ax / length, -ay / length);
   }
 }
 //Mixin Eventable

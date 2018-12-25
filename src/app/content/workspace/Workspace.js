@@ -27,7 +27,7 @@ class Workspace extends React.Component
     const svg = this.ref;
     if (!svg) return null;
 
-    const viewport = this.props.inputController.getViewport();
+    const viewport = this.props.inputController.getInputAdapter().getViewport();
     const offsetX = viewport.getOffsetX();
     const offsetY = viewport.getOffsetY();
     const bounds = this.props.graphController.getGraph().getBoundingRect();
@@ -71,7 +71,7 @@ class Workspace extends React.Component
     const GraphRenderer = module.getGraphRenderer();
 
     const graph = graphController.getGraph();
-    const viewport = inputController.getViewport();
+    const viewport = inputController.getInputAdapter().getViewport();
     const machineBuilder = machineController.getMachineBuilder();
     const picker = inputController.getPicker();
     const selectionBox = picker.getSelectionBox();

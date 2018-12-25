@@ -146,7 +146,7 @@ class LabelEditor extends React.Component
   render()
   {
     const inputController = this.props.inputController;
-    const viewport = inputController.getViewport();
+    const viewport = inputController.getInputAdapter().getViewport();
     const graphController = this.props.graphController;//This is used in closeEditor()
     const machineController = this.props.machineController;//This is also used in callbacks
     const screen = this.props.screen;

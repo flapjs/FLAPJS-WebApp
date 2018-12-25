@@ -1,6 +1,7 @@
 import Config from 'config.js';
 
 import InputPointer from './InputPointer.js';
+import ViewportAdapter from './ViewportAdapter.js';
 
 /**
  * Provides an interface for InputController to interact with a HTMLElement.
@@ -8,7 +9,7 @@ import InputPointer from './InputPointer.js';
  */
 class InputAdapter
 {
-  constructor(viewport)
+  constructor()
   {
     this._controller = null;
     this._element = null;
@@ -21,7 +22,7 @@ class InputAdapter
     };
     this._pointer = null;
 
-    this._viewport = viewport;
+    this._viewport = new ViewportAdapter();
 
     //Although dragging could be in pointer, it should be here to allow
     //the adapter to be independent of pointer.
@@ -59,16 +60,13 @@ class InputAdapter
     return this;
   }
 
-  initialize()
+  initialize(element)
   {
-    const viewport = this._viewport;
-    const element = viewport.getElement();
-
     if (!(element instanceof SVGElement)) throw new Error("Missing SVG element for input adapter's viewport");
     if (this._element) throw new Error("Trying to initialize an InputAdapter already initialized");
 
-    this._element = element;
-    this._pointer = new InputPointer(this, element, viewport);
+    this._viewport.setElement(this._element = element);
+    this._pointer = new InputPointer(this, this._element, this._viewport);
 
     this._element.addEventListener('mousedown', this.onMouseDown);
     this._element.addEventListener('mousemove', this.onMouseMove);
@@ -89,6 +87,12 @@ class InputAdapter
     this._element.removeEventListener('wheel', this.onWheel);
 
     this._element = null;
+  }
+
+  update()
+  {
+    //Smooth transition offset
+    this._viewport.update();
   }
 
   onMouseDown(e)

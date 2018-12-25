@@ -1,27 +1,15 @@
+import AbstractInputController from 'modules/base/AbstractInputController.js';
 import Config from 'config.js';
-
-import InputAdapter from 'system/inputadapter/InputAdapter.js';
-import ViewportAdapter from 'system/inputadapter/ViewportAdapter.js';
 
 import GraphPicker from './GraphPicker.js';
 import Node from 'modules/fsa/graph/FSANode.js';
 import Edge from 'modules/fsa/graph/FSAEdge.js';
 
-class InputController
+class InputController extends AbstractInputController
 {
-  constructor(module)
+  constructor(module, inputAdapter)
   {
-    this._module = module;
-
-    //TODO: Should this live here?
-    this._viewport = new ViewportAdapter()
-      .setMinScale(Config.MIN_SCALE)
-      .setMaxScale(Config.MAX_SCALE)
-      .setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
-
-    //TODO: Should this live here?
-    this._inputAdapter = new InputAdapter(this._viewport)
-      .setController(this);
+    super(module, inputAdapter);
 
     this._picker = new GraphPicker();
 
@@ -47,25 +35,23 @@ class InputController
     this._trashMode = false;
   }
 
+  //Override
   initialize(app)
   {
+    super.initialize(app);
+
     this._graphController = app.getGraphController();
-
-    const element = app.workspace.ref;
-    this._viewport.setElement(element);
-    this._inputAdapter.initialize();
   }
 
-  destroy()
+  //Override
+  destroy(app)
   {
-    this._inputAdapter.destroy();
+    super.destroy(app);
   }
 
-  update()
+  //Override
+  update(app)
   {
-    //Smooth transition offset
-    this._viewport.update();
-
     const graph = this._graphController.getGraph();
     const picker = this._picker;
     const x = this._inputAdapter.getPointerX();
@@ -244,7 +230,7 @@ class InputController
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
-    const viewport = inputController.getViewport();
+    const viewport = inputController.getInputAdapter().getViewport();
 
     //If is in move mode...
     if (inputController.isMoveMode())
@@ -445,7 +431,7 @@ class InputController
         //Move graph
         const dx = x - graphController.prevX;
         const dy = y - graphController.prevY;
-        inputController.getViewport().addOffset(dx, dy, true);
+        inputController.getInputAdapter().getViewport().addOffset(dx, dy, true);
         return true;
       }
       else
@@ -690,11 +676,6 @@ class InputController
     return true;
   }
 
-  getViewport()
-  {
-    return this._inputAdapter.getViewport();
-  }
-
   setTrashMode(enabled)
   {
     this._trashMode = enabled;
@@ -738,11 +719,6 @@ class InputController
   getPicker()
   {
     return this._picker;
-  }
-
-  getAdapter()
-  {
-    return this._inputAdapter;
   }
 }
 

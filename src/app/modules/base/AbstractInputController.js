@@ -1,9 +1,9 @@
 class AbstractInputController
 {
-  constructor(module, adapter)
+  constructor(module, inputAdapter)
   {
     this._module = module;
-    this._adapter = adapter.setController(this);
+    this._inputAdapter = inputAdapter.setController(this);
   }
 
   initialize(app) {}
@@ -31,7 +31,7 @@ class AbstractInputController
 
   getInputAdapter()
   {
-    return this._adapter;
+    return this._inputAdapter;
   }
 
   getModule()
@@ -40,4 +40,4 @@ class AbstractInputController
   }
 }
 
-export default InputController;
+export default AbstractInputController;

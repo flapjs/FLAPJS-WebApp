@@ -16,6 +16,7 @@ import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
 import Tutorial from 'tutorial/Tutorial.js';
 
+import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
 
@@ -35,6 +36,14 @@ class App extends React.Component
     this.toolbar = null;
 
     this.testingManager = new TestingManager();
+
+    //This needs to be initialized before module
+    this.inputAdapter = new InputAdapter()
+      .setController(this);
+    this.inputAdapter.getViewport()
+      .setMinScale(Config.MIN_SCALE)
+      .setMaxScale(Config.MAX_SCALE)
+      .setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
 
     this._module = new FSAModule(this);
 
@@ -58,23 +67,13 @@ class App extends React.Component
     this._init = false;
   }
 
-  getInputController()
-  {
-    return this._module.getInputController();
-  }
-
-  getGraphController()
-  {
-    return this._module.getGraphController();
-  }
-
-  getMachineController()
-  {
-    return this._module.getMachineController();
-  }
-
+  //Override
   componentDidMount()
   {
+    //Initialize input adapter
+    const workspaceDOM = this.workspace.ref;
+    this.inputAdapter.initialize(workspaceDOM);
+
     //Initialize the module...
     const module = this.getCurrentModule();
     module.initialize(this);
@@ -93,7 +92,6 @@ class App extends React.Component
     this.hotKeys.initialize(this);
 
     //Upload drop zone
-    const workspaceDOM = this.workspace.ref;
     workspaceDOM.addEventListener("drop", this.onFileDrop);
     workspaceDOM.addEventListener("dragover", this.onDragOver);
     workspaceDOM.addEventListener("dragenter", this.onDragEnter);
@@ -110,6 +108,7 @@ class App extends React.Component
     this._init = true;
   }
 
+  //Override
   componentWillUnmount()
   {
     LocalSave.unregisterHandler(this);
@@ -120,6 +119,8 @@ class App extends React.Component
     this.eventManager.destroy();
 
     this._module.destroy(this);
+
+    this._inputAdapter.destroy();
 
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;
@@ -282,6 +283,26 @@ class App extends React.Component
     return this._module;
   }
 
+  getInputController()
+  {
+    return this._module.getInputController();
+  }
+
+  getGraphController()
+  {
+    return this._module.getGraphController();
+  }
+
+  getMachineController()
+  {
+    return this._module.getMachineController();
+  }
+
+  getInputAdapter()
+  {
+    return this.inputAdapter;
+  }
+
   render()
   {
     const module = this._module;
@@ -294,7 +315,7 @@ class App extends React.Component
 
     if (this._init)
     {
-      inputController.update();
+      this.inputAdapter.update();
       module.update(this);
     }
 

@@ -33,7 +33,7 @@ class FSAModule extends BaseModule
     this._refreshRate = 60;
     this._ticks = 0;
 
-    this._inputController = new InputController(this);
+    this._inputController = new InputController(this, app.getInputAdapter());
     this._graphController = new GraphController(this);
     this._machineController = new MachineController(this);
 
@@ -66,6 +66,8 @@ class FSAModule extends BaseModule
 
   update(app)
   {
+    this._inputController.update();
+
     if (--this._ticks <= 0)
     {
       this._machineBuilder.update();
