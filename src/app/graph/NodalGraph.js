@@ -28,9 +28,18 @@ class NodalGraph
     const i = this._nodeMapping.get(elementID);
     if (i >= 0)
     {
-      this._nodes.splice(1, i);
+      this._nodes.splice(i, 1);
       this._nodeMapping.delete(elementID);
     }
+  }
+  addNode(node)
+  {
+    if (!node.getGraphElementID()) node.setGraphElementID(guid());
+
+    const i = this._nodes.length;
+    this._nodes.push(node);
+    this._nodeMapping.set(node.getGraphElementID(), i);
+    return node;
   }
   clearNodes() { this._nodes.length = 0; this._nodeMapping.clear(); }
   getNodeByElementID(elementID)
@@ -65,9 +74,18 @@ class NodalGraph
     const i = this._edgeMapping.get(elementID);
     if (i >= 0)
     {
-      this._edges.splice(1, i);
+      this._edges.splice(i, 1);
       this._edgeMapping.delete(elementID);
     }
+  }
+  addEdge(edge)
+  {
+    if (!edge.getGraphElementID()) edge.setGraphElementID(guid());
+
+    const i = this._edges.length;
+    this._edges.push(edge);
+    this._edgeMapping.set(edge.getGraphElementID(), i);
+    return edge;
   }
   clearEdges() { this._edges.length = 0; this._edgeMapping.clear(); }
   getEdgeByElementID(elementID)

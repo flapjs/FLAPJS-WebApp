@@ -1,7 +1,6 @@
 import NodalGraph from 'graph/NodalGraph.js';
 import FSANode from './FSANode.js';
 import FSAEdge, { SYMBOL_SEPARATOR } from './FSAEdge.js';
-import { guid } from 'util/MathHelper.js';
 
 const PARALLEL_EDGE_HEIGHT = 10;
 
@@ -15,17 +14,13 @@ class FSAGraph extends NodalGraph
   //Override
   createNode(x=0, y=0, id=null)
   {
-    const result = new FSANode(id || guid(), x, y);
-    this._nodes.push(result);
-    return result;
+    return this.addNode(new FSANode(id, x, y));
   }
 
   //Override
   createEdge(from, to=null, id=null)
   {
-    const result = new FSAEdge(id || guid(), from, to);
-    this._edges.push(result);
-    return result;
+    return this.addEdge(new FSAEdge(id, from, to));
   }
 
   setStartNode(node)

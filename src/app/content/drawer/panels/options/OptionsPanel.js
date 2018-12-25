@@ -205,7 +205,6 @@ class OptionsPanel extends React.Component
   {
     const prevTheme = this.state.theme;
     const theme = e.target.value;
-    console.log(prevTheme, theme);
     if (prevTheme === theme) return;
 
     if (theme === "default")
