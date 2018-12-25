@@ -5,8 +5,11 @@ import TestingPanel from './panels/testing/TestingPanel.js';
 import AnalysisPanel from './panels/analysis/AnalysisPanel.js';
 import AboutPanel from './panels/about/AboutPanel.js';
 
+import MachineController from 'controller/MachineController.js';
+import GraphController from 'controller/GraphController.js';
+import InputController from 'controller/InputController.js';
+
 import FSAGraphRenderer from './graph/renderer/FSAGraphRenderer.js';
-import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
 
 import FSABuilder from './builder/FSABuilder.js';
 import GraphLayout from './graph/GraphLayout.js';
@@ -26,21 +29,26 @@ class FSAModule extends BaseModule
   constructor(app)
   {
     super();
-    this._graph = new FSAGraph();
-    this._machineBuilder = new FSABuilder(this._graph);
 
     this._refreshRate = 60;
     this._ticks = 0;
 
-    this._machineController = app.getMachineController();
-    this._graphController = app.getGraphController();
-    this._inputController = app.getInputController();
+    this._inputController = new InputController(this);
+    this._graphController = new GraphController(this);
+    this._machineController = new MachineController(this);
+
+    this._machineBuilder = new FSABuilder(this._graphController.getGraph());
   }
 
   //Override
   initialize(app)
   {
     super.initialize(app);
+
+    this._inputController.initialize(app);
+    this._graphController.initialize(app);
+    this._machineController.initialize(app);
+
     this._machineBuilder.initialize(app);
   }
 
@@ -48,6 +56,11 @@ class FSAModule extends BaseModule
   destroy(app)
   {
     this._machineBuilder.destroy();
+
+    this._machineController.destroy();
+    this._graphController.destroy();
+    this._inputController.destroy();
+
     super.destroy(app);
   }
 
@@ -62,7 +75,7 @@ class FSAModule extends BaseModule
 
   getGraph()
   {
-    return this._graph;
+    return this._graphController.getGraph();
   }
 
   getDefaultGraphLayout()

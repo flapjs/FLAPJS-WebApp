@@ -3,12 +3,13 @@ import AbstractGraphController from 'modules/base/AbstractGraphController.js';
 import Config from 'config.js';
 import Eventable from 'util/Eventable.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
+import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
 
-class GraphController
+class GraphController extends AbstractGraphController
 {
-  constructor()
+  constructor(module)
   {
-    this._module = null;
+    super(module, new FSAGraph());
 
     this.inputController = null;
     this.machineController = null;
@@ -99,16 +100,6 @@ class GraphController
     this.registerEvent("tryCreateWhileTrash");
   }
 
-  setModule(module)
-  {
-    this._module = module;
-  }
-
-  getModule()
-  {
-    return this._module;
-  }
-
   initialize(app)
   {
     this.labelEditor = app.viewport.labelEditor;
@@ -122,11 +113,6 @@ class GraphController
   {
   }
 
-  getGraph()
-  {
-    return this._module.getGraph();
-  }
-
   getLabelEditor()
   {
     return this.labelEditor;
@@ -135,7 +121,6 @@ class GraphController
   applyAutoLayout()
   {
     this.emit("userPreChangeLayout", this.getGraph());
-
     GraphLayout.applyLayout(this.getGraph());
 
     this.emit("userChangeLayout", this.getGraph());

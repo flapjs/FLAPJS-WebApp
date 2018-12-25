@@ -2,11 +2,10 @@ import React from 'react';
 import { hot } from 'react-hot-loader/root';
 import './App.css';
 
+import Config from 'config.js';
+
 import FSAModule from 'modules/fsa/FSAModule.js';
 import TestingManager from 'modules/fsa/testing/TestingManager.js';
-import MachineController from 'controller/MachineController.js';
-import GraphController from 'controller/GraphController.js';
-import InputController from 'controller/InputController.js';
 
 import HotKeys from './HotKeys.js';
 import LocalSave from 'system/localsave/LocalSave.js';
@@ -37,14 +36,7 @@ class App extends React.Component
 
     this.testingManager = new TestingManager();
 
-    this._inputController = new InputController();
-    this._graphController = new GraphController();
-    this._machineController = new MachineController();
     this._module = new FSAModule(this);
-
-    this._inputController.setModule(this._module);
-    this._graphController.setModule(this._module);
-    this._machineController.setModule(this._module);
 
     this.eventManager = new EventManager();
 
@@ -68,37 +60,33 @@ class App extends React.Component
 
   getInputController()
   {
-    return this._inputController;
+    return this._module.getInputController();
   }
 
   getGraphController()
   {
-    return this._graphController;
+    return this._module.getGraphController();
   }
 
   getMachineController()
   {
-    return this._machineController;
+    return this._module.getMachineController();
   }
 
   componentDidMount()
   {
     //Initialize the module...
-    this._module.initialize(this);
-
-    //Initialize the controller to graph components
-    this._inputController.initialize(this);
-    this._graphController.initialize(this);
-    this._machineController.initialize(this);
+    const module = this.getCurrentModule();
+    module.initialize(this);
 
     //Notify on create in delete mode
     const tryCreateWhileTrash = () => {
-      if (this._inputController.isTrashMode())
+      if (module.getInputController().isTrashMode())
       {
         Notifications.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
       }
     };
-    this._graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
+    module.getGraphController().on("tryCreateWhileTrash", tryCreateWhileTrash);
 
     this.testingManager.initialize(this);
     this.eventManager.initialize(this);
@@ -130,10 +118,6 @@ class App extends React.Component
 
     this.hotKeys.destroy();
     this.eventManager.destroy();
-
-    this._machineController.destroy();
-    this._graphController.destroy();
-    this._inputController.destroy();
 
     this._module.destroy(this);
 

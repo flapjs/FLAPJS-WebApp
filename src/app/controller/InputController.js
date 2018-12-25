@@ -9,9 +9,9 @@ import Edge from 'modules/fsa/graph/FSAEdge.js';
 
 class InputController
 {
-  constructor()
+  constructor(module)
   {
-    this._module = null;
+    this._module = module;
 
     //TODO: Should this live here?
     this._viewport = new Viewport()
@@ -20,7 +20,7 @@ class InputController
       .setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
 
     //TODO: Should this live here?
-    this._inputAdapter = new InputAdapter()
+    this._inputAdapter = new InputAdapter(this._viewport)
       .setController(this);
 
     this._picker = new GraphPicker();
@@ -47,23 +47,13 @@ class InputController
     this._trashMode = false;
   }
 
-  setModule(module)
-  {
-    this._module = module;
-  }
-
-  getModule()
-  {
-    return this._module;
-  }
-
   initialize(app)
   {
     this._graphController = app.getGraphController();
 
     const element = app.workspace.ref;
     this._viewport.setElement(element);
-    this._inputAdapter.initialize(this._viewport);
+    this._inputAdapter.initialize();
   }
 
   destroy()

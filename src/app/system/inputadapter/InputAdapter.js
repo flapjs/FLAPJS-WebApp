@@ -8,11 +8,10 @@ import InputPointer from './InputPointer.js';
  */
 class InputAdapter
 {
-  constructor()
+  constructor(viewport)
   {
     this._controller = null;
     this._element = null;
-    this._viewport = null;
     this._cursor = {
       _mousemove: null,
       _mouseup: null,
@@ -21,6 +20,8 @@ class InputAdapter
       _timer: null
     };
     this._pointer = null;
+
+    this._viewport = viewport;
 
     //Although dragging could be in pointer, it should be here to allow
     //the adapter to be independent of pointer.
@@ -58,16 +59,15 @@ class InputAdapter
     return this;
   }
 
-  initialize(viewport)
+  initialize()
   {
+    const viewport = this._viewport;
     const element = viewport.getElement();
 
-    if (!(element instanceof SVGElement)) throw new Error("Invalid SVG element for InputAdapter");
-    if (!viewport) throw new Error("Missing viewport for InputAdapter");
+    if (!(element instanceof SVGElement)) throw new Error("Missing SVG element for input adapter's viewport");
     if (this._element) throw new Error("Trying to initialize an InputAdapter already initialized");
 
     this._element = element;
-    this._viewport = viewport;
     this._pointer = new InputPointer(this, element, viewport);
 
     this._element.addEventListener('mousedown', this.onMouseDown);

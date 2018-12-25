@@ -6,9 +6,9 @@ import DFA from 'machine/DFA.js';
 
 class MachineController
 {
-  constructor()
+  constructor(module)
   {
-    this._module = null;
+    this._module = module;
 
     this.machineName = null;
 
