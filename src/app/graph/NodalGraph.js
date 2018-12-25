@@ -30,6 +30,14 @@ class NodalGraph
     {
       this._nodes.splice(i, 1);
       this._nodeMapping.delete(elementID);
+
+      //HACK: This is inefficient, you should convert everything to use only
+      //the map so the indicies would not need to be fixed in the array.
+      //Basically, get rid of this._nodes (you will have to change how setStartNode works)
+      for(let j = i, len = this._nodes.length; j < len; ++j)
+      {
+        this._nodeMapping.set(this._nodes[j].getGraphElementID(), j);
+      }
     }
   }
   addNode(node)
@@ -76,6 +84,12 @@ class NodalGraph
     {
       this._edges.splice(i, 1);
       this._edgeMapping.delete(elementID);
+
+      //HACK: This is inefficient, refer to deleteNode().
+      for(let j = i, len = this._edges.length; j < len; ++j)
+      {
+        this._edgeMapping.set(this._edges[j].getGraphElementID(), j);
+      }
     }
   }
   addEdge(edge)
