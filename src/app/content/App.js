@@ -120,7 +120,7 @@ class App extends React.Component
 
     this._module.destroy(this);
 
-    this._inputAdapter.destroy();
+    this.inputAdapter.destroy();
 
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;
