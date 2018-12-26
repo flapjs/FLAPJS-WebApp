@@ -63,12 +63,14 @@ class Workspace extends React.Component
 
   render()
   {
-    const module = this.props.app.getCurrentModule();
+    const app = this.props.app;
+    const module = app.getCurrentModule();
     const graphController = this.props.graphController;
     const inputController = this.props.inputController;
     const machineController = this.props.machineController;
     const tester = this.props.tester;
     const GraphRenderer = module.getGraphRenderer();
+    const GraphOverlayRenderer = module.getGraphOverlayRenderer();
 
     const graph = graphController.getGraph();
     const viewport = inputController.getInputAdapter().getViewport();
@@ -98,7 +100,8 @@ class Workspace extends React.Component
         <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="rgba(0,0,0,0.04)"/>
 
         {/* Graph objects */}
-        <GraphRenderer graph={graph} inputController={inputController}/>
+        { GraphRenderer &&
+          <GraphRenderer graph={graph} inputController={inputController}/> }
 
         {/* Graph GUIs */}
         <g>
@@ -128,17 +131,14 @@ class Workspace extends React.Component
           { machineController.getMachineBuilder().machineErrorChecker.errorEdges.map((e, i) =>
             <HighlightRenderer key={e.getGraphElementID()} className="highlight-error graph-gui" target={e} type="edge" offset="6"/>) }
 
-
-          {/* Node test targets */}
-          { tester.testMode.targets.map((e, i) => {
-              return <HighlightRenderer key={e.getGraphElementID()} className="highlight-test graph-gui" target={e} type="node" offset="6"/>;
-            }) }
-
           {/* Hover markers */}
           { picker.hasTarget() &&
             !picker.isTargetInSelection() &&
             <HighlightRenderer className={inputController.isTrashMode() ? "highlight-error" : "highlight-select"} target={picker.target} type={picker.targetType}/> }
 
+          {/* Graph overlay objects */}
+          { GraphOverlayRenderer &&
+            <GraphOverlayRenderer app={app}/> }
         </g>
       </g>
     </svg>;

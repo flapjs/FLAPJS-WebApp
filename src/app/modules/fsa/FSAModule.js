@@ -10,6 +10,7 @@ import GraphController from './controller/GraphController.js';
 import MachineController from './controller/MachineController.js';
 
 import FSAGraphRenderer from './graph/renderer/FSAGraphRenderer.js';
+import FSAGraphOverlayRenderer from './graph/renderer/FSAGraphOverlayRenderer.js';
 
 import FSABuilder from './builder/FSABuilder.js';
 import GraphLayout from './graph/GraphLayout.js';
@@ -57,9 +58,9 @@ class FSAModule extends AbstractModule
 
     this._machineBuilder.initialize(app);
 
-    this._eventManager.initialize(this);
+    this._eventManager.initialize(app);
 
-    this._testingManager.initialize(this);
+    this._testingManager.initialize(app);
   }
 
   //Override
@@ -118,6 +119,11 @@ class FSAModule extends AbstractModule
   getLabelEditor()
   {
     return LabelEditor;
+  }
+
+  getGraphOverlayRenderer()
+  {
+    return FSAGraphOverlayRenderer;
   }
 
   //Override
