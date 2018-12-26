@@ -6,7 +6,7 @@ import Config from 'config.js';
 import { saveConfig } from 'config.js';
 
 import LocalSave from 'system/localsave/LocalSave.js';
-import ColorHelper from 'util/ColorHelper.js';
+import * as ColorHelper from 'util/ColorHelper.js';
 import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
 import StyleInput from 'system/styleopt/components/StyleInput.js';
 
@@ -44,12 +44,8 @@ class OptionsPanel extends React.Component
     const invertFunc = function(opt, value) {
       const color = [];
       ColorHelper.HEXtoRGB(value, color);
-      ColorHelper.RGBtoHSV(...color, color);
-      //INVERT HUE: color[0] = (color[0] + 0.5) % 1;
-      //INVERT BRIGHTNESS:
-      color[2] = 1 - color[2];
-      ColorHelper.HSVtoRGB(...color, color);
-      const result = ColorHelper.RGBtoHEX(...color);
+      ColorHelper.invertRGB(color, false, color);
+      const result = ColorHelper.RGBtoHEX(color);
       //Set style
       opts.getOptionByProp(opt.prop + "-invert").setStyle(result);
     };
@@ -57,11 +53,11 @@ class OptionsPanel extends React.Component
     const darkFunc = function(opt, value) {
       //v < 0.15 ? lighten : darken
       const color = [];
+      const inverted = [];
       ColorHelper.HEXtoRGB(value, color);
-      ColorHelper.RGBtoHSV(...color, color);
-      color[2] *= 0.8;
-      ColorHelper.HSVtoRGB(...color, color);
-      const result = ColorHelper.RGBtoHEX(...color);
+      ColorHelper.invertRGB(color, true, inverted);
+      ColorHelper.blendRGB(0.2, color, inverted, color);
+      const result = ColorHelper.RGBtoHEX(color);
       //Set style
       opts.getOptionByProp(opt.prop + "-dark").setStyle(result);
     };
@@ -70,11 +66,11 @@ class OptionsPanel extends React.Component
     {
       //v < 0.15 ? lighten : darken
       const color = [];
+      const inverted = [];
       ColorHelper.HEXtoRGB(value, color);
-      ColorHelper.RGBtoHSV(...color, color);
-      color[2] *= 0.61;
-      ColorHelper.HSVtoRGB(...color, color);
-      const result = ColorHelper.RGBtoHEX(...color);
+      ColorHelper.invertRGB(color, true, inverted);
+      ColorHelper.blendRGB(0.39, color, inverted, color);
+      const result = ColorHelper.RGBtoHEX(color);
       //Set style
       opts.getOptionByProp(opt.prop + "-subtle").setStyle(result);
     };
@@ -83,11 +79,11 @@ class OptionsPanel extends React.Component
     {
       //v < 0.15 ? lighten : darken
       const color = [];
+      const inverted = [];
       ColorHelper.HEXtoRGB(value, color);
-      ColorHelper.RGBtoHSV(...color, color);
-      color[2] *= 0.74;
-      ColorHelper.HSVtoRGB(...color, color);
-      const result = ColorHelper.RGBtoHEX(...color);
+      ColorHelper.invertRGB(color, true, inverted);
+      ColorHelper.blendRGB(0.26, color, inverted, color);
+      const result = ColorHelper.RGBtoHEX(color);
       //Set style
       opts.getOptionByProp(opt.prop + "-ghost").setStyle(result);
     };
@@ -96,11 +92,11 @@ class OptionsPanel extends React.Component
     {
       //v < 0.15 ? lighten : darken
       const color = [];
+      const inverted = [];
       ColorHelper.HEXtoRGB(value, color);
-      ColorHelper.RGBtoHSV(...color, color);
-      color[2] *= 0.87;
-      ColorHelper.HSVtoRGB(...color, color);
-      const result = ColorHelper.RGBtoHEX(...color);
+      ColorHelper.invertRGB(color, true, inverted);
+      ColorHelper.blendRGB(0.13, color, inverted, color);
+      const result = ColorHelper.RGBtoHEX(color);
       //Set style
       opts.getOptionByProp(opt.prop + "-back").setStyle(result);
     };

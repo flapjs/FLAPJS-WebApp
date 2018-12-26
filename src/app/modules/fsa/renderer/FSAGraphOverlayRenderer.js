@@ -13,6 +13,8 @@ class FSAGraphOverlayRenderer extends React.Component
   //Override
   render()
   {
+    //Inherits props from parent
+    const parent = this.props.parent;
     const app = this.props.app;
 
     const currentModule = app.getCurrentModule();

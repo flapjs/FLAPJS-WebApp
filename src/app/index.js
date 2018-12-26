@@ -58,7 +58,6 @@ function loadApplication()
 {
   loadConfig();
   root = document.getElementById("root");
-  //import(/* webpackChunkName: "landing" */ 'landing/components/LandingPage.js').then(({ default: _ }) => Router.routeTo( _ ));
 
   //This should be the same as the one referred to by OptionsPanel
   if (LocalSave.getStringFromStorage("skipWelcome") == "true")

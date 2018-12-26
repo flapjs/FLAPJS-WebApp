@@ -44,6 +44,8 @@ class App extends React.Component
 
     this.undoManager = new UndoManager();
 
+    //Modules should handle its own initialization, regardless of web state
+    //Also, loading from file should be handled by modules themselves
     this._module = new FSAModule(this);
     /*
     Modules['fsa'].fetch((Module) => {

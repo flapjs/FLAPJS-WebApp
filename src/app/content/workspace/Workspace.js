@@ -10,6 +10,7 @@ const WORKSPACE_OFFSET_Y = 0;
 const EXPORT_PADDING_X = 30;
 const EXPORT_PADDING_Y = 0;
 
+const GRAPH_RENDER_LAYER = "graph";
 const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
 
 class Workspace extends React.Component
@@ -72,7 +73,7 @@ class Workspace extends React.Component
     const inputController = app.getInputController();
     const machineController = app.getMachineController();
 
-    const GraphRenderer = currentModule.getGraphRenderer();
+    const GraphRenderer = currentModule.getRenderer(GRAPH_RENDER_LAYER);
     const GraphOverlayRenderer = currentModule.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
 
     const graph = graphController.getGraph();
@@ -83,29 +84,30 @@ class Workspace extends React.Component
 
     //Must not be a block content (must inline)
     return <svg id="workspace-content" ref={ref=>this.ref=ref}
-      viewBox={(-halfSize + WORKSPACE_OFFSET_X) + " " + (-halfSize + WORKSPACE_OFFSET_Y) + " " + size + " " + size}
+      viewBox={(-halfSize + WORKSPACE_OFFSET_X) + " "
+        + (-halfSize + WORKSPACE_OFFSET_Y) + " "
+        + size + " " + size}
       xmlns="http://www.w3.org/2000/svg">
 
       {/* Graph subtitle */}
       <Subtitle visible={graph.isEmpty()}/>
 
       {/* Graph elements */}
-      <g id="workspace-content-elements" transform={
-        "translate(" +
-        viewport.getOffsetX() + " " +
-        viewport.getOffsetY() + ")"}>
+      <g id="workspace-content-elements" transform={"translate("
+        + viewport.getOffsetX() + " "
+        + viewport.getOffsetY() + ")"}>
 
         {/* Graph origin crosshair */}
-        <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="rgba(0,0,0,0.04)"/>
-        <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="rgba(0,0,0,0.04)"/>
+        <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="#E6E6E6"/>
+        <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="#E6E6E6"/>
 
         {/* Graph objects */}
         { GraphRenderer &&
-          <GraphRenderer graph={graph} inputController={inputController}/> }
+          <GraphRenderer {...this.props} parent={this}/> }
 
         {/* Graph overlays */}
         { GraphOverlayRenderer &&
-          <GraphOverlayRenderer workspace={this} app={app}/> }
+          <GraphOverlayRenderer {...this.props} parent={this}/> }
       </g>
     </svg>;
   }

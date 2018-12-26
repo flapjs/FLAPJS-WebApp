@@ -11,8 +11,8 @@ import InputController from './controller/InputController.js';
 import GraphController from './controller/GraphController.js';
 import MachineController from './controller/MachineController.js';
 
-import FSAGraphRenderer from './graph/renderer/FSAGraphRenderer.js';
-import FSAGraphOverlayRenderer from './graph/renderer/FSAGraphOverlayRenderer.js';
+import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
+import FSAGraphOverlayRenderer from './renderer/FSAGraphOverlayRenderer.js';
 import ViewportRenderer from './renderer/ViewportRenderer.js';
 
 import FSABuilder from './builder/FSABuilder.js';
@@ -138,6 +138,8 @@ class FSAModule extends AbstractModule
   {
     switch(renderLayer)
     {
+      case "graph":
+        return FSAGraphRenderer;
       case "graphoverlay":
         return FSAGraphOverlayRenderer;
       case "viewport":

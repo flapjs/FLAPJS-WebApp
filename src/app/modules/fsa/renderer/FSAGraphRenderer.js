@@ -14,8 +14,12 @@ class FSAGraphRenderer extends React.Component
   //Override
   render()
   {
-    const graph = this.props.graph;
-    const inputController = this.props.inputController;
+    //Inherits props from parent
+    const app = this.props.app;
+    const inputController = app.getInputController();
+    const graphController = app.getGraphController();
+    const graph = graphController.getGraph();
+
     return <g>
       {/* Nodes */}
       {graph.getNodes().map((e, i) => <NodeRenderer key={e.getGraphElementID() || i} node={e}/>)}
