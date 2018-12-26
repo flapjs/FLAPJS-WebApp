@@ -22,26 +22,16 @@ class Viewport extends React.Component
   render()
   {
     const app = this.props.app;
-    const screen = this.props.screen;
     const currentModule = app.getCurrentModule();
     const inputController = app.getInputController();
     const graphController = app.getGraphController();
     const machineController = app.getMachineController();
 
-    const LabelEditor = currentModule.getLabelEditor();
     const ViewportRenderer = currentModule.getRenderer(VIEWPORT_RENDER_LAYER);
 
     return <div className={"viewport-container viewport-" + this.state.mode} ref={ref=>this.ref=ref}>
-      { LabelEditor &&
-        <LabelEditor ref={ref=>this.labelEditor=ref}
-        inputController={inputController}
-        graphController={graphController}
-        machineController={machineController}
-        screen={screen}/> }
       { ViewportRenderer &&
-        <ViewportRenderer
-        viewport={this}
-        app={app}/>}
+        <ViewportRenderer {...this.props} parent={this}/>}
     </div>;
   }
 }

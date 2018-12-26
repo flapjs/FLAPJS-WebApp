@@ -14,7 +14,7 @@ class GraphController extends AbstractGraphController
     this.inputController = null;
     this.machineController = null;
 
-    this.viewportElement = null;
+    this.labelEditorElement = null;
     this.tester = null;
 
     this.prevQuad = {
@@ -100,17 +100,20 @@ class GraphController extends AbstractGraphController
     this.registerEvent("tryCreateWhileTrash");
   }
 
+  //Override
   initialize(app)
   {
-    this.viewportElement = app.viewport;
+    super.initialize(app);
     this.tester = app.getCurrentModule().getTestingManager();
 
     this.inputController = app.getInputController();
     this.machineController = app.getMachineController();
   }
 
-  destroy()
+  //Override
+  destroy(app)
   {
+    super.destroy(app);
   }
 
   applyAutoLayout()
@@ -307,7 +310,7 @@ class GraphController extends AbstractGraphController
   openLabelEditor(target, x, y, placeholder=null, replace=true, callback=null)
   {
     const prevLabel = placeholder || target.getEdgeLabel();
-    this.viewportElement.labelEditor.openEditor(target, placeholder, replace, () => {
+    this.labelEditorElement.openEditor(target, placeholder, replace, () => {
       const label = target.getEdgeLabel();
       if (prevLabel.length > 0 && label != prevLabel)
       {

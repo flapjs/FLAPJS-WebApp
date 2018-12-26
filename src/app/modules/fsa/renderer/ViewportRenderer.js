@@ -14,14 +14,26 @@ class ViewportRenderer extends React.Component
   //Override
   render()
   {
-    const viewport = this.props.viewport;
+    //Inherits props from parent
+    const parent = this.props.parent;
     const app = this.props.app;
+    const screen = this.props.screen;
+
+    const currentModule = app.getCurrentModule();
     const inputController = app.getInputController();
     const graphController = app.getGraphController();
     const machineController = app.getMachineController();
     const tester = app.getCurrentModule().getTestingManager();
 
+    const LabelEditor = currentModule.getLabelEditor();
+
     return <span>
+    { LabelEditor &&
+      <LabelEditor ref={ref=>graphController.labelEditorElement=ref}
+      inputController={inputController}
+      graphController={graphController}
+      machineController={machineController}
+      screen={screen}/> }
     {
       tester.getStepByStepMode() ?
       <div className="anchor-bottom-left" style={{width: "100%"}}>
@@ -33,7 +45,7 @@ class ViewportRenderer extends React.Component
           <CursorMode inputController={inputController} graphController={graphController}/>
         </div>
         <div className="anchor-bottom-right">
-          <TrashCan inputController={inputController} viewport={viewport}/>
+          <TrashCan inputController={inputController} viewport={parent}/>
         </div>
       </span>
     }
