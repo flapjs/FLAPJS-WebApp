@@ -4,8 +4,9 @@ import './App.css';
 
 import Config from 'config.js';
 
+//import Modules from './Modules.js';
+//import DefaultModule from 'modules/default/DefaultModule.js';
 import FSAModule from 'modules/fsa/FSAModule.js';
-import TestingManager from 'modules/fsa/testing/TestingManager.js';
 
 import HotKeys from './HotKeys.js';
 import LocalSave from 'system/localsave/LocalSave.js';
@@ -34,11 +35,8 @@ class App extends React.Component
     this.drawer = null;
     this.toolbar = null;
 
-    this.testingManager = new TestingManager();
-
     //These need to be initialized before module
-    this.inputAdapter = new InputAdapter()
-      .setController(this);
+    this.inputAdapter = new InputAdapter();
     this.inputAdapter.getViewport()
       .setMinScale(Config.MIN_SCALE)
       .setMaxScale(Config.MAX_SCALE)
@@ -47,6 +45,8 @@ class App extends React.Component
     this.undoManager = new UndoManager();
 
     this._module = new FSAModule(this);
+    //this._module = new DefaultModule(this);
+    //Modules['fsa'].fetch((Module) => this._module = new Module(this));
 
     this.hotKeys = new HotKeys();
     this.tutorial = new Tutorial();
@@ -86,7 +86,6 @@ class App extends React.Component
     };
     module.getGraphController().on("tryCreateWhileTrash", tryCreateWhileTrash);
 
-    this.testingManager.initialize(this);
     this.hotKeys.initialize(this);
 
     //Upload drop zone
@@ -311,8 +310,8 @@ class App extends React.Component
     const inputController = module.getInputController();
     const graphController = module.getGraphController();
     const machineController = module.getMachineController();
+    const tester = module.getTestingManager();
 
-    const tester = this.testingManager;
     const screen = this.workspace ? this.workspace.ref : null;
 
     if (this._init)

@@ -1,4 +1,4 @@
-import BaseModule from 'modules/base/BaseModule.js';
+import AbstractModule from 'modules/base/AbstractModule.js';
 
 import OverviewPanel from './panels/overview/OverviewPanel.js';
 import TestingPanel from './panels/testing/TestingPanel.js';
@@ -15,6 +15,7 @@ import FSABuilder from './builder/FSABuilder.js';
 import GraphLayout from './graph/GraphLayout.js';
 import EventManager from './EventManager.js';
 import LabelEditor from './editor/LabelEditor.js';
+import TestingManager from './testing/TestingManager.js';
 
 import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
@@ -26,11 +27,11 @@ const EXPORTERS = [
   new JFLAPGraphExporter()
 ];
 
-class FSAModule extends BaseModule
+class FSAModule extends AbstractModule
 {
   constructor(app)
   {
-    super();
+    super(app);
 
     this._refreshRate = 60;
     this._ticks = 0;
@@ -42,6 +43,7 @@ class FSAModule extends BaseModule
     this._machineBuilder = new FSABuilder(this._graphController.getGraph());
 
     this._eventManager = new EventManager(app.getUndoManager());
+    this._testingManager = new TestingManager();
   }
 
   //Override
@@ -56,11 +58,15 @@ class FSAModule extends BaseModule
     this._machineBuilder.initialize(app);
 
     this._eventManager.initialize(this);
+
+    this._testingManager.initialize(this);
   }
 
   //Override
   destroy(app)
   {
+    this._testingManager.destroy();
+
     this._eventManager.destroy();
 
     this._machineBuilder.destroy();
@@ -72,6 +78,7 @@ class FSAModule extends BaseModule
     super.destroy(app);
   }
 
+  //Override
   update(app)
   {
     this._inputController.update();
@@ -86,6 +93,11 @@ class FSAModule extends BaseModule
   getGraph()
   {
     return this._graphController.getGraph();
+  }
+
+  getTestingManager()
+  {
+    return this._testingManager;
   }
 
   getDefaultGraphLayout()

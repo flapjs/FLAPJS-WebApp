@@ -32,7 +32,7 @@ class TestingPanel extends React.Component
     this.uploadInput = React.createRef();
 
     this.state = {
-      errorCheckMode: this.props.app.testingManager.getErrorCheckMode(),
+      errorCheckMode: this.props.app.getCurrentModule().getTestingManager().getErrorCheckMode(),
       noTestMode: true
     };
 
@@ -70,7 +70,7 @@ class TestingPanel extends React.Component
   onGraphChange(g)
   {
     const app = this.props.app;
-    const tester = app.testingManager;
+    const tester = app.getCurrentModule().getTestingManager();
     tester.inputList.resetTests();
   }
 
@@ -80,7 +80,7 @@ class TestingPanel extends React.Component
     if (files.length > 0)
     {
       const app = this.props.app;
-      const tester = app.testingManager;
+      const tester = app.getCurrentModule().getTestingManager();
       tester.inputList.importTests(files[0]);
       document.getElementById("test-name").innerHTML = files[0].name;
 
@@ -96,7 +96,7 @@ class TestingPanel extends React.Component
     const graphController = this.props.graphController;
     const machineController = this.props.machineController;
     const app = this.props.app;
-    const tester = app.testingManager;
+    const tester = app.getCurrentModule().getTestingManager();
 
     const graph = graphController.getGraph();
     const machineBuilder = machineController.getMachineBuilder();
@@ -119,7 +119,7 @@ class TestingPanel extends React.Component
   {
     const machine = this.props.machineController.getMachineBuilder().getMachine();
     const app = this.props.app;
-    const tester = app.testingManager;
+    const tester = app.getCurrentModule().getTestingManager();
     if (tester.testMode.isStarted())
     {
       tester.setStepByStepMode(false);
@@ -139,7 +139,7 @@ class TestingPanel extends React.Component
   onTestsClear(e)
   {
     const app = this.props.app;
-    const tester = app.testingManager;
+    const tester = app.getCurrentModule().getTestingManager();
     tester.inputList.clearTests();
     this.clearTestName();
     this.hideTestInputList();
@@ -149,7 +149,7 @@ class TestingPanel extends React.Component
   onTestsSave(e)
   {
     const app = this.props.app;
-    const tester = app.testingManager;
+    const tester = app.getCurrentModule().getTestingManager();
     Downloader.downloadText(TEST_FILENAME, tester.inputList.getTestsAsStrings().join("\n"));
   }
 
@@ -183,7 +183,7 @@ class TestingPanel extends React.Component
   {
     const app = this.props.app;
     const viewport = app.viewport;
-    const tester = app.testingManager;
+    const tester = app.getCurrentModule().getTestingManager();
     const testList = tester.inputList;
     const machineBuilder = this.props.machineController.getMachineBuilder();
 

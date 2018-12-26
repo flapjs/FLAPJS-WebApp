@@ -103,7 +103,7 @@ class GraphController extends AbstractGraphController
   initialize(app)
   {
     this.labelEditor = app.viewport.labelEditor;
-    this.tester = app.testingManager;
+    this.tester = app.getCurrentModule().getTestingManager();
 
     this.inputController = app.getInputController();
     this.machineController = app.getMachineController();

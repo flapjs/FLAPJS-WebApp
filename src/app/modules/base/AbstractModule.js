@@ -8,9 +8,9 @@ const DEFAULT_IMAGE_EXPORTERS = [
   new GraphImageExporter('jpg')
 ];
 
-class BaseModule
+class AbstractModule
 {
-  constructor()
+  constructor(app)
   {
     this._importer = new GraphImporter(this);
   }
@@ -18,6 +18,8 @@ class BaseModule
   initialize(app) {}
 
   destroy(app) {}
+
+  update(app) {}
 
   getInputController()
   {
@@ -62,6 +64,11 @@ class BaseModule
     throw new Error("Missing graph renderer for module \'" + this.getModuleName() + "\'");
   }
 
+  getOverlayRenderer()
+  {
+    return null;
+  }
+
   getDefaultModulePanel()
   {
     return null;
@@ -83,4 +90,4 @@ class BaseModule
   }
 }
 
-export default BaseModule;
+export default AbstractModule;

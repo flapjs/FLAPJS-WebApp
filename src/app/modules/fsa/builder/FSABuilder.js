@@ -41,7 +41,7 @@ class FSABuilder extends MachineBuilder
   {
     super.initialize(app);
 
-    this.tester = app.testingManager;
+    this.tester = app.getCurrentModule().getTestingManager();
     this.graphController = app.getGraphController();
     this.machineController = app.getMachineController();
 
