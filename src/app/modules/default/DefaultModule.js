@@ -1,5 +1,6 @@
 import AbstractModule from 'modules/base/AbstractModule.js';
 
+import DefaultGraphExporter from './DefaultGraphExporter.js';
 import DefaultInputController from './DefaultInputController.js';
 import DefaultGraphController from './DefaultGraphController.js';
 import DefaultMachineController from './DefaultMachineController.js';
@@ -10,34 +11,23 @@ class DefaultModule extends AbstractModule
   {
     super(app);
 
+    this._exporter = new DefaultGraphExporter();
     this._inputController = new DefaultInputController(this, app.getInputAdapter());
     this._graphController = new DefaultGraphController(this);
     this._machineController = new DefaultMachineController(this);
   }
 
-  //Override
-  getInputController()
-  {
-    return this._inputController;
-  }
+  getLabelEditor() { return null; }
 
+  getDefaultGraphExporter() { return this._exporter; }
   //Override
-  getGraphController()
-  {
-    return this._graphController;
-  }
-
+  getInputController() { return this._inputController; }
   //Override
-  getMachineController()
-  {
-    return this._machineController;
-  }
-
+  getGraphController() { return this._graphController; }
   //Override
-  getModuleName()
-  {
-    return "default";
-  }
+  getMachineController() { return this._machineController; }
+  //Override
+  getModuleName() { return "default"; }
 }
 
 export default DefaultModule;

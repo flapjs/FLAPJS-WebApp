@@ -44,7 +44,7 @@ class AbstractModule
   getDefaultGraphExporter()
   {
     const exporters = this.getGraphExporters();
-    if (exporters.length >= 0) return exporters[0];
+    if (exporters.length > 0) return exporters[0];
 
     throw new Error("Missing default graph exporter for module \'" + this.getModuleName() + "\'");
   }
@@ -66,7 +66,7 @@ class AbstractModule
 
   getGraphRenderer()
   {
-    throw new Error("Missing graph renderer for module \'" + this.getModuleName() + "\'");
+    return null;
   }
 
   getDefaultModulePanel()

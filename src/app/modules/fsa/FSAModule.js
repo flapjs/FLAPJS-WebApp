@@ -1,5 +1,7 @@
 import AbstractModule from 'modules/base/AbstractModule.js';
 
+import Notifications from 'system/notification/Notifications.js';
+
 import OverviewPanel from './panels/overview/OverviewPanel.js';
 import TestingPanel from './panels/testing/TestingPanel.js';
 import AnalysisPanel from './panels/analysis/AnalysisPanel.js';
@@ -62,6 +64,15 @@ class FSAModule extends AbstractModule
     this._eventManager.initialize(app);
 
     this._testingManager.initialize(app);
+
+    //Notify on create in delete mode
+    const tryCreateWhileTrash = () => {
+      if (this._inputController.isTrashMode())
+      {
+        Notifications.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
+      }
+    };
+    this._graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
   }
 
   //Override

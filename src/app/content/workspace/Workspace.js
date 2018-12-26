@@ -5,9 +5,6 @@ import Config from 'config.js';
 
 import Subtitle from './Subtitle.js';
 
-import SelectionBoxRenderer from './renderer/SelectionBoxRenderer.js';
-import HighlightRenderer from './renderer/HighlightRenderer.js';
-
 const WORKSPACE_OFFSET_X = 0;
 const WORKSPACE_OFFSET_Y = 0;
 const EXPORT_PADDING_X = 30;
@@ -66,18 +63,16 @@ class Workspace extends React.Component
   render()
   {
     const app = this.props.app;
+    const currentModule = app.getCurrentModule();
     const graphController = app.getGraphController();
     const inputController = app.getInputController();
     const machineController = app.getMachineController();
-    const module = app.getCurrentModule();
-    const GraphRenderer = module.getGraphRenderer();
-    const GraphOverlayRenderer = module.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
+
+    const GraphRenderer = currentModule.getGraphRenderer();
+    const GraphOverlayRenderer = currentModule.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
 
     const graph = graphController.getGraph();
     const viewport = inputController.getInputAdapter().getViewport();
-    const machineBuilder = machineController.getMachineBuilder();
-    const picker = inputController.getPicker();
-    const selectionBox = picker.getSelectionBox();
 
     let size = Config.DEFAULT_GRAPH_SIZE * Math.max(Number.MIN_VALUE, viewport.getScale());
     const halfSize = size / 2;
@@ -104,43 +99,9 @@ class Workspace extends React.Component
         { GraphRenderer &&
           <GraphRenderer graph={graph} inputController={inputController}/> }
 
-        {/* Graph GUIs */}
-        <g>
-          {/* Selected elements */}
-          { picker.hasSelection() &&
-            picker.getSelection(graph).map((e, i) =>
-              <HighlightRenderer key={e.getGraphElementID()} className={inputController.isTrashMode() ? "highlight-error" : "highlight-select"} target={e} type="node"/>) }
-
-          {/* Selection box */}
-          <SelectionBoxRenderer visible={selectionBox.visible}
-            fromX={selectionBox.fromX} fromY={selectionBox.fromY}
-            toX={selectionBox.toX} toY={selectionBox.toY}/>
-
-          {/* Node warning targets */}
-          { machineController.getMachineBuilder().machineErrorChecker.warningNodes.map((e, i) =>
-            <HighlightRenderer key={e.getGraphElementID()} className="highlight-warning graph-gui" target={e} type="node" offset="6"/>) }
-
-          {/* Edge warning targets */}
-          { machineController.getMachineBuilder().machineErrorChecker.warningEdges.map((e, i) =>
-            <HighlightRenderer key={e.getGraphElementID()} className="highlight-warning graph-gui" target={e} type="edge" offset="6"/>) }
-
-          {/* Node error targets */}
-          { machineController.getMachineBuilder().machineErrorChecker.errorNodes.map((e, i) =>
-            <HighlightRenderer key={e.getGraphElementID()} className="highlight-error graph-gui" target={e} type="node" offset="6"/>) }
-
-          {/* Edge error targets */}
-          { machineController.getMachineBuilder().machineErrorChecker.errorEdges.map((e, i) =>
-            <HighlightRenderer key={e.getGraphElementID()} className="highlight-error graph-gui" target={e} type="edge" offset="6"/>) }
-
-          {/* Hover markers */}
-          { picker.hasTarget() &&
-            !picker.isTargetInSelection() &&
-            <HighlightRenderer className={inputController.isTrashMode() ? "highlight-error" : "highlight-select"} target={picker.target} type={picker.targetType}/> }
-
-          {/* Graph overlay objects */}
-          { GraphOverlayRenderer &&
-            <GraphOverlayRenderer app={app}/> }
-        </g>
+        {/* Graph overlays */}
+        { GraphOverlayRenderer &&
+          <GraphOverlayRenderer workspace={this} app={app}/> }
       </g>
     </svg>;
   }

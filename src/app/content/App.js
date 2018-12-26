@@ -43,7 +43,7 @@ class App extends React.Component
       .setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
 
     this.undoManager = new UndoManager();
-    
+
     this._module = new Module(this);
     //Modules['fsa'].fetch((Module) => this._module = new Module(this));
 
@@ -75,15 +75,6 @@ class App extends React.Component
     //Initialize the module...
     const module = this.getCurrentModule();
     module.initialize(this);
-
-    //Notify on create in delete mode
-    const tryCreateWhileTrash = () => {
-      if (module.getInputController().isTrashMode())
-      {
-        Notifications.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
-      }
-    };
-    module.getGraphController().on("tryCreateWhileTrash", tryCreateWhileTrash);
 
     this.hotKeys.initialize(this);
 
