@@ -4,9 +4,8 @@ import './App.css';
 
 import Config from 'config.js';
 
-//import Modules from './Modules.js';
-//import Module from 'modules/default/DefaultModule.js';
-import Module from 'modules/fsa/FSAModule.js';
+import Modules from './Modules.js';
+import DefaultModule from 'modules/default/DefaultModule.js';
 
 import HotKeys from './HotKeys.js';
 import LocalSave from 'system/localsave/LocalSave.js';
@@ -44,8 +43,16 @@ class App extends React.Component
 
     this.undoManager = new UndoManager();
 
-    this._module = new Module(this);
-    //Modules['fsa'].fetch((Module) => this._module = new Module(this));
+    this._module = new DefaultModule(this);
+    Modules['fsa'].fetch((Module) => {
+      if (this._module)
+      {
+        this._module.destroy();
+      }
+
+      this._module = new Module(this);
+      this._module.initialize(this);
+    });
 
     this.hotKeys = new HotKeys();
     this.tutorial = new Tutorial();
