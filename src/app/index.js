@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom';
 
 //Router: imports
 import Router from 'router.js';
-import App from 'content/App.js';
-import LandingPage from 'landing/components/LandingPage.js';
+import Test from 'test/App.js';
+//import App from 'content/App.js';
+//import LandingPage from 'landing/components/LandingPage.js';
+
 //Config: imports
 import Config from 'config.js';
 import { loadConfig, saveConfig } from 'config.js';
@@ -59,7 +61,9 @@ function loadApplication()
   loadConfig();
   root = document.getElementById("root");
 
+  Router.routeTo(Test);
   //This should be the same as the one referred to by OptionsPanel
+  /*
   if (LocalSave.getStringFromStorage("skipWelcome") == "true")
   {
     Router.routeTo(App);
@@ -68,6 +72,7 @@ function loadApplication()
   {
     Router.routeTo(LandingPage);
   }
+  */
 }
 
 //Update application
