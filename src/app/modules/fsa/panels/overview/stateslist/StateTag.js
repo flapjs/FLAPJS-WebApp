@@ -19,28 +19,6 @@ class StateTag extends React.Component
     this.onBlur = this.onBlur.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
-
-    this.onDragStart = this.onDragStart.bind(this);
-    this.onDrop = this.onDrop.bind(this);
-  }
-
-  onDragStart(e)
-  {
-    //Drag all of it
-    e.target.select();
-  }
-
-  onDrop(e)
-  {
-    const graphController = this.props.graphController;
-    const graph = graphController.getGraph();
-    const nodeIndex = graph.getNodeIndex(this.props.src);
-    const otherIndex = graph.getNodeIndexByLabel(e.dataTransfer.getData("text"));
-
-    //Swap
-    graphController.swapNodeByIndex(nodeIndex, otherIndex);
-
-    e.preventDefault();
   }
 
   onFocus(e)
@@ -67,8 +45,8 @@ class StateTag extends React.Component
       const graph = graphController.getGraph();
       if (newLabel.length > 0)
       {
-        const result = graph.getNodeByLabel(newLabel);
-        if (!result)
+        const nodes = graph.getNodesByLabel(newLabel);
+        if (nodes.length <= 0)
         {
           //Valid! Rename it!
           graphController.renameNode(node, newLabel);
@@ -121,10 +99,15 @@ class StateTag extends React.Component
     let error = false;
     if (value.length > 0)
     {
-      const node = graph.getNodeByLabel(value);
-      if (node != null && node != this.props.src)
+      const nodes = graph.getNodesByLabel(value);
+      if (nodes.length > 0)
       {
-        error = true;
+        //If there are more than 1 that have the same name
+        //OR if it is NOT the one we have...
+        if (nodes.length > 1 || nodes[0] !== this.props.src)
+        {
+          error = true;
+        }
       }
     }
 
@@ -136,7 +119,7 @@ class StateTag extends React.Component
 
   render()
   {
-    const isCustom = this.props.src.hasCustomLabel();
+    const isCustom = this.props.src.getNodeCustom();
     const value = this.state.value != null ? this.state.value : this.props.label;
     return <div className={"statetag-container" +
       (isCustom ? " customtag" : "") +
@@ -144,16 +127,13 @@ class StateTag extends React.Component
       (this.state.value && this.state.error ? " errortag" : "")}>
       <input type="text" className={(this.props.accept ? " accept" : "")}
         spellCheck="false"
-        draggable="true"
         style={{width: value.length + "ch"}}
         value={value}
         onChange={this.onValueChange}
         onFocus={this.onFocus}
         onBlur={this.onBlur}
         onKeyUp={this.onKeyUp}
-        onKeyDown={this.onKeyDown}
-        onDragStart={this.onDragStart}
-        onDrop={this.onDrop}/>
+        onKeyDown={this.onKeyDown}/>
     </div>;
   }
 }

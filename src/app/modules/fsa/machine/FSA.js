@@ -5,6 +5,8 @@ const FROM_STATE_INDEX = 0;
 const SYMBOL_INDEX = 1;
 const TO_STATE_INDEX = 2;
 
+export const EMPTY_SYMBOL = '&empty';
+
 export class State
 {
   constructor(label="", src=null)
@@ -277,6 +279,11 @@ class FSA
     return dst;
   }
 
+  getStateByID(id)
+  {
+    return this._states.get(id);
+  }
+
   hasState(state) { return this._states.has(state.getStateID()); }
 
   getStates() { return this._states.values(); }
@@ -375,7 +382,7 @@ class FSA
   _incrSymbolCount(symbol)
   {
     //Don't add empty symbol to the alphabet
-    if (symbol === FSA.EMPTY_SYMBOL) return;
+    if (symbol === EMPTY_SYMBOL) return;
 
     const symbolCount = this._alphabet.get(symbol) || 0;
     this._alphabet.set(symbol, symbolCount + 1);
@@ -386,7 +393,7 @@ class FSA
     if (!this._alphabet.has(symbol)) throw new Error("Unable to find valid transition symbol in alphabet");
 
     //Empty symbol is not in the alphabet
-    if (symbol === FSA.EMPTY_SYMBOL) return;
+    if (symbol === EMPTY_SYMBOL) return;
 
     const symbolCount = this._alphabet.get(symbol);
     //Delete the symbol, since it is no longer used...
@@ -412,8 +419,8 @@ class FSA
 
   changeSymbol(symbol, newSymbol)
   {
-    if (symbol === FSA.EMPTY_SYMBOL) throw new Error("Cannot change the empty symbol");
-    if (newSymbol === FSA.EMPTY_SYMBOL) throw new Error("Cannot change to the empty symbol");
+    if (symbol === EMPTY_SYMBOL) throw new Error("Cannot change the empty symbol");
+    if (newSymbol === EMPTY_SYMBOL) throw new Error("Cannot change to the empty symbol");
     if (this._alphabet.has(newSymbol)) throw new Error("Cannot change symbol to another existing symbol");
 
     for(const transition of this._transitions.values())
@@ -469,7 +476,7 @@ class FSA
     }
 
     //Remove from alphabet if possible...
-    if (symbol !== FSA.EMPTY_SYMBOL)
+    if (symbol !== EMPTY_SYMBOL)
     {
       if (this._customSymbols.has(symbol))
       {
@@ -484,7 +491,7 @@ class FSA
 
   setCustomSymbol(symbol, custom=true)
   {
-    if (symbol === FSA.EMPTY_SYMBOL) throw new Error("Cannot change the empty symbol as a custom symbol");
+    if (symbol === EMPTY_SYMBOL) throw new Error("Cannot change the empty symbol as a custom symbol");
 
     if (custom)
     {
@@ -578,7 +585,7 @@ class FSA
     if (!state) return dst;
     if (!this._states.has(state.getStateID())) throw new Error("Unable to find source state with id \'" + state.getStateID() + "\'");
 
-    if (!symbol) symbol = FSA.EMPTY_SYMBOL;
+    if (!symbol) symbol = EMPTY_SYMBOL;
 
     const fromTransitionKey = state.getStateID() + "->";
     for(const key of this._transitions.keys())
@@ -603,7 +610,7 @@ class FSA
     if (!state) return dst;
     if (!this._states.has(state.getStateID())) throw new Error("Unable to find source state with id \'" + state.getStateID() + "\'");
 
-    if (!symbol) symbol = FSA.EMPTY_SYMBOL;
+    if (!symbol) symbol = EMPTY_SYMBOL;
 
     const fromTransitionKey = state.getStateID() + "->";
     for(const key of this._transitions.keys())
@@ -636,7 +643,7 @@ class FSA
       const transitions = this.getOutgoingTransitions(dst[i]);
       for(const transition of transitions)
       {
-        if (transition[SYMBOL_INDEX] === FSA.EMPTY_SYMBOL)
+        if (transition[SYMBOL_INDEX] === EMPTY_SYMBOL)
         {
           const toState = transition[TO_STATE_INDEX];
           if (!dst.includes(toState))
@@ -671,6 +678,5 @@ class FSA
     return dst;
   }
 }
-FSA.EMPTY_SYMBOL = "&empty";
 
 export default FSA;

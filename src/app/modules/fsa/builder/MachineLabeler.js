@@ -15,13 +15,13 @@ class MachineLabeler
   {
     const startNode = this.graph.getStartNode();
     if (!startNode) return;
-    const isDefaultInitial = !startNode.hasCustomLabel();
+    const isDefaultInitial = !startNode.getNodeCustom();
 
     const defaultNodes = [];
     const customLabels = [];
-    for(const node of this.graph.nodes)
+    for(const node of this.graph.getNodes())
     {
-      if (node.hasCustomLabel())
+      if (node.getNodeCustom())
       {
         customLabels.push(node.getNodeLabel());
       }
@@ -63,7 +63,7 @@ class MachineLabeler
 
   isUniqueNodeLabel(newLabel)
   {
-    for(const node of this.graph.nodes)
+    for(const node of this.graph.getNodes())
     {
       if (node.getNodeLabel() == newLabel)
       {

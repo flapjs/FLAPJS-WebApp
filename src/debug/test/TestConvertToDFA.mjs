@@ -1,6 +1,6 @@
 import * as TEST from '../Tester.js';
 
-import FSA from 'modules/fsa/machine/FSA.js';
+import FSA, { EMPTY_SYMBOL } from 'modules/fsa/machine/FSA.js';
 import { solveFSA } from 'modules/fsa/machine/solveFSA.js';
 import { convertToDFA } from 'modules/fsa/machine/convertFSA.js';
 
@@ -96,7 +96,7 @@ import { convertToDFA } from 'modules/fsa/machine/convertFSA.js';
   nfa.addTransition(state0, state0, "0");
   nfa.addTransition(state0, state0, "1");
   nfa.addTransition(state0, state1, "1");
-  nfa.addTransition(state0, state1, FSA.EMPTY_SYMBOL);
+  nfa.addTransition(state0, state1, EMPTY_SYMBOL);
   nfa.setFinalState(state1);
   const result = convertToDFA(nfa, nfa);
   TEST.assert(result && result.validate());

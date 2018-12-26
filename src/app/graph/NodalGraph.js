@@ -1,351 +1,156 @@
-import Config from 'config.js';
-import Eventable from 'util/Eventable.js';
-
-import GraphLayout from 'graph/GraphLayout.js';
-
-import Node from './Node.js';
-import Edge from './Edge.js';
-import { EMPTY } from 'machine/Symbols.js';
-
-const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
+import GraphNode from './GraphNode.js';
+import GraphEdge from './GraphEdge.js';
+import { guid, stringHash } from 'util/MathHelper.js';
 
 class NodalGraph
 {
-  constructor(nodes=[], edges=[])
+  constructor()
   {
-    this.nodes = nodes;
-    this.edges = edges;
-
-    //nodeCreate(node) - Whenever a new node is created
-    this.registerEvent("nodeCreate");
-    //nodeDestroy(node) - Whenever a node is destroyed (even on clear)
-    this.registerEvent("nodeDestroy");
-    //nodeLabel(node, newLabel, oldLabel) - Whenever a node label changes
-    this.registerEvent("nodeLabel");
-    //nodeCustomLabel(node, newLabel, oldLabel) - Whenever a node custom label changes
-    this.registerEvent("nodeCustomLabel");
-    //edgeCreate(edge) - Whenever a new edge is created
-    this.registerEvent("edgeCreate");
-    //edgeDestroy(edge) - Whenever an edge is destroyed (even on clear)
-    this.registerEvent("edgeDestroy");
-    //edgeLabel(edge, newLabel, oldLabel) - Whenever a node label changes
-    this.registerEvent("edgeLabel");
-    //edgeDestination(edge, newDestination, oldDestination) - Whenever a node changes destination
-    this.registerEvent("edgeDestination");
-    //toggleAccept(node) - Whenever a node changes to an accept state, or vice versa
-    this.registerEvent("toggleAccept");
-    //newInitial(node, oldNode) - Whenever a node becomes the initial state; oldNode could be null
-    this.registerEvent("newInitial");
-    //markDirty(graph) - Whenever the graph is marked dirty
-    this.registerEvent("markDirty");
+    this._nodes = [];
+    this._edges = [];
+    this._nodeMapping = new Map();
+    this._edgeMapping = new Map();
   }
 
-  getNodeByLabel(label)
+  /** NODES **/
+
+  createNode(x=0, y=0, id=null)
   {
-    for(const node of this.nodes)
-    {
-      if (node.getNodeLabel() == label)
-      {
-        return node;
-      }
-    }
-
-    return null;
-  }
-
-  getNodeIndexByID(id)
-  {
-    const length = this.nodes.length;
-    for(let i = 0; i < length; ++i)
-    {
-      const node = this.nodes[i];
-      if (node.getGraphElementID() == id)
-      {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  getNodeIndex(node)
-  {
-    for(let i = this.nodes.length - 1; i >= 0; --i)
-    {
-      const other = this.nodes[i];
-      if (node === other)
-      {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  getNodeIndexByLabel(label)
-  {
-    for(let i = this.nodes.length - 1; i >= 0; --i)
-    {
-      const node = this.nodes[i];
-      if (node.getNodeLabel() == label)
-      {
-        return i;
-      }
-    }
-
-    return -1;
-  }
-
-  getReachableState()
-  {
-    let reachable = []
-    let startNode = this.getStartNode();
-    reachable.push(startNode);
-    for(let i = 0; i < reachable.length; i++)
-    {
-      for (const edge of this.edges)
-      {
-        if(edge.from == reachable[i])
-        {
-          if(!reachable.includes(edge.to))
-          {
-            reachable.push(edge.to);
-          }
-        }
-      }
-    }
-    return reachable
-  }
-
-  newNode(x, y, label)
-  {
-    const result = new Node(this, x, y, label);
-    if (this.nodes.length == 0)
-    {
-      this.emit("newInitial", result, null);
-    }
-    this.nodes.push(result);
-    this.emit("nodeCreate", result);
-
-    this.markDirty();
+    const result = new GraphNode(id || guid(), x, y);
+    const i = this._nodes.length;
+    this._nodes.push(result);
+    this._nodeMapping.set(result.getGraphElementID(), i);
     return result;
   }
-
   deleteNode(node)
   {
-    //Make sure that any connections to this node are resolved before removal
-    let edge = null;
-    for(let i = this.edges.length - 1; i >= 0; --i)
+    const elementID = node.getGraphElementID();
+    const i = this._nodeMapping.get(elementID);
+    if (i >= 0)
     {
-      edge = this.edges[i];
-      if (edge.getSourceNode() == node)
-      {
-        //Delete any edges that have this node as a source
-        this.edges.splice(i, 1);
-        this.emit("edgeDestroy", edge);
-      }
-      else if (edge.getDestinationNode() == node)
-      {
-        //Return any edges that have this node as a destination
-        edge.changeDestinationNode(null);
-      }
-    }
-    let nodeIndex = this.nodes.indexOf(node);
-    this.nodes.splice(nodeIndex, 1);
-    if (nodeIndex == 0)
-    {
-      this.emit("newInitial", this.getStartNode(), node);
-    }
-    this.emit("nodeDestroy", node);
+      this._nodes.splice(i, 1);
+      this._nodeMapping.delete(elementID);
 
-    this.markDirty();
+      //HACK: This is inefficient, you should convert everything to use only
+      //the map so the indicies would not need to be fixed in the array.
+      //Basically, get rid of this._nodes (you will have to change how setStartNode works)
+      for(let j = i, len = this._nodes.length; j < len; ++j)
+      {
+        this._nodeMapping.set(this._nodes[j].getGraphElementID(), j);
+      }
+
+      const nullSourceEdges = [];
+
+      //Remove connected edges
+      for(const edge of this._edges)
+      {
+        if (edge.getSourceNode() === node)
+        {
+          nullSourceEdges.push(edge);
+        }
+        else if (edge.getDestinationNode() === node)
+        {
+          edge.changeDestinationNode(null);
+        }
+      }
+      for(const edge of nullSourceEdges)
+      {
+        this.deleteEdge(edge);
+      }
+    }
   }
-
-  getEdgeIndexByID(id)
+  addNode(node)
   {
-    const length = this.edges.length;
-    for(let i = 0; i < length; ++i)
-    {
-      const edge = this.edges[i];
-      if (edge.getGraphElementID() == id)
-      {
-        return i;
-      }
-    }
-    return -1;
+    if (!node.getGraphElementID()) node.setGraphElementID(guid());
+
+    const i = this._nodes.length;
+    this._nodes.push(node);
+    this._nodeMapping.set(node.getGraphElementID(), i);
+    return node;
   }
-
-  newEdge(from, to, label)
+  clearNodes() { this._nodes.length = 0; this._nodeMapping.clear(); }
+  getNodeByElementID(elementID)
   {
-    const result = new Edge(this, from, to, label);
-    this.edges.push(result);
+    const index = this._nodeMapping.get(elementID);
+    return index >= 0 ? this._nodes[index] : null;
+  }
+  getNodesByLabel(label, dst=[])
+  {
+    for(const node of this._nodes)
+    {
+      if (node.getNodeLabel() == label) dst.push(node);
+    }
+    return dst;
+  }
+  getNodes() { return this._nodes; }
+  getNodeCount() { return this._nodes.length; }
 
-    this.emit("edgeCreate", result);
+  /** EDGES **/
 
-    this.markDirty();
+  createEdge(from, to=null, id=null)
+  {
+    const result = new GraphEdge(id || guid(), from, to);
+    const i = this._edges.length;
+    this._edges.push(result);
+    this._edgeMapping.set(result.getGraphElementID(), i);
     return result;
   }
-
-  //This is more like addEdge() without adding it to the graph and just returns the result
-  //This should only be called once when completing an edge
-  formatEdge(edge)
-  {
-    const edgeSource = edge.getSourceNode();
-    const edgeDestination = edge.getDestinationNode();
-    const edgeLabel = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
-
-    //Look for an existing edge with similar from and to
-    for(const otherEdge of this.edges)
-    {
-      if (otherEdge === edge) continue;
-      if (otherEdge.getSourceNode() === edgeSource && otherEdge.getDestinationNode() === edgeDestination)
-      {
-        const otherEdgeLabel = otherEdge.getEdgeLabel();
-        if (edgeLabel.length > 0)
-        {
-          const result = otherEdgeLabel.split(EDGE_SYMBOL_SEPARATOR).concat(edgeLabel);
-          otherEdge.setEdgeLabel(result.join(EDGE_SYMBOL_SEPARATOR));
-        }
-
-        //Merged with newfound edge...
-        return otherEdge;
-      }
-    }
-
-    //Otherwise, format the current edge
-
-    if (!edge.isSelfLoop())
-    {
-      let flag = false;
-
-      //Bend away if there is another edge not bent with the same src/dst
-      const parallelEdgeHeight = Config.PARALLEL_EDGE_HEIGHT;
-      const HALFPI = Math.PI / 2;
-      for(const otherEdge of this.edges)
-      {
-        if (otherEdge.isQuadratic() && Math.abs(otherEdge.getQuadratic().length) >= parallelEdgeHeight * 2) continue;
-        if ((otherEdge.getDestinationNode() === edgeSource && otherEdge.getSourceNode() === edgeDestination))
-        {
-          edge.setQuadratic(HALFPI, parallelEdgeHeight);
-          otherEdge.setQuadratic(HALFPI, parallelEdgeHeight);
-          flag = true;
-
-          //ASSUMES that there will only ever be 2 edges that are parallel...
-          break;
-        }
-      }
-
-      //Try to move the edge away from intersecting nodes...
-      if (!flag)
-      {
-        const x1 = edgeSource.x;
-        const y1 = edgeSource.y;
-        const x2 = edgeDestination.x;
-        const y2 = edgeDestination.y;
-        const dist12sq = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
-        let vertical = false;
-        let m = 0;
-        let b = 0;
-
-        if(x1 > x2)
-        {
-          m = (y1-y2) / (x1-x2);
-          b = y2-m*x2;
-        }
-        else if (x1 < x2)
-        {
-          m = (y2-y1) / (x2-x1);
-          b = y1-m*x1;
-        }
-        else
-        {
-          vertical = true;
-        }
-
-        for(const node of this.nodes)
-        {
-          if(node === edgeSource || node === edgeDestination) continue;
-
-          const x0 = node.x;
-          const y0 = node.y;
-
-          const dist01sq = (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0);
-          const dist02sq = (x2-x0)*(x2-x0) + (y2-y0)*(y2-y0);
-          if(dist01sq > dist12sq || dist02sq > dist12sq) continue;
-
-          let dist = 0;
-          if(vertical) {
-            dist = Math.abs(x1-x0);
-          } else {
-            dist = Math.abs(b+ m*x0 - y0) / Math.sqrt(1+m*m);
-          }
-
-          if(dist < Config.NODE_RADIUS)
-          {
-            flag = true;
-            break;
-          }
-        }
-
-        if (flag)
-        {
-          edge.setQuadratic(-Math.PI / 2, Config.NODE_RADIUS + 10);
-        }
-      }
-    }
-
-    return edge;
-  }
-
   deleteEdge(edge)
   {
-    this.edges.splice(this.edges.indexOf(edge), 1);
-    this.emit("edgeDestroy", edge);
+    const elementID = edge.getGraphElementID();
+    const i = this._edgeMapping.get(elementID);
+    if (i >= 0)
+    {
+      this._edges.splice(i, 1);
+      this._edgeMapping.delete(elementID);
 
-    this.markDirty();
+      //HACK: This is inefficient, refer to deleteNode().
+      for(let j = i, len = this._edges.length; j < len; ++j)
+      {
+        this._edgeMapping.set(this._edges[j].getGraphElementID(), j);
+      }
+    }
   }
-
-  deleteAll()
+  addEdge(edge)
   {
-    for(let node of this.nodes)
-    {
-      this.emit("nodeDestroy", node);
-    }
-    this.nodes.length = 0;
+    if (!edge.getGraphElementID()) edge.setGraphElementID(guid());
 
-    for(let edge of this.edges)
-    {
-      this.emit("edgeDestroy", edge);
-    }
-    this.edges.length = 0;
+    const i = this._edges.length;
+    this._edges.push(edge);
+    this._edgeMapping.set(edge.getGraphElementID(), i);
+    return edge;
+  }
+  clearEdges() { this._edges.length = 0; this._edgeMapping.clear(); }
+  getEdgeByElementID(elementID)
+  {
+    const index = this._edgeMapping.get(elementID);
+    return index >= 0 ? this._edges[index] : null;
+  }
+  getEdges() { return this._edges; }
+  getEdgeCount() { return this._edges.length; }
 
-    this.markDirty();
+  /** HELPER **/
+
+  clear()
+  {
+    this.clearEdges();
+    this.clearNodes();
   }
 
   isEmpty()
   {
-    return this.nodes.length <= 0;
-  }
-
-  setStartNode(node)
-  {
-    if (this.nodes.length <= 1) return;
-
-    this.nodes.splice(this.nodes.indexOf(node), 1);
-    const prevNode = this.nodes[0];
-    this.nodes.unshift(node);
-    this.emit("newInitial", node, prevNode);
-
-    this.markDirty();
-  }
-
-  getStartNode()
-  {
-    return this.nodes.length > 0 ? this.nodes[0] : null;
+    return this.getNodeCount() <= 0 && this.getEdgeCount() <= 0;
   }
 
   getBoundingRect()
   {
-    if (this.nodes.length <= 0) return {
-      minX: 0, minY: 0, maxX: 1, maxY: 1, width: 1, height: 1
+    if (this._nodes.length <= 0) return {
+      minX: 0,
+      minY: 0,
+      maxX: 1,
+      maxY: 1,
+      width: 1,
+      height: 1
     };
 
     var minNX = Number.MAX_VALUE;
@@ -353,50 +158,60 @@ class NodalGraph
     var maxNX = Number.MIN_VALUE;
     var maxNY = Number.MIN_VALUE;
 
-    this.nodes.forEach(function (node) {
+    var maxNodeSize = 0;
+    for(const node of this._nodes)
+    {
       const x = node.x;
       const y = node.y;
+      const size = node.getNodeSize();
+      if (size > maxNodeSize) maxNodeSize = size;
 
       minNX = Math.min(minNX, x);
       maxNX = Math.max(maxNX, x);
 
       minNY = Math.min(minNY, y);
       maxNY = Math.max(maxNY, y);
-    });
+    }
 
-    minNX -= Config.NODE_RADIUS;
-    minNY -= Config.NODE_RADIUS;
-    maxNX += Config.NODE_RADIUS;
-    maxNY += Config.NODE_RADIUS;
+    minNX -= maxNodeSize;
+    minNY -= maxNodeSize;
+    maxNX += maxNodeSize;
+    maxNY += maxNodeSize;
 
     var minEX = Number.MAX_VALUE;
     var minEY = Number.MAX_VALUE;
     var maxEX = Number.MIN_VALUE;
     var maxEY = Number.MIN_VALUE;
-    this.edges.forEach(function (edge) {
-      const startpoint = edge.getStartPoint();
-      const endpoint = edge.getEndPoint();
-      const center = edge.getCenterPoint();
 
-      const sx = startpoint.x;
-      const sy = startpoint.y;
-      const ex = endpoint.x;
-      const ey = endpoint.y;
-      const cx = center.x;
-      const cy = center.y;
+    const startPoint = {x: 0, y: 0};
+    const endPoint = {x: 0, y: 0};
+    const centerPoint = {x: 0, y: 0};
+    for(const edge of this._edges)
+    {
+      //Will store into point objects...
+      edge.getStartPoint(startPoint);
+      edge.getEndPoint(endPoint);
+      edge.getCenterPoint(centerPoint);
+
+      const sx = startPoint.x;
+      const sy = startPoint.y;
+      const ex = endPoint.x;
+      const ey = endPoint.y;
+      const cx = centerPoint.x;
+      const cy = centerPoint.y;
 
       minEX = Math.min(minEX, sx, ex, cx);
       maxEX = Math.max(maxEX, sx, ex, cx);
 
       minEY = Math.min(minEY, sy, ey, cy);
       maxEY = Math.max(maxEY, sy, ey, cy);
-    });
+    }
 
     const result = {
-      minX: Math.min(minNX, minEX),//minNX < minEX ? minNX : minEX,
-      minY: Math.min(minNY, minEY),//minNY < minEY ? minNY : minEY,
-      maxX: Math.max(maxNX, maxEX),//maxNX > maxEX ? maxNX : maxEX,
-      maxY: Math.max(maxNY, maxEY),//maxNY > maxEY ? maxNY : maxEY,
+      minX: Math.min(minNX, minEX),
+      minY: Math.min(minNY, minEY),
+      maxX: Math.max(maxNX, maxEX),
+      maxY: Math.max(maxNY, maxEY),
       width: 0,
       height: 0
     };
@@ -405,84 +220,22 @@ class NodalGraph
     return result;
   }
 
-  copyGraph(graph)
+  //Gets a hash of the graph's current state. Can generally assume the hash will
+  //change if the graph's content has changed (including nodes and edges).
+  getHashCode(usePosition=true)
   {
-    this.deleteAll();
-    this.nodes = this.nodes.concat(graph.nodes);
-    this.edges = this.edges.concat(graph.edges);
-
-    //Reassign all nodes and edges to new graph
-    for(const node of graph.nodes)
+    let string = "";
+    for(const node of this._nodes)
     {
-      node.graph = this;
+      string += node.getHashString(usePosition) + ",";
     }
-    for(const edge of graph.edges)
+    string += "|";
+    for(const edge of this._edges)
     {
-      edge.graph = this;
+      string += edge.getHashString(usePosition) + ",";
     }
-
-    this.markDirty();
-  }
-
-  copyMachine(machine)
-  {
-    this.deleteAll();
-
-    //Add all states
-    let node;
-    for(const state of machine.getStates())
-    {
-      node = this.newNode(0, 0, state);
-      if (machine.isFinalState(state))
-      {
-        node.accept = true;
-      }
-    }
-
-    //Add all transitions
-    let edge, from, to, read, labels, flag;
-    for(let transition of machine.getTransitions())
-    {
-      from = this.getNodeByLabel(transition[0]);
-      read = transition[1];
-      to = this.getNodeByLabel(transition[2]);
-      edge = this.newEdge(from, to, read);
-      const formattedEdge = this.formatEdge(edge);
-      if (edge != formattedEdge) this.deleteEdge(edge);
-    }
-
-    //Set start state
-    const startState = machine.getStartState();
-    this.setStartNode(this.getNodeByLabel(startState));
-
-    //Auto layout graph
-    GraphLayout.applyLayout(this);
-
-    this.markDirty();
-  }
-
-  markDirty()
-  {
-    this.emit("markDirty", this);
-  }
-
-  toDFA(dst=null)
-  {
-    throw new Error("DEPRECATED!");
-  }
-
-  toNFA(dst=null)
-  {
-    throw new Error("DEPRECATED!");
-  }
-
-  //TODO: NEVER CALL THIS DIRECTLY (Only FSABuilder is allowed.) Will be deprecated later.
-  _toNFA(dst=null)
-  {
-    throw new Error("DEPRECATED!");
+    return stringHash(string);
   }
 }
-//Mixin Eventable
-Eventable.mixin(NodalGraph);
 
 export default NodalGraph;

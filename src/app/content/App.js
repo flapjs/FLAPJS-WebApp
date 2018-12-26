@@ -2,15 +2,13 @@ import React from 'react';
 import { hot } from 'react-hot-loader/root';
 import './App.css';
 
-import FSAModule from 'modules/fsa/FSAModule.js';
-import TestingManager from 'modules/fsa/testing/TestingManager.js';
-import MachineController from 'controller/MachineController.js';
-import GraphController from 'controller/GraphController.js';
-import InputController from 'controller/InputController.js';
+import Config from 'config.js';
+
+import Modules from './Modules.js';
+import DefaultModule from 'modules/default/DefaultModule.js';
 
 import HotKeys from './HotKeys.js';
 import LocalSave from 'system/localsave/LocalSave.js';
-import * as FlapSaver from 'util/FlapSaver.js';
 
 import Toolbar from './toolbar/Toolbar.js';
 import Workspace from './workspace/Workspace.js';
@@ -18,10 +16,10 @@ import Drawer from './drawer/Drawer.js';
 import Viewport from './viewport/Viewport.js';
 import Tutorial from 'tutorial/Tutorial.js';
 
-import Notification from 'system/notification/Notification.js';
+import InputAdapter from 'system/inputadapter/InputAdapter.js';
+import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
-
-import EventManager from './EventManager.js';
+import UndoManager from 'system/undomanager/UndoManager.js';
 
 class App extends React.Component
 {
@@ -36,18 +34,25 @@ class App extends React.Component
     this.drawer = null;
     this.toolbar = null;
 
-    this._module = new FSAModule();
-    this.testingManager = new TestingManager();
+    //These need to be initialized before module
+    this.inputAdapter = new InputAdapter();
+    this.inputAdapter.getViewport()
+      .setMinScale(Config.MIN_SCALE)
+      .setMaxScale(Config.MAX_SCALE)
+      .setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
 
-    this.inputController = new InputController();
-    this.graphController = new GraphController();
-    this.machineController = new MachineController();
+    this.undoManager = new UndoManager();
 
-    this.inputController.setModule(this._module);
-    this.graphController.setModule(this._module);
-    this.machineController.setModule(this._module);
+    this._module = new DefaultModule(this);
+    Modules['fsa'].fetch((Module) => {
+      if (this._module)
+      {
+        this._module.destroy();
+      }
 
-    this.eventManager = new EventManager();
+      this._module = new Module(this);
+      this._module.initialize(this);
+    });
 
     this.hotKeys = new HotKeys();
     this.tutorial = new Tutorial();
@@ -67,31 +72,20 @@ class App extends React.Component
     this._init = false;
   }
 
+  //Override
   componentDidMount()
   {
+    //Initialize input adapter
+    const workspaceDOM = this.workspace.ref;
+    this.inputAdapter.initialize(workspaceDOM);
+
     //Initialize the module...
-    this._module.initialize(this);
+    const module = this.getCurrentModule();
+    module.initialize(this);
 
-    //Initialize the controller to graph components
-    this.inputController.initialize(this);
-    this.graphController.initialize(this);
-    this.machineController.initialize(this);
-
-    //Notify on create in delete mode
-    const tryCreateWhileTrash = () => {
-      if (this.inputController.isTrashMode())
-      {
-        Notification.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
-      }
-    };
-    this.graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
-
-    this.testingManager.initialize(this);
-    this.eventManager.initialize(this);
     this.hotKeys.initialize(this);
 
     //Upload drop zone
-    const workspaceDOM = this.workspace.ref;
     workspaceDOM.addEventListener("drop", this.onFileDrop);
     workspaceDOM.addEventListener("dragover", this.onDragOver);
     workspaceDOM.addEventListener("dragenter", this.onDragEnter);
@@ -108,6 +102,7 @@ class App extends React.Component
     this._init = true;
   }
 
+  //Override
   componentWillUnmount()
   {
     LocalSave.unregisterHandler(this);
@@ -115,13 +110,10 @@ class App extends React.Component
     LocalSave.terminate();
 
     this.hotKeys.destroy();
-    this.eventManager.destroy();
-
-    this.machineController.destroy();
-    this.graphController.destroy();
-    this.inputController.destroy();
 
     this._module.destroy(this);
+
+    this.inputAdapter.destroy();
 
     //Upload drop zone
     const workspaceDOM = this.workspace.ref;
@@ -135,17 +127,23 @@ class App extends React.Component
 
   onLoadSave()
   {
-    const data = LocalSave.loadFromStorage("graph");
+    const moduleName = this._module.getModuleName();
+
+    const data = LocalSave.loadFromStorage("graph-" + moduleName);
     if (data)
     {
-      FlapSaver.loadFromJSON(data, this.graphController, this.machineController);
+      const exporter = this._module.getDefaultGraphExporter();
+      exporter.importFromData(data, this);
     }
   }
 
   onAutoSave()
   {
-    const data = FlapSaver.saveToJSON(this.graphController, this.machineController);
-    LocalSave.saveToStorage("graph", data);
+    const moduleName = this._module.getModuleName();
+
+    const exporter = this._module.getDefaultGraphExporter();
+    const data = exporter.exportToData(this);
+    LocalSave.saveToStorage("graph-" + moduleName, data);
   }
 
   //Called to prevent default file open
@@ -196,6 +194,7 @@ class App extends React.Component
       };
     });
 
+    let fileBlob = null;
     if (ev.dataTransfer.items)
     {
       const length = ev.dataTransfer.items.length;
@@ -206,8 +205,7 @@ class App extends React.Component
         const file = ev.dataTransfer.items[0];
         if (file.kind === 'file')
         {
-          const data = file.getAsFile();
-          this.graphController.getUploader().uploadFileGraph(data);
+          fileBlob = file.getAsFile();
         }
       }
     }
@@ -218,9 +216,16 @@ class App extends React.Component
       //Just get the first one
       if (length >= 1)
       {
-        const data = ev.dataTransfer.files[0];
-        this.graphController.getUploader().uploadFileGraph(data);
+        fileBlob = ev.dataTransfer.files[0];
       }
+    }
+
+    if (fileBlob)
+    {
+      this.props.app.getCurrentModule().getGraphImporter().importFile(fileBlob, this)
+        .catch((e) => {
+          Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
+        });
     }
 
     if (ev.dataTransfer.items)
@@ -271,28 +276,47 @@ class App extends React.Component
     return this._module;
   }
 
+  getInputController()
+  {
+    return this._module.getInputController();
+  }
+
+  getGraphController()
+  {
+    return this._module.getGraphController();
+  }
+
+  getMachineController()
+  {
+    return this._module.getMachineController();
+  }
+
+  getInputAdapter()
+  {
+    return this.inputAdapter;
+  }
+
+  getUndoManager()
+  {
+    return this.undoManager;
+  }
+
   render()
   {
-    const inputController = this.inputController;
-    const graphController = this.graphController;
-    const machineController = this.machineController;
-
-    const tester = this.testingManager;
     const screen = this.workspace ? this.workspace.ref : null;
 
     if (this._init)
     {
-      inputController.update();
+      this.inputAdapter.update();
+      this._module.update(this);
     }
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar ref={ref=>this.toolbar=ref}
-        eventManager={this.eventManager}
-        drawer={this.drawer}
-        graphController={graphController}
-        machineController={machineController}/>
+        app={this}
+        drawer={this.drawer}/>
 
-      <NotificationView notificationManager={Notification}/>
+      <NotificationView notificationManager={Notifications}/>
 
       <div className="workspace-container">
         <div className={"workspace-main" +
@@ -303,10 +327,7 @@ class App extends React.Component
           }}>
 
           <Workspace ref={ref=>this.workspace=ref}
-            tester={tester}
-            graphController={graphController}
-            inputController={inputController}
-            machineController={machineController}/>
+            app={this}/>
         </div>
 
         <div className={"workspace-viewport" +
@@ -316,11 +337,8 @@ class App extends React.Component
           }}>
 
           <Viewport ref={ref=>this.viewport=ref}
-            tester={tester}
-            screen={screen}
-            graphController={graphController}
-            inputController={inputController}
-            machineController={machineController}/>
+            app={this}
+            screen={screen}/>
         </div>
 
         <div className={"workspace-drawer" +
@@ -329,9 +347,7 @@ class App extends React.Component
 
           <Drawer ref={ref=>this.drawer=ref}
             app={this}
-            toolbar={this.toolbar}
-            graphController={graphController}
-            machineController={machineController}/>
+            toolbar={this.toolbar}/>
         </div>
       </div>
     </div>;

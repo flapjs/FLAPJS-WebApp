@@ -48,10 +48,7 @@ class StateErrorMessage extends React.Component
       {
         const targets = message.value.targets;
         //Delete all target nodes
-        for(const node of targets)
-        {
-          graphController.getGraph().deleteNode(node);
-        }
+        graphController.deleteTargetNodes(targets);
 
         //Sort the nodes after deleting if enabled...
         machineController.getMachineBuilder().labeler.sortDefaultNodeLabels();

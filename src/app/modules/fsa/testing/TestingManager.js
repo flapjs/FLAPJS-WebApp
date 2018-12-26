@@ -21,7 +21,7 @@ class TestingManager
 
   initialize(app)
   {
-    this.machineController = app.machineController;
+    this.machineController = app.getMachineController();
     this.viewport = app.viewport;
 
     this.testMode.initialize(app);

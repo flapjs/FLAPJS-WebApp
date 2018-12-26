@@ -1,6 +1,7 @@
 import Config from 'config.js';
 
 import InputPointer from './InputPointer.js';
+import ViewportAdapter from './ViewportAdapter.js';
 
 /**
  * Provides an interface for InputController to interact with a HTMLElement.
@@ -12,7 +13,6 @@ class InputAdapter
   {
     this._controller = null;
     this._element = null;
-    this._viewport = null;
     this._cursor = {
       _mousemove: null,
       _mouseup: null,
@@ -20,8 +20,9 @@ class InputAdapter
       _touchend: null,
       _timer: null
     };
+    this._pointer = null;
 
-    this._pointer = new InputPointer();
+    this._viewport = new ViewportAdapter();
 
     //Although dragging could be in pointer, it should be here to allow
     //the adapter to be independent of pointer.
@@ -59,15 +60,13 @@ class InputAdapter
     return this;
   }
 
-  initialize(element, viewport)
+  initialize(element)
   {
-    if (!(element instanceof SVGElement)) throw new Error("Invalid SVG element for InputAdapter");
-    if (!viewport) throw new Error("Missing viewport for InputAdapter");
-    if (viewport.getElement() != element) throw new Error("Mismatched viewport for passed-in element");
+    if (!(element instanceof SVGElement)) throw new Error("Missing SVG element for input adapter's viewport");
     if (this._element) throw new Error("Trying to initialize an InputAdapter already initialized");
 
-    this._element = element;
-    this._viewport = viewport;
+    this._viewport.setElement(this._element = element);
+    this._pointer = new InputPointer(this, this._element, this._viewport);
 
     this._element.addEventListener('mousedown', this.onMouseDown);
     this._element.addEventListener('mousemove', this.onMouseMove);
@@ -88,6 +87,12 @@ class InputAdapter
     this._element.removeEventListener('wheel', this.onWheel);
 
     this._element = null;
+  }
+
+  update()
+  {
+    //Smooth transition offset
+    this._viewport.update();
   }
 
   onMouseDown(e)
@@ -472,14 +477,24 @@ class InputAdapter
     return this._element;
   }
 
-  getActiveViewport()
+  getViewport()
   {
     return this._viewport;
   }
 
-  getPointer()
+  getPointerX()
   {
-    return this._pointer;
+    return this._pointer ? this._pointer.x : 0;
+  }
+
+  getPointerY()
+  {
+    return this._pointer ? this._pointer.y : 0;
+  }
+
+  isPointerActive()
+  {
+    return this._pointer ? this._pointer.isActive() : false;
   }
 
   isUsingTouch()

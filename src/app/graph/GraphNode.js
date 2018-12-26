@@ -27,6 +27,19 @@ class GraphNode extends GraphElement
   {
     return 10;
   }
+
+  //Override
+  getHashString(usePosition=true)
+  {
+    if (usePosition)
+    {
+      return super.getHashString(usePosition) + ":" + Math.floor(this.x) + "," + Math.floor(this.y) + "." + this._label;
+    }
+    else
+    {
+      return super.getHashString(usePosition) + ":" + this._label;
+    }
+  }
 }
 
 export default GraphNode;

@@ -7,6 +7,8 @@ import Router from 'router.js';
 import Logo from './Logo.js';
 import Quote from './Quote.js';
 
+import App from 'content/App.js';
+
 const LAUNCH_BUTTON_TEXT = "Launch Workspace";
 const SMALL_LAUNCH_BUTTON_TEXT = "Get Started!";
 const SMALLER_LAUNCH_BUTTON_TEXT = "Proceed.";
@@ -93,9 +95,8 @@ class LandingPage extends React.Component
 
   onLaunchButton(e)
   {
-    import(/* webpackChunkName: "content" */ 'content/App.js').then(({ default: _ }) => {
-      Router.routeTo( _ );
-    });
+    //import(/* webpackChunkName: "content" */ 'content/App.js').then(({ default: _ }) => { Router.routeTo( _ ); });
+    Router.routeTo(App);
   }
 
   onTutorialButton(e)

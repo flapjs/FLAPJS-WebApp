@@ -71,46 +71,6 @@ class Graph
   {
 
   }
-
-  deleteNode()
-  {
-
-  }
-
-  getNodeByID()
-  {
-
-  }
-
-  newEdge()
-  {
-
-  }
-
-  deleteEdge()
-  {
-
-  }
-
-  getEdgeByID()
-  {
-
-  }
-
-  getNodes()
-  {
-
-  }
-
-  getEdges()
-  {
-
-  }
-
-  getBoundingRect()
-  {
-
-  }
 }
 
 class GraphHandler
@@ -147,77 +107,6 @@ class Graph
 
     //Set of edges
     this.edges = [];
-  }
-
-  getNodeByID(id)
-  {
-    for(let node of this.nodes)
-    {
-      if (node.id == id)
-      {
-        return node;
-      }
-    }
-
-    return null;
-  }
-
-  newNode(x=0, y=0)
-  {
-    const result = this.handler.onGraphCreateNode(x, y);
-    if (result instanceof Node)
-    {
-      this.nodes.push(result);
-      return result;
-    }
-    return null;
-  }
-
-  deleteNode(node)
-  {
-    const result = this.handler.onGraphDestroyNode(node);
-    //Delete any edges that has this node as a source...
-
-    //Then...
-    return node;
-  }
-
-  getEdgeByID(id)
-  {
-    for(let edge of this.edges)
-    {
-      if (edge.id == id)
-      {
-        return edge;
-      }
-    }
-
-    return null;
-  }
-
-  newEdge(from, to=null)
-  {
-    const result = this.handler.onGraphCreateEdge(from, to);
-    if (result instanceof Edge)
-    {
-      //Format the edges correctly...
-
-      //Then...
-      this.edges.push(result);
-      return result;
-    }
-    return null;
-  }
-
-  deleteEdge(edge)
-  {
-    const result = this.handler.onGraphDestroyEdge(edge);
-    return result;
-  }
-
-  getBoundingRect()
-  {
-
   }
 }
 

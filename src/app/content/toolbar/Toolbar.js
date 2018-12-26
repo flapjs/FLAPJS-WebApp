@@ -62,14 +62,14 @@ class Toolbar extends React.Component
 
   render()
   {
-    const graphController = this.props.graphController;
-    const machineController = this.props.machineController;
-    const eventManager = this.props.eventManager;
+    const app = this.props.app;
+    const currentModule = app.getCurrentModule();
     const drawer = this.props.drawer;
+    const graphController = app.getGraphController();
+    const machineController = app.getMachineController();
+    const undoManager = app.getUndoManager();
 
     const graph = graphController.getGraph();
-    const machineBuilder = machineController.getMachineBuilder();
-    const events = eventManager.getLogger();
 
     const offline = navigator && navigator.onLine;
 
@@ -112,7 +112,7 @@ class Toolbar extends React.Component
         {/*Machine Type*/}
         <label id="machine-type"
           onClick={()=>drawer.setTab(0)}>
-          {machineBuilder.getMachineType()}
+          {currentModule.getLocalizedModuleName()}
         </label>
       </div>
 
@@ -122,8 +122,8 @@ class Toolbar extends React.Component
           onClick={() => {
             if (window.confirm(I18N.toString("alert.graph.clear")))
             {
-              graph.deleteAll();
-              events.clear();
+              graph.clear();
+              undoManager.clear();
               machineController.setMachineName(null);
             }
           }}>
@@ -131,19 +131,20 @@ class Toolbar extends React.Component
         </IconButton>
         {/*Upload Button*/}
         <UploadButton className="navicon" id="toolbar-upload" title={I18N.toString("action.toolbar.uploadmachine")}
+          app={app}
           graphController={graphController}>
           <UploadIcon/>
         </UploadButton>
         {/*Undo Button*/}
         <IconButton className="navicon" id="toolbar-undo" title={I18N.toString("action.toolbar.undo")}
-          disabled={!events.canUndo()}
-          onClick={()=>events.undo()}>
+          disabled={!undoManager.canUndo()}
+          onClick={()=>undoManager.undo()}>
           <UndoIcon/>
         </IconButton>
         {/*Redo Button*/}
         <IconButton className="navicon" id="toolbar-redo" title={I18N.toString("action.toolbar.redo")}
-          disabled={!events.canRedo()}
-          onClick={()=>events.redo()}>
+          disabled={!undoManager.canRedo()}
+          onClick={()=>undoManager.redo()}>
           <RedoIcon/>
         </IconButton>
         {/*Save Button*/}

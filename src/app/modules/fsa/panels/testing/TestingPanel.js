@@ -19,6 +19,9 @@ import CloseIcon from 'icons/CloseIcon.js';
 
 const TEST_FILENAME = "test.txt";
 
+//TODO: This is faster, since it's pretty easy to tell latency here. But really it shouldn't.
+const REFRESH_TEST_TICKS = 30;
+
 class TestingPanel extends React.Component
 {
   constructor(props)
@@ -29,10 +32,12 @@ class TestingPanel extends React.Component
     this.uploadInput = React.createRef();
 
     this.state = {
-      errorCheckMode: this.props.app.testingManager.getErrorCheckMode(),
+      errorCheckMode: this.props.app.getCurrentModule().getTestingManager().getErrorCheckMode(),
       noTestMode: true
     };
 
+    this._savedGraphHash = 0;
+    this._ticksSinceHash = 0;
     this.stepByStepModeChecked = false;
 
     this.onChangeErrorCheckMode = this.onChangeErrorCheckMode.bind(this);
@@ -50,22 +55,22 @@ class TestingPanel extends React.Component
     const graphController = this.props.graphController;
     const graph = graphController.getGraph();
 
-    //HACK: this should be a listener to FSABuilder, should not access graph
-    graph.on("markDirty", this.onGraphChange);
+    //HACK: this should be in FSABuilder and listen for machine changes instead
+    this._savedGraphHash = graph.getHashCode();
+    this._ticksSinceHash = 0;
   }
 
   componentWillUnmount()
   {
     const graphController = this.props.graphController;
     const graph = graphController.getGraph();
-
-    graph.removeEventListener("markDirty", this.onGraphChange);
+    this._savedGraphHash = 0;
   }
 
   onGraphChange(g)
   {
     const app = this.props.app;
-    const tester = app.testingManager;
+    const tester = app.getCurrentModule().getTestingManager();
     tester.inputList.resetTests();
   }
 
@@ -75,7 +80,7 @@ class TestingPanel extends React.Component
     if (files.length > 0)
     {
       const app = this.props.app;
-      const tester = app.testingManager;
+      const tester = app.getCurrentModule().getTestingManager();
       tester.inputList.importTests(files[0]);
       document.getElementById("test-name").innerHTML = files[0].name;
 
@@ -91,7 +96,7 @@ class TestingPanel extends React.Component
     const graphController = this.props.graphController;
     const machineController = this.props.machineController;
     const app = this.props.app;
-    const tester = app.testingManager;
+    const tester = app.getCurrentModule().getTestingManager();
 
     const graph = graphController.getGraph();
     const machineBuilder = machineController.getMachineBuilder();
@@ -114,7 +119,7 @@ class TestingPanel extends React.Component
   {
     const machine = this.props.machineController.getMachineBuilder().getMachine();
     const app = this.props.app;
-    const tester = app.testingManager;
+    const tester = app.getCurrentModule().getTestingManager();
     if (tester.testMode.isStarted())
     {
       tester.setStepByStepMode(false);
@@ -134,7 +139,7 @@ class TestingPanel extends React.Component
   onTestsClear(e)
   {
     const app = this.props.app;
-    const tester = app.testingManager;
+    const tester = app.getCurrentModule().getTestingManager();
     tester.inputList.clearTests();
     this.clearTestName();
     this.hideTestInputList();
@@ -144,7 +149,7 @@ class TestingPanel extends React.Component
   onTestsSave(e)
   {
     const app = this.props.app;
-    const tester = app.testingManager;
+    const tester = app.getCurrentModule().getTestingManager();
     Downloader.downloadText(TEST_FILENAME, tester.inputList.getTestsAsStrings().join("\n"));
   }
 
@@ -178,11 +183,23 @@ class TestingPanel extends React.Component
   {
     const app = this.props.app;
     const viewport = app.viewport;
-    const tester = app.testingManager;
+    const tester = app.getCurrentModule().getTestingManager();
     const testList = tester.inputList;
     const machineBuilder = this.props.machineController.getMachineBuilder();
 
     const isTestInvalid = !machineBuilder.isValidMachine();
+
+    if (--this._ticksSinceHash <= 0)
+    {
+      this._ticksSinceHash = REFRESH_TEST_TICKS;
+      const graph = this.props.graphController.getGraph();
+      const graphHash = graph.getHashCode();
+      if (this._savedGraphHash !== graphHash)
+      {
+        this.onGraphChange(graph);
+        this._savedGraphHash = graphHash;
+      }
+    }
 
     return <div className="panel-container" id="testing" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title">

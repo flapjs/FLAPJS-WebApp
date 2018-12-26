@@ -1,7 +1,7 @@
 import React from 'react';
 import Config from 'config.js';
 
-import Notification from 'system/notification/Notification.js';
+import Notifications from 'system/notification/Notifications.js';
 import NFAToDFAConversionWarningMessage from 'modules/fsa/notifications/NFAToDFAConversionWarningMessage.js';
 
 class AnalysisPanel extends React.Component
@@ -24,13 +24,8 @@ class AnalysisPanel extends React.Component
   {
     const machineController = this.props.machineController;
     const unreachableArray = machineController.getMachineBuilder().machineErrorChecker.getUnreachableNodes();
-    for(let node of unreachableArray)
-    {
-      if(node != machineController.graphController.getGraph().getStartNode())
-      {
-        machineController.graphController.getGraph().deleteNode(node);
-      }
-    }
+    const graphController = machineController.graphController;
+    graphController.deleteTargetNodes(unreachableArray);
   }
 
   onConvertToDFA(e)
@@ -41,7 +36,7 @@ class AnalysisPanel extends React.Component
     const messageTag = Config.MACHINE_CONVERSION_MESSAGE_TAG;
 
     //machineController.convertMachineTo("DFA");
-    Notification.addMessage(I18N.toString("message.warning.convertNFAToDFA"),
+    Notifications.addMessage(I18N.toString("message.warning.convertNFAToDFA"),
       "warning", messageTag, NFAToDFAConversionWarningMessage, props);
   }
 

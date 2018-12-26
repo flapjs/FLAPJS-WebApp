@@ -1,11 +1,9 @@
 import Config from 'config.js';
 import { EMPTY } from 'machine/Symbols.js';
 
-import Notification from 'system/notification/Notification.js';
+import Notifications from 'system/notification/Notifications.js';
 import StateUnreachableWarningMessage from 'modules/fsa/notifications/StateUnreachableWarningMessage.js';
 import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
-
-const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class NFAErrorChecker
 {
@@ -40,14 +38,14 @@ class NFAErrorChecker
     this.clear();
 
     let nodeTransitionMap = new Map();
-    let unReachedNode = graph.nodes.slice();
+    let unReachedNode = graph.getNodes().slice();
     let startNode = graph.getStartNode();
     unReachedNode.splice(unReachedNode.indexOf(startNode),1);
 
     const placeholderEdges = [];
     const emptyEdges = [];
     const dupeEdges = [];
-    for(const edge of graph.edges)
+    for(const edge of graph.getEdges())
     {
       //check incomplete edges
       if (edge.isPlaceholder())
@@ -60,7 +58,7 @@ class NFAErrorChecker
       {
         const from = edge.getSourceNode();
         const to = edge.getDestinationNode();
-        const labels = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
+        const labels = edge.getEdgeSymbolsFromLabel();
 
         for(const label of labels)
         {
@@ -82,12 +80,12 @@ class NFAErrorChecker
     //Callbacks for all collected errors
     const messageTag = Config.MACHINE_ERRORS_MESSAGE_TAG;
     //Clear the existing messages
-    Notification.clearMessages(messageTag);
+    Notifications.clearMessages(messageTag);
 
     //No errors!
     if (!result)
     {
-      Notification.addMessage(I18N.toString("message.error.none"), "success", messageTag, null, null, false);
+      Notifications.addMessage(I18N.toString("message.error.none"), "success", messageTag, null, null, false);
     }
     //There are some errors/warnings...
     else
@@ -97,14 +95,14 @@ class NFAErrorChecker
       //Add new warning messages
       if (unReachedNode.length > 0)
       {
-        Notification.addMessage(unReachedNode,
+        Notifications.addMessage(unReachedNode,
           "warning", messageTag, StateUnreachableWarningMessage, props, false);
       }
 
       //Add new error messages
       if (placeholderEdges.length > 0)
       {
-        Notification.addMessage({text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
+        Notifications.addMessage({text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
           "error", messageTag, TransitionErrorMessage, props, false);
       }
     }
@@ -116,11 +114,11 @@ class NFAErrorChecker
 
     const graph = this.graph;
 
-    let unReachedNodes = graph.nodes.slice();
+    let unReachedNodes = graph.getNodes().slice();
 
     //keep start state
     //unReachedNodes.splice(unReachedNodes.indexOf(unReachedNode.getStartNode()), 1);
-    for(const edge of graph.edges) {
+    for(const edge of graph.getEdges()) {
       const labels = edge.label.split(",");
       for(const label of labels) {
 

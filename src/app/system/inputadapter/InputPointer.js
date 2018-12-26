@@ -3,8 +3,12 @@
  */
 class InputPointer
 {
-  constructor()
+  constructor(adapter, element, viewport)
   {
+    this._adapter = adapter;
+    this._element = element;
+    this._viewport = viewport;
+
     this._active = false;
     this._x = 0;
     this._y = 0;
@@ -19,6 +23,7 @@ class InputPointer
   {
     this._x = x;
     this._y = y;
+    return this;
   }
 
   beginInput()
@@ -29,7 +34,7 @@ class InputPointer
   }
 
   /**
-   * Returns the position which the input began at. This is not immutable.
+   * Returns the position which the input began at. This is mutable.
    */
   getInputEventPosition()
   {
@@ -58,6 +63,32 @@ class InputPointer
     const dx = pos.x - this._x;
     const dy = pos.y - this._y;
     return dx * dx + dy * dy;
+  }
+
+  /**
+   * The DOM element for which this pointer provides context for; this should be
+   * the same element as in the input adapter.
+   */
+  getElement()
+  {
+    return this._element;
+  }
+
+  /**
+   * The viewport for this pointer operates within; this should be the same
+   * viewport as in the input adapter.
+   */
+  getViewport()
+  {
+    return this._viewport;
+  }
+
+  /**
+   * The input adapter that controls this pointer's properties
+   */
+  getAdapter()
+  {
+    return this._adapter;
   }
 }
 

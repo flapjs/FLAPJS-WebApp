@@ -1,4 +1,4 @@
-import Notification from 'system/notification/Notification.js';
+import Notifications from 'system/notification/Notifications.js';
 import LocalSave from 'system/localsave/LocalSave.js';
 import Config from 'config.js';
 
@@ -13,8 +13,8 @@ class Tutorial
   {
     if (!LocalSave.existsInStorage("graph"))
     {
-      Notification.addMessage(I18N.toString("message.tutorial.1"));
-      Notification.addMessage(I18N.toString("message.intro.2"));
+      Notifications.addMessage(I18N.toString("message.tutorial.1"));
+      Notifications.addMessage(I18N.toString("message.intro.2"));
     }
   }
 }

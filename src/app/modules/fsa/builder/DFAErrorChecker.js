@@ -1,13 +1,11 @@
 import Config from 'config.js';
 import { EMPTY } from 'machine/Symbols.js';
 
-import Notification from 'system/notification/Notification.js';
+import Notifications from 'system/notification/Notifications.js';
 import StateUnreachableWarningMessage from 'modules/fsa/notifications/StateUnreachableWarningMessage.js';
 import StateMissingTransitionErrorMessage from 'modules/fsa/notifications/StateMissingTransitionErrorMessage.js';
 import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
 import StateErrorMessage from 'modules/fsa/notifications/StateErrorMessage.js';
-
-const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class DFAErrorChecker
 {
@@ -53,7 +51,7 @@ class DFAErrorChecker
     const placeholderEdges = [];
     const emptyEdges = [];
     const dupeEdges = [];
-    for(const edge of graph.edges)
+    for(const edge of graph.getEdges())
     {
       //check incomplete edges
       if (edge.isPlaceholder())
@@ -66,7 +64,7 @@ class DFAErrorChecker
       {
         const from = edge.getSourceNode();
         const to = edge.getDestinationNode();
-        const labels = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
+        const labels = edge.getEdgeSymbolsFromLabel();
 
         for(const label of labels)
         {
@@ -105,7 +103,7 @@ class DFAErrorChecker
 
     const missingNodes = [];
     //Check for missing transitions
-    for(const node of graph.nodes)
+    for(const node of graph.getNodes())
     {
       const nodeTransitions = nodeTransitionMap.get(node);
       if (!nodeTransitions && alphabet.length != 0 ||
@@ -145,44 +143,44 @@ class DFAErrorChecker
     {
       const messageTag = Config.MACHINE_ERRORS_MESSAGE_TAG;
       //Clear the existing messages
-      Notification.clearMessages(messageTag);
+      Notifications.clearMessages(messageTag);
 
       //No errors!
       if (!result)
       {
-        Notification.addMessage(I18N.toString("message.error.none"), "success", messageTag, null, null, false);
+        Notifications.addMessage(I18N.toString("message.error.none"), "success", messageTag, null, null, false);
       }
       //There are some errors/warnings...
       else
       {
         const props = {graphController: graphController, machineController: machineController};
         //Add new warning messages
-        const unReachedNodes = getUnreachableNodes();
+        const unReachedNodes = this.getUnreachableNodes();
         if (unReachedNodes.length > 0)
         {
-          Notification.addMessage(unReachedNodes,
+          Notifications.addMessage(unReachedNodes,
             "warning", messageTag, StateUnreachableWarningMessage, props, false);
         }
 
         //Add new error messages
         if (placeholderEdges.length > 0)
         {
-          Notification.addMessage({text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
+          Notifications.addMessage({text: I18N.toString("message.error.incomplete"), targets: placeholderEdges},
             "error", messageTag, TransitionErrorMessage, props, false);
         }
         if (emptyEdges.length > 0)
         {
-          Notification.addMessage({text: I18N.toString("message.error.empty"), targets: emptyEdges},
+          Notifications.addMessage({text: I18N.toString("message.error.empty"), targets: emptyEdges},
             "error", messageTag, TransitionErrorMessage, props, false);
         }
         if (dupeEdges.length > 0)
         {
-          Notification.addMessage({text: I18N.toString("message.error.dupe"), targets: dupeEdges},
+          Notifications.addMessage({text: I18N.toString("message.error.dupe"), targets: dupeEdges},
             "error", messageTag, TransitionErrorMessage, props, false);
         }
         if (missingNodes.length > 0)
         {
-          Notification.addMessage({targets: missingNodes},
+          Notifications.addMessage({targets: missingNodes},
             "error", messageTag, StateMissingTransitionErrorMessage, props, false);
         }
       }
@@ -195,7 +193,7 @@ class DFAErrorChecker
     const graph = this.graph;
     const machine = this.machineBuilder.getMachine();
 
-    const states = graph.nodes.slice();
+    const states = graph.getNodes().slice();
     const nextStates = [];
     nextStates.push(states[0]);
     states.splice(0, 1);

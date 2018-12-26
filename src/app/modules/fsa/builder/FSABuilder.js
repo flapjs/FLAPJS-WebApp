@@ -5,12 +5,9 @@ import DFAErrorChecker from './DFAErrorChecker.js';
 import NFAErrorChecker from './NFAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
-import NodalGraph from 'graph/NodalGraph';
-import Node from 'graph/Node.js';
-
+import Node from 'modules/fsa/graph/FSANode.js';
+import { SYMBOL_SEPARATOR } from 'modules/fsa/graph/FSAEdge.js';
 import { EMPTY } from 'machine/Symbols.js';
-
-const EDGE_SYMBOL_SEPARATOR = Config.EDGE_SYMBOL_SEPARATOR;
 
 class FSABuilder extends MachineBuilder
 {
@@ -23,6 +20,8 @@ class FSABuilder extends MachineBuilder
     this._machineValidDFA = false;
     this._alphabet = [];
     this._symbols = [];
+
+    this._savedGraphHash = 0;
 
     this._timer = null;
     this._errorTimer = null;
@@ -42,40 +41,30 @@ class FSABuilder extends MachineBuilder
   {
     super.initialize(app);
 
-    this.tester = app.testingManager;
-    this.graphController = app.graphController;
-    this.machineController = app.machineController;
+    this.tester = app.getCurrentModule().getTestingManager();
+    this.graphController = app.getGraphController();
+    this.machineController = app.getMachineController();
 
-    this.graph.on("nodeCreate", this.onGraphChange);
-    this.graph.on("nodeDestroy", this.onGraphChange);
-    this.graph.on("nodeLabel", this.onGraphChange);
-    this.graph.on("edgeCreate", this.onGraphChange);
-    this.graph.on("edgeDestroy", this.onGraphChange);
-    this.graph.on("edgeLabel", this.onGraphChange);
-    this.graph.on("edgeDestination", this.onGraphChange);
-    this.graph.on("toggleAccept", this.onGraphChange);
-    this.graph.on("newInitial", this.onGraphChange);
-    this.graph.on("markDirty", this.onGraphChange);
-
+    this._savedGraphHash = this.graph.getHashCode(false);
     this.onGraphChange();
   }
 
   destroy()
   {
+    this._savedGraphHash = this.graph.getHashCode(false);
     this.onGraphChange();
 
-    this.graph.removeEventListener("nodeCreate", this.onGraphChange);
-    this.graph.removeEventListener("nodeDestroy", this.onGraphChange);
-    this.graph.removeEventListener("nodeLabel", this.onGraphChange);
-    this.graph.removeEventListener("edgeCreate", this.onGraphChange);
-    this.graph.removeEventListener("edgeDestroy", this.onGraphChange);
-    this.graph.removeEventListener("edgeLabel", this.onGraphChange);
-    this.graph.removeEventListener("edgeDestination", this.onGraphChange);
-    this.graph.removeEventListener("toggleAccept", this.onGraphChange);
-    this.graph.removeEventListener("newInitial", this.onGraphChange);
-    this.graph.removeEventListener("markDirty", this.onGraphChange);
-
     super.destroy();
+  }
+
+  update()
+  {
+    const graphHash = this.graph.getHashCode(false);
+    if (graphHash !== this._savedGraphHash)
+    {
+      this._savedGraphHash = graphHash;
+      this.onGraphChange(this.graph);
+    }
   }
 
   onGraphChange(graph)
@@ -119,7 +108,7 @@ class FSABuilder extends MachineBuilder
 
   formatAlphabetString(string, allowNull=false)
   {
-    const symbols = string.split(EDGE_SYMBOL_SEPARATOR);
+    const symbols = string.split(SYMBOL_SEPARATOR);
     const result = new Set();
 
     let symbol = "";
@@ -155,7 +144,7 @@ class FSABuilder extends MachineBuilder
 
     //If it is an empty string...
     if (result.size === 0) return allowNull ? null : EMPTY;
-    return Array.from(result).join(EDGE_SYMBOL_SEPARATOR);
+    return Array.from(result).join(SYMBOL_SEPARATOR);
   }
 
   setMachineType(machineType)
@@ -258,9 +247,9 @@ class FSABuilder extends MachineBuilder
 
 function fillFSA(graph, fsa)
 {
-  if (graph.nodes.length <= 0) return fsa;
+  if (graph.getNodes().length <= 0) return fsa;
   //Create all the nodes
-  for(const node of graph.nodes)
+  for(const node of graph.getNodes())
   {
     try
     {
@@ -268,7 +257,7 @@ function fillFSA(graph, fsa)
       fsa.newState(state);
 
       //Set final state
-      if (node.accept)
+      if (node.getNodeAccept())
       {
         fsa.setFinalState(state, true);
       }
@@ -280,7 +269,7 @@ function fillFSA(graph, fsa)
   }
 
   //Create all the edges
-  for(const edge of graph.edges)
+  for(const edge of graph.getEdges())
   {
     //Ignore any incomplete edges
     if (edge.isPlaceholder()) continue;
@@ -288,7 +277,7 @@ function fillFSA(graph, fsa)
     const to = edge.getDestinationNode();
     if (from instanceof Node && to instanceof Node)
     {
-      const labels = edge.getEdgeLabel().split(EDGE_SYMBOL_SEPARATOR);
+      const labels = edge.getEdgeSymbolsFromLabel();
       for(const label of labels)
       {
         try

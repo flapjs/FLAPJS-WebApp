@@ -1,4 +1,5 @@
 import React from 'react';
+import Notifications from 'system/notification/Notifications.js';
 
 class UploadButton extends React.Component
 {
@@ -14,7 +15,11 @@ class UploadButton extends React.Component
     const files = e.target.files;
     if (files.length > 0)
     {
-      this.props.graphController.getUploader().uploadFileGraph(files[0]);
+      this.props.app.getCurrentModule().getGraphImporter().importFile(files[0], this.props.app)
+        .catch((e) => {
+          Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
+          console.error(e);
+        });
 
       //Makes sure you can upload the same file again.
       e.target.value = "";
@@ -34,7 +39,7 @@ class UploadButton extends React.Component
       <input id={inputID} type="file" name="import"
         style={{display:"none"}}
         onChange={this.onUploadFileChange}
-        accept={this.props.graphController.getUploader().getValidFileTypes().join(",")}/>
+        accept={this.props.app.getCurrentModule().getGraphImporter().getImportFileTypes().join(",")}/>
       <label htmlFor={inputID}>
         {this.props.children}
       </label>

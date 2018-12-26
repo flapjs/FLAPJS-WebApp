@@ -2,7 +2,7 @@ import GraphElement from 'graph/GraphElement.js';
 
 class GraphEdge extends GraphElement
 {
-  constructor(id, from, to)
+  constructor(id, from, to=null)
   {
     super(id);
 
@@ -136,6 +136,15 @@ class GraphEdge extends GraphElement
   isSelfLoop()
   {
     return this._from === this._to;
+  }
+
+  //Override
+  getHashString(usePosition=true)
+  {
+    const src = this._from ? this._from.getHashString(usePosition) : "";
+    //HACK: to may be a pointer, which is not a node, so getHashString does not exist.
+    const dst = this._to ? this._to.getHashString ? this._to.getHashString(usePosition) : "0" : "";
+    return super.getHashString(usePosition) + ":" + src + "," + dst + "." + this._label;
   }
 }
 

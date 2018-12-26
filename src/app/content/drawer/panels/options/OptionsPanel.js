@@ -13,7 +13,7 @@ import StyleInput from 'system/styleopt/components/StyleInput.js';
 import OptionGroup from './OptionGroup.js';
 import OptionHotkey from './OptionHotkey.js';
 
-//This should be the same as the one referred to by index.html
+//This should be the same as the one referred to by index.js
 const LOCAL_STORAGE_ID = "skipWelcome";
 
 class OptionsPanel extends React.Component
@@ -32,6 +32,7 @@ class OptionsPanel extends React.Component
     };
 
     this.onChangeTheme = this.onChangeTheme.bind(this);
+    this.onChangeModule = this.onChangeModule.bind(this);
   }
 
   //Override
@@ -204,7 +205,6 @@ class OptionsPanel extends React.Component
   {
     const prevTheme = this.state.theme;
     const theme = e.target.value;
-    console.log(prevTheme, theme);
     if (prevTheme === theme) return;
 
     if (theme === "default")
@@ -216,6 +216,11 @@ class OptionsPanel extends React.Component
     }
 
     this.setState({theme: theme});
+  }
+
+  onChangeModule(e)
+  {
+    //Nothing yet...
   }
 
   //Override
@@ -247,6 +252,16 @@ class OptionsPanel extends React.Component
           <OptionHotkey label={I18N.toString("action.workspace.cancel.label")} keyName="Escape"/>
         </OptionGroup>
 
+        <div className="panel-checkbox" style={{marginTop: "10px"}}>
+          <input id="option-skipwelcome" type="checkbox" checked={this.state.skipWelcome}
+          onChange={(e) => {
+            const result = e.target.checked;
+            this.setState({skipWelcome: e.target.checked});
+            LocalSave.setStringToStorage(LOCAL_STORAGE_ID, "" + result);
+          }}/>
+          <label htmlFor="option-skipwelcome">{I18N.toString("options.skipwelcome")}</label>
+        </div>
+
         <hr/>
 
         <div>
@@ -254,8 +269,8 @@ class OptionsPanel extends React.Component
             <label htmlFor="options-theme-select">Theme</label>
             <select id="options-theme-select" className="panel-select" value={this.state.theme} onChange={this.onChangeTheme} disabled={this.state.customTheme}>
               <option value="default">Default</option>
-              <option value="ucsd" disabled="true">UC San Diego (Coming Soon)</option>
-              <option value="duke" disabled="true">Duke University (Coming Soon)</option>
+              <option value="ucsd" disabled={true}>UC San Diego (Coming Soon)</option>
+              <option value="duke" disabled={true}>Duke University (Coming Soon)</option>
             </select>
             {
               !this.state.customTheme &&
@@ -317,18 +332,21 @@ class OptionsPanel extends React.Component
               }}>{I18N.toString("action.options.reset")}</button>
             </div>
           }
-
-          <hr/>
         </div>
 
-        <div className="panel-checkbox">
-          <input id="option-skipwelcome" type="checkbox" checked={this.state.skipWelcome}
-          onChange={(e) => {
-            const result = e.target.checked;
-            this.setState({skipWelcome: e.target.checked});
-            LocalSave.setStringToStorage(LOCAL_STORAGE_ID, result);
-          }}/>
-          <label htmlFor="option-skipwelcome">{I18N.toString("options.skipwelcome")}</label>
+        <hr/>
+
+        <div>
+          <h2>Experimental</h2>
+          <label htmlFor="options-experimental-modules">Module</label>
+          <select id="options-experimental-modules" className="panel-select" value={this.props.app.getCurrentModule().getModuleName()} onChange={this.onChangeModule}>
+            <option value="fsa">Finite State Automata</option>
+            <option value="pda" disabled={true}>Pushdown Automata (Coming Soon)</option>
+            <option value="cfg" disabled={true}>Context-Free Grammar (Future)</option>
+            <option value="tm" disabled={true}>Turing Machine (Future)</option>
+            <option value="rdt" disabled={true}>Red-Black Tree (Future)</option>
+            <option value="hlsm" disabled={true}>High Level State Machine (Future)</option>
+          </select>
         </div>
 
       </div>

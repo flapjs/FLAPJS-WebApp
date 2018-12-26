@@ -17,7 +17,7 @@ class MachineBuilder
 
   initialize(app)
   {
-    this.graphController = app.graphController;
+    this.graphController = app.getGraphController();
 
     this.setAutoRenameNodes(DEFAULT_AUTO_RENAME);
   }

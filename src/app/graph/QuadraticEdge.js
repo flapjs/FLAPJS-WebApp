@@ -1,9 +1,8 @@
 import GraphEdge from 'graph/GraphEdge.js';
-import { guid } from 'util/MathHelper.js';
 
 class GraphCurvedEdge extends GraphEdge
 {
-  constructor(id, from, to)
+  constructor(id, from, to=null)
   {
     super(id, from, null);
 
@@ -297,6 +296,19 @@ class GraphCurvedEdge extends GraphEdge
     }
 
     return dst;
+  }
+
+  //Override
+  getHashString(usePosition=true)
+  {
+    if (usePosition)
+    {
+      return super.getHashString(usePosition) + ":" + this._quad.radians + "," + this._quad.length;
+    }
+    else
+    {
+      return super.getHashString(usePosition);
+    }
   }
 }
 

@@ -1,13 +1,11 @@
-import Downloader from 'util/Downloader.js';
-import * as FlapSaver from 'util/FlapSaver.js';
-
 class HotKeys
 {
-  constructor(events)
+  constructor()
   {
+    this.app = null;
     this.workspace = null;
     this.toolbar = null;
-    this.events = null;
+    this.undoManager = null;
     this.graphController = null;
     this.machineController = null;
 
@@ -16,11 +14,12 @@ class HotKeys
 
   initialize(app)
   {
+    this.app = app;
     this.workspace = app.workspace;
     this.toolbar = app.toolbar;
-    this.events = app.eventManager;
-    this.graphController = app.graphController;
-    this.machineController = app.machineController;
+    this.undoManager = app.getUndoManager();
+    this.graphController = app.getGraphController();
+    this.machineController = app.getMachineController();
 
     window.addEventListener('keydown', this.onKeyDown);
   }
@@ -36,10 +35,9 @@ class HotKeys
     if (event.which == 83 && (event.metaKey || event.ctrlKey))
     {
       //Save as machine file
-      //TODO: Refer to export panel
-      const jsonString = JSON.stringify(FlapSaver.saveToJSON(this.graphController, this.machineController));
+      const exporter = this.app.getCurrentModule().getDefaultGraphExporter();
       const machineName = this.machineController.getMachineName();
-      Downloader.downloadText(machineName + '.json', jsonString);
+      exporter.exportToFile(machineName, this.app);
 
       e.preventDefault();
       e.stopPropagation();
@@ -50,14 +48,12 @@ class HotKeys
       if (event.shiftKey)
       {
         //Redo
-        //TODO: Refer to toolbar
-        this.events.getLogger().redo();
+        this.undoManager.redo();
       }
       else
       {
         //Undo
-        //TODO: Refer to toolbar
-        this.events.getLogger().undo();
+        this.undoManager.undo();
       }
       e.preventDefault();
       e.stopPropagation();
@@ -66,12 +62,17 @@ class HotKeys
     else if (event.which == 80 && (event.metaKey || event.ctrlKey))
     {
       //Export to PNG
-      //TODO: Refer to export panel
-      const workspaceDim = this.workspace.ref.viewBox.baseVal;
-      const width = workspaceDim.width;
-      const height = workspaceDim.height;
-      const svg = this.workspace.getSVGForExport(width, height);
-      Downloader.downloadSVG(this.machineController.getMachineName(), 'png', svg, width, height);
+      const imageExporters = this.app.getCurrentModule().getImageExporters();
+      if (imageExporter.length >= 1)
+      {
+        const exporter = imageExporters[0];
+        const machineName = this.machineController.getMachineName();
+        exporter.exportToFile(machineName, this.app);
+      }
+      else
+      {
+        throw new Error("Unable to find valid image exporter for module \'" + this.app.getCurrentModule().getModuleName() + "\'");
+      }
 
       e.preventDefault();
       e.stopPropagation();
