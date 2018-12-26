@@ -45,13 +45,18 @@ class App extends React.Component
 
     this._module = new DefaultModule(this);
     Modules['fsa'].fetch((Module) => {
-      if (this._module)
+      const prevModule = this._module;
+      if (prevModule && this._init)
       {
-        this._module.destroy();
+        prevModule.destroy(this);
       }
 
       this._module = new Module(this);
-      this._module.initialize(this);
+
+      if (this._init)
+      {
+        this._module.initialize(this);
+      }
     });
 
     this.hotKeys = new HotKeys();
@@ -303,17 +308,19 @@ class App extends React.Component
 
   render()
   {
+    const currentModule = this._module;
     const screen = this.workspace ? this.workspace.ref : null;
 
     if (this._init)
     {
       this.inputAdapter.update();
-      this._module.update(this);
+      currentModule.update(this);
     }
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar ref={ref=>this.toolbar=ref}
         app={this}
+        currentModule={currentModule}
         drawer={this.drawer}/>
 
       <NotificationView notificationManager={Notifications}/>
@@ -327,7 +334,8 @@ class App extends React.Component
           }}>
 
           <Workspace ref={ref=>this.workspace=ref}
-            app={this}/>
+            app={this}
+            currentModule={currentModule}/>
         </div>
 
         <div className={"workspace-viewport" +
@@ -338,6 +346,7 @@ class App extends React.Component
 
           <Viewport ref={ref=>this.viewport=ref}
             app={this}
+            currentModule={currentModule}
             screen={screen}/>
         </div>
 
@@ -347,6 +356,7 @@ class App extends React.Component
 
           <Drawer ref={ref=>this.drawer=ref}
             app={this}
+            currentModule={currentModule}
             toolbar={this.toolbar}/>
         </div>
       </div>

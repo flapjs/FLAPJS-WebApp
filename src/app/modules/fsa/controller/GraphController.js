@@ -14,7 +14,7 @@ class GraphController extends AbstractGraphController
     this.inputController = null;
     this.machineController = null;
 
-    this.labelEditor = null;
+    this.viewportElement = null;
     this.tester = null;
 
     this.prevQuad = {
@@ -102,7 +102,7 @@ class GraphController extends AbstractGraphController
 
   initialize(app)
   {
-    this.labelEditor = app.viewport.labelEditor;
+    this.viewportElement = app.viewport;
     this.tester = app.getCurrentModule().getTestingManager();
 
     this.inputController = app.getInputController();
@@ -307,7 +307,7 @@ class GraphController extends AbstractGraphController
   openLabelEditor(target, x, y, placeholder=null, replace=true, callback=null)
   {
     const prevLabel = placeholder || target.getEdgeLabel();
-    this.labelEditor.openEditor(target, placeholder, replace, () => {
+    this.viewportElement.labelEditor.openEditor(target, placeholder, replace, () => {
       const label = target.getEdgeLabel();
       if (prevLabel.length > 0 && label != prevLabel)
       {

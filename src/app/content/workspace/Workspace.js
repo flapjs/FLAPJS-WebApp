@@ -26,10 +26,14 @@ class Workspace extends React.Component
     const svg = this.ref;
     if (!svg) return null;
 
-    const viewport = this.props.inputController.getInputAdapter().getViewport();
+    const app = this.props.app;
+    const inputController = app.getInputController();
+    const graphController = app.getGraphController();
+
+    const viewport = inputController.getInputAdapter().getViewport();
     const offsetX = viewport.getOffsetX();
     const offsetY = viewport.getOffsetY();
-    const bounds = this.props.graphController.getGraph().getBoundingRect();
+    const bounds = graphController.getGraph().getBoundingRect();
     const dx = bounds.minX + offsetX - EXPORT_PADDING_X;
     const dy = bounds.minY + offsetY - EXPORT_PADDING_Y;
     const w = bounds.width + EXPORT_PADDING_X * 2;
