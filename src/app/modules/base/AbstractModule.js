@@ -64,11 +64,6 @@ class AbstractModule
     throw new Error("Missing graph renderer for module \'" + this.getModuleName() + "\'");
   }
 
-  getOverlayRenderer()
-  {
-    return null;
-  }
-
   getDefaultModulePanel()
   {
     return null;
