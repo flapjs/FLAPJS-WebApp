@@ -5,8 +5,8 @@ import './App.css';
 import Config from 'config.js';
 
 //import Modules from './Modules.js';
-//import DefaultModule from 'modules/default/DefaultModule.js';
-import FSAModule from 'modules/fsa/FSAModule.js';
+//import Module from 'modules/default/DefaultModule.js';
+import Module from 'modules/fsa/FSAModule.js';
 
 import HotKeys from './HotKeys.js';
 import LocalSave from 'system/localsave/LocalSave.js';
@@ -43,9 +43,8 @@ class App extends React.Component
       .setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
 
     this.undoManager = new UndoManager();
-
-    this._module = new FSAModule(this);
-    //this._module = new DefaultModule(this);
+    
+    this._module = new Module(this);
     //Modules['fsa'].fetch((Module) => this._module = new Module(this));
 
     this.hotKeys = new HotKeys();
@@ -306,27 +305,18 @@ class App extends React.Component
 
   render()
   {
-    const module = this._module;
-    const inputController = module.getInputController();
-    const graphController = module.getGraphController();
-    const machineController = module.getMachineController();
-    const tester = module.getTestingManager();
-
     const screen = this.workspace ? this.workspace.ref : null;
 
     if (this._init)
     {
       this.inputAdapter.update();
-      module.update(this);
+      this._module.update(this);
     }
 
     return <div className="app-container" ref={ref=>this.container=ref}>
       <Toolbar ref={ref=>this.toolbar=ref}
         app={this}
-        undoManager={this.undoManager}
-        drawer={this.drawer}
-        graphController={graphController}
-        machineController={machineController}/>
+        drawer={this.drawer}/>
 
       <NotificationView notificationManager={Notifications}/>
 
@@ -339,11 +329,7 @@ class App extends React.Component
           }}>
 
           <Workspace ref={ref=>this.workspace=ref}
-            app={this}
-            tester={tester}
-            graphController={graphController}
-            inputController={inputController}
-            machineController={machineController}/>
+            app={this}/>
         </div>
 
         <div className={"workspace-viewport" +
@@ -354,11 +340,7 @@ class App extends React.Component
 
           <Viewport ref={ref=>this.viewport=ref}
             app={this}
-            tester={tester}
-            screen={screen}
-            graphController={graphController}
-            inputController={inputController}
-            machineController={machineController}/>
+            screen={screen}/>
         </div>
 
         <div className={"workspace-drawer" +
@@ -367,9 +349,7 @@ class App extends React.Component
 
           <Drawer ref={ref=>this.drawer=ref}
             app={this}
-            toolbar={this.toolbar}
-            graphController={graphController}
-            machineController={machineController}/>
+            toolbar={this.toolbar}/>
         </div>
       </div>
     </div>;

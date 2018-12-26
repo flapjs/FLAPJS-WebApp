@@ -11,6 +11,7 @@ import MachineController from './controller/MachineController.js';
 
 import FSAGraphRenderer from './graph/renderer/FSAGraphRenderer.js';
 import FSAGraphOverlayRenderer from './graph/renderer/FSAGraphOverlayRenderer.js';
+import ViewportRenderer from './renderer/ViewportRenderer.js';
 
 import FSABuilder from './builder/FSABuilder.js';
 import GraphLayout from './graph/GraphLayout.js';
@@ -121,9 +122,17 @@ class FSAModule extends AbstractModule
     return LabelEditor;
   }
 
-  getGraphOverlayRenderer()
+  //Override
+  getRenderer(renderLayer)
   {
-    return FSAGraphOverlayRenderer;
+    switch(renderLayer)
+    {
+      case "graphoverlay":
+        return FSAGraphOverlayRenderer;
+      case "viewport":
+        return ViewportRenderer;
+    }
+    return null;
   }
 
   //Override
@@ -146,5 +155,7 @@ class FSAModule extends AbstractModule
   getModulePanels() { return PANELS; }
   //Override
   getModuleName() { return "fsa"; }
+  //Override
+  getLocalizedModuleName() { return this._machineBuilder.getMachineType(); }
 }
 export default FSAModule;

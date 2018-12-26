@@ -1,9 +1,7 @@
 import React from 'react';
 import './Viewport.css';
 
-import TrashCan from './TrashCan.js';
-import TestTray from './TestTray.js';
-import CursorMode from './CursorMode.js';
+const VIEWPORT_RENDER_LAYER = "viewport";
 
 class Viewport extends React.Component
 {
@@ -20,36 +18,29 @@ class Viewport extends React.Component
     };
   }
 
+  //Override
   render()
   {
-    const inputController = this.props.inputController;
-    const graphController = this.props.graphController;
-    const machineController = this.props.machineController;
-    const tester = this.props.tester;
+    const app = this.props.app;
+    const module = app.getCurrentModule();
+    const inputController = app.getInputController();
+    const graphController = app.getGraphController();
+    const machineController = app.getMachineController();
     const screen = this.props.screen;
-    const LabelEditor = this.props.app.getCurrentModule().getLabelEditor();
+    const LabelEditor = module.getLabelEditor();
+    const ViewportRenderer = module.getRenderer(VIEWPORT_RENDER_LAYER);
 
     return <div className={"viewport-container viewport-" + this.state.mode} ref={ref=>this.ref=ref}>
-      <LabelEditor ref={ref=>this.labelEditor=ref}
+      { LabelEditor &&
+        <LabelEditor ref={ref=>this.labelEditor=ref}
         inputController={inputController}
         graphController={graphController}
         machineController={machineController}
-        screen={screen}/>
-      {
-        tester.getStepByStepMode() ?
-        <div className="anchor-bottom-left" style={{width: "100%"}}>
-          <TestTray tester={tester} graphController={graphController}/>
-        </div>
-        :
-        <span>
-          <div className="anchor-bottom-left" style={{width: "100%"}}>
-            <CursorMode inputController={inputController} graphController={graphController}/>
-          </div>
-          <div className="anchor-bottom-right">
-            <TrashCan inputController={inputController} viewport={this}/>
-          </div>
-        </span>
-      }
+        screen={screen}/> }
+      { ViewportRenderer &&
+        <ViewportRenderer
+        viewport={this}
+        app={app}/>}
     </div>;
   }
 }

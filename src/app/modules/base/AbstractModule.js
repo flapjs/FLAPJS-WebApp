@@ -21,6 +21,11 @@ class AbstractModule
 
   update(app) {}
 
+  getRenderer(renderLayer)
+  {
+    return null;
+  }
+
   getInputController()
   {
     throw new Error("Missing input controller for module \'" + this.getModuleName() + "\'");
@@ -82,6 +87,11 @@ class AbstractModule
   getModuleName()
   {
     throw new Error("Missing module name");
+  }
+
+  getLocalizedModuleName()
+  {
+    return "Module";
   }
 }
 

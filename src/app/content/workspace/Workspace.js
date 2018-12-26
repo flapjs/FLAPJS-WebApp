@@ -13,6 +13,8 @@ const WORKSPACE_OFFSET_Y = 0;
 const EXPORT_PADDING_X = 30;
 const EXPORT_PADDING_Y = 0;
 
+const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
+
 class Workspace extends React.Component
 {
   constructor(props)
@@ -64,13 +66,12 @@ class Workspace extends React.Component
   render()
   {
     const app = this.props.app;
+    const graphController = app.getGraphController();
+    const inputController = app.getInputController();
+    const machineController = app.getMachineController();
     const module = app.getCurrentModule();
-    const graphController = this.props.graphController;
-    const inputController = this.props.inputController;
-    const machineController = this.props.machineController;
-    const tester = this.props.tester;
     const GraphRenderer = module.getGraphRenderer();
-    const GraphOverlayRenderer = module.getGraphOverlayRenderer();
+    const GraphOverlayRenderer = module.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
 
     const graph = graphController.getGraph();
     const viewport = inputController.getInputAdapter().getViewport();

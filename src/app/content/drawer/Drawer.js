@@ -191,8 +191,8 @@ class Drawer extends React.Component
   {
     const app = this.props.app;
     const currentModule = app.getCurrentModule();
-    const graphController = this.props.graphController;
-    const machineController = this.props.machineController;
+    const graphController = app.getGraphController();
+    const machineController = app.getMachineController();
 
     const tabIndex = this.state.tabIndex;
     const InfoPanel = currentModule ? currentModule.getDefaultModulePanel() : null;

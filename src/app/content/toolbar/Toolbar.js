@@ -63,13 +63,13 @@ class Toolbar extends React.Component
   render()
   {
     const app = this.props.app;
-    const graphController = this.props.graphController;
-    const machineController = this.props.machineController;
-    const undoManager = this.props.undoManager;
+    const currentModule = app.getCurrentModule();
     const drawer = this.props.drawer;
+    const graphController = app.getGraphController();
+    const machineController = app.getMachineController();
+    const undoManager = app.getUndoManager();
 
     const graph = graphController.getGraph();
-    const machineBuilder = machineController.getMachineBuilder();
 
     const offline = navigator && navigator.onLine;
 
@@ -112,7 +112,7 @@ class Toolbar extends React.Component
         {/*Machine Type*/}
         <label id="machine-type"
           onClick={()=>drawer.setTab(0)}>
-          {machineBuilder.getMachineType()}
+          {currentModule.getLocalizedModuleName()}
         </label>
       </div>
 
