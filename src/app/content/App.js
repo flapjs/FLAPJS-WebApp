@@ -4,8 +4,9 @@ import './App.css';
 
 import Config from 'config.js';
 
-import Modules from './Modules.js';
-import DefaultModule from 'modules/default/DefaultModule.js';
+//import Modules from './Modules.js';
+//import DefaultModule from 'modules/default/DefaultModule.js';
+import FSAModule from 'modules/fsa/FSAModule.js';
 
 import HotKeys from './HotKeys.js';
 import LocalSave from 'system/localsave/LocalSave.js';
@@ -43,7 +44,8 @@ class App extends React.Component
 
     this.undoManager = new UndoManager();
 
-    this._module = new DefaultModule(this);
+    this._module = new FSAModule(this);
+    /*
     Modules['fsa'].fetch((Module) => {
       const prevModule = this._module;
       if (prevModule && this._init)
@@ -58,6 +60,7 @@ class App extends React.Component
         this._module.initialize(this);
       }
     });
+    */
 
     this.hotKeys = new HotKeys();
     this.tutorial = new Tutorial();
