@@ -17,7 +17,8 @@
   margin-left: calc(var(--drawer-handle-width) + var(--drawer-tab-height) - var(--drawer-width));
   left: calc(var(--drawer-width) - var(--drawer-tab-height) - var(--drawer-handle-width));
   transition:
-    margin-left 0.3s ease,
+    /* TODO: Although it looks nice, it is bad at transitions */
+    /* margin-left 0.3s ease, */
     left 0.3s ease;
 }
 .app-drawer.open {
@@ -166,7 +167,8 @@
   margin-top: calc(var(--drawer-handle-width) + var(--drawer-tab-height) - var(--drawer-width));
   top: calc(var(--drawer-width) - var(--drawer-tab-height) - var(--drawer-handle-width));
   transition:
-    margin-top 0.3s ease,
+    /* TODO: Although it looks nice, it is bad at transitions */
+    /* margin-top 0.3s ease, */
     top 0.3s ease;
 }
 .app-drawer.open.drawer-side-bottom {
