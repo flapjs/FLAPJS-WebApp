@@ -35,33 +35,78 @@
 .app-drawer {
   --drawer-width: 300px;
   --drawer-tab-height: 32px;
+  --drawer-handle-width: 12px;
 
   position: relative;
   z-index: 500;
   width: var(--drawer-width);
-
-  background: gray;
   flex-shrink: 0;
+
+  /*box-shadow: -1px 0 5px rgba(0, 0, 0, 0.5);*/
+  background: gray;
 }
 .app-drawer.open {
-  margin-left: calc(var(--drawer-tab-height) - var(--drawer-width));
-  left: calc(var(--drawer-width) - var(--drawer-tab-height));
+  margin-left: calc(var(--drawer-handle-width) + var(--drawer-tab-height) - var(--drawer-width));
+  left: calc(var(--drawer-width) - var(--drawer-tab-height) - var(--drawer-handle-width));
+}
+.drawer-handle {
+  position: absolute;
+  width: var(--drawer-handle-width);
+  height: 100%;
+  color: white;
+  background: black;
+
+  text-align: center;
 }
 .drawer-bar {
   display: flex;
-  align-items: flex-end;
+  flex-direction: row;
+  width: 100%;
   height: var(--drawer-tab-height);
+  margin-left: var(--drawer-handle-width);
+
   background: green;
 }
-.drawer-bar {
-  transform: rotate(-90deg);
-  transform-origin: top left;
-  margin-top: var(--drawer-width);
-}
 .drawer-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   flex-grow: 1;
-  text-align: center;
-  outline: 1px solid black;
+
+  /* Hover animation */
+  border-bottom: none;
+  border-right: none;
+  padding-right: 0px;
+  transition: border-bottom 0.1s ease,
+    padding-bottom 0.1s ease,
+    border-right 0.1s ease,
+    padding-right 0.1s ease;
+}
+.drawer-tab:hover {
+  color: white;
+
+  /* Hover animation */
+  border-bottom: 4px solid gold;
+  padding-bottom: 2px;
+  border-right: none;
+  padding-right: 0px;
+}
+.sideways .drawer-bar {
+  flex-direction: column;
+  width: var(--drawer-tab-height);
+  height: 100%;
+}
+.sideways .drawer-tab > * {
+  flex-grow: 1;
+  transform: rotateZ(-90deg);
+}
+.sideways .drawer-tab:hover {
+  /* Hover animation */
+  border-bottom: none;
+  padding-bottom: 0px;
+  border-right: 4px solid gold;
+  padding-right: 2px;
 }
 .drawer-panel {
 }

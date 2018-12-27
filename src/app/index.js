@@ -14,7 +14,7 @@ const AUTOSAVE_CONFIG = true;
 //LocalSave: imports
 import LocalSave from 'system/localsave/LocalSave.js';
 
-const SHOULD_WARN_USERS_ON_EXIT = true;
+const SHOULD_WARN_USERS_ON_EXIT = false;//true;
 
 //Setup viewport
 window.addEventListener('load', (event) => {
