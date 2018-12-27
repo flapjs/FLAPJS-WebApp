@@ -9,8 +9,12 @@ const DRAWER_HANDLE_MIN_SIZE_BUFFER = 32;
 const DRAWER_HANDLE_MAX_SIZE_BUFFER = 128;
 const DRAWER_MIN_WIDTH = 300;
 
-const DRAWER_WIDTH_TYPE_FULL = "full";
-const DRAWER_WIDTH_TYPE_MIN = "min";
+export const DRAWER_WIDTH_TYPE_FULL = "full";
+export const DRAWER_WIDTH_TYPE_MIN = "min";
+export const DRAWER_SIDE_BOTTOM = "bottom";
+export const DRAWER_SIDE_RIGHT = "right";
+export const DRAWER_BAR_DIRECTION_VERTICAL = "vertical";
+export const DRAWER_BAR_DIRECTION_HORIZONTAL = "horizontal";
 
 class Drawer extends React.Component
 {
@@ -20,7 +24,6 @@ class Drawer extends React.Component
 
     this.ref = null;
 
-    this._mediaQueryList = window.matchMedia("only screen and (min-height: 400px)");
     this._handlingGrab = false;
 
     this.onDrawerHandleGrab = this.onDrawerHandleGrab.bind(this);
@@ -89,17 +92,26 @@ class Drawer extends React.Component
   //Override
   render()
   {
-    const expandCallback = this.props.onExpand;
+    const onExpand = this.props.onExpand;
     const isDrawerOpen = this.props.open;
-    const shouldDrawerBarSideways = !isDrawerOpen || this._mediaQueryList.matches;
+    //Assumes that parent container has flex and flex-direction: column for bottom, row for right.
+    const isDrawerSideBottom = this.props.side === DRAWER_SIDE_BOTTOM;
+    const shouldDrawerBarSideways = !isDrawerSideBottom && (!isDrawerOpen || this.props.direction === DRAWER_BAR_DIRECTION_VERTICAL);
     const showDrawerHandle = isDrawerOpen || this._handlingGrab;
 
     return (
-      <div ref={ref=>this.ref=ref} className={"app-drawer " + (isDrawerOpen ? "open " : "") + (shouldDrawerBarSideways ? "sideways " : "")}>
-        <div className={"drawer-handle " + (showDrawerHandle ? "show " : "")} onMouseDown={this.onDrawerHandleGrab}><span>||</span></div>
+      <div ref={ref=>this.ref=ref} className={
+        "app-drawer " +
+        (isDrawerOpen ? "open " : "") +
+        (shouldDrawerBarSideways ? "drawer-bar-sideways " : "") +
+        (isDrawerSideBottom ? "drawer-side-bottom " : "")
+      }>
+        <div className={"drawer-handle " + (showDrawerHandle ? "show " : "")} onMouseDown={this.onDrawerHandleGrab}>
+          <span>||</span>
+        </div>
         <div className="drawer-content">
           <nav className="drawer-content-bar">
-            <a className="drawer-tab-expander" onClick={expandCallback}>
+            <a className="drawer-tab-expander" onClick={onExpand}>
               <Icon/>
             </a>
             <a className="drawer-tab"><label>Start</label></a>

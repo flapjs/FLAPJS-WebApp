@@ -31,7 +31,11 @@
 /********* APP CONTENT *********/
 .app-content {
   display: flex;
+  flex-direction: row;
   flex-grow: 1;
+}
+.app-content.column {
+  flex-direction: column;
 }
 /********* APP VIEWPORT *********/
 .app-viewport {
@@ -39,4 +43,10 @@
 
   outline: 10px dashed lightgray;
   outline-offset: -20px;
+}
+
+@media only screen and (max-width: 400px) {
+  .app-content {
+    flex-direction: column;
+  }
 }
