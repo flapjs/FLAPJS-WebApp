@@ -1,0 +1,74 @@
+#root {
+  width: 100%;
+  height: 100%;
+}
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+/********* APP BAR *********/
+.app-bar {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  z-index: 1000;
+
+  background: yellow;
+}
+.app-title {
+  padding: 0 5px;
+}
+.app-toolbar {
+  display: flex;
+  flex-grow: 1;
+  background: blue;
+}
+/********* APP CONTENT *********/
+.app-content {
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+}
+/********* APP DRAWER *********/
+.app-drawer {
+  --drawer-width: 300px;
+  --drawer-tab-height: 32px;
+
+  position: relative;
+  z-index: 500;
+  width: var(--drawer-width);
+
+  background: gray;
+  flex-shrink: 0;
+}
+.app-drawer.open {
+  margin-left: calc(var(--drawer-tab-height) - var(--drawer-width));
+  left: calc(var(--drawer-width) - var(--drawer-tab-height));
+}
+.drawer-bar {
+  display: flex;
+  align-items: flex-end;
+  height: var(--drawer-tab-height);
+  background: green;
+}
+.drawer-bar {
+  transform: rotate(-90deg);
+  transform-origin: top left;
+  margin-top: var(--drawer-width);
+}
+.drawer-tab {
+  flex-grow: 1;
+  text-align: center;
+  outline: 1px solid black;
+}
+.drawer-panel {
+}
+/********* APP VIEWPORT *********/
+.app-viewport {
+  flex-grow: 1;
+
+  outline: 10px dashed lightgray;
+  outline-offset: -20px;
+}

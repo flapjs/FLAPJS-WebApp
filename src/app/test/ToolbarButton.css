@@ -1,0 +1,17 @@
+:local(.container) {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
+
+  font-size: 1.5em;
+  min-width: 3em;
+  min-height: 3em;
+}
+:local(.container):hover :local(.icon) {
+  fill: gray;
+}
+:local(.container):active :local(.icon) {
+  fill: white;
+}
