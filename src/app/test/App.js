@@ -13,16 +13,16 @@ class App extends React.Component
   {
     super(props);
 
+    this.drawerComponent = null;
+
     this.state = {
       drawerOpen: false
     };
 
-    this._mediaQueryList = window.matchMedia("only screen and (min-height: 400px)");
-
     this.onDrawerExpand = this.onDrawerExpand.bind(this);
   }
 
-  openDrawer()
+  openDrawer(fullscreen=false)
   {
     this.setState({ drawerOpen: true });
   }
@@ -39,7 +39,7 @@ class App extends React.Component
     });
   }
 
-  onDrawerExpand(e)
+  onDrawerExpand()
   {
     this.toggleDrawer();
   }
@@ -47,9 +47,6 @@ class App extends React.Component
   //Override
   render()
   {
-    const isDrawerOpen = this.state.drawerOpen;
-    const shouldDrawerBarSideways = this._mediaQueryList.matches;
-
     return (
       <div className="app-container">
         <div className={"app-bar"}>
@@ -63,25 +60,9 @@ class App extends React.Component
         <div className="app-content">
           <div className="app-viewport">
           </div>
-          <div className={"app-drawer " + (isDrawerOpen ? "open " : "") + (shouldDrawerBarSideways ? "sideways " : "")}>
-            <div className="drawer-handle">||</div>
-            <nav className="drawer-bar">
-              <a className="drawer-tab" onClick={this.onDrawerExpand}>
-                <label>Drawer</label>
-              </a>
-              <a className="drawer-tab" onClick={this.onDrawerExpand}>
-                <label>Nothing</label>
-              </a>
-              <a className="drawer-tab" onClick={this.onDrawerExpand}>
-                <label>About</label>
-              </a>
-              <a className="drawer-tab" onClick={this.onDrawerExpand}>
-                <label>Other</label>
-              </a>
-            </nav>
-            <div className="drawer-panel">
-            </div>
-          </div>
+          <Drawer ref={ref=>this.drawerComponent=ref}
+            open={this.state.drawerOpen}
+            onExpand={this.onDrawerExpand}/>
         </div>
       </div>
     );

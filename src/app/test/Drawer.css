@@ -1,0 +1,154 @@
+.app-drawer {
+  --drawer-width: 300px;
+  --drawer-tab-height: 32px;
+  --drawer-handle-width: 4px;/* 12px on open */
+
+  position: relative;
+  z-index: 500;
+  width: var(--drawer-width);
+  display: flex;
+  flex-shrink: 0;
+
+  /*box-shadow: -1px 0 5px rgba(0, 0, 0, 0.5);*/
+  background: gray;
+
+  /* Drawer sliding */
+  margin-left: calc(var(--drawer-handle-width) + var(--drawer-tab-height) - var(--drawer-width));
+  left: calc(var(--drawer-width) - var(--drawer-tab-height) - var(--drawer-handle-width));
+  transition:
+    margin-left 0.3s ease,
+    left 0.3s ease;
+}
+.app-drawer.open {
+  /* Drawer sliding */
+  margin-left: 0;
+  left: 0;
+}
+
+/********* DRAWER HANDLE *********/
+.drawer-handle {
+  width: var(--drawer-handle-width);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  user-select: none;
+  cursor: auto;
+
+  color: gray;
+  background: black;
+
+  transition: width 0.1s 0.3s ease;
+}
+.drawer-handle > * {
+  /* Hide drawer handle when open */
+  opacity: 0;
+  transition: opacity 0.1s 0.3s ease;
+}
+.drawer-handle.show {
+  /* Show drawer handle when open */
+  --drawer-handle-width: 12px;
+  cursor: col-resize;
+}
+.drawer-handle.show > * {
+  /* Show drawer handle when open */
+  opacity: 1;
+}
+
+/********* DRAWER CONTENT *********/
+.drawer-content {
+  width: calc(var(--drawer-width) - var(--drawer-handle-width));
+  display: flex;
+  flex-direction: column;
+}
+
+/********* DRAWER CONTENT BAR *********/
+.drawer-content-bar {
+  width: 100%;
+  min-height: var(--drawer-tab-height);
+  display: flex;
+  flex-direction: row;
+
+  background: green;
+}
+.drawer-content-bar > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+
+  overflow: hidden;
+  user-select: none;
+  cursor: pointer;
+}
+.drawer-tab-expander {
+  margin: auto auto;
+  min-width: var(--drawer-tab-height);
+  max-width: var(--drawer-tab-height);
+  min-height: var(--drawer-tab-height);
+  max-height: var(--drawer-tab-height);
+}
+.drawer-tab {
+  padding-top: 4px;
+  padding-left: 0px;
+  white-space: nowrap;
+
+  /* Hover animation */
+  border-bottom: none;
+  border-right: none;
+  padding-right: 0px;
+  transition: border-bottom 0.1s ease,
+    padding-bottom 0.1s ease,
+    border-right 0.1s ease,
+    padding-right 0.1s ease;
+}
+.drawer-tab > * {
+  pointer-events: none;
+}
+.drawer-tab:hover {
+  color: white;
+
+  /* Hover animation */
+  border-bottom: 4px solid gold;
+  padding-bottom: 2px;
+  border-right: none;
+  padding-right: 0px;
+}
+/* Sideways drawer tabs */
+.sideways .drawer-content {
+  flex-direction: row;
+}
+.sideways .drawer-content-bar {
+  width: var(--drawer-tab-height);
+  height: 100%;
+  flex-direction: column;
+}
+.sideways .drawer-tab {
+  padding-top: 0px;
+  padding-left: 4px;
+}
+.sideways .drawer-tab > * {
+  flex-grow: 1;
+  transform: rotateZ(-90deg);
+}
+.sideways .drawer-tab:hover {
+  /* Hover animation */
+  border-bottom: none;
+  padding-bottom: 0px;
+  border-right: 4px solid gold;
+  padding-right: 2px;
+}
+
+/********* DRAWER CONTENT PANEL *********/
+.open .drawer-content-panel {
+  visibility: visible;
+}
+.drawer-content-panel {
+  visibility: hidden;
+  width: 100%;
+  height: 100%;
+  outline: 5px solid black;
+  outline-offset: -10px;
+  overflow-y: auto;
+}
