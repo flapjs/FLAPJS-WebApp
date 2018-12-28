@@ -1,11 +1,13 @@
 import React from 'react';
-import Style from './AppBarView.css';
+import Style from './ToolbarView.css';
 
-import Icon from 'test/Icon.js';
+import AbstractToolbarButton from './AbstractToolbarButton.js';
+
+import ExpandIcon from 'test/Icon.js';
 
 const TOOLBAR_BUTTON_BUFFER = 200;
 
-class AppBarView extends React.Component
+class ToolbarView extends React.Component
 {
   constructor(props)
   {
@@ -80,11 +82,14 @@ class AppBarView extends React.Component
       style={this.props.style}>
         <div className={Style.bar_menu}>
         {buttons && buttons.map((e, i) => {
+          const title = e.getTitle();
+          const IconClass = e.getIconClass();
           return (
-            <button key={e + ":" + i} className={Style.menu_button}
+            <button key={title + ":" + i} className={Style.menu_button}
               value={e}
               onClick={onButtonClick}>
-              {e}
+              {<IconClass/>}
+              <label>{title}</label>
             </button>
           );
         })}
@@ -96,21 +101,24 @@ class AppBarView extends React.Component
           <div className={Style.toolbar_button_container}>
           {buttons && buttons.map((e, i) => {
             if (i >= maxButtonCount) return null;
+            const title = e.getTitle();
+            const IconClass = e.getIconClass();
             return (
               <button key={e + ":" + i} className={Style.toolbar_button}
+                title={title}
                 value={e}
                 onClick={onButtonClick}>
-                {e}
+                <IconClass/>
               </button>
             );
           })}
           </div>
           <button className={Style.toolbar_expander} onClick={this.onBarExpand}>
-            <Icon/>
+            <ExpandIcon/>
           </button>
         </div>
       </div>
     );
   }
 }
-export default AppBarView;
+export default ToolbarView;

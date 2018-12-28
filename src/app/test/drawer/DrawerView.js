@@ -1,8 +1,11 @@
 import React from 'react';
 import Style from './DrawerView.css';
 
+import AbstractDrawerPanel from './AbstractDrawerPanel.js';
+
 import DrawerPanelView from './DrawerPanelView.js';
-import Icon from 'test/Icon.js';
+import ExpandIcon from 'test/Icon.js';
+import MoreIcon from 'test/Icon.js';
 
 const DRAWER_WIDTH_CSSVAR = "--drawer-width";
 const DRAWER_HANDLE_DRAG_OFFSET = 6;
@@ -109,8 +112,8 @@ class DrawerView extends React.Component
 
   setCurrentTab(tabIndex)
   {
-    if (!this.props.tabs) return;
-    if (tabIndex >= this.props.tabs.length) tabIndex = 0;
+    if (!this.props.panels) return;
+    if (tabIndex >= this.props.panels.length) tabIndex = 0;
     if (this.state.open && this.state.tabIndex === tabIndex)
     {
       //Toggle fullscreen
@@ -317,7 +320,7 @@ class DrawerView extends React.Component
   //Override
   render()
   {
-    const drawerTabs = this.props.tabs;
+    const drawerPanels = this.props.panels;
     const drawerSide = this.props.side || DRAWER_SIDE_RIGHT;
     const drawerDirection = this.props.direction || DRAWER_BAR_DIRECTION_HORIZONTAL;
 
@@ -328,7 +331,7 @@ class DrawerView extends React.Component
     const showDrawerHandle = isDrawerOpen || this._handlingGrab;
     const shouldDrawerOpenFull = this._isfull;
     const shouldHideDrawerContent = (DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE && this._handlingGrab) || !isDrawerOpen;
-    const shouldCollapseDrawerTabs = DRAWER_SHOULD_COLLAPSE_LARGE_TAB_LIST && drawerTabs && this.getTabListIndex(drawerTabs.length - 1) > 0;
+    const shouldCollapseDrawerTabs = DRAWER_SHOULD_COLLAPSE_LARGE_TAB_LIST && drawerPanels && this.getTabListIndex(drawerPanels.length - 1) > 0;
     const showDrawerTabs = isDrawerOpen || !shouldCollapseDrawerTabs;
 
     //Used to handle sideways logic
@@ -358,33 +361,34 @@ class DrawerView extends React.Component
           <div className={Style.drawer_content}>
             <nav className={Style.drawer_content_bar}>
               <a className={Style.drawer_tab_expander} onClick={this.onDrawerExpand}>
-                <Icon/>
+                <ExpandIcon/>
               </a>
-              {showDrawerTabs && drawerTabs && drawerTabs.map((e, i) => {
+              {showDrawerTabs && drawerPanels && drawerPanels.map((e, i) => {
                 if (DRAWER_SHOULD_COLLAPSE_LARGE_TAB_LIST && this.getCurrentTabListIndex() !== this.getTabListIndex(i)) return null;
+                const title = e.getTitle();
                 return (
-                  <a key={e + ":" + i}
+                  <a key={title + ":" + i}
                   className={Style.drawer_tab +
                     (this.isCurrentTab(i) ? " active " : "")}
                   onClick={() => this.setCurrentTab(i)}>
-                    <label>{e}</label>
+                    <label>{title}</label>
                   </a>
                 );
               })}
               {showDrawerTabs && shouldCollapseDrawerTabs &&
                 <a className={Style.drawer_tab_next} onClick={this.onDrawerNextTabList}>
-                  <Icon/>
+                  <MoreIcon/>
                 </a>}
             </nav>
             <div className={Style.drawer_panel_container}>
               <div className={Style.drawer_content_panel}>
-                {
-                  drawerTabs && drawerTabs.map((e, i) => {
+                {drawerPanels && drawerPanels.map((e, i) => {
                   if (!this.isCurrentTab(i)) return null;
+                  const ComponentClass = e.getComponentClass();
+                  if (!ComponentClass) return null;
+                  const title = e.getTitle();
                   return (
-                    <DrawerPanelView key={e + ":" + i}>
-                      <h1>{e}</h1>
-                    </DrawerPanelView>
+                    <ComponentClass key={title + ":" + i}/>
                   );
                 })}
               </div>

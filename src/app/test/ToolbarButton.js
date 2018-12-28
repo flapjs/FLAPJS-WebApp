@@ -12,11 +12,10 @@ class ToolbarButton extends React.Component
   render()
   {
     return (
-      <button className={Style.container}>
-        {this.props.open ?
-          <label>{this.props.title}</label> :
-          React.createElement(this.props.iconClass, {className: Style.icon})}
-      </button>
+      <div id={this.props.id}
+        className={this.props.className}
+        style={this.props.style}>
+      </div>;
     );
   }
 }
