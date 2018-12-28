@@ -161,17 +161,30 @@
   padding-right: 2px;
 }
 
-/********* DRAWER CONTENT PANEL *********/
-:local(.app_drawer).open :local(.drawer_content_panel) {
-  visibility: visible;
-}
-:local(.drawer_content_panel) {
-  visibility: hidden;
+/********* DRAWER PANELS *********/
+:local(.drawer_panel_container) {
   width: 100%;
   height: 100%;
-  outline: 5px solid black;
-  outline-offset: -10px;
   overflow-y: auto;
+
+  outline: 10px dashed transparent;
+  outline-offset: -20px;
+}
+:local(.app_drawer).hide :local(.drawer_panel_container) {
+  outline: 10px dashed black;
+  transition: outline 0.1s 0.4s ease;
+}
+:local(.app_drawer).hide :local(.drawer_content_panel) {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.1s 0.3s ease, visibility 0s linear 0.4s;
+}
+:local(.drawer_content_panel) {
+  width: 100%;
+  height: 100%;
+
+  visibility: visible;
+  opacity: 1;
 }
 
 /********* BOTTOM DRAWER *********/
