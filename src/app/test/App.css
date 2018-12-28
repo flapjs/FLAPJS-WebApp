@@ -3,30 +3,16 @@
   height: 100%;
 }
 .app-container {
+  position: relative;
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   /* TODO: For production, add this back in. */
-  /* overflow: hidden; */
-
-  --toolbar-height: 80px;
+  overflow: hidden;
 }
-/********* APP BAR *********/
-.app-bar {
-  z-index: 1000;
-  min-height: var(--toolbar-height);
-  display: flex;
-  flex-direction: row;
 
-  background: yellow;
-}
-.app-title {
-  padding: 0 5px;
-}
-.app-toolbar {
-  display: flex;
-  flex-grow: 1;
-
-  background: blue;
+.app-bar.open ~ .app-content {
+  visibility: hidden;
+  transition: visibility 0s linear 0.3s;
 }

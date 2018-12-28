@@ -1,8 +1,10 @@
 /********* APP CONTENT *********/
 :local(.app_content) {
+  /*TODO: This is still dependent on the parent having display: flex.*/
+  flex-grow: 1;
+
   display: flex;
   flex-direction: row;
-  flex-grow: 1;
 }
 :local(.app_content).column {
   flex-direction: column;
@@ -10,9 +12,17 @@
 
 /********* APP VIEWPORT *********/
 :local(.app_viewport) {
+
+  --color-viewport-main: none;
+  --color-viewport-main-dark: lightgray;
+  --color-viewport-accent: gold;
+  --color-viewport-text: black;
+
   flex-grow: 1;
 
-  outline: 10px dashed lightgray;
+  background: var(--color-viewport-main);
+  color: var(--color-viewport-text);
+  outline: 10px dashed var(--color-viewport-main-dark);
   outline-offset: -20px;
 }
 
@@ -22,6 +32,12 @@
   --drawer-tab-height: 32px;
   --drawer-handle-width: 4px;/* 12px on open */
 
+  --color-drawer-main: darkgray;
+  --color-drawer-main-dark: gray;
+  --color-drawer-accent: gold;
+  --color-drawer-text: black;
+  --color-drawer-text-active: white;
+
   position: relative;
   z-index: 500;
   width: var(--drawer-width);
@@ -29,8 +45,8 @@
   flex-direction: row;
   flex-shrink: 0;
 
-  /*box-shadow: -1px 0 5px rgba(0, 0, 0, 0.5);*/
-  background: gray;
+  box-shadow: -1px 0 5px rgba(0, 0, 0, 0.5);
+  background: var(--color-drawer-main);
 
   /* Drawer sliding */
   margin-left: calc(var(--drawer-handle-width) + var(--drawer-tab-height) - var(--drawer-width));
@@ -57,15 +73,15 @@
   user-select: none;
   cursor: auto;
 
-  color: gray;
-  background: black;
+  color: var(--color-drawer-main);
+  background: var(--color-drawer-main-dark);
 
-  transition: width 0.1s 0.3s ease;
+  transition: width 0.1s ease 0.3s;
 }
 :local(.drawer_handle) > * {
   /* Hide drawer handle when open */
   opacity: 0;
-  transition: opacity 0.1s 0.3s ease;
+  transition: opacity 0.1s ease 0.3s;
 }
 :local(.drawer_handle).show {
   /* Show drawer handle when open */
@@ -83,8 +99,8 @@
   display: flex;
   flex-direction: column;
 
-  /* TODO: For production, add this back in. */
-  /* overflow: hidden; */
+  /* NOTE: Remove this to make sure no content is outside of drawer */
+  overflow: hidden;
 }
 
 /********* DRAWER CONTENT BAR *********/
@@ -94,7 +110,7 @@
   display: flex;
   flex-direction: row;
 
-  background: green;
+  background: var(--color-drawer-main);
 }
 :local(.drawer_content_bar) > * {
   display: flex;
@@ -124,6 +140,8 @@
   padding-left: 0px;
   white-space: nowrap;
 
+  color: var(--color-drawer-text);
+
   /* Hover animation */
   border-bottom: none;
   border-right: none;
@@ -137,17 +155,17 @@
 :local(.drawer_tab) > * {
   pointer-events: none;
 }
-:local(.drawer_tab).active, :local(.drawer_tab):hover {
-  color: white;
+:local(.drawer_tab):hover {
+  color: var(--color-drawer-text-active);
+}
+:local(.drawer_tab).active {
+  color: var(--color-drawer-accent);
 
   /* Hover animation */
   border-bottom: 4px solid currentColor;
   padding-bottom: 2px;
   border-right: none;
   padding-right: 0px;
-}
-:local(.drawer_tab).active {
-  color: gold;
 }
 /* Sideways drawer tabs */
 .drawer-bar-sideways :local(.drawer_content) {
@@ -166,7 +184,7 @@
   flex-grow: 1;
   transform: rotateZ(-90deg);
 }
-.drawer-bar-sideways :local(.drawer_tab).active, .drawer-bar-sideways :local(.drawer_tab):hover {
+.drawer-bar-sideways :local(.drawer_tab).active {
   /* Hover animation */
   border-bottom: none;
   padding-bottom: 0px;
@@ -184,13 +202,13 @@
   outline-offset: -20px;
 }
 :local(.app_drawer).hide :local(.drawer_panel_container) {
-  outline: 10px dashed black;
-  transition: outline 0.1s 0.4s ease;
+  outline: 10px dashed var(--color-drawer-main-dark);
+  transition: outline 0.1s ease 0.4s;
 }
 :local(.app_drawer).hide :local(.drawer_content_panel) {
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.1s 0.3s ease, visibility 0s linear 0.4s;
+  transition: opacity 0.1s ease 0.3s, visibility 0s linear 0.4s;
 }
 :local(.drawer_content_panel) {
   width: 100%;
@@ -207,8 +225,6 @@
   flex-direction: column;
 
   /* Drawer sliding */
-  margin-left: 0;
-  left: 0;
   margin-top: calc(var(--drawer-handle-width) + var(--drawer-tab-height) - var(--drawer-width));
   top: calc(var(--drawer-width) - var(--drawer-tab-height) - var(--drawer-handle-width));
   transition:
@@ -218,8 +234,6 @@
 }
 :local(.app_drawer).open.drawer-side-bottom {
   /* Drawer sliding */
-  margin-left: 0;
-  left: 0;
   margin-top: 0;
   top: 0;
 }
@@ -227,7 +241,7 @@
   height: var(--drawer-handle-width);
   width: 100%;
 
-  transition: height 0.1s 0.3s ease;
+  transition: height 0.1s ease 0.3s;
 }
 .drawer-side-bottom :local(.drawer_handle).show {
   /* Show drawer handle when open */

@@ -176,7 +176,6 @@ class DrawerView extends React.Component
         case DRAWER_WIDTH_TYPE_FULL:
           this._isfull = true;
           this._prevWidth = getCSSDrawerWidth(this.drawerElement);
-          this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, documentSize + "px");
           break;
         case DRAWER_WIDTH_TYPE_MIN:
           this._isfull = false;
@@ -212,6 +211,13 @@ class DrawerView extends React.Component
     if (this.state.open && this._isfull)
     {
       this.setDrawerWidth(this._prevWidth);
+
+      //If did not make any changes...
+      if (this._isfull)
+      {
+        //Make it do normal stuff.
+        this.toggleDrawer();
+      }
     }
     else
     {
@@ -264,7 +270,6 @@ class DrawerView extends React.Component
           {
             this._isfull = true;
             this._hasintent = false;
-            this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, drawerSize + "px");
           }
         }
       }, DRAWER_RESIZE_REFRESH_RATE);
@@ -337,6 +342,7 @@ class DrawerView extends React.Component
         (" " + this.props.className)}
       style={this.props.style}>
         <div className={Style.app_viewport}>
+          {this.props.children}
         </div>
         <div ref={ref=>this.drawerElement=ref}
         className={
