@@ -9,11 +9,13 @@
   flex-direction: column;
   /* TODO: For production, add this back in. */
   /* overflow: hidden; */
+
+  --toolbar-height: 80px;
 }
 /********* APP BAR *********/
 .app-bar {
   z-index: 1000;
-  min-height: 80px;
+  min-height: var(--toolbar-height);
   display: flex;
   flex-direction: row;
 
@@ -27,26 +29,4 @@
   flex-grow: 1;
 
   background: blue;
-}
-/********* APP CONTENT *********/
-.app-content {
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-}
-.app-content.column {
-  flex-direction: column;
-}
-/********* APP VIEWPORT *********/
-.app-viewport {
-  flex-grow: 1;
-
-  outline: 10px dashed lightgray;
-  outline-offset: -20px;
-}
-
-@media only screen and (max-width: 400px) {
-  .app-content {
-    flex-direction: column;
-  }
 }

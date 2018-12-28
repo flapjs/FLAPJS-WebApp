@@ -1,4 +1,23 @@
-.app-drawer {
+/********* APP CONTENT *********/
+:local(.app_content) {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+:local(.app_content).column {
+  flex-direction: column;
+}
+
+/********* APP VIEWPORT *********/
+:local(.app_viewport) {
+  flex-grow: 1;
+
+  outline: 10px dashed lightgray;
+  outline-offset: -20px;
+}
+
+/********* APP DRAWER *********/
+:local(.app_drawer) {
   --drawer-width: 300px;
   --drawer-tab-height: 32px;
   --drawer-handle-width: 4px;/* 12px on open */
@@ -21,14 +40,14 @@
     /* margin-left 0.3s ease, */
     left 0.3s ease;
 }
-.app-drawer.open {
+:local(.app_drawer).open {
   /* Drawer sliding */
   margin-left: 0;
   left: 0;
 }
 
 /********* DRAWER HANDLE *********/
-.drawer-handle {
+:local(.drawer_handle) {
   width: var(--drawer-handle-width);
   height: 100%;
   display: flex;
@@ -43,30 +62,30 @@
 
   transition: width 0.1s 0.3s ease;
 }
-.drawer-handle > * {
+:local(.drawer_handle) > * {
   /* Hide drawer handle when open */
   opacity: 0;
   transition: opacity 0.1s 0.3s ease;
 }
-.drawer-handle.show {
+:local(.drawer_handle).show {
   /* Show drawer handle when open */
   --drawer-handle-width: 12px;
   cursor: col-resize;
 }
-.drawer-handle.show > * {
+:local(.drawer_handle).show > * {
   /* Show drawer handle when open */
   opacity: 1;
 }
 
 /********* DRAWER CONTENT *********/
-.drawer-content {
+:local(.drawer_content) {
   width: calc(var(--drawer-width) - var(--drawer-handle-width));
   display: flex;
   flex-direction: column;
 }
 
 /********* DRAWER CONTENT BAR *********/
-.drawer-content-bar {
+:local(.drawer_content_bar) {
   width: 100%;
   min-height: var(--drawer-tab-height);
   display: flex;
@@ -74,7 +93,7 @@
 
   background: green;
 }
-.drawer-content-bar > * {
+:local(.drawer_content_bar) > * {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,14 +103,14 @@
   user-select: none;
   cursor: pointer;
 }
-.drawer-tab-expander {
+:local(.drawer_tab_expander) {
   margin: auto auto;
   min-width: var(--drawer-tab-height);
   max-width: var(--drawer-tab-height);
   min-height: var(--drawer-tab-height);
   max-height: var(--drawer-tab-height);
 }
-.drawer-tab {
+:local(.drawer_tab) {
   padding-top: 4px;
   padding-left: 0px;
   white-space: nowrap;
@@ -105,10 +124,10 @@
     border-right 0.1s ease,
     padding-right 0.1s ease;
 }
-.drawer-tab > * {
+:local(.drawer_tab) > * {
   pointer-events: none;
 }
-.drawer-tab:hover {
+:local(.drawer_tab):hover {
   color: white;
 
   /* Hover animation */
@@ -118,23 +137,23 @@
   padding-right: 0px;
 }
 /* Sideways drawer tabs */
-.drawer-bar-sideways .drawer-content {
+.drawer-bar-sideways :local(.drawer_content) {
   flex-direction: row;
 }
-.drawer-bar-sideways .drawer-content-bar {
+.drawer-bar-sideways :local(.drawer_content_bar) {
   width: var(--drawer-tab-height);
   height: 100%;
   flex-direction: column;
 }
-.drawer-bar-sideways .drawer-tab {
+.drawer-bar-sideways :local(.drawer_tab) {
   padding-top: 0px;
   padding-left: 4px;
 }
-.drawer-bar-sideways .drawer-tab > * {
+.drawer-bar-sideways :local(.drawer_tab) > * {
   flex-grow: 1;
   transform: rotateZ(-90deg);
 }
-.drawer-bar-sideways .drawer-tab:hover {
+.drawer-bar-sideways :local(.drawer_tab):hover {
   /* Hover animation */
   border-bottom: none;
   padding-bottom: 0px;
@@ -143,10 +162,10 @@
 }
 
 /********* DRAWER CONTENT PANEL *********/
-.app-drawer.open .drawer-content-panel {
+:local(.app_drawer).open :local(.drawer_content_panel) {
   visibility: visible;
 }
-.drawer-content-panel {
+:local(.drawer_content_panel) {
   visibility: hidden;
   width: 100%;
   height: 100%;
@@ -156,7 +175,7 @@
 }
 
 /********* BOTTOM DRAWER *********/
-.app-drawer.drawer-side-bottom {
+:local(.app_drawer).drawer-side-bottom {
   width: 100%;
   height: var(--drawer-width);
   flex-direction: column;
@@ -171,20 +190,32 @@
     /* margin-top 0.3s ease, */
     top 0.3s ease;
 }
-.app-drawer.open.drawer-side-bottom {
+:local(.app_drawer).open.drawer-side-bottom {
   /* Drawer sliding */
   margin-left: 0;
   left: 0;
   margin-top: 0;
   top: 0;
 }
-.drawer-side-bottom .drawer-handle {
+.drawer-side-bottom :local(.drawer_handle) {
   height: var(--drawer-handle-width);
   width: 100%;
 
   transition: height 0.1s 0.3s ease;
 }
-.drawer-side-bottom .drawer-content {
+.drawer-side-bottom :local(.drawer_handle).show {
+  /* Show drawer handle when open */
+  cursor: row-resize;
+}
+.drawer-side-bottom :local(.drawer_content) {
   height: calc(var(--drawer-width) - var(--drawer-handle-width));
   width: 100%;
+}
+
+/********* FULL DRAWER (OPENED) *********/
+:local(.app_drawer).open.full {
+  --drawer-width: 100vw!important;
+}
+:local(.app_drawer).open.drawer-side-bottom.full {
+  --drawer-width: calc(100vh - var(--toolbar-height) - 2px)!important;
 }
