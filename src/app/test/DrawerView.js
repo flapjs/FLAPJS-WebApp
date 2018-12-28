@@ -10,6 +10,7 @@ const DRAWER_HANDLE_MIN_SIZE_BUFFER = 32;
 const DRAWER_HANDLE_MAX_SIZE_BUFFER = 128;
 const DRAWER_MIN_WIDTH = 200;
 const DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE = false;
+const DRAWER_RESIZE_REFRESH_RATE = 200;
 
 export const DRAWER_WIDTH_TYPE_FULL = "full";
 export const DRAWER_WIDTH_TYPE_MIN = "min";
@@ -24,16 +25,19 @@ class DrawerView extends React.Component
   {
     super(props);
 
+    this.ref = null;
     this.drawerElement = null;
 
     this.state = {
-      open: false
+      open: false,
+      tabIndex: 0
     };
 
     this._handlingGrab = false;
     this._isfull = false;
     this._hasintent = false;
     this._prevWidth = DRAWER_MIN_WIDTH;
+    this._resizeTimeout = null;
 
     this.onDrawerHandleGrab = this.onDrawerHandleGrab.bind(this);
     this.onDrawerHandleRelease = this.onDrawerHandleRelease.bind(this);
@@ -45,7 +49,7 @@ class DrawerView extends React.Component
   //Override
   componentDidMount()
   {
-    window.addEventListener('resize', this.onWindowResize);
+    window.addEventListener('resize', this.onWindowResize, false);
   }
 
   //Override
@@ -54,33 +58,86 @@ class DrawerView extends React.Component
     window.removeEventListener('resize', this.onWindowResize);
   }
 
-  openDrawer(fullscreen=false)
+  openDrawer(fullscreen=false, callback=null)
   {
-    this.setState({ open: true });
+    if (fullscreen)
+    {
+      this.setDrawerWidth(DRAWER_WIDTH_TYPE_FULL, true);
+    }
+
+    if (!this.state.open)
+    {
+      this.setState({ open: true }, callback);
+    }
   }
 
-  closeDrawer()
+  closeDrawer(callback=null)
   {
-    this.setState({ open: false });
+    if (this.state.open)
+    {
+      this.setState({ open: false }, callback);
+    }
   }
 
-  toggleDrawer()
+  toggleDrawer(callback=null)
   {
     this.setState((prev, props) => {
       return { open: !prev.open };
-    });
+    }, callback);
   }
 
-  setDrawerWidth(value)
+  isDrawerOpen()
   {
-    if (!this.drawerElement) return;
+    return this.state.open;
+  }
 
-    this._hasintent = true;
+  isDrawerFullscreen()
+  {
+    return this._isfull;
+  }
+
+  setCurrentTab(tabIndex)
+  {
+    if (this.state.open && this.state.tabIndex === tabIndex)
+    {
+      //Toggle fullscreen
+      if (this._isfull)
+      {
+        this.setDrawerWidth(this._prevWidth);
+      }
+      else
+      {
+        this.setDrawerWidth(DRAWER_WIDTH_TYPE_FULL, true);
+      }
+    }
+    else
+    {
+      //Open and set tab index
+      this.setState({open: true, tabIndex: tabIndex});
+    }
+  }
+
+  getCurrentTabIndex()
+  {
+    return this.state.tabIndex;
+  }
+
+  isCurrentTab(tabIndex)
+  {
+    return this.state.tabIndex === tabIndex;
+  }
+
+  setDrawerWidth(value, hasIntent=true)
+  {
+    if (!this.drawerElement || !this.ref) return;
+
+    this._hasintent = hasIntent;
 
     const drawerSide = this.props.side;
+    const drawerOffsetY = this.ref.getBoundingClientRect().top;
     const isDrawerSideBottom = drawerSide === DRAWER_SIDE_BOTTOM;
     const documentSize = isDrawerSideBottom ?
-      document.documentElement.clientHeight - 80 - 2:
+      document.documentElement.clientHeight - drawerOffsetY:
       document.documentElement.clientWidth;
     const minSize = DRAWER_MIN_WIDTH;
 
@@ -89,12 +146,13 @@ class DrawerView extends React.Component
       switch(value)
       {
         case DRAWER_WIDTH_TYPE_FULL:
-          this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, documentSize + "px");
           this._isfull = true;
+          this._prevWidth = getCSSDrawerWidth(this.drawerElement);
+          this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, documentSize + "px");
           break;
         case DRAWER_WIDTH_TYPE_MIN:
-          this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, minSize + "px");
           this._isfull = false;
+          this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, minSize + "px");
           break;
         default:
           throw new Error("Trying to set drawer width to invalid string");
@@ -122,37 +180,53 @@ class DrawerView extends React.Component
 
   onDrawerExpand()
   {
-    this.toggleDrawer();
+    //Don't close, just small-ify.
+    if (this.state.open && this._isfull)
+    {
+      this.setDrawerWidth(this._prevWidth);
+    }
+    else
+    {
+      this.toggleDrawer();
+    }
   }
 
   onWindowResize(e)
   {
-    if (!this.drawerElement) return;
-
-    const drawerSide = this.props.side;
-    const isDrawerSideBottom = drawerSide === DRAWER_SIDE_BOTTOM;
-    const documentSize = isDrawerSideBottom ?
-      document.documentElement.clientHeight - 80 - 2:
-      document.documentElement.clientWidth;
-
-    if (this._isfull)
+    if (!this._resizeTimeout)
     {
-      if (this._hasintent) return;
-      if (this._prevWidth + DRAWER_HANDLE_MAX_SIZE_BUFFER < documentSize)
-      {
-        this._isfull = false;
-        this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, this._prevWidth + "px");
-      }
-    }
-    else
-    {
-      const drawerSize = parseInt(window.getComputedStyle(this.drawerElement).getPropertyValue(DRAWER_WIDTH_CSSVAR).replace(/\D/g, ''));
-      if (drawerSize + DRAWER_HANDLE_MAX_SIZE_BUFFER > documentSize)
-      {
-        this._isfull = true;
-        this._hasintent = false;
-        this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, drawerSize + "px");
-      }
+      this._resizeTimeout = setTimeout(() => {
+        this._resizeTimeout = null;
+
+        if (!this.drawerElement || !this.ref) return;
+
+        const drawerSide = this.props.side;
+        const drawerOffsetY = this.ref.getBoundingClientRect().top;
+        const isDrawerSideBottom = drawerSide === DRAWER_SIDE_BOTTOM;
+        const documentSize = isDrawerSideBottom ?
+          document.documentElement.clientHeight - drawerOffsetY:
+          document.documentElement.clientWidth;
+
+        if (this._isfull)
+        {
+          if (this._hasintent) return;
+          if (this._prevWidth + DRAWER_HANDLE_MAX_SIZE_BUFFER < documentSize)
+          {
+            this._isfull = false;
+            this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, this._prevWidth + "px");
+          }
+        }
+        else
+        {
+          const drawerSize = getCSSDrawerWidth(this.drawerElement);
+          if (drawerSize + DRAWER_HANDLE_MAX_SIZE_BUFFER > documentSize)
+          {
+            this._isfull = true;
+            this._hasintent = false;
+            this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, drawerSize + "px");
+          }
+        }
+      }, DRAWER_RESIZE_REFRESH_RATE);
     }
   }
 
@@ -161,7 +235,7 @@ class DrawerView extends React.Component
     if (!this._handlingGrab)
     {
       this._handlingGrab = true;
-      this._prevWidth = parseInt(window.getComputedStyle(this.drawerElement).getPropertyValue(DRAWER_WIDTH_CSSVAR).replace(/\D/g, ''));
+      this._prevWidth = getCSSDrawerWidth(this.drawerElement);
       document.addEventListener("mouseup", this.onDrawerHandleRelease);
       document.addEventListener("mousemove", this.onDrawerHandleMove);
     }
@@ -178,7 +252,7 @@ class DrawerView extends React.Component
       document.removeEventListener("mouseup", this.onDrawerHandleRelease);
       document.removeEventListener("mousemove", this.onDrawerHandleMove);
       this._handlingGrab = false;
-      this._prevWidth = parseInt(window.getComputedStyle(this.drawerElement).getPropertyValue(DRAWER_WIDTH_CSSVAR).replace(/\D/g, ''));
+      this._prevWidth = getCSSDrawerWidth(this.drawerElement);
     }
   }
 
@@ -190,12 +264,14 @@ class DrawerView extends React.Component
       document.documentElement.clientHeight :
       document.documentElement.clientWidth;
     const pointerValue = isDrawerSideBottom ? e.clientY : e.clientX;
+
     this.setDrawerWidth(documentSize - pointerValue + DRAWER_HANDLE_DRAG_OFFSET);
   }
 
   //Override
   render()
   {
+    const drawerTabs = this.props.tabs || ['Start', 'Middle', 'End'];
     const drawerSide = this.props.side || DRAWER_SIDE_RIGHT;
     const drawerDirection = this.props.direction || DRAWER_BAR_DIRECTION_HORIZONTAL;
 
@@ -207,22 +283,25 @@ class DrawerView extends React.Component
     const shouldDrawerOpenFull = this._isfull;
     const shouldHideDrawerContent = (DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE && this._handlingGrab) || !isDrawerOpen;
 
+    //const DrawerActivePanel = drawerTabs[this.state.tabIndex];
+
     return (
-      <div id={this.props.id}
+      <div ref={ref=>this.ref=ref}
+      id={this.props.id}
       className={Style.app_content +
         (isDrawerSideBottom ? " column " : "") +
         (" " + this.props.className)}
       style={this.props.style}>
         <div className={Style.app_viewport}>
         </div>
-        <div ref={ref=>this.drawerElement=ref} className={
+        <div ref={ref=>this.drawerElement=ref}
+        className={
           Style.app_drawer +
           (isDrawerOpen ? " open " : "") +
           (shouldDrawerBarSideways ? " drawer-bar-sideways " : "") +
           (isDrawerSideBottom ? " drawer-side-bottom " : "") +
           (shouldDrawerOpenFull ? " full " : "") +
-          (shouldHideDrawerContent ? " hide " : "")
-        }>
+          (shouldHideDrawerContent ? " hide " : "")}>
           <div className={Style.drawer_handle + (showDrawerHandle ? " show " : "")} onMouseDown={this.onDrawerHandleGrab}>
             <span>{isDrawerSideBottom ? "\uFF1D" : "||"}</span>
           </div>
@@ -231,14 +310,28 @@ class DrawerView extends React.Component
               <a className={Style.drawer_tab_expander} onClick={this.onDrawerExpand}>
                 <Icon/>
               </a>
-              <a className={Style.drawer_tab}><label>Start</label></a>
-              <a className={Style.drawer_tab}><label>Middle-ish</label></a>
-              <a className={Style.drawer_tab}><label>End</label></a>
+              {drawerTabs.map((e, i) => {
+                return (
+                  <a key={e + ":" + i}
+                  className={Style.drawer_tab +
+                    (this.isCurrentTab(i) ? " active " : "")}
+                  onClick={() => this.setCurrentTab(i)}>
+                    <label>{e}</label>
+                  </a>
+                );
+              })}
             </nav>
             <div className={Style.drawer_panel_container}>
               <div className={Style.drawer_content_panel}>
-                <DrawerPanelView>
-                </DrawerPanelView>
+                {
+                  drawerTabs.map((e, i) => {
+                  if (!this.isCurrentTab(i)) return null;
+                  return (
+                    <DrawerPanelView key={e + ":" + i}>
+                      <h1>{e}</h1>
+                    </DrawerPanelView>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -247,5 +340,9 @@ class DrawerView extends React.Component
     );
   }
 }
-
 export default DrawerView;
+
+function getCSSDrawerWidth(drawerElement)
+{
+  return parseInt(window.getComputedStyle(drawerElement).getPropertyValue(DRAWER_WIDTH_CSSVAR).replace(/\D/g, ''));
+}

@@ -14,6 +14,8 @@ class DrawerPanelView extends React.Component
       <div id={this.props.id}
       className={this.props.className}
       style={this.props.style}>
+        {this.props.children}
+
         <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. In at mi a magna posuere congue quis in lorem. Ut ornare nulla tempus, finibus velit eu, finibus odio. Etiam et felis diam. Phasellus convallis non justo non posuere. Duis facilisis felis ut sapien posuere tincidunt. Donec a neque nec nisi dignissim semper. Integer egestas tincidunt mauris eu molestie. Aliquam vitae consequat lacus. Maecenas sollicitudin tristique dolor. Curabitur consequat, justo semper accumsan ultrices, est nunc cursus eros, a egestas sapien quam vitae magna. Vivamus id ante mauris.
 
@@ -25,7 +27,6 @@ class DrawerPanelView extends React.Component
 
         Proin nec ante varius, tristique enim id, mollis mauris. Donec condimentum, lectus ut ultricies vulputate, lectus sapien euismod orci, et interdum turpis erat sed libero. Pellentesque imperdiet, nunc a egestas luctus, ipsum erat pharetra leo, id cursus sem mi ac augue. Nulla feugiat velit tellus, ac efficitur velit pellentesque eleifend. Donec consequat porta maximus. Cras nec tellus tincidunt, venenatis orci et, blandit odio. Proin finibus mauris eu malesuada facilisis. Suspendisse potenti. Pellentesque ut sapien sit amet quam hendrerit imperdiet vitae vitae arcu. Vestibulum fringilla euismod quam ac tempor.
         </p>
-        {this.props.children}
       </div>
     );
   }

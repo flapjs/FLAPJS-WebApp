@@ -122,19 +122,23 @@
   transition: border-bottom 0.1s ease,
     padding-bottom 0.1s ease,
     border-right 0.1s ease,
-    padding-right 0.1s ease;
+    padding-right 0.1s ease,
+    color 0.1s ease;
 }
 :local(.drawer_tab) > * {
   pointer-events: none;
 }
-:local(.drawer_tab):hover {
+:local(.drawer_tab).active, :local(.drawer_tab):hover {
   color: white;
 
   /* Hover animation */
-  border-bottom: 4px solid gold;
+  border-bottom: 4px solid currentColor;
   padding-bottom: 2px;
   border-right: none;
   padding-right: 0px;
+}
+:local(.drawer_tab).active {
+  color: gold;
 }
 /* Sideways drawer tabs */
 .drawer-bar-sideways :local(.drawer_content) {
@@ -153,11 +157,11 @@
   flex-grow: 1;
   transform: rotateZ(-90deg);
 }
-.drawer-bar-sideways :local(.drawer_tab):hover {
+.drawer-bar-sideways :local(.drawer_tab).active, .drawer-bar-sideways :local(.drawer_tab):hover {
   /* Hover animation */
   border-bottom: none;
   padding-bottom: 0px;
-  border-right: 4px solid gold;
+  border-right: 4px solid currentColor;
   padding-right: 2px;
 }
 
