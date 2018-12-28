@@ -82,6 +82,9 @@
   width: calc(var(--drawer-width) - var(--drawer-handle-width));
   display: flex;
   flex-direction: column;
+
+  /* TODO: For production, add this back in. */
+  /* overflow: hidden; */
 }
 
 /********* DRAWER CONTENT BAR *********/
@@ -99,11 +102,17 @@
   justify-content: center;
   flex-grow: 1;
 
-  overflow: hidden;
   user-select: none;
   cursor: pointer;
 }
 :local(.drawer_tab_expander) {
+  margin: auto auto;
+  min-width: var(--drawer-tab-height);
+  max-width: var(--drawer-tab-height);
+  min-height: var(--drawer-tab-height);
+  max-height: var(--drawer-tab-height);
+}
+:local(.drawer_tab_next) {
   margin: auto auto;
   min-width: var(--drawer-tab-height);
   max-width: var(--drawer-tab-height);

@@ -33,6 +33,7 @@ class App extends React.Component
           </div>
         </div>
         <DrawerView
+          tabs={['Start', 'Middle', 'End', 'FORUTH', 'FIGHT', 'NOPE', 'WHAT', 'YAY']}
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}>
         </DrawerView>

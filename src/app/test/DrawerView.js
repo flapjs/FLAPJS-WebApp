@@ -9,8 +9,11 @@ const DRAWER_HANDLE_DRAG_OFFSET = 6;
 const DRAWER_HANDLE_MIN_SIZE_BUFFER = 32;
 const DRAWER_HANDLE_MAX_SIZE_BUFFER = 128;
 const DRAWER_MIN_WIDTH = 200;
-const DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE = false;
 const DRAWER_RESIZE_REFRESH_RATE = 200;
+const DRAWER_TAB_LIST_BUFFER = 150;
+
+const DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE = false;
+const DRAWER_SHOULD_COLLAPSE_LARGE_TAB_LIST = false;
 
 export const DRAWER_WIDTH_TYPE_FULL = "full";
 export const DRAWER_WIDTH_TYPE_MIN = "min";
@@ -33,16 +36,24 @@ class DrawerView extends React.Component
       tabIndex: 0
     };
 
+    //When drawer is currently changing size intentfully
     this._handlingGrab = false;
+    //Whether the drawer should fullscreen
     this._isfull = false;
+    //Whether to restore drawer width after fullscreen
     this._hasintent = false;
+    //Save intentful drawer width for restore after fullscreen
     this._prevWidth = DRAWER_MIN_WIDTH;
+    //Used to manage resize updates
     this._resizeTimeout = null;
+    //Changed in render() to reflect current render state.
+    this._sideways = false;
 
     this.onDrawerHandleGrab = this.onDrawerHandleGrab.bind(this);
     this.onDrawerHandleRelease = this.onDrawerHandleRelease.bind(this);
     this.onDrawerHandleMove = this.onDrawerHandleMove.bind(this);
     this.onDrawerExpand = this.onDrawerExpand.bind(this);
+    this.onDrawerNextTabList = this.onDrawerNextTabList.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
   }
 
@@ -98,6 +109,8 @@ class DrawerView extends React.Component
 
   setCurrentTab(tabIndex)
   {
+    if (!this.props.tabs) return;
+    if (tabIndex >= this.props.tabs.length) tabIndex = 0;
     if (this.state.open && this.state.tabIndex === tabIndex)
     {
       //Toggle fullscreen
@@ -125,6 +138,21 @@ class DrawerView extends React.Component
   isCurrentTab(tabIndex)
   {
     return this.state.tabIndex === tabIndex;
+  }
+
+  getTabListIndex(tabIndex)
+  {
+    if (!this.drawerElement) return tabIndex;
+    //TODO: Possibly inefficient, depends on what getBoundingClientRect does.
+    const boundingRect = this.drawerElement.getBoundingClientRect();
+    const elementSize = this._sideways ? boundingRect.height : boundingRect.width;
+    const numOfTabs = elementSize / DRAWER_TAB_LIST_BUFFER;
+    return Math.floor(tabIndex / numOfTabs);
+  }
+
+  getCurrentTabListIndex()
+  {
+    return this.getTabListIndex(this.state.tabIndex);
   }
 
   setDrawerWidth(value, hasIntent=true)
@@ -189,6 +217,19 @@ class DrawerView extends React.Component
     {
       this.toggleDrawer();
     }
+  }
+
+  onDrawerNextTabList()
+  {
+    //NOTE: Inefficient, but since we don't expect more than 10 tabs in a list,
+    //this shouldn't be a problem.
+    const currentTabListIndex = this.getCurrentTabListIndex();
+    let nextTabIndex = this.getCurrentTabIndex() + 1;
+    while(this.getTabListIndex(nextTabIndex) === currentTabListIndex)
+    {
+      ++nextTabIndex;
+    }
+    this.setCurrentTab(nextTabIndex);
   }
 
   onWindowResize(e)
@@ -271,7 +312,7 @@ class DrawerView extends React.Component
   //Override
   render()
   {
-    const drawerTabs = this.props.tabs || ['Start', 'Middle', 'End'];
+    const drawerTabs = this.props.tabs;
     const drawerSide = this.props.side || DRAWER_SIDE_RIGHT;
     const drawerDirection = this.props.direction || DRAWER_BAR_DIRECTION_HORIZONTAL;
 
@@ -282,8 +323,11 @@ class DrawerView extends React.Component
     const showDrawerHandle = isDrawerOpen || this._handlingGrab;
     const shouldDrawerOpenFull = this._isfull;
     const shouldHideDrawerContent = (DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE && this._handlingGrab) || !isDrawerOpen;
+    const shouldCollapseDrawerTabs = DRAWER_SHOULD_COLLAPSE_LARGE_TAB_LIST && drawerTabs && this.getTabListIndex(drawerTabs.length - 1) > 0;
+    const showDrawerTabs = isDrawerOpen || !shouldCollapseDrawerTabs;
 
-    //const DrawerActivePanel = drawerTabs[this.state.tabIndex];
+    //Used to handle sideways logic
+    this._sideways = shouldDrawerBarSideways;
 
     return (
       <div ref={ref=>this.ref=ref}
@@ -310,7 +354,8 @@ class DrawerView extends React.Component
               <a className={Style.drawer_tab_expander} onClick={this.onDrawerExpand}>
                 <Icon/>
               </a>
-              {drawerTabs.map((e, i) => {
+              {showDrawerTabs && drawerTabs && drawerTabs.map((e, i) => {
+                if (DRAWER_SHOULD_COLLAPSE_LARGE_TAB_LIST && this.getCurrentTabListIndex() !== this.getTabListIndex(i)) return null;
                 return (
                   <a key={e + ":" + i}
                   className={Style.drawer_tab +
@@ -320,11 +365,15 @@ class DrawerView extends React.Component
                   </a>
                 );
               })}
+              {showDrawerTabs && shouldCollapseDrawerTabs &&
+                <a className={Style.drawer_tab_next} onClick={this.onDrawerNextTabList}>
+                  <Icon/>
+                </a>}
             </nav>
             <div className={Style.drawer_panel_container}>
               <div className={Style.drawer_content_panel}>
                 {
-                  drawerTabs.map((e, i) => {
+                  drawerTabs && drawerTabs.map((e, i) => {
                   if (!this.isCurrentTab(i)) return null;
                   return (
                     <DrawerPanelView key={e + ":" + i}>
