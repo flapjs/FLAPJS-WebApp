@@ -15,7 +15,7 @@ class App extends React.Component
   {
     super(props);
 
-    this.drawerPanels = [new AboutDrawerPanel()];
+    this.drawerPanels = [new AboutDrawerPanel(), new AboutDrawerPanel(), new AboutDrawerPanel(), new AboutDrawerPanel(), new AboutDrawerPanel()];
     this.toolbarButtons = [new NewToolbarButton()];
 
     this._mediaQuerySmallWidthList = window.matchMedia("only screen and (max-width: 400px)");

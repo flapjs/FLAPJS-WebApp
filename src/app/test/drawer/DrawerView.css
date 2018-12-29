@@ -64,6 +64,7 @@
 /** ICON STYLES **/
 :local(.app_drawer) .icon-button {
   fill: var(--color-drawer-text);
+  transition: fill 0.3s ease;
 }
 :local(.app_drawer) .icon-button:hover {
   fill: var(--color-drawer-text-active);
@@ -135,8 +136,9 @@
   user-select: none;
   cursor: pointer;
 }
-:local(.drawer_tab_expander) {
-  margin: auto auto;
+:local(.drawer_tab_expander).icon-button {
+  /*NOTE: Whether drawer expander should be centered*/
+  /*margin: auto auto;*/
   min-width: var(--drawer-tab-height);
   max-width: var(--drawer-tab-height);
   min-height: var(--drawer-tab-height);
@@ -144,16 +146,16 @@
 
   transform: rotateZ(90deg);
 }
-:local(.app_drawer).open :local(.drawer_tab_expander) {
+:local(.app_drawer).open :local(.drawer_tab_expander).icon-button {
   transform: rotateZ(-90deg);
 }
-:local(.app_drawer).drawer-side-bottom :local(.drawer_tab_expander) {
+:local(.app_drawer).drawer-side-bottom :local(.drawer_tab_expander).icon-button {
   transform: rotateZ(180deg);
 }
-:local(.app_drawer).open.drawer-side-bottom :local(.drawer_tab_expander) {
+:local(.app_drawer).open.drawer-side-bottom :local(.drawer_tab_expander).icon-button {
   transform: rotateZ(0deg);
 }
-:local(.drawer_tab_next) {
+:local(.drawer_tab_next).icon-button {
   margin: auto auto;
   min-width: var(--drawer-tab-height);
   max-width: var(--drawer-tab-height);
