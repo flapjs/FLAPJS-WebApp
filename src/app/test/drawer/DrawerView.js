@@ -323,6 +323,7 @@ class DrawerView extends React.Component
     const drawerPanels = this.props.panels;
     const drawerSide = this.props.side || DRAWER_SIDE_RIGHT;
     const drawerDirection = this.props.direction || DRAWER_BAR_DIRECTION_HORIZONTAL;
+    const shouldDrawerHide = this.props.hide || false;
 
     const isDrawerOpen = this.state.open;
     //Assumes that parent container has flex and flex-direction: column for bottom, row for right.
@@ -354,7 +355,8 @@ class DrawerView extends React.Component
           (shouldDrawerBarSideways ? " drawer-bar-sideways " : "") +
           (isDrawerSideBottom ? " drawer-side-bottom " : "") +
           (shouldDrawerOpenFull ? " full " : "") +
-          (shouldHideDrawerContent ? " hide " : "")}>
+          (shouldHideDrawerContent ? " hide-content " : "") +
+          (shouldDrawerHide ? " hide " : "")}>
           <div className={Style.drawer_handle + (showDrawerHandle ? " show " : "")} onMouseDown={this.onDrawerHandleGrab}>
             <span>{"||"}</span>
           </div>

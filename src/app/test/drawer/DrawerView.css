@@ -19,6 +19,9 @@
 
   flex-grow: 1;
 
+  /* think of the children */
+  position: relative;
+
   background: var(--color-viewport-main);
   color: var(--color-viewport-text);
   outline: 10px dashed var(--color-viewport-main-dark);
@@ -59,6 +62,10 @@
   /* Drawer sliding */
   margin-left: 0;
   left: 0;
+}
+:local(.app_drawer).hide {
+  margin-left: calc(var(--drawer-width) * -1);
+  left: calc(var(--drawer-width) + 5px);/*box shadow offset*/
 }
 
 /** ICON STYLES **/
@@ -228,11 +235,11 @@
   outline: 10px dashed transparent;
   outline-offset: -20px;
 }
-:local(.app_drawer).hide :local(.drawer_panel_container) {
+:local(.app_drawer).hide-content :local(.drawer_panel_container) {
   outline: 10px dashed var(--color-drawer-main-dark);
   transition: outline 0.1s ease 0.4s;
 }
-:local(.app_drawer).hide :local(.drawer_content_panel) {
+:local(.app_drawer).hide-content :local(.drawer_content_panel) {
   visibility: hidden;
   opacity: 0;
   transition: opacity 0.1s ease 0.3s, visibility 0s linear 0.4s;

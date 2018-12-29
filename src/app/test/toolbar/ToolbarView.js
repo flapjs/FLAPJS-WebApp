@@ -75,6 +75,7 @@ class ToolbarView extends React.Component
 
     const buttons = this.props.buttons;
     const isBarOpen = this.state.open;
+    const shouldBarHide = this.props.hide || false;
     const showBarExpander = isBarOpen || (buttons && TOOLBAR_ALLOW_MENU_BAR);
 
     return (
@@ -82,6 +83,7 @@ class ToolbarView extends React.Component
       id={this.props.id}
       className={Style.app_bar +
         (isBarOpen ? " open " : "") +
+        (shouldBarHide ? " hide " : "") +
         " " + this.props.className}
       style={this.props.style}>
         <div className={Style.bar_menu}>
