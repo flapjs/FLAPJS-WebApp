@@ -390,7 +390,7 @@ class DrawerView extends React.Component
                   if (!ComponentClass) return null;
                   const title = e.getTitle();
                   return (
-                    <ComponentClass key={title + ":" + i}/>
+                    <ComponentClass key={title + ":" + i} ref={ref=>e.panelComponent=ref}/>
                   );
                 })}
               </div>

@@ -2,6 +2,12 @@ class AbstractDrawerPanel
 {
   constructor()
   {
+    this.panelComponent = null;
+  }
+
+  getPanelComponent()
+  {
+    return this.panelComponent;
   }
 
   getTitle()

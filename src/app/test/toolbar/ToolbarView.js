@@ -88,6 +88,7 @@ class ToolbarView extends React.Component
       style={this.props.style}>
         <div className={Style.bar_menu}>
         {buttons && buttons.map((e, i) => {
+          if (!e.showInMenu()) return null;
           const title = e.getTitle();
           const IconClass = e.getIconClass();
           return (
@@ -106,6 +107,7 @@ class ToolbarView extends React.Component
           </div>
           <div className={Style.toolbar_button_container}>
           {buttons && buttons.map((e, i) => {
+            if (!e.showInToolbar()) return null;
             const title = e.getTitle();
             const IconClass = e.getIconClass();
             return (

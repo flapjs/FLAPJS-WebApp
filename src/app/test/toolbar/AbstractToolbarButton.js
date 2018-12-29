@@ -13,6 +13,16 @@ class AbstractToolbarButton
   {
     throw new Error("Missing icon for button");
   }
+
+  showInToolbar()
+  {
+    return true;
+  }
+
+  showInMenu()
+  {
+    return true;
+  }
 }
 
 export default AbstractToolbarButton;
