@@ -2,7 +2,10 @@ class AbstractToolbarButton
 {
   constructor()
   {
+    this.onClick = this.onClick.bind(this);
   }
+
+  onClick(e) {}
 
   getTitle()
   {

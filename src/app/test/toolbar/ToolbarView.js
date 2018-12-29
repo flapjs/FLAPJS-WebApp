@@ -61,7 +61,6 @@ class ToolbarView extends React.Component
   //Override
   render()
   {
-    const onButtonClick = this.props.onButtonClick;
     /*
     let maxButtonCount = Infinity;
     if (this.toolbarElement)
@@ -94,7 +93,7 @@ class ToolbarView extends React.Component
           return (
             <IconButton key={title + ":" + i} className={Style.menu_button}
               value={e}
-              onClick={onButtonClick}>
+              onClick={e.onClick}>
               <IconClass/>
               <label>{title}</label>
             </IconButton>
@@ -114,7 +113,7 @@ class ToolbarView extends React.Component
               <IconButton key={title + ":" + i} className={Style.toolbar_button}
                 title={title}
                 value={e}
-                onClick={onButtonClick}>
+                onClick={e.onClick}>
                 <IconClass/>
               </IconButton>
             );
