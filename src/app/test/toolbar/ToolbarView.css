@@ -14,7 +14,8 @@
   flex-shrink: 0;
 
   height: var(--toolbar-height);
-  transition: height 0.3s ease 0.3s, border 0.3s ease 0.3s;
+  transition: height 0.3s ease 0.3s,
+    border-bottom 0.3s ease 0.3s;/* for hide animation */
 
   border-bottom: 4px solid var(--color-toolbar-accent);
   background: var(--color-toolbar-main);
@@ -28,12 +29,15 @@
 :local(.app_bar).hide {
   height: 0px;
   border-bottom: 0px solid transparent;
+
+  visibility: hidden;
+  transition: height 0.3s ease 0.3s,
+    border-bottom 0.3s ease 0.3s, visibility 0s linear 0.6s;/* for hide animation */
 }
 
 /** ICON STYLES **/
-:local(.app_bar) .icon-button > * {
+:local(.app_bar) .icon-button {
   width: 6em;
-  height: 100%;
 }
 :local(.app_bar) .icon-button {
   fill: var(--color-toolbar-text);
@@ -66,18 +70,22 @@
   display: flex;
   flex-direction: row;
 
+  /* Override default icon button size */
+  width: 100% !important;
+
   color: var(--color-toolbar-text);
   border-bottom: 4px solid var(--color-toolbar-accent);
 }
 :local(.menu_button):hover {
   background: var(--color-toolbar-text-active);
-}
-:local(.menu_button).icon-button:hover {
-  /*Override default toolbar color change on hover*/
-  fill: var(--color-toolbar-text);
+  /* Override default toolbar color change on hover */
+  fill: var(--color-toolbar-text)!important;
 }
 :local(.menu_button):disabled {
   background: var(--color-toolbar-main-dark);
+}
+:local(.menu_button) > svg {
+  width: 6em;
 }
 :local(.menu_button) > label {
   flex: 1;

@@ -63,9 +63,14 @@
   margin-left: 0;
   left: 0;
 }
+/* for hide animation */
 :local(.app_drawer).hide {
   margin-left: calc(var(--drawer-width) * -1);
   left: calc(var(--drawer-width) + 5px);/*box shadow offset*/
+
+  visibility: hidden;
+  transition: left 0.3s ease,
+    visibility 0s linear 0.3s;/* for hide animation */
 }
 
 /** ICON STYLES **/

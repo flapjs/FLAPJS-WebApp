@@ -9,15 +9,16 @@
   display: flex;
   flex-direction: column;
   /* TODO: For production, add this back in. */
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 .app-bar.open ~ .app-content {
   visibility: hidden;
   transition: visibility 0s linear 0.3s;
 }
-
 .viewport-widget {
   position: absolute;
   bottom: 0;
   right: 0;
+  width: 32px;
+  height: 32px;
 }
