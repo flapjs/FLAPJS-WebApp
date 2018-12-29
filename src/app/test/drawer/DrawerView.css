@@ -12,7 +12,6 @@
 
 /********* APP VIEWPORT *********/
 :local(.app_viewport) {
-
   --color-viewport-main: none;
   --color-viewport-main-dark: lightgray;
   --color-viewport-accent: gold;
@@ -61,6 +60,9 @@
   margin-left: 0;
   left: 0;
 }
+:local(.app_drawer) .icon {
+  fill: var(--color-drawer-text);
+}
 
 /********* DRAWER HANDLE *********/
 :local(.drawer_handle) {
@@ -79,6 +81,8 @@
   transition: width 0.1s ease 0.3s;
 }
 :local(.drawer_handle) > * {
+  transform: rotateZ(0deg);
+
   /* Hide drawer handle when open */
   opacity: 0;
   transition: opacity 0.1s ease 0.3s;
@@ -92,7 +96,9 @@
   /* Show drawer handle when open */
   opacity: 1;
 }
-
+.drawer-side-bottom :local(.drawer_handle) > * {
+  transform: rotateZ(90deg);
+}
 /********* DRAWER CONTENT *********/
 :local(.drawer_content) {
   width: calc(var(--drawer-width) - var(--drawer-handle-width));
@@ -127,6 +133,17 @@
   max-width: var(--drawer-tab-height);
   min-height: var(--drawer-tab-height);
   max-height: var(--drawer-tab-height);
+
+  transform: rotateZ(90deg);
+}
+:local(.app_drawer).open :local(.drawer_tab_expander) {
+  transform: rotateZ(-90deg);
+}
+:local(.app_drawer).drawer-side-bottom :local(.drawer_tab_expander) {
+  transform: rotateZ(180deg);
+}
+:local(.app_drawer).open.drawer-side-bottom :local(.drawer_tab_expander) {
+  transform: rotateZ(0deg);
 }
 :local(.drawer_tab_next) {
   margin: auto auto;
@@ -168,23 +185,23 @@
   padding-right: 0px;
 }
 /* Sideways drawer tabs */
-.drawer-bar-sideways :local(.drawer_content) {
+:local(.app_drawer).drawer-bar-sideways :local(.drawer_content) {
   flex-direction: row;
 }
-.drawer-bar-sideways :local(.drawer_content_bar) {
+:local(.app_drawer).drawer-bar-sideways :local(.drawer_content_bar) {
   width: var(--drawer-tab-height);
   height: 100%;
   flex-direction: column;
 }
-.drawer-bar-sideways :local(.drawer_tab) {
+:local(.app_drawer).drawer-bar-sideways :local(.drawer_tab) {
   padding-top: 0px;
   padding-left: 4px;
 }
-.drawer-bar-sideways :local(.drawer_tab) > * {
+:local(.app_drawer).drawer-bar-sideways :local(.drawer_tab) > * {
   flex-grow: 1;
   transform: rotateZ(-90deg);
 }
-.drawer-bar-sideways :local(.drawer_tab).active {
+:local(.app_drawer).drawer-bar-sideways :local(.drawer_tab).active {
   /* Hover animation */
   border-bottom: none;
   padding-bottom: 0px;
@@ -237,17 +254,17 @@
   margin-top: 0;
   top: 0;
 }
-.drawer-side-bottom :local(.drawer_handle) {
+:local(.app_drawer).drawer-side-bottom :local(.drawer_handle) {
   height: var(--drawer-handle-width);
   width: 100%;
 
   transition: height 0.1s ease 0.3s;
 }
-.drawer-side-bottom :local(.drawer_handle).show {
+:local(.app_drawer).drawer-side-bottom :local(.drawer_handle).show {
   /* Show drawer handle when open */
   cursor: row-resize;
 }
-.drawer-side-bottom :local(.drawer_content) {
+:local(.app_drawer).drawer-side-bottom :local(.drawer_content) {
   height: calc(var(--drawer-width) - var(--drawer-handle-width));
   width: 100%;
 }
@@ -257,5 +274,5 @@
   --drawer-width: 100vw!important;
 }
 :local(.app_drawer).open.drawer-side-bottom.full {
-  --drawer-width: calc(100vh - var(--toolbar-height) - 2px)!important;
+  --drawer-width: 100vh!important;
 }

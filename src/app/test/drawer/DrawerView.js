@@ -3,9 +3,8 @@ import Style from './DrawerView.css';
 
 import AbstractDrawerPanel from './AbstractDrawerPanel.js';
 
-import DrawerPanelView from './DrawerPanelView.js';
-import ExpandIcon from 'test/Icon.js';
-import MoreIcon from 'test/Icon.js';
+import ExpandDownIcon from '../iconset/ExpandDownIcon.js';
+import MoreIcon from '../iconset/MoreIcon.js';
 
 const DRAWER_WIDTH_CSSVAR = "--drawer-width";
 const DRAWER_HANDLE_DRAG_OFFSET = 6;
@@ -356,12 +355,12 @@ class DrawerView extends React.Component
           (shouldDrawerOpenFull ? " full " : "") +
           (shouldHideDrawerContent ? " hide " : "")}>
           <div className={Style.drawer_handle + (showDrawerHandle ? " show " : "")} onMouseDown={this.onDrawerHandleGrab}>
-            <span>{isDrawerSideBottom ? "\uFF1D" : "||"}</span>
+            <span>{"||"}</span>
           </div>
           <div className={Style.drawer_content}>
             <nav className={Style.drawer_content_bar}>
               <a className={Style.drawer_tab_expander} onClick={this.onDrawerExpand}>
-                <ExpandIcon/>
+                <ExpandDownIcon className="icon"/>
               </a>
               {showDrawerTabs && drawerPanels && drawerPanels.map((e, i) => {
                 if (DRAWER_SHOULD_COLLAPSE_LARGE_TAB_LIST && this.getCurrentTabListIndex() !== this.getTabListIndex(i)) return null;
@@ -377,7 +376,7 @@ class DrawerView extends React.Component
               })}
               {showDrawerTabs && shouldCollapseDrawerTabs &&
                 <a className={Style.drawer_tab_next} onClick={this.onDrawerNextTabList}>
-                  <MoreIcon/>
+                  <MoreIcon className="icon"/>
                 </a>}
             </nav>
             <div className={Style.drawer_panel_container}>
