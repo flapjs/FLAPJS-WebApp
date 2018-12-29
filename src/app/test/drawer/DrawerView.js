@@ -3,6 +3,7 @@ import Style from './DrawerView.css';
 
 import AbstractDrawerPanel from './AbstractDrawerPanel.js';
 
+import IconButton from '../components/IconButton.js';
 import ExpandDownIcon from '../iconset/ExpandDownIcon.js';
 import MoreIcon from '../iconset/MoreIcon.js';
 
@@ -359,9 +360,9 @@ class DrawerView extends React.Component
           </div>
           <div className={Style.drawer_content}>
             <nav className={Style.drawer_content_bar}>
-              <a className={Style.drawer_tab_expander} onClick={this.onDrawerExpand}>
-                <ExpandDownIcon className="icon"/>
-              </a>
+              <IconButton className={Style.drawer_tab_expander} onClick={this.onDrawerExpand}>
+                <ExpandDownIcon/>
+              </IconButton>
               {showDrawerTabs && drawerPanels && drawerPanels.map((e, i) => {
                 if (DRAWER_SHOULD_COLLAPSE_LARGE_TAB_LIST && this.getCurrentTabListIndex() !== this.getTabListIndex(i)) return null;
                 const title = e.getTitle();
@@ -375,9 +376,9 @@ class DrawerView extends React.Component
                 );
               })}
               {showDrawerTabs && shouldCollapseDrawerTabs &&
-                <a className={Style.drawer_tab_next} onClick={this.onDrawerNextTabList}>
-                  <MoreIcon className="icon"/>
-                </a>}
+                <IconButton className={Style.drawer_tab_next} onClick={this.onDrawerNextTabList}>
+                  <MoreIcon/>
+                </IconButton>}
             </nav>
             <div className={Style.drawer_panel_container}>
               <div className={Style.drawer_content_panel}>

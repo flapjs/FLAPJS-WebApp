@@ -3,8 +3,10 @@
   --toolbar-height: 80px;
 
   --color-toolbar-main: darkgray;
+  --color-toolbar-main-dark: black;
   --color-toolbar-accent: gray;
   --color-toolbar-text: white;
+  --color-toolbar-text-active: gold;
 
   position: relative;
   z-index: 1000;
@@ -23,9 +25,19 @@
   height: 100%;
   transition: height 0.3s ease;
 }
-:local(.app_bar) .icon {
+
+/** ICON STYLES **/
+:local(.app_bar) .icon-button {
   fill: var(--color-toolbar-text);
 }
+:local(.app_bar) .icon-button:hover {
+  fill: var(--color-toolbar-text-active);
+}
+:local(.app_bar) .icon-button:disabled {
+  fill: var(--color-toolbar-main-dark);
+}
+
+/********* MENU *********/
 :local(.bar_menu) {
   display: flex;
   flex-direction: column;
@@ -43,6 +55,8 @@
 :local(.menu_button) {
   flex: 1;
 }
+
+/********* TOOLBAR *********/
 :local(.bar_toolbar) {
   height: var(--toolbar-height);
   display: flex;

@@ -3,6 +3,7 @@ import Style from './ToolbarView.css';
 
 import AbstractToolbarButton from './AbstractToolbarButton.js';
 
+import IconButton from '../components/IconButton.js';
 import MenuIcon from '../iconset/MenuIcon.js';
 
 const TOOLBAR_BUTTON_BUFFER = 200;
@@ -85,12 +86,12 @@ class ToolbarView extends React.Component
           const title = e.getTitle();
           const IconClass = e.getIconClass();
           return (
-            <button key={title + ":" + i} className={Style.menu_button}
+            <IconButton key={title + ":" + i} className={Style.menu_button}
               value={e}
               onClick={onButtonClick}>
-              {<IconClass className="icon"/>}
+              <IconClass/>
               <label>{title}</label>
-            </button>
+            </IconButton>
           );
         })}
         </div>
@@ -104,18 +105,18 @@ class ToolbarView extends React.Component
             const title = e.getTitle();
             const IconClass = e.getIconClass();
             return (
-              <button key={e + ":" + i} className={Style.toolbar_button}
+              <IconButton key={title + ":" + i} className={Style.toolbar_button}
                 title={title}
                 value={e}
                 onClick={onButtonClick}>
-                <IconClass className="icon"/>
-              </button>
+                <IconClass/>
+              </IconButton>
             );
           })}
           </div>
-          <button className={Style.toolbar_expander} onClick={this.onBarExpand}>
-            <MenuIcon className="icon"/>
-          </button>
+          <IconButton className={Style.toolbar_expander} onClick={this.onBarExpand}>
+            <MenuIcon/>
+          </IconButton>
         </div>
       </div>
     );

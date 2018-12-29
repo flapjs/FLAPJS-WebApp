@@ -60,8 +60,16 @@
   margin-left: 0;
   left: 0;
 }
-:local(.app_drawer) .icon {
+
+/** ICON STYLES **/
+:local(.app_drawer) .icon-button {
   fill: var(--color-drawer-text);
+}
+:local(.app_drawer) .icon-button:hover {
+  fill: var(--color-drawer-text-active);
+}
+:local(.app_drawer) .icon-button:disabled {
+  fill: var(--color-drawer-main-dark);
 }
 
 /********* DRAWER HANDLE *********/

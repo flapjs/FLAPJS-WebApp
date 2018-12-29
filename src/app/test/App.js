@@ -6,7 +6,6 @@ import ToolbarView from './toolbar/ToolbarView.js';
 
 import AboutDrawerPanel from './AboutDrawerPanel.js';
 import NewToolbarButton from './NewToolbarButton.js';
-import Icon from './Icon.js';
 
 import * as Icons from './iconset/Icons.js';
 
