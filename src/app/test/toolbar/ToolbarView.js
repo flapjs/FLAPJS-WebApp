@@ -6,7 +6,7 @@ import AbstractToolbarButton from './AbstractToolbarButton.js';
 import IconButton from '../components/IconButton.js';
 import MenuIcon from '../iconset/MenuIcon.js';
 
-const TOOLBAR_BUTTON_BUFFER = 200;
+const TOOLBAR_BUTTON_BUFFER = 150;
 
 class ToolbarView extends React.Component
 {

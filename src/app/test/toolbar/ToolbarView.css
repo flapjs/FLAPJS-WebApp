@@ -27,8 +27,13 @@
 }
 
 /** ICON STYLES **/
+:local(.app_bar) .icon-button > * {
+  width: 6em;
+  height: 100%;
+}
 :local(.app_bar) .icon-button {
   fill: var(--color-toolbar-text);
+  transition: fill 0.3s ease;
 }
 :local(.app_bar) .icon-button:hover {
   fill: var(--color-toolbar-text-active);
@@ -54,6 +59,26 @@
 }
 :local(.menu_button) {
   flex: 1;
+  display: flex;
+  flex-direction: row;
+
+  color: var(--color-toolbar-text);
+  border-bottom: 4px solid var(--color-toolbar-accent);
+}
+:local(.menu_button):hover {
+  background: var(--color-toolbar-text-active);
+}
+:local(.menu_button).icon-button:hover {
+  /*Override default toolbar color change on hover*/
+  fill: var(--color-toolbar-text);
+}
+:local(.menu_button):disabled {
+  background: var(--color-toolbar-main-dark);
+}
+:local(.menu_button) > label {
+  flex: 1;
+  font-size: 2.5em;
+  align-self: center;
 }
 
 /********* TOOLBAR *********/
@@ -62,9 +87,6 @@
   display: flex;
   flex-direction: row;
   overflow: hidden;
-}
-:local(.app_bar).open :local(.toolbar_group) {
-  visibility: hidden;
 }
 :local(.toolbar_button_container) {
   flex: 1;
@@ -91,13 +113,8 @@
 }
 :local(.toolbar_expander) {
   z-index: 10001;
+  margin: auto auto;
   margin-left: auto;
 
-  /* No button styles */
-  background: none;
-  outline: none;
-  border: none;
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
+  height: 3em;
 }
