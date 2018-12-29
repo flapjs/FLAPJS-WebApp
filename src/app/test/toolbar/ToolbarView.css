@@ -37,7 +37,9 @@
 
 /** ICON STYLES **/
 :local(.app_bar) .icon-button {
-  width: 6em;
+  width: 4em;
+  min-width: 4em;
+  min-height: 4em;
 }
 :local(.app_bar) .icon-button {
   fill: var(--color-toolbar-text);
@@ -55,6 +57,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  overflow-y: auto;
 
   visibility: visible;
   transform: translateY(0);
@@ -85,7 +88,9 @@
   background: var(--color-toolbar-main-dark);
 }
 :local(.menu_button) > svg {
-  width: 6em;
+  width: 4em;
+  min-width: 4em;
+  min-height: 4em;
 }
 :local(.menu_button) > label {
   flex: 1;
@@ -105,13 +110,14 @@
   flex: 1;
   display: flex;
   flex-direction: row;
-  overflow: hidden;
+  overflow-x: auto;
 
   visibility: visible;
   transform: translateX(0);
   transition: visibility 0s linear, transform 0.3s ease;
 }
-/*Used only for the fade into effect*/
+/* Used only for the fade into effect (only works without scrolling) */
+/*
 :local(.toolbar_button_container):after {
   content: '';
   width: 100%;
@@ -120,12 +126,14 @@
   pointer-events: none;
   background: linear-gradient(to right, transparent 60%, var(--color-toolbar-main));
 }
+*/
 :local(.app_bar).open :local(.toolbar_button_container) {
   visibility: hidden;
   transform: translateX(-100vw);
   transition: visibility 0s linear 0.6s, transform 0.3s ease 0.3s;
 }
 :local(.toolbar_button) {
+  margin: 0px 5px;
 }
 :local(.toolbar_title) {
   padding: 0px 10px;
