@@ -144,6 +144,10 @@
 
   /* remove scrollbar */
   -ms-overflow-style: none;
+
+  /* for hiding content */
+  outline: 10px dashed transparent;
+  outline-offset: -20px;
 }
 /* remove scrollbar */
 :local(.drawer_content_bar)::-webkit-scrollbar {
@@ -197,6 +201,8 @@
   max-height: var(--drawer-tab-height);
 }
 :local(.drawer_tab) {
+  visibility: visible;
+  opacity: 1.0;
   padding-top: 4px;
   padding-left: 0px;
   white-space: nowrap;
@@ -211,7 +217,8 @@
     padding-bottom 0.1s ease,
     border-right 0.1s ease,
     padding-right 0.1s ease,
-    color 0.1s ease;
+    color 0.1s ease,
+    opacity 0.1s ease, visibility 0s linear;/* for hiding content */
 }
 :local(.drawer_tab) > * {
   pointer-events: none;
@@ -227,6 +234,16 @@
   padding-bottom: 2px;
   border-right: none;
   padding-right: 0px;
+}
+/* for hiding content */
+:local(.app_drawer).open.hide-content :local(.drawer_tab) {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s ease, visibility 0s linear 0.1s
+}
+:local(.app_drawer).open.hide-content :local(.drawer_content_bar) {
+  outline: 10px dashed var(--color-drawer-main-dark);
+  transition: outline 0.1s ease 0.1s;
 }
 /* Sideways drawer tabs */
 :local(.app_drawer).drawer-bar-sideways :local(.drawer_content) {
@@ -266,24 +283,28 @@
   height: 100%;
   overflow-y: auto;
 
+  /* for hiding content */
   outline: 10px dashed transparent;
   outline-offset: -20px;
-}
-:local(.app_drawer).hide-content :local(.drawer_panel_container) {
-  outline: 10px dashed var(--color-drawer-main-dark);
-  transition: outline 0.1s ease 0.4s;
-}
-:local(.app_drawer).hide-content :local(.drawer_content_panel) {
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.1s ease 0.3s, visibility 0s linear 0.4s;
 }
 :local(.drawer_content_panel) {
   width: 100%;
   height: 100%;
 
+  /* for hiding content */
   visibility: visible;
   opacity: 1;
+  transition: opacity 0.1s ease, visibility 0s linear;
+}
+/* for hiding content */
+:local(.app_drawer).hide-content :local(.drawer_panel_container) {
+  outline: 10px dashed var(--color-drawer-main-dark);
+  transition: outline 0.1s ease 0.1s;
+}
+:local(.app_drawer).hide-content :local(.drawer_content_panel) {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.1s ease 0.1s, visibility 0s linear 0.2s;
 }
 
 /********* BOTTOM DRAWER *********/

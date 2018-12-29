@@ -12,7 +12,7 @@ const DRAWER_MIN_WIDTH = 200;
 const DRAWER_RESIZE_REFRESH_RATE = 200;
 const DRAWER_TAB_LIST_BUFFER = 150;
 
-const DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE = false;
+const DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE = true;
 const DRAWER_SHOULD_HIDE_TAB_LIST = true;
 
 export const DRAWER_WIDTH_TYPE_FULL = "full";
@@ -38,6 +38,7 @@ class DrawerView extends React.Component
 
     //When drawer is currently changing size intentfully
     this._handlingGrab = false;
+    this._handlingResize = false;
     //Whether the drawer should fullscreen
     this._isfull = false;
     //Whether to restore drawer width after fullscreen
@@ -46,6 +47,7 @@ class DrawerView extends React.Component
     this._prevWidth = DRAWER_MIN_WIDTH;
     //Used to manage resize updates
     this._resizeTimeout = null;
+    this._resizeEndTimeout = null;
     //Changed in render() to reflect current render state.
     this._sideways = false;
 
@@ -216,6 +218,14 @@ class DrawerView extends React.Component
       this._resizeTimeout = setTimeout(() => {
         this._resizeTimeout = null;
 
+        //Handle resize ends (more like debouncing)
+        if (this._resizeEndTimeout) clearTimeout(this._resizeEndTimeout);
+        else this._handlingResize = true;
+        this._resizeEndTimeout = setTimeout(() => {
+          this._resizeEndTimeout = null;
+          this._handlingResize = false;
+        }, 500);
+
         if (!this.drawerElement || !this.ref) return;
 
         const drawerSide = this.props.side;
@@ -299,7 +309,7 @@ class DrawerView extends React.Component
     const shouldDrawerBarSideways = !isDrawerSideBottom && (!isDrawerOpen || drawerDirection === DRAWER_BAR_DIRECTION_VERTICAL);
     const showDrawerHandle = isDrawerOpen || this._handlingGrab;
     const shouldDrawerOpenFull = this._isfull;
-    const shouldHideDrawerContent = (DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE && this._handlingGrab) || !isDrawerOpen;
+    const shouldHideDrawerContent = (DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE && (this._handlingGrab || this._handlingResize)) || !isDrawerOpen;
     const showDrawerTabs = isDrawerOpen || !DRAWER_SHOULD_HIDE_TAB_LIST;
 
     //Used to handle sideways logic
