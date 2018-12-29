@@ -7,6 +7,7 @@ import IconButton from '../components/IconButton.js';
 import MenuIcon from '../iconset/MenuIcon.js';
 
 const TOOLBAR_BUTTON_BUFFER = 150;
+const TOOLBAR_ALLOW_MENU_BAR = true;
 
 class ToolbarView extends React.Component
 {
@@ -61,10 +62,7 @@ class ToolbarView extends React.Component
   render()
   {
     const onButtonClick = this.props.onButtonClick;
-
-    const buttons = this.props.buttons;
-    const isBarOpen = this.state.open;
-
+    /*
     let maxButtonCount = Infinity;
     if (this.toolbarElement)
     {
@@ -73,6 +71,11 @@ class ToolbarView extends React.Component
       const elementSize = boundingRect.width;
       maxButtonCount = elementSize / TOOLBAR_BUTTON_BUFFER;
     }
+    */
+
+    const buttons = this.props.buttons;
+    const isBarOpen = this.state.open;
+    const showBarExpander = isBarOpen || (buttons && TOOLBAR_ALLOW_MENU_BAR);
 
     return (
       <div ref={ref=>this.ref=ref}
@@ -101,7 +104,6 @@ class ToolbarView extends React.Component
           </div>
           <div className={Style.toolbar_button_container}>
           {buttons && buttons.map((e, i) => {
-            if (i >= maxButtonCount) return null;
             const title = e.getTitle();
             const IconClass = e.getIconClass();
             return (
@@ -114,9 +116,10 @@ class ToolbarView extends React.Component
             );
           })}
           </div>
+          {showBarExpander &&
           <IconButton className={Style.toolbar_expander} onClick={this.onBarExpand}>
             <MenuIcon/>
-          </IconButton>
+          </IconButton>}
         </div>
       </div>
     );

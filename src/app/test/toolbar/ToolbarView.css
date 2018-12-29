@@ -92,6 +92,7 @@
   flex: 1;
   display: flex;
   flex-direction: row;
+  overflow-x: auto;
 
   visibility: visible;
   transform: translateX(0);
@@ -103,15 +104,17 @@
   transition: visibility 0s linear 0.6s, transform 0.3s ease 0.3s;
 }
 :local(.toolbar_button) {
-  flex: 1;
 }
 :local(.toolbar_title) {
+  padding: 0px 10px;
   z-index: 10001;
   margin-right: auto;
 
   background: var(--color-toolbar-main);
+  border-right: 4px dashed var(--color-toolbar-accent);
 }
 :local(.toolbar_expander) {
+  flex-shrink: 0;
   z-index: 10001;
   margin: auto auto;
   margin-left: auto;
