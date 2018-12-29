@@ -1,11 +1,8 @@
 import React from 'react';
 import Style from './DrawerView.css';
 
-import AbstractDrawerPanel from './AbstractDrawerPanel.js';
-
 import IconButton from '../components/IconButton.js';
 import ExpandDownIcon from '../iconset/ExpandDownIcon.js';
-import MoreIcon from '../iconset/MoreIcon.js';
 
 const DRAWER_WIDTH_CSSVAR = "--drawer-width";
 const DRAWER_HANDLE_DRAG_OFFSET = 6;
@@ -16,7 +13,6 @@ const DRAWER_RESIZE_REFRESH_RATE = 200;
 const DRAWER_TAB_LIST_BUFFER = 150;
 
 const DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE = false;
-const DRAWER_SHOULD_COLLAPSE_TAB_LIST = false;
 const DRAWER_SHOULD_HIDE_TAB_LIST = true;
 
 export const DRAWER_WIDTH_TYPE_FULL = "full";
@@ -57,7 +53,6 @@ class DrawerView extends React.Component
     this.onDrawerHandleRelease = this.onDrawerHandleRelease.bind(this);
     this.onDrawerHandleMove = this.onDrawerHandleMove.bind(this);
     this.onDrawerExpand = this.onDrawerExpand.bind(this);
-    this.onDrawerNextTabList = this.onDrawerNextTabList.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
   }
 
@@ -144,21 +139,6 @@ class DrawerView extends React.Component
     return this.state.tabIndex === tabIndex;
   }
 
-  getTabListIndex(tabIndex)
-  {
-    if (!this.drawerElement) return tabIndex;
-    //TODO: Possibly inefficient, depends on what getBoundingClientRect does.
-    const boundingRect = this.drawerElement.getBoundingClientRect();
-    const elementSize = this._sideways ? boundingRect.height : boundingRect.width;
-    const numOfTabs = elementSize / DRAWER_TAB_LIST_BUFFER;
-    return Math.floor(tabIndex / numOfTabs);
-  }
-
-  getCurrentTabListIndex()
-  {
-    return this.getTabListIndex(this.state.tabIndex);
-  }
-
   setDrawerWidth(value, hasIntent=true)
   {
     if (!this.drawerElement || !this.ref) return;
@@ -227,19 +207,6 @@ class DrawerView extends React.Component
     {
       this.toggleDrawer();
     }
-  }
-
-  onDrawerNextTabList()
-  {
-    //NOTE: Inefficient, but since we don't expect more than 10 tabs in a list,
-    //this shouldn't be a problem.
-    const currentTabListIndex = this.getCurrentTabListIndex();
-    let nextTabIndex = this.getCurrentTabIndex() + 1;
-    while(this.getTabListIndex(nextTabIndex) === currentTabListIndex)
-    {
-      ++nextTabIndex;
-    }
-    this.setCurrentTab(nextTabIndex);
   }
 
   onWindowResize(e)
@@ -333,7 +300,6 @@ class DrawerView extends React.Component
     const showDrawerHandle = isDrawerOpen || this._handlingGrab;
     const shouldDrawerOpenFull = this._isfull;
     const shouldHideDrawerContent = (DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE && this._handlingGrab) || !isDrawerOpen;
-    const shouldCollapseDrawerTabs = DRAWER_SHOULD_COLLAPSE_TAB_LIST && drawerPanels && this.getTabListIndex(drawerPanels.length - 1) > 0;
     const showDrawerTabs = isDrawerOpen || !DRAWER_SHOULD_HIDE_TAB_LIST;
 
     //Used to handle sideways logic
@@ -367,7 +333,6 @@ class DrawerView extends React.Component
                 <ExpandDownIcon/>
               </IconButton>
               {showDrawerTabs && drawerPanels && drawerPanels.map((e, i) => {
-                if (DRAWER_SHOULD_COLLAPSE_TAB_LIST && this.getCurrentTabListIndex() !== this.getTabListIndex(i)) return null;
                 const title = e.getTitle();
                 return (
                   <a key={title + ":" + i}
@@ -378,10 +343,6 @@ class DrawerView extends React.Component
                   </a>
                 );
               })}
-              {showDrawerTabs && shouldCollapseDrawerTabs &&
-                <IconButton className={Style.drawer_tab_next} onClick={this.onDrawerNextTabList}>
-                  <MoreIcon/>
-                </IconButton>}
             </nav>
             <div className={Style.drawer_panel_container}>
               <div className={Style.drawer_content_panel}>
