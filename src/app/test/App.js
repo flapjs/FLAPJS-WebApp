@@ -4,6 +4,9 @@ import './App.css';
 import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION_VERTICAL, DRAWER_BAR_DIRECTION_HORIZONTAL } from './drawer/DrawerView.js';
 import ToolbarView from './toolbar/ToolbarView.js';
 
+import Notifications from 'system/notification/Notifications.js';
+import NotificationView from 'system/notification/components/NotificationView.js';
+
 import AboutDrawerPanel from './AboutDrawerPanel.js';
 import NewToolbarButton from './NewToolbarButton.js';
 
@@ -27,6 +30,8 @@ class App extends React.Component
 
     this._mediaQuerySmallWidthList = window.matchMedia("only screen and (max-width: 400px)");
     this._mediaQuerySmallHeightList = window.matchMedia("only screen and (min-height: 400px)");
+
+    Notifications.addMessage("WHAT?");
   }
 
   //Override
@@ -46,6 +51,7 @@ class App extends React.Component
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
           hide={isFullscreen}>
+          <NotificationView notificationManager={Notifications}></NotificationView>
           <div className="viewport-tray">
           </div>
           <div className="viewport-navbar">

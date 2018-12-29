@@ -1,5 +1,6 @@
 .icon-button {
-  background: none;
+  background: inherit;
+  color: inherit;
   outline: none;
   border: none;
   margin: 0;

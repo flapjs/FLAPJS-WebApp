@@ -133,38 +133,60 @@
 /********* DRAWER CONTENT BAR *********/
 :local(.drawer_content_bar) {
   width: 100%;
+  min-width: var(--drawer-tab-height);
   min-height: var(--drawer-tab-height);
   display: flex;
   flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
 
   background: var(--color-drawer-main);
+
+  /* remove scrollbar */
+  -ms-overflow-style: none;
+}
+/* remove scrollbar */
+:local(.drawer_content_bar)::-webkit-scrollbar {
+  display: none;
 }
 :local(.drawer_content_bar) > * {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-grow: 1;
+  min-width: 64px;
+  min-height: 0px;
 
   user-select: none;
   cursor: pointer;
 }
-:local(.drawer_tab_expander).icon-button {
+:local(.drawer_tab_expander) {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 501;
+
   /*NOTE: Whether drawer expander should be centered*/
   /*margin: auto auto;*/
-  min-width: var(--drawer-tab-height);
-  max-width: var(--drawer-tab-height);
-  min-height: var(--drawer-tab-height);
-  max-height: var(--drawer-tab-height);
+  min-width: var(--drawer-tab-height)!important;
+  max-width: var(--drawer-tab-height)!important;
+  min-height: var(--drawer-tab-height)!important;
+  max-height: var(--drawer-tab-height)!important;
+  width: var(--drawer-tab-height);
+  height: var(--drawer-tab-height);
 
   transform: rotateZ(90deg);
 }
-:local(.app_drawer).open :local(.drawer_tab_expander).icon-button {
+:local(.drawer_tab_expander) {
+  background: var(--color-drawer-main);
+}
+:local(.app_drawer).open :local(.drawer_tab_expander) {
   transform: rotateZ(-90deg);
 }
-:local(.app_drawer).drawer-side-bottom :local(.drawer_tab_expander).icon-button {
+:local(.app_drawer).drawer-side-bottom :local(.drawer_tab_expander) {
   transform: rotateZ(180deg);
 }
-:local(.app_drawer).open.drawer-side-bottom :local(.drawer_tab_expander).icon-button {
+:local(.app_drawer).open.drawer-side-bottom :local(.drawer_tab_expander) {
   transform: rotateZ(0deg);
 }
 :local(.drawer_tab_next).icon-button {
@@ -214,6 +236,13 @@
   width: var(--drawer-tab-height);
   height: 100%;
   flex-direction: column;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+:local(.app_drawer).drawer-bar-sideways :local(.drawer_content_bar) > * {
+  min-width: 0px;
+  min-height: 64px;
 }
 :local(.app_drawer).drawer-bar-sideways :local(.drawer_tab) {
   padding-top: 0px;

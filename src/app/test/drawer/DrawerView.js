@@ -16,7 +16,8 @@ const DRAWER_RESIZE_REFRESH_RATE = 200;
 const DRAWER_TAB_LIST_BUFFER = 150;
 
 const DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE = false;
-const DRAWER_SHOULD_COLLAPSE_LARGE_TAB_LIST = false;
+const DRAWER_SHOULD_COLLAPSE_TAB_LIST = false;
+const DRAWER_SHOULD_HIDE_TAB_LIST = true;
 
 export const DRAWER_WIDTH_TYPE_FULL = "full";
 export const DRAWER_WIDTH_TYPE_MIN = "min";
@@ -332,8 +333,8 @@ class DrawerView extends React.Component
     const showDrawerHandle = isDrawerOpen || this._handlingGrab;
     const shouldDrawerOpenFull = this._isfull;
     const shouldHideDrawerContent = (DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE && this._handlingGrab) || !isDrawerOpen;
-    const shouldCollapseDrawerTabs = DRAWER_SHOULD_COLLAPSE_LARGE_TAB_LIST && drawerPanels && this.getTabListIndex(drawerPanels.length - 1) > 0;
-    const showDrawerTabs = isDrawerOpen || !shouldCollapseDrawerTabs;
+    const shouldCollapseDrawerTabs = DRAWER_SHOULD_COLLAPSE_TAB_LIST && drawerPanels && this.getTabListIndex(drawerPanels.length - 1) > 0;
+    const showDrawerTabs = isDrawerOpen || !DRAWER_SHOULD_HIDE_TAB_LIST;
 
     //Used to handle sideways logic
     this._sideways = shouldDrawerBarSideways;
@@ -366,7 +367,7 @@ class DrawerView extends React.Component
                 <ExpandDownIcon/>
               </IconButton>
               {showDrawerTabs && drawerPanels && drawerPanels.map((e, i) => {
-                if (DRAWER_SHOULD_COLLAPSE_LARGE_TAB_LIST && this.getCurrentTabListIndex() !== this.getTabListIndex(i)) return null;
+                if (DRAWER_SHOULD_COLLAPSE_TAB_LIST && this.getCurrentTabListIndex() !== this.getTabListIndex(i)) return null;
                 const title = e.getTitle();
                 return (
                   <a key={title + ":" + i}
