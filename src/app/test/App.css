@@ -1,6 +1,36 @@
 #root {
   width: 100%;
   height: 100%;
+  
+    --color-testing-failure: #FF0000;
+    --color-testing-success: #00FF00;
+    --color-testing-working: #808080;
+    --color-testing-text: #FFFFFF;
+
+    --color-notification-text: #F7F5E6;
+    --color-notification-info: #7D7D7D;
+    --color-notification-info-dark: #3D3D3D;
+    --color-notification-error: #C77575;
+    --color-notification-error-dark: #B54A4A;
+    --color-notification-warning: #D6A922;/*#E6CB53;*/
+    --color-notification-warning-dark: #AD8715;/*#DFBC20;*/
+    --color-notification-success: #A1C797;
+    --color-notification-success-dark: #468C34;
+
+    --color-viewport-error: #F54545;
+    --color-viewport-warning: #E6CB53;
+    --color-viewport-testing: #FFCD00;
+    --color-highlight-select: #808080;
+
+    --color-labeleditor-text: #000000;
+    --color-labeleditor-main: #D3D3D3;
+
+    --color-graph-node: #FEE781;
+    --color-workspace-main: #FFFFFF;
+    --color-workspace-text: #000000;
+
+    --color-selection-main: #000000;
+    --color-selection-border: #000000;
 
   --color-main: darkgray;
   --color-alt: lightgray;

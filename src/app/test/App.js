@@ -18,7 +18,6 @@ import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
 
 import FSAModule from 'modules/fsa/FSAModule.js';
-import DefaultDrawerPanel from './drawer/DefaultDrawerPanel.js';
 
 import IconStateButton from './components/IconStateButton.js';
 import FullscreenIcon from './iconset/FullscreenIcon.js';
@@ -48,7 +47,7 @@ class App extends React.Component
 
     this._module = new FSAModule(this);
 
-    this.drawerPanels = [DefaultDrawerPanel];
+    this._init = false;
 
     this.state = {
       hide: false
@@ -69,11 +68,15 @@ class App extends React.Component
 
     //Initialize the module...
     this._module.initialize(this);
+
+    this._init = true;
   }
 
   //Override
   componentWillUnmount()
   {
+    this._init = false;
+
     this._module.destroy(this);
     this._inputAdapter.destroy(this);
   }
@@ -106,12 +109,20 @@ class App extends React.Component
   //Override
   render()
   {
+    if (this._init)
+    {
+      this._inputAdapter.update();
+      this._module.update(this);
+    }
+
     const hasSmallWidth = this._mediaQuerySmallWidthList.matches;
     const hasSmallHeight = this._mediaQuerySmallHeightList.matches;
     const isFullscreen = this.state.hide;
 
     const viewport = this._inputAdapter.getViewport();
-    const inputActionMode = this._module.getInputController().isActionMode(this._module.getGraphController());
+    const inputController = this._module.getInputController();
+    const graphController = this._module.getGraphController();
+    const inputActionMode = inputController.isActionMode(graphController);
 
     const GRAPH_RENDER_LAYER = "graph";
     const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
@@ -157,10 +168,10 @@ class App extends React.Component
                     </IconStateButton>
                   </div>
                   <div className="viewport-widget viewport-side-bottom viewport-side-left">
-                    <ModeSelectTray mode={inputActionMode ? 0 : 1} onChange={modeIndex => this._module.getInputController().setInputScheme(modeIndex === 0)}/>
+                    <ModeSelectTray mode={inputActionMode ? 0 : 1} onChange={modeIndex => inputController.setInputScheme(modeIndex === 0)}/>
                   </div>
                   <div className="viewport-widget viewport-side-bottom viewport-side-right">
-                    <TrashCanWidget/>
+                    <TrashCanWidget inputController={inputController}/>
                   </div>
                   {/* Viewport overlay objects */
                     false && ViewportRenderer &&
