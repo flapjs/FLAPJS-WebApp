@@ -1,6 +1,21 @@
 #root {
   width: 100%;
   height: 100%;
+
+  --color-main: darkgray;
+  --color-alt: lightgray;
+  --color-accent: gold;
+  --color-back: white;
+  --color-surface: gray;
+  --color-error: tomato;
+
+  --color-main-text: white;
+  --color-alt-text: black;
+
+  --color-main-lite: white;
+  --color-main-dark: gray;
+  --color-alt-lite: white;
+  --color-alt-dark: gray;
 }
 .app-container {
   position: relative;

@@ -12,9 +12,9 @@
 
 /********* APP VIEWPORT *********/
 :local(.app_viewport) {
-  --color-viewport-main: none;
-  --color-viewport-main-dark: lightgray;
-  --color-viewport-accent: gold;
+
+  --color-viewport-back: none;
+  --color-viewport-back-detail: lightgray;
   --color-viewport-text: black;
 
   flex: 1;
@@ -23,9 +23,9 @@
   position: relative;
   width: 100%;
 
-  background: var(--color-viewport-main);
+  background: var(--color-viewport-back);
   color: var(--color-viewport-text);
-  outline: 10px dashed var(--color-viewport-main-dark);
+  outline: 10px dashed var(--color-viewport-back-detail);
   outline-offset: -20px;
 }
 /********* APP DRAWER *********/
@@ -34,11 +34,18 @@
   --drawer-tab-height: 32px;
   --drawer-handle-width: 4px;/* 12px on open */
 
-  --color-drawer-main: darkgray;
-  --color-drawer-main-dark: gray;
-  --color-drawer-accent: gold;
+  --color-drawer-back: darkgray;
+  --color-drawer-back-detail: gray;
   --color-drawer-text: black;
   --color-drawer-text-active: white;
+  --color-drawer-text-disabled: gray;
+  --color-drawer-handle: gray;
+  --color-drawer-handle-detail: darkgray;
+  --color-drawer-tab: darkgray;
+  --color-drawer-tab-text: black;
+  --color-drawer-tab-text-active: white;
+  --color-drawer-tab-highlight: gold;
+  --color-drawer-shadow: rgba(0, 0, 0, 0.5);
 
   position: relative;
   z-index: 500;
@@ -47,8 +54,8 @@
   display: flex;
   flex-direction: row;
 
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-  background: var(--color-drawer-main);
+  box-shadow: 0px 0px 5px var(--color-drawer-shadow);
+  background: var(--color-drawer-back);
 
   /* Drawer sliding */
   margin-left: calc(var(--drawer-handle-width) + var(--drawer-tab-height) - var(--drawer-width));
@@ -90,7 +97,7 @@
   fill: var(--color-drawer-text-active);
 }
 :local(.app_drawer) .icon-button:disabled {
-  fill: var(--color-drawer-main-dark);
+  fill: var(--color-drawer-text-disabled);
 }
 
 /********* DRAWER HANDLE *********/
@@ -104,8 +111,8 @@
   user-select: none;
   cursor: auto;
 
-  color: var(--color-drawer-main);
-  background: var(--color-drawer-main-dark);
+  color: var(--color-drawer-handle-detail);
+  background: var(--color-drawer-handle);
 
   transition: width 0.1s ease 0.3s;
 }
@@ -148,7 +155,7 @@
   overflow-x: auto;
   overflow-y: hidden;
 
-  background: var(--color-drawer-main);
+  background: var(--color-drawer-tab);
 
   /* remove scrollbar */
   -ms-overflow-style: none;
@@ -190,7 +197,7 @@
   transform: rotateZ(90deg);
 }
 :local(.drawer_tab_expander) {
-  background: var(--color-drawer-main);
+  background: var(--color-drawer-back);
 }
 :local(.app_drawer).open :local(.drawer_tab_expander) {
   transform: rotateZ(-90deg);
@@ -215,7 +222,7 @@
   padding-left: 0px;
   white-space: nowrap;
 
-  color: var(--color-drawer-text);
+  color: var(--color-drawer-tab-text);
 
   /* Hover animation */
   border-bottom: none;
@@ -232,10 +239,10 @@
   pointer-events: none;
 }
 :local(.drawer_tab):hover {
-  color: var(--color-drawer-text-active);
+  color: var(--color-drawer-tab-text-active);
 }
 :local(.drawer_tab).active {
-  color: var(--color-drawer-accent);
+  color: var(--color-drawer-tab-highlight);
 
   /* Hover animation */
   border-bottom: 4px solid currentColor;
@@ -250,7 +257,7 @@
   transition: opacity 0.1s ease, visibility 0s linear 0.1s
 }
 :local(.app_drawer).open.hide-content :local(.drawer_content_bar) {
-  outline: 10px dashed var(--color-drawer-main-dark);
+  outline: 10px dashed var(--color-drawer-back-detail);
   transition: outline 0.1s ease 0.1s;
 }
 /* Sideways drawer tabs */
@@ -314,7 +321,7 @@
 }
 /* for hiding content */
 :local(.app_drawer).hide-content :local(.drawer_content_panel) {
-  outline: 10px dashed var(--color-drawer-main-dark);
+  outline: 10px dashed var(--color-drawer-back-detail);
   transition: outline 0.1s ease 0.1s;
 }
 :local(.app_drawer).hide-content :local(.drawer_panel_container) {

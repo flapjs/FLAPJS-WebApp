@@ -2,11 +2,15 @@
 :local(.app_bar) {
   --toolbar-height: 80px;
 
-  --color-toolbar-main: darkgray;
-  --color-toolbar-main-dark: black;
-  --color-toolbar-accent: gray;
+  --color-toolbar-highlight: gold;
+  --color-toolbar-back: darkgray;
+  --color-toolbar-back-detail: gray;
+  --color-toolbar-menu: gray;
+  --color-toolbar-menu-active: darkgray;
+  --color-toolbar-menu-disabled: gray;
   --color-toolbar-text: white;
   --color-toolbar-text-active: gold;
+  --color-toolbar-text-disabled: gray;
 
   z-index: 1000;
   display: flex;
@@ -17,8 +21,8 @@
   transition: height 0.3s ease 0.3s,
     border-bottom 0.3s ease 0.3s;/* for hide animation */
 
-  border-bottom: 4px solid var(--color-toolbar-accent);
-  background: var(--color-toolbar-main);
+  border-bottom: 4px solid var(--color-toolbar-highlight);
+  background: var(--color-toolbar-back);
   color: var(--color-toolbar-text);
 }
 :local(.app_bar).open {
@@ -40,8 +44,7 @@
   width: 4em;
   min-width: 4em;
   min-height: 4em;
-}
-:local(.app_bar) .icon-button {
+
   fill: var(--color-toolbar-text);
   transition: fill 0.3s ease;
 }
@@ -49,7 +52,7 @@
   fill: var(--color-toolbar-text-active);
 }
 :local(.app_bar) .icon-button:disabled {
-  fill: var(--color-toolbar-main-dark);
+  fill: var(--color-toolbar-text-disabled);
 }
 
 /********* MENU *********/
@@ -68,24 +71,24 @@
   transform: translateY(-100vh);
   transition: visibility 0s linear 0.3s, transform 0.3s ease;
 }
-:local(.menu_button) {
+:local(.menu_button).icon-button {
   flex: 1;
   display: flex;
   flex-direction: row;
 
   /* Override default icon button size */
-  width: 100% !important;
+  width: 100%;
 
+  background: var(--color-toolbar-menu);
   color: var(--color-toolbar-text);
-  border-bottom: 4px solid var(--color-toolbar-accent);
+  border-bottom: 2px solid var(--color-toolbar-text);
 }
-:local(.menu_button):hover {
-  background: var(--color-toolbar-text-active);
-  /* Override default toolbar color change on hover */
-  fill: var(--color-toolbar-text)!important;
+:local(.menu_button).icon-button:hover {
+  color: var(--color-toolbar-text-active);
+  background: var(--color-toolbar-menu-active);
 }
-:local(.menu_button):disabled {
-  background: var(--color-toolbar-main-dark);
+:local(.menu_button).icon-button:disabled {
+  background: var(--color-toolbar-menu-disabled);
 }
 :local(.menu_button) > svg {
   width: 4em;
@@ -117,17 +120,6 @@
   transform: translateX(0);
   transition: visibility 0s linear, transform 0.3s ease;
 }
-/* Used only for the fade into effect (only works without scrolling) */
-/*
-:local(.toolbar_button_container):after {
-  content: '';
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  pointer-events: none;
-  background: linear-gradient(to right, transparent 60%, var(--color-toolbar-main));
-}
-*/
 :local(.app_bar).open :local(.toolbar_button_container) {
   visibility: hidden;
   transform: translateX(-100vw);
@@ -141,8 +133,8 @@
   z-index: 10001;
   margin-right: auto;
 
-  background: var(--color-toolbar-main);
-  border-right: 4px dashed var(--color-toolbar-accent);
+  background: var(--color-toolbar-back);
+  border-right: 4px dashed var(--color-toolbar-back-detail);
 }
 :local(.toolbar_expander) {
   flex-shrink: 0;
