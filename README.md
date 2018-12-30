@@ -29,15 +29,15 @@ To make a program that is more accessible and intuitive to use, so we can all be
 
 ---
 ## Compatibility
-- [ ] Windows
+- [x] Windows
 - [x] Mac
-- [ ] Android
-- [ ] iOS
+- [x] Android
+- [x] iOS
 - [ ] All major browsers
-  - [ ] Chrome
-  - [ ] Firefox
+  - [x] Chrome
+  - [x] Firefox
   - [ ] Edge
-  - [ ] Safari
+  - [x] Safari
   - [ ] Opera
 
 (Although it may work on other unchecked platforms, it is not completely tested)
@@ -70,6 +70,10 @@ To make a program that is more accessible and intuitive to use, so we can all be
 - [x] Graph Optimizations
 - [x] Email Exporting
 - [x] Bug Reporting
+
+### 0.3.0 (Coming Soon)
+- [ ] Pushdown Automaton
+- [ ] Regular Expressions
 
 ### 1.0.0 (Future)
 - [ ] Pushdown Automaton
@@ -329,13 +333,13 @@ Each is stored in their own script and can be tested separately from the main pr
 #### GraphRenderer
 This final layer evaluates the `NodalGraph` and constructs a renderable structure to display to the user. In other words, this is the `React` component representation of `NodalGraph`. Because of this abstraction, the graph could be rendered in `Canvas` or other rendering systems if required. Currently, the individual elements are rendered onto the workspace in `SVG` for scalability.
 
-### InputController
-This handles all complex input manipulations of the graph workspace. All raw input (i.e. `onTouchStart`, `onMouseDown`) are first evaluated by `InputController.js` into more abstract actions. Both touch and mouse actions are converted to abstracted input actions to simplify input logic.
+### InputAdapter
+This handles all complex input manipulations of the graph workspace. All raw input (i.e. `onTouchStart`, `onMouseDown`) are first evaluated by `InputAdapter.js` into more abstract actions. Both touch and mouse actions are converted to abstracted input actions to simplify input logic.
 
-#### GraphInputController
-These input actions (i.e. `onDragStart`, `onInputAction`) are then handled by `GraphInputController.js`, which applies context-specific actions to the elements in the `NodalGraph`. In addition to the controller handling the input action events, it also emits events for external handlers to listen and respond to.
+#### InputController
+These input actions (i.e. `onDragStart`, `onInputAction`) are then handled by `InputController.js`, which applies context-specific actions to the elements in the `NodalGraph`. In addition to the controller handling the input action events, it also emits events for external handlers to listen and respond to.
 
-Available events to listen for are listed at the top of `GraphInputController.js`.
+Available events to listen for are listed at the top of `InputController.js`.
 
 **Note:** Certain groups of actions, such as selection, are handled by external handlers. This serves only to produce more organized code.
 
