@@ -13,7 +13,7 @@ const DRAWER_RESIZE_REFRESH_RATE = 200;
 const DRAWER_TAB_LIST_BUFFER = 150;
 
 const DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE = true;
-const DRAWER_SHOULD_HIDE_TAB_LIST = true;
+const DRAWER_SHOULD_HIDE_TAB_LIST = false;
 
 export const DRAWER_WIDTH_TYPE_FULL = "full";
 export const DRAWER_WIDTH_TYPE_MIN = "min";
@@ -359,10 +359,12 @@ class DrawerView extends React.Component
                 {drawerPanels && drawerPanels.map((e, i) => {
                   const ComponentClass = e;
                   const title = e.TITLE || "";
+                  const current = this.isCurrentTab(i);
                   return (
-                    <ComponentClass key={title + ":" + i}
+                    <ComponentClass key={title + ":" + i + ":" + current}
                       className={Style.drawer_panel}
-                      style={{visibility: this.isCurrentTab(i) ? "visible!important" : "hidden!important"}}/>
+                      style={{visibility: current ? "visible" : "hidden"}}
+                      {...this.props.panelProps}/>
                   );
                 })}
               </div>

@@ -18,7 +18,7 @@ class WorkspaceView extends React.Component
     const viewSize = 100;
     const halfViewSize = viewSize / 2;
     return (
-      <svg ref={ref=>this.ref} id={this.props.id}
+      <svg ref={ref=>this.ref=ref} id={this.props.id}
         className={"workspace-container" +
           " " + this.props.className}
         style={this.props.style}
