@@ -15,6 +15,7 @@
 
   --color-viewport-back: white;
   --color-viewport-back-detail: lightgray;
+  --color-viewport-outline: rgba(0, 0, 0, 0.03);
   --color-viewport-text: black;
   --color-viewport-error: red;
 
@@ -26,8 +27,8 @@
 
   background: var(--color-viewport-back);
   color: var(--color-viewport-text);
-  outline: 10px dashed var(--color-viewport-back-detail);
-  outline-offset: -20px;
+  outline: 10px dashed var(--color-viewport-outline);
+  outline-offset: -30px;
 }
 /********* APP DRAWER *********/
 :local(.app_drawer) {

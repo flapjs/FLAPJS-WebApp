@@ -111,6 +111,7 @@ class App extends React.Component
     const isFullscreen = this.state.hide;
 
     const viewport = this._inputAdapter.getViewport();
+    const inputActionMode = this._module.getInputController().isActionMode(this._module.getGraphController());
 
     const GRAPH_RENDER_LAYER = "graph";
     const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
@@ -155,11 +156,8 @@ class App extends React.Component
                       <FullscreenExitIcon/>
                     </IconStateButton>
                   </div>
-                  <div className="viewport-widget viewport-side-bottom">
-                    <TapeWidget/>
-                  </div>
                   <div className="viewport-widget viewport-side-bottom viewport-side-left">
-                    <ModeSelectTray mode={0}/>
+                    <ModeSelectTray mode={inputActionMode ? 0 : 1} onChange={modeIndex => this._module.getInputController().setInputScheme(modeIndex === 0)}/>
                   </div>
                   <div className="viewport-widget viewport-side-bottom viewport-side-right">
                     <TrashCanWidget/>
