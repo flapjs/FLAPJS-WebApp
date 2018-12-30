@@ -309,6 +309,12 @@ class GraphController extends AbstractGraphController
 
   openLabelEditor(target, x, y, placeholder=null, replace=true, callback=null)
   {
+    if (!this.labelEditorElement)
+    {
+      if (callback) callback();
+      return;
+    }
+
     const prevLabel = placeholder || target.getEdgeLabel();
     this.labelEditorElement.openEditor(target, placeholder, replace, () => {
       const label = target.getEdgeLabel();
