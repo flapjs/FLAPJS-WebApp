@@ -7,7 +7,7 @@
   fill: var(--color-viewport-text);
 }
 :local(.trash_container):hover {
-  fill: tomato;
+  fill: var(--color-viewport-error);
 }
 :local(.trash_container) > * {
   width: 100%;

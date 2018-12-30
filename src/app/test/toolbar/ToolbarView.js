@@ -23,6 +23,8 @@ class ToolbarView extends React.Component
     };
 
     this.onBarExpand = this.onBarExpand.bind(this);
+    this.onMenuButtonClick = this.onMenuButtonClick.bind(this);
+    this.onToolbarButtonClick = this.onToolbarButtonClick.bind(this);
   }
 
   openBar(callback=null)
@@ -56,6 +58,17 @@ class ToolbarView extends React.Component
   onBarExpand(e)
   {
     this.toggleBar();
+  }
+
+  onMenuButtonClick(e, target)
+  {
+    this.closeBar();
+    target.onClick(e);
+  }
+
+  onToolbarButtonClick(e, target)
+  {
+    target.onClick(e);
   }
 
   //Override
@@ -92,8 +105,7 @@ class ToolbarView extends React.Component
           const IconClass = e.getIconClass();
           return (
             <IconButton key={title + ":" + i} className={Style.menu_button}
-              value={e}
-              onClick={e.onClick}>
+              onClick={ev => this.onMenuButtonClick(ev, e)}>
               <IconClass/>
               <label>{title}</label>
             </IconButton>
@@ -112,8 +124,7 @@ class ToolbarView extends React.Component
             return (
               <IconButton key={title + ":" + i} className={Style.toolbar_button}
                 title={title}
-                value={e}
-                onClick={e.onClick}>
+                onClick={ev => this.onToolbarButtonClick(ev, e)}>
                 <IconClass/>
               </IconButton>
             );

@@ -18,11 +18,16 @@ import UndoManager from 'system/undomanager/UndoManager.js';
 
 import FSAModule from 'modules/fsa/FSAModule.js';
 import DefaultDrawerPanel from './drawer/DefaultDrawerPanel.js';
-import NewToolbarButton from './NewToolbarButton.js';
 
 import IconStateButton from './components/IconStateButton.js';
 import FullscreenIcon from './iconset/FullscreenIcon.js';
 import FullscreenExitIcon from './iconset/FullscreenExitIcon.js';
+
+import NewToolbarButton from './NewToolbarButton.js';
+import UndoToolbarButton from './UndoToolbarButton.js';
+import RedoToolbarButton from './RedoToolbarButton.js';
+import UploadToolbarButton from './UploadToolbarButton.js';
+import ExportToolbarButton from './ExportToolbarButton.js';
 
 class App extends React.Component
 {
@@ -43,8 +48,7 @@ class App extends React.Component
     this._module = new FSAModule(this);
 
     this.drawerPanels = [DefaultDrawerPanel];
-    this.toolbarButtons = [new NewToolbarButton(), new NewToolbarButton(), new NewToolbarButton(), new NewToolbarButton(), new NewToolbarButton()];
-    this.viewportWidgets = [];
+    this.toolbarButtons = [new NewToolbarButton(), new UndoToolbarButton(), new RedoToolbarButton(), new UploadToolbarButton(), new ExportToolbarButton()];
 
     this.state = {
       hide: false

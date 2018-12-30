@@ -1,6 +1,5 @@
 import AbstractToolbarButton from './toolbar/AbstractToolbarButton.js';
-
-import Icon from 'test/Icon.js';
+import PageEmptyIcon from 'test/iconset/PageEmptyIcon.js';
 
 class NewToolbarButton extends AbstractToolbarButton
 {
@@ -18,8 +17,7 @@ class NewToolbarButton extends AbstractToolbarButton
   //Override
   getIconClass()
   {
-    return Icon;
+    return PageEmptyIcon;
   }
 }
-
 export default NewToolbarButton;

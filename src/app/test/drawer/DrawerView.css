@@ -16,6 +16,7 @@
   --color-viewport-back: white;
   --color-viewport-back-detail: lightgray;
   --color-viewport-text: black;
+  --color-viewport-error: red;
 
   flex: 1;
 
@@ -196,7 +197,7 @@
 
   transform: rotateZ(90deg);
 }
-:local(.drawer_tab_expander) {
+:local(.drawer_tab_expander).icon-button {
   background: var(--color-drawer-back);
 }
 :local(.app_drawer).open :local(.drawer_tab_expander) {
