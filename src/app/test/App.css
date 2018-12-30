@@ -9,7 +9,7 @@
   display: flex;
   flex-direction: column;
   /* TODO: For production, add this back in. */
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 .app-bar.open ~ .app-content {
   visibility: hidden;
@@ -17,8 +17,85 @@
 }
 .viewport-widget {
   position: absolute;
-  bottom: 0;
+  min-width: 32px;
+  min-height: 32px;
+}
+.viewport-side-top {
+  top: 0;
+}
+.viewport-side-left {
+  left: 0;
+}
+.viewport-side-right {
   right: 0;
-  width: 32px;
-  height: 32px;
+}
+.viewport-side-bottom {
+  bottom: 0;
+}
+
+
+
+.tape-container {
+  --tape-text-size: 2em;
+  margin: 0.5em;
+
+  font-size: var(--tape-text-size);
+}
+.tape-row {
+  display: flex;
+  flex-direction: row;
+}
+.tape-pointer {
+  position: absolute;
+  top: -0.5em;
+  left: 0em;
+  margin-left: 0.5em;
+  width: 1em;
+  height: 1em;
+
+  transition: left 0.3s ease;
+}
+.tape-row-entry {
+  position: relative;
+  width: 1em;
+  height: 1.3em;
+
+  outline: 1px solid black;
+}
+.tape-row-symbol {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+
+  background: lightgray;
+}
+.tape-row-symbol:hover {
+  background: white;
+  cursor: pointer;
+}
+.tape-row-states {
+  display: flex;
+  flex-direction: column-reverse;
+  padding-bottom: 0.2em;
+  transform: translateX(-0.25em) translateY(-100%);
+
+  pointer-events: none;
+  user-select: none;
+}
+.tape-row-states > label {
+  font-size: 0.5em;
+}
+/* When tape symbol is active... */
+.tape-row-entry.active {
+  z-index: 1;/* must be higher than the rest */
+  outline-width: 0.2em;
+}
+.tape-row-entry.active .tape-row-symbol {
+  font-weight: bold;
+}
+.tape-row-entry.active-read .tape-row-states {
+  font-weight: bold;
 }

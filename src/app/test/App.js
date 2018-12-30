@@ -13,6 +13,7 @@ import NewToolbarButton from './NewToolbarButton.js';
 import IconStateButton from './components/IconStateButton.js';
 import FullscreenIcon from './iconset/FullscreenIcon.js';
 import FullscreenExitIcon from './iconset/FullscreenExitIcon.js';
+import DownArrowIcon from './iconset/DownArrowIcon.js';
 
 class App extends React.Component
 {
@@ -23,6 +24,10 @@ class App extends React.Component
     this.drawerPanels = [new AboutDrawerPanel(), new AboutDrawerPanel(), new AboutDrawerPanel(), new AboutDrawerPanel(), new AboutDrawerPanel()];
     this.toolbarButtons = [new NewToolbarButton(), new NewToolbarButton(), new NewToolbarButton(), new NewToolbarButton(), new NewToolbarButton()];
     this.viewportWidgets = [];
+    this.inputs = "0129389472637892012u93________".split('');
+
+    this.counter = 0;
+    this.index = 0;
 
     this.state = {
       hide: false
@@ -37,6 +42,11 @@ class App extends React.Component
   //Override
   render()
   {
+    if (++this.counter >= 100)
+    {
+      this.counter = 0;
+      this.index += 1;
+    }
     const hasSmallWidth = this._mediaQuerySmallWidthList.matches;
     const hasSmallHeight = this._mediaQuerySmallHeightList.matches;
     const isFullscreen = this.state.hide;
@@ -56,7 +66,42 @@ class App extends React.Component
           </div>
           <div className="viewport-navbar">
           </div>
-          <div className="viewport-widget">
+          <div className="viewport-widget viewport-side-bottom">
+            <div className="tape-container">
+              <DownArrowIcon className="tape-pointer" style={{left: Math.floor((this.index - 1) / 2) + "em"}}/>
+              <div className="tape-row">
+                {this.inputs.map((e, i) => {
+                  let active = false;
+                  let activeRead = false;
+                  const currentIndex = Math.floor(this.index / 2);
+                  if (currentIndex === i)
+                  {
+                    //It's the current index...
+                    active = this.index % 2 === 1;
+                    activeRead = this.index % 2 === 0;
+                  }
+                  else if (currentIndex === i + 1)
+                  {
+                    //It's the previous index...
+                    active = this.index % 2 === 0;
+                  }
+
+                  return <div className={"tape-row-entry" + (active ? " active " : "") + (activeRead ? " active-read " : "")}>
+                    <span className="tape-row-states">
+                      <label>{"q0"}</label>
+                      <label>{"q1"}</label>
+                      <label>{"q2"}</label>
+                      <label>{"q3"}</label>
+                      <label>{"q4"}</label>
+                      <label>{"q5"}</label>
+                    </span>
+                    <label className="tape-row-symbol">{e}</label>
+                  </div>;
+                })}
+              </div>
+            </div>
+          </div>
+          <div className="viewport-widget viewport-side-right">
             <IconStateButton onClick={(e, i) => this.setState({hide: (i === 0)})}>
               <FullscreenIcon/>
               <FullscreenExitIcon/>
