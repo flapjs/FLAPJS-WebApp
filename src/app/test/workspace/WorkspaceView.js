@@ -1,6 +1,8 @@
 import React from 'react';
 import Style from './WorkspaceView.css';
 
+const DEFAULT_WORKSPACE_SIZE = 300;
+
 class WorkspaceView extends React.Component
 {
   constructor(props)
@@ -13,9 +15,10 @@ class WorkspaceView extends React.Component
   //Override
   render()
   {
-    const offsetX = 0;
-    const offsetY = 0;
-    const viewSize = 100;
+    const viewport = this.props.viewport;
+    const offsetX = viewport.getOffsetX();
+    const offsetY = viewport.getOffsetY();
+    const viewSize = DEFAULT_WORKSPACE_SIZE * Math.max(Number.MIN_VALUE, viewport.getScale());
     const halfViewSize = viewSize / 2;
     return (
       <svg ref={ref=>this.ref=ref} id={this.props.id}

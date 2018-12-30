@@ -61,14 +61,14 @@ class App extends React.Component
     this._inputAdapter.initialize(workspaceDOM);
 
     //Initialize the module...
-    const module = this.getCurrentModule();
-    module.initialize(this);
+    this._module.initialize(this);
   }
 
   //Override
   componentWillUnmount()
   {
-
+    this._module.destroy(this);
+    this._inputAdapter.destroy(this);
   }
 
   get workspace()
@@ -103,6 +103,13 @@ class App extends React.Component
     const hasSmallHeight = this._mediaQuerySmallHeightList.matches;
     const isFullscreen = this.state.hide;
 
+    const viewport = this._inputAdapter.getViewport();
+
+    const GRAPH_RENDER_LAYER = "graph";
+    const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
+    const GraphRenderer = this._module.getRenderer(GRAPH_RENDER_LAYER);
+    const GraphOverlayRenderer = this._module.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
+
     return (
         <div className="app-container">
           <ToolbarView className="app-bar"
@@ -116,7 +123,16 @@ class App extends React.Component
             hide={isFullscreen}>
               <UploadDropZone>
                 <div className="viewport">
-                  <WorkspaceView ref={ref=>this._workspace=ref}>
+                  <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>
+                    {/* Graph origin crosshair */}
+                    <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="#E6E6E6"/>
+                    <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="#E6E6E6"/>
+                    {/* Graph objects */
+                    GraphRenderer &&
+                      <GraphRenderer currentModule={this._module} parent={this._workspace}/>}
+                    {/* Graph overlays */
+                    GraphOverlayRenderer &&
+                      <GraphOverlayRenderer currentModule={this._module} parent={this._workspace}/>}
                   </WorkspaceView>
                   <NotificationView notificationManager={Notifications}></NotificationView>
                   <div className="viewport-widget viewport-side-right">
