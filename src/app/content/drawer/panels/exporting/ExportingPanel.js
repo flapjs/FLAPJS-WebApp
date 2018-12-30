@@ -21,7 +21,7 @@ class ExportingPanel extends React.Component
       id={"export-" + exporter.getFileType()}
       title={exporter.getTitle()}
       onClick={() => {
-        const filename = this.props.machineController.getMachineName();
+        const filename = this.props.currentModule.getMachineController().getMachineName();
         exporter.exportToFile(filename, currentModule);
       }}>
       { React.createElement(exporter.getIconComponentClass()) }

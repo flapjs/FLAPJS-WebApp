@@ -43,7 +43,7 @@ class OverviewPanel extends React.Component
   onChangeMachineType(e)
   {
     const value = e.target.value;
-    const machineController = this.props.machineController;
+    const machineController = this.props.currentModule.getMachineController();
     machineController.changeMachineTo(value);
   }
 
@@ -55,7 +55,7 @@ class OverviewPanel extends React.Component
 
   onSubmitAutoStatePrefix(next, prev)
   {
-    const labeler = this.props.machineController.getMachineBuilder().getLabeler();
+    const labeler = this.props.currentModule.getMachineController().getMachineBuilder().getLabeler();
     if (labeler.prefix != next)
     {
       labeler.prefix = next;
