@@ -30,7 +30,7 @@
   transition: opacity 0.3s ease, visibility 0s linear 0.3s;
 }
 :local(.upload_container).waiting :local(.upload_icon) {
-  opacity: 0.1;
+  opacity: 0.3;
   visibility: visible;
 
   transition: opacity 0.3s ease, visibility 0s linear;

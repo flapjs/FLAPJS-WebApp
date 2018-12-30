@@ -1,7 +1,7 @@
 /********* APP CONTENT *********/
 :local(.app_content) {
   /*TODO: This is still dependent on the parent having display: flex.*/
-  flex-grow: 1;
+  flex: 1;
 
   display: flex;
   flex-direction: row;
@@ -17,17 +17,17 @@
   --color-viewport-accent: gold;
   --color-viewport-text: black;
 
-  flex-grow: 1;
+  flex: 1;
 
   /* think of the children */
   position: relative;
+  width: 100%;
 
   background: var(--color-viewport-main);
   color: var(--color-viewport-text);
   outline: 10px dashed var(--color-viewport-main-dark);
   outline-offset: -20px;
 }
-
 /********* APP DRAWER *********/
 :local(.app_drawer) {
   --drawer-width: 300px;
@@ -43,9 +43,9 @@
   position: relative;
   z-index: 500;
   width: var(--drawer-width);
+  height: auto;
   display: flex;
   flex-direction: row;
-  flex-shrink: 0;
 
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
   background: var(--color-drawer-main);
@@ -325,7 +325,7 @@
 
 /********* BOTTOM DRAWER *********/
 :local(.app_drawer).drawer-side-bottom {
-  width: 100%;
+  width: auto;
   height: var(--drawer-width);
   flex-direction: column;
 
@@ -354,7 +354,7 @@
 }
 :local(.app_drawer).drawer-side-bottom :local(.drawer_content) {
   height: calc(var(--drawer-width) - var(--drawer-handle-width));
-  width: 100%;
+  width: auto;
 }
 
 /********* FULL DRAWER (OPENED) *********/

@@ -17,6 +17,13 @@
 
   overflow-x: auto;
   overflow-y: hidden;
+
+  /* remove scrollbar */
+  -ms-overflow-style: none;
+}
+/* remove scrollbar */
+.tape-row::-webkit-scrollbar {
+  display: none;
 }
 /* Just some spacing, since the last border edge is cut off */
 .tape-row::after {

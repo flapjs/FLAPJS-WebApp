@@ -5,6 +5,7 @@ import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION
 import ToolbarView from './toolbar/ToolbarView.js';
 import TapeWidget from './widgets/TapeWidget.js';
 import UploadDropZone from './components/UploadDropZone.js';
+import WorkspaceView from './workspace/WorkspaceView.js';
 
 import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
@@ -55,6 +56,9 @@ class App extends React.Component
             hide={isFullscreen}>
               <UploadDropZone>
                 <div className="viewport">
+                  <WorkspaceView>
+                    <rect width="10px" height="10px"/>
+                  </WorkspaceView>
                   <NotificationView notificationManager={Notifications}></NotificationView>
                   <div className="viewport-tray">
                   </div>
