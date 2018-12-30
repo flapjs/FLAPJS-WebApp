@@ -1,4 +1,5 @@
 import AbstractDrawerPanel from './drawer/AbstractDrawerPanel.js';
+import AboutPanel from './AboutPanel.js';
 
 class AboutDrawerPanel extends AbstractDrawerPanel
 {
@@ -11,6 +12,12 @@ class AboutDrawerPanel extends AbstractDrawerPanel
   getTitle()
   {
     return "About";
+  }
+
+  //Override
+  getComponentClass()
+  {
+    return AboutPanel;
   }
 }
 

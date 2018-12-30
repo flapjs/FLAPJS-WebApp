@@ -357,12 +357,14 @@ class DrawerView extends React.Component
             <div className={Style.drawer_panel_container}>
               <div className={Style.drawer_content_panel}>
                 {drawerPanels && drawerPanels.map((e, i) => {
-                  if (!this.isCurrentTab(i)) return null;
                   const ComponentClass = e.getComponentClass();
                   if (!ComponentClass) return null;
                   const title = e.getTitle();
                   return (
-                    <ComponentClass key={title + ":" + i} ref={ref=>e.panelComponent=ref}/>
+                    <ComponentClass key={title + ":" + i}
+                      ref={ref=>e.panelComponent=ref}
+                      className={Style.drawer_panel}
+                      style={{visibility: this.isCurrentTab(i) ? "visible!important" : "hidden!important"}}/>
                   );
                 })}
               </div>
