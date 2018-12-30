@@ -1,11 +1,12 @@
 .tape-row {
   --tape-text-size: 2em;
 
-  --color-tape-main: lightgray;
-  --color-tape-main-dark: black;
   --color-tape-text: black;
-  --color-tape-text-active: white;
-  --color-tape-accent: gold;
+  --color-tape-back: white;
+  --color-tape-back-active: lightgray;
+  --color-tape-highlight: black;
+  --color-tape-outline: darkgray;
+  --color-tape-shadow: gold;
 
   position: relative;
   display: flex;
@@ -52,7 +53,7 @@
   display: flex;
   flex-direction: column;
   min-width: 1em;
-  border-bottom: 4px solid var(--color-tape-accent);
+  border-bottom: 4px solid var(--color-tape-shadow);
 }
 /* INFINITE ENTRY */
 .tape-row-entry.infinite {
@@ -61,26 +62,26 @@
 }
 .tape-row-entry.infinite .tape-row-symbol {
   outline: none;
-  border: 1px solid var(--color-tape-main-dark);
+  border: 1px solid var(--color-tape-outline);
   margin-bottom: -0.1em;
 }
 .tape-row-entry:first-of-type.infinite .tape-row-symbol {
   border-left: none;
-  background: linear-gradient(to right, transparent, var(--color-tape-main) 0.5em);
+  background: linear-gradient(to right, transparent, var(--color-tape-back) 0.5em);
 }
 .tape-row-entry:last-of-type.infinite .tape-row-symbol {
   border-right: none;
-  background: linear-gradient(to left, transparent, var(--color-tape-main) 0.5em);
+  background: linear-gradient(to left, transparent, var(--color-tape-back) 0.5em);
 }
 /* NORMAL ENTRY */
 .tape-row-symbol {
   text-align: center;
 
-  background: var(--color-tape-main);
-  outline: 1px solid var(--color-tape-main-dark);
+  background: var(--color-tape-back);
+  outline: 1px solid var(--color-tape-outline);
 }
 .tape-row-symbol:hover {
-  background: var(--color-tape-text-active);
+  background: var(--color-tape-back-active);
   cursor: pointer;
 }
 .tape-row-states {
@@ -100,7 +101,7 @@
 .tape-row-entry.active .tape-row-symbol {
   z-index: 1;/* must be higher than the rest */
   outline-width: 0.2em;
-  outline-color: var(--color-tape-accent);
+  outline-color: var(--color-tape-highlight);
   font-weight: bold;
 }
 .tape-row-entry.active-read .tape-row-states {

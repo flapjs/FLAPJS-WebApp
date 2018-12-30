@@ -156,6 +156,9 @@ class App extends React.Component
                   <div className="viewport-widget viewport-side-bottom viewport-side-right">
                     <TrashCanWidget/>
                   </div>
+                  <div className="viewport-widget viewport-side-bottom">
+                    <TapeWidget/>
+                  </div>
                   {/* Viewport overlay objects */
                     false && ViewportRenderer &&
                     <ViewportRenderer currentModule={this._module} screen={this._workspace ? this._workspace.ref : null} parent={this._workspace}/>}
