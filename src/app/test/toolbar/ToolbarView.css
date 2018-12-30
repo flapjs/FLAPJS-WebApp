@@ -141,8 +141,11 @@
 :local(.toolbar_expander) {
   flex-shrink: 0;
   z-index: 10001;
-  margin: auto auto;
-  margin-left: auto;
+  margin: auto;
+  margin-left: 10px;
+  margin-right: 10px;
 
   height: 3em;
+
+  background: var(--color-toolbar-back);
 }
