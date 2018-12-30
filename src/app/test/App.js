@@ -3,9 +3,12 @@ import './App.css';
 
 import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION_VERTICAL, DRAWER_BAR_DIRECTION_HORIZONTAL } from './drawer/DrawerView.js';
 import ToolbarView from './toolbar/ToolbarView.js';
+import WorkspaceView from './workspace/WorkspaceView.js';
+
 import TapeWidget from './widgets/TapeWidget.js';
 import UploadDropZone from './components/UploadDropZone.js';
-import WorkspaceView from './workspace/WorkspaceView.js';
+import ModeSelectTray from './widgets/ModeSelectTray.js';
+import TrashCanWidget from './widgets/TrashCanWidget.js';
 
 import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
@@ -143,8 +146,14 @@ class App extends React.Component
                       <FullscreenExitIcon/>
                     </IconStateButton>
                   </div>
+                  <div className="viewport-widget viewport-side-bottom viewport-side-left">
+                    <ModeSelectTray mode={0}/>
+                  </div>
+                  <div className="viewport-widget viewport-side-bottom viewport-side-right">
+                    <TrashCanWidget/>
+                  </div>
                   {/* Viewport overlay objects */
-                    ViewportRenderer &&
+                    false && ViewportRenderer &&
                     <ViewportRenderer currentModule={this._module} screen={this._workspace ? this._workspace.ref : null} parent={this._workspace}/>}
                 </div>
               </UploadDropZone>

@@ -13,7 +13,7 @@
 /********* APP VIEWPORT *********/
 :local(.app_viewport) {
 
-  --color-viewport-back: none;
+  --color-viewport-back: white;
   --color-viewport-back-detail: lightgray;
   --color-viewport-text: black;
 
