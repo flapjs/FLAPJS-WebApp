@@ -21,11 +21,10 @@ class Viewport extends React.Component
   //Override
   render()
   {
-    const app = this.props.app;
-    const currentModule = app.getCurrentModule();
-    const inputController = app.getInputController();
-    const graphController = app.getGraphController();
-    const machineController = app.getMachineController();
+    const currentModule = this.props.currentModule;
+    const inputController = currentModule.getInputController();
+    const graphController = currentModule.getGraphController();
+    const machineController = currentModule.getMachineController();
 
     const ViewportRenderer = currentModule.getRenderer(VIEWPORT_RENDER_LAYER);
 

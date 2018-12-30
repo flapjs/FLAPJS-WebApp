@@ -22,7 +22,7 @@ class ExportingPanel extends React.Component
       title={exporter.getTitle()}
       onClick={() => {
         const filename = this.props.machineController.getMachineName();
-        exporter.exportToFile(filename, this.props.app.getCurrentModule());
+        exporter.exportToFile(filename, currentModule);
       }}>
       { React.createElement(exporter.getIconComponentClass()) }
       <label>{ exporter.getLabel() }</label>
@@ -32,7 +32,7 @@ class ExportingPanel extends React.Component
   //Override
   render()
   {
-    const module = this.props.app.getCurrentModule();
+    const module = this.props.currentModule;
     const graphExporters = module.getGraphExporters();
     const imageExporters = module.getImageExporters();
 
