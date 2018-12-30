@@ -33,10 +33,10 @@ class EventManager
     this.undoManager = undoManager;
   }
 
-  initialize(app)
+  initialize(module)
   {
-    this.graphController = app.getGraphController();
-    this.machineController = app.getMachineController();
+    this.graphController = module.getGraphController();
+    this.machineController = module.getMachineController();
 
     const graph = this.graphController.getGraph();
     const events = this.undoManager;

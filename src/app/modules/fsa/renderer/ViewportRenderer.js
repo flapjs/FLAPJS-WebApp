@@ -16,14 +16,13 @@ class ViewportRenderer extends React.Component
   {
     //Inherits props from parent
     const parent = this.props.parent;
-    const app = this.props.app;
+    const currentModule = this.props.currentModule;
     const screen = this.props.screen;
 
-    const currentModule = app.getCurrentModule();
-    const inputController = app.getInputController();
-    const graphController = app.getGraphController();
-    const machineController = app.getMachineController();
-    const tester = app.getCurrentModule().getTestingManager();
+    const inputController = currentModule.getInputController();
+    const graphController = currentModule.getGraphController();
+    const machineController = currentModule.getMachineController();
+    const tester = currentModule.getTestingManager();
 
     const LabelEditor = currentModule.getLabelEditor();
 

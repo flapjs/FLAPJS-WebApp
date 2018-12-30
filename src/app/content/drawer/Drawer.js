@@ -190,9 +190,9 @@ class Drawer extends React.Component
   render()
   {
     const app = this.props.app;
-    const currentModule = app.getCurrentModule();
-    const graphController = app.getGraphController();
-    const machineController = app.getMachineController();
+    const currentModule = this.props.currentModule;
+    const graphController = currentModule.getGraphController();
+    const machineController = currentModule.getMachineController();
 
     const tabIndex = this.state.tabIndex;
     const InfoPanel = currentModule ? currentModule.getDefaultModulePanel() : null;
@@ -205,23 +205,19 @@ class Drawer extends React.Component
           const panelID = i + 1;
           return <PanelClass key={currentModule.getModuleName() + ":" + panelID}
             style={{display: tabIndex == panelID ? "block" : "none"}}
-            app={app}
-            graphController={graphController}
-            machineController={machineController}/>;
+            currentModule={currentModule}/>;
         })
       }
       {
         tabIndex == 0 && InfoPanel != null &&
-        <InfoPanel app={app}/>
+        <InfoPanel currentModule={currentModule}/>
       }
       {
         DEFAULT_PANELS.map((PanelClass, i) => {
           const panelID = -(i + 1);
           return <PanelClass key={"default:" + panelID}
             style={{display: tabIndex == panelID ? "block" : "none"}}
-            app={app}
-            graphController={graphController}
-            machineController={machineController}/>;
+            currentModule={currentModule}/>;
         })
       }
       </div>

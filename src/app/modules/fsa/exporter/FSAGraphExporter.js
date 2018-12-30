@@ -8,10 +8,10 @@ class FSAGraphExporter extends AbstractGraphExporter
 {
   constructor() { super(); }
 
-  fromJSON(data, app)
+  fromJSON(data, module)
   {
-    const graphController = app.getGraphController();
-    const machineController = app.getMachineController();
+    const graphController = module.getGraphController();
+    const machineController = module.getMachineController();
     const machineBuilder = machineController.getMachineBuilder();
     const graph = graphController.getGraph();
 
@@ -39,11 +39,10 @@ class FSAGraphExporter extends AbstractGraphExporter
     return newGraph;
   }
 
-  toJSON(graphData, app)
+  toJSON(graphData, module)
   {
-    const module = app.getCurrentModule();
-    const graphController = app.getGraphController();
-    const machineController = app.getMachineController();
+    const graphController = module.getGraphController();
+    const machineController = module.getMachineController();
     const machineBuilder = machineController.getMachineBuilder();
 
     const dst = {};
@@ -63,17 +62,17 @@ class FSAGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  importFromData(data, app)
+  importFromData(data, module)
   {
-    this.fromJSON(data, app);
+    this.fromJSON(data, module);
   }
 
   //Override
-  exportToData(app)
+  exportToData(module)
   {
-    const graph = app.getGraphController().getGraph();
+    const graph = module.getGraphController().getGraph();
     const graphData = JSONGraphParser.objectify(graph);
-    const result = this.toJSON(graphData, app);
+    const result = this.toJSON(graphData, module);
     return result;
   }
 
@@ -84,7 +83,7 @@ class FSAGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  importFromFile(fileBlob, app)
+  importFromFile(fileBlob, module)
   {
     return new Promise((resolve, reject) => {
       const filename = fileBlob.name;
@@ -95,8 +94,8 @@ class FSAGraphExporter extends AbstractGraphExporter
 
       const reader = new FileReader();
       reader.onload = e => {
-        const graphController = app.getGraphController();
-        const machineController = app.getMachineController();
+        const graphController = module.getGraphController();
+        const machineController = module.getMachineController();
         const data = e.target.result;
         const name = filename.substring(0, filename.length - this.getFileType().length - 1);
         const graph = graphController.getGraph();
@@ -108,7 +107,7 @@ class FSAGraphExporter extends AbstractGraphExporter
         {
           const jsonData = JSON.parse(data);
 
-          this.fromJSON(jsonData, app);
+          this.fromJSON(jsonData, module);
 
           graphController.emit("userImportGraph", graph);
 
@@ -139,11 +138,11 @@ class FSAGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  exportToFile(filename, app)
+  exportToFile(filename, module)
   {
-    const graph = app.getGraphController().getGraph();
+    const graph = module.getGraphController().getGraph();
     const graphData = JSONGraphParser.objectify(graph);
-    const dst = this.toJSON(graphData, app);
+    const dst = this.toJSON(graphData, module);
     const jsonString = JSON.stringify(dst);
     Downloader.downloadText(filename + '.fsa.' + this.getFileType(), jsonString);
   }

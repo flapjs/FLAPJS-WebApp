@@ -36,7 +36,7 @@ class OverviewPanel extends React.Component
 
   onAutoLayout(e)
   {
-    const graphController = this.props.graphController;
+    const graphController = this.props.currentModule.getGraphController();
     graphController.applyAutoLayout();
   }
 
@@ -49,7 +49,7 @@ class OverviewPanel extends React.Component
 
   onChangeAutoRename(e)
   {
-    const machineBuilder = this.props.machineController.getMachineBuilder();
+    const machineBuilder = this.props.currentModule.getMachineController().getMachineBuilder();
     machineBuilder.setAutoRenameNodes(e.target.checked);
   }
 
@@ -77,8 +77,9 @@ class OverviewPanel extends React.Component
 
   render()
   {
-    const graphController = this.props.graphController;
-    const machineController = this.props.machineController;
+    const currentModule = this.props.currentModule;
+    const graphController = currentModule.getGraphController();
+    const machineController = currentModule.getMachineController();
 
     const graph = graphController.getGraph();
     const machineBuilder = machineController.getMachineBuilder();

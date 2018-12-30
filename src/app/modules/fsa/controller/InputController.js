@@ -36,21 +36,21 @@ class InputController extends AbstractInputController
   }
 
   //Override
-  initialize(app)
+  initialize(module)
   {
-    super.initialize(app);
+    super.initialize(module);
 
-    this._graphController = app.getGraphController();
+    this._graphController = module.getGraphController();
   }
 
   //Override
-  destroy(app)
+  destroy(module)
   {
-    super.destroy(app);
+    super.destroy(module);
   }
 
   //Override
-  update(app)
+  update(module)
   {
     const graph = this._graphController.getGraph();
     const picker = this._picker;
@@ -90,7 +90,7 @@ class InputController extends AbstractInputController
 
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
-    
+
     if (picker.hasSelection())
     {
       //Unselect everything is clicked on something other than nodes...

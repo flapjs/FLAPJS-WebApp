@@ -143,7 +143,7 @@ class App extends React.Component
     if (data)
     {
       const exporter = this._module.getDefaultGraphExporter();
-      exporter.importFromData(data, this);
+      exporter.importFromData(data, this._module);
     }
   }
 
@@ -152,7 +152,7 @@ class App extends React.Component
     const moduleName = this._module.getModuleName();
 
     const exporter = this._module.getDefaultGraphExporter();
-    const data = exporter.exportToData(this);
+    const data = exporter.exportToData(this._module);
     LocalSave.saveToStorage("graph-" + moduleName, data);
   }
 
@@ -232,7 +232,7 @@ class App extends React.Component
 
     if (fileBlob)
     {
-      this.props.app.getCurrentModule().getGraphImporter().importFile(fileBlob, this)
+      this.props.app.getCurrentModule().getGraphImporter().importFile(fileBlob, this._module)
         .catch((e) => {
           Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
         });
@@ -339,7 +339,6 @@ class App extends React.Component
           }}>
 
           <Workspace ref={ref=>this.workspace=ref}
-            app={this}
             currentModule={currentModule}/>
         </div>
 

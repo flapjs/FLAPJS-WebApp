@@ -7,13 +7,13 @@ class DefaultGraphExporter extends AbstractGraphExporter
   constructor() { super(); }
 
   //Override
-  importFromData(data, app)
+  importFromData(data, module)
   {
     //Do nothing...
   }
 
   //Override
-  exportToData(app)
+  exportToData(module)
   {
     //Return nothing...
     return {};
@@ -26,7 +26,7 @@ class DefaultGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  importFromFile(fileBlob, app)
+  importFromFile(fileBlob, module)
   {
     return new Promise((resolve, reject) => {
       //Do nothing...
@@ -35,7 +35,7 @@ class DefaultGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  exportToFile(filename, app)
+  exportToFile(filename, module)
   {
     //Do nothing...
   }

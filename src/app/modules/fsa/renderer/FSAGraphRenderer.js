@@ -15,9 +15,9 @@ class FSAGraphRenderer extends React.Component
   render()
   {
     //Inherits props from parent
-    const app = this.props.app;
-    const inputController = app.getInputController();
-    const graphController = app.getGraphController();
+    const currentModule = this.props.currentModule;
+    const inputController = currentModule.getInputController();
+    const graphController = currentModule.getGraphController();
     const graph = graphController.getGraph();
 
     return <g>

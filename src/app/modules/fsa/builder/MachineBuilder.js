@@ -15,9 +15,9 @@ class MachineBuilder
     this.onGraphNodeLabelChange = this.onGraphNodeLabelChange.bind(this);
   }
 
-  initialize(app)
+  initialize(module)
   {
-    this.graphController = app.getGraphController();
+    this.graphController = module.getGraphController();
 
     this.setAutoRenameNodes(DEFAULT_AUTO_RENAME);
   }

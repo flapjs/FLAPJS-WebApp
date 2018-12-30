@@ -2,8 +2,6 @@ import React from 'react';
 import '../Panel.css';
 import './TestingPanel.css';
 
-import Viewport from 'content/viewport/Viewport.js';
-
 import Downloader from 'util/Downloader.js';
 
 import TestingManager from 'modules/fsa/testing/TestingManager.js';
@@ -32,7 +30,7 @@ class TestingPanel extends React.Component
     this.uploadInput = React.createRef();
 
     this.state = {
-      errorCheckMode: this.props.app.getCurrentModule().getTestingManager().getErrorCheckMode(),
+      errorCheckMode: this.props.currentModule.getTestingManager().getErrorCheckMode(),
       noTestMode: true
     };
 
@@ -52,7 +50,7 @@ class TestingPanel extends React.Component
 
   componentWillMount()
   {
-    const graphController = this.props.graphController;
+    const graphController = this.props.currentModule.getGraphController();
     const graph = graphController.getGraph();
 
     //HACK: this should be in FSABuilder and listen for machine changes instead
@@ -62,15 +60,14 @@ class TestingPanel extends React.Component
 
   componentWillUnmount()
   {
-    const graphController = this.props.graphController;
+    const graphController = this.props.currentModule.getGraphController();
     const graph = graphController.getGraph();
     this._savedGraphHash = 0;
   }
 
   onGraphChange(g)
   {
-    const app = this.props.app;
-    const tester = app.getCurrentModule().getTestingManager();
+    const tester = this.props.currentModule.getTestingManager();
     tester.inputList.resetTests();
   }
 
@@ -79,8 +76,7 @@ class TestingPanel extends React.Component
     const files = e.target.files;
     if (files.length > 0)
     {
-      const app = this.props.app;
-      const tester = app.getCurrentModule().getTestingManager();
+      const tester = this.props.currentModule.getTestingManager();
       tester.inputList.importTests(files[0]);
       document.getElementById("test-name").innerHTML = files[0].name;
 
@@ -93,10 +89,10 @@ class TestingPanel extends React.Component
   {
     const value = e.target.value;
 
-    const graphController = this.props.graphController;
-    const machineController = this.props.machineController;
-    const app = this.props.app;
-    const tester = app.getCurrentModule().getTestingManager();
+    const currentModule = this.props.currentModule;
+    const graphController = currentModule.getGraphController();
+    const machineController = currentModule.getMachineController();
+    const tester = currentModule.getTestingManager();
 
     const graph = graphController.getGraph();
     const machineBuilder = machineController.getMachineBuilder();
@@ -117,9 +113,9 @@ class TestingPanel extends React.Component
 
   onTestsRunAll(e)
   {
-    const machine = this.props.machineController.getMachineBuilder().getMachine();
-    const app = this.props.app;
-    const tester = app.getCurrentModule().getTestingManager();
+    const currentModule = this.props.currentModule;
+    const machine = currentModule.getMachineController().getMachineBuilder().getMachine();
+    const tester = currentModule.getTestingManager();
     if (tester.testMode.isStarted())
     {
       tester.setStepByStepMode(false);
@@ -138,8 +134,7 @@ class TestingPanel extends React.Component
 
   onTestsClear(e)
   {
-    const app = this.props.app;
-    const tester = app.getCurrentModule().getTestingManager();
+    const tester = this.props.currentModule.getTestingManager();
     tester.inputList.clearTests();
     this.clearTestName();
     this.hideTestInputList();
@@ -148,8 +143,7 @@ class TestingPanel extends React.Component
 
   onTestsSave(e)
   {
-    const app = this.props.app;
-    const tester = app.getCurrentModule().getTestingManager();
+    const tester = this.props.currentModule.getTestingManager();
     Downloader.downloadText(TEST_FILENAME, tester.inputList.getTestsAsStrings().join("\n"));
   }
 
@@ -181,18 +175,17 @@ class TestingPanel extends React.Component
 
   render()
   {
-    const app = this.props.app;
-    const viewport = app.viewport;
-    const tester = app.getCurrentModule().getTestingManager();
+    const currentModule = this.props.currentModule;
+    const tester = currentModule.getTestingManager();
     const testList = tester.inputList;
-    const machineBuilder = this.props.machineController.getMachineBuilder();
+    const machineBuilder = currentModule.getMachineController().getMachineBuilder();
 
     const isTestInvalid = !machineBuilder.isValidMachine();
 
     if (--this._ticksSinceHash <= 0)
     {
       this._ticksSinceHash = REFRESH_TEST_TICKS;
-      const graph = this.props.graphController.getGraph();
+      const graph = currentModule.getGraphController().getGraph();
       const graphHash = graph.getHashCode();
       if (this._savedGraphHash !== graphHash)
       {

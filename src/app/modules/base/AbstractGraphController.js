@@ -8,9 +8,9 @@ class AbstractGraphController
     //throw new Error("Missing implementation for graph controller \'" + this.getModule().getModuleName() + "\'");
   }
 
-  initialize(app) {}
-  destroy(app) {}
-  update(app) {}
+  initialize(module) {}
+  destroy(module) {}
+  update(module) {}
 
   getGraph()
   {

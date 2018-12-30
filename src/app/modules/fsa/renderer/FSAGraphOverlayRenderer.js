@@ -15,12 +15,11 @@ class FSAGraphOverlayRenderer extends React.Component
   {
     //Inherits props from parent
     const parent = this.props.parent;
-    const app = this.props.app;
+    const currentModule = this.props.currentModule;
 
-    const currentModule = app.getCurrentModule();
-    const graphController = app.getGraphController();
-    const inputController = app.getInputController();
-    const machineController = app.getMachineController();
+    const graphController = currentModule.getGraphController();
+    const inputController = currentModule.getInputController();
+    const machineController = currentModule.getMachineController();
     const tester = currentModule.getTestingManager();
 
     const graph = graphController.getGraph();

@@ -27,9 +27,9 @@ class Workspace extends React.Component
     const svg = this.ref;
     if (!svg) return null;
 
-    const app = this.props.app;
-    const inputController = app.getInputController();
-    const graphController = app.getGraphController();
+    const currentModule = this.props.currentModule;
+    const inputController = currentModule.getInputController();
+    const graphController = currentModule.getGraphController();
 
     const viewport = inputController.getInputAdapter().getViewport();
     const offsetX = viewport.getOffsetX();
@@ -67,11 +67,10 @@ class Workspace extends React.Component
 
   render()
   {
-    const app = this.props.app;
-    const currentModule = app.getCurrentModule();
-    const graphController = app.getGraphController();
-    const inputController = app.getInputController();
-    const machineController = app.getMachineController();
+    const currentModule = this.props.currentModule;
+    const graphController = currentModule.getGraphController();
+    const inputController = currentModule.getInputController();
+    const machineController = currentModule.getMachineController();
 
     const GraphRenderer = currentModule.getRenderer(GRAPH_RENDER_LAYER);
     const GraphOverlayRenderer = currentModule.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);

@@ -6,9 +6,9 @@ class AbstractInputController
     this._inputAdapter = inputAdapter.setController(this);
   }
 
-  initialize(app) {}
-  destroy(app) {}
-  update(app) {}
+  initialize(module) {}
+  destroy(module) {}
+  update(module) {}
 
   //Override
   onPreInputEvent(pointer) { return false; }

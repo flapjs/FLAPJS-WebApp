@@ -335,7 +335,7 @@ class OptionsPanel extends React.Component
         <div>
           <h2>Experimental</h2>
           <label htmlFor="options-experimental-modules">Module</label>
-          <select id="options-experimental-modules" className="panel-select" value={this.props.app.getCurrentModule().getModuleName()} onChange={this.onChangeModule}>
+          <select id="options-experimental-modules" className="panel-select" value={this.props.currentModule.getModuleName()} onChange={this.onChangeModule}>
             <option value="fsa">Finite State Automata</option>
             <option value="pda" disabled={true}>Pushdown Automata (Coming Soon)</option>
             <option value="cfg" disabled={true}>Context-Free Grammar (Future)</option>

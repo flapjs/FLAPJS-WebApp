@@ -22,16 +22,18 @@ class AnalysisPanel extends React.Component
 
   onDeleteAllUnreachable(e)
   {
-    const machineController = this.props.machineController;
+    const currentModule = this.props.currentModule;
+    const graphController = currentModule.getGraphController();
+    const machineController = currentModule.getMachineController();
     const unreachableArray = machineController.getMachineBuilder().machineErrorChecker.getUnreachableNodes();
-    const graphController = machineController.graphController;
     graphController.deleteTargetNodes(unreachableArray);
   }
 
   onConvertToDFA(e)
   {
-    const machineController = this.props.machineController;
-    const graphController = this.props.graphController;
+    const currentModule = this.props.currentModule;
+    const graphController = currentModule.getGraphController();
+    const machineController = currentModule.getMachineController();
     const props = {graphController: graphController, machineController: machineController};
     const messageTag = Config.MACHINE_CONVERSION_MESSAGE_TAG;
 
@@ -42,7 +44,7 @@ class AnalysisPanel extends React.Component
 
   onConvertToNFA(e)
   {
-    const machineController = this.props.machineController;
+    const machineController = this.props.currentModule.getMachineController();
     machineController.convertMachineTo("NFA");
   }
 
@@ -62,8 +64,9 @@ class AnalysisPanel extends React.Component
 
   render()
   {
-    const graphController = this.props.graphController;
-    const machineController = this.props.machineController;
+    const currentModule = this.props.currentModule;
+    const graphController = currentModule.getGraphController();
+    const machineController = currentModule.getMachineController();
 
     const graph = graphController.getGraph();
     const machineBuilder = machineController.getMachineBuilder();

@@ -7,7 +7,7 @@ class MachineLabeler
     this.graph = graph;
     this.prefix = Config.STR_STATE_LABEL;
 
-    //TODO: this is hooked into the controller in App.js
+    //TODO: this is hooked into the controller in module
     this.shouldAutoLabel = false;
   }
 
