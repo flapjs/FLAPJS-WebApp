@@ -225,7 +225,7 @@ class OptionsPanel extends React.Component
     const root = document.getElementById("root");
     const opts = this.styleOpts;
 
-    return <div className="panel-container" id="option" ref={ref=>this.container=ref} style={this.props.style}>
+    return <div className={"panel-container " + this.props.className} id="option" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title">
         <h1>{I18N.toString("component.options.title")}</h1>
       </div>

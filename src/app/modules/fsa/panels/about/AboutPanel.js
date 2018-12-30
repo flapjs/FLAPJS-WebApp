@@ -12,7 +12,7 @@ class AboutPanel extends React.Component
   //Override
   render()
   {
-    return <div className="panel-container" id="about" ref={ref=>this.container=ref} style={this.props.style}>
+    return <div className={"panel-container " + this.props.className} id="about" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title">
         <h1>Finite State Automata</h1>
       </div>

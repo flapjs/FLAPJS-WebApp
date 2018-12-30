@@ -84,7 +84,7 @@ class OverviewPanel extends React.Component
     const graph = graphController.getGraph();
     const machineBuilder = machineController.getMachineBuilder();
 
-    return <div className="panel-container" id="overview" ref={ref=>this.container=ref} style={this.props.style}>
+    return <div className={"panel-container " + this.props.className} id="overview" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title">
         <h1>{I18N.toString("component.overview.title")}</h1>
       </div>
@@ -160,6 +160,9 @@ class OverviewPanel extends React.Component
     </div>;
   }
 }
+Object.defineProperty(OverviewPanel, 'TITLE', {
+  get: function() { return I18N.toString("component.overview.title"); }
+});
 OverviewPanel.UNLOCALIZED_NAME = "component.overview.title";
 
 export default OverviewPanel;

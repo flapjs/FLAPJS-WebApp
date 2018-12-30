@@ -194,7 +194,7 @@ class TestingPanel extends React.Component
       }
     }
 
-    return <div className="panel-container" id="testing" ref={ref=>this.container=ref} style={this.props.style}>
+    return <div className={"panel-container " + this.props.className} id="testing" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title">
         <h1>{I18N.toString("component.testing.title")}</h1>
       </div>
@@ -290,6 +290,9 @@ class TestingPanel extends React.Component
     </div>;
   }
 }
+Object.defineProperty(TestingPanel, 'TITLE', {
+  get: function() { return I18N.toString("component.testing.title"); }
+});
 TestingPanel.UNLOCALIZED_NAME = "component.testing.title";
 
 export default TestingPanel;
