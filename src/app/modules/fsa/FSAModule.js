@@ -101,11 +101,12 @@ class FSAModule extends AbstractModule
   //Override
   update(app)
   {
-    this._inputController.update();
+    this._inputController.update(this);
+    this._graphController.update(this);
 
     if (--this._ticks <= 0)
     {
-      this._machineBuilder.update();
+      this._machineBuilder.update(this);
       this._ticks = this._refreshRate;
     }
   }
