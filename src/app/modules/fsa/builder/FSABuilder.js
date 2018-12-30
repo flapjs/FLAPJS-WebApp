@@ -37,13 +37,13 @@ class FSABuilder extends MachineBuilder
     this.onDelayedErrorCheck = this.onDelayedErrorCheck.bind(this);
   }
 
-  initialize(app)
+  initialize(module)
   {
-    super.initialize(app);
+    super.initialize(module);
 
-    this.tester = app.getCurrentModule().getTestingManager();
-    this.graphController = app.getGraphController();
-    this.machineController = app.getMachineController();
+    this.tester = module.getTestingManager();
+    this.graphController = module.getGraphController();
+    this.machineController = module.getMachineController();
 
     this._savedGraphHash = this.graph.getHashCode(false);
     this.onGraphChange();

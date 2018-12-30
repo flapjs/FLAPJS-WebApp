@@ -22,7 +22,7 @@ class ExportingPanel extends React.Component
       title={exporter.getTitle()}
       onClick={() => {
         const filename = this.props.machineController.getMachineName();
-        exporter.exportToFile(filename, this.props.app);
+        exporter.exportToFile(filename, this.props.app.getCurrentModule());
       }}>
       { React.createElement(exporter.getIconComponentClass()) }
       <label>{ exporter.getLabel() }</label>

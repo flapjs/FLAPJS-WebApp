@@ -101,19 +101,19 @@ class GraphController extends AbstractGraphController
   }
 
   //Override
-  initialize(app)
+  initialize(module)
   {
-    super.initialize(app);
-    this.tester = app.getCurrentModule().getTestingManager();
+    super.initialize(module);
+    this.tester = module.getTestingManager();
 
-    this.inputController = app.getInputController();
-    this.machineController = app.getMachineController();
+    this.inputController = module.getInputController();
+    this.machineController = module.getMachineController();
   }
 
   //Override
-  destroy(app)
+  destroy(module)
   {
-    super.destroy(app);
+    super.destroy(module);
   }
 
   applyAutoLayout()

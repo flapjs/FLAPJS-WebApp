@@ -2,12 +2,12 @@ class AbstractGraphExporter
 {
   constructor() {}
 
-  importFromData(data, app)
+  importFromData(data, module)
   {
     throw new Error("Unsupported import for type \'" + this.getFileType() + "\'");
   }
 
-  exportToData(app)
+  exportToData(module)
   {
     throw new Error("Unsupported export for type \'" + this.getFileType() + "\'");
   }
@@ -17,12 +17,12 @@ class AbstractGraphExporter
     return false;
   }
 
-  importFromFile(fileBlob, app)
+  importFromFile(fileBlob, module)
   {
     throw new Error("Unsupported import for type \'" + this.getFileType() + "\'");
   }
 
-  exportToFile(filename, app)
+  exportToFile(filename, module)
   {
     throw new Error("Unsupported export for type \'" + this.getFileType() + "\'");
   }

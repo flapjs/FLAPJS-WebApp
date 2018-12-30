@@ -37,7 +37,7 @@ class HotKeys
       //Save as machine file
       const exporter = this.app.getCurrentModule().getDefaultGraphExporter();
       const machineName = this.machineController.getMachineName();
-      exporter.exportToFile(machineName, this.app);
+      exporter.exportToFile(machineName, this.app.getCurrentModule());
 
       e.preventDefault();
       e.stopPropagation();
@@ -67,7 +67,7 @@ class HotKeys
       {
         const exporter = imageExporters[0];
         const machineName = this.machineController.getMachineName();
-        exporter.exportToFile(machineName, this.app);
+        exporter.exportToFile(machineName, this.app.getCurrentModule());
       }
       else
       {

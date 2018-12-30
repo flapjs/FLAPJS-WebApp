@@ -13,9 +13,9 @@ class GraphImageExporter extends AbstractGraphExporter
   }
 
   //Override
-  exportToFile(filename, app)
+  exportToFile(filename, module)
   {
-    const workspace = app.workspace;
+    const workspace = module._workspace;
     const workspaceDim = workspace.ref.viewBox.baseVal;
     const width = workspaceDim.width;
     const height = workspaceDim.height;

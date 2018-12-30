@@ -5,20 +5,20 @@ class GraphImporter
     this._module = module;
   }
 
-  importFile(fileBlob, app)
+  importFile(fileBlob, module)
   {
     if (!fileBlob) throw new Error("Unable to import null file");
     if (!(fileBlob instanceof File)) throw new Error("Unable to import object as file");
 
     let result = Promise.reject();
     const fileName = fileBlob.name;
-    const exporters = this._module.getGraphExporters();
+    const exporters = module.getGraphExporters();
 
     for(const exporter of exporters)
     {
       if (exporter.canImport() && exporter.doesSupportFile() && fileName.endsWith(exporter.getFileType()))
       {
-        result = result.catch(e => exporter.importFromFile(fileBlob, app));
+        result = result.catch(e => exporter.importFromFile(fileBlob, module));
       }
     }
 
@@ -28,18 +28,18 @@ class GraphImporter
     });
   }
 
-  importData(data, app)
+  importData(data, module)
   {
     if (!data) throw new Error("Unable to import null data");
 
     let result = Promise.reject();
-    const exporters = this._module.getGraphExporters();
+    const exporters = module.getGraphExporters();
 
     for(const exporter of exporters)
     {
       if (exporter.canImport() && exporter.doesSupportData())
       {
-        result = result.catch(e => exporter.importFromData(data, app));
+        result = result.catch(e => exporter.importFromData(data, module));
       }
     }
 

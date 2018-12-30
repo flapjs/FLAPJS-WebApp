@@ -44,9 +44,9 @@ class MachineController
     return this._module;
   }
 
-  initialize(app)
+  initialize(module)
   {
-    this.graphController = app.getGraphController();
+    this.graphController = module.getGraphController();
   }
 
   destroy()

@@ -37,6 +37,8 @@ class FSAModule extends AbstractModule
   {
     super(app);
 
+    this._workspace = null;
+
     this._refreshRate = 60;
     this._ticks = 0;
 
@@ -55,15 +57,20 @@ class FSAModule extends AbstractModule
   {
     super.initialize(app);
 
-    this._inputController.initialize(app);
-    this._graphController.initialize(app);
-    this._machineController.initialize(app);
+    const viewport = app.viewport;
+    const workspace = app.workspace;
 
-    this._machineBuilder.initialize(app);
+    this._workspace = workspace;
 
-    this._eventManager.initialize(app);
+    this._inputController.initialize(this);
+    this._graphController.initialize(this);
+    this._machineController.initialize(this);
 
-    this._testingManager.initialize(app);
+    this._machineBuilder.initialize(this);
+
+    this._eventManager.initialize(this);
+
+    this._testingManager.initialize(this, viewport);
 
     //Notify on create in delete mode
     const tryCreateWhileTrash = () => {

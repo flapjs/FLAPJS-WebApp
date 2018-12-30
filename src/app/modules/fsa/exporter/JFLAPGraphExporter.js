@@ -9,7 +9,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
   constructor() { super(); }
 
   //Override
-  importFromFile(fileBlob, app)
+  importFromFile(fileBlob, module)
   {
     return new Promise((resolve, reject) => {
       const filename = fileBlob.name;
@@ -20,8 +20,8 @@ class JFLAPGraphExporter extends AbstractGraphExporter
 
       const reader = new FileReader();
       reader.onload = e => {
-        const graphController = app.getGraphController();
-        const machineController = app.getMachineController();
+        const graphController = module.getGraphController();
+        const machineController = module.getMachineController();
         const data = e.target.result;
         const name = filename.substring(0, filename.length - this.getFileType().length - 1);
         const graph = graphController.getGraph();
@@ -63,9 +63,9 @@ class JFLAPGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  exportToFile(filename, app)
+  exportToFile(filename, module)
   {
-    const graph = app.getGraphController().getGraph();
+    const graph = module.getGraphController().getGraph();
     const graphData = XMLGraphParser.objectify(graph);
     const xmlString = new XMLSerializer().serializeToString(graphData);
     Downloader.downloadText(filename + '.' + this.getFileType(), xmlString);

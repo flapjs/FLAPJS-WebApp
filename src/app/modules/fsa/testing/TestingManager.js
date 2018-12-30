@@ -19,12 +19,12 @@ class TestingManager
     this.testMode = new TestMode(this);
   }
 
-  initialize(app)
+  initialize(module, viewport)
   {
-    this.machineController = app.getMachineController();
-    this.viewport = app.viewport;
+    this.machineController = module.getMachineController();
+    this.viewport = viewport;
 
-    this.testMode.initialize(app);
+    this.testMode.initialize(module);
   }
 
   destroy()

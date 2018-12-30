@@ -34,10 +34,10 @@ class TestMode
     this.onNodeDestroy = this.onNodeDestroy.bind(this);
   }
 
-  initialize(app)
+  initialize(module)
   {
-    this.graphController = app.getGraphController();
-    this.machineController = app.getMachineController();
+    this.graphController = module.getGraphController();
+    this.machineController = module.getMachineController();
 
     //NOTE: This is not necessary because you can edit once in stepbystep mode
     //this.graphController.getGraph().on("nodeDestroy", this.onNodeDestroy);
