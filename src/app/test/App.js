@@ -107,8 +107,10 @@ class App extends React.Component
 
     const GRAPH_RENDER_LAYER = "graph";
     const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
+    const VIEWPORT_RENDER_LAYER = "viewport";
     const GraphRenderer = this._module.getRenderer(GRAPH_RENDER_LAYER);
     const GraphOverlayRenderer = this._module.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
+    const ViewportRenderer = this._module.getRenderer(VIEWPORT_RENDER_LAYER);
 
     return (
         <div className="app-container">
@@ -128,10 +130,10 @@ class App extends React.Component
                     <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="#E6E6E6"/>
                     <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="#E6E6E6"/>
                     {/* Graph objects */
-                    GraphRenderer &&
+                      GraphRenderer &&
                       <GraphRenderer currentModule={this._module} parent={this._workspace}/>}
                     {/* Graph overlays */
-                    GraphOverlayRenderer &&
+                      GraphOverlayRenderer &&
                       <GraphOverlayRenderer currentModule={this._module} parent={this._workspace}/>}
                   </WorkspaceView>
                   <NotificationView notificationManager={Notifications}></NotificationView>
@@ -141,6 +143,9 @@ class App extends React.Component
                       <FullscreenExitIcon/>
                     </IconStateButton>
                   </div>
+                  {/* Viewport overlay objects */
+                    ViewportRenderer &&
+                    <ViewportRenderer currentModule={this._module} screen={this._workspace ? this._workspace.ref : null} parent={this._workspace}/>}
                 </div>
               </UploadDropZone>
           </DrawerView>
