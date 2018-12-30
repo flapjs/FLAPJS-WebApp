@@ -34,6 +34,8 @@ import BugIcon from './iconset/BugIcon.js';
 import WorldIcon from './iconset/WorldIcon.js';
 import HelpIcon from './iconset/HelpIcon.js';
 
+const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
+
 class App extends React.Component
 {
   constructor(props)
@@ -131,6 +133,7 @@ class App extends React.Component
     const inputController = this._module.getInputController();
     const graphController = this._module.getGraphController();
     const machineController = this._module.getMachineController();
+    const graphImporter = this._module.getGraphImporter();
     const inputActionMode = inputController.isActionMode(graphController);
 
     const GRAPH_RENDER_LAYER = "graph";
@@ -161,14 +164,28 @@ class App extends React.Component
             <ToolbarButton title="Redo" icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
               disabled={!undoManager.canRedo()}
               onClick={()=>undoManager.redo()}/>
-            <ToolbarUploadButton title="Upload" icon={UploadIcon} accept=".json"
-              onUpload={()=>alert("WHAT")}/>
+            <ToolbarUploadButton title="Upload" icon={UploadIcon} accept={graphImporter.getImportFileTypes().join(",")}
+              onUpload={file => {
+                graphImporter.importFile(file, this._module)
+                  .catch((e) => {
+                    Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
+                    console.error(e);
+                  })
+                  .finally(() => {
+                    this._toolbar.closeBar();
+                  });
+              }}/>
             <ToolbarButton title="Export" icon={DownloadIcon}
-              onClick={()=>this._drawer.setCurrentTab(0)} disabled={graphController.getGraph().isEmpty()}/>
+              onClick={()=>{
+                this._drawer.setCurrentTab(0);
+                this._toolbar.closeBar();
+              }}
+              disabled={graphController.getGraph().isEmpty()}/>
             <ToolbarDivider/>
             <ToolbarButton title="Report a Bug" icon={BugIcon}/>
             <ToolbarButton title="Language" icon={WorldIcon}/>
-            <ToolbarButton title="Help" icon={HelpIcon}/>
+            <ToolbarButton title="Help" icon={HelpIcon}
+              onClick={()=>window.open(HELP_URL, '_blank')}/>
           </ToolbarView>
           <DrawerView ref={ref=>this._drawer=ref} className="app-content"
             panels={this._module.getModulePanels()}
