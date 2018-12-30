@@ -1,0 +1,14 @@
+:local(.upload_input_container) {
+  position: relative;
+  overflow: hidden;
+}
+
+/* HACK: make an invisible input that users can click */
+:local(.upload_input) {
+  position: absolute;
+  font-size: 100px;
+  opacity: 0;
+
+  pointer-events: all;
+  cursor: pointer;
+}

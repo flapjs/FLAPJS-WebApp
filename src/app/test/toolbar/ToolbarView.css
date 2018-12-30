@@ -93,10 +93,10 @@
 :local(.bar_menu) .icon-button:disabled {
   background: var(--color-toolbar-menu-disabled);
 }
-:local(.bar_menu) svg {
+:local(.bar_menu) .icon-button svg {
   width: 16vh;
 }
-:local(.bar_menu) label {
+:local(.bar_menu) .icon-button label {
   flex: 1;
   font-size: 10vh;
   align-self: center;

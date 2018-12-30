@@ -10,6 +10,7 @@ import UploadDropZone from './components/UploadDropZone.js';
 import ModeSelectTray from './widgets/ModeSelectTray.js';
 import TrashCanWidget from './widgets/TrashCanWidget.js';
 import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR} from './toolbar/ToolbarButton.js';
+import ToolbarUploadButton from './toolbar/ToolbarUploadButton.js';
 
 import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
@@ -36,6 +37,8 @@ class App extends React.Component
     super(props);
 
     this._workspace = null;
+    this._toolbar = null;
+    this._drawer = null;
 
     //These need to be initialized before module
     this._inputAdapter = new InputAdapter();
@@ -119,9 +122,11 @@ class App extends React.Component
     const hasSmallHeight = this._mediaQuerySmallHeightList.matches;
     const isFullscreen = this.state.hide;
 
+    const undoManager = this._undoManager;
     const viewport = this._inputAdapter.getViewport();
     const inputController = this._module.getInputController();
     const graphController = this._module.getGraphController();
+    const machineController = this._module.getMachineController();
     const inputActionMode = inputController.isActionMode(graphController);
 
     const GRAPH_RENDER_LAYER = "graph";
@@ -133,15 +138,31 @@ class App extends React.Component
 
     return (
         <div className="app-container">
-          <ToolbarView className="app-bar"
+          <ToolbarView ref={ref=>this._toolbar=ref} className="app-bar"
             hide={isFullscreen}>
-            <ToolbarButton title="New" icon={PageEmptyIcon}/>
-            <ToolbarButton title="Undo" icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}/>
-            <ToolbarButton title="Redo" icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}/>
-            <ToolbarButton title="Upload" icon={UploadIcon}/>
-            <ToolbarButton title="Export" icon={DownloadIcon}/>
+            <ToolbarButton title="New" icon={PageEmptyIcon}
+              onClick={() => {
+                if (window.confirm(I18N.toString("alert.graph.clear")))
+                {
+                  graphController.getGraph().clear();
+                  undoManager.clear();
+                  machineController.setMachineName(null);
+
+                  this._toolbar.closeBar();
+                }
+              }}/>
+            <ToolbarButton title="Undo" icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+              disabled={!undoManager.canUndo()}
+              onClick={()=>undoManager.undo()}/>
+            <ToolbarButton title="Redo" icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+              disabled={!undoManager.canRedo()}
+              onClick={()=>undoManager.redo()}/>
+            <ToolbarUploadButton title="Upload" icon={UploadIcon} accept=".json"
+              onUpload={()=>alert("WHAT")}/>
+            <ToolbarButton title="Export" icon={DownloadIcon}
+              onClick={()=>this._drawer.setCurrentTab(0)} disabled={graphController.getGraph().isEmpty()}/>
           </ToolbarView>
-          <DrawerView className="app-content"
+          <DrawerView ref={ref=>this._drawer=ref} className="app-content"
             panels={this._module.getModulePanels()}
             panelProps={{currentModule: this._module}}
             side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
