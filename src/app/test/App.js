@@ -9,6 +9,7 @@ import TapeWidget from './widgets/TapeWidget.js';
 import UploadDropZone from './components/UploadDropZone.js';
 import ModeSelectTray from './widgets/ModeSelectTray.js';
 import TrashCanWidget from './widgets/TrashCanWidget.js';
+import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR} from './toolbar/ToolbarButton.js';
 
 import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
@@ -23,11 +24,11 @@ import IconStateButton from './components/IconStateButton.js';
 import FullscreenIcon from './iconset/FullscreenIcon.js';
 import FullscreenExitIcon from './iconset/FullscreenExitIcon.js';
 
-import NewToolbarButton from './NewToolbarButton.js';
-import UndoToolbarButton from './UndoToolbarButton.js';
-import RedoToolbarButton from './RedoToolbarButton.js';
-import UploadToolbarButton from './UploadToolbarButton.js';
-import ExportToolbarButton from './ExportToolbarButton.js';
+import PageEmptyIcon from './iconset/PageEmptyIcon.js';
+import UndoIcon from './iconset/UndoIcon.js';
+import RedoIcon from './iconset/RedoIcon.js';
+import UploadIcon from './iconset/UploadIcon.js';
+import DownloadIcon from './iconset/DownloadIcon.js';
 
 class App extends React.Component
 {
@@ -48,7 +49,6 @@ class App extends React.Component
     this._module = new FSAModule(this);
 
     this.drawerPanels = [DefaultDrawerPanel];
-    this.toolbarButtons = [new NewToolbarButton(), new UndoToolbarButton(), new RedoToolbarButton(), new UploadToolbarButton(), new ExportToolbarButton()];
 
     this.state = {
       hide: false
@@ -122,8 +122,13 @@ class App extends React.Component
     return (
         <div className="app-container">
           <ToolbarView className="app-bar"
-            buttons={this.toolbarButtons}
-            hide={isFullscreen}/>
+            hide={isFullscreen}>
+            <ToolbarButton title="New" icon={PageEmptyIcon}/>
+            <ToolbarButton title="Undo" icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}/>
+            <ToolbarButton title="Redo" icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}/>
+            <ToolbarButton title="Upload" icon={UploadIcon}/>
+            <ToolbarButton title="Export" icon={DownloadIcon}/>
+          </ToolbarView>
           <DrawerView className="app-content"
             panels={this._module.getModulePanels()}
             panelProps={{currentModule: this._module}}
@@ -134,8 +139,8 @@ class App extends React.Component
                 <div className="viewport">
                   <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>
                     {/* Graph origin crosshair */}
-                    <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="#E6E6E6"/>
-                    <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="#E6E6E6"/>
+                    <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="var(--color-viewport-back-detail)"/>
+                    <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="var(--color-viewport-back-detail)"/>
                     {/* Graph objects */
                       GraphRenderer &&
                       <GraphRenderer currentModule={this._module} parent={this._workspace}/>}

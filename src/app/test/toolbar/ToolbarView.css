@@ -72,30 +72,31 @@
   transform: translateY(-100vh);
   transition: visibility 0s linear 0.3s, transform 0.3s ease;
 }
-:local(.menu_button).icon-button {
+:local(.bar_menu) > * {
   flex: 1;
   display: flex;
   flex-direction: row;
   padding-left: 10px;
-
-  /* Override default icon button size */
-  width: 100%;
-
+}
+:local(.bar_menu) .icon-button {
   background: var(--color-toolbar-menu);
   color: var(--color-toolbar-text);
   border-bottom: 2px solid var(--color-toolbar-menu-detail);
+
+  /* Override default icon button size */
+  width: 100%;
 }
-:local(.menu_button).icon-button:hover {
+:local(.bar_menu) .icon-button:hover {
   color: var(--color-toolbar-text-active);
   background: var(--color-toolbar-menu-active);
 }
-:local(.menu_button).icon-button:disabled {
+:local(.bar_menu) .icon-button:disabled {
   background: var(--color-toolbar-menu-disabled);
 }
-:local(.menu_button) > svg {
+:local(.bar_menu) svg {
   width: 16vh;
 }
-:local(.menu_button) > label {
+:local(.bar_menu) label {
   flex: 1;
   font-size: 10vh;
   align-self: center;
@@ -125,7 +126,7 @@
   transform: translateX(-100vw);
   transition: visibility 0s linear 0.6s, transform 0.3s ease 0.3s;
 }
-:local(.toolbar_button) {
+:local(.toolbar_button_container) .icon-button {
   margin: 0px 5px;
 }
 :local(.toolbar_title) {

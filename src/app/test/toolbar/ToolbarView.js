@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './ToolbarView.css';
 
-import AbstractToolbarButton from './AbstractToolbarButton.js';
+import {TOOLBAR_CONTAINER_MENU, TOOLBAR_CONTAINER_TOOLBAR} from './ToolbarButton.js';
 
 import IconButton from '../components/IconButton.js';
 import MenuIcon from '../iconset/MenuIcon.js';
@@ -84,11 +84,10 @@ class ToolbarView extends React.Component
       maxButtonCount = elementSize / TOOLBAR_BUTTON_BUFFER;
     }
     */
-
-    const buttons = this.props.buttons;
+    const hasButtons = React.Children.count(this.props.children) > 0;
     const isBarOpen = this.state.open;
     const shouldBarHide = this.props.hide || false;
-    const showBarExpander = isBarOpen || (buttons && TOOLBAR_ALLOW_MENU_BAR);
+    const showBarExpander = isBarOpen || (hasButtons && TOOLBAR_ALLOW_MENU_BAR);
 
     return (
       <div ref={ref=>this.ref=ref}
@@ -99,36 +98,18 @@ class ToolbarView extends React.Component
         " " + this.props.className}
       style={this.props.style}>
         <div className={Style.bar_menu}>
-        {buttons && buttons.map((e, i) => {
-          if (!e.showInMenu()) return null;
-          const title = e.getTitle();
-          const IconClass = e.getIconClass();
-          return (
-            <IconButton key={title + ":" + i} className={Style.menu_button}
-              onClick={ev => this.onMenuButtonClick(ev, e)}>
-              <IconClass/>
-              <label>{title}</label>
-            </IconButton>
-          );
-        })}
+          {React.Children.map(this.props.children, child => {
+            if (child.props.containerOnly !== TOOLBAR_CONTAINER_TOOLBAR) return child;
+          })}
         </div>
         <div ref={ref=>this.toolbarElement=ref} className={Style.bar_toolbar}>
           <div className={Style.toolbar_title}>
             <h1>Untitled</h1>
           </div>
           <div className={Style.toolbar_button_container}>
-          {buttons && buttons.map((e, i) => {
-            if (!e.showInToolbar()) return null;
-            const title = e.getTitle();
-            const IconClass = e.getIconClass();
-            return (
-              <IconButton key={title + ":" + i} className={Style.toolbar_button}
-                title={title}
-                onClick={ev => this.onToolbarButtonClick(ev, e)}>
-                <IconClass/>
-              </IconButton>
-            );
-          })}
+            {React.Children.map(this.props.children, child => {
+              if (child.props.containerOnly !== TOOLBAR_CONTAINER_MENU) return child;
+            })}
           </div>
           {showBarExpander &&
           <IconButton className={Style.toolbar_expander} onClick={this.onBarExpand}>
