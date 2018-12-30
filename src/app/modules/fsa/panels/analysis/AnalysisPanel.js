@@ -71,7 +71,7 @@ class AnalysisPanel extends React.Component
     const graph = graphController.getGraph();
     const machineBuilder = machineController.getMachineBuilder();
 
-    return <div className="panel-container" id="analysis" ref={ref=>this.container=ref} style={this.props.style}>
+    return <div className={"panel-container " + this.props.className} id="analysis" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title"><h1>{I18N.toString("component.analysis.title")}</h1></div>
       <div className="panel-content">
 
@@ -109,6 +109,9 @@ class AnalysisPanel extends React.Component
     </div>;
   }
 }
+Object.defineProperty(AnalysisPanel, 'TITLE', {
+  get: function() { return I18N.toString("component.analysis.title"); }
+});
 AnalysisPanel.UNLOCALIZED_NAME = "component.analysis.title";
 
 export default AnalysisPanel;
