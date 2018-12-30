@@ -9,6 +9,8 @@ import TapeWidget from './widgets/TapeWidget.js';
 import UploadDropZone from './components/UploadDropZone.js';
 import ModeSelectTray from './widgets/ModeSelectTray.js';
 import TrashCanWidget from './widgets/TrashCanWidget.js';
+import ZoomWidget from './widgets/ZoomWidget.js';
+
 import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR} from './toolbar/ToolbarButton.js';
 import ToolbarDivider from './toolbar/ToolbarDivider.js';
 import ToolbarUploadButton from './toolbar/ToolbarUploadButton.js';
@@ -212,6 +214,7 @@ class App extends React.Component
                       <FullscreenIcon/>
                       <FullscreenExitIcon/>
                     </IconStateButton>
+                    <ZoomWidget viewport={viewport}/>
                   </div>
                   <div className="viewport-widget viewport-side-bottom viewport-side-left">
                     <ModeSelectTray mode={inputActionMode ? 0 : 1} onChange={modeIndex => inputController.setInputScheme(modeIndex === 0)}/>
