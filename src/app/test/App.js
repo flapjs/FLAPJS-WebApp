@@ -150,14 +150,14 @@ class App extends React.Component
                       <FullscreenExitIcon/>
                     </IconStateButton>
                   </div>
+                  <div className="viewport-widget viewport-side-bottom">
+                    <TapeWidget/>
+                  </div>
                   <div className="viewport-widget viewport-side-bottom viewport-side-left">
                     <ModeSelectTray mode={0}/>
                   </div>
                   <div className="viewport-widget viewport-side-bottom viewport-side-right">
                     <TrashCanWidget/>
-                  </div>
-                  <div className="viewport-widget viewport-side-bottom">
-                    <TapeWidget/>
                   </div>
                   {/* Viewport overlay objects */
                     false && ViewportRenderer &&

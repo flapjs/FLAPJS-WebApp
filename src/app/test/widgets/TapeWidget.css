@@ -2,8 +2,9 @@
   --tape-text-size: 2em;
 
   --color-tape-text: black;
-  --color-tape-back: white;
-  --color-tape-back-active: lightgray;
+  --color-tape-back: rgba(200, 200, 200, 0.9);
+  --color-tape-symbol-back: white;
+  --color-tape-symbol-back-active: lightgray;
   --color-tape-highlight: black;
   --color-tape-outline: darkgray;
   --color-tape-shadow: gold;
@@ -13,8 +14,13 @@
   flex-direction: row;
   font-size: var(--tape-text-size);
   margin: 1em;
+  margin-top: 0em;
   padding: 0.2em 0.4em;
   min-height: 2em;/* entry size + pointer size */
+
+  border-top: 1px solid var(--color-tape-text);
+  border-bottom: 1px solid var(--color-tape-text);
+  background: var(--color-tape-back);
 
   overflow-x: auto;
   overflow-y: hidden;
@@ -67,21 +73,21 @@
 }
 .tape-row-entry:first-of-type.infinite .tape-row-symbol {
   border-left: none;
-  background: linear-gradient(to right, transparent, var(--color-tape-back) 0.5em);
+  background: linear-gradient(to right, transparent, var(--color-tape-symbol-back) 0.5em);
 }
 .tape-row-entry:last-of-type.infinite .tape-row-symbol {
   border-right: none;
-  background: linear-gradient(to left, transparent, var(--color-tape-back) 0.5em);
+  background: linear-gradient(to left, transparent, var(--color-tape-symbol-back) 0.5em);
 }
 /* NORMAL ENTRY */
 .tape-row-symbol {
   text-align: center;
 
-  background: var(--color-tape-back);
+  background: var(--color-tape-symbol-back);
   outline: 1px solid var(--color-tape-outline);
 }
 .tape-row-symbol:hover {
-  background: var(--color-tape-back-active);
+  background: var(--color-tape-symbol-back-active);
   cursor: pointer;
 }
 .tape-row-states {
