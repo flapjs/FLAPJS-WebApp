@@ -1,0 +1,37 @@
+:local(.upload_container) {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+:local(.upload_container) > * {
+  opacity: 1;
+
+  transition: opacity 0.3s ease;
+}
+:local(.upload_container).waiting > * {
+  opacity: 0.3;
+}
+:local(.upload_icon) {
+  position: absolute;
+  margin: auto auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 9999;
+  width: 50%;
+  height: 50%;
+  pointer-events: none;
+  user-select: none;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+:local(.upload_container).waiting :local(.upload_icon) {
+  opacity: 0.1;
+  visibility: visible;
+
+  transition: opacity 0.3s ease, visibility 0s linear;
+}
