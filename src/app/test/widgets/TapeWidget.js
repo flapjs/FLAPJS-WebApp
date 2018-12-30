@@ -3,8 +3,8 @@ import Style from './TapeWidget.css';
 
 import DownArrowIcon from 'test/iconset/DownArrowIcon.js';
 
-const TAPE_INFINITE_LEFT = false;
-const TAPE_INFINITE_RIGHT = false;
+const TAPE_INFINITE_LEFT = true;
+const TAPE_INFINITE_RIGHT = true;
 
 class TapeWidget extends React.Component
 {
@@ -32,6 +32,8 @@ class TapeWidget extends React.Component
       this.counter = 0;
       this.index += 1;
     }
+
+    const showTransitionStates = true;
 
     return (
       <div id={this.props.id}
@@ -65,14 +67,15 @@ class TapeWidget extends React.Component
           }
 
           return <div className={"tape-row-entry" + (active ? " active " : "") + (activeRead ? " active-read " : "")}>
-            <span className="tape-row-states">
-              <label>{"q0"}</label>
-              <label>{"q1"}</label>
-              <label>{"q2"}</label>
-              <label>{"q3"}</label>
-              <label>{"q4"}</label>
-              {i > 2 && <label>{"q5"}</label>}
-            </span>
+            {showTransitionStates &&
+              <span className="tape-row-states">
+                <label>{"q0"}</label>
+                <label>{"q1"}</label>
+                <label>{"q2"}</label>
+                <label>{"q3"}</label>
+                <label>{"q4"}</label>
+                {i > 2 && <label>{"q5"}</label>}
+              </span>}
             <label className="tape-row-symbol">{e}</label>
           </div>;
         })}
