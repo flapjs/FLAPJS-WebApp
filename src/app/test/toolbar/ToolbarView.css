@@ -49,7 +49,7 @@
   fill: var(--color-toolbar-text);
   transition: fill 0.3s ease;
 }
-:local(.app_bar) .icon-button:hover {
+:local(.app_bar) .icon-button:hover:not(:disabled) {
   fill: var(--color-toolbar-text-active);
 }
 :local(.app_bar) .icon-button:disabled {
@@ -86,11 +86,12 @@
   /* Override default icon button size */
   width: 100%;
 }
-:local(.bar_menu) .icon-button:hover {
+:local(.bar_menu) .icon-button:hover:not(:disabled) {
   color: var(--color-toolbar-text-active);
   background: var(--color-toolbar-menu-active);
 }
 :local(.bar_menu) .icon-button:disabled {
+  color: var(--color-toolbar-text-disabled);
   background: var(--color-toolbar-menu-disabled);
 }
 :local(.bar_menu) .icon-button svg {

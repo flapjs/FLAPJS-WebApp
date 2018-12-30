@@ -10,6 +10,7 @@ import UploadDropZone from './components/UploadDropZone.js';
 import ModeSelectTray from './widgets/ModeSelectTray.js';
 import TrashCanWidget from './widgets/TrashCanWidget.js';
 import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR} from './toolbar/ToolbarButton.js';
+import ToolbarDivider from './toolbar/ToolbarDivider.js';
 import ToolbarUploadButton from './toolbar/ToolbarUploadButton.js';
 
 import Notifications from 'system/notification/Notifications.js';
@@ -29,6 +30,9 @@ import UndoIcon from './iconset/UndoIcon.js';
 import RedoIcon from './iconset/RedoIcon.js';
 import UploadIcon from './iconset/UploadIcon.js';
 import DownloadIcon from './iconset/DownloadIcon.js';
+import BugIcon from './iconset/BugIcon.js';
+import WorldIcon from './iconset/WorldIcon.js';
+import HelpIcon from './iconset/HelpIcon.js';
 
 class App extends React.Component
 {
@@ -161,6 +165,10 @@ class App extends React.Component
               onUpload={()=>alert("WHAT")}/>
             <ToolbarButton title="Export" icon={DownloadIcon}
               onClick={()=>this._drawer.setCurrentTab(0)} disabled={graphController.getGraph().isEmpty()}/>
+            <ToolbarDivider/>
+            <ToolbarButton title="Report a Bug" icon={BugIcon}/>
+            <ToolbarButton title="Language" icon={WorldIcon}/>
+            <ToolbarButton title="Help" icon={HelpIcon}/>
           </ToolbarView>
           <DrawerView ref={ref=>this._drawer=ref} className="app-content"
             panels={this._module.getModulePanels()}

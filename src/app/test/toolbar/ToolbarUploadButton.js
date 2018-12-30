@@ -8,6 +8,20 @@ class ToolbarUploadButton extends React.Component
   constructor(props)
   {
     super(props);
+
+    this.onFileUpload = this.onFileUpload.bind(this);
+  }
+
+  onFileUpload(e)
+  {
+    const files = e.target.files;
+    if (files.length > 0)
+    {
+      if (this.props.onUpload) this.props.onUpload(files[0]);
+
+      //Makes sure you can upload the same file again.
+      e.target.value = "";
+    }
   }
 
   //Override
@@ -26,7 +40,7 @@ class ToolbarUploadButton extends React.Component
         <input type="file" name="import"
           className={Style.upload_input}
           accept={this.props.accept}
-          onChange={this.props.onUpload}/>
+          onChange={this.onFileUpload}/>
         {IconClass && <IconClass/>}
         <label>{title}</label>
       </IconButton>
