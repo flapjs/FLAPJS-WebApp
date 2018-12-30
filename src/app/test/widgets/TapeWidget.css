@@ -1,0 +1,96 @@
+.tape-row {
+  --tape-text-size: 2em;
+
+  --color-tape-main: lightgray;
+  --color-tape-main-dark: darkgray;
+  --color-tape-text: black;
+  --color-tape-text-active: white;
+
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  font-size: var(--tape-text-size);
+  margin: 1em;
+  padding: 0.2em 0.4em;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+/* Just some spacing, since the last border edge is cut off */
+.tape-row::after {
+  content: "";
+  display: block;
+  min-width: 1px;
+  min-height: 1px;
+}
+.tape-pointer {
+  position: absolute;
+  bottom: 1.5em;
+  left: 0em;/* Will be handled by JavaScript*/
+  margin-left: 0.4em;/* half of entry width + row padding */
+  width: 1em;
+  height: 1em;
+  z-index: 2;
+
+  transform: scaleX(0.5);
+
+  transition: left 0.3s ease;
+}
+.tape-row-entry.infinite + .tape-pointer {
+  margin-left: 2.4em;/* infinite width + half of entry width + row padding */
+}
+.tape-row-entry {
+  display: flex;
+  flex-direction: column;
+  min-width: 1em;
+}
+/* INFINITE ENTRY */
+.tape-row-entry.infinite {
+  min-width: 2em;
+}
+.tape-row-entry.infinite .tape-row-symbol {
+  outline: none;
+  border: 1px solid var(--color-tape-text);
+  margin-bottom: -0.2em;
+}
+.tape-row-entry:first-of-type.infinite .tape-row-symbol {
+  border-left: none;
+  background: linear-gradient(to right, transparent, var(--color-tape-main) 0.5em);
+}
+.tape-row-entry:last-of-type.infinite .tape-row-symbol {
+  border-right: none;
+  background: linear-gradient(to left, transparent, var(--color-tape-main) 0.5em);
+}
+/* NORMAL ENTRY */
+.tape-row-symbol {
+  text-align: center;
+
+  background: var(--color-tape-main);
+  outline: 1px solid var(--color-tape-text);
+}
+.tape-row-symbol:hover {
+  background: var(--color-tape-text-active);
+  cursor: pointer;
+}
+.tape-row-states {
+  flex: 1;
+  display: flex;
+  flex-direction: column-reverse;
+  padding-bottom: 0.2em;
+  transform: translateX(-0.25em);
+
+  pointer-events: none;
+  user-select: none;
+}
+.tape-row-states > label {
+  font-size: 0.5em;
+}
+/* When tape symbol is active... */
+.tape-row-entry.active .tape-row-symbol {
+  z-index: 1;/* must be higher than the rest */
+  outline-width: 0.2em;
+  font-weight: bold;
+}
+.tape-row-entry.active-read .tape-row-states {
+  font-weight: bold;
+}
