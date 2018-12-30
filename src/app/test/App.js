@@ -8,7 +8,7 @@ import TapeWidget from './widgets/TapeWidget.js';
 import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
 
-import AboutDrawerPanel from './AboutDrawerPanel.js';
+import DefaultDrawerPanel from './drawer/DefaultDrawerPanel.js';
 import NewToolbarButton from './NewToolbarButton.js';
 
 import IconStateButton from './components/IconStateButton.js';
@@ -21,7 +21,7 @@ class App extends React.Component
   {
     super(props);
 
-    this.drawerPanels = [new AboutDrawerPanel(), new AboutDrawerPanel(), new AboutDrawerPanel(), new AboutDrawerPanel(), new AboutDrawerPanel()];
+    this.drawerPanels = [DefaultDrawerPanel];
     this.toolbarButtons = [new NewToolbarButton(), new NewToolbarButton(), new NewToolbarButton(), new NewToolbarButton(), new NewToolbarButton()];
     this.viewportWidgets = [];
 

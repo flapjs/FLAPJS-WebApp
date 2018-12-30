@@ -286,7 +286,7 @@
 }
 
 /********* DRAWER PANELS *********/
-:local(.drawer_panel_container) {
+:local(.drawer_content_panel) {
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -295,7 +295,7 @@
   outline: 10px dashed transparent;
   outline-offset: -20px;
 }
-:local(.drawer_content_panel) {
+:local(.drawer_panel_container) {
   position: relative;
   width: 100%;
   height: 100%;
@@ -313,11 +313,11 @@
   height: 100%;
 }
 /* for hiding content */
-:local(.app_drawer).hide-content :local(.drawer_panel_container) {
+:local(.app_drawer).hide-content :local(.drawer_content_panel) {
   outline: 10px dashed var(--color-drawer-main-dark);
   transition: outline 0.1s ease 0.1s;
 }
-:local(.app_drawer).hide-content :local(.drawer_content_panel) {
+:local(.app_drawer).hide-content :local(.drawer_panel_container) {
   visibility: hidden;
   opacity: 0;
   transition: opacity 0.1s ease 0.1s, visibility 0s linear 0.2s;

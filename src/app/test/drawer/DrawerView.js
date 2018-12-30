@@ -343,7 +343,7 @@ class DrawerView extends React.Component
                 <ExpandDownIcon/>
               </IconButton>
               {showDrawerTabs && drawerPanels && drawerPanels.map((e, i) => {
-                const title = e.getTitle();
+                const title = e.TITLE || "";
                 return (
                   <a key={title + ":" + i}
                   className={Style.drawer_tab +
@@ -354,15 +354,13 @@ class DrawerView extends React.Component
                 );
               })}
             </nav>
-            <div className={Style.drawer_panel_container}>
-              <div className={Style.drawer_content_panel}>
+            <div className={Style.drawer_content_panel}>
+              <div className={Style.drawer_panel_container}>
                 {drawerPanels && drawerPanels.map((e, i) => {
-                  const ComponentClass = e.getComponentClass();
-                  if (!ComponentClass) return null;
-                  const title = e.getTitle();
+                  const ComponentClass = e;
+                  const title = e.TITLE || "";
                   return (
                     <ComponentClass key={title + ":" + i}
-                      ref={ref=>e.panelComponent=ref}
                       className={Style.drawer_panel}
                       style={{visibility: this.isCurrentTab(i) ? "visible!important" : "hidden!important"}}/>
                   );
