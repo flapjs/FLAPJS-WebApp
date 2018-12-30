@@ -72,6 +72,14 @@
   transition: left 0.3s ease,
     visibility 0s linear 0.3s;/* for hide animation */
 }
+:local(.app_drawer).drawer-side-bottom.hide {
+  margin-top: calc(var(--drawer-width) * -1);
+  top: calc(var(--drawer-width) + 5px);/*box shadow offset*/
+
+  visibility: hidden;
+  transition: top 0.3s ease,
+    visibility 0s linear 0.3s;/* for hide animation */
+}
 
 /** ICON STYLES **/
 :local(.app_drawer) .icon-button {
