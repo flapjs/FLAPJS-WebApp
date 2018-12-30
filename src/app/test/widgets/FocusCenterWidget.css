@@ -1,0 +1,5 @@
+:local(.center_focus_container) {
+  width: 2em;
+  padding: 5px;
+  margin: auto;
+}

@@ -10,6 +10,7 @@ import UploadDropZone from './components/UploadDropZone.js';
 import ModeSelectTray from './widgets/ModeSelectTray.js';
 import TrashCanWidget from './widgets/TrashCanWidget.js';
 import ZoomWidget from './widgets/ZoomWidget.js';
+import FocusCenterWidget from './widgets/FocusCenterWidget.js';
 
 import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR} from './toolbar/ToolbarButton.js';
 import ToolbarDivider from './toolbar/ToolbarDivider.js';
@@ -67,7 +68,7 @@ class App extends React.Component
     this._mediaQuerySmallWidthList = window.matchMedia("only screen and (max-width: 400px)");
     this._mediaQuerySmallHeightList = window.matchMedia("only screen and (min-height: 400px)");
 
-    Notifications.addMessage("WHAT?");
+    Notifications.addMessage("Welcome to Flap.js");
   }
 
   //Override
@@ -215,6 +216,7 @@ class App extends React.Component
                       <FullscreenExitIcon/>
                     </IconStateButton>
                     <ZoomWidget viewport={viewport}/>
+                    <FocusCenterWidget viewport={viewport}/>
                   </div>
                   <div className="viewport-widget viewport-side-bottom viewport-side-left">
                     <ModeSelectTray mode={inputActionMode ? 0 : 1} onChange={modeIndex => inputController.setInputScheme(modeIndex === 0)}/>
