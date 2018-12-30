@@ -3,14 +3,15 @@
   --toolbar-height: 80px;
 
   --color-toolbar-highlight: gold;
-  --color-toolbar-back: darkgray;
-  --color-toolbar-back-detail: gray;
-  --color-toolbar-menu: gray;
-  --color-toolbar-menu-active: darkgray;
-  --color-toolbar-menu-disabled: gray;
+  --color-toolbar-back: olivedrab;
+  --color-toolbar-back-detail: olive;
+  --color-toolbar-menu: olivedrab;
+  --color-toolbar-menu-detail: darkolivegreen;
+  --color-toolbar-menu-active: olivedrab;
+  --color-toolbar-menu-disabled: olivedrab;
   --color-toolbar-text: white;
   --color-toolbar-text-active: gold;
-  --color-toolbar-text-disabled: gray;
+  --color-toolbar-text-disabled: darkolivegreen;
 
   z-index: 1000;
   display: flex;
@@ -81,7 +82,7 @@
 
   background: var(--color-toolbar-menu);
   color: var(--color-toolbar-text);
-  border-bottom: 2px solid var(--color-toolbar-text);
+  border-bottom: 2px solid var(--color-toolbar-menu-detail);
 }
 :local(.menu_button).icon-button:hover {
   color: var(--color-toolbar-text-active);
