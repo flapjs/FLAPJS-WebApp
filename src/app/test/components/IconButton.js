@@ -17,7 +17,6 @@ class IconButton extends React.Component
         style={this.props.style}
         title={this.props.title}
         disabled={this.props.disabled}
-        value={this.props.value}
         onClick={this.props.onClick}>
         {this.props.children}
       </button>

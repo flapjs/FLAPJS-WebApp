@@ -76,6 +76,7 @@
   flex: 1;
   display: flex;
   flex-direction: row;
+  padding-left: 10px;
 
   /* Override default icon button size */
   width: 100%;
@@ -92,13 +93,11 @@
   background: var(--color-toolbar-menu-disabled);
 }
 :local(.menu_button) > svg {
-  width: 4em;
-  min-width: 4em;
-  min-height: 4em;
+  width: 16vh;
 }
 :local(.menu_button) > label {
   flex: 1;
-  font-size: 2.5em;
+  font-size: 10vh;
   align-self: center;
 }
 
