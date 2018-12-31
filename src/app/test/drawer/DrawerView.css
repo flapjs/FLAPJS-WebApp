@@ -17,6 +17,7 @@
   --color-viewport-back-detail: lightgray;
   --color-viewport-outline: rgba(0, 0, 0, 0.03);
   --color-viewport-text: black;
+  --color-viewport-text-active: gray;
   --color-viewport-error: red;
 
   flex: 1;

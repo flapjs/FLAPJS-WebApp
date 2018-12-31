@@ -1,0 +1,11 @@
+:local(.navbar_container) .icon-button {
+  fill: var(--color-viewport-text);
+}
+
+:local(.navbar_container) .icon-button:hover {
+  fill: var(--color-viewport-text-active);
+}
+
+:local(.navbar_container) .icon-button:disabled {
+  fill: var(--color-viewport-back-detail);
+}
