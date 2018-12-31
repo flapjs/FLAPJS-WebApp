@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Style from './ViewportView.css';
+
 class ViewportView extends React.Component
 {
   constructor(props)
@@ -7,7 +9,7 @@ class ViewportView extends React.Component
     super(props);
 
     this.state = {
-      index: 0
+      index: 1
     };
   }
 
@@ -25,20 +27,19 @@ class ViewportView extends React.Component
   render()
   {
     return (
-      <div id={this.props.id}
-        className={this.props.className}
-        style={this.props.style}>
+      <React.Fragment>
         {React.Children.map(this.props.children, (child, i) => {
-          if (this.state.index === i)
-          {
-            return React.cloneElement(child, {active: true});
-          }
-          else
-          {
-            return child;
-          }
+          return (
+            <div id={this.props.id}
+              className={Style.view_container +
+                (this.state.index === i ? " active " : "") +
+                " " + this.props.className}
+              style={this.props.style}>
+              {child}
+            </div>
+          );
         })}
-      </div>
+      </React.Fragment>
     );
   }
 }

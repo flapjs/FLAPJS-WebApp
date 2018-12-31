@@ -1,0 +1,16 @@
+:local(.view_container) {
+  visibility: hidden;
+  opacity: 0;
+}
+:local(.view_container).active {
+  visibility: visible;
+  opacity: 1;
+}
+
+:local(.view_widget) {
+  position: absolute;
+  min-width: 32px;
+  min-height: 32px;
+  max-width: 100%;
+  max-height: 100%;
+}

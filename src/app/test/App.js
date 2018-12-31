@@ -172,29 +172,29 @@ class App extends React.Component
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
           hide={isFullscreen}>
-            <UploadDropZone>
-              <div className="viewport">
-                <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>
-                  {/* Graph origin crosshair */}
-                  <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="var(--color-viewport-back-detail)"/>
-                  <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="var(--color-viewport-back-detail)"/>
-                  {/* Graph objects */
-                    GraphRenderer &&
-                    <GraphRenderer currentModule={this._module} parent={this._workspace}/>}
-                  {/* Graph overlays */
-                    GraphOverlayRenderer &&
-                    <GraphOverlayRenderer currentModule={this._module} parent={this._workspace}/>}
-                </WorkspaceView>
+          <UploadDropZone>
+            <div className="viewport">
+              <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>
+                {/* Graph origin crosshair */}
+                <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="var(--color-viewport-back-detail)"/>
+                <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="var(--color-viewport-back-detail)"/>
+                {/* Graph objects */
+                  GraphRenderer &&
+                  <GraphRenderer currentModule={this._module} parent={this._workspace}/>}
+                {/* Graph overlays */
+                  GraphOverlayRenderer &&
+                  <GraphOverlayRenderer currentModule={this._module} parent={this._workspace}/>}
+              </WorkspaceView>
 
-                <NotificationView notificationManager={Notifications}>
-                </NotificationView>
+              <NotificationView notificationManager={Notifications}>
+              </NotificationView>
 
-                <ViewportView>
-                  <EditPane app={this} module={this._module} viewport={viewport}/>
-                  <TapePane app={this} module={this._module} viewport={viewport}/>
-                </ViewportView>
-              </div>
-            </UploadDropZone>
+              <ViewportView>
+                <EditPane app={this} module={this._module} viewport={viewport}/>
+                <TapePane app={this} module={this._module} viewport={viewport}/>
+              </ViewportView>
+            </div>
+          </UploadDropZone>
         </DrawerView>
       </div>
     );

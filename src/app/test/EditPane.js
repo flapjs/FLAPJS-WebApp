@@ -1,5 +1,5 @@
 import React from 'react';
-import Style from './pane/PaneView.css';
+import Style from './viewport/ViewportView.css';
 
 import ModeSelectTray from './widgets/ModeSelectTray.js';
 import TrashCanWidget from './widgets/TrashCanWidget.js';
@@ -10,10 +10,6 @@ class EditPane extends React.Component
   constructor(props)
   {
     super(props);
-
-    this.state = {
-      active: false
-    };
   }
 
   //Override
@@ -27,14 +23,10 @@ class EditPane extends React.Component
     const machineController = module.getMachineController();
     const inputActionMode = inputController.isActionMode(graphController);
     const LabelEditor = module.getLabelEditor();
-
-    const isActive = this.props.active;
-
+    
     return (
       <div id={this.props.id}
-        className={Style.pane_container +
-          (isActive ? " active " : "") +
-          " " + this.props.className}
+        className={this.props.className}
         style={this.props.style}>
         { LabelEditor &&
           <LabelEditor ref={ref=>graphController.labelEditorElement=ref}
@@ -42,12 +34,12 @@ class EditPane extends React.Component
           graphController={graphController}
           machineController={machineController}
           screen={app._workspace ? app._workspace.ref : null}/> }
-        <NavbarWidget className={Style.pane_widget} style={{right: 0}}
+        <NavbarWidget className={Style.view_widget} style={{right: 0}}
           app={app}/>
-        <div className={Style.pane_widget} style={{bottom: 0, left: 0}}>
+        <div className={Style.view_widget} style={{bottom: 0, left: 0}}>
           <ModeSelectTray mode={inputActionMode ? 0 : 1} onChange={modeIndex => inputController.setInputScheme(modeIndex === 0)}/>
         </div>
-        <div className={Style.pane_widget} style={{bottom: 0, right: 0}}>
+        <div className={Style.view_widget} style={{bottom: 0, right: 0}}>
           <TrashCanWidget inputController={inputController}/>
         </div>
       </div>
