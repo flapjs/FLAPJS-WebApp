@@ -155,9 +155,6 @@ class FSAModule extends AbstractModule
     }
     return null;
   }
-
-  //Override
-  getGraphRenderer() { return FSAGraphRenderer; }
   //Override
   getInputController() { return this._inputController; }
   //Override
