@@ -5,12 +5,10 @@ import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION
 import ToolbarView from './toolbar/ToolbarView.js';
 import WorkspaceView from './workspace/WorkspaceView.js';
 
-import TapeWidget from './widgets/TapeWidget.js';
 import UploadDropZone from './components/UploadDropZone.js';
-import ModeSelectTray from './widgets/ModeSelectTray.js';
-import TrashCanWidget from './widgets/TrashCanWidget.js';
-import ZoomWidget from './widgets/ZoomWidget.js';
-import FocusCenterWidget from './widgets/FocusCenterWidget.js';
+
+import EditPane from './EditPane.js';
+import TapePane from './TapePane.js';
 
 import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR} from './toolbar/ToolbarButton.js';
 import ToolbarDivider from './toolbar/ToolbarDivider.js';
@@ -23,10 +21,6 @@ import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
 
 import FSAModule from 'modules/fsa/FSAModule.js';
-
-import IconStateButton from './components/IconStateButton.js';
-import FullscreenIcon from './iconset/FullscreenIcon.js';
-import FullscreenExitIcon from './iconset/FullscreenExitIcon.js';
 
 import PageEmptyIcon from './iconset/PageEmptyIcon.js';
 import UndoIcon from './iconset/UndoIcon.js';
@@ -209,24 +203,11 @@ class App extends React.Component
                       GraphOverlayRenderer &&
                       <GraphOverlayRenderer currentModule={this._module} parent={this._workspace}/>}
                   </WorkspaceView>
-                  <NotificationView notificationManager={Notifications}></NotificationView>
-                  <div className="viewport-widget viewport-side-right">
-                    <IconStateButton onClick={(e, i) => this.setState({hide: (i === 0)})}>
-                      <FullscreenIcon/>
-                      <FullscreenExitIcon/>
-                    </IconStateButton>
-                    <ZoomWidget viewport={viewport}/>
-                    <FocusCenterWidget viewport={viewport}/>
-                  </div>
-                  <div className="viewport-widget viewport-side-bottom viewport-side-left">
-                    <ModeSelectTray mode={inputActionMode ? 0 : 1} onChange={modeIndex => inputController.setInputScheme(modeIndex === 0)}/>
-                  </div>
-                  <div className="viewport-widget viewport-side-bottom viewport-side-right">
-                    <TrashCanWidget inputController={inputController}/>
-                  </div>
-                  {/* Viewport overlay objects */
-                    false && ViewportRenderer &&
-                    <ViewportRenderer currentModule={this._module} screen={this._workspace ? this._workspace.ref : null} parent={this._workspace}/>}
+                  <NotificationView notificationManager={Notifications}>
+                  </NotificationView>
+
+                  <TapePane active={true} module={this._module} viewport={viewport}/>
+                  <EditPane active={false} app={this} module={this._module} viewport={viewport}/>
                 </div>
               </UploadDropZone>
           </DrawerView>
@@ -236,7 +217,7 @@ class App extends React.Component
 }
 
 /*
-
+<EditPane app={this} module={this._module} viewport={viewport}/>
 <div className="viewport-tray">
 </div>
 <div className="viewport-navbar">
