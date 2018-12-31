@@ -206,7 +206,7 @@ class App extends React.Component
                   <NotificationView notificationManager={Notifications}>
                   </NotificationView>
 
-                  <TapePane active={true} module={this._module} viewport={viewport}/>
+                  <TapePane active={true} app={this} module={this._module} viewport={viewport}/>
                   <EditPane active={false} app={this} module={this._module} viewport={viewport}/>
                 </div>
               </UploadDropZone>

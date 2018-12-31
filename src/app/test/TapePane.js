@@ -23,6 +23,7 @@ class TapePane extends React.Component
   //Override
   render()
   {
+    const app = this.props.app;
     const module = this.props.module;
     const viewport = this.props.viewport;
     const inputController = module.getInputController();
