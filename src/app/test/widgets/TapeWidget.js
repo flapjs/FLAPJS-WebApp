@@ -37,8 +37,7 @@ class TapeWidget extends React.Component
         " " + this.props.className}
         style={this.props.style}>
 
-        {/*MUST BE BEFORE POINTER*/
-          TAPE_INFINITE_LEFT && this._tapeContext.isTapeLeftInfinite() &&
+        {TAPE_INFINITE_LEFT && this._tapeContext.isTapeLeftInfinite() &&
           <div className="tape-row-entry infinite">
             <span className="tape-row-states"></span>
             <label className="tape-row-symbol">{"..."}</label>

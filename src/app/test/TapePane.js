@@ -2,12 +2,7 @@ import React from 'react';
 import Style from './pane/PaneView.css';
 
 import TapeWidget from './widgets/TapeWidget.js';
-
-import ZoomWidget from './widgets/ZoomWidget.js';
-import FocusCenterWidget from './widgets/FocusCenterWidget.js';
-import IconStateButton from './components/IconStateButton.js';
-import FullscreenIcon from './iconset/FullscreenIcon.js';
-import FullscreenExitIcon from './iconset/FullscreenExitIcon.js';
+import NavbarWidget from './widgets/NavbarWidget.js';
 
 class TapePane extends React.Component
 {
@@ -38,14 +33,8 @@ class TapePane extends React.Component
           (isActive ? " active " : "") +
           " " + this.props.className}
         style={this.props.style}>
-        <div className={Style.pane_widget} style={{right: 0}}>
-          <IconStateButton onClick={(e, i) => app.setState({hide: (i === 0)})}>
-            <FullscreenIcon/>
-            <FullscreenExitIcon/>
-          </IconStateButton>
-          <ZoomWidget viewport={viewport}/>
-          <FocusCenterWidget viewport={viewport}/>
-        </div>
+        <NavbarWidget className={Style.pane_widget} style={{right: 0}}
+          app={app}/>
         <div className={Style.pane_widget} style={{bottom: 0}}>
           <TapeWidget/>
         </div>

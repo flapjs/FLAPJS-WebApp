@@ -3,12 +3,7 @@ import Style from './pane/PaneView.css';
 
 import ModeSelectTray from './widgets/ModeSelectTray.js';
 import TrashCanWidget from './widgets/TrashCanWidget.js';
-import ZoomWidget from './widgets/ZoomWidget.js';
-import FocusCenterWidget from './widgets/FocusCenterWidget.js';
-
-import IconStateButton from './components/IconStateButton.js';
-import FullscreenIcon from './iconset/FullscreenIcon.js';
-import FullscreenExitIcon from './iconset/FullscreenExitIcon.js';
+import NavbarWidget from './widgets/NavbarWidget.js';
 
 class EditPane extends React.Component
 {
@@ -47,14 +42,8 @@ class EditPane extends React.Component
           graphController={graphController}
           machineController={machineController}
           screen={app._workspace ? app._workspace.ref : null}/> }
-        <div className={Style.pane_widget} style={{right: 0}}>
-          <IconStateButton onClick={(e, i) => app.setState({hide: (i === 0)})}>
-            <FullscreenIcon/>
-            <FullscreenExitIcon/>
-          </IconStateButton>
-          <ZoomWidget viewport={viewport}/>
-          <FocusCenterWidget viewport={viewport}/>
-        </div>
+        <NavbarWidget className={Style.pane_widget} style={{right: 0}}
+          app={app}/>
         <div className={Style.pane_widget} style={{bottom: 0, left: 0}}>
           <ModeSelectTray mode={inputActionMode ? 0 : 1} onChange={modeIndex => inputController.setInputScheme(modeIndex === 0)}/>
         </div>
