@@ -18,9 +18,8 @@
   padding: 0.2em 0.4em;
   min-height: 2em;/* entry size + pointer size */
 
-  border-top: 1px solid var(--color-tape-text);
-  border-bottom: 1px solid var(--color-tape-text);
-  background: var(--color-tape-back);
+  border: 1px solid var(--color-tape-text);
+  border-radius: 0.5em;
 
   overflow-x: auto;
   overflow-y: hidden;

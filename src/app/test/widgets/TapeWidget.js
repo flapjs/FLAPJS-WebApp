@@ -3,6 +3,8 @@ import Style from './TapeWidget.css';
 
 import DownArrowIcon from 'test/iconset/DownArrowIcon.js';
 
+import TapeContext from './TapeContext.js';
+
 const TAPE_INFINITE_LEFT = true;
 const TAPE_INFINITE_RIGHT = true;
 
@@ -12,18 +14,12 @@ class TapeWidget extends React.Component
   {
     super(props);
 
-    this.inputs = "0129389472637892012u93________".split('');
-
     this.counter = 0;
     this.index = 0;
-  }
-  /*
 
-    <div id={this.props.id}
-      className={this.props.className}
-      style={this.props.style}>
-    </div>;
-  */
+    this._tapeContext = new TapeContext("01001_");
+  }
+
   //Override
   render()
   {
@@ -42,15 +38,17 @@ class TapeWidget extends React.Component
         style={this.props.style}>
 
         {/*MUST BE BEFORE POINTER*/
-          TAPE_INFINITE_LEFT &&
+          TAPE_INFINITE_LEFT && this._tapeContext.isTapeLeftInfinite() &&
           <div className="tape-row-entry infinite">
             <span className="tape-row-states"></span>
             <label className="tape-row-symbol">{"..."}</label>
           </div>}
 
-        <DownArrowIcon className="tape-pointer" style={{left: Math.floor((this.index - 1) / 2) + "em"}}/>
+        <DownArrowIcon
+          className="tape-pointer"
+          style={{left: Math.floor((this.index - 1) / 2) + "em"}}/>
 
-        {this.inputs.map((e, i) => {
+        {this._tapeContext.getTapeInput().map((e, i) => {
           let active = false;
           let activeRead = false;
           const currentIndex = Math.floor(this.index / 2);
@@ -66,21 +64,27 @@ class TapeWidget extends React.Component
             active = this.index % 2 === 0;
           }
 
-          return <div className={"tape-row-entry" + (active ? " active " : "") + (activeRead ? " active-read " : "")}>
-            {showTransitionStates &&
-              <span className="tape-row-states">
-                <label>{"q0"}</label>
-                <label>{"q1"}</label>
-                <label>{"q2"}</label>
-                <label>{"q3"}</label>
-                <label>{"q4"}</label>
-                {i > 2 && <label>{"q5"}</label>}
-              </span>}
-            <label className="tape-row-symbol">{e}</label>
-          </div>;
+          const sourceStates = this._tapeContext.getTapeSourceStatesByIndex(i);
+          return (
+            <div className={"tape-row-entry" +
+              (active ? " active " : "") +
+              (activeRead ? " active-read " : "")}>
+              {showTransitionStates &&
+                <span className="tape-row-states">
+                  {sourceStates.map(sourceState => {
+                    return (
+                      <label>{sourceState}</label>
+                    );
+                  })}
+                </span>}
+              <label className="tape-row-symbol">
+                {e}
+              </label>
+            </div>
+          );
         })}
 
-        {TAPE_INFINITE_RIGHT &&
+        {TAPE_INFINITE_RIGHT && this._tapeContext.isTapeRightInfinite() &&
           <div className="tape-row-entry infinite">
             <span className="tape-row-states"></span>
             <label className="tape-row-symbol">{"..."}</label>
