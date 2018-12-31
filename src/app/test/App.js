@@ -4,6 +4,7 @@ import './App.css';
 import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION_VERTICAL, DRAWER_BAR_DIRECTION_HORIZONTAL } from './drawer/DrawerView.js';
 import ToolbarView from './toolbar/ToolbarView.js';
 import WorkspaceView from './workspace/WorkspaceView.js';
+import ViewportView from './viewport/ViewportView.js';
 
 import UploadDropZone from './components/UploadDropZone.js';
 
@@ -14,14 +15,6 @@ import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR} from './toolbar/ToolbarButton.
 import ToolbarDivider from './toolbar/ToolbarDivider.js';
 import ToolbarUploadButton from './toolbar/ToolbarUploadButton.js';
 
-import Notifications from 'system/notification/Notifications.js';
-import NotificationView from 'system/notification/components/NotificationView.js';
-
-import InputAdapter from 'system/inputadapter/InputAdapter.js';
-import UndoManager from 'system/undomanager/UndoManager.js';
-
-import FSAModule from 'modules/fsa/FSAModule.js';
-
 import PageEmptyIcon from './iconset/PageEmptyIcon.js';
 import UndoIcon from './iconset/UndoIcon.js';
 import RedoIcon from './iconset/RedoIcon.js';
@@ -30,6 +23,14 @@ import DownloadIcon from './iconset/DownloadIcon.js';
 import BugIcon from './iconset/BugIcon.js';
 import WorldIcon from './iconset/WorldIcon.js';
 import HelpIcon from './iconset/HelpIcon.js';
+
+import Notifications from 'system/notification/Notifications.js';
+import NotificationView from 'system/notification/components/NotificationView.js';
+
+import InputAdapter from 'system/inputadapter/InputAdapter.js';
+import UndoManager from 'system/undomanager/UndoManager.js';
+
+import FSAModule from 'modules/fsa/FSAModule.js';
 
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
 
@@ -87,30 +88,11 @@ class App extends React.Component
     this._inputAdapter.destroy(this);
   }
 
-  get workspace()
-  {
-    return this._workspace;
-  }
-
-  get viewport()
-  {
-    return this._inputAdapter.getViewport();
-  }
-
-  getCurrentModule()
-  {
-    return this._module;
-  }
-
-  getInputAdapter()
-  {
-    return this._inputAdapter;
-  }
-
-  getUndoManager()
-  {
-    return this._undoManager;
-  }
+  get workspace() { return this._workspace; }
+  get viewport() { return this._inputAdapter.getViewport(); }
+  getCurrentModule() { return this._module; }
+  getInputAdapter() { return this._inputAdapter; }
+  getUndoManager() { return this._undoManager; }
 
   //Override
   render()
@@ -141,91 +123,82 @@ class App extends React.Component
     const ViewportRenderer = this._module.getRenderer(VIEWPORT_RENDER_LAYER);
 
     return (
-        <div className="app-container">
-          <ToolbarView ref={ref=>this._toolbar=ref} className="app-bar"
-            hide={isFullscreen}>
-            <ToolbarButton title="New" icon={PageEmptyIcon}
-              onClick={() => {
-                if (window.confirm(I18N.toString("alert.graph.clear")))
-                {
-                  graphController.getGraph().clear();
-                  undoManager.clear();
-                  machineController.setMachineName(null);
+      <div className="app-container">
+        <ToolbarView ref={ref=>this._toolbar=ref} className="app-bar"
+          hide={isFullscreen}>
+          <ToolbarButton title="New" icon={PageEmptyIcon}
+            onClick={() => {
+              if (window.confirm(I18N.toString("alert.graph.clear")))
+              {
+                graphController.getGraph().clear();
+                undoManager.clear();
+                machineController.setMachineName(null);
 
-                  this._toolbar.closeBar();
-                }
-              }}/>
-            <ToolbarButton title="Undo" icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
-              disabled={!undoManager.canUndo()}
-              onClick={()=>undoManager.undo()}/>
-            <ToolbarButton title="Redo" icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
-              disabled={!undoManager.canRedo()}
-              onClick={()=>undoManager.redo()}/>
-            <ToolbarUploadButton title="Upload" icon={UploadIcon} accept={graphImporter.getImportFileTypes().join(",")}
-              onUpload={file => {
-                graphImporter.importFile(file, this._module)
-                  .catch((e) => {
-                    Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
-                    console.error(e);
-                  })
-                  .finally(() => {
-                    this._toolbar.closeBar();
-                  });
-              }}/>
-            <ToolbarButton title="Export" icon={DownloadIcon}
-              onClick={()=>{
-                this._drawer.setCurrentTab(0);
                 this._toolbar.closeBar();
-              }}
-              disabled={graphController.getGraph().isEmpty()}/>
-            <ToolbarDivider/>
-            <ToolbarButton title="Report a Bug" icon={BugIcon}/>
-            <ToolbarButton title="Language" icon={WorldIcon}/>
-            <ToolbarButton title="Help" icon={HelpIcon}
-              onClick={()=>window.open(HELP_URL, '_blank')}/>
-          </ToolbarView>
-          <DrawerView ref={ref=>this._drawer=ref} className="app-content"
-            panels={this._module.getModulePanels()}
-            panelProps={{currentModule: this._module}}
-            side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
-            direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
-            hide={isFullscreen}>
-              <UploadDropZone>
-                <div className="viewport">
-                  <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>
-                    {/* Graph origin crosshair */}
-                    <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="var(--color-viewport-back-detail)"/>
-                    <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="var(--color-viewport-back-detail)"/>
-                    {/* Graph objects */
-                      GraphRenderer &&
-                      <GraphRenderer currentModule={this._module} parent={this._workspace}/>}
-                    {/* Graph overlays */
-                      GraphOverlayRenderer &&
-                      <GraphOverlayRenderer currentModule={this._module} parent={this._workspace}/>}
-                  </WorkspaceView>
-                  <NotificationView notificationManager={Notifications}>
-                  </NotificationView>
+              }
+            }}/>
+          <ToolbarButton title="Undo" icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+            disabled={!undoManager.canUndo()}
+            onClick={()=>undoManager.undo()}/>
+          <ToolbarButton title="Redo" icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+            disabled={!undoManager.canRedo()}
+            onClick={()=>undoManager.redo()}/>
+          <ToolbarUploadButton title="Upload" icon={UploadIcon} accept={graphImporter.getImportFileTypes().join(",")}
+            onUpload={file => {
+              graphImporter.importFile(file, this._module)
+                .catch((e) => {
+                  Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
+                  console.error(e);
+                })
+                .finally(() => {
+                  this._toolbar.closeBar();
+                });
+            }}/>
+          <ToolbarButton title="Export" icon={DownloadIcon}
+            onClick={()=>{
+              this._drawer.setCurrentTab(0);
+              this._toolbar.closeBar();
+            }}
+            disabled={graphController.getGraph().isEmpty()}/>
+          <ToolbarDivider/>
+          <ToolbarButton title="Report a Bug" icon={BugIcon}/>
+          <ToolbarButton title="Language" icon={WorldIcon}/>
+          <ToolbarButton title="Help" icon={HelpIcon}
+            onClick={()=>window.open(HELP_URL, '_blank')}/>
+        </ToolbarView>
+        <DrawerView ref={ref=>this._drawer=ref} className="app-content"
+          panels={this._module.getModulePanels()}
+          panelProps={{currentModule: this._module}}
+          side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
+          direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
+          hide={isFullscreen}>
+            <UploadDropZone>
+              <div className="viewport">
+                <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>
+                  {/* Graph origin crosshair */}
+                  <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="var(--color-viewport-back-detail)"/>
+                  <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="var(--color-viewport-back-detail)"/>
+                  {/* Graph objects */
+                    GraphRenderer &&
+                    <GraphRenderer currentModule={this._module} parent={this._workspace}/>}
+                  {/* Graph overlays */
+                    GraphOverlayRenderer &&
+                    <GraphOverlayRenderer currentModule={this._module} parent={this._workspace}/>}
+                </WorkspaceView>
 
-                  <TapePane active={true} app={this} module={this._module} viewport={viewport}/>
-                  <EditPane active={false} app={this} module={this._module} viewport={viewport}/>
-                </div>
-              </UploadDropZone>
-          </DrawerView>
-        </div>
+                <NotificationView notificationManager={Notifications}>
+                </NotificationView>
+
+                <ViewportView>
+                  <EditPane app={this} module={this._module} viewport={viewport}/>
+                  <TapePane app={this} module={this._module} viewport={viewport}/>
+                </ViewportView>
+              </div>
+            </UploadDropZone>
+        </DrawerView>
+      </div>
     );
   }
 }
-
-/*
-<EditPane app={this} module={this._module} viewport={viewport}/>
-<div className="viewport-tray">
-</div>
-<div className="viewport-navbar">
-</div>
-<div className="viewport-widget viewport-side-bottom">
-  <TapeWidget/>
-</div>
-
-*/
 
 export default App;
