@@ -98,6 +98,7 @@
 
   pointer-events: none;
   user-select: none;
+  -moz-user-select: none;
 }
 .tape-row-states > label {
   font-size: 0.5em;

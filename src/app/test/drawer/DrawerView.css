@@ -112,6 +112,7 @@
   justify-content: center;
 
   user-select: none;
+  -moz-user-select: none;
   cursor: auto;
 
   color: var(--color-drawer-handle-detail);

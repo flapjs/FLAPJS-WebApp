@@ -23,6 +23,7 @@
   height: 50%;
   pointer-events: none;
   user-select: none;
+  -moz-user-select: none;
 
   opacity: 0;
   visibility: hidden;

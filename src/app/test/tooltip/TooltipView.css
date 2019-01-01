@@ -5,6 +5,7 @@
 
   pointer-events: none;
   user-select: none;
+  -moz-user-select: none;
 
   position: absolute;
   top: 0;
