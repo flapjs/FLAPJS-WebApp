@@ -23,4 +23,6 @@ class DefaultDrawerPanel extends React.Component
   }
 }
 DefaultDrawerPanel.TITLE = "Panel";
+DefaultDrawerPanel.HIDDEN = false;
+
 export default DefaultDrawerPanel;

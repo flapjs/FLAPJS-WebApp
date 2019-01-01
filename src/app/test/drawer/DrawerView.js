@@ -343,6 +343,7 @@ class DrawerView extends React.Component
                 <ExpandDownIcon/>
               </IconButton>
               {showDrawerTabs && drawerPanels && drawerPanels.map((e, i) => {
+                if (e.HIDDEN) return null;
                 const title = e.TITLE || "";
                 return (
                   <a key={title + ":" + i}
