@@ -64,11 +64,6 @@ class AbstractModule
     return this._importer;
   }
 
-  getGraphRenderer()
-  {
-    return null;
-  }
-
   getDefaultModulePanel()
   {
     return null;
