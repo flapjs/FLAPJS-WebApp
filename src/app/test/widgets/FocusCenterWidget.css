@@ -1,5 +1,3 @@
-:local(.center_focus_container) {
-  width: 2em;
-  padding: 0.5em;
-  margin: auto;
+:local(.center_focus_button) {
+  padding: 10%;
 }

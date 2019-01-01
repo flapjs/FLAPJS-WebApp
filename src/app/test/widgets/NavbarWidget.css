@@ -1,15 +1,18 @@
 :local(.navbar_container) {
-  font-size: 0.8em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
-:local(.navbar_container) .icon-button {
-  fill: var(--color-viewport-text);
+:local(.navbar_widget), :local(.navbar_widget_container) {
+  width: 100%;
+  height: 100%;
 }
-
-:local(.navbar_container) .icon-button:hover {
-  fill: var(--color-viewport-text-active);
+:local(.navbar_widget), :local(.navbar_widget_container) > * {
+  color: var(--color-viewport-text);
 }
-
-:local(.navbar_container) .icon-button:disabled {
-  fill: var(--color-viewport-back-detail);
+:local(.navbar_widget):hover, :local(.navbar_widget_container) > *:hover {
+  color: var(--color-viewport-text-active);
+}
+:local(.navbar_widget):disabled, :local(.navbar_widget_container) > *:disabled {
+  color: var(--color-viewport-back-detail);
 }

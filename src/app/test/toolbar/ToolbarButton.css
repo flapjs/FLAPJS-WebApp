@@ -1,0 +1,15 @@
+:local(.toolbar_button) {
+  width: 3em;
+  height: 100%;
+  min-width: 3em;
+  min-height: 3em;
+
+  color: var(--color-toolbar-text);
+  transition: color 0.3s ease;
+}
+:local(.toolbar_button):hover {
+  color: var(--color-toolbar-text-active);
+}
+:local(.toolbar_button):disabled {
+  color: var(--color-toolbar-text-disabled);
+}

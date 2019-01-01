@@ -27,14 +27,15 @@ class FocusCenterWidget extends React.Component
     const viewport = this.props.viewport;
 
     return (
-      <div id={this.props.id}
-        className={Style.center_focus_container +
+      <IconButton id={this.props.id}
+        className={Style.center_focus_button +
           " " + this.props.className}
-        style={this.props.style}>
-        <IconButton disabled={Math.abs(viewport.getOffsetX()) < OFFSET_EPSILON && Math.abs(viewport.getOffsetY()) < OFFSET_EPSILON} onClick={this.onClick}>
-          <PinpointIcon/>
-        </IconButton>
-      </div>
+        style={this.props.style}
+        title={"Center Workspace"}
+        disabled={Math.abs(viewport.getOffsetX()) < OFFSET_EPSILON &&
+          Math.abs(viewport.getOffsetY()) < OFFSET_EPSILON} onClick={this.onClick}>
+        <PinpointIcon/>
+      </IconButton>
     );
   }
 }

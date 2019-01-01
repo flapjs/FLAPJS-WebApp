@@ -9,6 +9,7 @@ import TooltipView, { ONESHOT_MODE } from './tooltip/TooltipView.js';
 import UploadDropZone from './components/UploadDropZone.js';
 
 import ExportPanel from './panels/ExportPanel.js';
+import OptionPanel from './panels/OptionPanel.js';
 
 import EditPane from './EditPane.js';
 import TapePane from './TapePane.js';
@@ -179,7 +180,7 @@ class App extends React.Component
             onClick={()=>window.open(HELP_URL, '_blank')}/>
         </ToolbarView>
         <DrawerView ref={ref=>this._drawer=ref} className="app-content"
-          panels={this._module.getModulePanels().concat(ExportPanel)}
+          panels={this._module.getModulePanels().concat([ExportPanel, OptionPanel])}
           panelProps={{currentModule: this._module}}
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}

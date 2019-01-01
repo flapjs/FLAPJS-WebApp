@@ -40,26 +40,6 @@
     border-bottom 0.3s ease, visibility 0s linear 0.3s;/* for hide animation */
 }
 
-/** ICON STYLES **/
-:local(.app_bar) .icon-button {
-  width: 4em;
-  height: 100%;
-  min-width: 4em;
-  min-height: 4em;
-
-  fill: var(--color-toolbar-text);
-  transition: fill 0.3s ease;
-}
-:local(.app_bar).toolbar-show-labels .icon-button {
-  height: auto;
-}
-:local(.app_bar) .icon-button:hover:not(:disabled) {
-  fill: var(--color-toolbar-text-active);
-}
-:local(.app_bar) .icon-button:disabled {
-  fill: var(--color-toolbar-text-disabled);
-}
-
 /********* MENU *********/
 :local(.bar_menu) {
   display: flex;
@@ -81,29 +61,30 @@
   display: flex;
   flex-direction: row;
 }
-:local(.bar_menu) .icon-button {
+:local(.bar_menu) button {
   background: var(--color-toolbar-menu);
-  color: var(--color-toolbar-text);
   border-bottom: 2px solid var(--color-toolbar-menu-detail);
 
   /* Override default icon button size */
   width: 100%;
 }
-:local(.bar_menu) .icon-button:hover:not(:disabled) {
-  color: var(--color-toolbar-text-active);
+:local(.bar_menu) button:hover {
   background: var(--color-toolbar-menu-active);
 }
-:local(.bar_menu) .icon-button:disabled {
-  color: var(--color-toolbar-text-disabled);
+:local(.bar_menu) button:disabled {
   background: var(--color-toolbar-menu-disabled);
 }
-:local(.bar_menu) .icon-button svg {
+:local(.bar_menu) button svg {
   width: 16vh;
 }
-:local(.bar_menu) .icon-button label {
+:local(.bar_menu) button label {
   flex: 1;
   font-size: 10vmin;
   align-self: center;
+
+  /* Override default icon button styles */
+  position: relative;
+  opacity: 1;
 }
 
 /********* TOOLBAR *********/
@@ -130,9 +111,6 @@
   transform: translateX(-100vw);
   transition: visibility 0s linear 0.6s, transform 0.3s ease 0.3s;
 }
-:local(.toolbar_button_container) .icon-button {
-  margin: 0px 5px;
-}
 :local(.toolbar_title) {
   padding: 0px 10px;
   z-index: 10001;
@@ -142,12 +120,12 @@
   border-right: 4px dashed var(--color-toolbar-back-detail);
 }
 :local(.toolbar_expander) {
-  flex-shrink: 0;
   z-index: 10001;
   margin: auto;
-  margin-left: 10px;
+  margin-left: 1em;
   margin-right: 10px;
 
+  width: 3em;
   height: 3em;
 
   background: var(--color-toolbar-back);

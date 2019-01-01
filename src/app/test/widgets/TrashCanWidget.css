@@ -6,17 +6,15 @@
 
   fill: var(--color-viewport-text);
 
-  visibility: visible;
   opacity: 1;
-  transition: opacity 0.3s ease, visibility 0s linear;
+  transition: opacity 0.3s ease;
 }
 :local(.trash_container).active {
   fill: var(--color-viewport-error);
 }
 :local(.trash_container).hide {
   opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  transition: opacity 0.3s ease;
 }
 :local(.trash_container) > * {
   width: 100%;

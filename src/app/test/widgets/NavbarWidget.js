@@ -23,9 +23,9 @@ class NavbarWidget extends React.Component
         className={Style.navbar_container +
           " " + this.props.className}
         style={this.props.style}>
-        <FullscreenWidget app={app}/>
-        <ZoomWidget viewport={viewport}/>
-        <FocusCenterWidget viewport={viewport}/>
+        <FullscreenWidget className={Style.navbar_widget} app={app}/>
+        <ZoomWidget className={Style.navbar_widget_container} viewport={viewport}/>
+        <FocusCenterWidget className={Style.navbar_widget} viewport={viewport}/>
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import React from 'react';
+import Style from './ToolbarButton.css';
 
 import IconButton from 'test/components/IconButton.js';
 
@@ -17,16 +18,14 @@ class ToolbarButton extends React.Component
   render()
   {
     const IconClass = this.props.icon;
-    const title = this.props.title;
     return (
       <IconButton id={this.props.id}
-        className={this.props.className}
+        className={Style.toolbar_button + " " + this.props.className}
         style={this.props.style}
-        title={title}
+        title={this.props.title}
         disabled={this.props.disabled}
         onClick={this.props.onClick}>
-        {IconClass && <IconClass/>}
-        <label>{title}</label>
+        <IconClass/>
       </IconButton>
     );
   }

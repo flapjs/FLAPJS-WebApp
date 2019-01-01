@@ -1,5 +1,7 @@
 import React from 'react';
-import './IconButton.css';
+import Style from './IconButton.css';
+
+const ICON_BUTTON_SHOW_LABEL = false;
 
 class IconButton extends React.Component
 {
@@ -11,14 +13,19 @@ class IconButton extends React.Component
   //Override
   render()
   {
+    const title = this.props.title;
+
     return (
       <button id={this.props.id}
-        className={"icon-button " + this.props.className}
+        className={Style.icon_button +
+          (ICON_BUTTON_SHOW_LABEL ? " icon-button-show-label " : "") +
+          " " + this.props.className}
         style={this.props.style}
-        title={this.props.title}
+        title={title}
         disabled={this.props.disabled}
         onClick={this.props.onClick}>
         {this.props.children}
+        <label>{title}</label>
       </button>
     );
   }

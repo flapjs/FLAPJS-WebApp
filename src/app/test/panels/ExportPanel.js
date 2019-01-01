@@ -17,14 +17,13 @@ class ExportPanel extends React.Component
     return (
       <IconButton key={exporter.getFileType()}
         className={Style.panel_button}
-        title={exporter.getTitle()}
+        title={exporter.getLabel()}
         onClick={() => {
           const machineController = this.props.currentModule.getMachineController();
           const filename = machineController.getMachineName();
           exporter.exportToFile(filename, currentModule);
         }}>
         <IconClass/>
-        <label>{exporter.getLabel()}</label>
       </IconButton>
     );
   }

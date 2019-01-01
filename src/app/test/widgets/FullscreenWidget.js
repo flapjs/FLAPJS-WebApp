@@ -21,6 +21,7 @@ class FullscreenWidget extends React.Component
       <IconStateButton id={this.props.id}
         className={Style.fullscreen_button + " " + this.props.className}
         style={this.props.style}
+        title={"Fullscreen Mode"}
         onClick={(e, i) => app.setState({hide: (i === 0)})}>
         <FullscreenIcon/>
         <FullscreenExitIcon/>

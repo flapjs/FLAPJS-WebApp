@@ -1,5 +1,5 @@
 import React from 'react';
-import './IconButton.css';
+import IconButton from './IconButton.js';
 
 class IconStateButton extends React.Component
 {
@@ -46,18 +46,19 @@ class IconStateButton extends React.Component
   //Override
   render()
   {
+    const child = React.Children.map(this.props.children, (child, i) => {
+      if (i === this.state.index) return child;
+    })[0];
+
     return (
-      <button id={this.props.id}
-        className={"icon-button " + this.props.className}
+      <IconButton id={this.props.id}
+        className={this.props.className}
         style={this.props.style}
         title={this.props.title}
         disabled={this.props.disabled}
         onClick={this.onClick}>
-        {React.Children.map(this.props.children, (child, i) => {
-          if (i === this.state.index) return child;
-          return null;
-        })}
-      </button>
+        {child}
+      </IconButton>
     );
   }
 }

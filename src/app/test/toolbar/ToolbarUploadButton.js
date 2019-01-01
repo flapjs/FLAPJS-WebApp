@@ -1,4 +1,5 @@
 import React from 'react';
+import ToolbarButtonStyle from './ToolbarButton.css';
 import Style from './ToolbarUploadButton.css';
 
 import IconButton from 'test/components/IconButton.js';
@@ -28,21 +29,19 @@ class ToolbarUploadButton extends React.Component
   render()
   {
     const IconClass = this.props.icon;
-    const title = this.props.title;
-
     return (
       <IconButton id={this.props.id}
-        className={Style.upload_input_container +
+        className={ToolbarButtonStyle.toolbar_button +
+          " " + Style.upload_button +
           " " + this.props.className}
         style={this.props.style}
-        title={title}
+        title={this.props.title}
         disabled={this.props.disabled}>
         <input type="file" name="import"
           className={Style.upload_input}
           accept={this.props.accept}
           onChange={this.onFileUpload}/>
-        {IconClass && <IconClass/>}
-        <label>{title}</label>
+        <IconClass/>
       </IconButton>
     );
   }

@@ -1,15 +1,13 @@
 :local(.zoom_container) {
   display: flex;
   flex-direction: column;
-
-  width: 3em;
 }
 :local(.zoom_button) {
   margin-bottom: -0.75em;
 }
 :local(.zoom_label) {
-  font-size: 0.75em;
+  font-size: 0.5em;
   text-align: center;
 
-  margin-top: 0.5em;
+  margin-top: 0.75em;
 }
