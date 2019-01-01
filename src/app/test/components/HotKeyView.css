@@ -1,0 +1,24 @@
+:local(.hotkey_container) {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+:local(.hotkey) {
+  flex: 1;
+  padding: 0.2em;
+  border: 1px solid var(--color-viewport-back-detail);
+  border-radius: 0.5em;
+
+  color: var(--color-viewport-back-detail);
+}
+:local(.hotkey).active {
+  color: var(--color-viewport-text);
+}
+:local(.hotkey_name) {
+  float: right;
+  margin-left: 1em;
+  font-weight: bold;
+}

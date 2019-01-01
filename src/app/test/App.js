@@ -5,7 +5,6 @@ import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION
 import ToolbarView from './toolbar/ToolbarView.js';
 import WorkspaceView from './workspace/WorkspaceView.js';
 import ViewportView from './viewport/ViewportView.js';
-
 import UploadDropZone from './components/UploadDropZone.js';
 
 import EditPane from './EditPane.js';
@@ -14,7 +13,6 @@ import TapePane from './TapePane.js';
 import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR} from './toolbar/ToolbarButton.js';
 import ToolbarDivider from './toolbar/ToolbarDivider.js';
 import ToolbarUploadButton from './toolbar/ToolbarUploadButton.js';
-
 import PageEmptyIcon from './iconset/PageEmptyIcon.js';
 import UndoIcon from './iconset/UndoIcon.js';
 import RedoIcon from './iconset/RedoIcon.js';
@@ -23,6 +21,9 @@ import DownloadIcon from './iconset/DownloadIcon.js';
 import BugIcon from './iconset/BugIcon.js';
 import WorldIcon from './iconset/WorldIcon.js';
 import HelpIcon from './iconset/HelpIcon.js';
+
+import HotKeyManager, {CTRL_KEY, ALT_KEY, SHIFT_KEY} from './HotKeyManager.js';
+import HotKeyView from './components/HotKeyView.js';
 
 import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
@@ -43,6 +44,7 @@ class App extends React.Component
     this._workspace = null;
     this._toolbar = null;
     this._drawer = null;
+    this._viewport = null;
 
     //These need to be initialized before module
     this._inputAdapter = new InputAdapter();
@@ -51,6 +53,13 @@ class App extends React.Component
       .setMaxScale(10)
       .setOffsetDamping(0.4);
     this._undoManager = new UndoManager();
+
+    this._hotKeyManager = new HotKeyManager();
+    this._hotKeyManager.registerHotKey("Export to PNG", [CTRL_KEY, 'KeyP'], () => {console.log("Export!")});
+    this._hotKeyManager.registerHotKey("Save as JSON", [CTRL_KEY, 'KeyS'], () => {console.log("Save!")});
+    this._hotKeyManager.registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {console.log("New!")});
+    this._hotKeyManager.registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")});
+    this._hotKeyManager.registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
 
     this._module = new FSAModule(this);
 
@@ -63,18 +72,16 @@ class App extends React.Component
     this._mediaQuerySmallWidthList = window.matchMedia("only screen and (max-width: 400px)");
     this._mediaQuerySmallHeightList = window.matchMedia("only screen and (min-height: 400px)");
 
-    Notifications.addMessage("Welcome to Flap.js");
+    //Notifications.addMessage("Welcome to Flap.js");
   }
 
   //Override
   componentDidMount()
   {
-    //Initialize input adapter
     const workspaceDOM = this._workspace.ref;
     this._inputAdapter.initialize(workspaceDOM);
-
-    //Initialize the module...
     this._module.initialize(this);
+    this._hotKeyManager.initialize();
 
     this._init = true;
   }
@@ -84,8 +91,9 @@ class App extends React.Component
   {
     this._init = false;
 
+    this._hotKeyManager.destroy();
     this._module.destroy(this);
-    this._inputAdapter.destroy(this);
+    this._inputAdapter.destroy();
   }
 
   get workspace() { return this._workspace; }
@@ -93,6 +101,7 @@ class App extends React.Component
   getCurrentModule() { return this._module; }
   getInputAdapter() { return this._inputAdapter; }
   getUndoManager() { return this._undoManager; }
+  getHotKeyManager() { return this._hotKeyManager; }
 
   //Override
   render()
@@ -189,7 +198,9 @@ class App extends React.Component
               <NotificationView notificationManager={Notifications}>
               </NotificationView>
 
-              <ViewportView>
+              <HotKeyView hotKeyManager={this._hotKeyManager}/>
+
+              <ViewportView ref={ref=>this._viewport=ref}>
                 <EditPane app={this} module={this._module} viewport={viewport}/>
                 <TapePane app={this} module={this._module} viewport={viewport}/>
               </ViewportView>
