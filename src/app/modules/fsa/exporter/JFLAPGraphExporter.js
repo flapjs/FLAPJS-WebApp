@@ -1,6 +1,6 @@
 import AbstractGraphExporter from 'modules/base/exporter/AbstractGraphExporter.js';
 
-import XMLIcon from 'icons/flat/XMLIcon.js';
+import XMLFileIcon from 'test/iconset/flat/XMLFileIcon.js';
 import { XML as XMLGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import Downloader from 'util/Downloader.js';
 
@@ -102,9 +102,9 @@ class JFLAPGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  getIconComponentClass()
+  getIconClass()
   {
-    return XMLIcon;
+    return XMLFileIcon;
   }
 }
 

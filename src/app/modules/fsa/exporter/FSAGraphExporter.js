@@ -1,6 +1,6 @@
 import AbstractGraphExporter from 'modules/base/exporter/AbstractGraphExporter.js';
 
-import JSONIcon from 'icons/flat/JSONIcon.js';
+import JSONFileIcon from 'test/iconset/flat/JSONFileIcon.js';
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import Downloader from 'util/Downloader.js';
 
@@ -178,9 +178,9 @@ class FSAGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  getIconComponentClass()
+  getIconClass()
   {
-    return JSONIcon;
+    return JSONFileIcon;
   }
 }
 

@@ -1,0 +1,35 @@
+:local(.panel_container) {
+}
+:local(.panel_title) > h1 {
+  border-bottom: 1px solid black;
+}
+:local(.panel_content) {
+  display: flex;
+  flex-direction: column;
+}
+:local(.exporter_button) {
+  display: flex;
+  padding: 0.5em 0em;
+
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+:local(.exporter_button):hover {
+  background: gray;
+}
+:local(.exporter_button) > svg {
+  width: 4em;
+  height: 4em;
+
+  pointer-events: none;
+}
+:local(.exporter_button) > label {
+  flex: 1;
+  align-self: center;
+
+  font-size: 1.5em;
+
+  pointer-events: none;
+}

@@ -42,7 +42,7 @@ class AbstractGraphExporter
     return this.getLabel();
   }
 
-  getIconComponentClass()
+  getIconClass()
   {
     return null;
   }

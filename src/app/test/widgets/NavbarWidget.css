@@ -1,3 +1,7 @@
+:local(.navbar_container) {
+  font-size: 0.8em;
+}
+
 :local(.navbar_container) .icon-button {
   fill: var(--color-viewport-text);
 }

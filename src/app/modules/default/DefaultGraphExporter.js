@@ -71,7 +71,7 @@ class DefaultGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  getIconComponentClass()
+  getIconClass()
   {
     return JSONIcon;
   }

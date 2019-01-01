@@ -65,7 +65,7 @@ class GraphImageExporter extends AbstractGraphExporter
   }
 
   //Override
-  getIconComponentClass()
+  getIconClass()
   {
     switch(this._imageType)
     {
