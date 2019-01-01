@@ -13,7 +13,8 @@ class ExportPanel extends React.Component
     if (!exporter.doesSupportFile()) return null;
     const IconClass = exporter.getIconClass();
     return (
-      <button className={Style.exporter_button}
+      <button key={exporter.getFileType()}
+        className={Style.exporter_button}
         title={exporter.getTitle()}
         onClick={() => {
           const machineController = this.props.currentModule.getMachineController();

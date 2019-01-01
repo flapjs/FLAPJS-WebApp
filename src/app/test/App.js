@@ -2,10 +2,10 @@ import React from 'react';
 import './App.css';
 
 import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION_VERTICAL, DRAWER_BAR_DIRECTION_HORIZONTAL } from './drawer/DrawerView.js';
-import ToolbarView, { ONESHOT_MODE } from './toolbar/ToolbarView.js';
+import ToolbarView from './toolbar/ToolbarView.js';
 import WorkspaceView from './workspace/WorkspaceView.js';
 import ViewportView from './viewport/ViewportView.js';
-import TooltipView from './tooltip/TooltipView.js';
+import TooltipView, { ONESHOT_MODE } from './tooltip/TooltipView.js';
 import UploadDropZone from './components/UploadDropZone.js';
 
 import ExportPanel from './panels/ExportPanel.js';
