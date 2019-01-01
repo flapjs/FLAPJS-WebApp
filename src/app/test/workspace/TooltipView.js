@@ -6,6 +6,7 @@ const TOOLTIP_WAIT_TIME = 15000;
 
 export const RANDOM_MODE = "random";
 export const SEQUENTIAL_MODE = "sequential";
+export const ONESHOT_MODE = "oneshot";
 
 class TooltipView extends React.Component
 {
@@ -44,11 +45,33 @@ class TooltipView extends React.Component
       {
         nextIndex = Math.floor(Math.random() * count);
       }
-      this.setTooltipIndex(nextIndex >= count ? 0 : nextIndex);
+      else if (this.props.mode === ONESHOT_MODE)
+      {
+        if (nextIndex >= count) nextIndex = count - 1;
+      }
+      else
+      {
+        if (nextIndex >= count) nextIndex = 0;
+      }
+      this.setTooltipIndex(nextIndex);
     }
     else
     {
-      this.setTooltipIndex(0);
+      if (this.props.mode === RANDOM_MODE)
+      {
+        //Pick a random index to start at.
+        this.setTooltipIndex(Math.floor(Math.random() * React.Children.count(this.props.children)));
+      }
+      else if (this.props.mode === ONESHOT_MODE)
+      {
+        //Skip to the end.
+        this.setTooltipIndex(React.Children.count(this.props.children) - 1);
+      }
+      else
+      {
+        //Go back to the beginning.
+        this.setTooltipIndex(0);
+      }
     }
   }
 

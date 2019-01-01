@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 
 import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION_VERTICAL, DRAWER_BAR_DIRECTION_HORIZONTAL } from './drawer/DrawerView.js';
-import ToolbarView from './toolbar/ToolbarView.js';
+import ToolbarView, { ONESHOT_MODE } from './toolbar/ToolbarView.js';
 import WorkspaceView from './workspace/WorkspaceView.js';
 import TooltipView from './workspace/TooltipView.js';
 import ViewportView from './viewport/ViewportView.js';
@@ -184,10 +184,16 @@ class App extends React.Component
           hide={isFullscreen}>
           <UploadDropZone>
             <div className="viewport">
-              <TooltipView visible={/* For the initial fade-in animation */this._init && graphController.getGraph().isEmpty()}>
+              <TooltipView mode={ONESHOT_MODE} visible={/* For the initial fade-in animation */this._init && graphController.getGraph().isEmpty()}>
                 <label>{I18N.toString("message.workspace.empty")}</label>
-                <label>{"Hello?"}</label>
                 <label>{"If you need help, try the \'?\' at the top."}</label>
+                <label>{"Or you can choose to do nothing."}</label>
+                <label>{"I can't do anything about that."}</label>
+                <label>{"You really should consider doing something though, for the sake of both of us."}</label>
+                <label>{"Of course, it is your free will."}</label>
+                <label>{"Please do something."}</label>
+                <label>{"I need my job."}</label>
+                <label>{I18N.toString("message.workspace.empty")}</label>
               </TooltipView>
 
               <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>
