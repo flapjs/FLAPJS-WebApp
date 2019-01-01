@@ -22,8 +22,8 @@ import BugIcon from './iconset/BugIcon.js';
 import WorldIcon from './iconset/WorldIcon.js';
 import HelpIcon from './iconset/HelpIcon.js';
 
-import HotKeyManager, {CTRL_KEY, ALT_KEY, SHIFT_KEY} from './HotKeyManager.js';
-import HotKeyView from './components/HotKeyView.js';
+import HotKeyManager, {CTRL_KEY, ALT_KEY, SHIFT_KEY} from './hotkey/HotKeyManager.js';
+import HotKeyView from './hotkey/HotKeyView.js';
 
 import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
