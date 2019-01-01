@@ -1,4 +1,4 @@
-import AbstractModule from 'modules/base/AbstractModule.js';
+import AbstractModule, {DEFAULT_PANELS} from 'modules/base/AbstractModule.js';
 
 import Notifications from 'system/notification/Notifications.js';
 
@@ -25,7 +25,7 @@ import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
 
 const VERSION = "0.0.1";
-const PANELS = [TestingPanel, OverviewPanel, AnalysisPanel];
+const PANELS = [AboutPanel, TestingPanel, OverviewPanel, AnalysisPanel].concat(DEFAULT_PANELS);
 const EXPORTERS = [
   new FSAGraphExporter(),
   new JFLAPGraphExporter()
@@ -167,8 +167,6 @@ class FSAModule extends AbstractModule
   getGraphExporters() { return EXPORTERS; }
   //Override
   getModuleVersion() { return VERSION; }
-  //Override
-  getDefaultModulePanel() { return AboutPanel; }
   //Override
   getModulePanels() { return PANELS; }
   //Override

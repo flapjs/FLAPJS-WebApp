@@ -57,6 +57,9 @@ class ExportingPanel extends React.Component
     </div>;
   }
 }
+Object.defineProperty(ExportingPanel, 'TITLE', {
+  get: function() { return I18N.toString("component.exporting.title"); }
+});
 ExportingPanel.UNLOCALIZED_NAME = "component.exporting.title";
 
 export default ExportingPanel;

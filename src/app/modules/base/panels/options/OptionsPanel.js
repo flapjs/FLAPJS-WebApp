@@ -164,7 +164,7 @@ class OptionsPanel extends React.Component
   //Override
   componentWillUnmount()
   {
-    registry.terminate();
+    this.styleOpts.terminate();
 
     LocalSave.unregisterHandler(this);
   }
@@ -351,6 +351,9 @@ class OptionsPanel extends React.Component
     </div>;
   }
 }
+Object.defineProperty(OptionsPanel, 'TITLE', {
+  get: function() { return I18N.toString("component.options.title"); }
+});
 OptionsPanel.UNLOCALIZED_NAME = "component.options.title";
 
 export default OptionsPanel;

@@ -19,6 +19,7 @@ class DefaultModule extends AbstractModule
 
   getLabelEditor() { return null; }
 
+  //Override
   getDefaultGraphExporter() { return this._exporter; }
   //Override
   getInputController() { return this._inputController; }

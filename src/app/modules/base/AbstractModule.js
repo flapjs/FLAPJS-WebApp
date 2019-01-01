@@ -1,12 +1,16 @@
 import GraphImporter from './exporter/GraphImporter.js';
 import GraphImageExporter from './exporter/GraphImageExporter.js';
 
-const DEFAULT_PANELS = [];
+import ExportingPanel from './panels/exporting/ExportingPanel.js';
+import OptionsPanel from './panels/options/OptionsPanel.js';
+
 const DEFAULT_GRAPH_EXPORTERS = [];
 const DEFAULT_IMAGE_EXPORTERS = [
   new GraphImageExporter('png'),
   new GraphImageExporter('jpg')
 ];
+
+export const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
 
 class AbstractModule
 {
@@ -21,26 +25,10 @@ class AbstractModule
 
   update(app) {}
 
-  getRenderer(renderLayer)
-  {
-    return null;
-  }
-
-  getInputController()
-  {
-    throw new Error("Missing input controller for module \'" + this.getModuleName() + "\'");
-  }
-
-  getGraphController()
-  {
-    throw new Error("Missing graph controller for module \'" + this.getModuleName() + "\'");
-  }
-
-  getMachineController()
-  {
-    throw new Error("Missing machine controller for module \'" + this.getModuleName() + "\'");
-  }
-
+  getRenderer(renderLayer) { return null; }
+  getInputController() { throw new Error("Missing input controller for module \'" + this.getModuleName() + "\'"); }
+  getGraphController() { throw new Error("Missing graph controller for module \'" + this.getModuleName() + "\'"); }
+  getMachineController() { throw new Error("Missing machine controller for module \'" + this.getModuleName() + "\'"); }
   getDefaultGraphExporter()
   {
     const exporters = this.getGraphExporters();
@@ -48,46 +36,13 @@ class AbstractModule
 
     throw new Error("Missing default graph exporter for module \'" + this.getModuleName() + "\'");
   }
-
-  getImageExporters()
-  {
-    return DEFAULT_IMAGE_EXPORTERS;
-  }
-
-  getGraphExporters()
-  {
-    return DEFAULT_GRAPH_EXPORTERS;
-  }
-
-  getGraphImporter()
-  {
-    return this._importer;
-  }
-
-  getDefaultModulePanel()
-  {
-    return null;
-  }
-
-  getModulePanels()
-  {
-    return DEFAULT_PANELS;
-  }
-
-  getModuleVersion()
-  {
-    return '0.0.0';
-  }
-
-  getModuleName()
-  {
-    throw new Error("Missing module name");
-  }
-
-  getLocalizedModuleName()
-  {
-    return "Module";
-  }
+  getImageExporters() { return DEFAULT_IMAGE_EXPORTERS; }
+  getGraphExporters() { return DEFAULT_GRAPH_EXPORTERS; }
+  getGraphImporter() { return this._importer; }
+  getModulePanels() { return DEFAULT_PANELS; }
+  getModuleVersion() { return '0.0.0'; }
+  getModuleName() { throw new Error("Missing module name"); }
+  getLocalizedModuleName() { return "Module"; }
 }
 
 export default AbstractModule;

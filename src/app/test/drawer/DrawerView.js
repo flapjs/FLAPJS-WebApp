@@ -10,7 +10,6 @@ const DRAWER_HANDLE_MIN_SIZE_BUFFER = 32;
 const DRAWER_HANDLE_MAX_SIZE_BUFFER = 128;
 const DRAWER_MIN_WIDTH = 200;
 const DRAWER_RESIZE_REFRESH_RATE = 200;
-const DRAWER_TAB_LIST_BUFFER = 150;
 
 const DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE = true;
 const DRAWER_SHOULD_HIDE_TAB_LIST = false;
@@ -343,6 +342,7 @@ class DrawerView extends React.Component
                 <ExpandDownIcon/>
               </IconButton>
               {showDrawerTabs && drawerPanels && drawerPanels.map((e, i) => {
+                if (!e) return null;
                 if (!e['TITLE']) return null;
                 const title = e['TITLE'];
                 return (
@@ -358,6 +358,7 @@ class DrawerView extends React.Component
             <div className={Style.drawer_content_panel}>
               <div className={Style.drawer_panel_container}>
                 {drawerPanels && drawerPanels.map((e, i) => {
+                  if (!e) return null;
                   const ComponentClass = e;
                   const title = e.TITLE || "";
                   const current = this.isCurrentTab(i);
