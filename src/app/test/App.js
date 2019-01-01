@@ -4,6 +4,7 @@ import './App.css';
 import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION_VERTICAL, DRAWER_BAR_DIRECTION_HORIZONTAL } from './drawer/DrawerView.js';
 import ToolbarView from './toolbar/ToolbarView.js';
 import WorkspaceView from './workspace/WorkspaceView.js';
+import TooltipView from './workspace/TooltipView.js';
 import ViewportView from './viewport/ViewportView.js';
 import UploadDropZone from './components/UploadDropZone.js';
 
@@ -183,10 +184,19 @@ class App extends React.Component
           hide={isFullscreen}>
           <UploadDropZone>
             <div className="viewport">
+              <TooltipView visible={/* For the initial fade-in animation */this._init && graphController.getGraph().isEmpty()}>
+                <label>{I18N.toString("message.workspace.empty")}</label>
+                <label>{"Hello?"}</label>
+                <label>{"If you need help, try the \'?\' at the top."}</label>
+              </TooltipView>
+
               <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>
-                {/* Graph origin crosshair */}
-                <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="var(--color-viewport-back-detail)"/>
-                <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="var(--color-viewport-back-detail)"/>
+                {/* Graph origin crosshair */
+                  !graphController.getGraph().isEmpty() &&
+                  <React.Fragment>
+                    <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="var(--color-viewport-back-detail)"/>
+                    <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="var(--color-viewport-back-detail)"/>
+                  </React.Fragment>}
                 {/* Graph objects */
                   GraphRenderer &&
                   <GraphRenderer currentModule={this._module} parent={this._workspace}/>}

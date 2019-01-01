@@ -76,7 +76,6 @@
   flex: 1;
   display: flex;
   flex-direction: row;
-  padding-left: 10px;
 }
 :local(.bar_menu) .icon-button {
   background: var(--color-toolbar-menu);
@@ -99,7 +98,7 @@
 }
 :local(.bar_menu) .icon-button label {
   flex: 1;
-  font-size: 10vh;
+  font-size: 10vmin;
   align-self: center;
 }
 

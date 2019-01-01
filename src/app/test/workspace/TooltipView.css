@@ -1,0 +1,36 @@
+:local(.tooltip_container) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  pointer-events: none;
+  user-select: none;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+}
+:local(.tooltip_container).visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 3.0s 3.0s ease, visibility 0s linear 3.0s;
+}
+:local(.tooltip_container) > * {
+  /* HACK: This fixes a weird offset for the view */
+  margin-right: 10px;
+
+  position: absolute;
+  text-align: center;
+
+  font-size: 6vmin;
+  color: var(--color-viewport-back-detail);
+
+  opacity: 0;
+  transition: opacity 1.0s ease;
+}
