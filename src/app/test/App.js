@@ -191,6 +191,7 @@ class App extends React.Component
                 <label>{"I can't do anything about that."}</label>
                 <label>{"You really should consider doing something though, for the sake of both of us."}</label>
                 <label>{"Of course, it is your free will."}</label>
+                <label>{"You do you."}</label>
                 <label>{"Please do something."}</label>
                 <label>{"I need my job."}</label>
                 <label>{I18N.toString("message.workspace.empty")}</label>
