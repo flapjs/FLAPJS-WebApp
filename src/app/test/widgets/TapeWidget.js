@@ -65,7 +65,7 @@ class TapeWidget extends React.Component
 
           const sourceStates = this._tapeContext.getTapeSourceStatesByIndex(i);
           return (
-            <div className={"tape-row-entry" +
+            <div key={e + ":" + i} className={"tape-row-entry" +
               (active ? " active " : "") +
               (activeRead ? " active-read " : "")}>
               {showTransitionStates &&

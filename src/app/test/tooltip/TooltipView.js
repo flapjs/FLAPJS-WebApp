@@ -1,8 +1,7 @@
 import React from 'react';
 import Style from './TooltipView.css';
 
-const TOOLTIP_INIT_TIME = 30000;
-const TOOLTIP_WAIT_TIME = 15000;
+const TOOLTIP_WAIT_TIME = 30000;
 
 export const RANDOM_MODE = "random";
 export const SEQUENTIAL_MODE = "sequential";
@@ -15,7 +14,6 @@ class TooltipView extends React.Component
     super(props);
 
     this._tooltipTimeout = null;
-    this._tooltipTime = TOOLTIP_INIT_TIME;
 
     this.state = {
       index: props.initial || 0
@@ -34,18 +32,19 @@ class TooltipView extends React.Component
 
   updateTooltip()
   {
+    const mode = this.props.mode;
+    const visible = this.props.visible;
     this._tooltipTimeout = null;
-    this._tooltipTime = TOOLTIP_WAIT_TIME;
 
-    if (this.props.visible)
+    if (visible)
     {
       const count = React.Children.count(this.props.children);
       let nextIndex = this.state.index + 1;
-      if (this.props.mode === RANDOM_MODE)
+      if (mode === RANDOM_MODE)
       {
         nextIndex = Math.floor(Math.random() * count);
       }
-      else if (this.props.mode === ONESHOT_MODE)
+      else if (mode === ONESHOT_MODE)
       {
         if (nextIndex >= count) nextIndex = count - 1;
       }
@@ -57,12 +56,12 @@ class TooltipView extends React.Component
     }
     else
     {
-      if (this.props.mode === RANDOM_MODE)
+      if (mode === RANDOM_MODE)
       {
         //Pick a random index to start at.
         this.setTooltipIndex(Math.floor(Math.random() * React.Children.count(this.props.children)));
       }
-      else if (this.props.mode === ONESHOT_MODE)
+      else if (mode === ONESHOT_MODE)
       {
         //Skip to the end.
         this.setTooltipIndex(React.Children.count(this.props.children) - 1);
@@ -80,14 +79,13 @@ class TooltipView extends React.Component
   {
     const mode = this.props.mode;
     const visible = this.props.visible;
-
     const tooltipIndex = this.state.index;
 
     if (visible && !this._tooltipTimeout)
     {
       this._tooltipTimeout = setTimeout(() => {
         this.updateTooltip();
-      }, this._tooltipTime);
+      }, TOOLTIP_WAIT_TIME);
     }
 
     return (
