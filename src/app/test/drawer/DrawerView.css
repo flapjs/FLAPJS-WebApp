@@ -136,7 +136,7 @@
   /* Show drawer handle when open */
   opacity: 1;
 }
-.drawer-side-bottom :local(.drawer_handle) > * {
+:local(.app_drawer).drawer-side-bottom :local(.drawer_handle) > * {
   transform: rotateZ(90deg);
 }
 /********* DRAWER CONTENT *********/
@@ -211,13 +211,6 @@
 }
 :local(.app_drawer).open.drawer-side-bottom :local(.drawer_tab_expander) {
   transform: rotateZ(0deg);
-}
-:local(.drawer_tab_next).icon-button {
-  margin: auto auto;
-  min-width: var(--drawer-tab-height);
-  max-width: var(--drawer-tab-height);
-  min-height: var(--drawer-tab-height);
-  max-height: var(--drawer-tab-height);
 }
 :local(.drawer_tab) {
   visibility: visible;
