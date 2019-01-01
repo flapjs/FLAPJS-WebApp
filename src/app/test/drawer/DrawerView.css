@@ -180,7 +180,6 @@
 
   min-width: 5em;
   min-height: 0em;
-  margin: 0em 0.2em;
 
   user-select: none;
   cursor: pointer;
@@ -274,7 +273,6 @@
 :local(.app_drawer).drawer-bar-sideways :local(.drawer_content_bar) > * {
   min-width: 0em;
   min-height: 5em;
-  margin: 0.2em 0em;
 }
 :local(.app_drawer).drawer-bar-sideways :local(.drawer_tab) {
   padding-top: 0px;
