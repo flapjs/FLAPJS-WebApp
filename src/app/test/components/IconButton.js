@@ -15,10 +15,12 @@ class IconButton extends React.Component
   {
     const title = this.props.title;
 
+    const showButtonLabel = ICON_BUTTON_SHOW_LABEL && title;
+
     return (
       <button id={this.props.id}
         className={Style.icon_button +
-          (ICON_BUTTON_SHOW_LABEL ? " icon-button-show-label " : "") +
+          (showButtonLabel ? " icon-button-show-label " : "") +
           " " + this.props.className}
         style={this.props.style}
         title={title}
