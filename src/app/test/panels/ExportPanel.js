@@ -1,6 +1,8 @@
 import React from 'react';
 import Style from './ExportPanel.css';
 
+import IconButton from 'test/components/IconButton.js';
+
 class ExportPanel extends React.Component
 {
   constructor(props)
@@ -13,8 +15,8 @@ class ExportPanel extends React.Component
     if (!exporter.doesSupportFile()) return null;
     const IconClass = exporter.getIconClass();
     return (
-      <button key={exporter.getFileType()}
-        className={Style.exporter_button}
+      <IconButton key={exporter.getFileType()}
+        className={Style.panel_button}
         title={exporter.getTitle()}
         onClick={() => {
           const machineController = this.props.currentModule.getMachineController();
@@ -23,7 +25,7 @@ class ExportPanel extends React.Component
         }}>
         <IconClass/>
         <label>{exporter.getLabel()}</label>
-      </button>
+      </IconButton>
     );
   }
 
