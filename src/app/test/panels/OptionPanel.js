@@ -2,7 +2,6 @@ import React from 'react';
 import Style from './ExportPanel.css';
 
 import PanelSection from './PanelSection.js';
-import IconButton from 'test/components/IconButton.js';
 
 class OptionPanel extends React.Component
 {

@@ -12,7 +12,7 @@ class PanelSection extends React.Component
     super(props);
 
     this.state = {
-      open: false
+      open: props.initial || false
     };
 
     this.onClick = this.onClick.bind(this);

@@ -1,0 +1,7 @@
+:local(.panel_checkbox) {
+  font-size: 1.2em;
+}
+:local(.panel_button) {
+  width: 100%;
+  margin: 0.5em;
+}
