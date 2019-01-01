@@ -13,12 +13,28 @@
   border-radius: 0.5em;
 
   color: var(--color-viewport-back-detail);
+
+  animation-name: fadein;
+  animation-duration: 0.2s;
 }
 :local(.hotkey).active {
   color: var(--color-viewport-text);
+
+  animation-name: wiggle;
+  animation-duration: 0.3s;
 }
 :local(.hotkey_name) {
   float: right;
   margin-left: 1em;
   font-weight: bold;
+}
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes wiggle {
+  0% { transform: translateX(0); }
+  30% { transform: translateX(2%); }
+  60% { transform: translateX(-2%); }
+  100% { transform: translateX(0); }
 }

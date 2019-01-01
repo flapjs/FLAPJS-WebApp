@@ -38,7 +38,7 @@ class HotKeyView extends React.Component
         {this._cachedHotKeys.map((e, i) => {
           const isActive = currentHotKey === e;
           return (
-            <div key={e.localizedKeys}
+            <div key={e.localizedKeys + ":" + i + ":" + (isActive ? useCount : 0)}
               className={Style.hotkey +
                 (isActive ? " active " : "")}>
               <label className={Style.hotkey_label}>
