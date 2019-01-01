@@ -53,7 +53,7 @@
   position: relative;
   z-index: 500;
   width: var(--drawer-width);
-  height: auto;
+  height: 100%;/* auto */
   display: flex;
   flex-direction: row;
 
@@ -176,7 +176,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-grow: 1;
+  flex: 1;
+  
   min-width: 5em;
   min-height: 0em;
 
@@ -331,7 +332,7 @@
 
 /********* BOTTOM DRAWER *********/
 :local(.app_drawer).drawer-side-bottom {
-  width: auto;
+  width: 100%;
   height: var(--drawer-width);
   flex-direction: column;
 
@@ -360,7 +361,7 @@
 }
 :local(.app_drawer).drawer-side-bottom :local(.drawer_content) {
   height: calc(var(--drawer-width) - var(--drawer-handle-width));
-  width: auto;
+  width: 100%;/* auto */
 }
 
 /********* FULL DRAWER (OPENED) *********/
