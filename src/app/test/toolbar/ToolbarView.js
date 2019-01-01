@@ -8,6 +8,7 @@ import MenuIcon from '../iconset/MenuIcon.js';
 
 const TOOLBAR_BUTTON_BUFFER = 150;
 const TOOLBAR_ALLOW_MENU_BAR = true;
+const TOOLBAR_SHOW_BUTTON_LABELS = true;
 
 class ToolbarView extends React.Component
 {
@@ -95,6 +96,7 @@ class ToolbarView extends React.Component
       className={Style.app_bar +
         (isBarOpen ? " open " : "") +
         (shouldBarHide ? " hide " : "") +
+        (TOOLBAR_SHOW_BUTTON_LABELS ? " toolbar-show-labels " : "") +
         " " + this.props.className}
       style={this.props.style}>
         <div className={Style.bar_menu}>

@@ -10,19 +10,18 @@
   color: var(--color-viewport-text);
   background: var(--color-viewport-back);
 }
-/* TODO: Icon button styles are overwriting these changes... */
-:local(.tray_container) .icon-button {
+:local(.tray_button).icon-button {
   flex: 1;
   padding: 0em 0.8em;
   border-right: 1px solid var(--color-viewport-text);
 }
-:local(.tray_container) .icon-button:last-child {
+:local(.tray_button).icon-button:last-child {
   border-right: none;
 }
 
-:local(.tray_container) .icon-button {
+:local(.tray_button).icon-button {
   fill: var(--color-viewport-back-detail);
 }
-:local(.tray_container) .icon-button.active {
+:local(.tray_button).icon-button.active {
   fill: var(--color-viewport-text);
 }

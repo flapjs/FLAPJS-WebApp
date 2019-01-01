@@ -4,8 +4,12 @@
 
   width: 3em;
 }
+:local(.zoom_button) {
+  margin-bottom: -0.75em;
+}
 :local(.zoom_label) {
   font-size: 0.75em;
-  width: inherit;
   text-align: center;
+
+  margin-top: 0.5em;
 }

@@ -33,12 +33,14 @@ class ModeSelectTray extends React.Component
         className={Style.tray_container +
           " " + this.props.className}
         style={this.props.style}>
-        <IconButton className={mode === 0 ? "active" : ""}
+        <IconButton className={Style.tray_button +
+          (mode === 0 ? " active " : "")}
           onClick={() => this.onChange(0)}
           title={I18N.toString("cursor.actionmode")}>
           <EditPencilIcon/>
         </IconButton>
-        <IconButton className={mode === 1 ? "active" : ""}
+        <IconButton className={Style.tray_button +
+          (mode === 1 ? " active " : "")}
           onClick={() => this.onChange(1)}
           title={I18N.toString("cursor.movemode")}>
           <MoveIcon/>

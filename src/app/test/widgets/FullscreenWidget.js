@@ -1,4 +1,5 @@
 import React from 'react';
+import Style from './FullscreenWidget.css';
 
 import IconStateButton from 'test/components/IconStateButton.js';
 import FullscreenIcon from 'test/iconset/FullscreenIcon.js';
@@ -15,10 +16,10 @@ class FullscreenWidget extends React.Component
   render()
   {
     const app = this.props.app;
-    
+
     return (
       <IconStateButton id={this.props.id}
-        className={this.props.className}
+        className={Style.fullscreen_button + " " + this.props.className}
         style={this.props.style}
         onClick={(e, i) => app.setState({hide: (i === 0)})}>
         <FullscreenIcon/>

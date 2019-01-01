@@ -40,10 +40,10 @@ class ZoomWidget extends React.Component
         className={Style.zoom_container +
           " " + this.props.className}
         style={this.props.style}>
-        <IconButton onClick={this.onZoomIn}>
+        <IconButton className={Style.zoom_button} title="Zoom In" onClick={this.onZoomIn}>
           <ZoomInIcon/>
         </IconButton>
-        <IconButton onClick={this.onZoomOut}>
+        <IconButton className={Style.zoom_button} title="Zoom Out" onClick={this.onZoomOut}>
           <ZoomOutIcon/>
         </IconButton>
         <label className={Style.zoom_label}>{viewScale}</label>
