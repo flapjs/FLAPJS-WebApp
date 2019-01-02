@@ -8,8 +8,7 @@ import ViewportView from './viewport/ViewportView.js';
 import TooltipView, { ONESHOT_MODE } from './tooltip/TooltipView.js';
 import UploadDropZone from './components/UploadDropZone.js';
 
-import AnalysisPanel from './panels/AnalysisPanel.js';
-import ExportPanel from './panels/ExportPanel.js';
+import OverviewPanel from './panels/OverviewPanel.js';
 import OptionPanel from './panels/OptionPanel.js';
 
 import EditPane from './EditPane.js';
@@ -26,6 +25,7 @@ import DownloadIcon from './iconset/DownloadIcon.js';
 import BugIcon from './iconset/BugIcon.js';
 import WorldIcon from './iconset/WorldIcon.js';
 import HelpIcon from './iconset/HelpIcon.js';
+import SettingsIcon from 'test/iconset/SettingsIcon.js';
 
 import HotKeyManager, {CTRL_KEY, ALT_KEY, SHIFT_KEY} from './hotkey/HotKeyManager.js';
 import HotKeyView from './hotkey/HotKeyView.js';
@@ -139,6 +139,8 @@ class App extends React.Component
     return (
       <div className="app-container">
         <ToolbarView ref={ref=>this._toolbar=ref} className="app-bar"
+          menus={[OptionPanel]}
+          menuProps={{currentModule: this._module}}
           hide={isFullscreen}>
           <ToolbarButton title="New" icon={PageEmptyIcon}
             onClick={() => {
@@ -179,9 +181,11 @@ class App extends React.Component
           <ToolbarButton title="Language" icon={WorldIcon}/>
           <ToolbarButton title="Help" icon={HelpIcon}
             onClick={()=>window.open(HELP_URL, '_blank')}/>
+          <ToolbarButton title="Options" icon={SettingsIcon}
+            onClick={()=>this._toolbar.setCurrentMenu(0)}/>
         </ToolbarView>
         <DrawerView ref={ref=>this._drawer=ref} className="app-content"
-          panels={this._module.getModulePanels().concat([AnalysisPanel, ExportPanel, OptionPanel])}
+          panels={this._module.getModulePanels().concat([OverviewPanel, OptionPanel])}
           panelProps={{currentModule: this._module}}
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}

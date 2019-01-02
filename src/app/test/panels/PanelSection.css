@@ -57,11 +57,11 @@
 }
 
 :local(.section_content_container).open :local(.section_content) {
-  animation-name: slidein;
+  animation-name: panel-section-slidein;
   animation-duration: 0.3s;
 }
 
-@keyframes slidein {
+@keyframes panel-section-slidein {
   from { transform: translateX(30%); }
   to { transform: translateX(0%); }
 }

@@ -14,13 +14,13 @@
 
   color: var(--color-viewport-back-detail);
 
-  animation-name: fadein;
+  animation-name: hotkey-view-fadein;
   animation-duration: 0.2s;
 }
 :local(.hotkey).active {
   color: var(--color-viewport-text);
 
-  animation-name: wiggle;
+  animation-name: hotkey-view-wiggle;
   animation-duration: 0.3s;
 }
 :local(.hotkey_name) {
@@ -28,11 +28,11 @@
   margin-left: 1em;
   font-weight: bold;
 }
-@keyframes fadein {
+@keyframes hotkey-view-fadein {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-@keyframes wiggle {
+@keyframes hotkey-view-wiggle {
   0% { transform: translateX(0); }
   30% { transform: translateX(2%); }
   60% { transform: translateX(-2%); }

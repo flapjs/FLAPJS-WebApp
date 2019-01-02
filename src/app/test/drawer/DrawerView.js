@@ -363,10 +363,11 @@ class DrawerView extends React.Component
                   const title = e.TITLE || "";
                   const current = this.isCurrentTab(i);
                   return (
-                    <ComponentClass key={title + ":" + i + ":" + current}
+                    <ComponentClass key={title + ":" + i}
                       className={Style.drawer_panel}
                       style={{visibility: current ? "visible" : "hidden"}}
-                      {...this.props.panelProps}/>
+                      {...this.props.panelProps}
+                      drawer={this.ref}/>
                   );
                 })}
               </div>

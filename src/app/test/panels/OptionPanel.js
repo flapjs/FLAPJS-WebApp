@@ -1,5 +1,5 @@
 import React from 'react';
-import Style from './ExportPanel.css';
+import Style from './OptionPanel.css';
 
 import PanelSection from './PanelSection.js';
 
