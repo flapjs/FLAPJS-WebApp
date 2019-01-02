@@ -18,6 +18,7 @@ class HotKeyManager
     };
     this._prevHotKey = null;
     this._repeatCount = 0;
+    this._enabled = false;
 
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
@@ -27,10 +28,14 @@ class HotKeyManager
   {
     window.addEventListener('keydown', this.onKeyDown);
     window.addEventListener('keyup', this.onKeyUp);
+
+    this._enabled = true;
   }
 
   destroy()
   {
+    this._enabled = false;
+
     window.removeEventListener('keydown', this.onKeyDown);
     window.removeEventListener('keyup', this.onKeyUp);
   }
@@ -67,6 +72,16 @@ class HotKeyManager
     };
 
     this._hotkeys.push(result);
+  }
+
+  setEnabled(enabled)
+  {
+    this._enabled = enabled;
+  }
+
+  isEnabled()
+  {
+    return this._enabled;
   }
 
   findMatchingHotKey(e)
@@ -141,6 +156,8 @@ class HotKeyManager
 
   onKeyDown(e)
   {
+    if (!this._enabled) return;
+
     if (!e.repeat)
     {
       this.captureKeyEvent(e, false);
@@ -168,6 +185,8 @@ class HotKeyManager
 
   onKeyUp(e)
   {
+    if (!this._enabled) return;
+
     if (this.captureKeyEvent(e, true))
     {
       this._prevHotKey = null;

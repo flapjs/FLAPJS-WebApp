@@ -118,6 +118,13 @@ class App extends React.Component
     {
       this._inputAdapter.update();
       this._module.update(this);
+
+      //Disable hotkeys when graph is not in view
+      this._hotKeyManager.setEnabled(
+        !(this._toolbar && this._toolbar.isBarOpen()) &&
+        !(this._drawer && this._drawer.isDrawerOpen() &&
+          this._drawer.isDrawerFullscreen())
+        );
     }
 
     const hasSmallWidth = this._mediaQuerySmallWidthList.matches;

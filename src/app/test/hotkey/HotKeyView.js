@@ -17,8 +17,9 @@ class HotKeyView extends React.Component
   render()
   {
     const hotKeyManager = this.props.hotKeyManager;
+    const showHotKeys = !this.props.disabled && hotKeyManager.isEnabled();
 
-    if (!this._cacheTimeout)
+    if (!this._cacheTimeout && showHotKeys)
     {
       this._cacheTimeout = setTimeout(() => {
         this._cacheTimeout = null;
@@ -35,7 +36,7 @@ class HotKeyView extends React.Component
         className={Style.hotkey_container +
           " " + this.props.className}
         style={this.props.style}>
-        {this._cachedHotKeys.map((e, i) => {
+        {showHotKeys && this._cachedHotKeys.map((e, i) => {
           const isActive = currentHotKey === e;
           return (
             <div key={e.localizedKeys + ":" + i + ":" + (isActive ? useCount : 0)}
