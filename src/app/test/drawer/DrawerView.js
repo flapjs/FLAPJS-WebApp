@@ -10,6 +10,7 @@ const DRAWER_HANDLE_MIN_SIZE_BUFFER = 32;
 const DRAWER_HANDLE_MAX_SIZE_BUFFER = 128;
 const DRAWER_MIN_WIDTH = 200;
 const DRAWER_RESIZE_REFRESH_RATE = 200;
+const DRAWER_HANDLE_CUSTOM_SNAP_WIDTH = 300;
 
 const DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE = true;
 const DRAWER_SHOULD_HIDE_TAB_LIST = false;
@@ -290,8 +291,14 @@ class DrawerView extends React.Component
       document.documentElement.clientHeight :
       document.documentElement.clientWidth;
     const pointerValue = isDrawerSideBottom ? e.clientY : e.clientX;
-
-    this.setDrawerWidth(documentSize - pointerValue + DRAWER_HANDLE_DRAG_OFFSET);
+    
+    let result = documentSize - pointerValue + DRAWER_HANDLE_DRAG_OFFSET;
+    //Try snapping to some widths...
+    if (!isDrawerSideBottom && Math.abs(result - DRAWER_HANDLE_CUSTOM_SNAP_WIDTH) < DRAWER_HANDLE_MIN_SIZE_BUFFER)
+    {
+      result = DRAWER_HANDLE_CUSTOM_SNAP_WIDTH;
+    }
+    this.setDrawerWidth(result);
   }
 
   //Override
