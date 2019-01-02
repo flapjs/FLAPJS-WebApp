@@ -91,18 +91,6 @@
     visibility 0s linear 0.3s;/* for hide animation */
 }
 
-/** ICON STYLES **/
-:local(.app_drawer) .icon-button {
-  fill: var(--color-drawer-text);
-  transition: fill 0.3s ease;
-}
-:local(.app_drawer) .icon-button:hover {
-  fill: var(--color-drawer-text-active);
-}
-:local(.app_drawer) .icon-button:disabled {
-  fill: var(--color-drawer-text-disabled);
-}
-
 /********* DRAWER HANDLE *********/
 :local(.drawer_handle) {
   width: var(--drawer-handle-width);
@@ -185,10 +173,15 @@
   cursor: pointer;
 }
 :local(.drawer_tab_expander) {
+  /*TODO: This doesn't do anything, probably because of how IconButton is styled.*/
   position: sticky;
   top: 0;
   left: 0;
   z-index: 501;
+  background: var(--color-drawer-back);
+
+  color: var(--color-drawer-text);
+  transition: color 0.3s ease;
 
   /*NOTE: Whether drawer expander should be centered*/
   /*margin: auto auto;*/
@@ -201,8 +194,11 @@
 
   transform: rotateZ(90deg);
 }
-:local(.drawer_tab_expander).icon-button {
-  background: var(--color-drawer-back);
+:local(.drawer_tab_expander):hover {
+  color: var(--color-drawer-text-active);
+}
+:local(.drawer_tab_expander):disabled {
+  color: var(--color-drawer-text-disabled);
 }
 :local(.app_drawer).open :local(.drawer_tab_expander) {
   transform: rotateZ(-90deg);
@@ -213,6 +209,7 @@
 :local(.app_drawer).open.drawer-side-bottom :local(.drawer_tab_expander) {
   transform: rotateZ(0deg);
 }
+
 :local(.drawer_tab) {
   visibility: visible;
   opacity: 1.0;
@@ -291,16 +288,15 @@
 }
 
 /********* DRAWER PANELS *********/
-:local(.drawer_content_panel) {
+:local(.drawer_content_panel_container) {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
 
   /* for hiding content */
   outline: 10px dashed transparent;
   outline-offset: -20px;
 }
-:local(.drawer_panel_container) {
+:local(.drawer_content_panel) {
   position: relative;
   width: calc(100% - var(--drawer-tab-height));
   height: 100%;
@@ -310,21 +306,28 @@
   opacity: 1;
   transition: opacity 0.1s ease, visibility 0s linear;
 }
+:local(.drawer_panel_container) {
+  visibility: visible;
+}
+:local(.drawer_panel_container).hide {
+  visibility: hidden;
+}
 :local(.drawer_panel) {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  overflow-y: auto;
 
   padding: 0 1em;
 }
 /* for hiding content */
-:local(.app_drawer).hide-content :local(.drawer_content_panel) {
+:local(.app_drawer).hide-content :local(.drawer_content_panel_container) {
   outline: 10px dashed var(--color-drawer-back-detail);
   transition: outline 0.1s ease 0.1s;
 }
-:local(.app_drawer).hide-content :local(.drawer_panel_container) {
+:local(.app_drawer).hide-content :local(.drawer_content_panel) {
   visibility: hidden;
   opacity: 0;
   transition: opacity 0.1s ease 0.1s, visibility 0s linear 0.2s;
