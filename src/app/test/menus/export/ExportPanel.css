@@ -2,7 +2,7 @@
   padding: 0 1em;
 }
 :local(.panel_title) {
-  z-index: 10001;
+  z-index: 1001;
   position: sticky;
   top: 0;
   background: var(--color-toolbar-menu);

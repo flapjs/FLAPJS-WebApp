@@ -41,7 +41,7 @@ class ExportPanel extends React.Component
           " " + this.props.className}
         style={this.props.style}>
         <div className={Style.panel_title}>
-          <h1>{ExportPanel.TITLE}</h1>
+          <h1>{I18N.toString("component.exporting.title")}</h1>
         </div>
         <div className={Style.panel_content}>
           {graphExporters.map(e => this.renderExporterButton(e))}
