@@ -25,7 +25,7 @@ import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
 
 const VERSION = "0.0.1";
-const PANELS = [AboutPanel, TestingPanel, OverviewPanel, AnalysisPanel].concat(DEFAULT_PANELS);
+const PANELS = [AboutPanel, TestingPanel, OverviewPanel, AnalysisPanel];
 const EXPORTERS = [
   new FSAGraphExporter(),
   new JFLAPGraphExporter()

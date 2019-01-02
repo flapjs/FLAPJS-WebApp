@@ -10,7 +10,7 @@ const DEFAULT_IMAGE_EXPORTERS = [
   new GraphImageExporter('jpg')
 ];
 
-export const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
+export const DEFAULT_PANELS = [];
 
 class AbstractModule
 {
