@@ -1,0 +1,32 @@
+.transitiontable-container {
+  width: 100%;
+  overflow: auto;
+  text-align: center;
+}
+
+.transitiontable th, .transitiontable td {
+  padding: 5px;
+  border-radius: 5px;
+
+  background: var(--color-drawer-text-back);
+}
+
+.transitiontable th {
+  color: var(--color-drawer-text);
+}
+.transitiontable th.col {
+}
+.transitiontable th.row {
+}
+.transitiontable td {
+  color: var(--color-drawer-text-subtle);
+
+  font-size: 1.2em;
+  font-family: monospace;
+}
+.transitiontable td.accept {
+  text-decoration: underline;
+}
+.transitiontable td.error {
+  color: var(--color-drawer-error);
+}

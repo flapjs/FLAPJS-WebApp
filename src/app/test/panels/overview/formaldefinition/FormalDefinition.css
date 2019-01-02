@@ -1,0 +1,34 @@
+.formaldef-container div.error {
+  color: var(--color-drawer-error);
+}
+.formaldef-container {
+  margin-bottom: 10px;
+}
+.formaldef-container > h2 {
+  color: darkgray;
+  margin: 0;
+  padding-bottom: 5px;
+  border-bottom: 1px solid black;
+}
+.formaldef-container > div {
+  padding-bottom: 5px;
+  padding-left: 10px;
+  border-bottom: 1px dashed gray;
+}
+.formaldef-container h3 {
+  display: inline-block;
+  white-space: nowrap;
+  margin: 0;
+  margin-top: 10px;
+}
+.formaldef-container .formaldef-values {
+  margin: 0;
+  margin-left: 5px;
+}
+
+#formaldef-otherinputs {
+  color: var(--color-drawer-text-subtle);
+}
+#formaldef-otherinputs > *:not(:first-child) {
+  margin-left: 5px;
+}

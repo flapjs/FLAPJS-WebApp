@@ -20,7 +20,7 @@ class OptionPanel extends React.Component
           " " + this.props.className}
         style={this.props.style}>
         <div className={Style.panel_title}>
-          <h1>{OptionPanel.TITLE}</h1>
+          <h1>{I18N.toString("component.options.title")}</h1>
         </div>
         <div className={Style.panel_content}>
           <PanelSection title={"Customize stuff"}>
@@ -32,8 +32,5 @@ class OptionPanel extends React.Component
     );
   }
 }
-Object.defineProperty(OptionPanel, 'TITLE', {
-  get: function() { return I18N.toString("component.options.title"); }
-});
 
 export default OptionPanel;

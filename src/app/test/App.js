@@ -8,9 +8,13 @@ import ViewportView from './viewport/ViewportView.js';
 import TooltipView, { ONESHOT_MODE } from './tooltip/TooltipView.js';
 import UploadDropZone from './components/UploadDropZone.js';
 
-import OverviewPanel from './panels/OverviewPanel.js';
 import ExportPanel from './menus/export/ExportPanel.js';
 import OptionPanel from './menus/option/OptionPanel.js';
+
+import AboutPanel from './panels/about/AboutPanel.js';
+import TestingPanel from './panels/testing/TestingPanel.js';
+import OverviewPanel from './panels/overview/OverviewPanel.js';
+import AnalysisPanel from './panels/analysis/AnalysisPanel.js';
 
 import EditPane from './EditPane.js';
 import TapePane from './TapePane.js';
@@ -42,6 +46,8 @@ import UndoManager from 'system/undomanager/UndoManager.js';
 import FSAModule from 'modules/fsa/FSAModule.js';
 
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
+
+const PANELS = [AboutPanel, TestingPanel, OverviewPanel, AnalysisPanel];
 
 class App extends React.Component
 {
@@ -179,11 +185,11 @@ class App extends React.Component
           <ToolbarButton title="Language" icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}/>
           <ToolbarButton title="Help" icon={HelpIcon}
             onClick={()=>window.open(HELP_URL, '_blank')}/>
-          <ToolbarButton title="Options" icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+          <ToolbarButton title={I18N.toString("component.options.title")} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>this._toolbar.setCurrentMenu(1)}/>
         </ToolbarView>
         <DrawerView ref={ref=>this._drawer=ref} className="app-content"
-          panels={this._module.getModulePanels().concat([OverviewPanel])}
+          panels={PANELS}
           panelProps={{currentModule: this._module}}
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
