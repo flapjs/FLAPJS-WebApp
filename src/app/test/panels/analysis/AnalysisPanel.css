@@ -1,0 +1,13 @@
+:local(.panel_container) {
+}
+:local(.panel_title) > h1 {
+  border-bottom: 1px solid black;
+}
+:local(.panel_content) {
+  display: flex;
+  flex-direction: column;
+}
+:local(.panel_button) {
+  width: 100%;
+  margin: 0.5em;
+}

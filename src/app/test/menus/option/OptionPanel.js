@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './OptionPanel.css';
 
-import PanelSection from './PanelSection.js';
+import PanelSection from 'test/panels/PanelSection.js';
 
 class OptionPanel extends React.Component
 {
@@ -23,7 +23,7 @@ class OptionPanel extends React.Component
           <h1>{OptionPanel.TITLE}</h1>
         </div>
         <div className={Style.panel_content}>
-          <PanelSection title={"What?"}>
+          <PanelSection title={"Customize stuff"}>
           </PanelSection>
           <PanelSection title={"What?"}>
           </PanelSection>

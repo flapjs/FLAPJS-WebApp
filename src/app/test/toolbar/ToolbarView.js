@@ -3,11 +3,12 @@ import Style from './ToolbarView.css';
 
 import {TOOLBAR_CONTAINER_MENU, TOOLBAR_CONTAINER_TOOLBAR} from './ToolbarButton.js';
 
-import IconButton from '../components/IconButton.js';
-import MenuIcon from '../iconset/MenuIcon.js';
+import IconButton from 'test/components/IconButton.js';
+import MenuIcon from 'test/iconset/MenuIcon.js';
 
 const TOOLBAR_BUTTON_BUFFER = 150;
 const TOOLBAR_ALLOW_MENU_BAR = true;
+const TOOLBAR_DEFAULT_MENU_INDEX = -1;
 
 class ToolbarView extends React.Component
 {
@@ -20,7 +21,7 @@ class ToolbarView extends React.Component
 
     this.state = {
       open: false,
-      menuIndex: -1
+      menuIndex: TOOLBAR_DEFAULT_MENU_INDEX
     };
 
     this.onBarExpand = this.onBarExpand.bind(this);
@@ -31,7 +32,7 @@ class ToolbarView extends React.Component
     if (!this.state.open)
     {
       //Open it, but also reset menu...
-      this.setState({ open: true, menuIndex: -1 }, callback);
+      this.setState({ open: true, menuIndex: TOOLBAR_DEFAULT_MENU_INDEX }, callback);
     }
   }
 
@@ -40,7 +41,7 @@ class ToolbarView extends React.Component
     if (this.state.open)
     {
       //Close it, but also reset menu...
-      this.setState({ open: false, menuIndex: -1 }, callback);
+      this.setState({ open: false, menuIndex: TOOLBAR_DEFAULT_MENU_INDEX }, callback);
     }
   }
 
@@ -48,7 +49,7 @@ class ToolbarView extends React.Component
   {
     //Toggle it, but also reset menu...
     this.setState((prev, props) => {
-      return { open: !prev.open, menuIndex: -1 };
+      return { open: !prev.open, menuIndex: TOOLBAR_DEFAULT_MENU_INDEX };
     }, callback);
   }
 
@@ -60,7 +61,7 @@ class ToolbarView extends React.Component
   setCurrentMenu(menuIndex)
   {
     if (!this.props.menus) return;
-    if (menuIndex >= this.props.menus.length) menuIndex = -1;
+    if (menuIndex >= this.props.menus.length) menuIndex = TOOLBAR_DEFAULT_MENU_INDEX;
 
     //Open and set tab index
     this.setState({open: true, menuIndex: menuIndex});
@@ -80,7 +81,7 @@ class ToolbarView extends React.Component
   {
     if (this.state.open && this.state.menuIndex  >= 0)
     {
-      this.setCurrentMenu(-1);
+      this.setCurrentMenu(TOOLBAR_DEFAULT_MENU_INDEX);
     }
     else
     {
@@ -106,7 +107,9 @@ class ToolbarView extends React.Component
   render()
   {
     const toolbarMenus = this.props.menus;
-    const ToolbarMenu = this.state.menuIndex >= 0 ? toolbarMenus[this.state.menuIndex] : null;
+    const toolbarMenuIndex = this.state.menuIndex;
+    const ToolbarMenu = toolbarMenuIndex >= 0 ? toolbarMenus[toolbarMenuIndex] : null;
+    const showCustomToolbarMenu = ToolbarMenu != null;
 
     const hasButtons = React.Children.count(this.props.children) > 0;
     const isBarOpen = this.state.open;
@@ -122,9 +125,9 @@ class ToolbarView extends React.Component
         " " + this.props.className}
       style={this.props.style}>
         <div className={Style.bar_menu}>
-          {ToolbarMenu ?
+          {showCustomToolbarMenu ?
             <div className={Style.menu_container}>
-              <ToolbarMenu {...this.props.panelProps} toolbar={this.ref}/>
+              <ToolbarMenu {...this.props.menuProps} toolbar={this.ref}/>
             </div> :
             <div className={Style.menu_button_container}>
               {this.renderMenuButtons(this.props.children)}

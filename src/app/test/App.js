@@ -9,7 +9,8 @@ import TooltipView, { ONESHOT_MODE } from './tooltip/TooltipView.js';
 import UploadDropZone from './components/UploadDropZone.js';
 
 import OverviewPanel from './panels/OverviewPanel.js';
-import OptionPanel from './panels/OptionPanel.js';
+import ExportPanel from './menus/export/ExportPanel.js';
+import OptionPanel from './menus/option/OptionPanel.js';
 
 import EditPane from './EditPane.js';
 import TapePane from './TapePane.js';
@@ -139,7 +140,7 @@ class App extends React.Component
     return (
       <div className="app-container">
         <ToolbarView ref={ref=>this._toolbar=ref} className="app-bar"
-          menus={[OptionPanel]}
+          menus={[ExportPanel, OptionPanel]}
           menuProps={{currentModule: this._module}}
           hide={isFullscreen}>
           <ToolbarButton title="New" icon={PageEmptyIcon}
@@ -171,10 +172,7 @@ class App extends React.Component
                 });
             }}/>
           <ToolbarButton title="Export" icon={DownloadIcon}
-            onClick={()=>{
-              this._drawer.setCurrentTab(0);
-              this._toolbar.closeBar();
-            }}
+            onClick={()=>this._toolbar.setCurrentMenu(0)}
             disabled={graphController.getGraph().isEmpty()}/>
           <ToolbarDivider/>
           <ToolbarButton title="Report a Bug" icon={BugIcon}/>
@@ -182,10 +180,10 @@ class App extends React.Component
           <ToolbarButton title="Help" icon={HelpIcon}
             onClick={()=>window.open(HELP_URL, '_blank')}/>
           <ToolbarButton title="Options" icon={SettingsIcon}
-            onClick={()=>this._toolbar.setCurrentMenu(0)}/>
+            onClick={()=>this._toolbar.setCurrentMenu(1)}/>
         </ToolbarView>
         <DrawerView ref={ref=>this._drawer=ref} className="app-content"
-          panels={this._module.getModulePanels().concat([OverviewPanel, OptionPanel])}
+          panels={this._module.getModulePanels().concat([OverviewPanel])}
           panelProps={{currentModule: this._module}}
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
