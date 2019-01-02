@@ -15,7 +15,7 @@ import OptionPanel from './menus/option/OptionPanel.js';
 import EditPane from './EditPane.js';
 import TapePane from './TapePane.js';
 
-import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR} from './toolbar/ToolbarButton.js';
+import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU} from './toolbar/ToolbarButton.js';
 import ToolbarDivider from './toolbar/ToolbarDivider.js';
 import ToolbarUploadButton from './toolbar/ToolbarUploadButton.js';
 import PageEmptyIcon from './iconset/PageEmptyIcon.js';
@@ -27,6 +27,8 @@ import BugIcon from './iconset/BugIcon.js';
 import WorldIcon from './iconset/WorldIcon.js';
 import HelpIcon from './iconset/HelpIcon.js';
 import SettingsIcon from 'test/iconset/SettingsIcon.js';
+
+import * as UserUtil from 'test/UserUtil.js';
 
 import HotKeyManager, {CTRL_KEY, ALT_KEY, SHIFT_KEY} from './hotkey/HotKeyManager.js';
 import HotKeyView from './hotkey/HotKeyView.js';
@@ -144,16 +146,7 @@ class App extends React.Component
           menuProps={{currentModule: this._module}}
           hide={isFullscreen}>
           <ToolbarButton title="New" icon={PageEmptyIcon}
-            onClick={() => {
-              if (window.confirm(I18N.toString("alert.graph.clear")))
-              {
-                graphController.getGraph().clear();
-                undoManager.clear();
-                machineController.setMachineName(null);
-
-                this._toolbar.closeBar();
-              }
-            }}/>
+            onClick={() => UserUtil.userClearGraph(this, false, () => this._toolbar.closeBar())}/>
           <ToolbarButton title="Undo" icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
             disabled={!undoManager.canUndo()}
             onClick={()=>undoManager.undo()}/>
@@ -171,15 +164,15 @@ class App extends React.Component
                   this._toolbar.closeBar();
                 });
             }}/>
-          <ToolbarButton title="Export" icon={DownloadIcon}
+          <ToolbarButton title={I18N.toString("component.exporting.title")} icon={DownloadIcon}
             onClick={()=>this._toolbar.setCurrentMenu(0)}
             disabled={graphController.getGraph().isEmpty()}/>
           <ToolbarDivider/>
-          <ToolbarButton title="Report a Bug" icon={BugIcon}/>
-          <ToolbarButton title="Language" icon={WorldIcon}/>
+          <ToolbarButton title="Report a Bug" icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}/>
+          <ToolbarButton title="Language" icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}/>
           <ToolbarButton title="Help" icon={HelpIcon}
             onClick={()=>window.open(HELP_URL, '_blank')}/>
-          <ToolbarButton title="Options" icon={SettingsIcon}
+          <ToolbarButton title="Options" icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>this._toolbar.setCurrentMenu(1)}/>
         </ToolbarView>
         <DrawerView ref={ref=>this._drawer=ref} className="app-content"

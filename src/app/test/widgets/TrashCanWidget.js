@@ -1,7 +1,11 @@
 import React from 'react';
 import Style from './TrashCanWidget.css';
 
+import { userClearGraph } from 'test/UserUtil.js';
+
 import TrashCanDetailedIcon from 'test/iconset/TrashCanDetailedIcon.js';
+
+const DOUBLE_TAP_TIME = 250;
 
 class TrashCanWidget extends React.Component
 {
@@ -14,6 +18,8 @@ class TrashCanWidget extends React.Component
     this.state = {
       forceActive: false
     };
+
+    this._doubleTapTimeout = null;
 
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
@@ -42,19 +48,36 @@ class TrashCanWidget extends React.Component
     e.stopPropagation();
     e.preventDefault();
 
-    this.setState((prev, props) => {
-      const result = !prev.forceActive;
-      props.inputController.setTrashMode(result);
+    if (this._doubleTapTimeout)
+    {
+      //This is a double tap!
+      clearTimeout(this._doubleTapTimeout);
+      this._doubleTapTimeout = null;
+      this.setState({forceActive: false});
 
-      if (result)
-      {
-        document.documentElement.addEventListener('mousedown', this.onAnyMouseDownNotConsumed);
-      }
+      userClearGraph(this.props.app, true);
+      this.props.inputController.setTrashMode(false);
+    }
+    else
+    {
+      //This is a single tap!
+      this.setState((prev, props) => {
+        const result = !prev.forceActive;
+        props.inputController.setTrashMode(result);
+        this._doubleTapTimeout = setTimeout(() => {
+          this._doubleTapTimeout = null;
+        }, DOUBLE_TAP_TIME);
 
-      return {
-        forceActive: result
-      };
-    });
+        if (result)
+        {
+          document.documentElement.addEventListener('mousedown', this.onAnyMouseDownNotConsumed);
+        }
+
+        return {
+          forceActive: result
+        };
+      });
+    }
   }
 
   onAnyMouseDownNotConsumed(e)
@@ -75,10 +98,11 @@ class TrashCanWidget extends React.Component
   render()
   {
     const inputController = this.props.inputController;
+    const graphController = this.props.graphController;
     const inputAdapter = inputController.getInputAdapter();
 
     const active = inputController.isTrashMode();
-    const hide = inputAdapter.isUsingTouch() && inputAdapter.isDragging();
+    const hide = graphController.getGraph().isEmpty() || (inputAdapter.isUsingTouch() && inputAdapter.isDragging());
 
     return (
       <div ref={ref=>this.ref=ref} id={this.props.id}

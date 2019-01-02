@@ -23,7 +23,7 @@ class EditPane extends React.Component
     const machineController = module.getMachineController();
     const inputActionMode = inputController.isActionMode(graphController);
     const LabelEditor = module.getLabelEditor();
-    
+
     return (
       <div id={this.props.id}
         className={this.props.className}
@@ -40,7 +40,7 @@ class EditPane extends React.Component
           <ModeSelectTray mode={inputActionMode ? 0 : 1} onChange={modeIndex => inputController.setInputScheme(modeIndex === 0)}/>
         </div>
         <div className={Style.view_widget} style={{bottom: 0, right: 0}}>
-          <TrashCanWidget inputController={inputController}/>
+          <TrashCanWidget app={app} inputController={inputController} graphController={graphController}/>
         </div>
       </div>
     );

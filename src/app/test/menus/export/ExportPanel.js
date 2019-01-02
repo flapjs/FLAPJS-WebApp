@@ -51,8 +51,5 @@ class ExportPanel extends React.Component
     );
   }
 }
-Object.defineProperty(ExportPanel, 'TITLE', {
-  get: function() { return I18N.toString("component.exporting.title"); }
-});
 
 export default ExportPanel;
