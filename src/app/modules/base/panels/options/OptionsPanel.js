@@ -29,7 +29,6 @@ class OptionsPanel extends React.Component
       theme: "default",
       customTheme: false,
       skipWelcome: LocalSave.getStringFromStorage(LOCAL_STORAGE_ID) === "true",
-      enableExperimental: LocalSave.getStringFromStorage("enableExperimental") === "true",
       disableExitWarning: LocalSave.getStringFromStorage("disableExitWarning") === "true"
     };
 
@@ -373,13 +372,17 @@ class OptionsPanel extends React.Component
                 if (window.prompt("Well, at this point, you are either a " +
                 "member of the dev team (welcome to the team) or you have " +
                 "been instructed to do so by a member of the dev team " +
-                "(hello human). Please ask them for the password:") === "youshallnotpass")
+                "(hello human). Please ask them for the password:") === "I solemnly swear I am up to no good.")
                 {
                   if (window.confirm("Alright, here we go. Last chance to " +
                   "leave. Cancel it now or restart and face the consequences."))
                   {
                     LocalSave.setStringToStorage("enableExperimental", "true");
                   }
+                }
+                else
+                {
+                  window.alert("Sorry, it looks like you are a normal human. Have a hug. <3");
                 }
               }
             }
