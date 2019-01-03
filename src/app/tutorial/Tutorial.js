@@ -11,7 +11,7 @@ class Tutorial
 
   start(app)
   {
-    if (!LocalSave.existsInStorage("skipWelcome"))
+    if (LocalSave.getStringFromStorage("skipWelcome") !== "true")
     {
       Notifications.addMessage(I18N.toString("message.tutorial.1"));
       Notifications.addMessage(I18N.toString("message.intro.2"));
