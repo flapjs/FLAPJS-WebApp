@@ -110,7 +110,7 @@ class GraphEdge extends GraphElement
     if (this.isPlaceholder())
     {
       const from = this._from;
-      const placeholderLength = getPlaceholderLength();
+      const placeholderLength = this.getPlaceholderLength();
       dst.x = from.x + placeholderLength;
       dst.y = from.y + placeholderLength;
     }
