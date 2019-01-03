@@ -143,7 +143,7 @@ class FSABuilder extends MachineBuilder
     }
 
     //If it is an empty string...
-    if (result.size === 0) return allowNull ? null : EMPTY;
+    if (result.size <= 0) return allowNull ? null : EMPTY;
     return Array.from(result).join(SYMBOL_SEPARATOR);
   }
 
