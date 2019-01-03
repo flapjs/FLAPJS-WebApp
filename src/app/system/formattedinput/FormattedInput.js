@@ -234,7 +234,7 @@ class FormattedInput extends React.Component
           id={this.props.id} className={this.props.className} style={this.props.style}
           ref={ref=>this.element=ref}
           type="text" value={this.state.value}
-          rows="2"
+          rows="1"
           onChange={this.onChange}
           onBlur={this.onBlur}
           onKeyUp={this.onKeyUp}>
