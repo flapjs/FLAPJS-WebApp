@@ -144,7 +144,7 @@ class FSAGraphExporter extends AbstractGraphExporter
     const graphData = JSONGraphParser.objectify(graph);
     const dst = this.toJSON(graphData, module);
     const jsonString = JSON.stringify(dst);
-    Downloader.downloadText(filename + '.fsa.' + this.getFileType(), jsonString);
+    Downloader.downloadText(filename + '.' + this.getFileType(), jsonString);
   }
 
   //Override
