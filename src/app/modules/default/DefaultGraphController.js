@@ -5,6 +5,7 @@ import Eventable from 'util/Eventable.js';
 
 import NodalGraph from 'graph/NodalGraph.js';
 import GraphNode from 'graph/GraphNode.js';
+import GraphEdge from 'graph/GraphEdge.js';
 import QuadraticEdge from 'graph/QuadraticEdge.js';
 
 class DefaultGraphController extends AbstractGraphController
@@ -217,16 +218,17 @@ class DefaultGraphController extends AbstractGraphController
     {
       //Update node collision
       if (node === other) continue;
+      const nodeSize = node.getNodeSize();
 
       const dx = x - other.x;
       const dy = y - other.y;
       const angle = Math.atan2(dy, dx);
 
-      const diameter = (Config.NODE_RADIUS * 2);
+      const diameter = (nodeSize * 2);
       const nextDX = other.x + (Math.cos(angle) * diameter) - x;
       const nextDY = other.y + (Math.sin(angle) * diameter) - y;
 
-      if (dx * dx + dy * dy < Config.NODE_RADIUS_SQU * 4)
+      if (dx * dx + dy * dy < nodeSize * nodeSize * 4)
       {
         x += nextDX;
         y += nextDY;
@@ -292,12 +294,12 @@ class DefaultGraphController extends AbstractGraphController
       return;
     }
 
-    const prevLabel = placeholder || target.getEdgeLabel();
+    const prevLabel = placeholder || target instanceof GraphEdge ? target.getEdgeLabel() : target.getNodeLabel();
     this.labelEditorElement.openEditor(target, placeholder, replace, () => {
-      const label = target.getEdgeLabel();
+      const label = target instanceof GraphEdge ? target.getEdgeLabel() : target.getNodeLabel();
       if (prevLabel.length > 0 && label != prevLabel)
       {
-        this.emit("edgeLabel", this.getGraph(), target, label, prevLabel);
+        this.emit(target instanceof GraphEdge ? "edgeLabel" : "nodeLabel", this.getGraph(), target, label, prevLabel);
       }
 
       if (callback)

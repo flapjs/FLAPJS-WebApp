@@ -1,4 +1,5 @@
 import React from 'react';
+import DefaultGraphRenderer from './DefaultGraphRenderer.css';
 
 import GraphNodeRenderer from 'graph/renderer/GraphNodeRenderer.js';
 import QuadraticEdgeRenderer from 'graph/renderer/QuadraticEdgeRenderer.js';

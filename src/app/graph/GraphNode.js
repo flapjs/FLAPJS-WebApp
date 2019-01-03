@@ -25,7 +25,7 @@ class GraphNode extends GraphElement
 
   getNodeSize()
   {
-    return 10;
+    return 16;
   }
 
   //Override
