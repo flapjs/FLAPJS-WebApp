@@ -1,6 +1,6 @@
 import AbstractGraphExporter from 'modules/base/exporter/AbstractGraphExporter.js';
 
-import JSONFileIcon from 'test/iconset/flat/JSONFileIcon.js';
+import JSONFileIcon from 'icons/flat/JSONIcon.js';
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import Downloader from 'util/Downloader.js';
 
