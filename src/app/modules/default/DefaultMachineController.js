@@ -1,4 +1,4 @@
-import AbstractMachineController from 'modules/base/AbstractMachineController.js';
+import AbstractMachineController from 'modules/abstract/AbstractMachineController.js';
 
 class DefaultMachineController extends AbstractMachineController
 {

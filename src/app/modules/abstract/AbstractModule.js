@@ -4,13 +4,12 @@ import GraphImageExporter from './exporter/GraphImageExporter.js';
 import ExportingPanel from './panels/exporting/ExportingPanel.js';
 import OptionsPanel from './panels/options/OptionsPanel.js';
 
-const DEFAULT_GRAPH_EXPORTERS = [];
-const DEFAULT_IMAGE_EXPORTERS = [
+export const DEFAULT_GRAPH_EXPORTERS = [];
+export const DEFAULT_IMAGE_EXPORTERS = [
   new GraphImageExporter('png'),
   new GraphImageExporter('jpg')
 ];
-
-export const DEFAULT_PANELS = [];
+export const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
 
 class AbstractModule
 {

@@ -1,4 +1,4 @@
-import AbstractInputController from 'modules/base/AbstractInputController.js';
+import AbstractInputController from 'modules/abstract/AbstractInputController.js';
 
 class DefaultInputController extends AbstractInputController
 {

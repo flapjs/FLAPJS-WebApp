@@ -1,4 +1,4 @@
-import AbstractModule, {DEFAULT_PANELS} from 'modules/base/AbstractModule.js';
+import AbstractModule from 'modules/abstract/AbstractModule.js';
 
 import Notifications from 'system/notification/Notifications.js';
 

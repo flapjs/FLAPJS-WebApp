@@ -1,4 +1,4 @@
-import AbstractGraphExporter from 'modules/base/exporter/AbstractGraphExporter.js';
+import AbstractGraphExporter from 'modules/abstract/exporter/AbstractGraphExporter.js';
 
 import JSONIcon from 'icons/flat/JSONIcon.js';
 

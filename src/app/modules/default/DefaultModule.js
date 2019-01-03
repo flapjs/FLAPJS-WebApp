@@ -1,4 +1,4 @@
-import AbstractModule from 'modules/base/AbstractModule.js';
+import AbstractModule from 'modules/abstract/AbstractModule.js';
 
 import DefaultGraphExporter from './DefaultGraphExporter.js';
 import DefaultInputController from './DefaultInputController.js';
