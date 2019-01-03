@@ -47,6 +47,7 @@ class Workspace extends React.Component
     //Apply the workspace font (refer to Workspace.css)
     clone.setAttribute('font-size', "16px");
     clone.setAttribute('font-family', "monospace");
+    clone.setAttribute('style', ".graph-ui {display: none;}");
 
     /*
     //TODO: Link the font family to svg
@@ -57,9 +58,10 @@ class Workspace extends React.Component
 
     //Remove unwanted ui elements from image
     const uiElements = clone.getElementsByClassName("graph-ui");
-    for(const e of uiElements)
+    while(uiElements.length > 0)
     {
-      e.remove();
+      const e = uiElements[0];
+      e.remove();//This will propagate changes to uiElements, so be careful
     }
 
     return clone;
@@ -97,8 +99,10 @@ class Workspace extends React.Component
         + viewport.getOffsetY() + ")"}>
 
         {/* Graph origin crosshair */}
-        <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="#E6E6E6"/>
-        <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="#E6E6E6"/>
+        <g className="graph-ui">
+          <line x1="0" y1="-5" x2="0" y2="5" stroke="#E6E6E6"/>
+          <line x1="-5" y1="0" x2="5" y2="0" stroke="#E6E6E6"/>
+        </g>
 
         {/* Graph objects */}
         { GraphRenderer &&

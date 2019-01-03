@@ -1,80 +1,125 @@
-import AbstractGraphExporter from 'modules/base/exporter/AbstractGraphExporter.js';
+import AbstractGraphExporter from 'modules/abstract/exporter/AbstractGraphExporter.js';
 
-import JSONIcon from 'icons/flat/JSONIcon.js';
+import JSONFileIcon from 'icons/flat/JSONIcon.js';
+import { JSON as JSONGraphParser } from 'graph/parser/NodalGraphParser.js';
+import Downloader from 'util/Downloader.js';
 
 class DefaultGraphExporter extends AbstractGraphExporter
 {
   constructor() { super(); }
 
+  fromJSON(data, module)
+  {
+    const graphController = module.getGraphController();
+    const graph = graphController.getGraph();
+
+    const metadata = '_metadata' in data ? data['_metadata'] : {};
+    const newGraph = JSONGraphParser.parse(data.graphData, graph);
+    return newGraph;
+  }
+
+  toJSON(graphData, module)
+  {
+    const graphController = module.getGraphController();
+
+    const dst = {};
+    dst["_metadata"] = {
+      module: module.getModuleName(),
+      version: process.env.VERSION + ":" + module.getModuleVersion(),
+      timestamp: new Date().toString()
+    };
+    dst["graphData"] = graphData;
+    return dst;
+  }
+
   //Override
   importFromData(data, module)
   {
-    //Do nothing...
+    this.fromJSON(data, module);
   }
 
   //Override
   exportToData(module)
   {
-    //Return nothing...
-    return {};
-  }
-
-  //Override
-  doesSupportData()
-  {
-    return true;
+    const graph = module.getGraphController().getGraph();
+    const graphData = JSONGraphParser.objectify(graph);
+    const result = this.toJSON(graphData, module);
+    return result;
   }
 
   //Override
   importFromFile(fileBlob, module)
   {
     return new Promise((resolve, reject) => {
-      //Do nothing...
-      resolve();
+      const filename = fileBlob.name;
+      if (!filename.endsWith(this.getFileType()))
+      {
+        throw new Error("Trying to import invalid file type for \'" + this.getFileType() + "\': " + filename);
+      }
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        const graphController = module.getGraphController();
+        const data = e.target.result;
+        const name = filename.substring(0, filename.length - this.getFileType().length - 1);
+        const graph = graphController.getGraph();
+
+        //TODO: this should not be here, this should exist somewhere in graphController
+        graphController.emit("userPreImportGraph", graph);
+
+        try
+        {
+          const jsonData = JSON.parse(data);
+
+          this.fromJSON(jsonData, module);
+
+          graphController.emit("userImportGraph", graph);
+
+          resolve();
+        }
+        catch (e)
+        {
+          reader.abort();
+          reject(e);
+        }
+        finally
+        {
+          graphController.emit("userPostImportGraph", graph);
+        }
+      };
+
+      reader.onerror = e => {
+        reject(new Error("Unable to import file: " + e.target.error.code));
+      }
+
+      reader.readAsText(fileBlob);
     });
   }
 
   //Override
   exportToFile(filename, module)
   {
-    //Do nothing...
+    const graph = module.getGraphController().getGraph();
+    const graphData = JSONGraphParser.objectify(graph);
+    const dst = this.toJSON(graphData, module);
+    const jsonString = JSON.stringify(dst);
+    Downloader.downloadText(filename + '.' + this.getFileType(), jsonString);
   }
 
   //Override
-  doesSupportFile()
-  {
-    return true;
-  }
-
+  doesSupportData() { return true; }
   //Override
-  canImport()
-  {
-    return true;
-  }
-
+  doesSupportFile() { return true; }
   //Override
-  getTitle()
-  {
-    return I18N.toString("file.export.machine.hint");
-  }
-
+  canImport() { return true; }
   //Override
-  getLabel()
-  {
-    return I18N.toString("file.export.machine");
-  }
-
+  getTitle() { return "Save machine to JSON"; }
   //Override
-  getFileType()
-  {
-    return "json";
-  }
-
+  getLabel() { return "Save machine to JSON"; }
   //Override
-  getIconClass()
-  {
-    return JSONIcon;
-  }
+  getFileType() { return "json"; }
+  //Override
+  getIconClass() { return JSONFileIcon; }
 }
 
 export default DefaultGraphExporter;

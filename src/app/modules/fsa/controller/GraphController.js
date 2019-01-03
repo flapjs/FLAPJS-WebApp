@@ -1,4 +1,4 @@
-import AbstractGraphController from 'modules/base/AbstractGraphController.js';
+import AbstractGraphController from 'modules/abstract/AbstractGraphController.js';
 
 import Config from 'config.js';
 import Eventable from 'util/Eventable.js';

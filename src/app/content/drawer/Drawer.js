@@ -3,10 +3,7 @@ import './Drawer.css';
 
 import DrawerExpander from './DrawerExpander.js';
 
-import ExportingPanel from 'modules/base/panels/exporting/ExportingPanel.js';
-import OptionsPanel from 'modules/base/panels/options/OptionsPanel.js';
-
-const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
+import { DEFAULT_PANELS } from 'modules/abstract/AbstractModule.js';
 const DEFAULT_TAB_INDEX = 0;
 
 const MAX_PANEL_THRESHOLD = 50;
@@ -228,7 +225,7 @@ class Drawer extends React.Component
           currentModule.getModulePanels().map((PanelClass, i) => {
             //Hide panels with no name...
             if (!PanelClass.UNLOCALIZED_NAME) return;
-            
+
             const panelID = i + 1;
             return <button key={currentModule.getModuleName() + ":" + panelID}
               className={"tab-link" + (tabIndex === panelID ? " active" : "")}

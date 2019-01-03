@@ -1,37 +1,26 @@
 import AbstractModule from 'modules/abstract/AbstractModule.js';
 
-import DefaultGraphExporter from './DefaultGraphExporter.js';
+import HLSMGraphRenderer from './renderer/HLSMGraphRenderer.js';
+import HLSMGraphExporter from './HLSMGraphExporter.js';
 
-import DefaultInputController from './DefaultInputController.js';
-import DefaultGraphController from './DefaultGraphController.js';
-import DefaultMachineController from './DefaultMachineController.js';
-
-import DefaultPanel from './DefaultPanel.js';
-import DefaultGraphRenderer from './DefaultGraphRenderer.js';
-import DefaultGraphOverlayRenderer from './DefaultGraphOverlayRenderer.js';
-import DefaultViewportRenderer from './DefaultViewportRenderer.js';
-
-import DefaultLabelEditor from './DefaultLabelEditor.js';
+import InputController from './controller/InputController.js';
+import GraphController from './controller/GraphController.js';
+import MachineController from './controller/MachineController.js';
 
 const VERSION = "0.0.1";
-const PANELS = [DefaultPanel];
-const EXPORTERS = [new DefaultGraphExporter()];
+const PANELS = [];
+const EXPORTERS = [new HLSMGraphExporter()];
 
-class DefaultModule extends AbstractModule
+class HLSMModule extends AbstractModule
 {
-  constructor(app)
+  constructor()
   {
-    super(app);
+    super();
 
     const inputAdapter = app.getInputAdapter();
-    this._inputController = new DefaultInputController(this, inputAdapter);
-    this._graphController = new DefaultGraphController(this);
-    this._machineController = new DefaultMachineController(this);
-  }
-
-  getLabelEditor()
-  {
-    return DefaultLabelEditor;
+    this._inputController = new InputController(this, inputAdapter);
+    this._graphController = new GraphController(this);
+    this._machineController = new MachineController(this);
   }
 
   //Override
@@ -68,11 +57,11 @@ class DefaultModule extends AbstractModule
     switch(renderLayer)
     {
       case "graph":
-        return DefaultGraphRenderer;
+        return HLSMGraphRenderer;
       case "graphoverlay":
-        return DefaultGraphOverlayRenderer;
+        //return GraphOverlayRenderer;
       case "viewport":
-        return DefaultViewportRenderer;
+        //return ViewportRenderer;
     }
     return null;
   }
@@ -89,9 +78,9 @@ class DefaultModule extends AbstractModule
   //Override
   getModulePanels() { return PANELS; }
   //Override
-  getModuleName() { return "default"; }
+  getModuleName() { return "hlsm"; }
   //Override
-  getLocalizedModuleName() { return "Default"; }
+  getLocalizedModuleName() { return "HLSM"; }
 }
 
-export default DefaultModule;
+export default HLSMModule;

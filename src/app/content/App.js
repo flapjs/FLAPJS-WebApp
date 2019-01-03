@@ -5,8 +5,8 @@ import './App.css';
 import Config from 'config.js';
 
 //import Modules from './Modules.js';
-//import DefaultModule from 'modules/default/DefaultModule.js';
-import FSAModule from 'modules/fsa/FSAModule.js';
+//import Module from 'modules/default/DefaultModule.js';
+import Module from 'modules/fsa/FSAModule.js';
 
 import HotKeys from './HotKeys.js';
 import LocalSave from 'system/localsave/LocalSave.js';
@@ -46,7 +46,7 @@ class App extends React.Component
 
     //Modules should handle its own initialization, regardless of web state
     //Also, loading from file should be handled by modules themselves
-    this._module = new FSAModule(this);
+    this._module = new Module(this);
     /*
     Modules['fsa'].fetch((Module) => {
       const prevModule = this._module;

@@ -4,7 +4,7 @@
   outline: none;
   z-index: 2;
 
-  max-width: 8em;
+  width: 8em;
   resize: vertical;
 
   background: var(--color-labeleditor-main);

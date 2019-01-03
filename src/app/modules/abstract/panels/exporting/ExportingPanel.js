@@ -16,13 +16,16 @@ class ExportingPanel extends React.Component
   renderExporterButton(exporter)
   {
     if (!exporter.doesSupportFile()) return null;
+
     return <IconButton key={exporter.getFileType()}
       className="export-button"
       id={"export-" + exporter.getFileType()}
       title={exporter.getTitle()}
       onClick={() => {
-        const filename = this.props.currentModule.getMachineController().getMachineName();
-        exporter.exportToFile(filename, currentModule);
+        const module = this.props.currentModule;
+        const machineController = module.getMachineController();
+        const filename = machineController.getMachineName() || "Untitled";
+        exporter.exportToFile(filename, module);
       }}>
       { React.createElement(exporter.getIconClass()) }
       <label>{ exporter.getLabel() }</label>

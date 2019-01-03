@@ -4,13 +4,13 @@ import GraphImageExporter from './exporter/GraphImageExporter.js';
 import ExportingPanel from './panels/exporting/ExportingPanel.js';
 import OptionsPanel from './panels/options/OptionsPanel.js';
 
-const DEFAULT_GRAPH_EXPORTERS = [];
-const DEFAULT_IMAGE_EXPORTERS = [
+export const DEFAULT_GRAPH_EXPORTERS = [];
+export const DEFAULT_IMAGE_EXPORTERS = [
   new GraphImageExporter('png'),
   new GraphImageExporter('jpg')
 ];
-
-export const DEFAULT_PANELS = [];
+//TODO: This is inserted by Drawer.js, not used here. (which is weird)
+export const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
 
 class AbstractModule
 {
@@ -39,7 +39,7 @@ class AbstractModule
   getImageExporters() { return DEFAULT_IMAGE_EXPORTERS; }
   getGraphExporters() { return DEFAULT_GRAPH_EXPORTERS; }
   getGraphImporter() { return this._importer; }
-  getModulePanels() { return DEFAULT_PANELS; }
+  getModulePanels() { return []; }
   getModuleVersion() { return '0.0.0'; }
   getModuleName() { throw new Error("Missing module name"); }
   getLocalizedModuleName() { return "Module"; }

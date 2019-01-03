@@ -4,8 +4,11 @@ import { guid, stringHash } from 'util/MathHelper.js';
 
 class NodalGraph
 {
-  constructor()
+  constructor(nodeClass=GraphNode, edgeClass=GraphEdge)
   {
+    this._nodeClass = nodeClass;
+    this._edgeClass = edgeClass;
+
     this._nodes = [];
     this._edges = [];
     this._nodeMapping = new Map();
@@ -16,7 +19,7 @@ class NodalGraph
 
   createNode(x=0, y=0, id=null)
   {
-    const result = new GraphNode(id || guid(), x, y);
+    const result = new (this._nodeClass)(id || guid(), x, y);
     const i = this._nodes.length;
     this._nodes.push(result);
     this._nodeMapping.set(result.getGraphElementID(), i);
@@ -84,12 +87,13 @@ class NodalGraph
   }
   getNodes() { return this._nodes; }
   getNodeCount() { return this._nodes.length; }
+  getNodeClass() { return this._nodeClass; }
 
   /** EDGES **/
 
   createEdge(from, to=null, id=null)
   {
-    const result = new GraphEdge(id || guid(), from, to);
+    const result = new (this._edgeClass)(id || guid(), from, to);
     const i = this._edges.length;
     this._edges.push(result);
     this._edgeMapping.set(result.getGraphElementID(), i);
@@ -128,6 +132,7 @@ class NodalGraph
   }
   getEdges() { return this._edges; }
   getEdgeCount() { return this._edges.length; }
+  getEdgeClass() { return this._edgeClass; }
 
   /** HELPER **/
 

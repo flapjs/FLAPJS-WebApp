@@ -1,4 +1,4 @@
-import AbstractInputController from 'modules/base/AbstractInputController.js';
+import AbstractInputController from 'modules/abstract/AbstractInputController.js';
 import Config from 'config.js';
 
 import GraphPicker from './GraphPicker.js';

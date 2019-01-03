@@ -8,19 +8,7 @@ class FSAGraph extends NodalGraph
 {
   constructor()
   {
-    super();
-  }
-
-  //Override
-  createNode(x=0, y=0, id=null)
-  {
-    return this.addNode(new FSANode(id, x, y));
-  }
-
-  //Override
-  createEdge(from, to=null, id=null)
-  {
-    return this.addEdge(new FSAEdge(id, from, to));
+    super(FSANode, FSAEdge);
   }
 
   setStartNode(node)

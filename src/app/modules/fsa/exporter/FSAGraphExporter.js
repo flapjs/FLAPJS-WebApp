@@ -1,4 +1,4 @@
-import AbstractGraphExporter from 'modules/base/exporter/AbstractGraphExporter.js';
+import AbstractGraphExporter from 'modules/abstract/exporter/AbstractGraphExporter.js';
 
 import JSONFileIcon from 'icons/flat/JSONIcon.js';
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
@@ -144,7 +144,7 @@ class FSAGraphExporter extends AbstractGraphExporter
     const graphData = JSONGraphParser.objectify(graph);
     const dst = this.toJSON(graphData, module);
     const jsonString = JSON.stringify(dst);
-    Downloader.downloadText(filename + '.fsa.' + this.getFileType(), jsonString);
+    Downloader.downloadText(filename + '.' + this.getFileType(), jsonString);
   }
 
   //Override
