@@ -154,14 +154,14 @@ class DefaultInputController extends AbstractInputController
     //If not in Trash Mode, then events should pass through to here...
     //Otherwise, ALL events are captured to prevent ALL default behavior.
 
-    //Makes sure that user cannot toggle state while in trash mode
+    //Edit label for selected edge
     if (targetType === 'node')
     {
-      graphController.toggleNode(target);
+      graphController.openLabelEditor(target, x, y);
       return true;
     }
     //Edit label for selected edge
-    else if (targetType === 'edge')
+    if (targetType === 'edge')
     {
       graphController.openLabelEditor(target, x, y);
       return true;

@@ -1,6 +1,8 @@
 import React from 'react';
 import './DefaultLabelEditor.css';
 
+import GraphEdge from 'graph/GraphEdge.js';
+
 import Config from 'config.js';
 import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
 
@@ -39,7 +41,7 @@ class DefaultLabelEditor extends React.Component
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  openEditor(targetEdge, defaultText=null, replace=true, callback=null)
+  openEditor(targetElement, defaultText=null, replace=true, callback=null)
   {
     //If not yet initilized, ignore any editor access
     if (!this.inputElement || !this.parentElement)
@@ -49,15 +51,18 @@ class DefaultLabelEditor extends React.Component
 
     this.setState((prev, props) => {
       return {
-        target: targetEdge,
+        target: targetElement,
         callback: callback
       };
     });
 
-    this.inputElement.resetValue(targetEdge.getEdgeLabel(), () => {
+    const targetLabel = targetElement instanceof GraphEdge ?
+      targetElement.getEdgeLabel() :
+      targetElement.getNodeLabel();
+    this.inputElement.resetValue(targetLabel, () => {
       if (defaultText) this.inputElement.setValue(defaultText);
 
-      this._prevValue = targetEdge.getEdgeLabel();
+      this._prevValue = targetLabel;
       this.parentElement.focus();
       this.inputElement.focus(replace);
     });
@@ -72,24 +77,49 @@ class DefaultLabelEditor extends React.Component
     }
 
     //Save data
-    if (this.state.target !== null)
+    const targetElement = this.state.target;
+    if (targetElement !== null)
     {
       if (saveOnExit)
       {
         let value = this.inputElement.value;
-        this.state.target.setEdgeLabel(value);
+        if (targetElement instanceof GraphEdge)
+        {
+          targetElement.setEdgeLabel(value);
+        }
+        else
+        {
+          targetElement.setNodeLabel(value);
+        }
       }
       else
       {
-        if (!this.state.target.getEdgeLabel())
+        const targetLabel = targetElement instanceof GraphEdge ?
+          targetElement.getEdgeLabel() :
+          targetElement.getNodeLabel();
+        if (!targetLabel)
         {
           //Make sure its empty (and let edge handle default labels)
-          this.state.target.setEdgeLabel(null);
+          if (targetElement instanceof GraphEdge)
+          {
+            targetElement.setEdgeLabel(null);
+          }
+          else
+          {
+            targetElement.setNodeLabel(null);
+          }
 
-          //Delete it since it is not a valid edge
+          //Delete it since it is not a valid element
           if (DELETE_ON_EMPTY)
           {
-            this.props.graphController.getGraph().deleteEdge(this.state.target);
+            if (targetElement instanceof GraphEdge)
+            {
+              this.props.graphController.getGraph().deleteEdge(targetElement);
+            }
+            else
+            {
+              this.props.graphController.getGraph().deleteNode(targetElement)
+            }
           }
         }
       }
@@ -168,7 +198,9 @@ class DefaultLabelEditor extends React.Component
       targetStyle.visibility = "visible";
 
       //Assumes target is an instance of Edge
-      const center = target.getCenterPoint();
+      const center = target instanceof GraphEdge ?
+        target.getCenterPoint() :
+        target/* GraphNode themselves have x/y attribs */;
       const screenPos = transformViewToScreen(screen,
         center.x + viewport.getOffsetX(),
         center.y + viewport.getOffsetY());
