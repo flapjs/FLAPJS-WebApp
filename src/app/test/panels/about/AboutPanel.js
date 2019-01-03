@@ -1,8 +1,6 @@
 import React from 'react';
 import Style from './AboutPanel.css';
 
-import PanelSection from 'test/panels/PanelSection.js';
-
 class AboutPanel extends React.Component
 {
   constructor(props)
