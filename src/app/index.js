@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 //Router: imports
 import Router from 'router.js';
-import Test from 'test/App.js';
+import Test from 'experimental/App.js';
 //import App from 'content/App.js';
 //import LandingPage from 'landing/components/LandingPage.js';
 
