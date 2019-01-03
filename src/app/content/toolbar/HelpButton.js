@@ -23,7 +23,7 @@ class HelpButton extends React.Component
     }
 
     //The tutorial
-    const LINK = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/HELP.md";
+    const LINK = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
     const newTab = window.open(LINK, '_blank');
 
     if (this.props.onClick)
