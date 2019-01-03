@@ -25,6 +25,8 @@ import BugReportIcon from 'icons/BugReportIcon.js';
 
 import Drawer from 'content/drawer/Drawer.js';
 
+const BUG_REPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
+
 class Toolbar extends React.Component
 {
   constructor(props)
@@ -156,7 +158,8 @@ class Toolbar extends React.Component
         {/*Right Alt. Toolbar*/}
         <div className="toolbar-tray-alt">
           {/*Report a Bug Button*/}
-          <IconButton className="navicon" id="toolbar-bug" title={I18N.toString("action.toolbar.bug")}>
+          <IconButton className="navicon" id="toolbar-bug" title={I18N.toString("action.toolbar.bug")}
+            onClick={e => window.open(BUG_REPORT_URL, '_blank')}>
             <BugReportIcon/>
           </IconButton>
           {/*Help Button*/}
