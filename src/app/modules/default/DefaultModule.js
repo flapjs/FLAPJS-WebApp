@@ -8,8 +8,10 @@ import DefaultMachineController from './DefaultMachineController.js';
 
 import DefaultPanel from './DefaultPanel.js';
 import DefaultGraphRenderer from './DefaultGraphRenderer.js';
+import DefaultGraphOverlayRenderer from './DefaultGraphOverlayRenderer.js';
+import DefaultViewportRenderer from './DefaultViewportRenderer.js';
 
-import Notifications from 'system/notification/Notifications.js';
+import DefaultLabelEditor from './DefaultLabelEditor.js';
 
 const VERSION = "0.0.1";
 const PANELS = [DefaultPanel];
@@ -25,6 +27,11 @@ class DefaultModule extends AbstractModule
     this._inputController = new DefaultInputController(this, inputAdapter);
     this._graphController = new DefaultGraphController(this);
     this._machineController = new DefaultMachineController(this);
+  }
+
+  getLabelEditor()
+  {
+    return DefaultLabelEditor;
   }
 
   //Override
@@ -63,9 +70,9 @@ class DefaultModule extends AbstractModule
       case "graph":
         return DefaultGraphRenderer;
       case "graphoverlay":
-        //return GraphOverlayRenderer;
+        return DefaultGraphOverlayRenderer;
       case "viewport":
-        //return ViewportRenderer;
+        return DefaultViewportRenderer;
     }
     return null;
   }

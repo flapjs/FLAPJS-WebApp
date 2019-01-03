@@ -33,9 +33,6 @@ class DefaultGraphController extends AbstractGraphController
     this.registerEvent("userPreCreateNode");//(graph, nextNodeID, x, y)
     this.registerEvent("userPostCreateNode");//(graph, node)
 
-    //userToggleNode(graph, node, prevAccept) - When user toggles the accept state
-    this.registerEvent("userToggleNode");
-
     //userDeleteNodes(graph, node, targetNodes, prevX, prevY) - When user deletes one or more nodes
     this.registerEvent("userDeleteNodes");
     this.registerEvent("userPreDeleteNodes");
@@ -143,17 +140,6 @@ class DefaultGraphController extends AbstractGraphController
 
     this.emit("userPostCreateNode", this.getGraph(), node);
     return node;
-  }
-
-  toggleNode(node)
-  {
-    const prev = node.getNodeAccept();
-    const result = !prev;
-    //Toggle accept for selected node
-    node.setNodeAccept(result);
-
-    //Emit event
-    this.emit("userToggleNode", this.getGraph(), node, prev);
   }
 
   deleteSelectedNodes(selectedNode)
