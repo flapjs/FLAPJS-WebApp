@@ -58,7 +58,6 @@ export const JSON = {
     const nodeCount = graphNodes.length || 0;
     const graphEdges = graph.getEdges() || [];
     const edgeCount = graphEdges.length || 0;
-    const graphInitial = graph.getStartNode();
 
     const nodeDatas = new Array(nodeCount);
     const nodeIndices = new Map();

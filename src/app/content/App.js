@@ -5,8 +5,8 @@ import './App.css';
 import Config from 'config.js';
 
 //import Modules from './Modules.js';
-//import Module from 'modules/default/DefaultModule.js';
-import Module from 'modules/fsa/FSAModule.js';
+import Module from 'modules/default/DefaultModule.js';
+//import Module from 'modules/fsa/FSAModule.js';
 
 import HotKeys from './HotKeys.js';
 import LocalSave from 'system/localsave/LocalSave.js';

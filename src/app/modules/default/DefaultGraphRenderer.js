@@ -19,8 +19,8 @@ class HLSMGraphRenderer extends React.Component
     const graph = graphController.getGraph();
 
     return <g>
-      {graph.getNodes().map((e, i) => <NodeRenderer key={e.getGraphElementID() || i} node={e}/>)}
-      {graph.getEdges().map((e, i) => <EdgeRenderer key={e.getGraphElementID() || i} edge={e}/>)}
+      {graph.getNodes().map((e, i) => <GraphNodeRenderer key={e.getGraphElementID() || i} node={e}/>)}
+      {graph.getEdges().map((e, i) => <QuadraticEdgeRenderer key={e.getGraphElementID() || i} edge={e}/>)}
     </g>;
   }
 }

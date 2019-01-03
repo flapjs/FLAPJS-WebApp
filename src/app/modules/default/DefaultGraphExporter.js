@@ -11,8 +11,6 @@ class DefaultGraphExporter extends AbstractGraphExporter
   fromJSON(data, module)
   {
     const graphController = module.getGraphController();
-    const machineController = module.getMachineController();
-    const machineBuilder = machineController.getMachineBuilder();
     const graph = graphController.getGraph();
 
     const metadata = '_metadata' in data ? data['_metadata'] : {};
@@ -23,8 +21,6 @@ class DefaultGraphExporter extends AbstractGraphExporter
   toJSON(graphData, module)
   {
     const graphController = module.getGraphController();
-    const machineController = module.getMachineController();
-    const machineBuilder = machineController.getMachineBuilder();
 
     const dst = {};
     dst["_metadata"] = {
@@ -64,7 +60,6 @@ class DefaultGraphExporter extends AbstractGraphExporter
       const reader = new FileReader();
       reader.onload = e => {
         const graphController = module.getGraphController();
-        const machineController = module.getMachineController();
         const data = e.target.result;
         const name = filename.substring(0, filename.length - this.getFileType().length - 1);
         const graph = graphController.getGraph();
@@ -79,11 +74,6 @@ class DefaultGraphExporter extends AbstractGraphExporter
           this.fromJSON(jsonData, module);
 
           graphController.emit("userImportGraph", graph);
-
-          if (machineController)
-          {
-            machineController.setMachineName(name);
-          }
 
           resolve();
         }

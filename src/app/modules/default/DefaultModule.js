@@ -1,6 +1,7 @@
 import AbstractModule from 'modules/abstract/AbstractModule.js';
 
 import DefaultGraphExporter from './DefaultGraphExporter.js';
+
 import DefaultInputController from './DefaultInputController.js';
 import DefaultGraphController from './DefaultGraphController.js';
 import DefaultMachineController from './DefaultMachineController.js';
