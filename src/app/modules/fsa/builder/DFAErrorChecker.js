@@ -191,29 +191,32 @@ class DFAErrorChecker
 
   getUnreachableNodes() {
     const graph = this.graph;
-    const machine = this.machineBuilder.getMachine();
+    if (graph.getNodeCount() <= 1) return [];
 
-    const states = graph.getNodes().slice();
-    const nextStates = [];
-    nextStates.push(states[0]);
-    states.splice(0, 1);
+    const edges = graph.getEdges();
+    const nodes = graph.getNodes().slice();
+    const startNode = nodes.shift();
+    let nextNodes = [];
+    nextNodes.push(startNode);
 
-    while(nextStates.length > 0)
+    while(nextNodes.length > 0)
     {
-      const state = nextStates.pop();
-      const i = states.indexOf(state);
-      if (i >= 0)
+      const node = nextNodes.pop();
+      for(const edge of edges)
       {
-        states.splice(i, 1);
-        const result = machine.getOutgoingTransitions(state);
-        for(const state of result)
+        if (edge.getSourceNode() === node)
         {
-          nextStates.push(state);
+          const i = nodes.indexOf(edge.getDestinationNode());
+          if (i >= 0)
+          {
+            const nextNode = nodes.splice(i, 1)[0];
+            nextNodes.push(nextNode);
+          }
         }
       }
     }
 
-    return states;
+    return nodes;
   }
 }
 
