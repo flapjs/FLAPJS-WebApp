@@ -31,7 +31,7 @@ class GraphEdgeRenderer extends React.Component
     let quadLine = "L " + end.x + " " + end.y;
 
     //Draw multiple labels
-    const labels = label.split('\n');
+    const labels = label ? label.split('\n') : [];
     let dy = 0;
 
     const cx = (center && center.x || 0);

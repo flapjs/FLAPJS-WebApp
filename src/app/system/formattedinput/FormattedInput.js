@@ -24,6 +24,7 @@ class FormattedInput extends React.Component
     //  formatter - a format function
     //  captureOnExit - what to capture on blur (none, save, reset)
     //  defaultValue - the default value for input
+    //  multiline - whether to allow multiple lines
   }
 
   //Override
@@ -113,6 +114,11 @@ class FormattedInput extends React.Component
   {
     if (e.key == "Enter")
     {
+      if (this.props.multiline && e.shiftKey)
+      {
+        return true;
+      }
+
       const prev = this.state.prevValue;
       const next = e.target.value || this.props.defaultValue || "";
       this.resetValue(next, () => {
@@ -124,6 +130,9 @@ class FormattedInput extends React.Component
         }
         this.element.blur();
       });
+
+      e.preventDefault();
+      e.stopPropagation();
       return false;
     }
     else if (e.key == "Escape")
@@ -138,6 +147,9 @@ class FormattedInput extends React.Component
         }
         this.element.blur();
       });
+
+      e.preventDefault();
+      e.stopPropagation();
       return false;
     }
   }
@@ -215,13 +227,32 @@ class FormattedInput extends React.Component
   //Override
   render()
   {
-    return <input
-      id={this.props.id} className={this.props.className} style={this.props.style}
-      ref={ref=>this.element=ref}
-      type="text" value={this.state.value}
-      onChange={this.onChange}
-      onBlur={this.onBlur}
-      onKeyUp={this.onKeyUp}/>;
+    if (this.props.multiline)
+    {
+      return (
+        <textarea
+          id={this.props.id} className={this.props.className} style={this.props.style}
+          ref={ref=>this.element=ref}
+          type="text" value={this.state.value}
+          rows="2"
+          onChange={this.onChange}
+          onBlur={this.onBlur}
+          onKeyUp={this.onKeyUp}>
+        </textarea>
+      );
+    }
+    else
+    {
+      return (
+        <input
+          id={this.props.id} className={this.props.className} style={this.props.style}
+          ref={ref=>this.element=ref}
+          type="text" value={this.state.value}
+          onChange={this.onChange}
+          onBlur={this.onBlur}
+          onKeyUp={this.onKeyUp}/>
+      );
+    }
   }
 }
 

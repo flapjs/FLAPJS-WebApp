@@ -145,7 +145,8 @@ class DefaultLabelEditor extends React.Component
   {
     //return this.props.machineController.getMachineBuilder().formatAlphabetString(value, false);
     //return this.props.machineController.getLabelFormatter().call(null, value, false);
-    return value;
+    if (value) return value;
+    else return "";
   }
 
   render()
@@ -195,7 +196,8 @@ class DefaultLabelEditor extends React.Component
       <FormattedInput className="label-editor-input" ref={ref=>this.inputElement=ref}
         formatter={this.onFormat}
         onSubmit={this.onSubmit}
-        captureOnExit={"none"}/>
+        captureOnExit={"none"}
+        multiline={true}/>
     </div>;
   }
 }
