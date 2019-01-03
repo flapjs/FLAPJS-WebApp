@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom';
 
 //Router: imports
 import Router from 'router.js';
-import Test from 'experimental/App.js';
-//import App from 'content/App.js';
-//import LandingPage from 'landing/components/LandingPage.js';
+import App from 'content/App.js';
+import LandingPage from 'landing/components/LandingPage.js';
 
 //Config: imports
 import Config from 'config.js';
@@ -14,7 +13,7 @@ const AUTOSAVE_CONFIG = true;
 //LocalSave: imports
 import LocalSave from 'system/localsave/LocalSave.js';
 
-const SHOULD_WARN_USERS_ON_EXIT = false;//true;
+const SHOULD_WARN_USERS_ON_EXIT = true;
 
 //Setup viewport
 window.addEventListener('load', (event) => {
@@ -28,7 +27,7 @@ window.addEventListener('beforeunload', (event) => {
   //Config: Only save if changes were made
   if (AUTOSAVE_CONFIG) saveConfig();
 
-  if (SHOULD_WARN_USERS_ON_EXIT)
+  if (SHOULD_WARN_USERS_ON_EXIT && LocalSave.getStringFromStorage("disableExitWarning") !== "true")
   {
     const message = I18N.toString("alert.window.exit");
     event = event || window.event;
@@ -61,10 +60,13 @@ function loadApplication()
   loadConfig();
   root = document.getElementById("root");
 
-  Router.routeTo(Test);
   //This should be the same as the one referred to by OptionsPanel
-  /*
-  if (LocalSave.getStringFromStorage("skipWelcome") == "true")
+  if (LocalSave.getStringFromStorage("enableExperimental") === "true")
+  {
+    import(/* webpackChunkName: "experimental" */ 'experimental/App.js')
+      .then(({ default: _ }) => Router.routeTo( _ ));
+  }
+  else if (LocalSave.getStringFromStorage("skipWelcome") === "true")
   {
     Router.routeTo(App);
   }
@@ -72,7 +74,6 @@ function loadApplication()
   {
     Router.routeTo(LandingPage);
   }
-  */
 }
 
 //Update application

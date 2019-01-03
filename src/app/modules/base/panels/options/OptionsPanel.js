@@ -28,7 +28,9 @@ class OptionsPanel extends React.Component
     this.state = {
       theme: "default",
       customTheme: false,
-      skipWelcome: LocalSave.getStringFromStorage(LOCAL_STORAGE_ID) == "true"
+      skipWelcome: LocalSave.getStringFromStorage(LOCAL_STORAGE_ID) === "true",
+      enableExperimental: LocalSave.getStringFromStorage("enableExperimental") === "true",
+      disableExitWarning: LocalSave.getStringFromStorage("disableExitWarning") === "true"
     };
 
     this.onChangeTheme = this.onChangeTheme.bind(this);
@@ -334,7 +336,7 @@ class OptionsPanel extends React.Component
 
         <div>
           <h2>Experimental</h2>
-          <label htmlFor="options-experimental-modules">Module</label>
+
           <select id="options-experimental-modules" className="panel-select" value={this.props.currentModule.getModuleName()} onChange={this.onChangeModule}>
             <option value="fsa">Finite State Automata</option>
             <option value="pda" disabled={true}>Pushdown Automata (Coming Soon)</option>
@@ -343,6 +345,48 @@ class OptionsPanel extends React.Component
             <option value="rdt" disabled={true}>Red-Black Tree (Future)</option>
             <option value="hlsm" disabled={true}>High Level State Machine (Future)</option>
           </select>
+
+          <div className="panel-checkbox" style={{marginTop: "10px"}}>
+            <input id="option-disableexitwarning" type="checkbox" checked={this.state.disableExitWarning}
+            onChange={(e) => {
+              const result = e.target.checked;
+              this.setState({disableExitWarning: result});
+              LocalSave.setStringToStorage("disableExitWarning", "" + result);
+            }}/>
+            <label htmlFor="option-disableexitwarning">{"Disable Exit Warning"}</label>
+          </div>
+
+          <button className="panel-button" style={{marginTop: "10px"}} onClick={(e) => {
+            if (LocalSave.getStringFromStorage("enableExperimental") === "true")
+            {
+              window.alert("Please restart to begin the awakening...");
+            }
+            else if (window.confirm("Be careful! This will PERMANENTLY change " +
+              "your app and is intended only for debugging purposes. You " +
+              "should only enable this if you know what you are doing. Are " +
+              "you sure about this?"))
+            {
+              if (window.confirm("Seriously, THIS CAN BREAK THE APP " +
+                "PERMANENTLY! So only proceed if you are absolutely sure " +
+                "about this. Ask a member of the dev team for assistance."))
+              {
+                if (window.prompt("Well, at this point, you are either a " +
+                "member of the dev team (welcome to the team) or you have " +
+                "been instructed to do so by a member of the dev team " +
+                "(hello human). Please ask them for the password:") === "youshallnotpass")
+                {
+                  if (window.confirm("Alright, here we go. Last chance to " +
+                  "leave. Cancel it now or restart and face the consequences."))
+                  {
+                    LocalSave.setStringToStorage("enableExperimental", "true");
+                  }
+                }
+              }
+            }
+          }}>
+            {"Enable Experimental Mode"}
+          </button>
+
         </div>
 
       </div>

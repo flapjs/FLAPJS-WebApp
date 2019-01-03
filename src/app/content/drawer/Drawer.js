@@ -3,8 +3,8 @@ import './Drawer.css';
 
 import DrawerExpander from './DrawerExpander.js';
 
-import ExportingPanel from './panels/exporting/ExportingPanel.js';
-import OptionsPanel from './panels/options/OptionsPanel.js';
+import ExportingPanel from 'modules/base/panels/exporting/ExportingPanel.js';
+import OptionsPanel from 'modules/base/panels/options/OptionsPanel.js';
 
 const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
 const DEFAULT_TAB_INDEX = 0;
@@ -195,7 +195,7 @@ class Drawer extends React.Component
     const machineController = currentModule.getMachineController();
 
     const tabIndex = this.state.tabIndex;
-    const InfoPanel = currentModule ? currentModule.getDefaultModulePanel() : null;
+    const InfoPanel = currentModule ? currentModule.getModulePanels()[0] : null;
 
     return <div className={"drawer-container"} onWheel={this.onScroll}>
       <div className="drawer-content">
@@ -226,6 +226,9 @@ class Drawer extends React.Component
         {
           currentModule &&
           currentModule.getModulePanels().map((PanelClass, i) => {
+            //Hide panels with no name...
+            if (!PanelClass.UNLOCALIZED_NAME) return;
+            
             const panelID = i + 1;
             return <button key={currentModule.getModuleName() + ":" + panelID}
               className={"tab-link" + (tabIndex === panelID ? " active" : "")}
