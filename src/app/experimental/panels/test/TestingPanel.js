@@ -20,9 +20,11 @@ class TestingPanel extends React.Component
     const tester = app._tester;
     tester.on("startTest", (tester) => {
       app._viewport.setViewIndex(1);
+      app._drawer.setDrawerSoloClass(TestingPanel);
     });
     tester.on("stopTest", (tester) => {
       app._viewport.setViewIndex(0);
+      app._drawer.setDrawerSoloClass(null);
     });
   }
 

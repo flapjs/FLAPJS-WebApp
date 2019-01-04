@@ -28,10 +28,10 @@ class ViewportView extends React.Component
     return (
       <React.Fragment>
         {React.Children.map(this.props.children, (child, i) => {
+          if (this.state.index !== i) return;
           return (
             <div id={this.props.id}
               className={Style.view_container +
-                (this.state.index === i ? " active " : "") +
                 " " + this.props.className}
               style={this.props.style}>
               {child}
