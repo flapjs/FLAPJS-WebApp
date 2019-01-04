@@ -74,7 +74,10 @@ class TestItem extends React.Component
   onChange(e)
   {
     const nextValue = e.target.value;
-    this.setState({value: nextValue});
+    if (this.state.value !== nextValue)
+    {
+      this.setState({value: nextValue, status: DEFAULT_MODE});
+    }
   }
 
   //Override

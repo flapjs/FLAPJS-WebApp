@@ -55,6 +55,12 @@ class TestListView extends React.Component
 
   onTestClose(e)
   {
+    const tester = this.props.tester;
+    if (tester.isTesting())
+    {
+      tester.stopTest();
+    }
+
     this._testList.length = 0;
   }
 
@@ -105,6 +111,10 @@ class TestListView extends React.Component
   {
     const immediate = this.props.immediate;
     const tester = this.props.tester;
+
+    const graphController = this.props.graphController;
+    const machineController = this.props.machineController;
+
     const empty = this.isEmpty();
     const disabled = tester && tester.isTesting();
 
@@ -152,7 +162,9 @@ class TestListView extends React.Component
             <div className={Style.test_list}>
               {this._testList.map((e, i) =>
                 <TestItem key={e} name={e}
-                  onTest={tester ? this.onTestTest : null}
+                  onTest={tester && !graphController.getGraph().isEmpty() ?
+                    this.onTestTest :
+                    null}
                   onDelete={this.onTestDelete}/>)}
             </div>
           </div>

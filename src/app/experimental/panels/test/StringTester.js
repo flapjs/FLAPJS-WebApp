@@ -19,14 +19,6 @@ class TestTapeContext extends TapeContext
   //Override
   stepForward()
   {
-    const graphController = this._graphController;
-    const graphHash = graphController.getGraph().getHashCode(false);
-    if (graphHash !== this._cachedGraphHash)
-    {
-      this.stop();
-      return;
-    }
-
     const machineController = this._machineController;
     this._tester.stepForward(graphController, machineController);
   }
@@ -34,14 +26,6 @@ class TestTapeContext extends TapeContext
   //Override
   stepBackward()
   {
-    const graphController = this._graphController;
-    const graphHash = graphController.getGraph().getHashCode(false);
-    if (graphHash !== this._cachedGraphHash)
-    {
-      this.stop();
-      return;
-    }
-
     const machineController = this._machineController;
     this._tester.stepBackward(graphController, machineController);
   }
@@ -49,14 +33,6 @@ class TestTapeContext extends TapeContext
   //Override
   reset()
   {
-    const graphController = this._graphController;
-    const graphHash = graphController.getGraph().getHashCode(false);
-    if (graphHash !== this._cachedGraphHash)
-    {
-      this.stop();
-      return;
-    }
-
     this._tester.resetPosition();
   }
 
@@ -64,13 +40,6 @@ class TestTapeContext extends TapeContext
   finish()
   {
     const graphController = this._graphController;
-    const graphHash = this._graphController.getGraph().getHashCode(false);
-    if (graphHash !== this._cachedGraphHash)
-    {
-      this.stop();
-      return;
-    }
-
     const machineController = this._machineController;
     this._tester.runTest(graphController, machineController, false);
   }
@@ -207,7 +176,6 @@ class StringTester
 
   stepForward(graphController, machineController, cacheStep=true)
   {
-    if (!this._testString || this._testString.length <= 0) return false;
     if (this._testIndex >= this._testString.length) return false;
     ++this._testIndex;
 
@@ -220,10 +188,29 @@ class StringTester
       if (this._testIndex === this._testString.length && this._cachedResult === null)
       {
         //Run the solver one last time for the result...
-        const prevCache = this._cachePath[this._testIndex - 1];
-        cachedStates = prevCache.states.slice();
-        cachedSymbols = prevCache.symbols.slice();
-        checkedStates = prevCache.checked.slice();
+
+        //If it's also the first time though...
+        if (this._testIndex <= 0)
+        {
+          cachedStates = [];
+          cachedSymbols = [];
+          checkedStates = [];
+
+          const graph = graphController.getGraph();
+          const machine = machineController.getMachineBuilder().getMachine();
+          const startState = machine.getStartState();
+          for (let curr_state of machine.doClosureTransition(startState))
+          {
+            cachedStates.push({state: curr_state, index: 0});
+          }
+        }
+        else
+        {
+          const prevCache = this._cachePath[this._testIndex - 1];
+          cachedStates = prevCache.states.slice();
+          cachedSymbols = prevCache.symbols.slice();
+          checkedStates = prevCache.checked.slice();
+        }
 
         const machine = machineController.getMachineBuilder().getMachine();
         const graph = graphController.getGraph();
@@ -237,6 +224,8 @@ class StringTester
 
           targets.add(node);
         }
+
+        console.log(this._cachedResult);
       }
       else
       {
