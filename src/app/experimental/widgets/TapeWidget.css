@@ -1,4 +1,4 @@
-.tape-row {
+:local(.tape_container) {
   --tape-text-size: 2em;
 
   --color-tape-text: black;
@@ -9,14 +9,26 @@
   --color-tape-outline: darkgray;
   --color-tape-shadow: gold;
 
+  display: flex;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+}
+
+:local(.tape_control_tray) {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.tape-row {
   position: relative;
   display: flex;
   flex-direction: row;
   font-size: var(--tape-text-size);
-  margin: 1em;
-  margin-top: 0em;
   padding: 0.2em 0.4em;
   min-height: 2em;/* entry size + pointer size */
+  width: 100%;
 
   border: 1px solid var(--color-tape-text);
   border-radius: 0.5em;

@@ -12,7 +12,7 @@ import DownloadIcon from 'experimental/iconset/DownloadIcon.js';
 import CrossIcon from 'experimental/iconset/CrossIcon.js';
 import AddIcon from 'experimental/iconset/AddIcon.js';
 
-import TestItem, {SUCCESS_MODE, FAILURE_MODE, DEFAULT_MODE} from './TestItem.js';
+import TestItem, {SUCCESS_MODE, FAILURE_MODE, WORKING_MODE, DEFAULT_MODE} from './TestItem.js';
 
 const ACCEPT_FILE_TYPES = ['.txt'];
 
@@ -74,7 +74,25 @@ class TestListView extends React.Component
 
   onTestTest(e, item)
   {
-    item.setState({status: SUCCESS_MODE});
+    const immediate = this.props.immediate;
+    const tester = this.props.tester;
+    const itemValue = item.getValue();
+
+    item.setState({status: WORKING_MODE});
+
+    const graphController = this.props.graphController;
+    const machineController = this.props.machineController;
+    tester.startTest(itemValue, graphController, machineController).then((result) => {
+      item.setState({status: result ? SUCCESS_MODE : FAILURE_MODE});
+    }, (err) => {
+      //It didn't work out :(
+      item.setState({status: DEFAULT_MODE});
+    });
+
+    if (immediate)
+    {
+      tester.runTest(graphController, machineController, true);
+    }
   }
 
   isEmpty()
@@ -85,7 +103,10 @@ class TestListView extends React.Component
   //Override
   render()
   {
+    const immediate = this.props.immediate;
+    const tester = this.props.tester;
     const empty = this.isEmpty();
+    const disabled = tester && tester.isTesting();
 
     return (
       <div id={this.props.id}
@@ -118,7 +139,8 @@ class TestListView extends React.Component
           </IconButton>
         </div>
         <div className={Style.test_list_container +
-          (empty ? " empty " : "")}>
+          (empty ? " empty " : "") +
+          (disabled ? " disabled ": "")}>
           <IconButton className={Style.test_list_add}
             title={"Add"} onClick={this.onTestAdd}>
             <AddIcon/>
@@ -130,7 +152,7 @@ class TestListView extends React.Component
             <div className={Style.test_list}>
               {this._testList.map((e, i) =>
                 <TestItem key={e} name={e}
-                  onTest={this.onTestTest}
+                  onTest={tester ? this.onTestTest : null}
                   onDelete={this.onTestDelete}/>)}
             </div>
           </div>

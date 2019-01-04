@@ -33,6 +33,10 @@
 :local(.test_list_container).empty {
   display: none;
 }
+:local(.test_list_container).disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
 :local(.test_list_scroll_container) {
   border-radius: 1em;
   border: 1px solid var(--color-drawer-text);

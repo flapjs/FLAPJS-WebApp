@@ -5,11 +5,13 @@ import IconButton from 'experimental/components/IconButton.js';
 import SubtractIcon from 'experimental/iconset/SubtractIcon.js';
 import CheckCircleIcon from 'experimental/iconset/CheckCircleIcon.js';
 import CrossCircleIcon from 'experimental/iconset/CrossCircleIcon.js';
+import PendingIcon from 'experimental/iconset/PendingIcon.js';
 import RunningManIcon from 'experimental/iconset/RunningManIcon.js';
 
 export const DEFAULT_MODE = "default";
 export const SUCCESS_MODE = "success";
 export const FAILURE_MODE = "failure";
+export const WORKING_MODE = "working";
 
 class TestItem extends React.Component
 {
@@ -33,6 +35,40 @@ class TestItem extends React.Component
     {
       this.inputElement.focus();
     }
+  }
+
+  setValue(value, callback=null)
+  {
+    if (this.state.value !== value)
+    {
+      this.setState({value: value}, callback);
+    }
+    else if (callback)
+    {
+      callback();
+    }
+  }
+
+  setStatus(status, callback=null)
+  {
+    if (this.state.status !== status)
+    {
+      this.setState({status: status}, callback);
+    }
+    else if (callback)
+    {
+      callback();
+    }
+  }
+
+  getValue()
+  {
+    return this.state.value;
+  }
+
+  getStatus()
+  {
+    return this.state.status;
   }
 
   onChange(e)
@@ -72,6 +108,8 @@ class TestItem extends React.Component
               <CheckCircleIcon/> :
               status === FAILURE_MODE ?
               <CrossCircleIcon/> :
+              status === WORKING_MODE ?
+              <PendingIcon/> :
               <RunningManIcon/>}
           </IconButton>}
         <div className={Style.test_input}>

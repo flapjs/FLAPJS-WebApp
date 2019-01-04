@@ -15,6 +15,8 @@ import OptionPanel from 'experimental/menus/option/OptionPanel.js';
 import EditPane from 'experimental/EditPane.js';
 import TapePane from 'experimental/TapePane.js';
 
+import TestingPanel from 'experimental/panels/test/TestingPanel.js';
+
 import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU } from 'experimental/toolbar/ToolbarButton.js';
 import ToolbarDivider from 'experimental/toolbar/ToolbarDivider.js';
 import ToolbarUploadButton from 'experimental/toolbar/ToolbarUploadButton.js';
@@ -40,6 +42,7 @@ import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
 
 import FSAModule from 'modules/fsa/FSAModule.js';
+import StringTester from 'experimental/panels/test/StringTester.js';
 
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
 
@@ -70,6 +73,7 @@ class App extends React.Component
     this._hotKeyManager.registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
 
     this._module = new FSAModule(this);
+    this._tester = new StringTester();
 
     this._init = false;
 
@@ -187,8 +191,8 @@ class App extends React.Component
         </ToolbarView>
 
         <DrawerView ref={ref=>this._drawer=ref} className="app-content"
-          panels={this._module.getModulePanels()}
-          panelProps={{currentModule: this._module}}
+          panels={this._module.getModulePanels().concat([TestingPanel])}
+          panelProps={{currentModule: this._module, app: this}}
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
           hide={isFullscreen}>
@@ -229,8 +233,8 @@ class App extends React.Component
               <HotKeyView hotKeyManager={this._hotKeyManager}/>
 
               <ViewportView ref={ref=>this._viewport=ref}>
-                <EditPane app={this} module={this._module} viewport={viewport}/>
-                <TapePane app={this} module={this._module} viewport={viewport}/>
+                {<EditPane app={this} module={this._module} viewport={viewport}/>}
+                {<TapePane app={this} module={this._module} viewport={viewport} tester={this._tester}/>}
               </ViewportView>
 
             </div>
