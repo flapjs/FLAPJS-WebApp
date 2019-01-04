@@ -144,7 +144,13 @@
   z-index: 10001;
   margin-right: auto;
 
+  width: 30%;
+  max-width: 20em;
+
   background: var(--color-toolbar-back);
+}
+:local(.app_bar).open :local(.toolbar_title) input {
+  opacity: 1;
 }
 :local(.toolbar_expander) {
   z-index: 10001;
