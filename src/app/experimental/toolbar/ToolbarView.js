@@ -2,6 +2,7 @@ import React from 'react';
 import Style from './ToolbarView.css';
 
 import {TOOLBAR_CONTAINER_MENU, TOOLBAR_CONTAINER_TOOLBAR} from './ToolbarButton.js';
+import ToolbarTitle from './ToolbarTitle.js';
 
 import IconButton from 'experimental/components/IconButton.js';
 import MenuIcon from 'experimental/iconset/MenuIcon.js';
@@ -134,12 +135,12 @@ class ToolbarView extends React.Component
             </div>}
         </div>
         <div ref={ref=>this.toolbarElement=ref} className={Style.bar_toolbar}>
-          <div className={Style.toolbar_title}>
-            <h1>Untitled</h1>
-          </div>
+          <ToolbarTitle className={Style.toolbar_title}/>
+          
           <div className={Style.toolbar_button_container}>
             {this.renderToolbarButtons(this.props.children)}
           </div>
+
           {showBarExpander &&
           <IconButton className={Style.toolbar_expander} onClick={this.onBarExpand}>
             <MenuIcon/>
