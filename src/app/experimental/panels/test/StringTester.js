@@ -19,6 +19,7 @@ class TestTapeContext extends TapeContext
   //Override
   stepForward()
   {
+    const graphController = this._graphController;
     const machineController = this._machineController;
     this._tester.stepForward(graphController, machineController);
   }
@@ -26,6 +27,7 @@ class TestTapeContext extends TapeContext
   //Override
   stepBackward()
   {
+    const graphController = this._graphController;
     const machineController = this._machineController;
     this._tester.stepBackward(graphController, machineController);
   }
@@ -59,7 +61,7 @@ class TestTapeContext extends TapeContext
   //Override
   getTapeSourceStatesByIndex(index)
   {
-    if (index < 0 || index >= this._tapeInput.length) return [];
+    if (index < 0 || index >= this._tapeInput.length) return null;
     return this._tester.getNodesAtPosition(index);
   }
 
@@ -224,8 +226,6 @@ class StringTester
 
           targets.add(node);
         }
-
-        console.log(this._cachedResult);
       }
       else
       {
@@ -339,6 +339,11 @@ class StringTester
   getPosition()
   {
     return this._testIndex;
+  }
+
+  isComputedPosition(position)
+  {
+    return this._cachePath.length > position;
   }
 
   getCurrentNodes()
