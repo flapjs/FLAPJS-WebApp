@@ -1,11 +1,11 @@
-import AbstractInputController from 'modules/abstract/AbstractInputController.js';
+import AbstractModuleInputController from 'modules/abstract/AbstractModuleInputController.js';
 import Config from 'config.js';
 
 import GraphPicker from './GraphPicker.js';
 import Node from 'graph/GraphNode.js';
 import Edge from 'graph/QuadraticEdge.js';
 
-class DefaultInputController extends AbstractInputController
+class DefaultInputController extends AbstractModuleInputController
 {
   constructor(module, inputAdapter)
   {

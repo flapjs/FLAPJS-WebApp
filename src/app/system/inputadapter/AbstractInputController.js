@@ -3,6 +3,8 @@
  */
 class AbstractInputController
 {
+  constructor() {}
+
   /**
    * Called by InputAdapter before an InputEvent begins.
    * Returns true if the event should be consumed. If consumed, the event will

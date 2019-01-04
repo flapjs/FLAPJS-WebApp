@@ -1,14 +1,15 @@
+import AbstractModuleMachineController from 'modules/abstract/AbstractModuleMachineController.js';
 import Eventable from 'util/Eventable.js';
 
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import { convertToDFA } from 'machine/util/convertNFA.js';
 import DFA from 'machine/DFA.js';
 
-class MachineController
+class MachineController extends AbstractModuleMachineController
 {
   constructor(module)
   {
-    this._module = module;
+    super(module);
 
     this.machineName = null;
 
@@ -37,11 +38,6 @@ class MachineController
   setModule(module)
   {
     this._module = module;
-  }
-
-  getModule()
-  {
-    return this._module;
   }
 
   initialize(module)

@@ -1,11 +1,11 @@
-import AbstractGraphController from 'modules/abstract/AbstractGraphController.js';
+import AbstractModuleGraphController from 'modules/abstract/AbstractModuleGraphController.js';
 
 import Config from 'config.js';
 import Eventable from 'util/Eventable.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
 
-class GraphController extends AbstractGraphController
+class GraphController extends AbstractModuleGraphController
 {
   constructor(module)
   {

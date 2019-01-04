@@ -1,9 +1,8 @@
-class AbstractMachineController
+class AbstractModuleMachineController
 {
-  constructor(module, machine)
+  constructor(module)
   {
     this._module = module;
-    this._machine = machine;
 
     //throw new Error("Missing implementation for graph controller \'" + this.getModule().getModuleName() + "\'");
   }
@@ -11,16 +10,11 @@ class AbstractMachineController
   initialize(module) {}
   destroy(module) {}
   update(module) {}
-
-  getMachine()
-  {
-    return this._machine;
-  }
-
+  
   getModule()
   {
     return this._module;
   }
 }
 
-export default AbstractMachineController;
+export default AbstractModuleMachineController;

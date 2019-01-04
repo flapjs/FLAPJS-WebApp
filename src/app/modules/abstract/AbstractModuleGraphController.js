@@ -1,4 +1,4 @@
-class AbstractGraphController
+class AbstractModuleGraphController
 {
   constructor(module, graph)
   {
@@ -23,4 +23,4 @@ class AbstractGraphController
   }
 }
 
-export default AbstractGraphController;
+export default AbstractModuleGraphController;
