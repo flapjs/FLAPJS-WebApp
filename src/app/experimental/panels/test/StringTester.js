@@ -12,12 +12,21 @@ class TestTapeContext extends TapeContext
     this._tester = tester;
     this._graphController = graphController;
     this._machineController = machineController;
+
+    this._cachedGraphHash = graphController.getGraph().getHashCode(false);
   }
 
   //Override
   stepForward()
   {
     const graphController = this._graphController;
+    const graphHash = graphController.getGraph().getHashCode(false);
+    if (graphHash !== this._cachedGraphHash)
+    {
+      this.stop();
+      return;
+    }
+
     const machineController = this._machineController;
     this._tester.stepForward(graphController, machineController);
   }
@@ -26,6 +35,13 @@ class TestTapeContext extends TapeContext
   stepBackward()
   {
     const graphController = this._graphController;
+    const graphHash = graphController.getGraph().getHashCode(false);
+    if (graphHash !== this._cachedGraphHash)
+    {
+      this.stop();
+      return;
+    }
+
     const machineController = this._machineController;
     this._tester.stepBackward(graphController, machineController);
   }
@@ -33,6 +49,14 @@ class TestTapeContext extends TapeContext
   //Override
   reset()
   {
+    const graphController = this._graphController;
+    const graphHash = graphController.getGraph().getHashCode(false);
+    if (graphHash !== this._cachedGraphHash)
+    {
+      this.stop();
+      return;
+    }
+
     this._tester.resetPosition();
   }
 
@@ -40,6 +64,13 @@ class TestTapeContext extends TapeContext
   finish()
   {
     const graphController = this._graphController;
+    const graphHash = this._graphController.getGraph().getHashCode(false);
+    if (graphHash !== this._cachedGraphHash)
+    {
+      this.stop();
+      return;
+    }
+
     const machineController = this._machineController;
     this._tester.runTest(graphController, machineController, false);
   }
@@ -94,7 +125,7 @@ class StringTester
 
     //For nfa solver use
     this._cachePath = [];
-    this._cachedResult = false;
+    this._cachedResult = null;
     this._resolve = null;
     this._reject = null;
 
@@ -114,7 +145,7 @@ class StringTester
     this._testString = testString;
     this._testIndex = -1;
     this._cachePath.length = 0;
-    this._cachedResult = false;
+    this._cachedResult = null;
     this._tapeContext = new TestTapeContext(this, graphController, machineController);
 
     this.emit("startTest", this);
@@ -149,7 +180,7 @@ class StringTester
     this._testString = null;
     this._testIndex = -1;
     this._cachePath.length = 0;
-    this._cachedResult = false;
+    this._cachedResult = null;
     this._tapeContext = null;
 
     return Promise.resolve(testResult);
@@ -177,40 +208,18 @@ class StringTester
   stepForward(graphController, machineController, cacheStep=true)
   {
     if (!this._testString || this._testString.length <= 0) return false;
-    if (this._testIndex >= this._testString.length - 1) return false;
+    if (this._testIndex >= this._testString.length) return false;
     ++this._testIndex;
 
     if (this._cachePath.length <= this._testIndex)
     {
       //Calculate current step...
-      const nextSymbol = this._testString[this._testIndex];
       const targets = new Set();
       let cachedStates, cachedSymbols, checkedStates = null;
 
-      //Initialize first step...
-      if (this._testIndex <= 0)
+      if (this._testIndex === this._testString.length && this._cachedResult === null)
       {
-        cachedStates = [];
-        cachedSymbols = [];
-        checkedStates = [];
-
-        const graph = graphController.getGraph();
-        const machine = machineController.getMachineBuilder().getMachine();
-        const startState = machine.getStartState();
-        for (let curr_state of machine.doClosureTransition(startState))
-        {
-          cachedStates.push({state: curr_state, index: 0});
-          const node = machineController.getFirstGraphNodeByLabel(graph, curr_state);
-
-          //Couldn't find the node that was solved for this step...
-          if (!node) throw new Error("Could not find node by label \'" + state.state + "\'");
-
-          targets.add(node);
-        }
-      }
-      //Do the remaining steps...
-      else
-      {
+        //Run the solver one last time for the result...
         const prevCache = this._cachePath[this._testIndex - 1];
         cachedStates = prevCache.states.slice();
         cachedSymbols = prevCache.symbols.slice();
@@ -218,7 +227,7 @@ class StringTester
 
         const machine = machineController.getMachineBuilder().getMachine();
         const graph = graphController.getGraph();
-        this._cachedResult = solveNFAbyStep(machine, nextSymbol, cachedStates, cachedSymbols, checkedStates);
+        this._cachedResult = solveNFAbyStep(machine, null, cachedStates, cachedSymbols, checkedStates);
         for(const state of cachedStates)
         {
           const node = machineController.getFirstGraphNodeByLabel(graph, state.state);
@@ -227,6 +236,53 @@ class StringTester
           if (!node) throw new Error("Could not find node by label \'" + state.state + "\'");
 
           targets.add(node);
+        }
+      }
+      else
+      {
+        const nextSymbol = this._testString[this._testIndex];
+
+        //Initialize first step...
+        if (this._testIndex <= 0)
+        {
+          cachedStates = [];
+          cachedSymbols = [];
+          checkedStates = [];
+
+          const graph = graphController.getGraph();
+          const machine = machineController.getMachineBuilder().getMachine();
+          const startState = machine.getStartState();
+          for (let curr_state of machine.doClosureTransition(startState))
+          {
+            cachedStates.push({state: curr_state, index: 0});
+            const node = machineController.getFirstGraphNodeByLabel(graph, curr_state);
+
+            //Couldn't find the node that was solved for this step...
+            if (!node) throw new Error("Could not find node by label \'" + state.state + "\'");
+
+            targets.add(node);
+          }
+        }
+        //Do the remaining steps...
+        else
+        {
+          const prevCache = this._cachePath[this._testIndex - 1];
+          cachedStates = prevCache.states.slice();
+          cachedSymbols = prevCache.symbols.slice();
+          checkedStates = prevCache.checked.slice();
+
+          const machine = machineController.getMachineBuilder().getMachine();
+          const graph = graphController.getGraph();
+          solveNFAbyStep(machine, nextSymbol, cachedStates, cachedSymbols, checkedStates);
+          for(const state of cachedStates)
+          {
+            const node = machineController.getFirstGraphNodeByLabel(graph, state.state);
+
+            //Couldn't find the node that was solved for this step...
+            if (!node) throw new Error("Could not find node by label \'" + state.state + "\'");
+
+            targets.add(node);
+          }
         }
       }
 
