@@ -19,13 +19,19 @@
 :local(.test_item_container).failure :local(.test_button) {
   color: var(--color-testing-failure);
 }
-:local(.test_item_container) :local(.delete_button) {
-  color: var(--color-drawer-text);
-}
-:local(.test_item_container) :local(.delete_button):hover {
+:local(.test_button):hover {
   color: var(--color-drawer-text-active);
 }
-:local(.test_item_container) :local(.delete_button):disabled {
+:local(.test_button):disabled {
+  color: var(--color-drawer-text-disabled);
+}
+:local(.delete_button) {
+  color: var(--color-drawer-text);
+}
+:local(.delete_button):hover {
+  color: var(--color-drawer-text-active);
+}
+:local(.delete_button):disabled {
   color: var(--color-drawer-text-disabled);
 }
 
