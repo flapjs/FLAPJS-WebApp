@@ -26,7 +26,8 @@ class EditPane extends React.Component
 
     return (
       <div id={this.props.id}
-        className={this.props.className}
+        className={Style.view_pane +
+          " " + this.props.className}
         style={this.props.style}>
         { LabelEditor &&
           <LabelEditor ref={ref=>graphController.labelEditorElement=ref}

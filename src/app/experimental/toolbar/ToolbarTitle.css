@@ -1,0 +1,68 @@
+:local(.title_container) {
+  display: flex;
+  flex-direction: column;
+
+  background: var(--color-toolbar-back);
+}
+
+:local(.title_input_container) {
+  height: 55%;
+  border-bottom: 1px solid var(--color-toolbar-text-invert);
+}
+:local(.title_container) input {
+  padding: 0;
+  outline: none;
+  border: none;
+
+  font-size: 2.2em;
+  width: 100%;
+  height: 100%;
+
+  outline: none;
+  border: none;
+
+  color: var(--color-toolbar-text);
+  background: transparent;
+  opacity: 0.3;
+
+  transition: opacity 0.3s ease;
+}
+:local(.title_container) input:hover {
+  opacity: 0.5;
+}
+:local(.title_container) input:focus {
+  opacity: 1;
+}
+:local(.title_subtitle) {
+  position: relative;
+  flex: 1;
+  color: var(--color-toolbar-text-active);
+  white-space: nowrap;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+
+  margin-top: -1px;/*Offset the border*/
+
+  margin-left: -0.5em;
+  margin-right: -0.5em;
+  margin-bottom: 0.3em;
+  padding-left: 0.6em;
+}
+:local(.title_subtitle)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 1em;
+  background: var(--color-toolbar-text);
+
+  opacity: 0.1;
+  transition: opacity 0.3s ease;
+}
+:local(.title_subtitle):hover::before {
+  opacity: 0.2;
+}

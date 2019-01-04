@@ -27,6 +27,8 @@ class IconUploadButton extends React.Component
   //Override
   render()
   {
+    const accept = this.props.accept;
+
     return (
       <IconButton id={this.props.id}
         className={Style.upload_button +
@@ -36,7 +38,7 @@ class IconUploadButton extends React.Component
         disabled={this.props.disabled}>
         <input type="file" name="import"
           className={Style.upload_input}
-          accept={this.props.accept}
+          accept={accept}
           onChange={this.onFileUpload}/>
         {this.props.children}
       </IconButton>

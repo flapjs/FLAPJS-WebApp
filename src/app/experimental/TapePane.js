@@ -17,18 +17,20 @@ class TapePane extends React.Component
     const app = this.props.app;
     const module = this.props.module;
     const viewport = this.props.viewport;
+    const tester = this.props.tester;
     const inputController = module.getInputController();
     const graphController = module.getGraphController();
     const machineController = module.getMachineController();
 
     return (
       <div id={this.props.id}
-        className={this.props.className}
+        className={Style.view_pane +
+          " " + this.props.className}
         style={this.props.style}>
         <NavbarWidget className={Style.view_widget} style={{right: 0}}
           app={app}/>
         <div className={Style.view_widget} style={{bottom: 0}}>
-          <TapeWidget/>
+          <TapeWidget value={tester ? tester.getTapeContext() : null}/>
         </div>
       </div>
     );

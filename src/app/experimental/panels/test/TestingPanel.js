@@ -1,48 +1,29 @@
 import React from 'react';
 import Style from './TestingPanel.css';
 
-import IconButton from 'experimental/components/IconButton.js';
-import IconUploadButton from 'experimental/components/IconUploadButton.js';
+import TestListView from './TestListView.js';
 
-import PageContentIcon from 'experimental/iconset/PageContentIcon.js';
-import UploadIcon from 'experimental/iconset/UploadIcon.js';
-import DownloadIcon from 'experimental/iconset/DownloadIcon.js';
-import CrossIcon from 'experimental/iconset/CrossIcon.js';
+import PanelCheckbox from 'experimental/panels/PanelCheckbox.js';
 
 class TestingPanel extends React.Component
 {
   constructor(props)
   {
     super(props);
-
-    this.state = {
-      noTestMode: true
-    };
-
-    this.onTestNew = this.onTestNew.bind(this);
-    this.onTestUpload = this.onTestUpload.bind(this);
-    this.onTestDownload = this.onTestDownload.bind(this);
-    this.onTestClose = this.onTestClose.bind(this);
   }
 
-  onTestNew()
+  //Override
+  componentDidMount()
   {
-
-  }
-
-  onTestUpload()
-  {
-
-  }
-
-  onTestDownload()
-  {
-
-  }
-
-  onTestClose()
-  {
-
+    //TODO: This should be in modules...
+    const app = this.props.app;
+    const tester = app._tester;
+    tester.on("startTest", (tester) => {
+      app._viewport.setViewIndex(1);
+    });
+    tester.on("stopTest", (tester) => {
+      app._viewport.setViewIndex(0);
+    });
   }
 
   //Override
@@ -51,7 +32,10 @@ class TestingPanel extends React.Component
     const currentModule = this.props.currentModule;
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
-    const machineBuilder = machineController.getMachineBuilder();
+
+    //TODO: This should be in modules...
+    const app = this.props.app;
+    const tester = app._tester;
 
     return (
       <div id={this.props.id}
@@ -62,22 +46,8 @@ class TestingPanel extends React.Component
           <h1>{TestingPanel.TITLE}</h1>
         </div>
         <div className={Style.panel_content}>
-          <div className={Style.test_control_tray}>
-            <IconButton title={I18N.toString("action.testing.new")}
-              onClick={this.onTestNew}>
-              <PageContentIcon/>
-            </IconButton>
-            <IconUploadButton title={I18N.toString("action.testing.import")}>
-              <UploadIcon/>
-            </IconUploadButton>
-            <IconButton title={I18N.toString("action.testing.save")}>
-              <DownloadIcon/>
-            </IconButton>
-            <IconButton title={I18N.toString("action.testing.clear")}
-              disabled={this.state.noTestMode}>
-              <CrossIcon/>
-            </IconButton>
-          </div>
+          <TestListView tester={tester} graphController={graphController} machineController={machineController}/>
+          <PanelCheckbox title={"Step Testing"}/>
         </div>
       </div>
     );

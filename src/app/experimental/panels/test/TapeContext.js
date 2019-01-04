@@ -2,28 +2,47 @@ class TapeContext
 {
   constructor(inputString, infiniteLeft=false, infiniteRight=false)
   {
-    this._tapeInput = inputString.split('');
-    this._tapeFroms = new Array(this._tapeInput.length);
+    this._tapeInput = inputString ? inputString.split('') : [];
     this._left = infiniteLeft;
     this._right = infiniteRight;
 
-    this._currentIndex = 0;
+    this._index = 0;
   }
 
-  setTapeSymbol(index, symbol="")
+  stepForward()
+  {
+    ++this._index;
+  }
+
+  stepBackward()
+  {
+    --this._index;
+  }
+
+  finish()
+  {
+    this._index = (this._tapeInput.length * 2);
+  }
+
+  reset()
+  {
+    this._index = -1;
+  }
+
+  stop()
+  {
+    this.finish();
+    this.reset();
+  }
+
+  changeTapeSymbol(index, symbol="")
   {
     this._tapeInput[index] = symbol;
   }
 
-  setTapeSourceStates(index, sourceStates=[])
-  {
-    this._tapeFroms[index] = sourceStates;
-  }
-
   getTapeSourceStatesByIndex(index)
   {
-    if (index < 0 || index >= this._tapeFroms.length) return [];
-    return this._tapeFroms[index] || [];
+    return [];
   }
 
   getTapeSymbolByIndex(index)
@@ -44,12 +63,12 @@ class TapeContext
 
   setCurrentTapeIndex(index)
   {
-    this._currentIndex = index;
+    this._index = index;
   }
 
   getCurrentTapeIndex()
   {
-    return this._currentIndex;
+    return this._index;
   }
 
   getTapeInput()
