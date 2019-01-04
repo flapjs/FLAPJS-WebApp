@@ -5,7 +5,7 @@
   --color-tape-back: rgba(200, 200, 200, 0.9);
   --color-tape-symbol-back: white;
   --color-tape-symbol-back-active: lightgray;
-  --color-tape-symbol-back-disabled: gray;
+  --color-tape-symbol-back-disabled: lightgray;
   --color-tape-highlight: black;
   --color-tape-outline: darkgray;
   --color-tape-shadow: gold;
