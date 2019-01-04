@@ -251,6 +251,9 @@
   visibility: hidden;
   transition: opacity 0.1s ease, visibility 0s linear 0.1s
 }
+:local(.app_drawer).no-animation :local(.drawer_tab) {
+  transition: none!important;
+}
 :local(.app_drawer).open.hide-content :local(.drawer_content_bar) {
   outline: 10px dashed var(--color-drawer-back-detail);
   transition: outline 0.1s ease 0.1s;
@@ -332,6 +335,9 @@
   visibility: hidden;
   opacity: 0;
   transition: opacity 0.1s ease 0.1s, visibility 0s linear 0.2s;
+}
+:local(.app_drawer).no-animation :local(.drawer_content_panel) {
+  transition: none!important;
 }
 
 /********* BOTTOM DRAWER *********/

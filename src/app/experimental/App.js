@@ -156,12 +156,6 @@ class App extends React.Component
 
           <ToolbarButton title="New" icon={PageEmptyIcon}
             onClick={() => UserUtil.userClearGraph(this, false, () => this._toolbar.closeBar())}/>
-          <ToolbarButton title="Undo" icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
-            disabled={!undoManager.canUndo()}
-            onClick={()=>undoManager.undo()}/>
-          <ToolbarButton title="Redo" icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
-            disabled={!undoManager.canRedo()}
-            onClick={()=>undoManager.redo()}/>
           <ToolbarUploadButton title="Upload" icon={UploadIcon} accept={graphImporter.getImportFileTypes().join(",")}
             onUpload={file => {
               graphImporter.importFile(file, this._module)
@@ -173,6 +167,12 @@ class App extends React.Component
                   this._toolbar.closeBar();
                 });
             }}/>
+          <ToolbarButton title="Undo" icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+            disabled={!undoManager.canUndo()}
+            onClick={()=>undoManager.undo()}/>
+          <ToolbarButton title="Redo" icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+            disabled={!undoManager.canRedo()}
+            onClick={()=>undoManager.redo()}/>
           <ToolbarButton title={I18N.toString("component.exporting.title")} icon={DownloadIcon}
             onClick={()=>this._toolbar.setCurrentMenu(0)}
             disabled={graphController.getGraph().isEmpty()}/>

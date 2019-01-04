@@ -339,6 +339,7 @@ class DrawerView extends React.Component
           (isDrawerSideBottom ? " drawer-side-bottom " : "") +
           (shouldDrawerOpenFull ? " full " : "") +
           (shouldHideDrawerContent ? " hide-content " : "") +
+          (this._handlingResize ? " no-animation " : "") +
           (shouldDrawerHide ? " hide " : "")}>
           <div className={Style.drawer_handle + (showDrawerHandle ? " show " : "")} onMouseDown={this.onDrawerHandleGrab}>
             <span>{"||"}</span>
