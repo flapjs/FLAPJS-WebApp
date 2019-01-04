@@ -41,7 +41,8 @@ import NotificationView from 'system/notification/components/NotificationView.js
 import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
 
-import FSAModule from 'modules/fsa/FSAModule.js';
+//import Module from 'modules/default/DefaultModule.js';
+import Module from 'modules/fsa/FSAModule.js';
 import StringTester from 'experimental/panels/test/StringTester.js';
 
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
@@ -72,7 +73,7 @@ class App extends React.Component
     this._hotKeyManager.registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")});
     this._hotKeyManager.registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
 
-    this._module = new FSAModule(this);
+    this._module = new Module(this);
     this._tester = new StringTester();
 
     this._init = false;

@@ -297,7 +297,7 @@ class DefaultGraphController extends AbstractModuleGraphController
     const prevLabel = placeholder || target instanceof GraphEdge ? target.getEdgeLabel() : target.getNodeLabel();
     this.labelEditorElement.openEditor(target, placeholder, replace, () => {
       const label = target instanceof GraphEdge ? target.getEdgeLabel() : target.getNodeLabel();
-      if (prevLabel.length > 0 && label != prevLabel)
+      if (prevLabel && prevLabel.length > 0 && label != prevLabel)
       {
         this.emit(target instanceof GraphEdge ? "edgeLabel" : "nodeLabel", this.getGraph(), target, label, prevLabel);
       }
