@@ -14,7 +14,7 @@ import AddIcon from 'experimental/iconset/AddIcon.js';
 
 import TestItem, {SUCCESS_MODE, FAILURE_MODE, DEFAULT_MODE} from './TestItem.js';
 
-const ACCEPT_FILE_TYPES = ['txt'];
+const ACCEPT_FILE_TYPES = ['.txt'];
 
 class TestListView extends React.Component
 {
@@ -106,6 +106,7 @@ class TestListView extends React.Component
           </IconUploadButton>
           <IconButton className={Style.test_control_button}
             title={I18N.toString("action.testing.save")}
+            disabled={empty}
             onClick={this.onTestDownload}>
             <DownloadIcon/>
           </IconButton>
