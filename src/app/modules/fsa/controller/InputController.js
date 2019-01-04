@@ -181,8 +181,7 @@ class InputController extends AbstractModuleInputController
     //If not in Trash Mode, then events should pass through to here...
     //Otherwise, ALL events are captured to prevent ALL default behavior.
 
-    //Makes sure that user cannot toggle state while in trash mode
-    if (targetType === 'node')
+    if (!inputController.isMoveMode() && targetType === 'node')
     {
       graphController.toggleNode(target);
       return true;
@@ -191,6 +190,11 @@ class InputController extends AbstractModuleInputController
     else if (targetType === 'edge')
     {
       graphController.openLabelEditor(target, x, y);
+      return true;
+    }
+    else if (targetType !== 'none')
+    {
+      //So double click can occur only if not on objects...
       return true;
     }
 
