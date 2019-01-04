@@ -30,17 +30,13 @@
 }
 
 :local(.test_button), :local(.delete_button) {
-  opacity: 0.2;
   margin: 0 0.2em;
 }
 :local(.test_item_container).active {
+  background: white;
+}
+:local(.test_item_container):hover {
   background: var(--color-drawer-back-detail);
-}
-:local(.test_item_container):hover :local(.test_button) {
-  opacity: 1;
-}
-:local(.test_item_container):hover :local(.delete_button) {
-  opacity: 1;
 }
 
 :local(.test_input) {

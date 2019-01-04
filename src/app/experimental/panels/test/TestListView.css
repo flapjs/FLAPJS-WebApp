@@ -71,5 +71,5 @@
   color: var(--color-drawer-text);
   opacity: 0;
 
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease 1s;
 }

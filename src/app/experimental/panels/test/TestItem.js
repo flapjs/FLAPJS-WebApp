@@ -10,7 +10,6 @@ import RunningManIcon from 'experimental/iconset/RunningManIcon.js';
 export const DEFAULT_MODE = "default";
 export const SUCCESS_MODE = "success";
 export const FAILURE_MODE = "failure";
-export const WORKING_MODE = "working";
 
 class TestItem extends React.Component
 {
@@ -18,52 +17,77 @@ class TestItem extends React.Component
   {
     super(props);
 
+    this.inputElement = null;
+
     this.state = {
       value: "",
-      status: WORKING_MODE
+      status: DEFAULT_MODE
     };
 
-    this.onTest = this.onTest.bind(this);
-    this.onDelete = this.onDelete.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
-  onTest(e)
+  focus()
   {
-
+    if (this.inputElement)
+    {
+      this.inputElement.focus();
+    }
   }
 
-  onDelete(e)
+  onChange(e)
   {
-
+    const nextValue = e.target.value;
+    this.setState({value: nextValue});
   }
 
   //Override
   render()
   {
+    const onDelete = this.props.onDelete;
+    const showDelete = true;
+
+    const onTest = this.props.onTest;
+    const showTest = true;
+
+    const name = this.props.name;
+    const active = this.props.active;
+    const subtitle = this.props.subtitle;
+    const placeholder = this.props.placeholder;
     const status = this.state.status;
+
     return (
       <div id={this.props.id}
         className={Style.test_item_container +
-          (this.props.active ? " active " : "") +
+          (active ? " active " : "") +
           " " + status +
           " " + this.props.className}
         style={this.props.style}>
-        <IconButton className={Style.test_button}
-          title={"Test"} onClick={this.onTest}>
-          {status === SUCCESS_MODE ?
-            <CheckCircleIcon/> :
-            status === FAILURE_MODE ?
-            <CrossCircleIcon/> :
-            <RunningManIcon/>}
-        </IconButton>
+        {showTest &&
+          <IconButton className={Style.test_button}
+            title={"Test"}
+            disabled={!onTest}
+            onClick={(e) => onTest(e, this)}>
+            {status === SUCCESS_MODE ?
+              <CheckCircleIcon/> :
+              status === FAILURE_MODE ?
+              <CrossCircleIcon/> :
+              <RunningManIcon/>}
+          </IconButton>}
         <div className={Style.test_input}>
-          <input type="text"/>
-          <label>TEST INPUT</label>
+          <input ref={ref=>this.inputElement=ref} type="text"
+            placeholder={placeholder}
+            value={this.state.value}
+            onChange={this.onChange}/>
+          <label>{this.props.subtitle}</label>
         </div>
-        <IconButton className={Style.delete_button}
-          title={"Delete"} onClick={this.onDelete}>
-          <SubtractIcon/>
-        </IconButton>
+        {showDelete &&
+          <IconButton className={Style.delete_button}
+            title={"Delete"}
+            disabled={!onDelete}
+            onClick={(e) => onDelete(e, this)}>
+            <SubtractIcon/>
+          </IconButton>}
       </div>
     );
   }

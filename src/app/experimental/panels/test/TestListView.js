@@ -12,7 +12,7 @@ import DownloadIcon from 'experimental/iconset/DownloadIcon.js';
 import CrossIcon from 'experimental/iconset/CrossIcon.js';
 import AddIcon from 'experimental/iconset/AddIcon.js';
 
-import TestItem from './TestItem.js';
+import TestItem, {SUCCESS_MODE, FAILURE_MODE, DEFAULT_MODE} from './TestItem.js';
 
 const ACCEPT_FILE_TYPES = ['txt'];
 
@@ -29,6 +29,8 @@ class TestListView extends React.Component
     this.onTestDownload = this.onTestDownload.bind(this);
     this.onTestClose = this.onTestClose.bind(this);
     this.onTestAdd = this.onTestAdd.bind(this);
+    this.onTestDelete = this.onTestDelete.bind(this);
+    this.onTestTest = this.onTestTest.bind(this);
   }
 
   onTestNew(e)
@@ -59,6 +61,20 @@ class TestListView extends React.Component
   onTestAdd(e)
   {
     this._testList.push(guid());
+  }
+
+  onTestDelete(e, item)
+  {
+    const i = this._testList.indexOf(item.props.name);
+    if (i >= 0)
+    {
+      this._testList.splice(i, 1);
+    }
+  }
+
+  onTestTest(e, item)
+  {
+    item.setState({status: SUCCESS_MODE});
   }
 
   isEmpty()
@@ -111,7 +127,10 @@ class TestListView extends React.Component
           </IconButton>
           <div className={Style.test_list_scroll_container}>
             <div className={Style.test_list}>
-              {this._testList.map((e, i) => <TestItem key={e}/>)}
+              {this._testList.map((e, i) =>
+                <TestItem key={e} name={e}
+                  onTest={this.onTestTest}
+                  onDelete={this.onTestDelete}/>)}
             </div>
           </div>
         </div>
