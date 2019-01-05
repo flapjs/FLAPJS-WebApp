@@ -2,6 +2,7 @@ import React from 'react';
 import Style from './TestListView.css';
 
 import { guid } from 'util/MathHelper.js';
+import Downloader from 'util/Downloader.js';
 
 import IconButton from 'experimental/components/IconButton.js';
 import IconUploadButton from 'experimental/components/IconUploadButton.js';
@@ -15,6 +16,7 @@ import AddIcon from 'experimental/iconset/AddIcon.js';
 import TestItem, {SUCCESS_MODE, FAILURE_MODE, WORKING_MODE, DEFAULT_MODE} from './TestItem.js';
 
 const ACCEPT_FILE_TYPES = ['.txt'];
+const TEST_FILENAME = "test.txt";
 
 class TestListView extends React.Component
 {
@@ -23,6 +25,7 @@ class TestListView extends React.Component
     super(props);
 
     this._testList = [];
+    this._testName = TEST_FILENAME;
 
     this.onTestNew = this.onTestNew.bind(this);
     this.onTestUpload = this.onTestUpload.bind(this);
@@ -45,12 +48,54 @@ class TestListView extends React.Component
 
   onTestUpload(fileBlob)
   {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try
+      {
+        this._testName = fileBlob.name;
+        this._testList.length = 0;
 
+        const tests = event.target.result.split("\n");
+        for(let test of tests)
+        {
+          test = test.trim();
+          if (test.length > 0)
+          {
+            this._testList.push({
+              id: guid(),
+              defaultValue: test,
+              ref: null
+            });
+          }
+        }
+
+        //Make sure an element exists, at least
+        if (this._testList.length <= 0)
+        {
+          this.onTestAdd(null);
+        }
+      }
+      catch(e)
+      {
+        reader.abort();
+      }
+    };
+    reader.readAsText(fileBlob);
   }
 
   onTestDownload(e)
   {
+    const testStrings = [];
+    for(const test of this._testList)
+    {
+      const ref = test.ref;
+      if (ref)
+      {
+        testStrings.push(ref.getValue());
+      }
+    }
 
+    Downloader.downloadText(this._testName, testStrings.join('\n'));
   }
 
   onTestClose(e)
@@ -66,16 +111,16 @@ class TestListView extends React.Component
 
   onTestAdd(e)
   {
-    this._testList.push(guid());
+    this._testList.push({
+      id: guid(),
+      defaultValue: "",
+      ref: null
+    });
   }
 
   onTestDelete(e, item)
   {
-    const i = this._testList.indexOf(item.props.name);
-    if (i >= 0)
-    {
-      this._testList.splice(i, 1);
-    }
+    //Already handled in render()
   }
 
   onTestTest(e, item)
@@ -160,12 +205,22 @@ class TestListView extends React.Component
           </IconButton>
           <div className={Style.test_list_scroll_container}>
             <div className={Style.test_list}>
-              {this._testList.map((e, i) =>
-                <TestItem key={e} name={e}
-                  onTest={tester && !graphController.getGraph().isEmpty() ?
-                    this.onTestTest :
-                    null}
-                  onDelete={this.onTestDelete}/>)}
+              {this._testList.map((e, i) => {
+                const id = e.id;
+                const defaultValue = e['defaultValue'] || "";
+                let testCallback = this.onTestTest;
+                if (!tester || graphController.getGraph().isEmpty())
+                {
+                  testCallback = null;
+                }
+                return <TestItem key={id} ref={ref=>e.ref=ref}
+                  defaultValue={defaultValue}
+                  onTest={testCallback}
+                  onDelete={(e, item) => {
+                    this._testList.splice(i, 1);
+                    this.onTestDelete(e, item);
+                  }}/>
+              })}
             </div>
           </div>
         </div>
