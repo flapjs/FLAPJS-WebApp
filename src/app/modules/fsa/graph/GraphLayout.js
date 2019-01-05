@@ -8,11 +8,11 @@ function getReachableState(graph)
   {
     for (const edge of graph.getEdges())
     {
-      if(edge.from == reachable[i])
+      if(edge._from == reachable[i])
       {
-        if(!reachable.includes(edge.to))
+        if(!reachable.includes(edge._to))
         {
-          reachable.push(edge.to);
+          reachable.push(edge._to);
         }
       }
     }
@@ -45,36 +45,41 @@ class GraphLayout
     //set radius
     var radius;
     if(numOfReachable < 10 && numOfUnreachable < 10){
-      radius = maxNum/4 * 50 + 10;
+      radius = maxNum/4 * 50 + 30;
     }
     else{
-      radius = (maxNum/5) * 40 + 10;
+      radius = (maxNum/5) * 40 + 30;
     }
-    /*var radius;
-    if(numOfNode < 10){
-      radius = numOfNode/4 * 50 + 10;
-    }
-    else{
-      radius = (numOfNode/5) * 40 + 10;
-    }*/
-
-    //set degree
-    const degree_re = 2* Math.PI/numOfReachable;
-    const degree_un = 2* Math.PI/numOfUnreachable;
 
     let currentStep = 0
-    for(const node of reachableNode)
+    if (numOfReachable == 1)
     {
-      node.y = Math.sin(degree_re*currentStep + Math.PI)*radius;
-      node.x = Math.cos(degree_re*currentStep + Math.PI)*radius;
-      currentStep += 1
+      let degree = 2* Math.PI/numOfNode
+      for(const node of graph.getNodes())
+      {
+        node.y = Math.sin(degree*currentStep + Math.PI)*radius;
+        node.x = Math.cos(degree*currentStep + Math.PI)*radius;
+        currentStep += 1
+      }
     }
-    currentStep = 0
-    for(const node of unreachableNode)
-    {
-      node.y = Math.sin(degree_un*currentStep + Math.PI)*(radius + 100);
-      node.x = Math.cos(degree_un*currentStep + Math.PI)*(radius + 100);
-      currentStep += 1
+    else {
+      const degree_re = 2* Math.PI/numOfReachable;
+      const degree_un = 2* Math.PI/numOfUnreachable;
+
+      currentStep = 0
+      for(const node of reachableNode)
+      {
+        node.y = Math.sin(degree_re*currentStep + Math.PI)*radius;
+        node.x = Math.cos(degree_re*currentStep + Math.PI)*radius;
+        currentStep += 1
+      }
+      currentStep = 0
+      for(const node of unreachableNode)
+      {
+        node.y = Math.sin(degree_un*currentStep + Math.PI)*(radius + 100);
+        node.x = Math.cos(degree_un*currentStep + Math.PI)*(radius + 100);
+        currentStep += 1
+      }
     }
     /*for(const node of graph.getNodes())
     {
