@@ -170,6 +170,7 @@ class OptionsPanel extends React.Component
     LocalSave.unregisterHandler(this);
   }
 
+  //Ducktype(AbstractLocalSaver)
   onLoadSave()
   {
     const opts = this.styleOpts;
@@ -184,6 +185,7 @@ class OptionsPanel extends React.Component
     }
   }
 
+  //Ducktype(AbstractLocalSaver)
   onAutoSave()
   {
     const opts = this.styleOpts;

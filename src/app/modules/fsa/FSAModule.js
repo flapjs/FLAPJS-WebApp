@@ -162,8 +162,6 @@ class FSAModule extends AbstractModule
   //Override
   getMachineController() { return this._machineController; }
   //Override
-  getDefaultGraphExporter() { return EXPORTERS[0]; }
-  //Override
   getGraphExporters() { return EXPORTERS; }
   //Override
   getModuleVersion() { return VERSION; }

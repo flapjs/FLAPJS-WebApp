@@ -31,6 +31,7 @@ import HelpIcon from 'experimental/iconset/HelpIcon.js';
 import SettingsIcon from 'experimental/iconset/SettingsIcon.js';
 
 import * as UserUtil from 'experimental/UserUtil.js';
+import AppSaver from 'experimental/AppSaver.js';
 
 import HotKeyManager, {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'experimental/hotkey/HotKeyManager.js';
 import HotKeyView from 'experimental/hotkey/HotKeyView.js';
@@ -40,6 +41,7 @@ import NotificationView from 'system/notification/components/NotificationView.js
 
 import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
+import LocalSave from 'system/localsave/LocalSave.js';
 
 //import Module from 'modules/default/DefaultModule.js';
 import Module from 'modules/fsa/FSAModule.js';
@@ -73,6 +75,8 @@ class App extends React.Component
     this._hotKeyManager.registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")});
     this._hotKeyManager.registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
 
+    this._saver = new AppSaver(this);
+
     this._module = new Module(this);
     this._tester = new StringTester();
 
@@ -96,6 +100,9 @@ class App extends React.Component
     this._module.initialize(this);
     this._hotKeyManager.initialize();
 
+    LocalSave.registerHandler(this._saver);
+    LocalSaver.initialize();
+
     this._init = true;
   }
 
@@ -103,6 +110,9 @@ class App extends React.Component
   componentWillUnmount()
   {
     this._init = false;
+
+    LocalSave.unregisterHandler(this._saver);
+    LocalSave.terminate();
 
     this._hotKeyManager.destroy();
     this._module.destroy(this);
