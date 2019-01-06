@@ -2,7 +2,7 @@ import React from 'react';
 import Style from './TestListView.css';
 
 import { guid } from 'util/MathHelper.js';
-import Downloader from 'util/Downloader.js';
+import { downloadText } from 'util/Downloader.js';
 
 import IconButton from 'experimental/components/IconButton.js';
 import IconUploadButton from 'experimental/components/IconUploadButton.js';
@@ -95,7 +95,7 @@ class TestListView extends React.Component
       }
     }
 
-    Downloader.downloadText(this._testName, testStrings.join('\n'));
+    downloadText(this._testName, testStrings.join('\n'));
   }
 
   onTestClose(e)

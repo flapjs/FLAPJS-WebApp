@@ -2,7 +2,7 @@ import AbstractGraphExporter from 'modules/abstract/exporter/AbstractGraphExport
 
 import JSONFileIcon from 'icons/flat/JSONIcon.js';
 import { JSON as JSONGraphParser } from 'graph/parser/NodalGraphParser.js';
-import Downloader from 'util/Downloader.js';
+import { downloadText } from 'util/Downloader.js';
 
 class DefaultGraphExporter extends AbstractGraphExporter
 {
@@ -103,7 +103,7 @@ class DefaultGraphExporter extends AbstractGraphExporter
     const graphData = JSONGraphParser.objectify(graph);
     const dst = this.toJSON(graphData, module);
     const jsonString = JSON.stringify(dst);
-    Downloader.downloadText(filename + '.' + this.getFileType(), jsonString);
+    downloadText(filename + '.' + this.getFileType(), jsonString);
   }
 
   //Override
