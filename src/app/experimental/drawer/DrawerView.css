@@ -236,7 +236,10 @@
 :local(.drawer_tab):hover {
   color: var(--color-drawer-tab-text-active);
 }
-:local(.drawer_tab).active {
+:local(.drawer_tab).disabled {
+  opacity: 0.3;
+}
+:local(.drawer_tab).active:not(.disabled) {
   color: var(--color-drawer-tab-highlight);
 
   /* Hover animation */
@@ -282,7 +285,7 @@
   flex-grow: 1;
   transform: rotateZ(-90deg);
 }
-:local(.app_drawer).drawer-bar-sideways :local(.drawer_tab).active {
+:local(.app_drawer).drawer-bar-sideways :local(.drawer_tab).active:not(.disabled) {
   /* Hover animation */
   border-bottom: none;
   padding-bottom: 0px;
@@ -314,6 +317,10 @@
 }
 :local(.drawer_panel_container).hide {
   visibility: hidden;
+}
+:local(.drawer_panel_container).disabled {
+  opacity: 0.3;
+  pointer-events: none;
 }
 :local(.drawer_panel) {
   position: absolute;

@@ -33,7 +33,8 @@ class DrawerView extends React.Component
 
     this.state = {
       open: false,
-      tabIndex: 0
+      tabIndex: 0,
+      soloClass: null
     };
 
     //When drawer is currently changing size intentfully
@@ -139,6 +140,11 @@ class DrawerView extends React.Component
   isCurrentTab(tabIndex)
   {
     return this.state.tabIndex === tabIndex;
+  }
+
+  setDrawerSoloClass(soloClass, callback=null)
+  {
+    this.setState({soloClass: soloClass}, callback);
   }
 
   setDrawerWidth(value, hasIntent=true)
@@ -308,6 +314,7 @@ class DrawerView extends React.Component
     const drawerSide = this.props.side || DRAWER_SIDE_RIGHT;
     const drawerDirection = this.props.direction || DRAWER_BAR_DIRECTION_HORIZONTAL;
     const shouldDrawerHide = this.props.hide || false;
+    const drawerSoloClass = this.state.soloClass;
 
     const isDrawerOpen = this.state.open;
     //Assumes that parent container has flex and flex-direction: column for bottom, row for right.
@@ -353,11 +360,14 @@ class DrawerView extends React.Component
                 if (!e) return null;
                 if (!e['TITLE']) return null;
                 const title = e['TITLE'];
+                const current = this.isCurrentTab(i);
+                const disabled = drawerSoloClass && drawerSoloClass !== e;
                 return (
                   <a key={title + ":" + i}
-                  className={Style.drawer_tab +
-                    (this.isCurrentTab(i) ? " active " : "")}
-                  onClick={() => this.setCurrentTab(i)}>
+                    className={Style.drawer_tab +
+                      (current ? " active " : "") +
+                      (disabled ? " disabled " : "")}
+                    onClick={() => this.setCurrentTab(i)}>
                     <label>{title}</label>
                   </a>
                 );
@@ -368,11 +378,14 @@ class DrawerView extends React.Component
                 {drawerPanels && drawerPanels.map((e, i) => {
                   if (!e) return null;
                   const ComponentClass = e;
-                  const title = e.TITLE || "";
+                  const title = e['TITLE'] || "";
                   const current = this.isCurrentTab(i);
+                  const disabled = drawerSoloClass && drawerSoloClass !== e;
                   return (
-                    <div key={title + ":" + i} className={Style.drawer_panel_container +
-                      (!current ? " hide " : "")}>
+                    <div key={title + ":" + i}
+                      className={Style.drawer_panel_container +
+                        (!current ? " hide " : "") +
+                        (disabled ? " disabled " : "")}>
                       <ComponentClass className={Style.drawer_panel}
                         {...this.props.panelProps}
                         drawer={this.ref}/>

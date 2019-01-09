@@ -102,7 +102,7 @@ class TrashCanWidget extends React.Component
     const inputAdapter = inputController.getInputAdapter();
 
     const active = inputController.isTrashMode();
-    const hide = graphController.getGraph().isEmpty() || (inputAdapter.isUsingTouch() && inputAdapter.isDragging());
+    const hide = !active && (graphController.getGraph().isEmpty() || (inputAdapter.isUsingTouch() && inputAdapter.isDragging()));
 
     return (
       <div ref={ref=>this.ref=ref} id={this.props.id}

@@ -104,10 +104,8 @@ class App extends React.Component
     //Begin tutorial
     this.tutorial.start(this);
 
-    LocalSave.initialize();
-
     LocalSave.registerHandler(this);
-    this.onLoadSave();
+    LocalSave.initialize();
 
     this._init = true;
   }
@@ -116,7 +114,6 @@ class App extends React.Component
   componentWillUnmount()
   {
     LocalSave.unregisterHandler(this);
-
     LocalSave.terminate();
 
     this.hotKeys.destroy();
@@ -135,6 +132,7 @@ class App extends React.Component
     this._init = false;
   }
 
+  //Ducktype(AbstractLocalSaver)
   onLoadSave()
   {
     const moduleName = this._module.getModuleName();
@@ -147,6 +145,7 @@ class App extends React.Component
     }
   }
 
+  //Ducktype(AbstractLocalSaver)
   onAutoSave()
   {
     const moduleName = this._module.getModuleName();

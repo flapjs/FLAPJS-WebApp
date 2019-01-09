@@ -1,6 +1,6 @@
-import AbstractMachineController from 'modules/abstract/AbstractMachineController.js';
+import AbstractModuleMachineController from 'modules/abstract/AbstractModuleMachineController.js';
 
-class DefaultMachineController extends AbstractMachineController
+class DefaultMachineController extends AbstractModuleMachineController
 {
   constructor(module)
   {

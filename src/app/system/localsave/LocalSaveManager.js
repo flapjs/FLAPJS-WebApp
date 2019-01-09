@@ -23,6 +23,16 @@ class LocalSaveManager
     {
       throw new Error("Cannot register handler, since it is already registered");
     }
+
+    if (this._init)
+    {
+      //NOTE: Due to duck typing, it might not exist...
+      if (typeof handler['onLoadSave'] === 'function')
+      {
+        handler.onLoadSave();
+      }
+    }
+
     this._handlers.add(handler);
   }
 
@@ -32,6 +42,16 @@ class LocalSaveManager
     {
       throw new Error("Cannot remove handler, since it is not yet registered");
     }
+
+    if (this._init)
+    {
+      //NOTE: Due to duck typing, it might not exist...
+      if (typeof handler['onUnloadSave'] === 'function')
+      {
+        handler.onUnloadSave();
+      }
+    }
+
     this._handlers.delete(handler);
   }
 
@@ -41,9 +61,19 @@ class LocalSaveManager
 
     if (this.doesSupportLocalStorage())
     {
+      this._init = true;
+
+      for(const handler of this._handlers)
+      {
+        //NOTE: Due to duck typing, it might not exist...
+        if (typeof handler['onLoadSave'] === 'function')
+        {
+          handler.onLoadSave();
+        }
+      }
+
       //Prepare autosave
       this._intervalID = setInterval(this.onIntervalUpdate, this._intervalMillis);
-      this._init = true;
     }
     else
     {
@@ -57,6 +87,15 @@ class LocalSaveManager
 
     clearInterval(this._intervalID);
 
+    for(const handler of this._handlers)
+    {
+      //NOTE: Due to duck typing, it might not exist...
+      if (typeof handler['onUnloadSave'] === 'function')
+      {
+        handler.onUnloadSave();
+      }
+    }
+
     this._handlers.clear();
     this._init = false;
   }
@@ -68,7 +107,11 @@ class LocalSaveManager
     {
       try
       {
-        handler.onAutoSave();
+        //NOTE: Due to duck typing, it might not exist...
+        if (typeof handler['onAutoSave'] === 'function')
+        {
+          handler.onAutoSave();
+        }
       }
       catch(e)
       {

@@ -3,8 +3,8 @@
   "version": "0.3.0",
   "description": "Repository for flap.js web app project",
   "scripts": {
-    "start": "NODE_ENV=development webpack-dev-server --mode development --config webpack.config.js",
-    "build": "NODE_ENV=production webpack --mode production --config webpack.config.js",
+    "start": "(set 'NODE_ENV=development' || 'NODE_ENV=development') && webpack-dev-server --mode development --config webpack.config.js",
+    "build": "(set 'NODE_ENV=production' || 'NODE_ENV=production') && webpack --mode production --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

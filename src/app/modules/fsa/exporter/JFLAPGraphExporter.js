@@ -2,7 +2,7 @@ import AbstractGraphExporter from 'modules/abstract/exporter/AbstractGraphExport
 
 import XMLFileIcon from 'icons/flat/XMLIcon.js';
 import { XML as XMLGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
-import Downloader from 'util/Downloader.js';
+import { downloadText } from 'util/Downloader.js';
 
 class JFLAPGraphExporter extends AbstractGraphExporter
 {
@@ -68,7 +68,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
     const graph = module.getGraphController().getGraph();
     const graphData = XMLGraphParser.objectify(graph);
     const xmlString = new XMLSerializer().serializeToString(graphData);
-    Downloader.downloadText(filename + '.' + this.getFileType(), xmlString);
+    downloadText(filename + '.' + this.getFileType(), xmlString);
   }
 
   //Override
