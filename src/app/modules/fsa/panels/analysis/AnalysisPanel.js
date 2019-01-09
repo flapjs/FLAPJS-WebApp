@@ -94,11 +94,13 @@ class AnalysisPanel extends React.Component
         <hr/>
         {
           machineBuilder.getMachineType() == "DFA" ?
-            <button className="panel-button" onClick={this.onConvertToNFA}>
+            <button className="panel-button" onClick={this.onConvertToNFA}
+             disabled={this.props.currentModule.getGraphController().getGraph().isEmpty()}>
               {I18N.toString("action.overview.convertnfa")}
             </button>
           : machineBuilder.getMachineType() == "NFA" ?
-            <button className="panel-button" onClick={this.onConvertToDFA}>
+            <button className="panel-button" onClick={this.onConvertToDFA}
+             disabled={this.props.currentModule.getGraphController().getGraph().isEmpty()}>
               {I18N.toString("action.overview.convertdfa")}
             </button>
           : null

@@ -15,6 +15,7 @@ import OptionPanel from 'experimental/menus/option/OptionPanel.js';
 import EditPane from 'experimental/EditPane.js';
 import TapePane from 'experimental/TapePane.js';
 
+import AnalysisPanel from 'experimental/panels/analysis/AnalysisPanel.js';
 import TestingPanel from 'experimental/panels/test/TestingPanel.js';
 
 import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU } from 'experimental/toolbar/ToolbarButton.js';
@@ -202,7 +203,7 @@ class App extends React.Component
         </ToolbarView>
 
         <DrawerView ref={ref=>this._drawer=ref} className="app-content"
-          panels={this._module.getModulePanels().concat([TestingPanel])}
+          panels={this._module.getModulePanels().concat([TestingPanel, AnalysisPanel])}
           panelProps={{currentModule: this._module, app: this}}
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
