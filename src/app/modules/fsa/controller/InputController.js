@@ -1,11 +1,11 @@
-import AbstractInputController from 'modules/abstract/AbstractInputController.js';
+import AbstractModuleInputController from 'modules/abstract/AbstractModuleInputController.js';
 import Config from 'config.js';
 
 import GraphPicker from './GraphPicker.js';
 import Node from 'modules/fsa/graph/FSANode.js';
 import Edge from 'modules/fsa/graph/FSAEdge.js';
 
-class InputController extends AbstractInputController
+class InputController extends AbstractModuleInputController
 {
   constructor(module, inputAdapter)
   {
@@ -33,6 +33,8 @@ class InputController extends AbstractInputController
 
     //Used to determine whether the target should be destroyed because of trash mode
     this._trashMode = false;
+
+    this._disabled = false;
   }
 
   //Override
@@ -77,9 +79,21 @@ class InputController extends AbstractInputController
     }
   }
 
+  setDisabled(disabled)
+  {
+    this._disabled = disabled;
+  }
+
+  isDisabled()
+  {
+    return this._disabled;
+  }
+
   //Override
   onPreInputEvent(pointer)
   {
+    if (this._disabled) return super.onPreInputEvent(pointer);
+
     const inputController = this;
     const graphController = this._graphController;
 
@@ -107,12 +121,15 @@ class InputController extends AbstractInputController
       return true;
     }
 
-    return false;
+    //Override
+    return super.onPreInputEvent(pointer);
   }
 
   //Override
   onInputEvent(pointer)
   {
+    if (this._disabled) return super.onInputEvent(pointer);
+
     const inputController = this;
     const graphController = this._graphController;
 
@@ -164,8 +181,7 @@ class InputController extends AbstractInputController
     //If not in Trash Mode, then events should pass through to here...
     //Otherwise, ALL events are captured to prevent ALL default behavior.
 
-    //Makes sure that user cannot toggle state while in trash mode
-    if (targetType === 'node')
+    if (!inputController.isMoveMode() && targetType === 'node')
     {
       graphController.toggleNode(target);
       return true;
@@ -176,19 +192,21 @@ class InputController extends AbstractInputController
       graphController.openLabelEditor(target, x, y);
       return true;
     }
+    else if (targetType !== 'none')
+    {
+      //So double click can occur only if not on objects...
+      return true;
+    }
 
-    return false;
-  }
-
-  //Override
-  onAltInputEvent(pointer)
-  {
-    return this.onInputEvent(pointer);
+    //Override
+    return super.onInputEvent(pointer);
   }
 
   //Override
   onDblInputEvent(pointer)
   {
+    if (this._disabled) return super.onDblInputEvent(pointer);
+
     const graphController = this._graphController;
     const x = pointer.x;
     const y = pointer.y;
@@ -205,12 +223,15 @@ class InputController extends AbstractInputController
       return true;
     }
 
-    return false;
+    //Override
+    return super.onDblInputEvent(pointer);
   }
 
   //Override
   onDragStart(pointer)
   {
+    if (this._disabled) return super.onDragStart(pointer);
+
     const inputController = this;
     const graphController = this._graphController;
 
@@ -288,16 +309,6 @@ class InputController extends AbstractInputController
         //Ready to move the initial marker to another state...
         return true;
       }
-      //Moving nothing
-      else if (targetType === 'none')
-      {
-        //Reuse nodal prev pos for graph prev pos
-        graphController.prevX = x;
-        graphController.prevY = y;
-
-        //Ready to move the graph to pointer...
-        return true;
-      }
     }
     //If is NOT in move mode...
     else
@@ -364,12 +375,15 @@ class InputController extends AbstractInputController
     //All input should be handled
     //throw new Error("Unknown target type \'" + targetType + "\'.");
 
-    return false;
+    //Override
+    return super.onDragStart(pointer);
   }
 
   //Override
   onDragMove(pointer)
   {
+    if (this._disabled) return super.onDragMove(pointer);
+
     const inputController = this;
     const graphController = this._graphController;
     const graph = graphController.getGraph();
@@ -419,11 +433,7 @@ class InputController extends AbstractInputController
       //Continue to move graph
       else if (targetType === 'none')
       {
-        //Move graph
-        const dx = x - graphController.prevX;
-        const dy = y - graphController.prevY;
-        inputController.getInputAdapter().getViewport().addOffset(dx, dy, true);
-        return true;
+        //Call super controller at the end...
       }
       else
       {
@@ -450,11 +460,16 @@ class InputController extends AbstractInputController
 
       //Otherwise, don't do anything. Cause even input drags will become move drags.
     }
+
+    //Override
+    return super.onDragMove(pointer);
   }
 
   //Override
   onDragStop(pointer)
   {
+    if (this._disabled) return super.onDragStop(pointer);
+
     const inputController = this;
     const graphController = this._graphController;
 
@@ -626,6 +641,9 @@ class InputController extends AbstractInputController
       else if (targetType === 'none')
       {
         //Do nothing. It should already be moved.
+      }
+      else if (super.onDragStop(pointer))
+      {
         return true;
       }
       else
@@ -646,12 +664,15 @@ class InputController extends AbstractInputController
       }
     }
 
-    return false;
+    //Override
+    return super.onDragStop(pointer);
   }
 
   //Override
   onPostInputEvent(pointer)
   {
+    if (this._disabled) return super.onPostInputEvent(pointer);
+
     const inputController = this;
     const graphController = this._graphController;
     const graph = graphController.getGraph();
@@ -659,12 +680,9 @@ class InputController extends AbstractInputController
 
     picker.clearTarget();
     picker.updateTarget(graph, pointer.x, pointer.y);
-  }
 
-  //Override
-  onZoomChange(pointer, zoomValue, prevValue)
-  {
-    return true;
+    //Override
+    super.onPostInputEvent(pointer);
   }
 
   setTrashMode(enabled)

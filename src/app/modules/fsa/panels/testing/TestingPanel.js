@@ -2,7 +2,7 @@ import React from 'react';
 import '../Panel.css';
 import './TestingPanel.css';
 
-import Downloader from 'util/Downloader.js';
+import { downloadText } from 'util/Downloader.js';
 
 import TestingManager from 'modules/fsa/testing/TestingManager.js';
 import TestingInput from './TestingInput.js';
@@ -144,7 +144,7 @@ class TestingPanel extends React.Component
   onTestsSave(e)
   {
     const tester = this.props.currentModule.getTestingManager();
-    Downloader.downloadText(TEST_FILENAME, tester.inputList.getTestsAsStrings().join("\n"));
+    downloadText(TEST_FILENAME, tester.inputList.getTestsAsStrings().join("\n"));
   }
 
   onTestsNew(e)

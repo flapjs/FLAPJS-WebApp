@@ -18,6 +18,8 @@ class GraphNodeRenderer extends React.Component
     const fill = this.props.fill || "#FFFFFF";
     const stroke = this.props.stroke || "#000000";
 
+    const label = node.getNodeLabel() || "";
+
     return (
       <g className={GRAPH_NODE_CONTAINER_STYLE_NAME}>
         {/*Outer circle*/}
@@ -34,10 +36,10 @@ class GraphNodeRenderer extends React.Component
           pointerEvents="none"
           style={{
             userSelect: "none",
-            fontSize: (1 - Math.min(Math.max(node.getNodeLabel().length - 2, 0) / 6, 0.5)) + "em"
+            fontSize: (1 - Math.min(Math.max(label.length - 2, 0) / 6, 0.5)) + "em"
           }}
           textAnchor="middle">
-          {node.getNodeLabel()}
+          {label}
         </text>
       </g>
     );

@@ -22,7 +22,7 @@ class TestItem extends React.Component
     this.inputElement = null;
 
     this.state = {
-      value: "",
+      value: this.props.defaultValue || "",
       status: DEFAULT_MODE
     };
 
@@ -74,7 +74,10 @@ class TestItem extends React.Component
   onChange(e)
   {
     const nextValue = e.target.value;
-    this.setState({value: nextValue});
+    if (this.state.value !== nextValue)
+    {
+      this.setState({value: nextValue, status: DEFAULT_MODE});
+    }
   }
 
   //Override
@@ -85,8 +88,7 @@ class TestItem extends React.Component
 
     const onTest = this.props.onTest;
     const showTest = true;
-
-    const name = this.props.name;
+    
     const active = this.props.active;
     const subtitle = this.props.subtitle;
     const placeholder = this.props.placeholder;

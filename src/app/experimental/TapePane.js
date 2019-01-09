@@ -12,6 +12,24 @@ class TapePane extends React.Component
   }
 
   //Override
+  componentDidMount()
+  {
+    const module = this.props.module;
+    const inputController = module.getInputController();
+
+    inputController.setDisabled(true);
+  }
+
+  //Override
+  componentWillUnmount()
+  {
+    const module = this.props.module;
+    const inputController = module.getInputController();
+    
+    inputController.setDisabled(false);
+  }
+
+  //Override
   render()
   {
     const app = this.props.app;

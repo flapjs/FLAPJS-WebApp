@@ -42,7 +42,7 @@ class TapeContext
 
   getTapeSourceStatesByIndex(index)
   {
-    return [];
+    return null;
   }
 
   getTapeSymbolByIndex(index)

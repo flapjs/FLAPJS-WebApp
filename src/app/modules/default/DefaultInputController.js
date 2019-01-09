@@ -1,11 +1,11 @@
-import AbstractInputController from 'modules/abstract/AbstractInputController.js';
+import AbstractModuleInputController from 'modules/abstract/AbstractModuleInputController.js';
 import Config from 'config.js';
 
 import GraphPicker from './GraphPicker.js';
 import Node from 'graph/GraphNode.js';
 import Edge from 'graph/QuadraticEdge.js';
 
-class DefaultInputController extends AbstractInputController
+class DefaultInputController extends AbstractModuleInputController
 {
   constructor(module, inputAdapter)
   {
@@ -97,7 +97,7 @@ class DefaultInputController extends AbstractInputController
       }
     }
 
-    return false;
+    return super.onPreInputEvent(pointer);
   }
 
   //Override
@@ -166,14 +166,13 @@ class DefaultInputController extends AbstractInputController
       graphController.openLabelEditor(target, x, y);
       return true;
     }
+    if (targetType !== 'none')
+    {
+      //Do nothing
+      return true;
+    }
 
-    return false;
-  }
-
-  //Override
-  onAltInputEvent(pointer)
-  {
-    return this.onInputEvent(pointer);
+    return super.onInputEvent(pointer);
   }
 
   //Override
@@ -195,7 +194,7 @@ class DefaultInputController extends AbstractInputController
       return true;
     }
 
-    return false;
+    return super.onDblInputEvent(pointer);
   }
 
   //Override
@@ -278,16 +277,6 @@ class DefaultInputController extends AbstractInputController
         //Ready to move the initial marker to another state...
         return true;
       }
-      //Moving nothing
-      else if (targetType === 'none')
-      {
-        //Reuse nodal prev pos for graph prev pos
-        graphController.prevX = x;
-        graphController.prevY = y;
-
-        //Ready to move the graph to pointer...
-        return true;
-      }
     }
     //If is NOT in move mode...
     else
@@ -354,7 +343,7 @@ class DefaultInputController extends AbstractInputController
     //All input should be handled
     //throw new Error("Unknown target type \'" + targetType + "\'.");
 
-    return false;
+    return super.onDragStart(pointer);
   }
 
   //Override
@@ -406,16 +395,8 @@ class DefaultInputController extends AbstractInputController
         inputController.ghostInitialMarker = dst;
         return true;
       }
-      //Continue to move graph
-      else if (targetType === 'none')
-      {
-        //Move graph
-        const dx = x - graphController.prevX;
-        const dy = y - graphController.prevY;
-        inputController.getInputAdapter().getViewport().addOffset(dx, dy, true);
-        return true;
-      }
-      else
+      //Continue to move graph if on none
+      else if (targetType !== 'none')
       {
         //All move drag should be handled
         throw new Error("Unknown target type \'" + targetType + "\'.");
@@ -440,6 +421,8 @@ class DefaultInputController extends AbstractInputController
 
       //Otherwise, don't do anything. Cause even input drags will become move drags.
     }
+
+    return super.onDragMove(pointer);
   }
 
   //Override
@@ -595,12 +578,7 @@ class DefaultInputController extends AbstractInputController
           }
         }
       }
-      else if (targetType === 'none')
-      {
-        //Do nothing. It should already be moved.
-        return true;
-      }
-      else
+      else if (targetType !== 'none')
       {
         //All move drag should be handled
         throw new Error("Unknown target type \'" + targetType + "\'.");
@@ -618,7 +596,7 @@ class DefaultInputController extends AbstractInputController
       }
     }
 
-    return false;
+    return super.onDragStop(pointer);
   }
 
   //Override
@@ -631,12 +609,14 @@ class DefaultInputController extends AbstractInputController
 
     picker.clearTarget();
     picker.updateTarget(graph, pointer.x, pointer.y);
+
+    return super.onPostInputEvent(pointer);
   }
 
   //Override
   onZoomChange(pointer, zoomValue, prevValue)
   {
-    return true;
+    return super.onZoomChange(pointer, zoomValue, prevValue);
   }
 
   setTrashMode(enabled)

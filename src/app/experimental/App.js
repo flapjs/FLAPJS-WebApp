@@ -31,6 +31,7 @@ import HelpIcon from 'experimental/iconset/HelpIcon.js';
 import SettingsIcon from 'experimental/iconset/SettingsIcon.js';
 
 import * as UserUtil from 'experimental/UserUtil.js';
+import AppSaver from 'experimental/AppSaver.js';
 
 import HotKeyManager, {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'experimental/hotkey/HotKeyManager.js';
 import HotKeyView from 'experimental/hotkey/HotKeyView.js';
@@ -40,8 +41,10 @@ import NotificationView from 'system/notification/components/NotificationView.js
 
 import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
+import LocalSave from 'system/localsave/LocalSave.js';
 
-import FSAModule from 'modules/fsa/FSAModule.js';
+//import Module from 'modules/default/DefaultModule.js';
+import Module from 'modules/fsa/FSAModule.js';
 import StringTester from 'experimental/panels/test/StringTester.js';
 
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
@@ -72,7 +75,9 @@ class App extends React.Component
     this._hotKeyManager.registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")});
     this._hotKeyManager.registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
 
-    this._module = new FSAModule(this);
+    this._saver = new AppSaver(this);
+
+    this._module = new Module(this);
     this._tester = new StringTester();
 
     this._init = false;
@@ -95,6 +100,9 @@ class App extends React.Component
     this._module.initialize(this);
     this._hotKeyManager.initialize();
 
+    LocalSave.registerHandler(this._saver);
+    LocalSaver.initialize();
+
     this._init = true;
   }
 
@@ -102,6 +110,9 @@ class App extends React.Component
   componentWillUnmount()
   {
     this._init = false;
+
+    LocalSave.unregisterHandler(this._saver);
+    LocalSave.terminate();
 
     this._hotKeyManager.destroy();
     this._module.destroy(this);

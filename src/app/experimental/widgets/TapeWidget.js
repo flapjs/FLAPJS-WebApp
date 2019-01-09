@@ -64,7 +64,7 @@ class TapeWidget extends React.Component
   {
     const showTransitionStates = true;
     const tapeContext = this.props.value;
-    const tapeIndex = tapeContext ? tapeContext.getCurrentTapeIndex() * 2 : -1;
+    const tapeIndex = tapeContext ? tapeContext.getCurrentTapeIndex() : -1;
 
     if (!tapeContext) return null;
 
@@ -97,14 +97,13 @@ class TapeWidget extends React.Component
 
           <DownArrowIcon
             className="tape-pointer"
-            style={{left: Math.floor((tapeIndex - 1) / 2) + "em"}}/>
+            style={{left: tapeIndex + "em"}}/>
 
           {tapeContext.getTapeInput().map((e, i) => {
             let active = false;
             let activeRead = false;
-            const currentIndex = Math.floor(tapeIndex / 2);
             active = tapeIndex === i;
-            activeRead = tapeIndex === i + 1;
+            activeRead = tapeIndex === i - 1;
             /*
             const currentIndex = Math.floor(tapeIndex / 2);
             if (currentIndex === i)
@@ -121,16 +120,21 @@ class TapeWidget extends React.Component
             */
 
             const sourceStates = tapeContext.getTapeSourceStatesByIndex(i);
+            const disabled = sourceStates === null;
             return (
               <div key={e + ":" + i} className={"tape-row-entry" +
                 (active ? " active " : "") +
-                (activeRead ? " active-read " : "")}>
+                (activeRead ? " active-read " : "") +
+                (disabled ? " disabled " : "")}
+                onClick={(e) => (!disabled ? tapeContext.setCurrentTapeIndex(i) : null)}>
                 {showTransitionStates &&
                   sourceStates &&
                   <span className="tape-row-states">
                     {sourceStates.map(sourceState => {
                       return (
-                        <label>{sourceState}</label>
+                        <label key={sourceState.getGraphElementID()}>
+                          {sourceState.getNodeLabel()}
+                        </label>
                       );
                     })}
                   </span>}

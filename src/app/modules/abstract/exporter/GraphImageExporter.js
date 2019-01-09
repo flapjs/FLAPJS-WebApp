@@ -2,7 +2,7 @@ import AbstractGraphExporter from './AbstractGraphExporter.js';
 
 import PNGIcon from 'icons/flat/PNGIcon.js';
 import JPGIcon from 'icons/flat/JPGIcon.js';
-import Downloader from 'util/Downloader.js';
+import { downloadSVG } from 'util/Downloader.js';
 
 class GraphImageExporter extends AbstractGraphExporter
 {
@@ -21,7 +21,7 @@ class GraphImageExporter extends AbstractGraphExporter
     const height = workspaceDim.height;
     const svg = workspace.getSVGForExport(width, height);
 
-    Downloader.downloadSVG(filename, this._imageType, svg, width, height);
+    downloadSVG(filename, this._imageType, svg, width, height);
   }
 
   //Override
