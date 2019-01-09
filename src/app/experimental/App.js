@@ -101,7 +101,7 @@ class App extends React.Component
     this._hotKeyManager.initialize();
 
     LocalSave.registerHandler(this._saver);
-    LocalSaver.initialize();
+    LocalSave.initialize();
 
     this._init = true;
   }

@@ -1,4 +1,5 @@
 import AbstractLocalSaver from 'system/localsave/AbstractLocalSaver.js';
+import LocalSave from 'system/localsave/LocalSave.js';
 
 class AppSaver extends AbstractLocalSaver
 {
