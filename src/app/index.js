@@ -21,6 +21,7 @@ const SHOULD_WARN_USERS_ON_EXIT = true;
 //Setup viewport
 window.addEventListener('load', (event) => {
   console.log("Preparing for \'" + process.env.NODE_ENV + "\' environment...");
+  console.log("Loading web app version \'" + process.env.VERSION + "\'...");
   loadApplication();
   window.requestAnimationFrame(updateApplication);
 });
