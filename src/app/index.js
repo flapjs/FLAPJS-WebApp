@@ -58,16 +58,6 @@ window.isUpdateAvailable.then(hasUpdate => {
   }
 });
 
-let message = "";
-if (Changelog && Changelog['show'])
-{
-  message += Changelog['log'];
-}
-
-console.log("[App] Found update for version " + process.env.VERSION + "...");
-window.alert("*** New update available! *** \n Please restart the browser." +
-  (message ? "\n" + message : ""));
-
 //Setup application
 const FRAMES_PER_SECOND = 60;
 var prevtime = 0;
