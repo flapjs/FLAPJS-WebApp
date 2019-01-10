@@ -1,6 +1,6 @@
 {
   "name": "flap.js",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Repository for flap.js web app project",
   "scripts": {
     "start": "(set 'NODE_ENV=development' || 'NODE_ENV=development') && webpack-dev-server --mode development --config webpack.config.js",
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/flapjs/FLAPJS-WebApp.git"
   },
-  "author": "Noah, Maya, David, Erik, Lixuan, Andrew",
+  "author": "Noah, Maya, David, Erik, Lixuan, Andrew, Seth, Ravneet",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/flapjs/FLAPJS-WebApp/issues"
