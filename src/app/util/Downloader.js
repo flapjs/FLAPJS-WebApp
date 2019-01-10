@@ -3,7 +3,7 @@ export const FILE_TYPE_JPG = "jpg";
 
 export function downloadText(filename, textData)
 {
-  downloadURL(filename, getTextDataURI(data));
+  downloadURL(filename, getTextDataURI(textData));
 }
 
 export function downloadSVG(filename, filetype, svg, width, height)
