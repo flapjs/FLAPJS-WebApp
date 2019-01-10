@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+//Changelog: imports
+import Changelog from 'changelog.js';
+
 //Router: imports
 import Router from 'router.js';
 import App from 'content/App.js';
@@ -43,10 +46,27 @@ window.addEventListener('beforeunload', (event) => {
 window.isUpdateAvailable.then(hasUpdate => {
   if (hasUpdate)
   {
+    let message = "";
+    if (Changelog && Changelog['show'])
+    {
+      message += Changelog['log'];
+    }
+
     console.log("[App] Found update for version " + process.env.VERSION + "...");
-    window.alert("*** New update available! *** \n Please restart the browser.");
+    window.alert("*** New update available! *** \n Please restart the browser." +
+      (message ? "\n" + message : ""));
   }
 });
+
+let message = "";
+if (Changelog && Changelog['show'])
+{
+  message += Changelog['log'];
+}
+
+console.log("[App] Found update for version " + process.env.VERSION + "...");
+window.alert("*** New update available! *** \n Please restart the browser." +
+  (message ? "\n" + message : ""));
 
 //Setup application
 const FRAMES_PER_SECOND = 60;

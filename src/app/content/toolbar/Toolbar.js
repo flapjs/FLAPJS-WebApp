@@ -44,7 +44,7 @@ class Toolbar extends React.Component
 
   onMachineNameChange(e)
   {
-    this.props.machineController.renameMachine(e.value);
+    this.props.currentModule.getMachineController().renameMachine(e.value);
   }
 
   onMachineNameKeyDown()
@@ -65,10 +65,10 @@ class Toolbar extends React.Component
   render()
   {
     const app = this.props.app;
-    const currentModule = app.getCurrentModule();
+    const currentModule = this.props.currentModule;
     const drawer = this.props.drawer;
-    const graphController = app.getGraphController();
-    const machineController = app.getMachineController();
+    const graphController = currentModule.getGraphController();
+    const machineController = currentModule.getMachineController();
     const undoManager = app.getUndoManager();
 
     const graph = graphController.getGraph();
