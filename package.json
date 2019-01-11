@@ -1,10 +1,12 @@
 {
   "name": "flap.js",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Repository for flap.js web app project",
   "scripts": {
-    "start": "(set 'NODE_ENV=development' || 'NODE_ENV=development') && webpack-dev-server --mode development --config webpack.config.js",
-    "build": "(set 'NODE_ENV=production' || 'NODE_ENV=production') && webpack --mode production --config webpack.config.js",
+    "start": "NODE_ENV=development webpack-dev-server --mode development --config webpack.config.js",
+    "build": "NODE_ENV=production && webpack --mode production --config webpack.config.js",
+    "start-win": "set NODE_ENV=development&& webpack-dev-server --mode development --config webpack.config.js",
+    "build-win": "set NODE_ENV=production&& webpack --mode production --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
