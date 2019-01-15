@@ -92,7 +92,11 @@ const Eventable = {
   {
     if (!this.__eventListeners) return;
 
-    if (this.__eventListeners.has(eventName))
+    if (!eventName)
+    {
+      this.__eventListeners.clear();
+    }
+    else if (this.__eventListeners.has(eventName))
     {
       const listeners = this.__eventListeners.get(eventName);
       listeners.length = 0;
