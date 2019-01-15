@@ -1,9 +1,10 @@
 import AbstractModuleGraphController from 'modules/abstract/AbstractModuleGraphController.js';
 
-import Config from 'config.js';
 import Eventable from 'util/Eventable.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
+
+const NODE_SPAWN_RADIUS = 64;
 
 class GraphController extends AbstractModuleGraphController
 {
@@ -140,8 +141,8 @@ class GraphController extends AbstractModuleGraphController
   {
     const newNodeLabel = this.machineController.getMachineBuilder().getLabeler().getNextDefaultNodeLabel();
 
-    if (typeof x === 'undefined') x = (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
-    if (typeof y === 'undefined') y = (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
+    if (typeof x === 'undefined') x = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
+    if (typeof y === 'undefined') y = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
 
     this.emit("userPreCreateNode", this.getGraph(), newNodeLabel, x, y);
 
@@ -236,6 +237,7 @@ class GraphController extends AbstractModuleGraphController
 
   moveNodeTo(pointer, node, x, y)
   {
+    const nodeSize = node.getNodeSize();
     for(const other of this.getGraph().getNodes())
     {
       //Update node collision
@@ -245,11 +247,11 @@ class GraphController extends AbstractModuleGraphController
       const dy = y - other.y;
       const angle = Math.atan2(dy, dx);
 
-      const diameter = (Config.NODE_RADIUS * 2);
+      const diameter = (nodeSize * 2);
       const nextDX = other.x + (Math.cos(angle) * diameter) - x;
       const nextDY = other.y + (Math.sin(angle) * diameter) - y;
 
-      if (dx * dx + dy * dy < Config.NODE_RADIUS_SQU * 4)
+      if (dx * dx + dy * dy < nodeSize * nodeSize * 4)
       {
         x += nextDX;
         y += nextDY;
@@ -385,6 +387,7 @@ function moveNodesOutOfEdges(target, graph)
   {
     if(node === target.getSourceNode() || node === target.getDestinationNode()) continue;
 
+    const nodeSize = node.getNodeSize();
     const x0 = node.x;
     const y0 = node.y;
 
@@ -414,8 +417,8 @@ function moveNodesOutOfEdges(target, graph)
       }
     }
 
-    if(dist < Config.NODE_RADIUS) {
-      const toMove = Config.NODE_RADIUS - dist + 10;
+    if(dist < nodeSize) {
+      const toMove = nodeSize - dist + 10;
       const distx = x0 - xint;
       const disty = y0 - yint;
       let signx = -1;
