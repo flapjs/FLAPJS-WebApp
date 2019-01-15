@@ -29,7 +29,7 @@ class ServiceCache
 /* * * * * * * * * * * * * * * * * * * * * * */
 
 //For debuggin' purposes, since this will turn off offline caching
-const FORCE_NETWORK_ONLY = false;
+const FORCE_NETWORK_ONLY = process.env.NODE_ENV === 'development';
 //If you can guarantee to NEVER do lazy-loading pre-cached assets,
 //then this will allow users to get the new ServiceWorker immediately,
 //rather than wait for a redirect (must close browser, then re-enter)
