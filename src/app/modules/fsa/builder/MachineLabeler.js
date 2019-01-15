@@ -2,13 +2,18 @@ import Config from 'config.js';
 
 class MachineLabeler
 {
-  constructor(graph)
+  constructor()
   {
-    this.graph = graph;
+    this.graph = null;
     this.prefix = Config.STR_STATE_LABEL;
 
     //TODO: this is hooked into the controller in module
     this.shouldAutoLabel = false;
+  }
+
+  setGraph(graph)
+  {
+    this.graph = graph;
   }
 
   sortDefaultNodeLabels()

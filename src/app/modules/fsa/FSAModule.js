@@ -46,7 +46,7 @@ class FSAModule extends AbstractModule
     this._graphController = new GraphController(this);
     this._machineController = new MachineController(this);
 
-    this._machineBuilder = new FSABuilder(this._graphController.getGraph());
+    this._machineBuilder = new FSABuilder();
 
     this._eventManager = new EventManager(app.getUndoManager());
     this._testingManager = new TestingManager();

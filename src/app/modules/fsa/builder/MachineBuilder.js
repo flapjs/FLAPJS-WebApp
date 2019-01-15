@@ -5,12 +5,12 @@ const DEFAULT_AUTO_RENAME = true;
 
 class MachineBuilder
 {
-  constructor(graph)
+  constructor()
   {
-    this.graph = graph;
+    this.graph = null;
     this.graphController = null;
 
-    this.labeler = new MachineLabeler(graph);
+    this.labeler = new MachineLabeler();
 
     this.onGraphNodeLabelChange = this.onGraphNodeLabelChange.bind(this);
   }
@@ -18,6 +18,8 @@ class MachineBuilder
   initialize(module)
   {
     this.graphController = module.getGraphController();
+    this.graph = this.graphController.getGraph();
+    this.labeler.setGraph(this.graph);
 
     this.setAutoRenameNodes(DEFAULT_AUTO_RENAME);
   }
