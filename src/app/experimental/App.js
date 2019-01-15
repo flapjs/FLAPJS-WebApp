@@ -44,7 +44,7 @@ import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
 import LocalSave from 'system/localsave/LocalSave.js';
 
-//import Module from 'modules/default/DefaultModule.js';
+import DefaultModule from 'modules/default/DefaultModule.js';
 import Module from 'modules/fsa/FSAModule.js';
 import StringTester from 'experimental/panels/test/StringTester.js';
 
@@ -78,12 +78,12 @@ class App extends React.Component
 
     this._saver = new AppSaver(this);
 
-    this._module = new Module(this);
     this._tester = new StringTester();
 
     this._init = false;
 
     this.state = {
+      module: new DefaultModule(this),
       hide: false
     };
 
@@ -98,7 +98,10 @@ class App extends React.Component
   {
     const workspaceDOM = this._workspace.ref;
     this._inputAdapter.initialize(workspaceDOM);
-    this._module.initialize(this);
+
+    const currentModule = this.getCurrentModule();
+    currentModule.initialize(this);
+
     this._hotKeyManager.initialize();
 
     LocalSave.registerHandler(this._saver);
@@ -116,13 +119,28 @@ class App extends React.Component
     LocalSave.terminate();
 
     this._hotKeyManager.destroy();
-    this._module.destroy(this);
+
+    const currentModule = this.getCurrentModule();
+    currentModule.destroy(this);
+
     this._inputAdapter.destroy();
   }
 
   get workspace() { return this._workspace; }
   get viewport() { return this._inputAdapter.getViewport(); }
-  getCurrentModule() { return this._module; }
+
+  setCurrentModuleClass(ModuleClass)
+  {
+    const prevModule = this.getCurrentModule();
+    prevModule.destroy(this);
+
+    const currentModule = new ModuleClass(this);
+    this.setState({ module: currentModule }, () => {
+      currentModule.initialize(this);
+    });
+  }
+
+  getCurrentModule() { return this.state.module; }
   getInputAdapter() { return this._inputAdapter; }
   getUndoManager() { return this._undoManager; }
   getHotKeyManager() { return this._hotKeyManager; }
@@ -130,10 +148,12 @@ class App extends React.Component
   //Override
   render()
   {
+    const currentModule = this.state.module;
+
     if (this._init)
     {
       this._inputAdapter.update();
-      this._module.update(this);
+      currentModule.update(this);
 
       //Disable hotkeys when graph is not in view
       this._hotKeyManager.setEnabled(
@@ -149,32 +169,37 @@ class App extends React.Component
 
     const undoManager = this._undoManager;
     const viewport = this._inputAdapter.getViewport();
-    const inputController = this._module.getInputController();
-    const graphController = this._module.getGraphController();
-    const machineController = this._module.getMachineController();
-    const graphImporter = this._module.getGraphImporter();
+    const inputController = currentModule.getInputController();
+    const graphController = currentModule.getGraphController();
+    const machineController = currentModule.getMachineController();
+    const graphImporter = currentModule.getGraphImporter();
     const inputActionMode = inputController.isActionMode(graphController);
+
+    const modulePanels = currentModule.getModulePanels();
+    const modulePanelProps = {currentModule: currentModule, app: this};
+    const moduleMenus = [ExportPanel, OptionPanel];
+    const moduleMenuProps = {currentModule: currentModule, app: this};
 
     const GRAPH_RENDER_LAYER = "graph";
     const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
     const VIEWPORT_RENDER_LAYER = "viewport";
-    const GraphRenderer = this._module.getRenderer(GRAPH_RENDER_LAYER);
-    const GraphOverlayRenderer = this._module.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
-    const ViewportRenderer = this._module.getRenderer(VIEWPORT_RENDER_LAYER);
+    const GraphRenderer = currentModule.getRenderer(GRAPH_RENDER_LAYER);
+    const GraphOverlayRenderer = currentModule.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
+    const ViewportRenderer = currentModule.getRenderer(VIEWPORT_RENDER_LAYER);
 
     return (
       <div className="app-container">
 
         <ToolbarView ref={ref=>this._toolbar=ref} className="app-bar"
-          menus={[ExportPanel, OptionPanel]}
-          menuProps={{currentModule: this._module}}
+          menus={moduleMenus}
+          menuProps={moduleMenuProps}
           hide={isFullscreen}>
 
           <ToolbarButton title="New" icon={PageEmptyIcon}
             onClick={() => UserUtil.userClearGraph(this, false, () => this._toolbar.closeBar())}/>
           <ToolbarUploadButton title="Upload" icon={UploadIcon} accept={graphImporter.getImportFileTypes().join(",")}
             onUpload={file => {
-              graphImporter.importFile(file, this._module)
+              graphImporter.importFile(file, currentModule)
                 .catch((e) => {
                   Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
                   console.error(e);
@@ -200,11 +225,18 @@ class App extends React.Component
           <ToolbarButton title={I18N.toString("component.options.title")} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>this._toolbar.setCurrentMenu(1)}/>
 
+          <button onClick={() => {
+            const nextModuleClass = this.getCurrentModule() instanceof Module ? DefaultModule : Module;
+            this.setCurrentModuleClass(nextModuleClass);
+          }}>
+            {"Change to Module"}
+          </button>
+
         </ToolbarView>
 
         <DrawerView ref={ref=>this._drawer=ref} className="app-content"
-          panels={this._module.getModulePanels().concat([TestingPanel, AnalysisPanel])}
-          panelProps={{currentModule: this._module, app: this}}
+          panels={modulePanels}
+          panelProps={modulePanelProps}
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
           hide={isFullscreen}>
@@ -233,10 +265,10 @@ class App extends React.Component
                   </React.Fragment>}
                 {/* Graph objects */
                   GraphRenderer &&
-                  <GraphRenderer currentModule={this._module} parent={this._workspace}/>}
+                  <GraphRenderer currentModule={currentModule} parent={this._workspace}/>}
                 {/* Graph overlays */
                   GraphOverlayRenderer &&
-                  <GraphOverlayRenderer currentModule={this._module} parent={this._workspace}/>}
+                  <GraphOverlayRenderer currentModule={currentModule} parent={this._workspace}/>}
               </WorkspaceView>
 
               <NotificationView notificationManager={Notifications}>
@@ -245,8 +277,8 @@ class App extends React.Component
               <HotKeyView hotKeyManager={this._hotKeyManager}/>
 
               <ViewportView ref={ref=>this._viewport=ref}>
-                {<EditPane app={this} module={this._module} viewport={viewport}/>}
-                {<TapePane app={this} module={this._module} viewport={viewport} tester={this._tester}/>}
+                {<EditPane app={this} module={currentModule} viewport={viewport}/>}
+                {<TapePane app={this} module={currentModule} viewport={viewport} tester={this._tester}/>}
               </ViewportView>
 
             </div>

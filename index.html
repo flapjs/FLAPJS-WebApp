@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Metadata -->
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#07889B">
+    <!-- Title -->
+    <title id="window-title">Flap.js</title>
+    <!-- Default styling -->
+    <style>
+    html, body { width: 100%; height: 100%; padding: 0; margin: 0;
+      font-family: 'Lato', sans-serif;
+      /* Disable drag-down reload behavior */
+      overscroll-behavior-y: contain;
+    }
+    ._center { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      display: flex; justify-content: center; align-items: center; }
+    </style>
+    <!-- Loading styles -->
+    <style>
+    /** Loading styles **/
+    #root:not(:empty) + #loading { opacity: 0; visibility: hidden; }
+    #loading { z-index: 9998; pointer-events: none; background: #FFF;
+      transition: opacity 0.3s ease, visibility 0.3s ease; }
+    #loading ._spinner > div {
+      display: inline-block; width: 24px; height: 24px; margin: 3px;
+      background-color: #333; border-radius: 50%;
+      animation: _spinner-bouncedelay 1.4s 0s infinite ease-in-out both; }
+    #loading ._spinner > div:first-child { animation-delay: 0.50s; }
+    #loading ._spinner > div:nth-child(2) { animation-delay: 0.66s; }
+    #loading ._spinner > div:last-child { animation-delay: 0.82s; }
+    @keyframes _spinner-bouncedelay { 0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); } }
+    /** Error styles **/
+    #error { z-index: 9999; pointer-events: none; top: 64px; }
+    </style>
+    <!-- Import Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Overpass+Mono" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
+  </head>
+  <body>
+    <!-- React Root -->
+    <div id="root"></div>
+
+    <!-- Loading Spinner -->
+    <div class="_center" id="loading">
+      <div class="_spinner"><div></div><div></div><div></div></div>
+    </div>
+
+    <!-- JavaScript Support -->
+    <div class="_center" id="error">
+      <noscript>You need to enable JavaScript to run this app.</noscript>
+    </div>
+
+    <!-- ServiceWorker -->
+    <script>
+    window.isUpdateAvailable = new Promise((resolve, reject) => {
+      if ('serviceWorker' in navigator)
+      {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('./serviceWorker.js', {scope: './'})
+            .then(registration => {
+              console.log("[ServiceWorker] Registration successful: ", registration.scope);
+              registration.addEventListener('updatefound', foundEvent => {
+                const installingWorker = registration.installing;
+                installingWorker.addEventListener('statechange', changeEvent => {
+                  if (installingWorker.state === 'installed')
+                  {
+                    //Found new update available
+                    if (navigator.serviceWorker.controller) resolve(true);
+                    //No update available
+                    else resolve(false);
+                  }
+                });
+              });
+            })
+            .catch(err => console.error("[ServiceWorker] Registration failed: ", err));
+        });
+      }
+    });
+    </script>
+
+    <!-- Library files -->
+    <script src="./dist/script/I18N.js" type="application/javascript"></script>
+    <script>
+      //TODO: this should be only lang/ when have server
+      I18N.baseUrl = "dist/lang/";
+      I18N.fetchLanguageFile("en_us");
+    </script>
+
+    <!-- Entry point -->
+  <script type="text/javascript" src="dist/app.bundle.js"></script></body>
+</html>
