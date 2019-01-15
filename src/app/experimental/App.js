@@ -34,6 +34,7 @@ import SettingsIcon from 'experimental/iconset/SettingsIcon.js';
 import * as UserUtil from 'experimental/UserUtil.js';
 import AppSaver from 'experimental/AppSaver.js';
 
+import IconButton from 'experimental/components/IconButton.js';
 import HotKeyManager, {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'experimental/hotkey/HotKeyManager.js';
 import HotKeyView from 'experimental/hotkey/HotKeyView.js';
 
@@ -75,6 +76,7 @@ class App extends React.Component
     this._hotKeyManager.registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {console.log("New!")});
     this._hotKeyManager.registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")});
     this._hotKeyManager.registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
+    this._hotKeyManager.registerAltHotKey("Show Hints", () => { IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL })
 
     this._saver = new AppSaver(this);
 
@@ -83,7 +85,7 @@ class App extends React.Component
     this._init = false;
 
     this.state = {
-      module: new DefaultModule(this),
+      module: new Module(this),
       hide: false
     };
 
@@ -175,7 +177,7 @@ class App extends React.Component
     const graphImporter = currentModule.getGraphImporter();
     const inputActionMode = inputController.isActionMode(graphController);
 
-    const modulePanels = currentModule.getModulePanels();
+    const modulePanels = currentModule.getModulePanels().concat([TestingPanel, AnalysisPanel]);
     const modulePanelProps = {currentModule: currentModule, app: this};
     const moduleMenus = [ExportPanel, OptionPanel];
     const moduleMenuProps = {currentModule: currentModule, app: this};

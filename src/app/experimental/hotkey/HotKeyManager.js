@@ -20,6 +20,8 @@ class HotKeyManager
     this._repeatCount = 0;
     this._enabled = false;
 
+    this._altHotkey = null;
+
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
   }
@@ -74,6 +76,22 @@ class HotKeyManager
     this._hotkeys.push(result);
   }
 
+  //HACK: Cause hotkey manager does not allow 'control' hotkeys. This is the exception.
+  registerAltHotKey(name, callback)
+  {
+    if (this._altHotkey) throw new Error("Only one hotkey can exist for \'Alt\'");
+
+    this._altHotkey = {
+      name: name,
+      localizedKeys: "Alt",
+      charKey: null,
+      ctrlKey: false,
+      altKey: true,
+      shiftKey: false,
+      callback: callback
+    };
+  }
+
   setEnabled(enabled)
   {
     this._enabled = enabled;
@@ -88,11 +106,7 @@ class HotKeyManager
   {
     for(const hotkey of this._hotkeys)
     {
-      if (hotkey.ctrlKey !== (e.ctrlKey || e.metaKey)) continue;
-      if (hotkey.altKey !== e.altKey) continue;
-      if (hotkey.shiftKey !== e.shiftKey) continue;
-      if (hotkey.charKey !== e.code) continue;
-      return hotkey;
+      if (matchesHotKeyEvent(e, hotkey)) return hotkey;
     }
     return null;
   }
@@ -162,7 +176,9 @@ class HotKeyManager
     {
       this.captureKeyEvent(e, false);
 
-      const result = this.findMatchingHotKey(this._cachedEvent);
+      let result = this.findMatchingHotKey(this._cachedEvent);
+      if (!result && matchesHotKeyEvent(e, this._altHotkey)) result = this._altHotkey;
+
       if (result)
       {
         if (this._prevHotKey === result)
@@ -206,3 +222,12 @@ class HotKeyManager
 }
 
 export default HotKeyManager;
+
+function matchesHotKeyEvent(e, hotkey)
+{
+  if (hotkey.ctrlKey !== (e.ctrlKey || e.metaKey)) return false;
+  if (hotkey.altKey !== e.altKey) return false;
+  if (hotkey.shiftKey !== e.shiftKey) return false;
+  if (hotkey.charKey && hotkey.charKey !== e.code) return false;
+  return true;
+}
