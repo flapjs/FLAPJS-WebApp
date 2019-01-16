@@ -55,11 +55,14 @@ class OverviewPanel extends React.Component
 
   onSubmitAutoStatePrefix(next, prev)
   {
-    const labeler = this.props.currentModule.getMachineController().getMachineBuilder().getLabeler();
-    if (labeler.prefix != next)
+    const graphController = this.props.currentModule.getGraphController();
+    const graphLabeler = graphController.getGraphLabeler();
+
+    const prefix = graphLabeler.getDefaultNodeLabelPrefix();
+    if (prefix != next)
     {
-      labeler.prefix = next;
-      labeler.sortDefaultNodeLabels();
+      graphLabeler.setDefaultNodeLabelPrefix(next);
+      graphController.applyAutoRename();
     }
   }
 
@@ -119,7 +122,7 @@ class OverviewPanel extends React.Component
                 <h3 style={{marginBottom: "0"}}>State Labels</h3>
                 <div style={{display: "flex", flexDirection: "row"}}>
                   <div className="statetag-container">
-                    <FormattedInput defaultValue={machineBuilder.getLabeler().prefix} style={{width: "4em"}} formatter={this.onAutoStateFormat} captureOnExit="save" onSubmit={this.onSubmitAutoStatePrefix}/>
+                    <FormattedInput defaultValue={graphController.getGraphLabeler().getDefaultNodeLabelPrefix()} style={{width: "4em"}} formatter={this.onAutoStateFormat} captureOnExit="save" onSubmit={this.onSubmitAutoStatePrefix}/>
                   </div>
                   <select style={{
                       background: "none",

@@ -3,13 +3,15 @@ import AbstractGraphLabeler from 'graph/AbstractGraphLabeler.js';
 import { SYMBOL_SEPARATOR } from 'modules/fsa/graph/FSAEdge.js';
 import { EMPTY } from 'machine/Symbols.js';
 
+const DEFAULT_NODE_LABEL_PREFIX = "q";
+
 class FSAGraphLabeler extends AbstractGraphLabeler
 {
   constructor()
   {
     super();
 
-    this._prefix = "q";
+    this._prefix = DEFAULT_NODE_LABEL_PREFIX;
   }
 
   setDefaultNodeLabelPrefix(prefix)

@@ -127,6 +127,29 @@ class GraphController extends AbstractModuleGraphController
     this.emit("userPostChangeLayout", this.getGraph());
   }
 
+  applyAutoRename()
+  {
+    const graphLabeler = this._labeler;
+    const graph = this._graph;
+
+    if (graph.isEmpty()) return;
+
+    //Reset all default labels...
+    for(const node of graph.getNodes())
+    {
+      if (!node.getNodeCustom()) node.setNodeLabel("");
+    }
+
+    //Rename all default labels appropriately...
+    for(const node of graph.getNodes())
+    {
+      if (!node.getNodeCustom())
+      {
+        node.setNodeLabel(graphLabeler.getDefaultNodeLabel());
+      }
+    }
+  }
+
   renameNode(node, name)
   {
     const prev = node.getNodeLabel();
@@ -140,7 +163,7 @@ class GraphController extends AbstractModuleGraphController
 
   createNode(x, y)
   {
-    const newNodeLabel = this.machineController.getMachineBuilder().getLabeler().getNextDefaultNodeLabel();
+    const newNodeLabel = this.getGraphLabeler().getDefaultNodeLabel();
 
     if (typeof x === 'undefined') x = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
     if (typeof y === 'undefined') y = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
