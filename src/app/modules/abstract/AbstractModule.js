@@ -16,14 +16,25 @@ class AbstractModule
 {
   constructor(app)
   {
+    if (!app) throw new Error("Missing app for module class");
+
     this._importer = new GraphImporter(this);
   }
 
-  initialize(app) {}
+  initialize(app)
+  {
+    if (!app) throw new Error("Missing app for module initialize");
+  }
 
-  destroy(app) {}
+  destroy(app)
+  {
+    if (!app) throw new Error("Missing app for module destroy");
+  }
 
-  update(app) {}
+  update(app)
+  {
+    if (!app) throw new Error("Missing app for module update");
+  }
 
   getRenderer(renderLayer) { return null; }
   getInputController() { throw new Error("Missing input controller for module \'" + this.getModuleName() + "\'"); }

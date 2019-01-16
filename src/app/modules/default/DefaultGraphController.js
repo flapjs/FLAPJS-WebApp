@@ -8,11 +8,13 @@ import GraphNode from 'graph/GraphNode.js';
 import GraphEdge from 'graph/GraphEdge.js';
 import QuadraticEdge from 'graph/QuadraticEdge.js';
 
+import DefaultGraphLabeler from './DefaultGraphLabeler.js';
+
 class DefaultGraphController extends AbstractModuleGraphController
 {
   constructor(module)
   {
-    super(module, new NodalGraph(GraphNode, QuadraticEdge));
+    super(module, new NodalGraph(GraphNode, QuadraticEdge), new DefaultGraphLabeler());
 
     this.inputController = null;
     this.machineController = null;
