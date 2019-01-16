@@ -62,7 +62,7 @@ class MachineController extends AbstractModuleMachineController
   update(module)
   {
     super.update(module);
-    
+
     if (--this._ticks <= 0)
     {
       this._machineBuilder.update(this);
@@ -82,7 +82,7 @@ class MachineController extends AbstractModuleMachineController
 
   setMachineType(machineType)
   {
-    this.getMachineBuilder().setMachineType(machineType);
+    this._machineBuilder.setMachineType(machineType);
   }
 
   getMachineName()
@@ -221,7 +221,12 @@ class MachineController extends AbstractModuleMachineController
 
   getAlphabet()
   {
-    return this.getMachineBuilder().getAlphabet();
+    return this._machineBuilder.getAlphabet();
+  }
+
+  isUsedSymbol(symbol)
+  {
+    return !this.isCustomSymbol(symbol);
   }
 
   createSymbol(symbol)

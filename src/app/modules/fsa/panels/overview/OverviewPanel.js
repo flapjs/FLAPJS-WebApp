@@ -93,7 +93,7 @@ class OverviewPanel extends React.Component
       </div>
         <div className="panel-content">
           <select className="machine-type panel-select"
-            value={machineBuilder.getMachineType()}
+            value={machineController.getMachineType()}
             onChange={this.onChangeMachineType}>
             <option value="DFA">DFA</option>
             <option value="NFA">NFA</option>

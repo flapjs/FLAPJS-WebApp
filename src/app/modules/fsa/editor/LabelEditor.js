@@ -178,7 +178,7 @@ class LabelEditor extends React.Component
       targetStyle.left = (x + offsetX) + "px";
     }
 
-    const usedAlphabet = machineController.getMachineBuilder().getMachine().getAlphabet();
+    const usedAlphabet = machineController.getAlphabet();
 
     return <div className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
       tabIndex={"0"/*This is to allow div's to focus/blur*/}

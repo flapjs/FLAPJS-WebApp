@@ -56,7 +56,7 @@ class TestMode
   onStart()
   {
     //Check the machine, if DFA, then it must be a valid DFA
-    /*if (this.machineController.getMachineBuilder().getMachineType() == "DFA")
+    /*if (this.machineController.getMachineType() == "DFA")
     {
       const dfa = this.machineController.getMachineBuilder().toDFA();
       if (!dfa.validate()) return;
