@@ -17,7 +17,8 @@ class TestingPanel extends React.Component
   {
     //TODO: This should be in modules...
     const app = this.props.app;
-    const tester = app._tester;
+    const currentModule = this.props.currentModule;
+    const tester = currentModule._tester;
     tester.on("startTest", (tester) => {
       app._viewport.setCurrentView(1);
       app._drawer.setDrawerSoloClass(TestingPanel);
@@ -33,13 +34,11 @@ class TestingPanel extends React.Component
   //Override
   render()
   {
+    const app = this.props.app;
     const currentModule = this.props.currentModule;
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
-
-    //TODO: This should be in modules...
-    const app = this.props.app;
-    const tester = app._tester;
+    const tester = currentModule._tester;
 
     return (
       <div id={this.props.id}

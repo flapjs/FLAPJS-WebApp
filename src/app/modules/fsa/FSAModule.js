@@ -19,6 +19,7 @@ import GraphLayout from './graph/GraphLayout.js';
 import EventManager from './EventManager.js';
 import LabelEditor from './editor/LabelEditor.js';
 import TestingManager from './testing/TestingManager.js';
+import StringTester from 'experimental/panels/test/StringTester.js';
 
 import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
@@ -42,8 +43,12 @@ class FSAModule extends AbstractModule
     this._graphController = new GraphController(this);
     this._machineController = new MachineController(this);
 
+    //Deprecated (should be anyways)
     this._eventManager = new EventManager(app.getUndoManager());
+    //Deprecated
     this._testingManager = new TestingManager();
+    //Use this instead
+    this._tester = new StringTester();
   }
 
   //Override

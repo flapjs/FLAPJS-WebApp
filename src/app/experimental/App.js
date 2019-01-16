@@ -47,7 +47,6 @@ import LocalSave from 'system/localsave/LocalSave.js';
 
 import DefaultModule from 'modules/default/DefaultModule.js';
 import Module from 'modules/fsa/FSAModule.js';
-import StringTester from 'experimental/panels/test/StringTester.js';
 
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
 
@@ -79,8 +78,6 @@ class App extends React.Component
     this._hotKeyManager.registerAltHotKey("Show Hints", () => { IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL })
 
     this._saver = new AppSaver(this);
-
-    this._tester = new StringTester();
 
     this._init = false;
 
@@ -182,7 +179,7 @@ class App extends React.Component
     const moduleMenus = currentModule.getModuleMenus().concat([ExportPanel, OptionPanel]);
     const moduleMenuProps = {currentModule: currentModule, app: this};
     const moduleViews = currentModule.getModuleViews().concat([EditPane, TapePane]);
-    const moduleViewProps = {app: this, module: currentModule, tester: this._tester};
+    const moduleViewProps = {currentModule: currentModule, app: this};
 
     const GRAPH_RENDER_LAYER = "graph";
     const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";

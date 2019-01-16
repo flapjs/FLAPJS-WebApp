@@ -16,13 +16,13 @@ class EditPane extends React.Component
   render()
   {
     const app = this.props.app;
-    const module = this.props.module;
+    const currentModule = this.props.currentModule;
     const viewport = this.props.viewport;
-    const inputController = module.getInputController();
-    const graphController = module.getGraphController();
-    const machineController = module.getMachineController();
+    const inputController = currentModule.getInputController();
+    const graphController = currentModule.getGraphController();
+    const machineController = currentModule.getMachineController();
     const inputActionMode = inputController.isActionMode(graphController);
-    const LabelEditor = module.getLabelEditor();
+    const LabelEditor = currentModule.getLabelEditor();
 
     return (
       <div id={this.props.id}
