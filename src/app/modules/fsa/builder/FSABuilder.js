@@ -6,8 +6,6 @@ import NFAErrorChecker from './NFAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
 import Node from 'modules/fsa/graph/FSANode.js';
-import { SYMBOL_SEPARATOR } from 'modules/fsa/graph/FSAEdge.js';
-import { EMPTY } from 'machine/Symbols.js';
 
 class FSABuilder extends MachineBuilder
 {
@@ -109,47 +107,6 @@ class FSABuilder extends MachineBuilder
     if (!this.tester.shouldCheckError) return;
 
     this.machineErrorChecker.checkErrors(true, this.graphController, this.machineController);
-  }
-
-  formatAlphabetString(string, allowNull=false)
-  {
-    const symbols = string.split(SYMBOL_SEPARATOR);
-    const result = new Set();
-
-    let symbol = "";
-    let symbolLength = 0;
-    const length = symbols.length;
-    for(let i = 0; i < length; ++i)
-    {
-      symbol = symbols[i].trim();
-      symbolLength = symbol.length;
-      //If the symbol has none or more than 1 char
-      if (symbolLength !== 1)
-      {
-        //Remove symbol (by not adding to result)
-
-        //Divide multi-char symbol into smaller single char symbols
-        if (symbolLength > 1)
-        {
-          for(let subsymbol of symbol.split(""))
-          {
-            subsymbol = subsymbol.trim();
-            if (!result.has(subsymbol))
-            {
-              result.add(subsymbol);
-            }
-          }
-        }
-      }
-      else
-      {
-        result.add(symbol);
-      }
-    }
-
-    //If it is an empty string...
-    if (result.size <= 0) return allowNull ? null : EMPTY;
-    return Array.from(result).join(SYMBOL_SEPARATOR);
   }
 
   setMachineType(machineType)

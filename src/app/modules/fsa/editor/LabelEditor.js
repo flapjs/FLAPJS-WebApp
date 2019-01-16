@@ -143,8 +143,7 @@ class LabelEditor extends React.Component
 
   onFormat(value)
   {
-    //return this.props.machineController.getMachineBuilder().formatAlphabetString(value, false);
-    return this.props.machineController.getLabelFormatter().call(null, value, false);
+    return this.props.graphController.getGraphLabeler().getEdgeLabelFormatter().call(null, value);
   }
 
   render()

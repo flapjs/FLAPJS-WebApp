@@ -113,8 +113,7 @@ class FSAModule extends AbstractModule
 
   getLabelFormatter()
   {
-    const machineBuilder = this._machineController.getMachineBuilder();
-    return machineBuilder.formatAlphabetString.bind(machineBuilder);
+    return this._graphController.getGraphLabeler().getEdgeLabelFormatter();
   }
 
   getLabelEditor()
