@@ -40,6 +40,8 @@ class AbstractModule
   getGraphExporters() { return DEFAULT_GRAPH_EXPORTERS; }
   getGraphImporter() { return this._importer; }
   getModulePanels() { return []; }
+  getModuleViews() { return []; }
+  getModuleMenus() { return []; }
   getModuleVersion() { return '0.0.0'; }
   getModuleName() { throw new Error("Missing module name"); }
   getLocalizedModuleName() { return "Module"; }

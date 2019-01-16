@@ -128,7 +128,7 @@ class ToolbarView extends React.Component
         <div className={Style.bar_menu}>
           {showCustomToolbarMenu ?
             <div className={Style.menu_container}>
-              <ToolbarMenu {...this.props.menuProps} toolbar={this.ref}/>
+              <ToolbarMenu {...this.props.menuProps} toolbar={this}/>
             </div> :
             <div className={Style.menu_button_container}>
               {this.renderMenuButtons(this.props.children)}
@@ -136,7 +136,7 @@ class ToolbarView extends React.Component
         </div>
         <div ref={ref=>this.toolbarElement=ref} className={Style.bar_toolbar}>
           <ToolbarTitle className={Style.toolbar_title}/>
-          
+
           <div className={Style.toolbar_button_container}>
             {this.renderToolbarButtons(this.props.children)}
           </div>

@@ -219,6 +219,7 @@ class StringTester
         this._cachedResult = solveNFAbyStep(machine, null, cachedStates, cachedSymbols, checkedStates);
         for(const state of cachedStates)
         {
+          //TODO: This is dangerous, cause states with the same name?
           const node = machineController.getFirstGraphNodeByLabel(graph, state.state);
 
           //Couldn't find the node that was solved for this step...

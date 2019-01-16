@@ -179,8 +179,10 @@ class App extends React.Component
 
     const modulePanels = currentModule.getModulePanels().concat([TestingPanel, AnalysisPanel]);
     const modulePanelProps = {currentModule: currentModule, app: this};
-    const moduleMenus = [ExportPanel, OptionPanel];
+    const moduleMenus = currentModule.getModuleMenus().concat([ExportPanel, OptionPanel]);
     const moduleMenuProps = {currentModule: currentModule, app: this};
+    const moduleViews = currentModule.getModuleViews().concat([EditPane, TapePane]);
+    const moduleViewProps = {app: this, module: currentModule, tester: this._tester};
 
     const GRAPH_RENDER_LAYER = "graph";
     const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
@@ -278,9 +280,9 @@ class App extends React.Component
 
               <HotKeyView hotKeyManager={this._hotKeyManager}/>
 
-              <ViewportView ref={ref=>this._viewport=ref}>
-                {<EditPane app={this} module={currentModule} viewport={viewport}/>}
-                {<TapePane app={this} module={currentModule} viewport={viewport} tester={this._tester}/>}
+              <ViewportView ref={ref=>this._viewport=ref}
+                views={moduleViews}
+                viewProps={moduleViewProps}>
               </ViewportView>
 
             </div>

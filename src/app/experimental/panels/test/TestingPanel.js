@@ -19,12 +19,12 @@ class TestingPanel extends React.Component
     const app = this.props.app;
     const tester = app._tester;
     tester.on("startTest", (tester) => {
-      app._viewport.setViewIndex(1);
+      app._viewport.setCurrentView(1);
       app._drawer.setDrawerSoloClass(TestingPanel);
       app._drawer.closeDrawer();
     });
     tester.on("stopTest", (tester) => {
-      app._viewport.setViewIndex(0);
+      app._viewport.setCurrentView(0);
       app._drawer.setDrawerSoloClass(null);
       app._drawer.openDrawer();
     });

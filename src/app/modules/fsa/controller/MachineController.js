@@ -40,25 +40,29 @@ class MachineController extends AbstractModuleMachineController
     this.registerEvent("userPostRenameSymbol");
   }
 
-  setModule(module)
-  {
-    this._module = module;
-  }
-
+  //Override
   initialize(module)
   {
+    super.initialize(module);
+
     this.graphController = module.getGraphController();
 
     this._machineBuilder.initialize(module);
   }
 
+  //Override
   destroy(module)
   {
     this._machineBuilder.destroy();
+
+    super.destroy(module);
   }
 
+  //Override
   update(module)
   {
+    super.update(module);
+    
     if (--this._ticks <= 0)
     {
       this._machineBuilder.update(this);

@@ -55,6 +55,8 @@ class InputController extends AbstractModuleInputController
   //Override
   update(module)
   {
+    super.update(module);
+    
     const graph = this._graphController.getGraph();
     const picker = this._picker;
     const x = this._inputAdapter.getPointerX();

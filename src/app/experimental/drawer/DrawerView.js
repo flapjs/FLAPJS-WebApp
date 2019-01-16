@@ -388,7 +388,7 @@ class DrawerView extends React.Component
                         (disabled ? " disabled " : "")}>
                       <ComponentClass className={Style.drawer_panel}
                         {...this.props.panelProps}
-                        drawer={this.ref}/>
+                        drawer={this}/>
                     </div>
                   );
                 })}
