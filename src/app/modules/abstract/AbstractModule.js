@@ -24,16 +24,37 @@ class AbstractModule
   initialize(app)
   {
     if (!app) throw new Error("Missing app for module initialize");
+
+    const inputController = this.getInputController();
+    const graphController = this.getGraphController();
+    const machineController = this.getMachineController();
+    inputController.initialize(this);
+    graphController.initialize(this);
+    machineController.initialize(this);
   }
 
   destroy(app)
   {
     if (!app) throw new Error("Missing app for module destroy");
+
+    const inputController = this.getInputController();
+    const graphController = this.getGraphController();
+    const machineController = this.getMachineController();
+    machineController.destroy(this);
+    graphController.destroy(this);
+    inputController.destroy(this);
   }
 
   update(app)
   {
     if (!app) throw new Error("Missing app for module update");
+    
+    const inputController = this.getInputController();
+    const graphController = this.getGraphController();
+    const machineController = this.getMachineController();
+    inputController.update(this);
+    graphController.update(this);
+    machineController.update(this);
   }
 
   getRenderer(renderLayer) { return null; }

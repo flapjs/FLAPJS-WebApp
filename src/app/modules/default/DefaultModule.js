@@ -38,28 +38,18 @@ class DefaultModule extends AbstractModule
   initialize(app)
   {
     super.initialize(app);
-
-    this._inputController.initialize(this);
-    this._graphController.initialize(this);
-    this._machineController.initialize(this);
   }
 
   //Override
   destroy(app)
   {
-    this._machineController.destroy(this);
-    this._graphController.destroy(this);
-    this._inputController.destroy(this);
-
     super.destroy(app);
   }
 
   //Override
   update(app)
   {
-    this._inputController.update(this);
-    this._graphController.update(this);
-    this._machineController.update(this);
+    super.update(app);
   }
 
   //Override

@@ -55,16 +55,12 @@ class FSAModule extends AbstractModule
   //Override
   initialize(app)
   {
-    super.initialize(app);
-
     const viewport = app.viewport;
     const workspace = app.workspace;
 
     this._workspace = workspace;
 
-    this._inputController.initialize(this);
-    this._graphController.initialize(this);
-    this._machineController.initialize(this);
+    super.initialize(app);
 
     this._eventManager.initialize(this);
 
@@ -87,19 +83,13 @@ class FSAModule extends AbstractModule
 
     this._eventManager.destroy();
 
-    this._machineController.destroy();
-    this._graphController.destroy();
-    this._inputController.destroy();
-
     super.destroy(app);
   }
 
   //Override
   update(app)
   {
-    this._inputController.update(this);
-    this._graphController.update(this);
-    this._machineController.update(this);
+    super.update(app);
   }
 
   getGraph()
