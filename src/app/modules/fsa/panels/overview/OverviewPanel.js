@@ -49,8 +49,8 @@ class OverviewPanel extends React.Component
 
   onChangeAutoRename(e)
   {
-    const machineBuilder = this.props.currentModule.getMachineController().getMachineBuilder();
-    machineBuilder.setAutoRenameNodes(e.target.checked);
+    const graphController = this.props.currentModule.getGraphController();
+    graphController.setAutoRenameNodes(e.target.checked);
   }
 
   onSubmitAutoStatePrefix(next, prev)
@@ -142,7 +142,7 @@ class OverviewPanel extends React.Component
 
                   <input type="checkbox" id="auto-statename"
                     onChange={this.onChangeAutoRename}
-                    checked={machineBuilder.shouldAutoRenameNodes()}/>
+                    checked={graphController.shouldAutoRenameNodes()}/>
                   <label htmlFor="auto-statename">{I18N.toString("options.autolabel")}</label>
                 </div>
               </div>

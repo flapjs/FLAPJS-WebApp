@@ -6,6 +6,7 @@ import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
 import FSAGraphLabeler from 'modules/fsa/graph/FSAGraphLabeler.js';
 
 const NODE_SPAWN_RADIUS = 64;
+const DEFAULT_AUTO_RENAME = true;
 
 class GraphController extends AbstractModuleGraphController
 {
@@ -26,6 +27,10 @@ class GraphController extends AbstractModuleGraphController
     this.prevEdgeTo = null;
     this.prevX = 0;
     this.prevY = 0;
+
+
+    this.shouldAutoLabel = false;
+    this.onGraphNodeLabelChange = this.onGraphNodeLabelChange.bind(this);
 
     //The difference between controller events vs graph events is: controller has user-intent
 
@@ -110,6 +115,8 @@ class GraphController extends AbstractModuleGraphController
 
     this.inputController = module.getInputController();
     this.machineController = module.getMachineController();
+
+    this.setAutoRenameNodes(DEFAULT_AUTO_RENAME);
   }
 
   //Override
@@ -148,6 +155,29 @@ class GraphController extends AbstractModuleGraphController
         node.setNodeLabel(graphLabeler.getDefaultNodeLabel());
       }
     }
+  }
+
+  //Auto renaming
+  onGraphNodeLabelChange(graph, node, targetNodes, prevX, prevY)
+  {
+    this.applyAutoRename();
+  }
+  setAutoRenameNodes(enable)
+  {
+    const prev = this.shouldAutoLabel;
+    this.shouldAutoLabel = enable;
+    if (prev != enable && enable)
+    {
+      this.on("userDeleteNodes", this.onGraphNodeLabelChange);
+    }
+    else
+    {
+      this.removeEventListener("userDeleteNodes", this.onGraphNodeLabelChange);
+    }
+  }
+  shouldAutoRenameNodes()
+  {
+    return this.shouldAutoLabel;
   }
 
   renameNode(node, name)
