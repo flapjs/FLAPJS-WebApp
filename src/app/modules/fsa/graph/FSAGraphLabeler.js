@@ -31,6 +31,9 @@ class FSAGraphLabeler extends AbstractGraphLabeler
     const otherNodes = [];
     let nodeIndex = 0;
 
+    const startNode = graph.getStartNode();
+    if (startNode && startNode.getNodeCustom()) nodeIndex = 1;
+
     let newNodeLabel = this.getDefaultNodeLabelPrefix() + nodeIndex;
     while(graph.getNodesByLabel(newNodeLabel, otherNodes).length > 0)
     {
