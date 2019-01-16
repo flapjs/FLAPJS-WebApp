@@ -1,9 +1,11 @@
 import AbstractModuleInputController from 'modules/abstract/AbstractModuleInputController.js';
-import Config from 'config.js';
 
 import GraphPicker from './GraphPicker.js';
 import Node from 'graph/GraphNode.js';
 import Edge from 'graph/QuadraticEdge.js';
+
+const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
+const STR_TRANSITION_DEFAULT_LABEL = "";
 
 class DefaultInputController extends AbstractModuleInputController
 {
@@ -23,7 +25,7 @@ class DefaultInputController extends AbstractModuleInputController
     this.isNewEdge = false;
 
     //Whether to destroy pointless edges
-    this.shouldDestroyPointlessEdges = Config.DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
+    this.shouldDestroyPointlessEdges = DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
 
     //Swap left to right clicks and vice versa on anything else but Macs
     this._swapMouseScheme = true;//!navigator.platform.startsWith("Mac");
@@ -287,7 +289,7 @@ class DefaultInputController extends AbstractModuleInputController
         if (!inputController.isTrashMode())
         {
           const edge = graph.createEdge(target, pointer);
-          edge.setEdgeLabel(Config.STR_TRANSITION_DEFAULT_LABEL);
+          edge.setEdgeLabel(graphController.getGraphLabeler().getDefaultEdgeLabel());
 
           //Redirect pointer to refer to the edge as the new target
           picker.setInitialTarget(edge, "endpoint");

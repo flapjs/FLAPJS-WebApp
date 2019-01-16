@@ -34,7 +34,10 @@ class FSAGraphExporter extends AbstractGraphExporter
       }
     }
     const statePrefix = machineData.statePrefix;
-    if (statePrefix) machineBuilder.getLabeler().prefix = statePrefix;
+    if (statePrefix)
+    {
+      graphController.getGraphLabeler().setDefaultNodeLabelPrefix(statePrefix);
+    }
 
     return newGraph;
   }
@@ -56,7 +59,7 @@ class FSAGraphExporter extends AbstractGraphExporter
       name: machineController.getMachineName(),
       type: machineController.getMachineType(),
       symbols: machineController.getCustomSymbols(),
-      statePrefix: machineBuilder.getLabeler().prefix
+      statePrefix: graphController.getGraphLabeler().getDefaultNodeLabelPrefix()
     };
     return dst;
   }

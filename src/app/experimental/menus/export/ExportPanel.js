@@ -19,7 +19,8 @@ class ExportPanel extends React.Component
         className={Style.panel_button}
         title={exporter.getLabel()}
         onClick={() => {
-          const machineController = this.props.currentModule.getMachineController();
+          const currentModule = this.props.currentModule;
+          const machineController = currentModule.getMachineController();
           const filename = machineController.getMachineName();
           exporter.exportToFile(filename, currentModule);
         }}>

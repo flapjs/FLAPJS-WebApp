@@ -19,6 +19,11 @@
 :local(.test_item_container).failure :local(.test_button) {
   color: var(--color-testing-failure);
 }
+/* Hide the delete button is not hovering */
+:local(.test_item_container):not(:hover) :local(.delete_button) {
+  opacity: 0;
+}
+
 :local(.test_button):hover {
   color: var(--color-drawer-text-active);
 }

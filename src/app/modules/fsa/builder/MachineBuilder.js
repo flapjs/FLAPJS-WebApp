@@ -1,23 +1,22 @@
 import Config from 'config.js';
-import MachineLabeler from './MachineLabeler.js';
 
 const DEFAULT_AUTO_RENAME = true;
 
 class MachineBuilder
 {
-  constructor(graph)
+  constructor()
   {
-    this.graph = graph;
+    this.graph = null;
     this.graphController = null;
 
-    this.labeler = new MachineLabeler(graph);
-
+    this.shouldAutoLabel = false;
     this.onGraphNodeLabelChange = this.onGraphNodeLabelChange.bind(this);
   }
 
   initialize(module)
   {
     this.graphController = module.getGraphController();
+    this.graph = this.graphController.getGraph();
 
     this.setAutoRenameNodes(DEFAULT_AUTO_RENAME);
   }
@@ -29,13 +28,13 @@ class MachineBuilder
 
   onGraphNodeLabelChange(graph, node, targetNodes, prevX, prevY)
   {
-    this.labeler.sortDefaultNodeLabels();
+    this.graphController.applyAutoRename();
   }
 
   setAutoRenameNodes(enable)
   {
-    const prev = this.labeler.shouldAutoLabel;
-    this.labeler.shouldAutoLabel = enable;
+    const prev = this.shouldAutoLabel;
+    this.shouldAutoLabel = enable;
     if (prev != enable && enable)
     {
       this.graphController.on("userDeleteNodes", this.onGraphNodeLabelChange);
@@ -48,12 +47,7 @@ class MachineBuilder
 
   shouldAutoRenameNodes()
   {
-    return this.labeler.shouldAutoLabel;
-  }
-
-  getLabeler()
-  {
-    return this.labeler;
+    return this.shouldAutoLabel;
   }
 }
 

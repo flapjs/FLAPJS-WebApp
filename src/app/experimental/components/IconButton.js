@@ -1,8 +1,6 @@
 import React from 'react';
 import Style from './IconButton.css';
 
-const ICON_BUTTON_SHOW_LABEL = false;
-
 class IconButton extends React.Component
 {
   constructor(props)
@@ -14,8 +12,7 @@ class IconButton extends React.Component
   render()
   {
     const title = this.props.title;
-
-    const showButtonLabel = ICON_BUTTON_SHOW_LABEL && title;
+    const showButtonLabel = IconButton.SHOW_LABEL && title;
 
     return (
       <button id={this.props.id}
@@ -32,4 +29,6 @@ class IconButton extends React.Component
     );
   }
 }
+IconButton.SHOW_LABEL = false;
+
 export default IconButton;

@@ -39,7 +39,7 @@ class OptionPanel extends React.Component
               try { LocalSave.terminate(); }
               catch(e){/* Ignore if it fails. */}
               LocalSave.clearStorage();
-              
+
               window.alert("It's done! Restart to apply changes!");
             }
           }}>

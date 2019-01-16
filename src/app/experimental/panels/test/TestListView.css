@@ -4,8 +4,8 @@
   --color-testing-working: white;
 
   padding: 0.5em 0;
-  border-top: 1px solid var(--color-drawer-text);
-  border-bottom: 1px solid var(--color-drawer-text);
+  /*border-top: 1px solid var(--color-drawer-text);
+  border-bottom: 1px solid var(--color-drawer-text);*/
 }
 :local(.test_control_tray) {
   display: flex;
@@ -51,7 +51,8 @@
   padding: 0.5em 0;
 }
 
-:local(.test_list_add) {
+:local(.test_list_add), :local(.test_list_runall) {
+  margin-top: 0.5em;
   margin-bottom: 0.5em;
   height: 1.8em;
 
@@ -59,13 +60,13 @@
   border: 1px solid var(--color-drawer-text);
   color: var(--color-drawer-text);
 }
-:local(.test_list_add):hover {
+:local(.test_list_add):hover, :local(.test_list_runall):hover {
   color: var(--color-drawer-text-active);
 }
 :local(.test_list_add):hover :local(.test_list_count) {
   opacity: 1;
 }
-:local(.test_list_add):disabled {
+:local(.test_list_add):disabled, :local(.test_list_runall):disabled {
   color: var(--color-drawer-text-disabled);
 }
 :local(.test_list_count) {

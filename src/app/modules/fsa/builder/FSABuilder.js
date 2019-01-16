@@ -6,14 +6,12 @@ import NFAErrorChecker from './NFAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
 import Node from 'modules/fsa/graph/FSANode.js';
-import { SYMBOL_SEPARATOR } from 'modules/fsa/graph/FSAEdge.js';
-import { EMPTY } from 'machine/Symbols.js';
 
 class FSABuilder extends MachineBuilder
 {
-  constructor(graph)
+  constructor()
   {
-    super(graph);
+    super();
 
     this._machine = new NFA();
     this._machineType = "DFA";
@@ -26,7 +24,7 @@ class FSABuilder extends MachineBuilder
     this._timer = null;
     this._errorTimer = null;
 
-    this.machineErrorChecker = new DFAErrorChecker(this, graph);
+    this.machineErrorChecker = null;
     this.tester = null;
 
     this.graphController = null;
@@ -45,13 +43,17 @@ class FSABuilder extends MachineBuilder
     this.graphController = module.getGraphController();
     this.machineController = module.getMachineController();
 
-    this._savedGraphHash = this.graph.getHashCode(false);
+    const graph = this.graphController.getGraph();
+    this.machineErrorChecker = new DFAErrorChecker(this, graph);
+
+    this._savedGraphHash = graph.getHashCode(false);
     this.onGraphChange();
   }
 
   destroy()
   {
-    this._savedGraphHash = this.graph.getHashCode(false);
+    const graph = this.graphController.getGraph();
+    this._savedGraphHash = graph.getHashCode(false);
     this.onGraphChange();
 
     super.destroy();
@@ -59,11 +61,12 @@ class FSABuilder extends MachineBuilder
 
   update()
   {
-    const graphHash = this.graph.getHashCode(false);
+    const graph = this.graphController.getGraph();
+    const graphHash = graph.getHashCode(false);
     if (graphHash !== this._savedGraphHash)
     {
       this._savedGraphHash = graphHash;
-      this.onGraphChange(this.graph);
+      this.onGraphChange(graph);
     }
   }
 
@@ -106,47 +109,6 @@ class FSABuilder extends MachineBuilder
     this.machineErrorChecker.checkErrors(true, this.graphController, this.machineController);
   }
 
-  formatAlphabetString(string, allowNull=false)
-  {
-    const symbols = string.split(SYMBOL_SEPARATOR);
-    const result = new Set();
-
-    let symbol = "";
-    let symbolLength = 0;
-    const length = symbols.length;
-    for(let i = 0; i < length; ++i)
-    {
-      symbol = symbols[i].trim();
-      symbolLength = symbol.length;
-      //If the symbol has none or more than 1 char
-      if (symbolLength !== 1)
-      {
-        //Remove symbol (by not adding to result)
-
-        //Divide multi-char symbol into smaller single char symbols
-        if (symbolLength > 1)
-        {
-          for(let subsymbol of symbol.split(""))
-          {
-            subsymbol = subsymbol.trim();
-            if (!result.has(subsymbol))
-            {
-              result.add(subsymbol);
-            }
-          }
-        }
-      }
-      else
-      {
-        result.add(symbol);
-      }
-    }
-
-    //If it is an empty string...
-    if (result.size <= 0) return allowNull ? null : EMPTY;
-    return Array.from(result).join(SYMBOL_SEPARATOR);
-  }
-
   setMachineType(machineType)
   {
     if (this._machineType == machineType) return;
@@ -154,11 +116,13 @@ class FSABuilder extends MachineBuilder
     this._machineType = machineType;
     if (machineType == "DFA")
     {
-      this.machineErrorChecker = new DFAErrorChecker(this, this.graph);
+      const graph = this.graphController.getGraph();
+      this.machineErrorChecker = new DFAErrorChecker(this, graph);
     }
     else if (machineType == "NFA")
     {
-      this.machineErrorChecker = new NFAErrorChecker(this, this.graph);
+      const graph = this.graphController.getGraph();
+      this.machineErrorChecker = new NFAErrorChecker(this, graph);
     }
     else
     {
@@ -226,7 +190,8 @@ class FSABuilder extends MachineBuilder
     const result = dst || new DFA();
     if (!(result instanceof DFA))
       throw new Error("Trying to parse graph mismatched machine type.");
-    fillFSA(this.graph, result);
+    const graph = this.graphController.getGraph();
+    fillFSA(graph, result);
     return result;
   }
 
@@ -235,7 +200,8 @@ class FSABuilder extends MachineBuilder
     const result = dst || new NFA();
     if (!(result instanceof NFA))
       throw new Error("Trying to parse graph mismatched machine type.");
-    fillFSA(this.graph, result);
+    const graph = this.graphController.getGraph();
+    fillFSA(graph, result);
     return result;
   }
 

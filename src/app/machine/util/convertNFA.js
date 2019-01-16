@@ -3,6 +3,10 @@ import { EMPTY } from 'machine/Symbols.js';
 
 export function convertToDFA(nfa, dst=null)
 {
+
+  //Avoid runtime errors for empty nfas
+  if(nfa.getStates().length == 0) return;
+
   const result = dst || new DFA();
 
   const alphabet = nfa.getAlphabet();

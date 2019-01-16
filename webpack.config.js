@@ -133,6 +133,7 @@ module.exports = (env, argv) => {
     config.devServer = {
       contentBase: path.join(__dirname, '/'),//public/
       //This stops serviceWorker in dev mode since its no longer https
+      //disableHostCheck: true,
       host: DEV_SERVER_IP,
       port: DEV_SERVER_PORT,
       overlay: true,

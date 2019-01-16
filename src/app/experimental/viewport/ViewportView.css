@@ -1,6 +1,9 @@
 :local(.view_container) {
   width: 100%;
   height: 100%;
+
+  /* BUGFIX: This stops some super large icons in viewport */
+  font-size: 1em;
 }
 
 :local(.view_pane) {

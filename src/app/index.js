@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+//Changelog: imports
+import Changelog from 'changelog.js';
+
 //Router: imports
 import Router from 'router.js';
 import App from 'content/App.js';
@@ -18,6 +21,7 @@ const SHOULD_WARN_USERS_ON_EXIT = true;
 //Setup viewport
 window.addEventListener('load', (event) => {
   console.log("Preparing for \'" + process.env.NODE_ENV + "\' environment...");
+  console.log("Loading web app version \'" + process.env.VERSION + "\'...");
   loadApplication();
   window.requestAnimationFrame(updateApplication);
 });
@@ -43,8 +47,15 @@ window.addEventListener('beforeunload', (event) => {
 window.isUpdateAvailable.then(hasUpdate => {
   if (hasUpdate)
   {
+    let message = "";
+    if (Changelog && Changelog['show'])
+    {
+      message += Changelog['log'];
+    }
+
     console.log("[App] Found update for version " + process.env.VERSION + "...");
-    window.alert("*** New update available! *** \n Please restart the browser.");
+    window.alert("*** New update available! *** \n Please restart the browser." +
+      (message ? "\n" + message : ""));
   }
 });
 

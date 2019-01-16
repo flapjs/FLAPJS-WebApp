@@ -12,6 +12,7 @@ import UploadIcon from 'experimental/iconset/UploadIcon.js';
 import DownloadIcon from 'experimental/iconset/DownloadIcon.js';
 import CrossIcon from 'experimental/iconset/CrossIcon.js';
 import AddIcon from 'experimental/iconset/AddIcon.js';
+import RunningManIcon from 'experimental/iconset/RunningManIcon.js';
 
 import TestItem, {SUCCESS_MODE, FAILURE_MODE, WORKING_MODE, DEFAULT_MODE} from './TestItem.js';
 
@@ -34,6 +35,7 @@ class TestListView extends React.Component
     this.onTestAdd = this.onTestAdd.bind(this);
     this.onTestDelete = this.onTestDelete.bind(this);
     this.onTestTest = this.onTestTest.bind(this);
+    this.onTestRunAll = this.onTestRunAll.bind(this);
   }
 
   onTestNew(e)
@@ -118,14 +120,23 @@ class TestListView extends React.Component
     });
   }
 
+  onTestRunAll(e)
+  {
+    const tester = this.props.tester;
+    for(const test of this._testList)
+    {
+      //this.onTestTest(null, test.ref, true);
+    }
+  }
+
   onTestDelete(e, item)
   {
     //Already handled in render()
   }
 
-  onTestTest(e, item)
+  onTestTest(e, item, forceImmediate=false)
   {
-    const immediate = this.props.immediate;
+    const immediate = forceImmediate || this.props.immediate;
     const tester = this.props.tester;
     const itemValue = item.getValue();
 
@@ -223,6 +234,10 @@ class TestListView extends React.Component
               })}
             </div>
           </div>
+          <IconButton className={Style.test_list_runall}
+            title={"Run All"} disabled={true} onClick={this.onTestRunAll}>
+            <RunningManIcon/>
+          </IconButton>
         </div>
       </div>
     );

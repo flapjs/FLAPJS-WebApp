@@ -1,6 +1,7 @@
 import AbstractModuleMachineController from 'modules/abstract/AbstractModuleMachineController.js';
 import Eventable from 'util/Eventable.js';
 
+import FSABuilder from 'modules/fsa/builder/FSABuilder.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import { convertToDFA } from 'machine/util/convertNFA.js';
 import DFA from 'machine/DFA.js';
@@ -14,6 +15,10 @@ class MachineController extends AbstractModuleMachineController
     this.machineName = null;
 
     this.graphController = null;
+
+    this._machineBuilder = new FSABuilder();
+    this._refreshRate = 60;
+    this._ticks = 0;
 
     //userChangeMachine(machineBuilder, nextMachineType, prevMachineType) - when user changes machine type
     this.registerEvent("userChangeMachine");
@@ -43,21 +48,27 @@ class MachineController extends AbstractModuleMachineController
   initialize(module)
   {
     this.graphController = module.getGraphController();
+
+    this._machineBuilder.initialize(module);
   }
 
-  destroy()
+  destroy(module)
   {
-
+    this._machineBuilder.destroy();
   }
 
-  getLabelFormatter()
+  update(module)
   {
-    return this._module.getLabelFormatter();
+    if (--this._ticks <= 0)
+    {
+      this._machineBuilder.update(this);
+      this._ticks = this._refreshRate;
+    }
   }
 
   getMachineBuilder()
   {
-    return this._module.getMachineBuilder();
+    return this._machineBuilder;
   }
 
   getMachineType()
@@ -197,6 +208,11 @@ class MachineController extends AbstractModuleMachineController
     {
       throw new Error("Conversion scheme between \'" + currentMachineType + "\' to \'" + machineType + "\' is not supported");
     }
+  }
+
+  getMachineType()
+  {
+    return this._machineBuilder.getMachineType();
   }
 
   getAlphabet()

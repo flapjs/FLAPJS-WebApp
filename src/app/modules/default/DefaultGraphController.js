@@ -127,7 +127,7 @@ class DefaultGraphController extends AbstractModuleGraphController
 
   createNode(x, y)
   {
-    const newNodeLabel = "";//FIXME: this.machineController.getMachineBuilder().getLabeler().getNextDefaultNodeLabel();
+    const newNodeLabel = this.getGraphLabeler().getDefaultNodeLabel();
 
     if (typeof x === 'undefined') x = (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
     if (typeof y === 'undefined') y = (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
