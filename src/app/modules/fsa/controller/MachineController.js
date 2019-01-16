@@ -66,11 +66,6 @@ class MachineController extends AbstractModuleMachineController
     }
   }
 
-  getLabelFormatter()
-  {
-    return this._module.getLabelFormatter();
-  }
-
   getMachineBuilder()
   {
     return this._machineBuilder;

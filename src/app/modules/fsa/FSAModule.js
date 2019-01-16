@@ -111,11 +111,6 @@ class FSAModule extends AbstractModule
     return GraphLayout;
   }
 
-  getLabelFormatter()
-  {
-    return this._graphController.getGraphLabeler().getEdgeLabelFormatter();
-  }
-
   getLabelEditor()
   {
     return LabelEditor;
