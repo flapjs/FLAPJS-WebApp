@@ -3,6 +3,7 @@ import AbstractModuleGraphController from 'modules/abstract/AbstractModuleGraphC
 import Eventable from 'util/Eventable.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
+import FSAGraphLabeler from 'modules/fsa/graph/FSAGraphLabeler.js';
 
 const NODE_SPAWN_RADIUS = 64;
 
@@ -10,7 +11,7 @@ class GraphController extends AbstractModuleGraphController
 {
   constructor(module)
   {
-    super(module, new FSAGraph());
+    super(module, new FSAGraph(), new FSAGraphLabeler());
 
     this.inputController = null;
     this.machineController = null;

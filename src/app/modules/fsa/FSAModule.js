@@ -15,7 +15,6 @@ import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
 import FSAGraphOverlayRenderer from './renderer/FSAGraphOverlayRenderer.js';
 import ViewportRenderer from './renderer/ViewportRenderer.js';
 
-import FSABuilder from './builder/FSABuilder.js';
 import GraphLayout from './graph/GraphLayout.js';
 import EventManager from './EventManager.js';
 import LabelEditor from './editor/LabelEditor.js';
@@ -39,14 +38,9 @@ class FSAModule extends AbstractModule
 
     this._workspace = null;
 
-    this._refreshRate = 60;
-    this._ticks = 0;
-
     this._inputController = new InputController(this, app.getInputAdapter());
     this._graphController = new GraphController(this);
     this._machineController = new MachineController(this);
-
-    this._machineBuilder = new FSABuilder();
 
     this._eventManager = new EventManager(app.getUndoManager());
     this._testingManager = new TestingManager();
@@ -65,8 +59,6 @@ class FSAModule extends AbstractModule
     this._inputController.initialize(this);
     this._graphController.initialize(this);
     this._machineController.initialize(this);
-
-    this._machineBuilder.initialize(this);
 
     this._eventManager.initialize(this);
 
@@ -89,8 +81,6 @@ class FSAModule extends AbstractModule
 
     this._eventManager.destroy();
 
-    this._machineBuilder.destroy();
-
     this._machineController.destroy();
     this._graphController.destroy();
     this._inputController.destroy();
@@ -103,12 +93,7 @@ class FSAModule extends AbstractModule
   {
     this._inputController.update(this);
     this._graphController.update(this);
-
-    if (--this._ticks <= 0)
-    {
-      this._machineBuilder.update(this);
-      this._ticks = this._refreshRate;
-    }
+    this._machineController.update(this);
   }
 
   getGraph()
@@ -126,14 +111,10 @@ class FSAModule extends AbstractModule
     return GraphLayout;
   }
 
-  getMachineBuilder()
-  {
-    return this._machineBuilder;
-  }
-
   getLabelFormatter()
   {
-    return this._machineBuilder.formatAlphabetString.bind(this._machineBuilder);
+    const machineBuilder = this._machineController.getMachineBuilder();
+    return machineBuilder.formatAlphabetString.bind(machineBuilder);
   }
 
   getLabelEditor()
@@ -170,6 +151,6 @@ class FSAModule extends AbstractModule
   //Override
   getModuleName() { return "fsa"; }
   //Override
-  getLocalizedModuleName() { return this._machineBuilder.getMachineType(); }
+  getLocalizedModuleName() { return this._machineController.getMachineType(); }
 }
 export default FSAModule;
