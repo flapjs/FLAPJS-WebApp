@@ -27,7 +27,8 @@ class StateListView extends React.Component
     const graphController = this.props.graphController;
     this._prevX += 16;
     this._prevY += 16;
-    graphController.createNode(this._prevX, this._prevY);
+    const node = graphController.createNode(this._prevX, this._prevY);
+    graphController.focusOnNode(node);
   }
 
   onElementFocus(e, element)
@@ -41,6 +42,8 @@ class StateListView extends React.Component
   onElementBlur(e, element, nextLabel)
   {
     const node = element.props.node;
+    if (!node) return;
+
     const graphController = this.props.graphController;
 
     //The value is already processed, abort
@@ -77,10 +80,10 @@ class StateListView extends React.Component
   onElementChange(e, element, value)
   {
     const graphController = this.props.graphController;
-    const graph = graphController.getGraph();
 
     if (value.length > 0)
     {
+      const graph = graphController.getGraph();
       const otherNodes = graph.getNodesByLabel(value);
 
       //If there are more than 1 nodes by the same name,

@@ -3,8 +3,8 @@ import Style from './OverviewPanel.css';
 
 import PanelSection from 'experimental/panels/PanelSection.js';
 
-import StateListElement from './StateListElement.js';
 import StateListView from './StateListView.js';
+import AlphabetListView from './AlphabetListView.js';
 
 class OverviewPanel extends React.Component
 {
@@ -33,7 +33,7 @@ class OverviewPanel extends React.Component
             <StateListView graphController={graphController}/>
           </PanelSection>
           <PanelSection title={"Alphabet"} initial={true}>
-            <button>0</button>
+            <AlphabetListView machineController={machineController}/>
           </PanelSection>
           <PanelSection title={"Transitions"} initial={true}>
             <PanelSection title={"Transition Chart"}>

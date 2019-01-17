@@ -550,9 +550,7 @@ class FSA
     }
     this._startState = state;
   }
-
   isStartState(state) { return this._startState === state; }
-
   getStartState() { return this._startState; }
 
   setFinalState(state, final=true)
