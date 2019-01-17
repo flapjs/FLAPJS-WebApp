@@ -25,7 +25,7 @@ class AnalysisPanel extends React.Component
     const currentModule = this.props.currentModule;
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
-    const unreachableArray = machineController.getMachineBuilder().machineErrorChecker.getUnreachableNodes();
+    const unreachableArray = machineController.getUnreachableNodes();
     graphController.deleteTargetNodes(unreachableArray);
   }
 

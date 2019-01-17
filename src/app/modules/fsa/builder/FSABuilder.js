@@ -1,8 +1,7 @@
 import Config from 'config.js';
 
 import MachineBuilder from './MachineBuilder.js';
-import DFAErrorChecker from './DFAErrorChecker.js';
-import NFAErrorChecker from './NFAErrorChecker.js';
+import FSAErrorChecker from './FSAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
 import Node from 'modules/fsa/graph/FSANode.js';
@@ -24,7 +23,7 @@ class FSABuilder extends MachineBuilder
     this._timer = null;
     this._errorTimer = null;
 
-    this.machineErrorChecker = null;
+    this.machineErrorChecker = new FSAErrorChecker();
     this.tester = null;
 
     this.graphController = null;
@@ -44,8 +43,6 @@ class FSABuilder extends MachineBuilder
     this.machineController = module.getMachineController();
 
     const graph = this.graphController.getGraph();
-    this.machineErrorChecker = new DFAErrorChecker(this, graph);
-
     this._savedGraphHash = graph.getHashCode(false);
     this.onGraphChange();
   }
@@ -114,20 +111,6 @@ class FSABuilder extends MachineBuilder
     if (this._machineType == machineType) return;
 
     this._machineType = machineType;
-    if (machineType == "DFA")
-    {
-      const graph = this.graphController.getGraph();
-      this.machineErrorChecker = new DFAErrorChecker(this, graph);
-    }
-    else if (machineType == "NFA")
-    {
-      const graph = this.graphController.getGraph();
-      this.machineErrorChecker = new NFAErrorChecker(this, graph);
-    }
-    else
-    {
-      throw new Error("Cannot find error checker for machine type \'" + machineType + "\'");
-    }
 
     this.onGraphChange();
   }
