@@ -314,6 +314,16 @@ class MachineController extends AbstractModuleMachineController
   {
     return this.getMachineBuilder().isCustomSymbol(symbol);
   }
+
+  addCustomSymbol(symbol)
+  {
+    this.getMachineBuilder().addCustomSymbol(symbol);
+  }
+
+  clearCustomSymbols()
+  {
+    this.getMachineBuilder()._symbols.length = 0;
+  }
 }
 Eventable.mixin(MachineController);
 
