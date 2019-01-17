@@ -253,7 +253,10 @@ class MachineController extends AbstractModuleMachineController
 
   getAlphabet()
   {
-    return this._machineBuilder.getAlphabet();
+    const machine = this._machineBuilder.getMachine();
+    const result = [];
+    machine.getAlphabet(result);
+    return result;
   }
 
   isUsedSymbol(symbol)

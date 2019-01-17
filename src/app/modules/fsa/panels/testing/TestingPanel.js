@@ -99,11 +99,7 @@ class TestingPanel extends React.Component
     tester.setErrorCheckMode(value);
 
     //HACK: this should automatically be updated by testing manager on set error check mode
-    if (!tester.shouldCheckError)
-    {
-      machineBuilder.machineErrorChecker.clear();
-    }
-    else
+    if (tester.shouldCheckError)
     {
       machineBuilder.onGraphChange(graph);
     }
@@ -180,7 +176,7 @@ class TestingPanel extends React.Component
     const testList = tester.inputList;
     const machineBuilder = currentModule.getMachineController().getMachineBuilder();
 
-    const isTestInvalid = !machineBuilder.isValidMachine();
+    const isTestInvalid = machineBuilder.getMachineErrors().length > 0;
 
     if (--this._ticksSinceHash <= 0)
     {

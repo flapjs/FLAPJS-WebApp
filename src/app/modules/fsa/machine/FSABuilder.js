@@ -4,11 +4,11 @@ import FSAEdge, { EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
 
 class FSABuilder
 {
-	constructor(graph)
+	constructor()
 	{
-		this._graph = graph;
 		this._machine = new FSA();
 
+		this._graph = null;
 		this._cachedGraphHash = 0;
 		this._timer = null;
 
@@ -16,9 +16,9 @@ class FSABuilder
 		this._warnings = [];
 	}
 
-	update()
+	update(graph)
 	{
-		const graph = this._graph;
+		this._graph = graph;
 		const graphHash = graph.getHashCode(false);
 		if (graphHash !== this._cachedGraphHash)
 		{
@@ -129,6 +129,16 @@ class FSABuilder
 			//Reasons are stored in errors
 			return null;
 		}
+	}
+
+	getMachineErrors()
+	{
+		return this._errors;
+	}
+
+	getMachineWarnings()
+	{
+		return this._warnings;
 	}
 
 	getMachine()

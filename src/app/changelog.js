@@ -1,13 +1,17 @@
-//Version 0.3.2
+//Version 0.3.3
 const changeLog = [
-  "FIXED: Allow cross-platform bundle building.",
-  "FIXED: Corrected 'development' mode while in production.",
-  "FIXED: NFA unreachable node checking is wrong.",
-  "FIXED: Unreachable node warnings were not treated as notification warnings.",
-  "Disabled service worker while in 'development' mode."
 ];
 
 /*
+  //Version 0.3.2
+  const changeLog = [
+    "FIXED: Allow cross-platform bundle building.",
+    "FIXED: Corrected 'development' mode while in production.",
+    "FIXED: NFA unreachable node checking is wrong.",
+    "FIXED: Unreachable node warnings were not treated as notification warnings.",
+    "Disabled service worker while in 'development' mode."
+  ];
+
   //Version 0.3.1
   const changeLog = [
     "FIXED: Renaming an uploaded file does not download file with new name.",
