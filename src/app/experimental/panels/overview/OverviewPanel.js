@@ -3,8 +3,10 @@ import Style from './OverviewPanel.css';
 
 import PanelSection from 'experimental/panels/PanelSection.js';
 
-import StateListView from './StateListView.js';
-import AlphabetListView from './AlphabetListView.js';
+import StateListView from './states/StateListView.js';
+import AlphabetListView from './alphabet/AlphabetListView.js';
+import TransitionTable from './transitions/TransitionTable.js';
+import TransitionFunction from './transitions/TransitionFunction.js';
 
 class OverviewPanel extends React.Component
 {
@@ -16,9 +18,13 @@ class OverviewPanel extends React.Component
   //Override
   render()
   {
+    const drawer = this.props.drawer;
     const currentModule = this.props.currentModule;
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
+    const machineBuilder = machineController.getMachineBuilder();
+
+    const drawerFull = drawer.isDrawerFullscreen();
 
     return (
       <div id={this.props.id}
@@ -29,17 +35,18 @@ class OverviewPanel extends React.Component
           <h1>{OverviewPanel.TITLE}</h1>
         </div>
         <div className={Style.panel_content}>
-          <PanelSection title={"States"} initial={true}>
+          <PanelSection title={"States"} initial={true} full={drawerFull}>
             <StateListView graphController={graphController}/>
           </PanelSection>
-          <PanelSection title={"Alphabet"} initial={true}>
+          <PanelSection title={"Alphabet"} initial={true} full={drawerFull}>
             <AlphabetListView machineController={machineController}/>
           </PanelSection>
-          <PanelSection title={"Transitions"} initial={true}>
-            <PanelSection title={"Transition Chart"}>
-            </PanelSection>
-            <PanelSection title={"Transition Table"}>
-            </PanelSection>
+          <div className={Style.panel_divider}></div>
+          <PanelSection title={"Transition Chart"} full={drawerFull}>
+            <TransitionFunction machineBuilder={machineBuilder}/>
+          </PanelSection>
+          <PanelSection title={"Transition Table"} full={drawerFull}>
+            <TransitionTable machineBuilder={machineBuilder}/>
           </PanelSection>
         </div>
       </div>
