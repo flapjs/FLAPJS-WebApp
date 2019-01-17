@@ -1,21 +1,19 @@
+import AbstractMachineBuilder from 'modules/abstract/AbstractMachineBuilder.js';
+
 import FSAErrorChecker from './FSAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
 import Node from 'modules/fsa/graph/FSANode.js';
 
-class FSABuilder
+class FSABuilder extends AbstractMachineBuilder
 {
   constructor()
   {
+    super();
+
     this._machine = new NFA();
     this._machineType = "DFA";
     this._symbols = [];
-
-		this._graph = null;
-		this._cachedGraphHash = 0;
-
-		this._errors = [];
-		this._warnings = [];
 
     this._errorChecker = new FSAErrorChecker();
 
@@ -31,22 +29,7 @@ class FSABuilder
     this.machineController = module.getMachineController();
   }
 
-  destroy()
-  {
-  }
-
-  update()
-  {
-    const graph = this.graphController.getGraph();
-		this._graph = graph;
-		const graphHash = graph.getHashCode(false);
-		if (graphHash !== this._cachedGraphHash)
-		{
-			this._cachedGraphHash = graphHash;
-			this.onGraphChange(graph);
-		}
-  }
-
+  //Override
   onGraphChange(graph=null)
   {
     if (!this.tester) return;
@@ -141,21 +124,7 @@ class FSABuilder
     return result;
   }
 
-  getMachineErrors()
-  {
-    return this._errors;
-  }
-
-  getMachineWarnings()
-  {
-    return this._warnings;
-  }
-
-	isMachineValid()
-	{
-		return this._errors.length <= 0;
-	}
-
+  //Override
   getMachine()
   {
     return this._machine;

@@ -10,15 +10,11 @@ class MachineController extends AbstractModuleMachineController
 {
   constructor(module)
   {
-    super(module);
+    super(module, new FSABuilder());
 
     this.machineName = null;
 
     this.graphController = null;
-
-    this._machineBuilder = new FSABuilder();
-    this._refreshRate = 60;
-    this._ticks = 0;
 
     //userChangeMachine(machineBuilder, nextMachineType, prevMachineType) - when user changes machine type
     this.registerEvent("userChangeMachine");
@@ -47,14 +43,13 @@ class MachineController extends AbstractModuleMachineController
 
     this.graphController = module.getGraphController();
 
-    this._machineBuilder.initialize(module);
+    //HACK: this is only to support the old FSABuilder (remove this once finished)
+    this.getMachineBuilder().initialize(module);
   }
 
   //Override
   destroy(module)
   {
-    this._machineBuilder.destroy();
-
     super.destroy(module);
   }
 
@@ -62,22 +57,11 @@ class MachineController extends AbstractModuleMachineController
   update(module)
   {
     super.update(module);
-
-    if (--this._ticks <= 0)
-    {
-      this._machineBuilder.update(this);
-      this._ticks = this._refreshRate;
-    }
-  }
-
-  getMachineBuilder()
-  {
-    return this._machineBuilder;
   }
 
   getMachineType()
   {
-    return this.getMachineBuilder().getMachineType();
+    return this._machineBuilder.getMachineType();
   }
 
   setMachineType(machineType)
