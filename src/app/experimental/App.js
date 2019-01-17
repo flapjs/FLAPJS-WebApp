@@ -104,7 +104,6 @@ class App extends React.Component
     this._hotKeyManager.initialize();
 
     LocalSave.registerHandler(this._saver);
-    LocalSave.initialize();
 
     this._init = true;
   }
@@ -115,7 +114,6 @@ class App extends React.Component
     this._init = false;
 
     LocalSave.unregisterHandler(this._saver);
-    LocalSave.terminate();
 
     this._hotKeyManager.destroy();
 

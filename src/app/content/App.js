@@ -7,6 +7,7 @@ import Config from 'config.js';
 //import Modules from './Modules.js';
 //import Module from 'modules/default/DefaultModule.js';
 import Module from 'modules/fsa/FSAModule.js';
+import ModuleLoader from 'modules/ModuleLoader.js';
 
 import HotKeys from './HotKeys.js';
 import LocalSave from 'system/localsave/LocalSave.js';
@@ -46,23 +47,8 @@ class App extends React.Component
 
     //Modules should handle its own initialization, regardless of web state
     //Also, loading from file should be handled by modules themselves
-    this._module = new Module(this);
-    /*
-    Modules['fsa'].fetch((Module) => {
-      const prevModule = this._module;
-      if (prevModule && this._init)
-      {
-        prevModule.destroy(this);
-      }
-
-      this._module = new Module(this);
-
-      if (this._init)
-      {
-        this._module.initialize(this);
-      }
-    });
-    */
+    const ModuleClass = props.moduleClass || Module;
+    this._module = new ModuleClass(this);
 
     this.hotKeys = new HotKeys();
     this.tutorial = new Tutorial();
@@ -105,7 +91,6 @@ class App extends React.Component
     this.tutorial.start(this);
 
     LocalSave.registerHandler(this);
-    LocalSave.initialize();
 
     this._init = true;
   }
@@ -114,7 +99,6 @@ class App extends React.Component
   componentWillUnmount()
   {
     LocalSave.unregisterHandler(this);
-    LocalSave.terminate();
 
     this.hotKeys.destroy();
 
@@ -310,6 +294,7 @@ class App extends React.Component
     return this.undoManager;
   }
 
+  //Override
   render()
   {
     const currentModule = this._module;
@@ -321,7 +306,8 @@ class App extends React.Component
       currentModule.update(this);
     }
 
-    return <div className="app-container" ref={ref=>this.container=ref}>
+    return <div className="app-container" ref={ref=>this.container=ref}
+      style={{animation: ModuleLoader.isModuleLoading() ? "fadeout 1s" : "fadein 1s"}}>
       <Toolbar ref={ref=>this.toolbar=ref}
         app={this}
         currentModule={currentModule}

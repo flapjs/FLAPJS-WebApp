@@ -13,8 +13,12 @@ import StyleInput from 'system/styleopt/components/StyleInput.js';
 import OptionGroup from './OptionGroup.js';
 import OptionHotkey from './OptionHotkey.js';
 
+import Modules from 'modules/Modules.js'
+import ModuleLoader from 'modules/ModuleLoader.js';
+
 //This should be the same as the one referred to by index.js
 const LOCAL_STORAGE_ID = "skipWelcome";
+const ENABLE_MODULES = process.env.NODE_ENV === 'development';
 
 class OptionsPanel extends React.Component
 {
@@ -219,7 +223,7 @@ class OptionsPanel extends React.Component
 
   onChangeModule(e)
   {
-    //Nothing yet...
+    ModuleLoader.loadModule(e.target.value);
   }
 
   //Override
@@ -338,13 +342,15 @@ class OptionsPanel extends React.Component
         <div>
           <h2>Experimental</h2>
 
-          <select id="options-experimental-modules" className="panel-select" value={this.props.currentModule.getModuleName()} onChange={this.onChangeModule}>
-            <option value="fsa">Finite State Automata</option>
-            <option value="pda" disabled={true}>Pushdown Automata (Coming Soon)</option>
-            <option value="cfg" disabled={true}>Context-Free Grammar (Future)</option>
-            <option value="tm" disabled={true}>Turing Machine (Future)</option>
-            <option value="rdt" disabled={true}>Red-Black Tree (Future)</option>
-            <option value="hlsm" disabled={true}>High Level State Machine (Future)</option>
+          <select id="options-experimental-modules"
+            className="panel-select"
+            value={this.props.currentModule.getModuleName()}
+            onChange={this.onChangeModule}
+            disabled={!ENABLE_MODULES}>
+          {Object.keys(Modules).map(e => {
+            const mod = Modules[e];
+            return <option key={e} value={e}>{mod.name + " (" + mod.version + ")"}</option>
+          })}
           </select>
 
           <div className="panel-checkbox" style={{marginTop: "10px"}}>
