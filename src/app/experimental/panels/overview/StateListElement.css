@@ -1,0 +1,40 @@
+:local(.element_container) {
+  margin: 0.2em;
+  padding: 0.3em;
+
+  border-radius: 0.5em;
+  background: var(--color-drawer-back-input);
+}
+:local(.element_container):first-of-type {
+  outline: 0.15em dashed var(--color-drawer-back-detail);
+  outline-offset: 0.15em;
+  margin-right: 0.3em;
+  margin-left: -0.15em;
+}
+:local(.element_container) input {
+  background: none;
+  outline: none;
+  padding: 1px;
+  margin: -3px;
+  height: calc(100% - 1px);
+
+  font-size: 1.2em;
+  font-family: monospace;
+
+  border: 3px solid transparent;
+  border-radius: 0.5em;
+}
+:local(.element_container).accept input {
+  /*text-decoration: underline;*/
+  border-color: var(--color-drawer-back-detail);
+}
+
+:local(.element_container).empty {
+  background: var(--color-drawer-error);
+}
+:local(.element_container).custom input {
+  color: var(--color-drawer-text-active);
+}
+:local(.element_container).error input {
+  color: var(--color-drawer-error);
+}

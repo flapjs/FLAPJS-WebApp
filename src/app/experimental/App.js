@@ -15,6 +15,7 @@ import OptionPanel from 'experimental/menus/option/OptionPanel.js';
 import EditPane from 'experimental/EditPane.js';
 import TapePane from 'experimental/TapePane.js';
 
+import OverviewPanel from 'experimental/panels/overview/OverviewPanel.js';
 import AnalysisPanel from 'experimental/panels/analysis/AnalysisPanel.js';
 import TestingPanel from 'experimental/panels/test/TestingPanel.js';
 
@@ -172,7 +173,7 @@ class App extends React.Component
     const graphImporter = currentModule.getGraphImporter();
     const inputActionMode = inputController.isActionMode(graphController);
 
-    const modulePanels = currentModule.getModulePanels().concat([TestingPanel, AnalysisPanel]);
+    const modulePanels = currentModule.getModulePanels().concat([TestingPanel, OverviewPanel, AnalysisPanel]);
     const modulePanelProps = {currentModule: currentModule, app: this};
     const moduleMenus = currentModule.getModuleMenus().concat([ExportPanel, OptionPanel]);
     const moduleMenuProps = {currentModule: currentModule, app: this};
