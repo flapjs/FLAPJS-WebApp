@@ -176,7 +176,7 @@ class TestingPanel extends React.Component
     const testList = tester.inputList;
     const machineBuilder = currentModule.getMachineController().getMachineBuilder();
 
-    const isTestInvalid = machineBuilder.getMachineErrors().length > 0;
+    const isTestInvalid = !machineBuilder.isMachineValid();
 
     if (--this._ticksSinceHash <= 0)
     {

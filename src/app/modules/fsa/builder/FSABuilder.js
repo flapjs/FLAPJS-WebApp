@@ -58,11 +58,9 @@ class FSABuilder
       this._machine.newSymbol(s);
     }
 
-    if (!this.tester.shouldCheckError) return;
-
     this._errors.length = 0;
     this._warnings.length = 0;
-    this._errorChecker.checkErrors(true, this.graphController, this.machineController);
+    this._errorChecker.checkErrors(this.tester.shouldCheckError, this.graphController, this.machineController);
     for(const node of this._errorChecker.errorNodes)
     {
       this._errors.push({target: node, targetType: 'node'});
@@ -152,6 +150,11 @@ class FSABuilder
   {
     return this._warnings;
   }
+
+	isMachineValid()
+	{
+		return this._errors.length <= 0;
+	}
 
   getMachine()
   {

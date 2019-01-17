@@ -10,7 +10,6 @@ class FSABuilder
 
 		this._graph = null;
 		this._cachedGraphHash = 0;
-		this._timer = null;
 
 		this._errors = [];
 		this._warnings = [];
@@ -139,6 +138,11 @@ class FSABuilder
 	getMachineWarnings()
 	{
 		return this._warnings;
+	}
+
+	isMachineValid()
+	{
+		return this._errors.length <= 0;
 	}
 
 	getMachine()
