@@ -1,10 +1,12 @@
 import AbstractModuleMachineController from 'modules/abstract/AbstractModuleMachineController.js';
 
+import DefaultMachineBuilder from './DefaultMachineBuilder.js';
+
 class DefaultMachineController extends AbstractModuleMachineController
 {
   constructor(module)
   {
-    super(module);
+    super(module, new DefaultMachineBuilder());
 
     this._machineName = "";
   }
