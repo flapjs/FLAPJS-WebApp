@@ -29,7 +29,7 @@ class AnalysisPanel extends React.Component
     const currentModule = this.props.currentModule;
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
-    const unreachableArray = machineController.getMachineBuilder().machineErrorChecker.getUnreachableNodes();
+    const unreachableArray = machineController.getUnreachableNodes();
     graphController.deleteTargetNodes(unreachableArray);
   }
 
@@ -72,7 +72,6 @@ class AnalysisPanel extends React.Component
     const currentModule = this.props.currentModule;
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
-    const machineBuilder = machineController.getMachineBuilder();
 
     return (
       <div id={this.props.id}
@@ -91,11 +90,11 @@ class AnalysisPanel extends React.Component
             <button className={Style.panel_button} onClick={this.onOptimizeMachine} disabled={!this.canOptimize()}>Optimize</button>
           </PanelSection>
           {
-            machineBuilder.getMachineType() == "DFA" ?
+            machineController.getMachineType() == "DFA" ?
               <button className={Style.panel_button} onClick={this.onConvertToNFA}>
                 {I18N.toString("action.overview.convertnfa")}
               </button>
-            : machineBuilder.getMachineType() == "NFA" ?
+            : machineController.getMachineType() == "NFA" ?
               <button className={Style.panel_button} onClick={this.onConvertToDFA}>
                 {I18N.toString("action.overview.convertdfa")}
               </button>

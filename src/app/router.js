@@ -1,12 +1,18 @@
 const ROUTER = {
-  _current: null,
-  routeTo(component)
+  _componentClass: null,
+  _componentProps: null,
+  routeTo(componentClass, componentProps={})
   {
-    this._current = component;
+    this._componentClass = componentClass;
+    this._componentProps = componentProps;
   },
   getCurrentPage()
   {
-    return this._current;
+    return this._componentClass;
+  },
+  getCurrentPageProps()
+  {
+    return this._componentProps;
   }
 };
 

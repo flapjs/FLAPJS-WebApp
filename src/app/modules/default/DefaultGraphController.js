@@ -8,11 +8,13 @@ import GraphNode from 'graph/GraphNode.js';
 import GraphEdge from 'graph/GraphEdge.js';
 import QuadraticEdge from 'graph/QuadraticEdge.js';
 
+import DefaultGraphLabeler from './DefaultGraphLabeler.js';
+
 class DefaultGraphController extends AbstractModuleGraphController
 {
   constructor(module)
   {
-    super(module, new NodalGraph(GraphNode, QuadraticEdge));
+    super(module, new NodalGraph(GraphNode, QuadraticEdge), new DefaultGraphLabeler());
 
     this.inputController = null;
     this.machineController = null;
@@ -127,7 +129,7 @@ class DefaultGraphController extends AbstractModuleGraphController
 
   createNode(x, y)
   {
-    const newNodeLabel = "";//FIXME: this.machineController.getMachineBuilder().getLabeler().getNextDefaultNodeLabel();
+    const newNodeLabel = this.getGraphLabeler().getDefaultNodeLabel();
 
     if (typeof x === 'undefined') x = (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;
     if (typeof y === 'undefined') y = (Math.random() * Config.SPAWN_RADIUS * 2) - Config.SPAWN_RADIUS;

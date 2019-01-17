@@ -21,6 +21,7 @@ const SHOULD_WARN_USERS_ON_EXIT = true;
 //Setup viewport
 window.addEventListener('load', (event) => {
   console.log("Preparing for \'" + process.env.NODE_ENV + "\' environment...");
+  console.log("Loading web app version \'" + process.env.VERSION + "\'...");
   loadApplication();
   window.requestAnimationFrame(updateApplication);
 });
@@ -40,6 +41,8 @@ window.addEventListener('beforeunload', (event) => {
     //For Safari
     return message;
   }
+
+  unloadApplication();
 });
 
 //Tell the client that an update is available
@@ -67,6 +70,8 @@ var dt;
 //Load application
 function loadApplication()
 {
+  LocalSave.initialize();
+
   loadConfig();
   root = document.getElementById("root");
 
@@ -92,11 +97,18 @@ function updateApplication(time)
   dt = (time - prevtime) / FRAMES_PER_SECOND;
   {
     const page = Router.getCurrentPage();
+    const pageProps = Router.getCurrentPageProps();
     if (page)
     {
-      ReactDOM.render(React.createElement(page), root);
+      ReactDOM.render(React.createElement(page, pageProps), root);
     }
   }
   prevtime = time;
   window.requestAnimationFrame(updateApplication);
+}
+
+//Unload application
+function unloadApplication()
+{
+  LocalSave.terminate();
 }

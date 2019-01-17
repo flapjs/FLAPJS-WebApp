@@ -8,6 +8,9 @@ class AbstractModuleInputController extends AbstractInputController
   {
     super();
 
+    if (!module) throw new Error("Missing module for input controller");
+    if (!inputAdapter) throw new Error("Missing inputAdapter for input controller");
+
     this._module = module;
     this._inputAdapter = inputAdapter.setController(this);
 

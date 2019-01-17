@@ -1,6 +1,7 @@
 import AbstractModuleMachineController from 'modules/abstract/AbstractModuleMachineController.js';
 import Eventable from 'util/Eventable.js';
 
+import FSABuilder from 'modules/fsa/builder/FSABuilder.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import { convertToDFA } from 'machine/util/convertNFA.js';
 import DFA from 'machine/DFA.js';
@@ -14,6 +15,10 @@ class MachineController extends AbstractModuleMachineController
     this.machineName = null;
 
     this.graphController = null;
+
+    this._machineBuilder = new FSABuilder();
+    this._refreshRate = 60;
+    this._ticks = 0;
 
     //userChangeMachine(machineBuilder, nextMachineType, prevMachineType) - when user changes machine type
     this.registerEvent("userChangeMachine");
@@ -35,29 +40,39 @@ class MachineController extends AbstractModuleMachineController
     this.registerEvent("userPostRenameSymbol");
   }
 
-  setModule(module)
-  {
-    this._module = module;
-  }
-
+  //Override
   initialize(module)
   {
+    super.initialize(module);
+
     this.graphController = module.getGraphController();
+
+    this._machineBuilder.initialize(module);
   }
 
-  destroy()
+  //Override
+  destroy(module)
   {
+    this._machineBuilder.destroy();
 
+    super.destroy(module);
   }
 
-  getLabelFormatter()
+  //Override
+  update(module)
   {
-    return this._module.getLabelFormatter();
+    super.update(module);
+
+    if (--this._ticks <= 0)
+    {
+      this._machineBuilder.update(this);
+      this._ticks = this._refreshRate;
+    }
   }
 
   getMachineBuilder()
   {
-    return this._module.getMachineBuilder();
+    return this._machineBuilder;
   }
 
   getMachineType()
@@ -67,7 +82,7 @@ class MachineController extends AbstractModuleMachineController
 
   setMachineType(machineType)
   {
-    this.getMachineBuilder().setMachineType(machineType);
+    this._machineBuilder.setMachineType(machineType);
   }
 
   getMachineName()
@@ -199,9 +214,51 @@ class MachineController extends AbstractModuleMachineController
     }
   }
 
+  getUnreachableNodes()
+  {
+    const graphController = this.graphController;
+    const graph = graphController.getGraph();
+    if (graph.getNodeCount() <= 1) return [];
+
+    const edges = graph.getEdges();
+    const nodes = graph.getNodes().slice();
+    const startNode = nodes.shift();
+    let nextNodes = [];
+    nextNodes.push(startNode);
+
+    while(nextNodes.length > 0)
+    {
+      const node = nextNodes.pop();
+      for(const edge of edges)
+      {
+        if (edge.getSourceNode() === node)
+        {
+          const i = nodes.indexOf(edge.getDestinationNode());
+          if (i >= 0)
+          {
+            const nextNode = nodes.splice(i, 1)[0];
+            nextNodes.push(nextNode);
+          }
+        }
+      }
+    }
+
+    return nodes;
+  }
+
+  getMachineType()
+  {
+    return this._machineBuilder.getMachineType();
+  }
+
   getAlphabet()
   {
-    return this.getMachineBuilder().getAlphabet();
+    return this._machineBuilder.getAlphabet();
+  }
+
+  isUsedSymbol(symbol)
+  {
+    return !this.isCustomSymbol(symbol);
   }
 
   createSymbol(symbol)
@@ -288,6 +345,16 @@ class MachineController extends AbstractModuleMachineController
   isCustomSymbol(symbol)
   {
     return this.getMachineBuilder().isCustomSymbol(symbol);
+  }
+
+  addCustomSymbol(symbol)
+  {
+    this.getMachineBuilder().addCustomSymbol(symbol);
+  }
+
+  clearCustomSymbols()
+  {
+    this.getMachineBuilder()._symbols.length = 0;
   }
 }
 Eventable.mixin(MachineController);

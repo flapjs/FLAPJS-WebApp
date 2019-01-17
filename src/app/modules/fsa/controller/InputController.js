@@ -1,9 +1,10 @@
 import AbstractModuleInputController from 'modules/abstract/AbstractModuleInputController.js';
-import Config from 'config.js';
 
 import GraphPicker from './GraphPicker.js';
 import Node from 'modules/fsa/graph/FSANode.js';
 import Edge from 'modules/fsa/graph/FSAEdge.js';
+
+const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
 
 class InputController extends AbstractModuleInputController
 {
@@ -26,7 +27,7 @@ class InputController extends AbstractModuleInputController
     this.ghostInitialMarker = null;
 
     //Whether to destroy pointless edges
-    this.shouldDestroyPointlessEdges = Config.DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
+    this.shouldDestroyPointlessEdges = DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
 
     //Swap left to right clicks and vice versa on anything else but Macs
     this._swapMouseScheme = true;//!navigator.platform.startsWith("Mac");
@@ -54,6 +55,8 @@ class InputController extends AbstractModuleInputController
   //Override
   update(module)
   {
+    super.update(module);
+    
     const graph = this._graphController.getGraph();
     const picker = this._picker;
     const x = this._inputAdapter.getPointerX();
@@ -319,7 +322,7 @@ class InputController extends AbstractModuleInputController
         if (!inputController.isTrashMode())
         {
           const edge = graph.createEdge(target, pointer);
-          edge.setEdgeLabel(Config.STR_TRANSITION_DEFAULT_LABEL);
+          edge.setEdgeLabel(graphController.getGraphLabeler().getDefaultEdgeLabel());
 
           //Redirect pointer to refer to the edge as the new target
           picker.setInitialTarget(edge, "endpoint");

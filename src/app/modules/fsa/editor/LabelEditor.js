@@ -143,8 +143,7 @@ class LabelEditor extends React.Component
 
   onFormat(value)
   {
-    //return this.props.machineController.getMachineBuilder().formatAlphabetString(value, false);
-    return this.props.machineController.getLabelFormatter().call(null, value, false);
+    return this.props.graphController.getGraphLabeler().getEdgeLabelFormatter().call(null, value);
   }
 
   render()
@@ -179,7 +178,7 @@ class LabelEditor extends React.Component
       targetStyle.left = (x + offsetX) + "px";
     }
 
-    const usedAlphabet = machineController.getMachineBuilder().getMachine().getAlphabet();
+    const usedAlphabet = machineController.getAlphabet();
 
     return <div className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
       tabIndex={"0"/*This is to allow div's to focus/blur*/}

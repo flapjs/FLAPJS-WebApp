@@ -39,9 +39,12 @@
 
   --color-drawer-back: darkgray;
   --color-drawer-back-detail: gray;
+  --color-drawer-back-input: lightgray;
   --color-drawer-text: black;
   --color-drawer-text-active: white;
   --color-drawer-text-disabled: gray;
+  --color-drawer-error: tomato;
+
   --color-drawer-handle: gray;
   --color-drawer-handle-detail: darkgray;
   --color-drawer-tab: darkgray;

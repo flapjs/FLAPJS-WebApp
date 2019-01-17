@@ -75,7 +75,7 @@
 }
 :local(.menu_button_container) button {
   background: var(--color-toolbar-menu);
-  border-bottom: 2px solid var(--color-toolbar-menu-detail);
+  border-bottom: 1px solid var(--color-toolbar-menu-detail);
 
   /* Override default icon button size */
   width: 100%;

@@ -3,17 +3,15 @@ import { EMPTY } from 'machine/Symbols.js';
 
 import Notifications from 'system/notification/Notifications.js';
 import StateUnreachableWarningMessage from 'modules/fsa/notifications/StateUnreachableWarningMessage.js';
-import StateMissingTransitionErrorMessage from 'modules/fsa/notifications/StateMissingTransitionErrorMessage.js';
 import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
+
+import StateMissingTransitionErrorMessage from 'modules/fsa/notifications/StateMissingTransitionErrorMessage.js';
 import StateErrorMessage from 'modules/fsa/notifications/StateErrorMessage.js';
 
-class DFAErrorChecker
+class FSAErrorChecker
 {
-  constructor(machineBuilder, graph)
+  constructor()
   {
-    this.machineBuilder = machineBuilder;
-    this.graph = graph;
-
     this.errorNodes = [];
     this.errorEdges = [];
     this.warningNodes = [];
@@ -28,16 +26,13 @@ class DFAErrorChecker
     this.warningEdges.length = 0;
   }
 
-  checkErrors(shouldNotifyErrors=false, graphController=null, machineController=null)
+  checkErrors(shouldNotifyErrors, graphController, machineController)
   {
-    //This should only run for "DFA" machine types...
-    if (this.machineBuilder.getMachineType() != "DFA")
-    {
-      throw new Error("Invalid machine type to check for DFA errors");
-    }
+    const deterministic = machineController.getMachineType() === "DFA";
+    const machineBuilder = machineController.getMachineBuilder();
 
-    const machine = this.machineBuilder.getMachine();
-    const graph = this.graph;
+    const machine = machineBuilder.getMachine();
+    const graph = graphController.getGraph();
     const alphabet = machine.getAlphabet();
     const errorNodes = this.errorNodes;
     const errorEdges = this.errorEdges;
@@ -48,6 +43,14 @@ class DFAErrorChecker
     let nodeTransitionMap = new Map();
     let startNode = graph.getStartNode();
 
+    //Get Unreachable nodes...
+    const unreachNodes = machineController.getUnreachableNodes();
+    for(const node of unreachNodes)
+    {
+      warnNodes.push(node);
+    }
+
+    //Get placeholder / empty / dupe edges...
     const placeholderEdges = [];
     const emptyEdges = [];
     const dupeEdges = [];
@@ -60,7 +63,8 @@ class DFAErrorChecker
         placeholderEdges.push(edge);
         if (errorEdges.indexOf(edge) == -1) errorEdges.push(edge);
       }
-      else
+      //Ignore dupe/empty edges for nondeterministic
+      else if (deterministic)
       {
         const from = edge.getSourceNode();
         const to = edge.getDestinationNode();
@@ -101,42 +105,46 @@ class DFAErrorChecker
       }
     }
 
+    //Get missing nodes...
     const missingNodes = [];
-    //Check for missing transitions
-    for(const node of graph.getNodes())
+    if (deterministic)
     {
-      const nodeTransitions = nodeTransitionMap.get(node);
-      if (!nodeTransitions && alphabet.length != 0 ||
-        nodeTransitions && nodeTransitions.length < alphabet.length)
+      //Check for missing transitions
+      for(const node of graph.getNodes())
       {
-        //Get the required missing symbols
-        /*
-        let array;
-        if (nodeTransitions)
+        const nodeTransitions = nodeTransitionMap.get(node);
+        if (!nodeTransitions && alphabet.length != 0 ||
+          nodeTransitions && nodeTransitions.length < alphabet.length)
         {
-          array = [];
-          for(const symbol of alphabet)
+          //Get the required missing symbols
+          /*
+          let array;
+          if (nodeTransitions)
           {
-            if (!nodeTransitions.includes(symbol))
+            array = [];
+            for(const symbol of alphabet)
             {
-              array.push(symbol);
+              if (!nodeTransitions.includes(symbol))
+              {
+                array.push(symbol);
+              }
             }
           }
-        }
-        else
-        {
-          array = alphabet.slice();
-        }
-        */
+          else
+          {
+            array = alphabet.slice();
+          }
+          */
 
-        //Update cached error targets
-        missingNodes.push(node);
-        if (errorNodes.indexOf(node) == -1) errorNodes.push(node);
+          //Update cached error targets
+          missingNodes.push(node);
+          if (errorNodes.indexOf(node) == -1) errorNodes.push(node);
+        }
       }
     }
 
-    const result = !(errorNodes.length == 0 && errorEdges.length == 0 &&
-      warnNodes.length == 0 && warnEdges.length == 0);
+    const result = !(errorNodes.length === 0 && errorEdges.length === 0 &&
+      warnNodes.length === 0 && warnEdges.length === 0);
 
     //Callbacks for all collected errors
     if (shouldNotifyErrors)
@@ -154,14 +162,13 @@ class DFAErrorChecker
       else
       {
         const props = {graphController: graphController, machineController: machineController};
+
         //Add new warning messages
-        const unReachedNodes = this.getUnreachableNodes();
-        if (unReachedNodes.length > 0)
+        if (unreachNodes.length > 0)
         {
-          Notifications.addMessage(unReachedNodes,
+          Notifications.addMessage(unreachNodes,
             "warning", messageTag, StateUnreachableWarningMessage, props, false);
         }
-
         //Add new error messages
         if (placeholderEdges.length > 0)
         {
@@ -188,36 +195,6 @@ class DFAErrorChecker
 
     return result;
   }
-
-  getUnreachableNodes() {
-    const graph = this.graph;
-    if (graph.getNodeCount() <= 1) return [];
-
-    const edges = graph.getEdges();
-    const nodes = graph.getNodes().slice();
-    const startNode = nodes.shift();
-    let nextNodes = [];
-    nextNodes.push(startNode);
-
-    while(nextNodes.length > 0)
-    {
-      const node = nextNodes.pop();
-      for(const edge of edges)
-      {
-        if (edge.getSourceNode() === node)
-        {
-          const i = nodes.indexOf(edge.getDestinationNode());
-          if (i >= 0)
-          {
-            const nextNode = nodes.splice(i, 1)[0];
-            nextNodes.push(nextNode);
-          }
-        }
-      }
-    }
-
-    return nodes;
-  }
 }
 
-export default DFAErrorChecker;
+export default FSAErrorChecker;

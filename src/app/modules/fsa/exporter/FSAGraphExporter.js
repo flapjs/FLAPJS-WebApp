@@ -12,7 +12,6 @@ class FSAGraphExporter extends AbstractGraphExporter
   {
     const graphController = module.getGraphController();
     const machineController = module.getMachineController();
-    const machineBuilder = machineController.getMachineBuilder();
     const graph = graphController.getGraph();
 
     const metadata = '_metadata' in data ? data['_metadata'] : {};
@@ -27,14 +26,17 @@ class FSAGraphExporter extends AbstractGraphExporter
     const customSymbols = machineData.symbols;
     if (customSymbols)
     {
-      machineBuilder._symbols.length = 0;
+      machineController.clearCustomSymbols();
       for(const symbol of customSymbols)
       {
-        machineBuilder._symbols.push(symbol);
+        machineController.addCustomSymbol(symbol);
       }
     }
     const statePrefix = machineData.statePrefix;
-    if (statePrefix) machineBuilder.getLabeler().prefix = statePrefix;
+    if (statePrefix)
+    {
+      graphController.getGraphLabeler().setDefaultNodeLabelPrefix(statePrefix);
+    }
 
     return newGraph;
   }
@@ -43,7 +45,6 @@ class FSAGraphExporter extends AbstractGraphExporter
   {
     const graphController = module.getGraphController();
     const machineController = module.getMachineController();
-    const machineBuilder = machineController.getMachineBuilder();
 
     const dst = {};
     dst["_metadata"] = {
@@ -56,7 +57,7 @@ class FSAGraphExporter extends AbstractGraphExporter
       name: machineController.getMachineName(),
       type: machineController.getMachineType(),
       symbols: machineController.getCustomSymbols(),
-      statePrefix: machineBuilder.getLabeler().prefix
+      statePrefix: graphController.getGraphLabeler().getDefaultNodeLabelPrefix()
     };
     return dst;
   }

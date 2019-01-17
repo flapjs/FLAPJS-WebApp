@@ -1,4 +1,7 @@
-import Config from 'config.js';
+const EDGE_RADIUS = 12;
+const EDGE_RADIUS_SQU = EDGE_RADIUS * EDGE_RADIUS;
+const ENDPOINT_RADIUS = 6;
+const ENDPOINT_RADIUS_SQU = ENDPOINT_RADIUS * ENDPOINT_RADIUS;
 
 class GraphPicker
 {
@@ -72,9 +75,10 @@ class GraphPicker
     //Search graph
     for(const node of graph.getNodes())
     {
+      const nodeSize = node.getNodeSize();
       const dx = x - node.x;
       const dy = y - node.y;
-      if (dx * dx + dy * dy < Config.NODE_RADIUS_SQU)
+      if (dx * dx + dy * dy < nodeSize * nodeSize)
       {
         return node;
       }
@@ -87,9 +91,11 @@ class GraphPicker
     const startNode = graph.getStartNode();
     if (!startNode) return null;
 
-    const dx = x - (startNode.x + Config.INITIAL_MARKER_OFFSET_X);
+    const nodeSize = startNode.getNodeSize();
+    const offset = -(nodeSize + (nodeSize / 2));
+    const dx = x - (startNode.x + offset);
     const dy = y - startNode.y;
-    if (dx * dx + dy * dy < Config.EDGE_RADIUS_SQU)
+    if (dx * dx + dy * dy < EDGE_RADIUS_SQU)
     {
       return startNode;
     }
@@ -107,7 +113,7 @@ class GraphPicker
       edge.getCenterPoint(center);
       const dx = x - center.x;
       const dy = y - center.y;
-      if (dx * dx + dy * dy < Config.EDGE_RADIUS_SQU)
+      if (dx * dx + dy * dy < EDGE_RADIUS_SQU)
       {
         return edge;
       }
@@ -124,7 +130,7 @@ class GraphPicker
       edge.getEndPoint(end);
       const dx = x - end.x;
       const dy = y - end.y;
-      if (dx * dx + dy * dy < Config.ENDPOINT_RADIUS_SQU)
+      if (dx * dx + dy * dy < ENDPOINT_RADIUS_SQU)
       {
         return edge;
       }

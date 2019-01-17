@@ -49,17 +49,20 @@ class OverviewPanel extends React.Component
 
   onChangeAutoRename(e)
   {
-    const machineBuilder = this.props.currentModule.getMachineController().getMachineBuilder();
-    machineBuilder.setAutoRenameNodes(e.target.checked);
+    const graphController = this.props.currentModule.getGraphController();
+    graphController.setAutoRenameNodes(e.target.checked);
   }
 
   onSubmitAutoStatePrefix(next, prev)
   {
-    const labeler = this.props.currentModule.getMachineController().getMachineBuilder().getLabeler();
-    if (labeler.prefix != next)
+    const graphController = this.props.currentModule.getGraphController();
+    const graphLabeler = graphController.getGraphLabeler();
+
+    const prefix = graphLabeler.getDefaultNodeLabelPrefix();
+    if (prefix != next)
     {
-      labeler.prefix = next;
-      labeler.sortDefaultNodeLabels();
+      graphLabeler.setDefaultNodeLabelPrefix(next);
+      graphController.applyAutoRename();
     }
   }
 
@@ -90,7 +93,7 @@ class OverviewPanel extends React.Component
       </div>
         <div className="panel-content">
           <select className="machine-type panel-select"
-            value={machineBuilder.getMachineType()}
+            value={machineController.getMachineType()}
             onChange={this.onChangeMachineType}>
             <option value="DFA">DFA</option>
             <option value="NFA">NFA</option>
@@ -119,7 +122,7 @@ class OverviewPanel extends React.Component
                 <h3 style={{marginBottom: "0"}}>State Labels</h3>
                 <div style={{display: "flex", flexDirection: "row"}}>
                   <div className="statetag-container">
-                    <FormattedInput defaultValue={machineBuilder.getLabeler().prefix} style={{width: "4em"}} formatter={this.onAutoStateFormat} captureOnExit="save" onSubmit={this.onSubmitAutoStatePrefix}/>
+                    <FormattedInput defaultValue={graphController.getGraphLabeler().getDefaultNodeLabelPrefix()} style={{width: "4em"}} formatter={this.onAutoStateFormat} captureOnExit="save" onSubmit={this.onSubmitAutoStatePrefix}/>
                   </div>
                   <select style={{
                       background: "none",
@@ -139,7 +142,7 @@ class OverviewPanel extends React.Component
 
                   <input type="checkbox" id="auto-statename"
                     onChange={this.onChangeAutoRename}
-                    checked={machineBuilder.shouldAutoRenameNodes()}/>
+                    checked={graphController.shouldAutoRenameNodes()}/>
                   <label htmlFor="auto-statename">{I18N.toString("options.autolabel")}</label>
                 </div>
               </div>

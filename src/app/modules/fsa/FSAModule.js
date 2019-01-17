@@ -15,11 +15,12 @@ import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
 import FSAGraphOverlayRenderer from './renderer/FSAGraphOverlayRenderer.js';
 import ViewportRenderer from './renderer/ViewportRenderer.js';
 
-import FSABuilder from './builder/FSABuilder.js';
 import GraphLayout from './graph/GraphLayout.js';
 import EventManager from './EventManager.js';
 import LabelEditor from './editor/LabelEditor.js';
 import TestingManager from './testing/TestingManager.js';
+
+import StringTester from 'experimental/panels/test/StringTester.js';
 
 import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
@@ -39,34 +40,27 @@ class FSAModule extends AbstractModule
 
     this._workspace = null;
 
-    this._refreshRate = 60;
-    this._ticks = 0;
-
     this._inputController = new InputController(this, app.getInputAdapter());
     this._graphController = new GraphController(this);
     this._machineController = new MachineController(this);
 
-    this._machineBuilder = new FSABuilder(this._graphController.getGraph());
-
+    //Deprecated (should be anyways)
     this._eventManager = new EventManager(app.getUndoManager());
+    //Deprecated
     this._testingManager = new TestingManager();
+    //Use this instead
+    this._tester = new StringTester();
   }
 
   //Override
   initialize(app)
   {
-    super.initialize(app);
-
     const viewport = app.viewport;
     const workspace = app.workspace;
 
     this._workspace = workspace;
 
-    this._inputController.initialize(this);
-    this._graphController.initialize(this);
-    this._machineController.initialize(this);
-
-    this._machineBuilder.initialize(this);
+    super.initialize(app);
 
     this._eventManager.initialize(this);
 
@@ -89,26 +83,13 @@ class FSAModule extends AbstractModule
 
     this._eventManager.destroy();
 
-    this._machineBuilder.destroy();
-
-    this._machineController.destroy();
-    this._graphController.destroy();
-    this._inputController.destroy();
-
     super.destroy(app);
   }
 
   //Override
   update(app)
   {
-    this._inputController.update(this);
-    this._graphController.update(this);
-
-    if (--this._ticks <= 0)
-    {
-      this._machineBuilder.update(this);
-      this._ticks = this._refreshRate;
-    }
+    super.update(app);
   }
 
   getGraph()
@@ -124,16 +105,6 @@ class FSAModule extends AbstractModule
   getDefaultGraphLayout()
   {
     return GraphLayout;
-  }
-
-  getMachineBuilder()
-  {
-    return this._machineBuilder;
-  }
-
-  getLabelFormatter()
-  {
-    return this._machineBuilder.formatAlphabetString.bind(this._machineBuilder);
   }
 
   getLabelEditor()
@@ -170,6 +141,6 @@ class FSAModule extends AbstractModule
   //Override
   getModuleName() { return "fsa"; }
   //Override
-  getLocalizedModuleName() { return this._machineBuilder.getMachineType(); }
+  getLocalizedModuleName() { return this._machineController.getMachineType(); }
 }
 export default FSAModule;

@@ -16,14 +16,46 @@ class AbstractModule
 {
   constructor(app)
   {
+    if (!app) throw new Error("Missing app for module class");
+
     this._importer = new GraphImporter(this);
   }
 
-  initialize(app) {}
+  initialize(app)
+  {
+    if (!app) throw new Error("Missing app for module initialize");
 
-  destroy(app) {}
+    const inputController = this.getInputController();
+    const graphController = this.getGraphController();
+    const machineController = this.getMachineController();
+    inputController.initialize(this);
+    graphController.initialize(this);
+    machineController.initialize(this);
+  }
 
-  update(app) {}
+  destroy(app)
+  {
+    if (!app) throw new Error("Missing app for module destroy");
+
+    const inputController = this.getInputController();
+    const graphController = this.getGraphController();
+    const machineController = this.getMachineController();
+    machineController.destroy(this);
+    graphController.destroy(this);
+    inputController.destroy(this);
+  }
+
+  update(app)
+  {
+    if (!app) throw new Error("Missing app for module update");
+    
+    const inputController = this.getInputController();
+    const graphController = this.getGraphController();
+    const machineController = this.getMachineController();
+    inputController.update(this);
+    graphController.update(this);
+    machineController.update(this);
+  }
 
   getRenderer(renderLayer) { return null; }
   getInputController() { throw new Error("Missing input controller for module \'" + this.getModuleName() + "\'"); }
@@ -40,6 +72,8 @@ class AbstractModule
   getGraphExporters() { return DEFAULT_GRAPH_EXPORTERS; }
   getGraphImporter() { return this._importer; }
   getModulePanels() { return []; }
+  getModuleViews() { return []; }
+  getModuleMenus() { return []; }
   getModuleVersion() { return '0.0.0'; }
   getModuleName() { throw new Error("Missing module name"); }
   getLocalizedModuleName() { return "Module"; }

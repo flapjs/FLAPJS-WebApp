@@ -25,6 +25,7 @@ class FSAGraphOverlayRenderer extends React.Component
     const graph = graphController.getGraph();
     const viewport = inputController.getInputAdapter().getViewport();
     const machineBuilder = machineController.getMachineBuilder();
+    const machineErrorChecker = machineBuilder.machineErrorChecker;
     const picker = inputController.getPicker();
     const selectionBox = picker.getSelectionBox();
 
@@ -40,19 +41,19 @@ class FSAGraphOverlayRenderer extends React.Component
         toX={selectionBox.toX} toY={selectionBox.toY}/>
 
       {/* Node warning targets */}
-      { machineController.getMachineBuilder().machineErrorChecker.warningNodes.map((e, i) =>
+      { machineErrorChecker && machineErrorChecker.warningNodes.map((e, i) =>
         <HighlightRenderer key={e.getGraphElementID()} className="highlight-warning graph-gui" target={e} type="node" offset="6"/>) }
 
       {/* Edge warning targets */}
-      { machineController.getMachineBuilder().machineErrorChecker.warningEdges.map((e, i) =>
+      { machineErrorChecker && machineErrorChecker.warningEdges.map((e, i) =>
         <HighlightRenderer key={e.getGraphElementID()} className="highlight-warning graph-gui" target={e} type="edge" offset="6"/>) }
 
       {/* Node error targets */}
-      { machineController.getMachineBuilder().machineErrorChecker.errorNodes.map((e, i) =>
+      { machineErrorChecker && machineErrorChecker.errorNodes.map((e, i) =>
         <HighlightRenderer key={e.getGraphElementID()} className="highlight-error graph-gui" target={e} type="node" offset="6"/>) }
 
       {/* Edge error targets */}
-      { machineController.getMachineBuilder().machineErrorChecker.errorEdges.map((e, i) =>
+      { machineErrorChecker && machineErrorChecker.errorEdges.map((e, i) =>
         <HighlightRenderer key={e.getGraphElementID()} className="highlight-error graph-gui" target={e} type="edge" offset="6"/>) }
 
       {/* Node test targets */}

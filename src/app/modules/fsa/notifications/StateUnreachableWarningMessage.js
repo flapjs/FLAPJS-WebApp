@@ -49,7 +49,7 @@ class StateUnreachableWarningMessage extends React.Component
         graphController.deleteTargetNodes(targets);
 
         //Sort the nodes after deleting if enabled...
-        machineController.getMachineBuilder().labeler.sortDefaultNodeLabels();
+        graphController.applyAutoRename();
 
         //Exit the message
         message.close();
