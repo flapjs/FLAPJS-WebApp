@@ -8,7 +8,7 @@ class AbstractModuleMachineController
     this._module = module;
     this._machineBuilder = machineBuilder;
     this._machineUpdateTicks = 0;
-    this._machineUpdateRate = 60;
+    this._machineUpdateRate = 30;
   }
 
   initialize(module) {}
@@ -18,6 +18,7 @@ class AbstractModuleMachineController
   {
     if (--this._machineUpdateTicks <= 0)
     {
+      console.log("UPDATE");
       this._machineBuilder.update(module);
       this._machineUpdateTicks = this._machineUpdateRate;
     }
