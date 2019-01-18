@@ -1,5 +1,7 @@
 //Version 0.3.3
 const changeLog = [
+  "FIXED: Edge cannot be created with default symbols.",
+  "FIXED: Action mode does not show edge creation as an edit"
 ];
 
 /*
