@@ -68,7 +68,6 @@ To make a program that is more accessible and intuitive to use, so we can all be
 ### 0.2.0
 - [x] Module Systems
 - [x] Graph Optimizations
-- [x] Email Exporting
 - [x] Bug Reporting
 
 ### 0.3.0 (Coming Soon)
