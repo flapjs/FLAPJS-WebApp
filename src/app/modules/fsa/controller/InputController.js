@@ -56,7 +56,7 @@ class InputController extends AbstractModuleInputController
   update(module)
   {
     super.update(module);
-    
+
     const graph = this._graphController.getGraph();
     const picker = this._picker;
     const x = this._inputAdapter.getPointerX();
@@ -719,11 +719,11 @@ class InputController extends AbstractModuleInputController
     return this._inputAdapter.isDragging();
   }
 
-  isActionMode(graphController)
+  isActionMode()
   {
     return this._inputAdapter.isPointerActive() ?
       //Is considered an input when NOT moving or when creating a new edge...
-      graphController.isNewEdge || !this.isMoveMode() :
+      this.isNewEdge || !this.isMoveMode() :
       //If not active, just show default input...
       !this._swapMouseScheme;
   }

@@ -16,7 +16,7 @@ class CursorMode extends React.Component
   {
     const inputController = this.props.inputController;
     const graphController = this.props.graphController;
-    const actionMode = inputController.isActionMode(graphController);
+    const actionMode = inputController.isActionMode();
 
     return <div id="cursor-btn">
       <IconButton id="action-mode" className={actionMode ? "active" : ""}
