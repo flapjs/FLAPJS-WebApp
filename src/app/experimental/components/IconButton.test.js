@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import IconButton from './IconButton.js';
 
-describe("IconButton tests", () => {
+describe("IconButton", () => {
   //Test props
   test("can define id by props", () => {
     const id = "SomeID";
