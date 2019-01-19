@@ -32,6 +32,18 @@ class UndoManager
     }
   }
 
+  getPreviousEvent()
+  {
+    if (!this.canUndo()) return null;
+    return this.history[this.history.length - this.offsetIndex - 1];
+  }
+
+  getNextEvent()
+  {
+    if (!this.canRedo()) return null;
+    return this.history[this.history.length - this.offsetIndex + 1];
+  }
+
   undo()
   {
     if (!this.canUndo())
@@ -43,7 +55,7 @@ class UndoManager
     const event = this.history[this.history.length - this.offsetIndex - 1];
     ++this.offsetIndex;
 
-    event.applyUndo();
+    event.applyUndo(undoManager);
   }
 
   canUndo()
@@ -62,7 +74,7 @@ class UndoManager
     --this.offsetIndex;
     const event = this.history[this.history.length - this.offsetIndex - 1];
 
-    event.applyRedo();
+    event.applyRedo(undoManager);
   }
 
   canRedo()

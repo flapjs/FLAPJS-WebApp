@@ -3,15 +3,14 @@
   --color-testing-failure: red;
   --color-testing-working: white;
 
-  padding: 0.5em 0;
-  /*border-top: 1px solid var(--color-drawer-text);
-  border-bottom: 1px solid var(--color-drawer-text);*/
+  padding: 0.5em;
+  padding-top: 0.5em;
+  border-radius: 1em;
+  border: 1px solid var(--color-drawer-back-detail);
 }
 :local(.test_control_tray) {
   display: flex;
   width: 100%;
-
-  margin-bottom: 0.5em;
 }
 :local(.test_control_button) {
   flex: 1;

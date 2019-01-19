@@ -51,6 +51,7 @@ class TestingPanel extends React.Component
         <div className={Style.panel_content}>
           <TestListView tester={tester} graphController={graphController} machineController={machineController}/>
           <PanelCheckbox title={"Step Testing"}/>
+          <PanelCheckbox title={"Automatic Error Checking"}/>
         </div>
       </div>
     );

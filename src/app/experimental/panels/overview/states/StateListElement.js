@@ -115,7 +115,7 @@ class StateListElement extends React.Component
       <div id={this.props.id}
         className={Style.element_container +
           (nodeCustom ? " custom " : "") +
-          (displayValue.length <= 0 ? " empty " : "") +
+          ((!node.getNodeCustom() && displayValue.length <= 0) ? " empty " : "") +
           (inputValue !== null && this.state.error ? " error " : "") +
           (nodeAccept ? " accept " : "") +
           " " + this.props.className}

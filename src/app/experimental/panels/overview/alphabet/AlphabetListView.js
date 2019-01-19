@@ -134,6 +134,7 @@ class AlphabetListView extends React.Component
             onChange={this.onElementChange}/>
         </div>
         <IconButton className={Style.add_button}
+          title="Add Symbol"
           onClick={this.onElementAdd}>
           <BoxAddIcon/>
         </IconButton>

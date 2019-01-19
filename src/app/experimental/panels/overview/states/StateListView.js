@@ -115,6 +115,7 @@ class StateListView extends React.Component
               onChange={this.onElementChange}/>)}
         </div>
         <IconButton className={Style.add_button}
+          title="Add State"
           onClick={this.onElementAdd}>
           <BoxAddIcon/>
         </IconButton>
