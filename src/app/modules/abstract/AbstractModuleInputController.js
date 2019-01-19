@@ -1,8 +1,8 @@
-import AbstractInputController from 'system/inputadapter/AbstractInputController.js';
+import AbstractInputHandler from 'system/inputadapter/AbstractInputHandler.js';
 
 import ViewportInputHandler from './ViewportInputHandler.js';
 
-class AbstractModuleInputController extends AbstractInputController
+class AbstractModuleInputController extends AbstractInputHandler
 {
   constructor(module, inputAdapter)
   {

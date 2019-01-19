@@ -1,7 +1,7 @@
 /**
  * Used by InputAdapter to handle input event logic.
  */
-class AbstractInputController
+class AbstractInputHandler
 {
   constructor() {}
 
@@ -76,4 +76,4 @@ class AbstractInputController
   }
 }
 
-export default AbstractInputController;
+export default AbstractInputHandler;
