@@ -4,19 +4,13 @@ import GraphPicker from './GraphPicker.js';
 import Node from 'modules/fsa/graph/FSANode.js';
 import Edge from 'modules/fsa/graph/FSAEdge.js';
 
-import GraphNodeInputHandler from './GraphNodeInputHandler.js';
-import GraphEdgeInputHandler from './GraphEdgeInputHandler.js';
-import GraphEndpointInputHandler from './GraphEndpointInputHandler.js';
-import GraphInitialInputHandler from './GraphInitialInputHandler.js';
+import GraphNodeInputHandler from './inputhandler/GraphNodeInputHandler.js';
+import GraphEdgeInputHandler from './inputhandler/GraphEdgeInputHandler.js';
+import GraphEndpointInputHandler from './inputhandler/GraphEndpointInputHandler.js';
+import GraphInitialInputHandler from './inputhandler/GraphInitialInputHandler.js';
+import SelectionBoxInputHandler from './inputhandler/SelectionBoxInputHandler.js';
 
 const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
-
-const ELEMENT_HANDLERS = [
-  new GraphNodeInputHandler(),
-  new GraphEdgeInputHandler(),
-  new GraphEndpointInputHandler(),
-  new GraphInitialInputHandler()
-];
 
 class InputController extends AbstractModuleInputController
 {
@@ -48,6 +42,14 @@ class InputController extends AbstractModuleInputController
     this._trashMode = false;
 
     this._disabled = false;
+
+    this._inputHandlers = [
+      new GraphNodeInputHandler(),
+      new GraphEdgeInputHandler(),
+      new GraphEndpointInputHandler(),
+      new GraphInitialInputHandler(),
+      new SelectionBoxInputHandler(this._picker)
+    ];
   }
 
   //Override
@@ -152,9 +154,9 @@ class InputController extends AbstractModuleInputController
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
-    for(const handler of ELEMENT_HANDLERS)
+    for(const handler of this._inputHandlers)
     {
-      if (handler.getTargetType() === targetType &&
+      if (handler.isTargetable(inputController, pointer, target, targetType) &&
         handler.onAction(inputController, graphController, pointer, target))
       {
         return true;
@@ -217,21 +219,13 @@ class InputController extends AbstractModuleInputController
       return false;
     }
 
-    for(const handler of ELEMENT_HANDLERS)
+    for(const handler of this._inputHandlers)
     {
-      if (handler.getTargetType() === targetType &&
+      if (handler.isTargetable(inputController, pointer, target, targetType) &&
         handler.onDragStart(inputController, graphController, pointer, target))
       {
         return true;
       }
-    }
-
-    //If input dragged nothing...
-    if (!inputController.isMoveMode() && targetType === 'none')
-    {
-      //Begin selection box...
-      picker.beginSelection(graphController.getGraph(), pointer.x, pointer.y);
-      return true;
     }
 
     //Override
@@ -249,24 +243,17 @@ class InputController extends AbstractModuleInputController
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
-    for(const handler of ELEMENT_HANDLERS)
+    for(const handler of this._inputHandlers)
     {
-      if (handler.getTargetType() === targetType &&
+      if (handler.isTargetable(inputController, pointer, target, targetType) &&
         handler.onDragMove(inputController, graphController, pointer, target))
       {
         return true;
       }
     }
 
-    //If the selection box is active...
-    if (picker.isSelecting())
-    {
-      //Update the selection box
-      picker.updateSelection(graphController.getGraph(), pointer.x, pointer.y);
-      return true;
-    }
     //Continue to move graph
-    else if (targetType === 'none')
+    if (targetType === 'none')
     {
       //Call super controller at the end...
     }
@@ -287,23 +274,16 @@ class InputController extends AbstractModuleInputController
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
-    for(const handler of ELEMENT_HANDLERS)
+    for(const handler of this._inputHandlers)
     {
-      if (handler.getTargetType() === targetType &&
+      if (handler.isTargetable(inputController, pointer, target, targetType) &&
         handler.onDragStop(inputController, graphController, pointer, target))
       {
         return true;
       }
     }
 
-    //If was trying to select...
-    if (picker.isSelecting())
-    {
-      //Stop selecting stuff, fool.
-      picker.endSelection(graphController.getGraph(), pointer.x, pointer.y);
-      return true;
-    }
-    else if (targetType === 'none')
+    if (targetType === 'none')
     {
       //Do nothing. It should already be moved.
     }

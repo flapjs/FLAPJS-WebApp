@@ -5,7 +5,7 @@ class GraphInitialInputHandler extends GraphElementInputHandler
 {
   constructor()
   {
-    super();
+    super("initial");
   }
 
   //Override
@@ -50,12 +50,6 @@ class GraphInitialInputHandler extends GraphElementInputHandler
     //Reset ghost initial marker
     inputController.ghostInitialMarker = null;
     return true;
-  }
-
-  //Override
-  getTargetType()
-  {
-    return 'initial';
   }
 }
 

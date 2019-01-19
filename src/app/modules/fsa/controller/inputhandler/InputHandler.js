@@ -1,8 +1,8 @@
-class GraphElementInputHandler
+class InputHandler
 {
-  constructor()
+  isTargetable(inputController, pointer, target, targetType)
   {
-
+    return false;
   }
 
   onAction(inputController, graphController, pointer, target)
@@ -24,11 +24,5 @@ class GraphElementInputHandler
   {
     return false;
   }
-
-  getTargetType()
-  {
-    throw new Error("Missing target type for GraphElementInputHandler");
-  }
 }
-
-export default GraphElementInputHandler;
+export default InputHandler;

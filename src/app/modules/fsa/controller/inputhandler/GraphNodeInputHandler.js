@@ -4,7 +4,7 @@ class GraphNodeInputHandler extends GraphElementInputHandler
 {
   constructor()
   {
-    super();
+    super("node");
   }
 
   //Override
@@ -134,12 +134,6 @@ class GraphNodeInputHandler extends GraphElementInputHandler
     }
 
     return false;
-  }
-
-  //Override
-  getTargetType()
-  {
-    return 'node';
   }
 }
 

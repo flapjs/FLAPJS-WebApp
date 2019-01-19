@@ -5,7 +5,7 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
 {
   constructor()
   {
-    super();
+    super("endpoint");
   }
 
   //Override
@@ -129,12 +129,6 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
         return true;
       }
     }
-  }
-
-  //Override
-  getTargetType()
-  {
-    return 'endpoint';
   }
 }
 

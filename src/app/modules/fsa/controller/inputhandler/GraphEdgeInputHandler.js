@@ -4,7 +4,7 @@ class GraphEdgeInputHandler extends GraphElementInputHandler
 {
   constructor()
   {
-    super();
+    super("edge");
   }
 
   //Override
@@ -14,15 +14,13 @@ class GraphEdgeInputHandler extends GraphElementInputHandler
     {
       //Delete a single edge
       graphController.deleteTargetEdge(target);
-      return true;
     }
     else
     {
       //Edit label for selected edge
       graphController.openLabelEditor(target, pointer.x, pointer.y);
-      return true;
     }
-    return false;
+    return true;
   }
 
   //Override
@@ -66,12 +64,6 @@ class GraphEdgeInputHandler extends GraphElementInputHandler
       graphController.emit("edgeMove", graph, target, target.getQuadratic(), graphController.prevQuad);
     }
     return true;
-  }
-
-  //Override
-  getTargetType()
-  {
-    return 'edge';
   }
 }
 
