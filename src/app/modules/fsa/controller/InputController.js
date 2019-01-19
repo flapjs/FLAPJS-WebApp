@@ -1,8 +1,6 @@
 import AbstractModuleInputController from 'modules/abstract/AbstractModuleInputController.js';
 
 import GraphPicker from './GraphPicker.js';
-import Node from 'modules/fsa/graph/FSANode.js';
-import Edge from 'modules/fsa/graph/FSAEdge.js';
 
 import GraphNodeInputHandler from './inputhandler/GraphNodeInputHandler.js';
 import GraphEdgeInputHandler from './inputhandler/GraphEdgeInputHandler.js';
