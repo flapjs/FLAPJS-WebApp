@@ -9,6 +9,7 @@ import GraphEdgeInputHandler from './inputhandler/GraphEdgeInputHandler.js';
 import GraphEndpointInputHandler from './inputhandler/GraphEndpointInputHandler.js';
 import GraphInitialInputHandler from './inputhandler/GraphInitialInputHandler.js';
 import SelectionBoxInputHandler from './inputhandler/SelectionBoxInputHandler.js';
+import GraphNodeCreateInputHandler from './inputhandler/GraphNodeCreateInputHandler.js';
 
 const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
 
@@ -48,7 +49,8 @@ class InputController extends AbstractModuleInputController
       new GraphEdgeInputHandler(),
       new GraphEndpointInputHandler(),
       new GraphInitialInputHandler(),
-      new SelectionBoxInputHandler(this._picker)
+      new SelectionBoxInputHandler(this._picker),
+      new GraphNodeCreateInputHandler()
     ];
   }
 
@@ -163,12 +165,6 @@ class InputController extends AbstractModuleInputController
       }
     }
 
-    if (targetType !== 'none')
-    {
-      //So double click can occur only if not on objects...
-      return true;
-    }
-
     //Override
     return super.onInputEvent(pointer);
   }
@@ -178,20 +174,26 @@ class InputController extends AbstractModuleInputController
   {
     if (this._disabled) return super.onDblInputEvent(pointer);
 
+    const inputController = this;
     const graphController = this._graphController;
-    const x = pointer.x;
-    const y = pointer.y;
+    const picker = inputController.getPicker();
+    const target = picker.initialTarget;
+    const targetType = picker.initialTargetType;
 
-    if (!this.isTrashMode())
-    {
-      //Create state at position
-      graphController.createNode(x, y);
-      return true;
-    }
-    else
+    //Make sure it is not in trash mode
+    if (inputController.isTrashMode())
     {
       graphController.emit("tryCreateWhileTrash");
-      return true;
+      return false;
+    }
+
+    for(const handler of this._inputHandlers)
+    {
+      if (handler.isTargetable(inputController, pointer, target, targetType) &&
+        handler.onDblAction(inputController, graphController, pointer, target))
+      {
+        return true;
+      }
     }
 
     //Override
@@ -252,12 +254,6 @@ class InputController extends AbstractModuleInputController
       }
     }
 
-    //Continue to move graph
-    if (targetType === 'none')
-    {
-      //Call super controller at the end...
-    }
-
     //Override
     return super.onDragMove(pointer);
   }
@@ -281,11 +277,6 @@ class InputController extends AbstractModuleInputController
       {
         return true;
       }
-    }
-
-    if (targetType === 'none')
-    {
-      //Do nothing. It should already be moved.
     }
 
     //Override

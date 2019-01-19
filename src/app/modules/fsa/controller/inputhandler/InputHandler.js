@@ -10,6 +10,11 @@ class InputHandler
     return false;
   }
 
+  onDblAction(inputController, graphController, pointer, target)
+  {
+    return false;
+  }
+
   onDragStart(inputController, graphController, pointer, target)
   {
     return false;
