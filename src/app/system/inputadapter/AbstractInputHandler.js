@@ -68,11 +68,11 @@ class AbstractInputHandler
 
   /**
    * Called by InputAdapter when zoom changes.
-   * Returns true if the zoom change can be applied to the current viewport.
+   * Returns true if event is consumed (zoom will not be applied)
    */
   onZoomChange(pointer, zoomValue, prevValue)
   {
-    return true;
+    return false;
   }
 }
 

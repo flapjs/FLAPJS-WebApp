@@ -12,7 +12,7 @@ class AbstractModuleInputController extends AbstractInputHandler
     if (!inputAdapter) throw new Error("Missing inputAdapter for input controller");
 
     this._module = module;
-    this._inputAdapter = inputAdapter.setController(this);
+    this._inputAdapter = inputAdapter.addInputHandler(this);
 
     this._viewportInputHandler = new ViewportInputHandler();
   }
