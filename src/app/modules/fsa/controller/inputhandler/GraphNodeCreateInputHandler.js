@@ -16,8 +16,21 @@ class GraphNodeCreateInputHandler extends InputHandler
   //Override
   onDblAction(inputController, graphController, pointer, target)
   {
+    let x = pointer.x;
+    let y = pointer.y;
+
+    if (inputController._snapToGrid)
+    {
+      const snapSize = inputController._snapSize;
+      x = Math.round(x / snapSize) * snapSize;
+      y = Math.round(y / snapSize) * snapSize;
+    }
+
     //Create node at position
-    graphController.createNode(pointer.x, pointer.y);
+    const node = graphController.createNode(x, y);
+    //TODO: this allows nodes to move away from other nodes
+    //But undoManager does not recognize it.
+    //graphController.moveNodeTo(pointer, node, x, y);
     return true;
   }
 }

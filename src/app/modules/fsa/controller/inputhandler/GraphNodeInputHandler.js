@@ -1,5 +1,8 @@
 import GraphElementInputHandler from './GraphElementInputHandler.js';
 
+const SNAP_TO_GRID = true;
+const SNAP_SIZE = 48;
+
 class GraphNodeInputHandler extends GraphElementInputHandler
 {
   constructor()
@@ -78,8 +81,15 @@ class GraphNodeInputHandler extends GraphElementInputHandler
   {
     const picker = inputController.getPicker();
     const graph = graphController.getGraph();
-    const x = pointer.x;
-    const y = pointer.y;
+    let x = pointer.x;
+    let y = pointer.y;
+
+    if (inputController._snapToGrid)
+    {
+      const snapSize = inputController._snapSize;
+      x = Math.round(x / snapSize) * snapSize;
+      y = Math.round(y / snapSize) * snapSize;
+    }
 
     if (picker.hasSelection())
     {
