@@ -12,9 +12,9 @@ class AbstractModuleInputController extends AbstractInputHandler
     if (!inputAdapter) throw new Error("Missing inputAdapter for input controller");
 
     this._module = module;
-    this._inputAdapter = inputAdapter.addInputHandler(this);
-
-    this._viewportInputHandler = new ViewportInputHandler();
+    this._inputAdapter = inputAdapter;
+    inputAdapter.addInputHandler(this);
+    inputAdapter.addInputHandler(new ViewportInputHandler());
   }
 
   initialize(module) {}
@@ -30,15 +30,15 @@ class AbstractModuleInputController extends AbstractInputHandler
   //Override
   onDblInputEvent(pointer) { return false; }
   //Override
-  onDragStart(pointer) { return this._viewportInputHandler.onDragStart(pointer); }
+  onDragStart(pointer) { return false; }
   //Override
-  onDragMove(pointer) { return this._viewportInputHandler.onDragMove(pointer); }
+  onDragMove(pointer) { return false; }
   //Override
-  onDragStop(pointer) { return this._viewportInputHandler.onDragStop(pointer); }
+  onDragStop(pointer) { return false; }
   //Override
   onPostInputEvent(pointer) {}
   //Override
-  onZoomChange(pointer, zoomValue, prevValue) { return this._viewportInputHandler.onZoomChange(pointer, zoomValue, prevValue); }
+  onZoomChange(pointer, zoomValue, prevValue) { return false; }
 
   getInputAdapter()
   {

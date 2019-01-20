@@ -18,6 +18,7 @@ class InputAdapter
   constructor()
   {
     this._handlers = [];
+    this._activeDragHandler = null;
 
     this._element = null;
     this._cursor = {
@@ -127,11 +128,11 @@ class InputAdapter
     {
       if (handler[eventName](...eventArgs))
       {
-        return true;
+        return handler;
       }
     }
 
-    return false;
+    return null;
   }
 
   onMouseDown(e)
@@ -392,7 +393,8 @@ class InputAdapter
         this._dragging = true;
 
         //Let others handle this event...
-        if (!this.handleEvent('onDragStart', pointer))
+        const result = this.handleEvent('onDragStart', pointer);
+        if (!result)
         {
           this._dragging = false;
 
@@ -401,6 +403,10 @@ class InputAdapter
 
           //Stop the input event early...
           this.cancelInputEvent();
+        }
+        else
+        {
+          this._activeDragHandler = result;
         }
       }
       else
@@ -411,7 +417,10 @@ class InputAdapter
     else
     {
       //Continue to drag...
-      this.handleEvent('onDragMove', pointer);
+      if (this._activeDragHandler)
+      {
+        this._activeDragHandler.onDragMove(pointer);
+      }
     }
   }
 
@@ -435,7 +444,11 @@ class InputAdapter
     if (this._dragging)
     {
       //Stop dragging!
-      this.handleEvent('onDragStop', pointer);
+      if (this._activeDragHandler)
+      {
+        this._activeDragHandler.onDragStop(pointer);
+        this._activeDragHandler = null;
+      }
     }
     else
     {
