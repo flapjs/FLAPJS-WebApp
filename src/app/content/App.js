@@ -23,6 +23,10 @@ import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
 
+const SMOOTH_OFFSET_DAMPING = 0.4;
+const MIN_SCALE = 0.1;
+const MAX_SCALE = 10;
+
 class App extends React.Component
 {
   constructor(props)
@@ -39,9 +43,9 @@ class App extends React.Component
     //These need to be initialized before module
     this.inputAdapter = new InputAdapter();
     this.inputAdapter.getViewport()
-      .setMinScale(Config.MIN_SCALE)
-      .setMaxScale(Config.MAX_SCALE)
-      .setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
+      .setMinScale(MIN_SCALE)
+      .setMaxScale(MAX_SCALE)
+      .setOffsetDamping(SMOOTH_OFFSET_DAMPING);
 
     this.undoManager = new UndoManager();
 
