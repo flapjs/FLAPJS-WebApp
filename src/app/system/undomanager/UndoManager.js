@@ -55,7 +55,7 @@ class UndoManager
     const event = this.history[this.history.length - this.offsetIndex - 1];
     ++this.offsetIndex;
 
-    event.applyUndo(undoManager);
+    event.applyUndo(this);
   }
 
   canUndo()
@@ -74,7 +74,7 @@ class UndoManager
     --this.offsetIndex;
     const event = this.history[this.history.length - this.offsetIndex - 1];
 
-    event.applyRedo(undoManager);
+    event.applyRedo(this);
   }
 
   canRedo()
