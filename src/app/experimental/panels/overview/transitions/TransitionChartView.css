@@ -1,0 +1,15 @@
+:local(.chart_container) {
+
+}
+
+:local(.chart_container) table {
+
+}
+
+:local(.chart_container) td, :local(.chart_container) th {
+  margin: 0.2em;
+  padding: 0.3em;
+
+  border-radius: 0.5em;
+  background: var(--color-drawer-back-input);
+}

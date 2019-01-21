@@ -242,6 +242,11 @@ class MachineController extends AbstractModuleMachineController
     return this._machineBuilder.getMachine().getStates();
   }
 
+  countStates()
+  {
+    return this.getStates().length;
+  }
+
   getFinalStates()
   {
     return this._machineBuilder.getMachine().getFinalStates();

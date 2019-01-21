@@ -7,6 +7,7 @@ import StateListView from './states/StateListView.js';
 import AlphabetListView from './alphabet/AlphabetListView.js';
 import TransitionTable from './transitions/TransitionTable.js';
 import TransitionFunction from './transitions/TransitionFunction.js';
+import TransitionChartView from './transitions/TransitionChartView.js';
 
 class OverviewPanel extends React.Component
 {
@@ -22,7 +23,6 @@ class OverviewPanel extends React.Component
     const currentModule = this.props.currentModule;
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
-    const machineBuilder = machineController.getMachineBuilder();
 
     const drawerFull = drawer.isDrawerFullscreen();
 
@@ -42,12 +42,17 @@ class OverviewPanel extends React.Component
             <AlphabetListView machineController={machineController}/>
           </PanelSection>
           <div className={Style.panel_divider}></div>
+          {/*
           <PanelSection title={"Transition Chart"} full={drawerFull}>
             <TransitionFunction machineController={machineController}/>
+          </PanelSection>
+          <PanelSection title={"Transition Chart (Alt)"} full={drawerFull}>
+            <TransitionChartView machineController={machineController}/>
           </PanelSection>
           <PanelSection title={"Transition Table"} full={drawerFull}>
             <TransitionTable machineController={machineController}/>
           </PanelSection>
+          */}
           <div className={Style.panel_divider}></div>
           <button>State Labels</button>
           <button>Auto layout</button>
