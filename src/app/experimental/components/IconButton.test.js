@@ -1,28 +1,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { testComponentProps } from 'ComponentTests.js';
 
 import IconButton from './IconButton.js';
 
 describe("IconButton", () => {
   //Test props
-  test("can define id by props", () => {
-    const id = "SomeID";
-    const wrapper = shallow(<IconButton id={id}/>);
-
-    expect(wrapper.prop("id")).toBe(id);
-  });
-  test("can define className by props", () => {
-    const className = "SomeClassName";
-    const wrapper = shallow(<IconButton className={className}/>);
-
-    expect(wrapper.hasClass(className)).toBe(true);
-  });
-  test("can define style by props", () => {
-    const style = {display: "block", margin: 0};
-    const wrapper = shallow(<IconButton style={style}/>);
-
-    expect(wrapper.prop('style')).toEqual(style);
-  });
+  testComponentProps(IconButton);
+  
   test("can be disabled by props", () => {
     const wrapper = shallow(<IconButton disabled={true}/>);
 

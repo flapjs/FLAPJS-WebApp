@@ -10,5 +10,6 @@ module.exports = {
   //Load css modules
   moduleNameMapper: {
     "\\.css$": "identity-obj-proxy"
-  }
+  },
+  moduleDirectories: ["node_modules", "src/test"],
 };

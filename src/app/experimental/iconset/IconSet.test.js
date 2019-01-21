@@ -1,6 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
+import { testComponentProps } from 'ComponentTests.js';
+
 import JPGFileIcon from './flat/JPGFileIcon.js';
 import JSONFileIcon from './flat/JSONFileIcon.js';
 import PNGFileIcon from './flat/PNGFileIcon.js';
@@ -106,24 +108,8 @@ testIconClass(ZoomOutIcon);
 function testIconClass(IconClass)
 {
   //Test props
-  test("can define id by props", () => {
-    const id = "SomeID";
-    const wrapper = shallow(<IconClass id={id}/>);
-
-    expect(wrapper.prop("id")).toBe(id);
-  });
-  test("can define className by props", () => {
-    const className = "SomeClassName";
-    const wrapper = shallow(<IconClass className={className}/>);
-
-    expect(wrapper.hasClass(className)).toBe(true);
-  });
-  test("can define style by props", () => {
-    const style = {display: "block", margin: 0};
-    const wrapper = shallow(<IconClass style={style}/>);
-
-    expect(wrapper.prop('style')).toEqual(style);
-  });
+  testComponentProps(IconClass);
+  
   test("check container component type", () => {
     const wrapper = shallow(<IconClass/>);
 
