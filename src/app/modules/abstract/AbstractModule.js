@@ -7,7 +7,8 @@ import OptionsPanel from './panels/options/OptionsPanel.js';
 export const DEFAULT_GRAPH_EXPORTERS = [];
 export const DEFAULT_IMAGE_EXPORTERS = [
   new GraphImageExporter('png'),
-  new GraphImageExporter('jpg')
+  new GraphImageExporter('jpg'),
+  new GraphImageExporter('svg')
 ];
 //TODO: This is inserted by Drawer.js, not used here. (which is weird)
 export const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];

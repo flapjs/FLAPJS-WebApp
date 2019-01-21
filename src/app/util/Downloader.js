@@ -6,11 +6,27 @@ export function downloadText(filename, textData)
   downloadURL(filename, getTextDataURI(textData));
 }
 
-export function downloadSVG(filename, filetype, svg, width, height)
+function createBlobFromSVG(svg)
 {
   const serializer = new XMLSerializer();
   const svgString = serializer.serializeToString(svg);
   const blob = new Blob([svgString], {type:'image/svg+xml'});
+  return blob
+}
+
+export function downloadSVG(filename, svg)
+{
+  const blob = createBlobFromSVG(svg);
+  const reader = new FileReader();
+  reader.onload = () => {
+    downloadURL(filename + ".svg", reader.result);
+  }
+  reader.readAsDataURL(blob);
+}
+
+export function downloadImageFromSVG(filename, filetype, svg, width, height)
+{
+  const blob = createBlobFromSVG(svg);
   const url = URL.createObjectURL(blob);
 
   const canvas = document.createElement('canvas');

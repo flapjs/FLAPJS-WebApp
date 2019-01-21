@@ -2,7 +2,8 @@ import AbstractGraphExporter from './AbstractGraphExporter.js';
 
 import PNGIcon from 'icons/flat/PNGIcon.js';
 import JPGIcon from 'icons/flat/JPGIcon.js';
-import { downloadSVG } from 'util/Downloader.js';
+import XMLIcon from 'icons/flat/XMLIcon.js';
+import { downloadSVG, downloadImageFromSVG } from 'util/Downloader.js';
 
 class GraphImageExporter extends AbstractGraphExporter
 {
@@ -21,7 +22,11 @@ class GraphImageExporter extends AbstractGraphExporter
     const height = workspaceDim.height;
     const svg = workspace.getSVGForExport(width, height);
 
-    downloadSVG(filename, this._imageType, svg, width, height);
+    if (this._imageType === 'svg') {
+      downloadSVG(filename, svg);
+    } else {
+      downloadImageFromSVG(filename, this._imageType, svg, width, height);
+    }
   }
 
   //Override
@@ -43,6 +48,7 @@ class GraphImageExporter extends AbstractGraphExporter
     {
       case 'png': return I18N.toString("file.export.png.hint");
       case 'jpg': return I18N.toString("file.export.jpg.hint");
+      case 'svg': return "Export diagram as .svg"
       default: return super.getTitle();
     }
   }
@@ -54,6 +60,7 @@ class GraphImageExporter extends AbstractGraphExporter
     {
       case 'png': return I18N.toString("file.export.png");
       case 'jpg': return I18N.toString("file.export.jpg");
+      case 'svg': return "Export diagram as SVG";
       default: return super.getLabel();
     }
   }
@@ -71,6 +78,7 @@ class GraphImageExporter extends AbstractGraphExporter
     {
       case 'png': return PNGIcon;
       case 'jpg': return JPGIcon;
+      case 'svg': return XMLIcon;
       default: return null;
     }
   }
