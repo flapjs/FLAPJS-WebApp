@@ -12,7 +12,7 @@ class FSABuilder extends AbstractMachineBuilder
     super();
 
     this._machine = new NFA();
-    this._machineType = "DFA";
+    this._deterministic = true;
     this._symbols = [];
 
     this._errorChecker = new FSAErrorChecker();
@@ -62,18 +62,17 @@ class FSABuilder extends AbstractMachineBuilder
     }
   }
 
-  setMachineType(machineType)
+  setDeterministic(deterministic)
   {
-    if (this._machineType == machineType) return;
-
-    this._machineType = machineType;
+    if (this._deterministic === deterministic) return;
+    this._deterministic = deterministic;
 
     this.onGraphChange();
   }
 
-  getMachineType()
+  isDeterministic()
   {
-    return this._machineType;
+    return this._deterministic;
   }
 
   addCustomSymbol(symbol)

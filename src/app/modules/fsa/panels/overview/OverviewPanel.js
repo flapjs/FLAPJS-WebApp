@@ -100,7 +100,7 @@ class OverviewPanel extends React.Component
           </select>
 
           {this.state.viewFormal &&
-            <FormalDefinition machineBuilder={machineBuilder}/>}
+            <FormalDefinition machineController={machineController}/>}
 
           {
             !this.state.viewFormal &&

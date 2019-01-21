@@ -43,10 +43,10 @@ class OverviewPanel extends React.Component
           </PanelSection>
           <div className={Style.panel_divider}></div>
           <PanelSection title={"Transition Chart"} full={drawerFull}>
-            <TransitionFunction machineBuilder={machineBuilder}/>
+            <TransitionFunction machineController={machineController}/>
           </PanelSection>
           <PanelSection title={"Transition Table"} full={drawerFull}>
-            <TransitionTable machineBuilder={machineBuilder}/>
+            <TransitionTable machineController={machineController}/>
           </PanelSection>
           <div className={Style.panel_divider}></div>
           <button>State Labels</button>

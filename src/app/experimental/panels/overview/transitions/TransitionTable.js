@@ -24,13 +24,13 @@ class TransitionTable extends React.Component
 
   render()
   {
-    const machineBuilder = this.props.machineBuilder;
-    const machine = machineBuilder.getMachine();
-    const states = machine.getStates();
-    const alphabet = machine.getAlphabet();
-    const transitions = machine.getTransitions();
+    const machineController = this.props.machineController;
+    const machine = machineController.getMachineBuilder().getMachine();
+    const states = machineController.getStates();
+    const alphabet = machineController.getAlphabet();
+    const transitions = machineController.getTransitions();
     const rowAxisType = this.state.rowAxis;
-    const isNFAMachine = machineBuilder.getMachineType() == "NFA";
+    const isNFAMachine = machineController.getMachineType() == "NFA";
     const hasEmptyColumn = rowAxisType === SYMBOL_AXIS && isNFAMachine;
 
     return (

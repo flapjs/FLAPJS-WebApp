@@ -61,12 +61,19 @@ class MachineController extends AbstractModuleMachineController
 
   getMachineType()
   {
-    return this._machineBuilder.getMachineType();
+    return this._machineBuilder.isDeterministic() ? "DFA" : "NFA";
   }
 
   setMachineType(machineType)
   {
-    this._machineBuilder.setMachineType(machineType);
+    if (machineType === "DFA")
+    {
+      this._machineBuilder.setDeterministic(true);
+    }
+    else
+    {
+      this._machineBuilder.setDeterministic(false);
+    }
   }
 
   getMachineName()
@@ -110,7 +117,7 @@ class MachineController extends AbstractModuleMachineController
 
   changeMachineTo(machineType)
   {
-    const prev = this.getMachineBuilder().getMachineType();
+    const prev = this.getMachineType();
     if (prev != machineType)
     {
       this.setMachineType(machineType);
@@ -230,14 +237,14 @@ class MachineController extends AbstractModuleMachineController
     return nodes;
   }
 
-  getMachineType()
-  {
-    return this._machineBuilder.getMachineType();
-  }
-
   getStates()
   {
     return this._machineBuilder.getMachine().getStates();
+  }
+
+  getFinalStates()
+  {
+    return this._machineBuilder.getMachine().getFinalStates();
   }
 
   getTransitions()
