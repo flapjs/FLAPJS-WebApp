@@ -38,7 +38,7 @@ class FSABuilder extends AbstractMachineBuilder
 		for (const node of graphNodes)
 		{
 			const nodeLabel = node.getNodeLabel();
-			const state = new State(nodeLabel, node.getGraphElementID());
+			const state = new State(nodeLabel, node);
 			dst.addState(state);
 
 			if (node.getNodeAccept())
@@ -66,10 +66,12 @@ class FSABuilder extends AbstractMachineBuilder
 				const dstState = dst.getStateByID(dstNode.getGraphElementID());
 				if (!srcState || !dstState) throw new Error("Cannot find state for edge source/destination nodes - mismatch id");
 
-				const edgeSymbols = edge.getEdgeSymbolsFromLabel();
-				for (const symbol of edgeSymbols)
+				const edgeLabelSymbols = edge.getEdgeSymbolsFromLabel();
+				for (const symbol of edgeLabelSymbols)
 				{
-          if (symbol == EMPTY_CHAR)
+					if (!symbol) continue;
+
+          if (symbol === EMPTY_CHAR)
           {
             edgeEmpties.push(edge);
           }

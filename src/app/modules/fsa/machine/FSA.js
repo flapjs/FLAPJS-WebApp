@@ -495,9 +495,9 @@ class FSA
 
     if (custom)
     {
-      if (!this._customAlphabet.has(symbol))
+      if (!this._customSymbols.has(symbol))
       {
-        this._customAlphabet.add(symbol);
+        this._customSymbols.add(symbol);
 
         //Add symbol to alphabet if missing...
         if (!this._alphabet.has(symbol)) this._alphabet.set(symbol, 0);
@@ -505,9 +505,9 @@ class FSA
     }
     else
     {
-      if (this._customAlphabet.has(symbol))
+      if (this._customSymbols.has(symbol))
       {
-        this._customAlphabet.delete(symbol);
+        this._customSymbols.delete(symbol);
 
         //If symbol is unused, delete it
         if (this._alphabet.has(symbol) && this._alphabet.get(symbol) <= 0) this._alphabet.delete(symbol)
@@ -517,7 +517,7 @@ class FSA
 
   isCustomSymbol(symbol)
   {
-    return this._customAlphabet.has(symbol);
+    return this._customSymbols.has(symbol);
   }
 
   getCustomSymbols()
