@@ -43,7 +43,7 @@ class InputController extends AbstractModuleInputController
     this._disabled = false;
 
     //TODO: this works, it's just not attached to anything
-    this._snapToGrid = true;
+    this._snapToGrid = false;
     this._snapSize = 48;
 
     this._inputHandlers = [
