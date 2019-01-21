@@ -235,6 +235,16 @@ class MachineController extends AbstractModuleMachineController
     return this._machineBuilder.getMachineType();
   }
 
+  getStates()
+  {
+    return this._machineBuilder.getMachine().getStates();
+  }
+
+  getTransitions()
+  {
+    return this._machineBuilder.getMachine().getTransitions();
+  }
+
   getAlphabet()
   {
     const machine = this._machineBuilder.getMachine();

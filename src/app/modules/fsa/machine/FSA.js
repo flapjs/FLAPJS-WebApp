@@ -525,6 +525,11 @@ class FSA
     return this._customSymbols;
   }
 
+  clearCustomSymbols()
+  {
+    this._customSymbols.clear();
+  }
+
   isUsedSymbol(symbol)
   {
     return this._alphabet.has(symbol) && this._alphabet.get(symbol) > 0;

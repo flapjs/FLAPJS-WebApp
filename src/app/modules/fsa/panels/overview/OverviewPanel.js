@@ -111,8 +111,8 @@ class OverviewPanel extends React.Component
                   <AlphabetList machineController={machineController}/>
                 </div>
                 <div className="graphinfo">
-                  <TransitionFunction machineBuilder={machineBuilder}/>
-                  <TransitionTable machineBuilder={machineBuilder}/>
+                  <TransitionFunction machineController={machineController}/>
+                  <TransitionTable machineController={machineController}/>
                 </div>
               </div>
               <hr/>
