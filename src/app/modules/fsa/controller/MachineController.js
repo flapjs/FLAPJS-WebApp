@@ -10,15 +10,11 @@ class MachineController extends AbstractModuleMachineController
 {
   constructor(module)
   {
-    super(module);
+    super(module, new FSABuilder());
 
     this.machineName = null;
 
     this.graphController = null;
-
-    this._machineBuilder = new FSABuilder();
-    this._refreshRate = 60;
-    this._ticks = 0;
 
     //userChangeMachine(machineBuilder, nextMachineType, prevMachineType) - when user changes machine type
     this.registerEvent("userChangeMachine");
@@ -47,14 +43,13 @@ class MachineController extends AbstractModuleMachineController
 
     this.graphController = module.getGraphController();
 
-    this._machineBuilder.initialize(module);
+    //HACK: this is only to support the old FSABuilder (remove this once finished)
+    this.getMachineBuilder().initialize(module);
   }
 
   //Override
   destroy(module)
   {
-    this._machineBuilder.destroy();
-
     super.destroy(module);
   }
 
@@ -62,27 +57,23 @@ class MachineController extends AbstractModuleMachineController
   update(module)
   {
     super.update(module);
-    
-    if (--this._ticks <= 0)
-    {
-      this._machineBuilder.update(this);
-      this._ticks = this._refreshRate;
-    }
-  }
-
-  getMachineBuilder()
-  {
-    return this._machineBuilder;
   }
 
   getMachineType()
   {
-    return this.getMachineBuilder().getMachineType();
+    return this._machineBuilder.isDeterministic() ? "DFA" : "NFA";
   }
 
   setMachineType(machineType)
   {
-    this.getMachineBuilder().setMachineType(machineType);
+    if (machineType === "DFA")
+    {
+      this._machineBuilder.setDeterministic(true);
+    }
+    else
+    {
+      this._machineBuilder.setDeterministic(false);
+    }
   }
 
   getMachineName()
@@ -126,7 +117,7 @@ class MachineController extends AbstractModuleMachineController
 
   changeMachineTo(machineType)
   {
-    const prev = this.getMachineBuilder().getMachineType();
+    const prev = this.getMachineType();
     if (prev != machineType)
     {
       this.setMachineType(machineType);
@@ -214,14 +205,64 @@ class MachineController extends AbstractModuleMachineController
     }
   }
 
-  getMachineType()
+  getUnreachableNodes()
   {
-    return this._machineBuilder.getMachineType();
+    const graphController = this.graphController;
+    const graph = graphController.getGraph();
+    if (graph.getNodeCount() <= 1) return [];
+
+    const edges = graph.getEdges();
+    const nodes = graph.getNodes().slice();
+    const startNode = nodes.shift();
+    let nextNodes = [];
+    nextNodes.push(startNode);
+
+    while(nextNodes.length > 0)
+    {
+      const node = nextNodes.pop();
+      for(const edge of edges)
+      {
+        if (edge.getSourceNode() === node)
+        {
+          const i = nodes.indexOf(edge.getDestinationNode());
+          if (i >= 0)
+          {
+            const nextNode = nodes.splice(i, 1)[0];
+            nextNodes.push(nextNode);
+          }
+        }
+      }
+    }
+
+    return nodes;
+  }
+
+  getStates()
+  {
+    return this._machineBuilder.getMachine().getStates();
+  }
+
+  getFinalStates()
+  {
+    return this._machineBuilder.getMachine().getFinalStates();
+  }
+
+  getTransitions()
+  {
+    return this._machineBuilder.getMachine().getTransitions();
   }
 
   getAlphabet()
   {
-    return this.getMachineBuilder().getAlphabet();
+    const machine = this._machineBuilder.getMachine();
+    const result = [];
+    machine.getAlphabet(result);
+    return result;
+  }
+
+  isUsedSymbol(symbol)
+  {
+    return !this.isCustomSymbol(symbol);
   }
 
   createSymbol(symbol)
@@ -308,6 +349,16 @@ class MachineController extends AbstractModuleMachineController
   isCustomSymbol(symbol)
   {
     return this.getMachineBuilder().isCustomSymbol(symbol);
+  }
+
+  addCustomSymbol(symbol)
+  {
+    this.getMachineBuilder().addCustomSymbol(symbol);
+  }
+
+  clearCustomSymbols()
+  {
+    this.getMachineBuilder()._symbols.length = 0;
   }
 }
 Eventable.mixin(MachineController);

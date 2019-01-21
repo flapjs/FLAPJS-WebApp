@@ -25,7 +25,7 @@ class AnalysisPanel extends React.Component
     const currentModule = this.props.currentModule;
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
-    const unreachableArray = machineController.getMachineBuilder().machineErrorChecker.getUnreachableNodes();
+    const unreachableArray = machineController.getUnreachableNodes();
     graphController.deleteTargetNodes(unreachableArray);
   }
 
@@ -70,6 +70,7 @@ class AnalysisPanel extends React.Component
 
     const graph = graphController.getGraph();
     const machineBuilder = machineController.getMachineBuilder();
+    const machineType = machineController.getMachineType();
 
     return <div className={"panel-container " + this.props.className} id="analysis" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title"><h1>{I18N.toString("component.analysis.title")}</h1></div>
@@ -93,12 +94,12 @@ class AnalysisPanel extends React.Component
 
         <hr/>
         {
-          machineBuilder.getMachineType() == "DFA" ?
+          machineType == "DFA" ?
             <button className="panel-button" onClick={this.onConvertToNFA}
              disabled={this.props.currentModule.getGraphController().getGraph().isEmpty()}>
               {I18N.toString("action.overview.convertnfa")}
             </button>
-          : machineBuilder.getMachineType() == "NFA" ?
+          : machineType == "NFA" ?
             <button className="panel-button" onClick={this.onConvertToDFA}
              disabled={this.props.currentModule.getGraphController().getGraph().isEmpty()}>
               {I18N.toString("action.overview.convertdfa")}

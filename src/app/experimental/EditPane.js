@@ -21,7 +21,7 @@ class EditPane extends React.Component
     const inputController = currentModule.getInputController();
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
-    const inputActionMode = inputController.isActionMode(graphController);
+    const inputActionMode = inputController.isActionMode();
     const LabelEditor = currentModule.getLabelEditor();
 
     return (

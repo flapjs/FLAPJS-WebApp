@@ -34,10 +34,8 @@ class TestingManager
 
   setErrorCheckMode(mode)
   {
-    const machineBuilder = this.machineController.getMachineBuilder();
-
     //Update machine builder error checker
-    machineBuilder.setMachineType(machineBuilder.getMachineType());
+    this.machineController.setMachineType(this.machineController.getMachineType());
 
     if (mode == TestingManager.NO_ERROR_CHECK)
     {

@@ -7,3 +7,13 @@
   display: flex;
   flex-direction: column;
 }
+:local(.panel_divider) {
+  border: 1px solid black;
+  margin: 0.5em 0em;
+}
+/*
+:local(.panel_content) section button {
+  border: none;
+  padding: 0;
+}
+*/

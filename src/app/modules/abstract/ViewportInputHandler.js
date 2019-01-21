@@ -1,6 +1,6 @@
-import AbstractInputController from 'system/inputadapter/AbstractInputController.js';
+import AbstractInputHandler from 'system/inputadapter/AbstractInputHandler.js';
 
-class ViewportInputHandler extends AbstractInputController
+class ViewportInputHandler extends AbstractInputHandler
 {
   constructor()
   {
@@ -9,7 +9,7 @@ class ViewportInputHandler extends AbstractInputController
     this._prevX = 0;
     this._prevY = 0;
   }
-  
+
   //Override
   onDragStart(pointer)
   {

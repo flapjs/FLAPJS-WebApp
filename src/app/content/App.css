@@ -49,9 +49,13 @@
   --color-selection-border: #000000;
 }
 
-@keyframes fadein {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+@keyframes app-in {
+  0% { transform: translateY(100vh); }
+  100% { transform: translateY(0vh); }
+}
+@keyframes app-out {
+  0% { transform: translateY(0vh); }
+  100% { transform: translateY(100vh); }
 }
 
 /*For hiding scrollbars*/
@@ -65,8 +69,6 @@
 */
 
 .app-container {
-  animation: fadein 1s;
-
   display: flex;
   flex-direction: column;
   height: 100%;

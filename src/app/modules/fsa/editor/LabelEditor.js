@@ -27,7 +27,6 @@ class LabelEditor extends React.Component
 
     //HACK: this is so if the click is focused back to the label editor, then it will NOT close
     this._timer = null;
-    this._prevValue = "";
 
     this.state = {
       target: null,
@@ -54,10 +53,10 @@ class LabelEditor extends React.Component
       };
     });
 
-    this.inputElement.resetValue(targetEdge.getEdgeLabel(), () => {
+    const edgeLabel = targetEdge.getEdgeLabel();
+    this.inputElement.resetValue(edgeLabel, () => {
       if (defaultText) this.inputElement.setValue(defaultText);
 
-      this._prevValue = targetEdge.getEdgeLabel();
       this.parentElement.focus();
       this.inputElement.focus(replace);
     });
@@ -127,9 +126,8 @@ class LabelEditor extends React.Component
 
   onSubmit(newValue, prevValue)
   {
-    //this._prevValue = newValue;
     //If the value has changed or the value remained empty...
-    if (newValue != prevValue)
+    if (newValue !== prevValue)
     {
       //this.closeEditor(true);
     }
@@ -178,7 +176,7 @@ class LabelEditor extends React.Component
       targetStyle.left = (x + offsetX) + "px";
     }
 
-    const usedAlphabet = machineController.getMachineBuilder().getMachine().getAlphabet();
+    const usedAlphabet = machineController.getAlphabet();
 
     return <div className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
       tabIndex={"0"/*This is to allow div's to focus/blur*/}

@@ -1,38 +1,24 @@
+import AbstractMachineBuilder from 'modules/abstract/AbstractMachineBuilder.js';
 import FSA, { EMPTY_SYMBOL, State } from './FSA.js';
 import FSANode from 'modules/fsa/graph/FSANode.js';
 import FSAEdge, { EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
 
-class FSABuilder
+class FSABuilder extends AbstractMachineBuilder
 {
-	constructor(graph)
+	constructor()
 	{
-		this._graph = graph;
+		super();
+
 		this._machine = new FSA();
-
-		this._cachedGraphHash = 0;
-		this._timer = null;
-
-		this._errors = [];
-		this._warnings = [];
 	}
 
-	update()
-	{
-		const graph = this._graph;
-		const graphHash = graph.getHashCode(false);
-		if (graphHash !== this._cachedGraphHash)
-		{
-			this._cachedGraphHash = graphHash;
-			this.onGraphChange(graph);
-		}
-	}
-
+	//Override
 	onGraphChange(graph)
 	{
 		this.attemptBuild(graph, this._machine, this._errors, this._warnings);
 	}
 
-	attemptBuild(graph, dst, errors = [], warnings = [])
+	attemptBuild(graph, dst, errors=[], warnings=[])
 	{
 		errors.length = 0;
 		warnings.length = 0;
@@ -131,6 +117,7 @@ class FSABuilder
 		}
 	}
 
+	//Override
 	getMachine()
 	{
 		return this._machine;
@@ -145,7 +132,5 @@ class FSABuilder
 //Machine Changes -> Graph (Apply them as they happen)
 //Any change to machine does.
 //Machine Conversion -> Graph (Reconstruct the entire graph from machine, then apply layout)
-
-
 
 export default FSABuilder;

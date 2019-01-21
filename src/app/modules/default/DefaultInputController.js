@@ -652,11 +652,11 @@ class DefaultInputController extends AbstractModuleInputController
     return this._inputAdapter.isDragging();
   }
 
-  isActionMode(graphController)
+  isActionMode()
   {
     return this._inputAdapter.isPointerActive() ?
       //Is considered an input when NOT moving or when creating a new edge...
-      graphController.isNewEdge || !this.isMoveMode() :
+      this.isNewEdge || !this.isMoveMode() :
       //If not active, just show default input...
       !this._swapMouseScheme;
   }

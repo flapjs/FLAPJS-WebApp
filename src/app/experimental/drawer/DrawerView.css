@@ -13,12 +13,12 @@
 /********* APP VIEWPORT *********/
 :local(.app_viewport) {
 
-  --color-viewport-back: white;
-  --color-viewport-back-detail: lightgray;
+  --color-viewport-back: var(--color-background);
+  --color-viewport-back-detail: var(--color-background-lite);
   --color-viewport-outline: rgba(0, 0, 0, 0.03);
-  --color-viewport-text: black;
-  --color-viewport-text-active: gray;
-  --color-viewport-error: red;
+  --color-viewport-text: var(--color-surface-text);
+  --color-viewport-text-active: var(--color-background-active);
+  --color-viewport-error: var(--color-error);
 
   flex: 1;
 
@@ -37,17 +37,20 @@
   --drawer-tab-height: 32px;
   --drawer-handle-width: 4px;/* 12px on open */
 
-  --color-drawer-back: darkgray;
-  --color-drawer-back-detail: gray;
-  --color-drawer-text: black;
-  --color-drawer-text-active: white;
-  --color-drawer-text-disabled: gray;
-  --color-drawer-handle: gray;
-  --color-drawer-handle-detail: darkgray;
-  --color-drawer-tab: darkgray;
-  --color-drawer-tab-text: black;
-  --color-drawer-tab-text-active: white;
-  --color-drawer-tab-highlight: gold;
+  --color-drawer-back: var(--color-surface);
+  --color-drawer-back-detail: var(--color-surface-dark);
+  --color-drawer-back-input: var(--color-surface-lite);
+  --color-drawer-text: var(--color-surface-text);
+  --color-drawer-text-active: var(--color-surface-active);
+  --color-drawer-text-disabled: var(--color-surface-dark);
+  --color-drawer-error: var(--color-error);
+
+  --color-drawer-handle: var(--color-surface-dark);
+  --color-drawer-handle-detail: var(--color-surface);
+  --color-drawer-tab: var(--color-surface);
+  --color-drawer-tab-text: var(--color-surface-text);
+  --color-drawer-tab-text-active: var(--color-surface-active);
+  --color-drawer-tab-highlight: var(--color-accent);
   --color-drawer-shadow: rgba(0, 0, 0, 0.5);
 
   position: relative;

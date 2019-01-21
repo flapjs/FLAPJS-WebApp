@@ -2,12 +2,12 @@ class AbstractEventHandler
 {
   constructor() {}
 
-  applyUndo()
+  applyUndo(undoManager)
   {
     throw new Error("Undo operation for handler not supported");
   }
 
-  applyRedo()
+  applyRedo(undoManager)
   {
     throw new Error("Redo operation for handler not supported");
   }
