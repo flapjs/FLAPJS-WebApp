@@ -1,5 +1,12 @@
 import React from 'react';
 
+const SUBMIT_KEY = "Enter";
+const CANCEL_KEY = "Escape";
+
+export const CAPTURE_NONE = "none";
+export const CAPTURE_SAVE = "save";
+export const CAPTURE_RESET = "reset";
+
 class FormattedInput extends React.Component
 {
   constructor(props)
@@ -82,7 +89,7 @@ class FormattedInput extends React.Component
 
   onBlur(e)
   {
-    if (this.ignoreSaveOnExit || this.props.captureOnExit == "none")
+    if (this.ignoreSaveOnExit || this.props.captureOnExit === CAPTURE_NONE)
     {
       //For those you choose to handle exit, it's value should remain correct.
       const result = this.formatValue(e.target.value);
@@ -90,10 +97,8 @@ class FormattedInput extends React.Component
 
       //Don't ignore it for the future.
       this.ignoreSaveOnExit = false;
-      return;
     }
-
-    if (this.props.captureOnExit == "save")
+    else if (this.props.captureOnExit === CAPTURE_SAVE)
     {
       const prev = this.state.prevValue;
       const next = e.target.value || this.props.defaultValue || "";
@@ -104,7 +109,7 @@ class FormattedInput extends React.Component
         }
       });
     }
-    else if (this.props.captureOnExit == "reset")
+    else if (this.props.captureOnExit === CAPTURE_RESET)
     {
       this.resetValue(null);
     }
@@ -112,7 +117,7 @@ class FormattedInput extends React.Component
 
   onKeyUp(e)
   {
-    if (e.key == "Enter")
+    if (e.key === SUBMIT_KEY)
     {
       if (this.props.multiline && e.shiftKey)
       {
@@ -121,7 +126,7 @@ class FormattedInput extends React.Component
 
       const prev = this.state.prevValue;
       const next = e.target.value || this.props.defaultValue || "";
-      this.resetValue(next, () => {
+      this.setValue(next, () => {
         this.ignoreSaveOnExit = true;
 
         if (this.props.onSubmit)
@@ -135,7 +140,7 @@ class FormattedInput extends React.Component
       e.stopPropagation();
       return false;
     }
-    else if (e.key == "Escape")
+    else if (e.key === CANCEL_KEY)
     {
       const prev = this.state.prevValue;
       this.resetValue(prev, () => {
@@ -159,7 +164,9 @@ class FormattedInput extends React.Component
     if (newValue !== null)
     {
       const result = this.formatValue(newValue);
-      this.setState({value: result, prevValue: result}, callback);
+      //NOTE: this uses newValue cause formatValue may introduce values
+      //which should be saved on exit. Therefore prev and next must be diff.
+      this.setState({value: result, prevValue: newValue}, callback);
     }
     else
     {

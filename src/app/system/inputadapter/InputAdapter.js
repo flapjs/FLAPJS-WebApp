@@ -1,17 +1,25 @@
-import Config from 'config.js';
-
 import InputPointer from './InputPointer.js';
 import ViewportAdapter from './ViewportAdapter.js';
 
+const LONG_TAP_TICKS = 600;
+const DOUBLE_TAP_TICKS = 600;
+const SCROLL_SENSITIVITY = 1.0 / 300.0;
+const CURSOR_RADIUS = 4;
+const CURSOR_RADIUS_SQU = CURSOR_RADIUS * CURSOR_RADIUS;
+const DRAGGING_BUFFER = 18;
+const DRAGGING_BUFFER_SQU = DRAGGING_BUFFER * DRAGGING_BUFFER;
+
 /**
- * Provides an interface for InputController to interact with a HTMLElement.
+ * Provides an interface for input handlers to interact with a HTMLElement.
  * Each listenable element should correspond to only a single InputAdapter.
  */
 class InputAdapter
 {
   constructor()
   {
-    this._controller = null;
+    this._handlers = [];
+    this._activeDragHandler = null;
+
     this._element = null;
     this._cursor = {
       _mousemove: null,
@@ -29,11 +37,11 @@ class InputAdapter
     this._dragging = false;
     this._altinput = false;
 
-    this._holdInputDelay = Config.LONG_TAP_TICKS;
-    this._dblInputDelay = Config.DOUBLE_TAP_TICKS;
-    this._scrollSensitivity = Config.SCROLL_SENSITIVITY;
-    this._minTapRadius = Config.CURSOR_RADIUS_SQU * 16;
-    this._draggingRadiusSqu = Config.CURSOR_RADIUS_SQU + Config.DRAGGING_BUFFER_SQU;
+    this._holdInputDelay = LONG_TAP_TICKS;
+    this._dblInputDelay = DOUBLE_TAP_TICKS;
+    this._scrollSensitivity = SCROLL_SENSITIVITY;
+    this._minTapRadius = CURSOR_RADIUS_SQU * 16;
+    this._draggingRadiusSqu = CURSOR_RADIUS_SQU + DRAGGING_BUFFER_SQU;
 
     this._prevEmptyInput = false;
     this._prevEmptyTime = 0;
@@ -54,10 +62,28 @@ class InputAdapter
     this.onDelayedInputDown = this.onDelayedInputDown.bind(this);
   }
 
-  setController(controller)
+  addInputHandler(handler)
   {
-    this._controller = controller;
+    this._handlers.push(handler);
     return this;
+  }
+
+  removeInputHandler(handler)
+  {
+    const index = this._handlers.indexOf(handler);
+    if (index < 0) return false;
+    this._handlers.splice(index, 1);
+    return true;
+  }
+
+  clearInputHandlers()
+  {
+    this._handlers.clear();
+  }
+
+  hasInputHandlers()
+  {
+    return this._handlers.length > 0;
   }
 
   initialize(element)
@@ -95,9 +121,23 @@ class InputAdapter
     this._viewport.update();
   }
 
+  handleEvent(eventName, ...eventArgs)
+  {
+    //Let others handle this event...
+    for(const handler of this._handlers)
+    {
+      if (handler[eventName](...eventArgs))
+      {
+        return handler;
+      }
+    }
+
+    return null;
+  }
+
   onMouseDown(e)
   {
-    if (!this._controller) return false;
+    if (!this.hasInputHandlers()) return false;
 
     e.stopPropagation();
     e.preventDefault();
@@ -140,7 +180,7 @@ class InputAdapter
 
   onMouseMove(e)
   {
-    if (!this._controller) return false;
+    if (!this.hasInputHandlers()) return false;
 
     const mouse = this._viewport.transformScreenToView(e.clientX, e.clientY);
     this._pointer.setPosition(mouse.x, mouse.y);
@@ -150,7 +190,7 @@ class InputAdapter
 
   onMouseDownThenMove(e)
   {
-    if (!this._controller) return false;
+    if (!this.hasInputHandlers()) return false;
 
     e.stopPropagation();
     e.preventDefault();
@@ -162,7 +202,7 @@ class InputAdapter
 
   onMouseDownThenUp(e)
   {
-    if (!this._controller) return false;
+    if (!this.hasInputHandlers()) return false;
 
     e.stopPropagation();
     e.preventDefault();
@@ -189,7 +229,7 @@ class InputAdapter
 
   onTouchStart(e)
   {
-    if (!this._controller) return false;
+    if (!this.hasInputHandlers()) return false;
 
     if (e.changedTouches.length == 1)
     {
@@ -233,7 +273,7 @@ class InputAdapter
 
   onTouchStartThenEnd(e)
   {
-    if (!this._controller) return false;
+    if (!this.hasInputHandlers()) return false;
 
     e.stopPropagation();
     e.preventDefault();
@@ -261,7 +301,7 @@ class InputAdapter
 
   onTouchStartThenMove(e)
   {
-    if (!this._controller) return false;
+    if (!this.hasInputHandlers()) return false;
 
     e.stopPropagation();
     e.preventDefault();
@@ -274,7 +314,7 @@ class InputAdapter
 
   onContextMenu(e)
   {
-    if (!this._controller) return false;
+    if (!this.hasInputHandlers()) return false;
 
     e.stopPropagation();
     e.preventDefault();
@@ -284,18 +324,18 @@ class InputAdapter
 
   onWheel(e)
   {
-    if (!this._controller) return false;
+    if (!this.hasInputHandlers()) return false;
 
     e.stopPropagation();
     e.preventDefault();
 
-    const controller = this._controller;
     const pointer = this._pointer;
     const dy = e.deltaY * this._scrollSensitivity;
     const prev = this._viewport.getScale();
     const next = prev + dy;
 
-    if (controller.onZoomChange(pointer, next, prev))
+    //Let others handle this event...
+    if (!this.handleEvent('onZoomChange', pointer, next, prev))
     {
       this._viewport.setScale(next);
     }
@@ -305,11 +345,10 @@ class InputAdapter
 
   onInputDown(x, y, button)
   {
-    if (!this._controller) throw new Error("Missing controller for input adapter");
+    if (!this.hasInputHandlers()) throw new Error("Missing handlers for input adapter");
 
     //Setup for hold timer...
     const cursor = this._cursor;
-    const controller = this._controller;
     const pointer = this._pointer;
     const mouse = this._viewport.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
@@ -317,7 +356,8 @@ class InputAdapter
     this._dragging = false;
     this._altinput = button == 2;
 
-    if (!controller.onPreInputEvent(pointer))
+    //Let others handle this event...
+    if (!this.handleEvent('onPreInputEvent', pointer))
     {
       pointer.beginInput();
       cursor._timer = setTimeout(this.onDelayedInputDown, this._holdInputDelay);
@@ -329,7 +369,7 @@ class InputAdapter
 
   onDelayedInputDown()
   {
-    if (!this._controller) throw new Error("Missing controller for input adapter");
+    if (!this.hasInputHandlers()) throw new Error("Missing handlers for input adapter");
 
     //That means the input is remaining still (like a hold)...
     if (!this._dragging)
@@ -340,9 +380,8 @@ class InputAdapter
 
   onInputMove(x, y)
   {
-    if (!this._controller) throw new Error("Missing controller for input adapter");
+    if (!this.hasInputHandlers()) throw new Error("Missing handlers for input adapter");
 
-    const controller = this._controller;
     const pointer = this._pointer;
     const mouse = this._viewport.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
@@ -352,7 +391,10 @@ class InputAdapter
       if (pointer.getDistanceSquToInitial() > this._draggingRadiusSqu)
       {
         this._dragging = true;
-        if (!controller.onDragStart(pointer))
+
+        //Let others handle this event...
+        const result = this.handleEvent('onDragStart', pointer);
+        if (!result)
         {
           this._dragging = false;
 
@@ -361,6 +403,10 @@ class InputAdapter
 
           //Stop the input event early...
           this.cancelInputEvent();
+        }
+        else
+        {
+          this._activeDragHandler = result;
         }
       }
       else
@@ -371,13 +417,16 @@ class InputAdapter
     else
     {
       //Continue to drag...
-      controller.onDragMove(pointer);
+      if (this._activeDragHandler)
+      {
+        this._activeDragHandler.onDragMove(pointer);
+      }
     }
   }
 
   onInputUp(x, y)
   {
-    if (!this._controller) throw new Error("Missing controller for input adapter");
+    if (!this.hasInputHandlers()) throw new Error("Missing handlers for input adapter");
 
     const cursor = this._cursor;
     const timer = cursor._timer;
@@ -388,7 +437,6 @@ class InputAdapter
     }
 
     //Update pointer target to final position
-    const controller = this._controller;
     const pointer = this._pointer;
     const mouse = this._viewport.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
@@ -396,22 +444,23 @@ class InputAdapter
     if (this._dragging)
     {
       //Stop dragging!
-      controller.onDragStop(pointer);
+      if (this._activeDragHandler)
+      {
+        this._activeDragHandler.onDragStop(pointer);
+        this._activeDragHandler = null;
+      }
     }
     else
     {
       if (this._altinput)
       {
         //Alt Tap!
-        controller.onAltInputEvent(pointer);
+        this.handleEvent('onAltInputEvent', pointer);
       }
       else
       {
-        //Tap!
-        const result = controller.onInputEvent(pointer);
-
         //If the input was not consumed...
-        if (!result)
+        if (!this.handleEvent('onInputEvent', pointer))
         {
           //Try for double tap...
           const dx = x - this._prevEmptyX;
@@ -423,7 +472,7 @@ class InputAdapter
             dt < this._dblInputDelay)
           {
             //Double tap!
-            controller.onDblInputEvent(pointer);
+            this.handleEvent('onDblInputEvent', pointer);
 
             this._prevEmptyInput = false;
           }
@@ -439,12 +488,11 @@ class InputAdapter
     }
 
     pointer.endInput();
-    controller.onPostInputEvent(pointer);
+    this.handleEvent('onPostInputEvent', pointer);
   }
 
   cancelInputEvent()
   {
-    const controller = this._controller;
     const pointer = this._pointer;
     const cursor = this._cursor;
 
@@ -469,7 +517,7 @@ class InputAdapter
     }
 
     pointer.endInput();
-    controller.onPostInputEvent(pointer);
+    this.handleEvent('onPostInputEvent', pointer);
   }
 
   getActiveElement()

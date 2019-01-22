@@ -1,7 +1,10 @@
 import AbstractModuleMachineController from 'modules/abstract/AbstractModuleMachineController.js';
 import Eventable from 'util/Eventable.js';
 
+//import FSABuilder from 'modules/fsa/machine/FSABuilder.js';
+//HACK: this is only to support the old FSABuilder (remove this once finished)
 import FSABuilder from 'modules/fsa/builder/FSABuilder.js';
+
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import { convertToDFA } from 'machine/util/convertNFA.js';
 import DFA from 'machine/DFA.js';
@@ -10,15 +13,11 @@ class MachineController extends AbstractModuleMachineController
 {
   constructor(module)
   {
-    super(module);
+    super(module, new FSABuilder());
 
     this.machineName = null;
 
     this.graphController = null;
-
-    this._machineBuilder = new FSABuilder();
-    this._refreshRate = 60;
-    this._ticks = 0;
 
     //userChangeMachine(machineBuilder, nextMachineType, prevMachineType) - when user changes machine type
     this.registerEvent("userChangeMachine");
@@ -47,14 +46,13 @@ class MachineController extends AbstractModuleMachineController
 
     this.graphController = module.getGraphController();
 
-    this._machineBuilder.initialize(module);
+    //HACK: this is only to support the old FSABuilder (remove this once finished)
+    this.getMachineBuilder().initialize(module);
   }
 
   //Override
   destroy(module)
   {
-    this._machineBuilder.destroy();
-
     super.destroy(module);
   }
 
@@ -62,27 +60,20 @@ class MachineController extends AbstractModuleMachineController
   update(module)
   {
     super.update(module);
-
-    if (--this._ticks <= 0)
-    {
-      this._machineBuilder.update(this);
-      this._ticks = this._refreshRate;
-    }
-  }
-
-  getMachineBuilder()
-  {
-    return this._machineBuilder;
   }
 
   getMachineType()
   {
-    return this.getMachineBuilder().getMachineType();
+    //return this._machineBuilder.getMachine().isDeterministic() ? "DFA" : "NFA";
+    //HACK: this is only to support the old FSABuilder (remove this once finished)
+    return this._machineBuilder.isDeterministic() ? "DFA" : "NFA";
   }
 
   setMachineType(machineType)
   {
-    this._machineBuilder.setMachineType(machineType);
+    //this._machineBuilder.getMachine().setDeterministic(machineType === 'DFA');
+    //HACK: this is only to support the old FSABuilder (remove this once finished)
+    this._machineBuilder.setDeterministic(machineType === 'DFA');
   }
 
   getMachineName()
@@ -126,7 +117,7 @@ class MachineController extends AbstractModuleMachineController
 
   changeMachineTo(machineType)
   {
-    const prev = this.getMachineBuilder().getMachineType();
+    const prev = this.getMachineType();
     if (prev != machineType)
     {
       this.setMachineType(machineType);
@@ -246,14 +237,32 @@ class MachineController extends AbstractModuleMachineController
     return nodes;
   }
 
-  getMachineType()
+  getStates()
   {
-    return this._machineBuilder.getMachineType();
+    return this._machineBuilder.getMachine().getStates();
+  }
+
+  countStates()
+  {
+    return this.getStates().length;
+  }
+
+  getFinalStates()
+  {
+    return this._machineBuilder.getMachine().getFinalStates();
+  }
+
+  getTransitions()
+  {
+    return this._machineBuilder.getMachine().getTransitions();
   }
 
   getAlphabet()
   {
-    return this._machineBuilder.getAlphabet();
+    const machine = this._machineBuilder.getMachine();
+    const result = [];
+    machine.getAlphabet(result);
+    return result;
   }
 
   isUsedSymbol(symbol)
@@ -339,21 +348,27 @@ class MachineController extends AbstractModuleMachineController
 
   getCustomSymbols()
   {
+    //return Array.from(this._machineBuilder.getMachine().getCustomSymbols());
+    //HACK: this is only to support the old FSABuilder (remove this once finished)
     return this.getMachineBuilder()._symbols;
   }
 
   isCustomSymbol(symbol)
   {
-    return this.getMachineBuilder().isCustomSymbol(symbol);
+    return this._machineBuilder.isCustomSymbol(symbol);
   }
 
   addCustomSymbol(symbol)
   {
-    this.getMachineBuilder().addCustomSymbol(symbol);
+    //this._machineBuilder.getMachine().setCustomSymbol(symbol);
+    //HACK: this is only to support the old FSABuilder (remove this once finished)
+    this._machineBuilder.addCustomSymbol(symbol);
   }
 
   clearCustomSymbols()
   {
+    //this._machineBuilder.getMachine().clearCustomSymbols();
+    //HACK: this is only to support the old FSABuilder (remove this once finished)
     this.getMachineBuilder()._symbols.length = 0;
   }
 }

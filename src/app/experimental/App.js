@@ -51,6 +51,10 @@ import Module from 'modules/fsa/FSAModule.js';
 
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
 
+const SMOOTH_OFFSET_DAMPING = 0.4;
+const MIN_SCALE = 0.1;
+const MAX_SCALE = 10;
+
 class App extends React.Component
 {
   constructor(props)
@@ -65,9 +69,9 @@ class App extends React.Component
     //These need to be initialized before module
     this._inputAdapter = new InputAdapter();
     this._inputAdapter.getViewport()
-      .setMinScale(0.1)
-      .setMaxScale(10)
-      .setOffsetDamping(0.4);
+      .setMinScale(MIN_SCALE)
+      .setMaxScale(MAX_SCALE)
+      .setOffsetDamping(SMOOTH_OFFSET_DAMPING);
     this._undoManager = new UndoManager();
 
     this._hotKeyManager = new HotKeyManager();
@@ -171,9 +175,9 @@ class App extends React.Component
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
     const graphImporter = currentModule.getGraphImporter();
-    const inputActionMode = inputController.isActionMode(graphController);
+    const inputActionMode = inputController.isActionMode();
 
-    const modulePanels = currentModule.getModulePanels().concat([TestingPanel, OverviewPanel, AnalysisPanel]);
+    const modulePanels = [TestingPanel, OverviewPanel, AnalysisPanel];
     const modulePanelProps = {currentModule: currentModule, app: this};
     const moduleMenus = currentModule.getModuleMenus().concat([ExportPanel, OptionPanel]);
     const moduleMenuProps = {currentModule: currentModule, app: this};

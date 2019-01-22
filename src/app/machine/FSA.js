@@ -233,6 +233,16 @@ class FSA
     return false;
   }
 
+  isUsedSymbol(symbol)
+  {
+    return this.isUsedAlphabet(symbol);
+  }
+
+  isSymbol(symbol)
+  {
+    return this.isAlphabet(symbol);
+  }
+
   //Includes custom user-defined symbols (from newSymbol)
   isAlphabet(symbol)
   {

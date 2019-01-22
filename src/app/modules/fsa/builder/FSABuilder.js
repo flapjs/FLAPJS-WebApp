@@ -1,123 +1,78 @@
-import Config from 'config.js';
+import AbstractMachineBuilder from 'modules/abstract/AbstractMachineBuilder.js';
 
-import MachineBuilder from './MachineBuilder.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 import DFA from 'machine/DFA.js';
 import NFA from 'machine/NFA.js';
 import Node from 'modules/fsa/graph/FSANode.js';
 
-class FSABuilder extends MachineBuilder
+class FSABuilder extends AbstractMachineBuilder
 {
   constructor()
   {
     super();
 
     this._machine = new NFA();
-    this._machineType = "DFA";
-    this._machineValidDFA = false;
-    this._alphabet = [];
+    this._deterministic = true;
     this._symbols = [];
 
-    this._savedGraphHash = 0;
+    this._errorChecker = new FSAErrorChecker();
 
-    this._timer = null;
-    this._errorTimer = null;
-
-    this.machineErrorChecker = new FSAErrorChecker();
     this.tester = null;
-
     this.graphController = null;
     this.machineController = null;
-
-    this.onGraphChange = this.onGraphChange.bind(this);
-    this.onDelayedGraphChange = this.onDelayedGraphChange.bind(this);
-    this.onDelayedErrorCheck = this.onDelayedErrorCheck.bind(this);
   }
 
   initialize(module)
   {
-    super.initialize(module);
-
     this.tester = module.getTestingManager();
     this.graphController = module.getGraphController();
     this.machineController = module.getMachineController();
-
-    const graph = this.graphController.getGraph();
-    this._savedGraphHash = graph.getHashCode(false);
-    this.onGraphChange();
   }
 
-  destroy()
-  {
-    const graph = this.graphController.getGraph();
-    this._savedGraphHash = graph.getHashCode(false);
-    this.onGraphChange();
-
-    super.destroy();
-  }
-
-  update()
-  {
-    const graph = this.graphController.getGraph();
-    const graphHash = graph.getHashCode(false);
-    if (graphHash !== this._savedGraphHash)
-    {
-      this._savedGraphHash = graphHash;
-      this.onGraphChange(graph);
-    }
-  }
-
-  onGraphChange(graph)
+  //Override
+  onGraphChange(graph=null)
   {
     if (!this.tester) return;
 
-    if (this._timer)
-    {
-      clearTimeout(this._timer);
-      this._timer = null;
-    }
-
-    if (this._errorTimer)
-    {
-      clearTimeout(this._errorTimer);
-      this._errorTimer = null;
-    }
-
-    this._timer = setTimeout(this.onDelayedGraphChange, Config.GRAPH_IMMEDIATE_INTERVAL);
-    this._errorTimer = setTimeout(this.onDelayedErrorCheck,
-      this.tester.isImmediateErrorCheck ? (Config.GRAPH_IMMEDIATE_INTERVAL * 2) : Config.ERROR_CHECK_INTERVAL);
-  }
-
-  onDelayedGraphChange()
-  {
     this._machine.clear();
     const result = this.toNFA(this._machine);
     for(const s of this._symbols)
     {
       this._machine.newSymbol(s);
     }
-    this._machineValidDFA = this._machine.isValidDFA();
+
+    this._errors.length = 0;
+    this._warnings.length = 0;
+    this._errorChecker.checkErrors(this.tester.shouldCheckError, this.graphController, this.machineController);
+    for(const node of this._errorChecker.errorNodes)
+    {
+      this._errors.push({target: node, targetType: 'node'});
+    }
+    for(const edge of this._errorChecker.errorEdges)
+    {
+      this._errors.push({target: edge, targetType: 'edge'});
+    }
+    for(const node of this._errorChecker.warningNodes)
+    {
+      this._warnings.push({target: node, targetType: 'node'});
+    }
+    for(const edge of this._errorChecker.warningEdges)
+    {
+      this._warnings.push({target: edge, targetType: 'edge'});
+    }
   }
 
-  onDelayedErrorCheck()
+  setDeterministic(deterministic)
   {
-    if (!this.tester.shouldCheckError) return;
-
-    this.machineErrorChecker.checkErrors(true, this.graphController, this.machineController);
-  }
-
-  setMachineType(machineType)
-  {
-    if (this._machineType == machineType) return;
-
-    this._machineType = machineType;
+    if (this._deterministic === deterministic) return;
+    this._deterministic = deterministic;
 
     this.onGraphChange();
   }
 
-  getMachineType()
+  isDeterministic()
   {
-    return this._machineType;
+    return this._deterministic;
   }
 
   addCustomSymbol(symbol)
@@ -148,26 +103,6 @@ class FSABuilder extends MachineBuilder
     return this._symbols.includes(symbol);
   }
 
-  getAlphabet()
-  {
-    const machine = this.getMachine();
-    this._alphabet.length = 0;
-    machine.getAlphabet(this._alphabet);
-    return this._alphabet;
-  }
-
-  isValidMachine()
-  {
-    if (this._machineType == "DFA")
-    {
-      return this._machineValidDFA;
-    }
-    else
-    {
-      return true;
-    }
-  }
-
   toDFA(dst = null)
   {
     const result = dst || new DFA();
@@ -188,6 +123,7 @@ class FSABuilder extends MachineBuilder
     return result;
   }
 
+  //Override
   getMachine()
   {
     return this._machine;

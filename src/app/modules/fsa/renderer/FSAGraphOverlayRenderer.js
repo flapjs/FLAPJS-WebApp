@@ -25,9 +25,11 @@ class FSAGraphOverlayRenderer extends React.Component
     const graph = graphController.getGraph();
     const viewport = inputController.getInputAdapter().getViewport();
     const machineBuilder = machineController.getMachineBuilder();
-    const machineErrorChecker = machineBuilder.machineErrorChecker;
+    const machineErrors = machineBuilder.getMachineErrors();
+    const machineWarnings = machineBuilder.getMachineWarnings();
     const picker = inputController.getPicker();
     const selectionBox = picker.getSelectionBox();
+    const shouldShowErrors = tester.shouldCheckError;
 
     return <g>
       {/* Selected elements */}
@@ -40,21 +42,20 @@ class FSAGraphOverlayRenderer extends React.Component
         fromX={selectionBox.fromX} fromY={selectionBox.fromY}
         toX={selectionBox.toX} toY={selectionBox.toY}/>
 
-      {/* Node warning targets */}
-      { machineErrorChecker && machineErrorChecker.warningNodes.map((e, i) =>
-        <HighlightRenderer key={e.getGraphElementID()} className="highlight-warning graph-gui" target={e} type="node" offset="6"/>) }
-
-      {/* Edge warning targets */}
-      { machineErrorChecker && machineErrorChecker.warningEdges.map((e, i) =>
-        <HighlightRenderer key={e.getGraphElementID()} className="highlight-warning graph-gui" target={e} type="edge" offset="6"/>) }
-
-      {/* Node error targets */}
-      { machineErrorChecker && machineErrorChecker.errorNodes.map((e, i) =>
-        <HighlightRenderer key={e.getGraphElementID()} className="highlight-error graph-gui" target={e} type="node" offset="6"/>) }
-
-      {/* Edge error targets */}
-      { machineErrorChecker && machineErrorChecker.errorEdges.map((e, i) =>
-        <HighlightRenderer key={e.getGraphElementID()} className="highlight-error graph-gui" target={e} type="edge" offset="6"/>) }
+      {shouldShowErrors &&
+        machineWarnings.map(e => {
+          const target = e['target'];
+          const targetType = e['targetType'];
+          if (!target) return;
+          return <HighlightRenderer key={target.getGraphElementID()} className="highlight-warning graph-gui" target={target} type={targetType} offset={6}/>;
+        })}
+      {shouldShowErrors &&
+        machineErrors.map(e => {
+          const target = e['target'];
+          const targetType = e['targetType'];
+          if (!target) return;
+          return <HighlightRenderer key={target.getGraphElementID()} className="highlight-error graph-gui" target={target} type={targetType} offset={6}/>;
+        })}
 
       {/* Node test targets */}
       { tester.testMode.targets.map((e, i) => {

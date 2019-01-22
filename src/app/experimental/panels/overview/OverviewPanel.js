@@ -3,8 +3,13 @@ import Style from './OverviewPanel.css';
 
 import PanelSection from 'experimental/panels/PanelSection.js';
 
-import StateListElement from './StateListElement.js';
-import StateListView from './StateListView.js';
+import StateListView from './states/StateListView.js';
+import AlphabetListView from './alphabet/AlphabetListView.js';
+//import TransitionChartView from './transitions/TransitionChartView.js';
+//import TransitionTableView from './transitions/TransitionTableView.js';
+//HACK: this is only to support the old FSABuilder (remove this once finished)
+import TransitionTable from './transitions/TransitionTable.js';
+import TransitionFunction from './transitions/TransitionFunction.js';
 
 class OverviewPanel extends React.Component
 {
@@ -16,9 +21,12 @@ class OverviewPanel extends React.Component
   //Override
   render()
   {
+    const drawer = this.props.drawer;
     const currentModule = this.props.currentModule;
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
+
+    const drawerFull = drawer.isDrawerFullscreen();
 
     return (
       <div id={this.props.id}
@@ -29,18 +37,31 @@ class OverviewPanel extends React.Component
           <h1>{OverviewPanel.TITLE}</h1>
         </div>
         <div className={Style.panel_content}>
-          <PanelSection title={"States"} initial={true}>
+          <PanelSection title={"States"} initial={true} full={drawerFull}>
             <StateListView graphController={graphController}/>
           </PanelSection>
-          <PanelSection title={"Alphabet"} initial={true}>
-            <button>0</button>
+          <PanelSection title={"Alphabet"} initial={true} full={drawerFull}>
+            <AlphabetListView machineController={machineController}/>
           </PanelSection>
-          <PanelSection title={"Transitions"} initial={true}>
-            <PanelSection title={"Transition Chart"}>
-            </PanelSection>
-            <PanelSection title={"Transition Table"}>
-            </PanelSection>
+          <div className={Style.panel_divider}></div>
+          {/*
+          <PanelSection title={"Transition Chart"} full={drawerFull}>
+            <TransitionChartView machineController={machineController}/>
           </PanelSection>
+          <PanelSection title={"Transition Table"} full={drawerFull}>
+            <TransitionTableView machineController={machineController}/>
+          </PanelSection>
+          */}
+          <PanelSection title={"Transition Chart"} full={drawerFull}>
+            <TransitionFunction machineController={machineController}/>
+          </PanelSection>
+          <PanelSection title={"Transition Table"} full={drawerFull}>
+            <TransitionTable machineController={machineController}/>
+          </PanelSection>
+          <div className={Style.panel_divider}></div>
+          <button>State Labels</button>
+          <button>Auto layout</button>
+          <button>Auto label</button>
         </div>
       </div>
     );

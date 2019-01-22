@@ -44,6 +44,10 @@
 
   display: none;
 }
+:local(.section_content_container):not(.full) {
+  overflow-y: auto;
+  max-height: 30vh;
+}
 
 :local(.section_content_container).open {
   display: block;

@@ -24,7 +24,7 @@ class FSAGraphExporter extends AbstractGraphExporter
     const machineType = machineData.type;
     if (machineType) machineController.setMachineType(machineType);
     const customSymbols = machineData.symbols;
-    if (customSymbols)
+    if (customSymbols && Array.isArray(customSymbols))
     {
       machineController.clearCustomSymbols();
       for(const symbol of customSymbols)

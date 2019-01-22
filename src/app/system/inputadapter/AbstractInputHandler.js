@@ -1,7 +1,7 @@
 /**
  * Used by InputAdapter to handle input event logic.
  */
-class AbstractInputController
+class AbstractInputHandler
 {
   constructor() {}
 
@@ -68,12 +68,12 @@ class AbstractInputController
 
   /**
    * Called by InputAdapter when zoom changes.
-   * Returns true if the zoom change can be applied to the current viewport.
+   * Returns true if event is consumed (zoom will not be applied)
    */
   onZoomChange(pointer, zoomValue, prevValue)
   {
-    return true;
+    return false;
   }
 }
 
-export default AbstractInputController;
+export default AbstractInputHandler;

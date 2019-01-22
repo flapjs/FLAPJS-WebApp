@@ -1,14 +1,16 @@
 import React from 'react';
-import Style from './StateListElement.css';
+import Style from './AlphabetListElement.css';
 
 const SUBMIT_KEY_CODE = "Enter";
 const CANCEL_KEY_CODE = "Escape";
 
-class StateListElement extends React.Component
+class AlphabetListElement extends React.Component
 {
   constructor(props)
   {
     super(props);
+
+    this._inputElement = null;
 
     this.state = {
       value: null,
@@ -25,13 +27,12 @@ class StateListElement extends React.Component
   onFocus(e)
   {
     const target = e.target;
-    const node = this.props.node;
-    if (!node) return;
+    const symbol = this.props.symbol;
 
-    const nodeLabel = node.getNodeLabel();
-    this.setState({ value: nodeLabel, error: false }, () => {
-      target.select()
-    });
+    this.setState({
+      value: symbol,
+      error: false
+    }, () => target.select());
 
     //Call any listening focus
     if (this.props.onFocus) this.props.onFocus(e, this);
@@ -39,16 +40,13 @@ class StateListElement extends React.Component
 
   onBlur(e)
   {
-    const node = this.props.node;
-    if (!node) return;
-
-    const nextLabel = this.state.value;
-
-    //Reset to nothing (will use node.getNodeLabel() instead)
-    this.setState({ value: null, error: false });
+    const nextSymbol = this.state.value;
 
     //Call any listening blurs
-    if (this.props.onBlur) this.props.onBlur(e, this, nextLabel);
+    if (this.props.onBlur) this.props.onBlur(e, this, nextSymbol);
+
+    //Reset to nothing (will use props.symbol instead)
+    this.setState({ value: null, error: false });
   }
 
   onKeyDown(e)
@@ -72,9 +70,10 @@ class StateListElement extends React.Component
     }
     else if (keyCode === CANCEL_KEY_CODE)
     {
-      this.setState({ value: null, error: false}, () => {
-        target.blur();
-      });
+      this.setState({
+        value: null,
+        error: false
+      }, () => target.blur());
     }
   }
 
@@ -101,31 +100,32 @@ class StateListElement extends React.Component
     });
   }
 
+  focus()
+  {
+    this._inputElement.focus();
+  }
+
   //Override
   render()
   {
-    const node = this.props.node;
-    const inputValue = this.state.value;
+    const inputSymbol = this.state.value;
+    const displaySymbol = inputSymbol === null ? this.props.symbol : inputSymbol;
 
-    const nodeLabel = node ? node.getNodeLabel() : "";
-    const nodeCustom = node ? (node.getNodeCustom() || inputValue !== null && inputValue !== nodeLabel) : false;
-    const nodeAccept = node ? node.getNodeAccept() : false;
-    //Must check for null, not ONLY truthy because value might be empty string.
-    const displayValue = inputValue === null ? nodeLabel : inputValue;
+    const symbolUsed = this.props.used || false;
 
     return (
       <div id={this.props.id}
         className={Style.element_container +
-          (nodeCustom ? " custom " : "") +
-          (displayValue.length <= 0 ? " empty " : "") +
-          (inputValue && this.state.error ? " error " : "") +
-          (nodeAccept ? " accept " : "") +
+          (displaySymbol !== null && displaySymbol.length <= 0 ? " empty " : "") +
+          (inputSymbol !== null && this.state.error ? " error " : "") +
+          (symbolUsed ? " used " : "") +
           " " + this.props.className}
         style={this.props.style}>
-        <input
+        <input ref={ref=>this._inputElement=ref}
           spellCheck={false}
-          style={{width: displayValue.length + "ch"}}
-          value={displayValue}
+          maxLength={1}
+          style={{width: "1ch"}}
+          value={displaySymbol}
           onChange={this.onValueChange}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
@@ -136,4 +136,4 @@ class StateListElement extends React.Component
   }
 }
 
-export default StateListElement;
+export default AlphabetListElement;

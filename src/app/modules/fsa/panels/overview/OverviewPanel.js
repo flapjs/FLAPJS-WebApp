@@ -85,7 +85,6 @@ class OverviewPanel extends React.Component
     const machineController = currentModule.getMachineController();
 
     const graph = graphController.getGraph();
-    const machineBuilder = machineController.getMachineBuilder();
 
     return <div className={"panel-container " + this.props.className} id="overview" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title">
@@ -100,7 +99,7 @@ class OverviewPanel extends React.Component
           </select>
 
           {this.state.viewFormal &&
-            <FormalDefinition machineBuilder={machineBuilder}/>}
+            <FormalDefinition machineController={machineController}/>}
 
           {
             !this.state.viewFormal &&
@@ -111,8 +110,8 @@ class OverviewPanel extends React.Component
                   <AlphabetList machineController={machineController}/>
                 </div>
                 <div className="graphinfo">
-                  <TransitionFunction machineBuilder={machineBuilder}/>
-                  <TransitionTable machineBuilder={machineBuilder}/>
+                  <TransitionFunction machineController={machineController}/>
+                  <TransitionTable machineController={machineController}/>
                 </div>
               </div>
               <hr/>
