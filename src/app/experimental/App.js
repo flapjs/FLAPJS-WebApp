@@ -177,7 +177,7 @@ class App extends React.Component
     const graphImporter = currentModule.getGraphImporter();
     const inputActionMode = inputController.isActionMode();
 
-    const modulePanels = currentModule.getModulePanels().concat([TestingPanel, OverviewPanel, AnalysisPanel]);
+    const modulePanels = [TestingPanel, OverviewPanel, AnalysisPanel];
     const modulePanelProps = {currentModule: currentModule, app: this};
     const moduleMenus = currentModule.getModuleMenus().concat([ExportPanel, OptionPanel]);
     const moduleMenuProps = {currentModule: currentModule, app: this};

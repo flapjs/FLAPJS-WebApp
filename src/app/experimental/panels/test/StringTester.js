@@ -13,8 +13,6 @@ class TestTapeContext extends TapeContext
     this._tester = tester;
     this._graphController = graphController;
     this._machineController = machineController;
-
-    this._cachedGraphHash = graphController.getGraph().getHashCode(false);
   }
 
   //Override

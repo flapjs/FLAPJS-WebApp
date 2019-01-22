@@ -1,41 +1,106 @@
 import React from 'react';
 import Style from './TransitionChartView.css';
 
-//TODO: Outdated; this should be from FSA instead of symbols
-import { EMPTY } from 'machine/Symbols.js';
+import { EMPTY_SYMBOL } from 'modules/fsa/machine/FSA.js';
 
 class TransitionChartView extends React.Component
 {
   constructor(props)
   {
     super(props);
+
+    //NOTE: this only works if machine hashing is faster than a re-calculate
+    this._cachedMachineHash = 0;
+    this._cachedMachineComponents = [];
   }
 
-  renderTransitionRow()
+  //Override
+  componentWillUnmount()
   {
-
+    //Reset cached components for re-rendering
+    this._cachedMachineHash = 0;
+    this._cachedMachineComponents.length = 0;
   }
 
-  renderTransitionTable(machine, deterministic)
+  renderTransitionEntry(machine, state, symbol)
   {
-    const result = [];
-    const states = machine.getStates();
-    const alphabet = machine.getAlphabet();
-    for(const state of states)
+    const deterministic = machine.isDeterministic();
+    let error = false;
+    let transitionString = "";
+    let destinations = machine.doTransition(state, symbol);
+
+    //DFA's can't have empty symbols
+    if (deterministic && symbol === EMPTY_SYMBOL) error = true;
+
+    if (destinations.length <= 0)
     {
-      const emptyTransitions = machine.doTransition(state, EMPTY);
-      for(const symbol of alphabet)
+      if (deterministic)
       {
-        let transition = machine.doTransition(state, symbol);
-        if (!deterministic && !transition.length) return;
-        if (deterministic && !transition.length)
-        {
+        error = true;
+        transitionString = "-";
+      }
+      else
+      {
+        //Don't show missing transitions for NFA's
+        return null;
+      }
+    }
+    else if (destinations.length === 1)
+    {
+      //Regardless if it's deterministic, it is a valid transition
+      error = false;
+      transitionString = destinations[0].getStateLabel();
+    }
+    else
+    {
+      //If it's deterministic, it is not valid
+      if (deterministic) error = true;
 
-        }
-        if (deterministic && transition.length > 1)
-        {
+      let string = "";
+      for(const state of destinations)
+      {
+        if (string.length > 0) string += ", ";
+        string += state.getStateLabel();
+      }
+      transitionString = "{" + string + "}";
+    }
 
-        }
+    return (
+      <tr key={state.getStateID() + ":" + symbol}>
+        <td className={Style.chart_key}>{"(" + state.getStateLabel() + ", " + symbol + ")"}</td>
+        <td className={Style.chart_value + (error ? " error " : "")}>{transitionString}</td>
+      </tr>
+    );
+  }
+
+  renderTransitionTable(machine)
+  {
+    const machineHash = machine.getHashCode();
+    if (machineHash !== this._cachedMachineHash)
+    {
+      this._cachedMachineHash = machineHash;
+    }
+    else
+    {
+      return this._cachedMachineComponents;
+    }
+
+    const result = this._cachedMachineComponents = [];
+    const deterministic = machine.isDeterministic();
+
+    for(const state of machine.getStates())
+    {
+      let entry = null;
+
+      //The empty transitions...
+      entry = this.renderTransitionEntry(machine, state, EMPTY_SYMBOL);
+      if (entry) result.push(entry);
+
+      //The other transitions...
+      for(const symbol of machine.getAlphabet())
+      {
+        entry = this.renderTransitionEntry(machine, state, symbol);
+        if (entry) result.push(entry);
       }
     }
     return result;
@@ -63,19 +128,7 @@ class TransitionChartView extends React.Component
                 {deterministic ? "Q" : "\u2118(Q)"}
               </th>
             </tr>
-            {this.renderTransitionTable(machine, deterministic)}
-            <tr>
-              <td>WHAT</td>
-              <td>NOTHING</td>
-            </tr>
-            <tr>
-              <td>WHAT</td>
-              <td>NOTHING</td>
-            </tr>
-            <tr>
-              <td>WHAT</td>
-              <td>NOTHING</td>
-            </tr>
+            {this.renderTransitionTable(machine)}
           </tbody>
         </table>
       </div>

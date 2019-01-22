@@ -1,5 +1,5 @@
 import GraphElement from 'graph/GraphElement.js';
-import { guid } from 'util/MathHelper.js';
+import { guid, stringHash } from 'util/MathHelper.js';
 
 const FROM_STATE_INDEX = 0;
 const SYMBOL_INDEX = 1;
@@ -30,6 +30,11 @@ export class State
 
   getStateID() { return this._id; }
   getSource() { return this._src; }
+
+  getHashString()
+  {
+    return this._id;
+  }
 }
 
 export class Transition
@@ -56,6 +61,11 @@ export class Transition
   addSymbol(symbol) { this._symbols.push(symbol); }
   hasSymbol(symbol) { return this._symbols.includes(symbol); }
   getSymbols() { return this._symbols; }
+
+  getHashString()
+  {
+    return this._from.getHashString() + ":" + this._symbols.join(",") + ":" + this._to.getHashString();
+  }
 }
 
 class FSA
@@ -679,6 +689,30 @@ class FSA
     }
 
     return dst;
+  }
+
+  getHashCode()
+  {
+    let string = "";
+    for(const state of this._states.values())
+    {
+      string += state.getHashString() + ",";
+    }
+    string += "|";
+    for(const transition of this._transitions.values())
+    {
+      string += transition.getHashString() + ",";
+    }
+    string += "|";
+    for(const state of this._finalStates)
+    {
+      string += state.getHashString();
+    }
+    string += "|";
+    string += this._startState ? this._startState.getHashString() : "";
+    string += "|";
+    string += this._deterministic ? "d" : "n";
+    return stringHash(string);
   }
 }
 
