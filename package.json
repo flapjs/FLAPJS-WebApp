@@ -1,6 +1,6 @@
 {
   "name": "flap.js",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Repository for flap.js web app project",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --config webpack.config.js",

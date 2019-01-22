@@ -1,12 +1,16 @@
-//Version 0.3.3
+//Version 0.3.4
 const changeLog = [
-  "ADDED: SVG export option (thanks to moreheadm).",
-  "FIXED: Edge cannot be created with default symbols.",
-  "FIXED: Action mode does not show edge creation as an edit.",
-  "FIXED: Wrong undo state for changing initial marker."
 ];
 
 /*
+  //Version 0.3.3
+  const changeLog = [
+    "ADDED: SVG export option (thanks to moreheadm).",
+    "FIXED: Edge cannot be created with default symbols.",
+    "FIXED: Action mode does not show edge creation as an edit.",
+    "FIXED: Wrong undo state for changing initial marker."
+  ];
+
   //Version 0.3.2
   const changeLog = [
     "FIXED: Allow cross-platform bundle building.",
