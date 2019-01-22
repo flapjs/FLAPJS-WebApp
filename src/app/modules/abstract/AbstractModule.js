@@ -4,11 +4,13 @@ import GraphImageExporter from './exporter/GraphImageExporter.js';
 import ExportingPanel from './panels/exporting/ExportingPanel.js';
 import OptionsPanel from './panels/options/OptionsPanel.js';
 
+import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG } from 'util/Downloader.js';
+
 export const DEFAULT_GRAPH_EXPORTERS = [];
 export const DEFAULT_IMAGE_EXPORTERS = [
-  new GraphImageExporter('png'),
-  new GraphImageExporter('jpg'),
-  new GraphImageExporter('svg')
+  new GraphImageExporter(FILE_TYPE_PNG),
+  new GraphImageExporter(FILE_TYPE_JPG),
+  new GraphImageExporter(FILE_TYPE_SVG)
 ];
 //TODO: This is inserted by Drawer.js, not used here. (which is weird)
 export const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
@@ -49,7 +51,7 @@ class AbstractModule
   update(app)
   {
     if (!app) throw new Error("Missing app for module update");
-    
+
     const inputController = this.getInputController();
     const graphController = this.getGraphController();
     const machineController = this.getMachineController();

@@ -1,5 +1,6 @@
 export const FILE_TYPE_PNG = "png";
 export const FILE_TYPE_JPG = "jpg";
+export const FILE_TYPE_SVG = "svg";
 
 export function downloadText(filename, textData)
 {
@@ -14,39 +15,48 @@ function createBlobFromSVG(svg)
   return blob
 }
 
-export function downloadSVG(filename, svg)
-{
-  const blob = createBlobFromSVG(svg);
-  const reader = new FileReader();
-  reader.onload = () => {
-    downloadURL(filename + ".svg", reader.result);
-  }
-  reader.readAsDataURL(blob);
-}
-
 export function downloadImageFromSVG(filename, filetype, svg, width, height)
 {
   const blob = createBlobFromSVG(svg);
-  const url = URL.createObjectURL(blob);
+  switch(filetype)
+  {
+    case FILE_TYPE_PNG:
+    case FILE_TYPE_JPG:
+    {
+      const url = URL.createObjectURL(blob);
 
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext("2d");
-  const pixelRatio = window.devicePixelRatio || 1;
-  canvas.width = width * pixelRatio;
-  canvas.height = height * pixelRatio;
-  canvas.style.width = width + "px";
-  canvas.style.height = height + "px";
-  ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext("2d");
+      const pixelRatio = window.devicePixelRatio || 1;
+      canvas.width = width * pixelRatio;
+      canvas.height = height * pixelRatio;
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
-  const image = new Image();
-  image.onload = () => {
-    ctx.drawImage(image, 0, 0);
-    URL.revokeObjectURL(url);
+      const image = new Image();
+      image.onload = () => {
+        ctx.drawImage(image, 0, 0);
+        URL.revokeObjectURL(url);
 
-    const imageURI = canvas.toDataURL('image/' + filetype).replace('image/' + filetype, 'image/octet-stream');
-    downloadURL(filename + '.' + filetype, imageURI);
-  };
-  image.src = url;
+        const imageURI = canvas.toDataURL('image/' + filetype).replace('image/' + filetype, 'image/octet-stream');
+        downloadURL(filename + '.' + filetype, imageURI);
+      };
+      image.src = url;
+    }
+    break;
+    case FILE_TYPE_SVG:
+    {
+      const reader = new FileReader();
+      reader.onload = () => {
+        downloadURL(filename + '.' + filetype, reader.result);
+      };
+      reader.readAsDataURL(blob);
+    }
+    break;
+    default:
+      throw new Error("Unknown file type \'" + filetype + "\'");
+  }
 }
 
 export function downloadURL(filename, url)
