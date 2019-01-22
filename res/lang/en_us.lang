@@ -105,11 +105,13 @@ file.export.machine = Save machine for Flap.js
 file.export.jff = Save machine for JFLAP
 file.export.png = Export diagram as PNG
 file.export.jpg = Export diagram as JPG
+file.export.svg = Export diagram as SVG
 
 file.export.machine.hint = Save machine as .json
 file.export.jff.hint = Save machine as .jff
 file.export.png.hint = Export diagram as .png
 file.export.jpg.hint = Export diagram as .jpg
+file.export.svg.hint = Export diagram as .svg
 
 //testing.placeholder = Test string
 
