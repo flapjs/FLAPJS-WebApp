@@ -1,5 +1,6 @@
 //Version 0.3.4
 const changeLog = [
+  "Added meta tags for those coming from a search engine."
 ];
 
 /*
