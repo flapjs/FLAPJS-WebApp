@@ -98,11 +98,11 @@ class MachineController extends AbstractModuleMachineController
     const separator = string.indexOf('-');
     if (separator !== -1)
     {
-      element.innerHTML = value + " - " + string.substring(separator + 1).trim();
+      element.innerHTML = string.substring(0, separator).trim() + " - " + value;
     }
     else
     {
-      element.innerHTML = value + " - " + string;
+      element.innerHTML = string + " - " + value;
     }
   }
 
