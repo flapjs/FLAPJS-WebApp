@@ -1,5 +1,6 @@
 //Version 0.3.3
 const changeLog = [
+  "ADDED: SVG export option (thanks to moreheadm).",
   "FIXED: Edge cannot be created with default symbols.",
   "FIXED: Action mode does not show edge creation as an edit.",
   "FIXED: Wrong undo state for changing initial marker."
