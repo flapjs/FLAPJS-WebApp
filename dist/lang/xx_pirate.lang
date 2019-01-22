@@ -65,14 +65,16 @@ options.testing.stepmode = Swab the deck!
 
 file.untitled = Cap'n's Log
 file.export.machine = Batten down the hatches
+file.export.jff = Strike yer colors
 file.export.png = Yer doubloons 'n jewels
 file.export.jpg = A swig ye rum
-file.export.jff = Strike yer colors
+file.export.svg = Fire in the hole
 
 file.export.machine.hint = Save yer charts as .json
+file.export.jff.hint = Save yer charts as .jff
 file.export.png.hint = Export yer charts as .png
 file.export.jpg.hint = Export yer charts as .jpg
-file.export.jff.hint = Export yer charts as .jff
+file.export.svg.hint = Export yer charts as .svg
 
 //testing.placeholder = Black Spot
 
