@@ -97,7 +97,7 @@ class TapeWidget extends React.Component
 
           <DownArrowIcon
             className="tape-pointer"
-            style={{left: tapeIndex + "em"}}/>
+            style={{opacity: tapeIndex < 0 ? 0 : 1, left: tapeIndex + "em"}}/>
 
           {tapeContext.getTapeInput().map((e, i) => {
             let active = false;

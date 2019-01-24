@@ -1,6 +1,7 @@
 import React from 'react';
 import Style from './TransitionTableView.css';
 
+import { EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
 import { EMPTY_SYMBOL } from 'modules/fsa/machine/FSA.js';
 
 const SYMBOL_AXIS = "symbols";
@@ -28,8 +29,51 @@ class TransitionTableView extends React.Component
     });
   }
 
+  renderTableEntryForSymbolAxis(machine, state, symbol)
+  {
+    const deterministic = machine.isDeterministic();
+    const destinations = machine.doTransition(state, symbol);
+    let transitionString = "";
+    let error = false;
+
+    if (destinations.length <= 0)
+    {
+      if (deterministic && symbol !== EMPTY_SYMBOL) error = true;
+      transitionString = "-";
+    }
+    else if (destinations.length === 1)
+    {
+      if (deterministic && symbol === EMPTY_SYMBOL) error = true;
+      transitionString = destinations[0].getStateLabel();
+    }
+    else
+    {
+      if (deterministic) error = true;
+      let string = "";
+      for(const other of destinations)
+      {
+        if (string.length > 0) string += ",";
+        string += other.getStateLabel();
+      }
+      transitionString = "{" + string + "}";
+    }
+
+    const disabled = deterministic && symbol === EMPTY_SYMBOL;
+
+    return (
+      <td key={state.getStateID() + ":" + symbol}
+        className={Style.table_entry +
+          (error ? " error " : "") +
+          (disabled ? " disabled " : "")}>
+        {transitionString}
+      </td>
+    );
+  }
+
   renderTableEntries(machine, rowAxis)
   {
+    const deterministic = machine.isDeterministic();
+
     const result = [];
     for(const state of machine.getStates())
     {
@@ -39,42 +83,31 @@ class TransitionTableView extends React.Component
         case SYMBOL_AXIS:
           for(const symbol of machine.getAlphabet())
           {
-            const destinations = machine.doTransition(state, symbol);
-            let transitionString = "";
-
-            if (destinations.length <= 0)
-            {
-              transitionString = "-";
-            }
-            else if (destinations.length === 1)
-            {
-              transitionString = destinations[0].getStateLabel();
-            }
-            else
-            {
-              let string = "";
-              for(const other of destinations)
-              {
-                if (string.length > 0) string += ", ";
-                string += state.getStateLabel();
-              }
-              transitionString = "{" + string + "}";
-            }
-
-            rowComponents.push(
-              <td key={state.getStateID() + ":" + symbol}>
-                {transitionString}
-              </td>
-            );
+            rowComponents.push(this.renderTableEntryForSymbolAxis(machine, state, symbol));
           }
+          rowComponents.push(this.renderTableEntryForSymbolAxis(machine, state, EMPTY_SYMBOL));
         break;
         case STATE_AXIS:
           for(const other of machine.getStates())
           {
             const symbols = machine.getTransitionSymbols(state, other);
+            let string = "";
+            if (symbols)
+            {
+              for(const symbol of symbols)
+              {
+                if (string.length > 0) string += "\n";
+                if (symbol === EMPTY_SYMBOL) string += EMPTY_CHAR;
+                else string += symbol;
+              }
+            }
+            else
+            {
+              string = "-";
+            }
             rowComponents.push(
               <td key={state.getStateID() + ":" + other.getStateID()}>
-                {symbols ? symbols : "-"}
+                {string}
               </td>
             );
           }
@@ -108,14 +141,15 @@ class TransitionTableView extends React.Component
             </th>
           );
         }
-        if (!machine.isDeterministic())
-        {
-          result.push(
-            <th key={EMPTY_SYMBOL} scope="col" className={Style.table_axis_header + " col"}>
-              {EMPTY_SYMBOL}
-            </th>
-          );
-        }
+        const disabled = machine.isDeterministic();
+        result.push(
+          <th key={EMPTY_SYMBOL} scope="col"
+            className={Style.table_axis_header +
+              (disabled ? " disabled " : "") +
+              " col"}>
+            {EMPTY_CHAR}
+          </th>
+        );
         return result;
       case STATE_AXIS:
         for(const state of machine.getStates())

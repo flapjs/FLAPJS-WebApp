@@ -593,7 +593,7 @@ class FSA
   isFinalState(state) { return this._finalStates.has(state); }
   getFinalStates() { return this._finalStates; }
 
-  doTransition(state, symbol, dst=[])
+  doTransition(state, symbol, forceNondeterminism=false, dst=[])
   {
     if (!state) return dst;
     if (!this._states.has(state.getStateID())) throw new Error("Unable to find source state with id \'" + state.getStateID() + "\'");
@@ -611,7 +611,7 @@ class FSA
           dst.push(transition.getDestinationState());
 
           //There will only ever be 1 transition for deterministic machines
-          if (this._deterministic) return dst;
+          if (!forceNondeterminism && this._deterministic) return dst;
         }
       }
     }

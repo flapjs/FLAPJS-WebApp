@@ -16,10 +16,6 @@
   text-align: center;
 }
 
-:local(.chart_key) {
-
-}
-
-:local(.chart_value).error {
+:local(.chart_key).error, :local(.chart_value).error {
   color: var(--color-drawer-error);
 }
