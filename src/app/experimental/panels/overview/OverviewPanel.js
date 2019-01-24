@@ -1,7 +1,10 @@
 import React from 'react';
 import Style from './OverviewPanel.css';
 
+import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';
+import PanelDivider from 'experimental/panels/PanelDivider.js';
+import PanelSwitch from 'experimental/panels/PanelSwitch.js';
 
 import StateListView from './states/StateListView.js';
 import AlphabetListView from './alphabet/AlphabetListView.js';
@@ -11,11 +14,65 @@ import AlphabetListView from './alphabet/AlphabetListView.js';
 import TransitionTable from './transitions/TransitionTable.js';
 import TransitionFunction from './transitions/TransitionFunction.js';
 
+import AutoStateLabelView from './AutoStateLabelView.js';
+
+const MACHINE_TYPE_DFA = "DFA";
+const MACHINE_TYPE_NFA = "NFA";
+
 class OverviewPanel extends React.Component
 {
   constructor(props)
   {
     super(props);
+
+    this.onMachineTypeChange = this.onMachineTypeChange.bind(this);
+    this.onAutoLayoutApply = this.onAutoLayoutApply.bind(this);
+    this.onAutoLayoutChange = this.onAutoLayoutChange.bind(this);
+    this.onAutoLabelChange = this.onAutoLabelChange.bind(this);
+    this.onSnapToGridChange = this.onSnapToGridChange.bind(this);
+  }
+
+  onMachineTypeChange(e)
+  {
+    const newValue = e.target.value;
+
+    const currentModule = this.props.currentModule;
+    const machineController = currentModule.getMachineController();
+    const machine = machineController.getMachineBuilder().getMachine();
+
+    switch(newValue)
+    {
+      case MACHINE_TYPE_DFA:
+        machine.setDeterministic(true);
+        break;
+      case MACHINE_TYPE_NFA:
+        machine.setDeterministic(false);
+        break;
+      default:
+        throw new Error("Unknown machine type \'" + newValue + "\'");
+    }
+  }
+
+  onAutoLayoutApply(e)
+  {
+    const graphController = this.props.currentModule.getGraphController();
+    graphController.applyAutoLayout();
+  }
+
+  onAutoLayoutChange(e)
+  {
+    //TODO: Not yet implemented...
+  }
+
+  onAutoLabelChange(e)
+  {
+    const graphController = this.props.currentModule.getGraphController();
+    graphController.setAutoRenameNodes(e.target.checked);
+  }
+
+  onSnapToGridChange(e)
+  {
+    //TODO: Not yet implemented...
   }
 
   //Override
@@ -25,45 +82,68 @@ class OverviewPanel extends React.Component
     const currentModule = this.props.currentModule;
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
+    //HACK: Re-enable this.
+    //const machineType = machineController.getMachineBuilder().getMachine().isDeterministic() ? MACHINE_TYPE_DFA : MACHINE_TYPE_NFA;
+    const autoRename = graphController.shouldAutoRenameNodes();
 
     const drawerFull = drawer.isDrawerFullscreen();
 
     return (
-      <div id={this.props.id}
-        className={Style.panel_container +
-          " " + this.props.className}
-        style={this.props.style}>
-        <div className={Style.panel_title}>
-          <h1>{OverviewPanel.TITLE}</h1>
-        </div>
-        <div className={Style.panel_content}>
-          <PanelSection title={"States"} initial={true} full={drawerFull}>
-            <StateListView graphController={graphController}/>
-          </PanelSection>
-          <PanelSection title={"Alphabet"} initial={true} full={drawerFull}>
-            <AlphabetListView machineController={machineController}/>
-          </PanelSection>
-          <div className={Style.panel_divider}></div>
-          {/*
-          <PanelSection title={"Transition Chart"} full={drawerFull}>
-            <TransitionChartView machineController={machineController}/>
-          </PanelSection>
-          <PanelSection title={"Transition Table"} full={drawerFull}>
-            <TransitionTableView machineController={machineController}/>
-          </PanelSection>
-          */}
-          <PanelSection title={"Transition Chart"} full={drawerFull}>
-            <TransitionFunction machineController={machineController}/>
-          </PanelSection>
-          <PanelSection title={"Transition Table"} full={drawerFull}>
-            <TransitionTable machineController={machineController}/>
-          </PanelSection>
-          <div className={Style.panel_divider}></div>
-          <button>State Labels</button>
-          <button>Auto layout</button>
-          <button>Auto label</button>
-        </div>
-      </div>
+      <PanelContainer id={this.props.id}
+        className={this.props.className}
+        style={this.props.style}
+        title={OverviewPanel.TITLE}>
+
+        {/*
+        <select className={Style.machine_type_select}
+          value={machineType}
+          onChange={this.onMachineTypeChange}>
+          <option>{MACHINE_TYPE_DFA}</option>
+          <option>{MACHINE_TYPE_NFA}</option>
+        </select>
+        */}
+
+        <PanelDivider/>
+
+        <PanelSection title={"States"} initial={true} full={drawerFull}>
+          <StateListView graphController={graphController}/>
+        </PanelSection>
+        <PanelSection title={"Alphabet"} initial={true} full={drawerFull}>
+          <AlphabetListView machineController={machineController}/>
+        </PanelSection>
+
+        <PanelDivider/>
+
+        {/*
+        <PanelSection title={"Transition Chart"} full={drawerFull}>
+          <TransitionChartView machineController={machineController}/>
+        </PanelSection>
+        <PanelSection title={"Transition Table"} full={drawerFull}>
+          <TransitionTableView machineController={machineController}/>
+        </PanelSection>
+        */}
+        <PanelSection title={"Transition Chart"} full={drawerFull}>
+          <TransitionFunction machineController={machineController}/>
+        </PanelSection>
+        <PanelSection title={"Transition Table"} full={drawerFull}>
+          <TransitionTable machineController={machineController}/>
+        </PanelSection>
+
+        <PanelDivider/>
+
+        <AutoStateLabelView graphController={graphController}/>
+
+        <button className={Style.autolayout_button} onClick={this.onAutoLayoutApply} disabled={graphController.getGraph().isEmpty()}>
+          {I18N.toString("action.overview.autolayout")}
+        </button>
+
+        <PanelDivider/>
+
+        <PanelSwitch id={"overview-auto-label"} checked={autoRename} onChange={this.onAutoLabelChange} title={"Auto rename nodes"}/>
+        <PanelSwitch id={"overview-auto-layout"} checked={false} onChange={this.onAutoLayoutChange} title={"Auto layout nodes"} disabled={true}/>
+        <PanelSwitch id={"overview-snap-grid"} checked={false} onChange={this.onSnapToGridChange} title={"Snap-to-grid"} disabled={true}/>
+
+      </PanelContainer>
     );
   }
 }

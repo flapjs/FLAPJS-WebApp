@@ -1,6 +1,7 @@
 import React from 'react';
 import Style from './TransitionChartView.css';
 
+import { EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
 import { EMPTY_SYMBOL } from 'modules/fsa/machine/FSA.js';
 
 class TransitionChartView extends React.Component
@@ -25,12 +26,10 @@ class TransitionChartView extends React.Component
   renderTransitionEntry(machine, state, symbol)
   {
     const deterministic = machine.isDeterministic();
-    let error = false;
-    let transitionString = "";
-    let destinations = machine.doTransition(state, symbol);
 
-    //DFA's can't have empty symbols
-    if (deterministic && symbol === EMPTY_SYMBOL) error = true;
+    let destinations = machine.doTransition(state, symbol, true);
+    let transitionString = "";
+    let error = false;
 
     if (destinations.length <= 0)
     {
@@ -38,6 +37,11 @@ class TransitionChartView extends React.Component
       {
         error = true;
         transitionString = "-";
+        if (symbol === EMPTY_SYMBOL)
+        {
+          //Don't show missing empty transitions for DFA's
+          return null;
+        }
       }
       else
       {
@@ -50,6 +54,8 @@ class TransitionChartView extends React.Component
       //Regardless if it's deterministic, it is a valid transition
       error = false;
       transitionString = destinations[0].getStateLabel();
+
+      if (!deterministic) transitionString = "{" + transitionString + "}";
     }
     else
     {
@@ -59,15 +65,24 @@ class TransitionChartView extends React.Component
       let string = "";
       for(const state of destinations)
       {
-        if (string.length > 0) string += ", ";
+        if (string.length > 0) string += ",";
         string += state.getStateLabel();
       }
       transitionString = "{" + string + "}";
     }
 
+    //Convert empty symbol to the expected char value
+    if (symbol === EMPTY_SYMBOL)
+    {
+      symbol = EMPTY_CHAR;
+
+      //DFA's can't have empty symbols
+      if (deterministic) error = true;
+    }
+
     return (
       <tr key={state.getStateID() + ":" + symbol}>
-        <td className={Style.chart_key}>{"(" + state.getStateLabel() + ", " + symbol + ")"}</td>
+        <td className={Style.chart_key + (error ? " error " : "")}>{"(" + state.getStateLabel() + "," + symbol + ")"}</td>
         <td className={Style.chart_value + (error ? " error " : "")}>{transitionString}</td>
       </tr>
     );

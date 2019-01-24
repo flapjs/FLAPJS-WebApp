@@ -1,19 +1,14 @@
-:local(.panel_container) {
+:local(.machine_type_select) {
+  font-size: 1em;
+  outline: none;
 }
-:local(.panel_title) > h1 {
-  border-bottom: 1px solid black;
+
+:local(.autolayout_button) {
+  outline: none;
+  cursor: pointer;
+  margin: 0.3em;
+  font-size: 1em;
+  border-radius: 1em;
+  background: var(--color-drawer-text-active);
+  color: var(--color-drawer-text);
 }
-:local(.panel_content) {
-  display: flex;
-  flex-direction: column;
-}
-:local(.panel_divider) {
-  border: 1px solid black;
-  margin: 0.5em 0em;
-}
-/*
-:local(.panel_content) section button {
-  border: none;
-  padding: 0;
-}
-*/

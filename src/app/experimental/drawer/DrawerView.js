@@ -265,7 +265,7 @@ class DrawerView extends React.Component
 
   onDrawerHandleGrab(e)
   {
-    if (!this._handlingGrab)
+    if (!this._handlingGrab && this.state.open)
     {
       this._handlingGrab = true;
       this._prevWidth = getCSSDrawerWidth(this.drawerElement);

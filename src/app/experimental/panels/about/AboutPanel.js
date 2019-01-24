@@ -1,6 +1,8 @@
 import React from 'react';
 import Style from './AboutPanel.css';
 
+import PanelContainer from 'experimental/panels/PanelContainer.js';
+
 class AboutPanel extends React.Component
 {
   constructor(props)
@@ -11,19 +13,16 @@ class AboutPanel extends React.Component
   //Override
   render()
   {
+    const currentModule = this.props.currentModule;
+
     return (
-      <div id={this.props.id}
-        className={Style.panel_container +
-          " " + this.props.className}
-        style={this.props.style}>
-        <div className={Style.panel_title}>
-          <h1>{"Finite State Automata"}</h1>
-        </div>
-        <div className={Style.panel_content}>
-          <p>{"Brought to you with \u2764 by the Flap.js team."}</p>
-          <p>{"<- Tap on a tab to begin!"}</p>
-        </div>
-      </div>
+      <PanelContainer id={this.props.id}
+        className={this.props.className}
+        style={this.props.style}
+        title={"Finite State Automata"}>
+        <p>{"Brought to you with \u2764 by the Flap.js team."}</p>
+        <p>{"<- Tap on a tab to begin!"}</p>
+      </PanelContainer>
     );
   }
 }

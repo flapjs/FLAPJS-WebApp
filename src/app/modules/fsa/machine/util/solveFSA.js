@@ -45,7 +45,7 @@ export function solveFSA(fsa, input)
     while(cachedStates.length > 0)
     {
       symbol = input.next().value;
-      if (solveNFAbyStep(fsa, symbol, cachedStates, cachedSymbols, checkedStates))
+      if (solveFSAbyStep(fsa, symbol, cachedStates, cachedSymbols, checkedStates))
       {
         return true;
       }
@@ -65,7 +65,7 @@ export function solveFSA(fsa, input)
 //TODO: When an empty transition occurs, it does a closure transition.
 //The closure chain will be stored as a group
 //Any future transitions must not re-enter the group
-export function solveNFAbyStep(nfa, symbol, cachedStates, cachedSymbols, checkedStates)
+export function solveFSAByStep(nfa, symbol, cachedStates, cachedSymbols, checkedStates)
 {
   //initialize variables
   let state = null;
