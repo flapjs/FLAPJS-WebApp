@@ -3,13 +3,20 @@ import Style from './TestingPanel.css';
 
 import TestListView from './TestListView.js';
 
-import PanelCheckbox from 'experimental/panels/PanelCheckbox.js';
+import PanelSwitch from 'experimental/panels/PanelSwitch.js';
 
 class TestingPanel extends React.Component
 {
   constructor(props)
   {
     super(props);
+
+    this.state = {
+      stepMode: false
+    };
+
+    this.onStepTestChange = this.onStepTestChange.bind(this);
+    this.onAutoErrorCheckChange = this.onAutoErrorCheckChange.bind(this);
   }
 
   //Override
@@ -31,6 +38,18 @@ class TestingPanel extends React.Component
     });
   }
 
+  onStepTestChange(e)
+  {
+    this.setState((prev, props) => {
+      return {stepMode: !prev.stepMode};
+    });
+  }
+
+  onAutoErrorCheckChange(e)
+  {
+    
+  }
+
   //Override
   render()
   {
@@ -49,9 +68,9 @@ class TestingPanel extends React.Component
           <h1>{TestingPanel.TITLE}</h1>
         </div>
         <div className={Style.panel_content}>
-          <TestListView tester={tester} graphController={graphController} machineController={machineController}/>
-          <PanelCheckbox title={"Step Testing"}/>
-          <PanelCheckbox title={"Automatic Error Checking"}/>
+          <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!this.state.stepMode}/>
+          <PanelSwitch id={"testing-step-test"} checked={this.state.stepMode} onChange={this.onStepTestChange} title={"Step testing"}/>
+          <PanelSwitch id={"testing-error-check"} checked={false} onChange={this.onAutoErrorCheckChange} title={"Auto error checking"}/>
         </div>
       </div>
     );

@@ -1,5 +1,5 @@
 import FSA, { EMPTY_SYMBOL } from 'modules/fsa/machine/FSA.js';
-import { solveFSA } from 'modules/fsa/machine/FSAUtils.js';
+import { solveFSA, solveFSAByStep } from 'modules/fsa/machine/FSAUtils.js';
 
 function testSolveFSA(machine, testString, expectedResult=true)
 {
@@ -95,4 +95,65 @@ describe("Testing NFA machine with immediate transitions", () => {
   testSolveFSA(machine, "011111", true);
   testSolveFSA(machine, "11010101", false);
   testSolveFSA(machine, "1111", false);
+});
+
+describe("Testing NFA machine step by step", () => {
+  const machine = new FSA();
+  const state0 = machine.createState("q0");
+  const state1 = machine.createState("q1");
+  const state2 = machine.createState("q2");
+  machine.addTransition(state0, state1, "0");
+  machine.addTransition(state0, state2, "1");
+  machine.setFinalState(state2);
+
+  test("test string \'0\'", () => {
+    const cachedStates = [];
+    const cachedSymbols = [];
+    const startState = machine.getStartState();
+    for(const currentState of machine.doClosureTransition(startState))
+    {
+      cachedStates.push({state: currentState, index: 0});
+    }
+
+    expect(startState.getStateLabel()).toBe("q0");
+    expect(cachedStates).toHaveLength(1);
+    expect(cachedStates[0].state.getStateLabel()).toBe("q0");
+
+    let result = solveFSAByStep(machine, "0", cachedStates, cachedSymbols);
+
+    expect(result).toBe(false);
+    expect(cachedStates).toHaveLength(1);
+    expect(cachedStates[0].state.getStateLabel()).toBe("q1");
+
+    result = solveFSAByStep(machine, null, cachedStates, cachedSymbols);
+
+    expect(result).toBe(false);
+    expect(cachedStates).toHaveLength(0);
+  });
+
+  test("test string \'1\'", () => {
+    const cachedStates = [];
+    const cachedSymbols = [];
+    const startState = machine.getStartState();
+    for(const currentState of machine.doClosureTransition(startState))
+    {
+      cachedStates.push({state: currentState, index: 0});
+    }
+
+    expect(startState.getStateLabel()).toBe("q0");
+    expect(cachedStates).toHaveLength(1);
+    expect(cachedStates[0].state.getStateLabel()).toBe("q0");
+
+    let result = solveFSAByStep(machine, "1", cachedStates, cachedSymbols);
+
+    expect(result).toBe(false);
+    expect(cachedStates).toHaveLength(1);
+    expect(cachedStates[0].state.getStateLabel()).toBe("q2");
+
+    result = solveFSAByStep(machine, null, cachedStates, cachedSymbols);
+
+    expect(result).toBe(true);
+    expect(cachedStates).toHaveLength(1);
+    expect(cachedStates[0].state.getStateLabel()).toBe("q2");
+  });
 });

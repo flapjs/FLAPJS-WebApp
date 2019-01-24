@@ -185,110 +185,61 @@ class StringTester
 
   stepForward(graphController, machineController, cacheStep=true)
   {
+    const machine = machineController.getMachineBuilder().getMachine();
+
     if (this._testIndex >= this._testString.length) return false;
     ++this._testIndex;
 
     if (this._cachePath.length <= this._testIndex)
     {
       //Calculate current step...
-      const targets = new Set();
-      let cachedStates, cachedSymbols, checkedStates = null;
+      let cachedStates, cachedSymbols = null;
 
-      if (this._testIndex === this._testString.length && this._cachedResult === null)
+      //Initialize first step...
+      if (this._testIndex <= 0)
       {
-        //Run the solver one last time for the result...
+        cachedStates = [];
+        cachedSymbols = [];
 
-        //If it's also the first time though...
-        if (this._testIndex <= 0)
+        const startState = machine.getStartState();
+        for (const currentState of machine.doClosureTransition(startState))
         {
-          cachedStates = [];
-          cachedSymbols = [];
-          checkedStates = [];
-
-          const graph = graphController.getGraph();
-          const machine = machineController.getMachineBuilder().getMachine();
-          const startState = machine.getStartState();
-          for (const curr_state of machine.doClosureTransition(startState))
-          {
-            cachedStates.push({state: curr_state, index: 0});
-          }
-        }
-        else
-        {
-          const prevCache = this._cachePath[this._testIndex - 1];
-          cachedStates = prevCache.states.slice();
-          cachedSymbols = prevCache.symbols.slice();
-          checkedStates = prevCache.checked.slice();
-        }
-
-        const machine = machineController.getMachineBuilder().getMachine();
-        const graph = graphController.getGraph();
-        this._cachedResult = solveFSAByStep(machine, null, cachedStates, cachedSymbols, checkedStates);
-        for(const state of cachedStates)
-        {
-          //TODO: This is dangerous, cause states with the same name?
-          const node = state.state.getSource();
-
-          //Couldn't find the node that was solved for this step...
-          if (!node) throw new Error("Could not find node \'" + state.state + "\'");
-
-          targets.add(node);
+          cachedStates.push({state: currentState, index: 0});
         }
       }
       else
       {
-        const nextSymbol = this._testString[this._testIndex];
+        const prevCache = this._cachePath[this._testIndex - 1];
+        cachedStates = prevCache.states.slice();
+        cachedSymbols = prevCache.symbols.slice();
 
-        //Initialize first step...
-        if (this._testIndex <= 0)
-        {
-          cachedStates = [];
-          cachedSymbols = [];
-          checkedStates = [];
-
-          const graph = graphController.getGraph();
-          const machine = machineController.getMachineBuilder().getMachine();
-          const startState = machine.getStartState();
-          for (const curr_state of machine.doClosureTransition(startState))
-          {
-            cachedStates.push({state: curr_state, index: 0});
-            const node = curr_state.getSource();
-
-            //Couldn't find the node that was solved for this step...
-            if (!node) throw new Error("Could not find node \'" + curr_state + "\'");
-
-            targets.add(node);
-          }
-        }
         //Do the remaining steps...
-        else
+        const isResult = this._testIndex === this._testString.length;
+        const nextSymbol = this._testString[this._testIndex - 1];
+        solveFSAByStep(machine, nextSymbol, cachedStates, cachedSymbols);
+
+        //Do one last step for result...
+        if (isResult)
         {
-          const prevCache = this._cachePath[this._testIndex - 1];
-          cachedStates = prevCache.states.slice();
-          cachedSymbols = prevCache.symbols.slice();
-          checkedStates = prevCache.checked.slice();
-
-          const machine = machineController.getMachineBuilder().getMachine();
-          const graph = graphController.getGraph();
-          solveFSAByStep(machine, nextSymbol, cachedStates, cachedSymbols, checkedStates);
-          for(const state of cachedStates)
-          {
-            const node = state.state.getSource();
-
-            //Couldn't find the node that was solved for this step...
-            if (!node) throw new Error("Could not find node \'" + state.state + "\'");
-
-            targets.add(node);
-          }
+          this._cachedResult = solveFSAByStep(machine, null, cachedStates, cachedSymbols);
         }
       }
 
       //Store current step...
+      const targets = new Set();
+      for(const cachedState of cachedStates)
+      {
+        const node = cachedState.state.getSource();
+
+        //Couldn't find the node that was solved for this step...
+        if (!node) throw new Error("Could not find node \'" + cachedState.state + "\'");
+
+        targets.add(node);
+      }
       const nextCache = {
         targets: Array.from(targets),
         states: cachedStates,
-        symbols: cachedSymbols,
-        checked: checkedStates
+        symbols: cachedSymbols
       };
       this._cachePath.push(nextCache);
     }

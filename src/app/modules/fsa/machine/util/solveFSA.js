@@ -36,7 +36,6 @@ export function solveFSA(fsa, input)
       cachedStates.push({state: relatedState, index: 0});
     }
 
-    const checkedStates = [];
     //The next symbol to compute...
     let symbol = null;
 
@@ -45,7 +44,7 @@ export function solveFSA(fsa, input)
     while(cachedStates.length > 0)
     {
       symbol = input.next().value;
-      if (solveFSAByStep(fsa, symbol, cachedStates, cachedSymbols, checkedStates))
+      if (solveFSAByStep(fsa, symbol, cachedStates, cachedSymbols))
       {
         return true;
       }
@@ -65,7 +64,7 @@ export function solveFSA(fsa, input)
 //TODO: When an empty transition occurs, it does a closure transition.
 //The closure chain will be stored as a group
 //Any future transitions must not re-enter the group
-export function solveFSAByStep(nfa, symbol, cachedStates, cachedSymbols, checkedStates)
+export function solveFSAByStep(nfa, symbol, cachedStates, cachedSymbols)
 {
   //initialize variables
   let state = null;
@@ -94,7 +93,6 @@ export function solveFSAByStep(nfa, symbol, cachedStates, cachedSymbols, checked
     else
     {
       if (nfa.isFinalState(state)) return true;
-      checkedStates.push(state);
     }
 
     //Read none to next state...
