@@ -11,5 +11,5 @@ module.exports = {
   moduleNameMapper: {
     "\\.css$": "identity-obj-proxy"
   },
-  moduleDirectories: ["node_modules", "src/test"],
+  moduleDirectories: ["node_modules", "src/app", "res", "src/test"],
 };

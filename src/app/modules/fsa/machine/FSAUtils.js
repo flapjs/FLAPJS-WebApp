@@ -1,2 +1,2 @@
-export {convertToDFA, convertToNFA} from './util/convertFSA.js';
-export {solveFSA, solveFSAByStep} from './util/solveFSA.js';
+export {convertToDFA, convertToNFA} from './util/ConvertFSA.js';
+export {solveFSA, solveFSAByStep} from './util/SolveFSA.js';

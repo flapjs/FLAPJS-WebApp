@@ -45,7 +45,7 @@ export function solveFSA(fsa, input)
     while(cachedStates.length > 0)
     {
       symbol = input.next().value;
-      if (solveFSAbyStep(fsa, symbol, cachedStates, cachedSymbols, checkedStates))
+      if (solveFSAByStep(fsa, symbol, cachedStates, cachedSymbols, checkedStates))
       {
         return true;
       }
