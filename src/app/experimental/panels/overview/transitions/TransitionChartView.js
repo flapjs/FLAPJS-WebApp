@@ -140,7 +140,12 @@ class TransitionChartView extends React.Component
                 {"Q\u00d7\u03A3"}
               </th>
               <th>
-                {deterministic ? "Q" : "\u2118(Q)"}
+                {deterministic ?
+                  <span>{"Q"}</span> :
+                  <span>
+                    <span style={{fontFamily: "cursive"}}>{"P"}</span>
+                    <span>{"(Q)"}</span>
+                  </span>}
               </th>
             </tr>
             {this.renderTransitionTable(machine)}
