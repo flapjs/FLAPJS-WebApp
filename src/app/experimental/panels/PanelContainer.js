@@ -24,6 +24,8 @@ class PanelContainer extends React.Component
         <div className={Style.panel_content}>
           {this.props.children}
         </div>
+        <div className={Style.panel_bottom}>
+        </div>
       </div>
     );
   }
