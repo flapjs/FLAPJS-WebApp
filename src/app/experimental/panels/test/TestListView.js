@@ -40,9 +40,19 @@ class TestListView extends React.Component
     this.onTestDelete = this.onTestDelete.bind(this);
     this.onTestTest = this.onTestTest.bind(this);
     this.onTestRunAll = this.onTestRunAll.bind(this);
-
     this.onGraphChange = this.onGraphChange.bind(this);
-    this._graphChangeHandler = new GraphChangeHandler(this.onGraphChange, TEST_REFRESH_TICKS);
+  }
+
+  //Override
+  componentDidMount()
+  {
+    this.props.graphController.getGraphChangeHandler().addListener(this.onGraphChange);
+  }
+
+  //Override
+  componentWillUnmount()
+  {
+    this.props.graphController.getGraphChangeHandler().removeListener(this.onGraphChange);
   }
 
   onGraphChange(graph)
@@ -189,14 +199,7 @@ class TestListView extends React.Component
   {
     return this._testList.length <= 0;
   }
-
-  //Override
-  componentDidUpdate(prevProps, prevState, snapshot)
-  {
-    const graphController = this.props.graphController;
-    this._graphChangeHandler.update(graphController.getGraph());
-  }
-
+  
   //Override
   render()
   {

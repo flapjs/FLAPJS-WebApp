@@ -194,6 +194,7 @@ class StringTester
     {
       //Calculate current step...
       let cachedStates, cachedSymbols = null;
+      const isResult = this._testIndex === this._testString.length;
 
       //Initialize first step...
       if (this._testIndex <= 0)
@@ -214,15 +215,14 @@ class StringTester
         cachedSymbols = prevCache.symbols.slice();
 
         //Do the remaining steps...
-        const isResult = this._testIndex === this._testString.length;
         const nextSymbol = this._testString[this._testIndex - 1];
         solveFSAByStep(machine, nextSymbol, cachedStates, cachedSymbols);
+      }
 
-        //Do one last step for result...
-        if (isResult)
-        {
-          this._cachedResult = solveFSAByStep(machine, null, cachedStates, cachedSymbols);
-        }
+      //Do one last step for result...
+      if (isResult)
+      {
+        this._cachedResult = solveFSAByStep(machine, null, cachedStates, cachedSymbols);
       }
 
       //Store current step...

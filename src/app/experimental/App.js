@@ -84,6 +84,7 @@ class App extends React.Component
 
     this._saver = new AppSaver(this);
 
+    //TODO: This is only used to control transitions (do we really need it?)
     this._init = false;
 
     this.state = {
@@ -148,29 +149,34 @@ class App extends React.Component
   getHotKeyManager() { return this._hotKeyManager; }
 
   //Override
+  componentDidUpdate()
+  {
+    const currentModule = this.state.module;
+    const inputAdapter = this._inputAdapter;
+
+    inputAdapter.update();
+    currentModule.update(this);
+
+    //Disable hotkeys when graph is not in view
+    this._hotKeyManager.setEnabled(
+      !(this._toolbar && this._toolbar.isBarOpen()) &&
+      !(this._drawer && this._drawer.isDrawerOpen() &&
+        this._drawer.isDrawerFullscreen())
+      );
+  }
+
+  //Override
   render()
   {
     const currentModule = this.state.module;
-
-    if (this._init)
-    {
-      this._inputAdapter.update();
-      currentModule.update(this);
-
-      //Disable hotkeys when graph is not in view
-      this._hotKeyManager.setEnabled(
-        !(this._toolbar && this._toolbar.isBarOpen()) &&
-        !(this._drawer && this._drawer.isDrawerOpen() &&
-          this._drawer.isDrawerFullscreen())
-        );
-    }
+    const inputAdapter = this._inputAdapter;
 
     const hasSmallWidth = this._mediaQuerySmallWidthList.matches;
     const hasSmallHeight = this._mediaQuerySmallHeightList.matches;
     const isFullscreen = this.state.hide;
 
     const undoManager = this._undoManager;
-    const viewport = this._inputAdapter.getViewport();
+    const viewport = inputAdapter.getViewport();
     const inputController = currentModule.getInputController();
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();

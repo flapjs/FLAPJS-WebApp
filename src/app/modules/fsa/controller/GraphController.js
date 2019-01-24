@@ -5,8 +5,11 @@ import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
 import FSAGraphLabeler from 'modules/fsa/graph/FSAGraphLabeler.js';
 
+import GraphChangeHandler from 'experimental/GraphChangeHandler.js';
+
 const NODE_SPAWN_RADIUS = 64;
 const DEFAULT_AUTO_RENAME = true;
+const GRAPH_REFRESH_RATE = 30;
 
 class GraphController extends AbstractModuleGraphController
 {
@@ -16,6 +19,7 @@ class GraphController extends AbstractModuleGraphController
 
     this.inputController = null;
     this.machineController = null;
+    this._graphChangeHandler = new GraphChangeHandler(GRAPH_REFRESH_RATE);
 
     this.labelEditorElement = null;
     this.tester = null;
@@ -123,6 +127,19 @@ class GraphController extends AbstractModuleGraphController
   destroy(module)
   {
     super.destroy(module);
+  }
+
+  //Override
+  update(module)
+  {
+    super.update(module);
+
+    this._graphChangeHandler.update(this._graph);
+  }
+
+  getGraphChangeHandler()
+  {
+    return this._graphChangeHandler;
   }
 
   applyAutoLayout()

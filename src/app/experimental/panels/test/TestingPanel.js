@@ -12,7 +12,8 @@ class TestingPanel extends React.Component
     super(props);
 
     this.state = {
-      stepMode: false
+      stepMode: false,
+      errorCheck: false
     };
 
     this.onStepTestChange = this.onStepTestChange.bind(this);
@@ -47,7 +48,9 @@ class TestingPanel extends React.Component
 
   onAutoErrorCheckChange(e)
   {
-    
+    this.setState((prev, props) => {
+      return {errorCheck: !prev.errorCheck};
+    });
   }
 
   //Override
@@ -59,6 +62,9 @@ class TestingPanel extends React.Component
     const machineController = currentModule.getMachineController();
     const tester = currentModule._tester;
 
+    const stepMode = this.state.stepMode;
+    const errorCheck = this.state.errorCheck;
+
     return (
       <div id={this.props.id}
         className={Style.panel_container +
@@ -68,9 +74,9 @@ class TestingPanel extends React.Component
           <h1>{TestingPanel.TITLE}</h1>
         </div>
         <div className={Style.panel_content}>
-          <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!this.state.stepMode}/>
-          <PanelSwitch id={"testing-step-test"} checked={this.state.stepMode} onChange={this.onStepTestChange} title={"Step testing"}/>
-          <PanelSwitch id={"testing-error-check"} checked={false} onChange={this.onAutoErrorCheckChange} title={"Auto error checking"}/>
+          <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode}/>
+          <PanelSwitch id={"testing-step-test"} checked={stepMode} onChange={this.onStepTestChange} title={"Step testing"}/>
+          <PanelSwitch id={"testing-error-check"} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={"Auto error checking"} disabled={true}/>
         </div>
       </div>
     );

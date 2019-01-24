@@ -68,8 +68,6 @@ class App extends React.Component
     this.onDragEnter = this.onDragEnter.bind(this);
     this.onDragLeave = this.onDragLeave.bind(this);
     this.onFileDrop = this.onFileDrop.bind(this);
-
-    this._init = false;
   }
 
   //Override
@@ -95,8 +93,6 @@ class App extends React.Component
     this.tutorial.start(this);
 
     LocalSave.registerHandler(this);
-
-    this._init = true;
   }
 
   //Override
@@ -116,8 +112,6 @@ class App extends React.Component
     workspaceDOM.removeEventListener("dragover", this.onDragOver);
     workspaceDOM.removeEventListener("dragenter", this.onDragEnter);
     workspaceDOM.removeEventListener("dragleave", this.onDragLeave);
-
-    this._init = false;
   }
 
   //Ducktype(AbstractLocalSaver)
@@ -299,16 +293,17 @@ class App extends React.Component
   }
 
   //Override
+  componentDidUpdate()
+  {
+    this.inputAdapter.update();
+    this._module.update(this);
+  }
+
+  //Override
   render()
   {
     const currentModule = this._module;
     const screen = this.workspace ? this.workspace.ref : null;
-
-    if (this._init)
-    {
-      this.inputAdapter.update();
-      currentModule.update(this);
-    }
 
     return <div className="app-container" ref={ref=>this.container=ref}
       style={{animation: ModuleLoader.isModuleLoading() ? "fadeout 1s" : "fadein 1s"}}>
