@@ -1,6 +1,6 @@
 import Eventable from 'util/Eventable.js';
-//FIXME: FSABUILDER: these should be the other ones
-import { solveNFAbyStep } from 'machine/util/solveNFA.js';
+
+import { solveFSAByStep } from 'modules/fsa/machine/FSAUtils.js';
 
 import TapeContext from './TapeContext.js';
 
@@ -104,6 +104,14 @@ class StringTester
     this.registerEvent("stopTest");
   }
 
+  //TODO: a hack to get current targets.
+  get targets()
+  {
+    if (this._cachePath.length <= 0) return [];
+    const cache = this._cachePath[this._cachePath.length - 1];
+    return cache.targets;
+  }
+
   startTest(testString, graphController, machineController)
   {
     if (!testString) testString = "";
@@ -200,7 +208,7 @@ class StringTester
           const graph = graphController.getGraph();
           const machine = machineController.getMachineBuilder().getMachine();
           const startState = machine.getStartState();
-          for (let curr_state of machine.doClosureTransition(startState))
+          for (const curr_state of machine.doClosureTransition(startState))
           {
             cachedStates.push({state: curr_state, index: 0});
           }
@@ -215,14 +223,14 @@ class StringTester
 
         const machine = machineController.getMachineBuilder().getMachine();
         const graph = graphController.getGraph();
-        this._cachedResult = solveNFAbyStep(machine, null, cachedStates, cachedSymbols, checkedStates);
+        this._cachedResult = solveFSAByStep(machine, null, cachedStates, cachedSymbols, checkedStates);
         for(const state of cachedStates)
         {
           //TODO: This is dangerous, cause states with the same name?
-          const node = machineController.getFirstGraphNodeByLabel(graph, state.state);
+          const node = state.state.getSource();
 
           //Couldn't find the node that was solved for this step...
-          if (!node) throw new Error("Could not find node by label \'" + state.state + "\'");
+          if (!node) throw new Error("Could not find node \'" + state.state + "\'");
 
           targets.add(node);
         }
@@ -241,13 +249,13 @@ class StringTester
           const graph = graphController.getGraph();
           const machine = machineController.getMachineBuilder().getMachine();
           const startState = machine.getStartState();
-          for (let curr_state of machine.doClosureTransition(startState))
+          for (const curr_state of machine.doClosureTransition(startState))
           {
             cachedStates.push({state: curr_state, index: 0});
-            const node = machineController.getFirstGraphNodeByLabel(graph, curr_state);
+            const node = curr_state.getSource();
 
             //Couldn't find the node that was solved for this step...
-            if (!node) throw new Error("Could not find node by label \'" + state.state + "\'");
+            if (!node) throw new Error("Could not find node \'" + curr_state + "\'");
 
             targets.add(node);
           }
@@ -262,13 +270,13 @@ class StringTester
 
           const machine = machineController.getMachineBuilder().getMachine();
           const graph = graphController.getGraph();
-          solveNFAbyStep(machine, nextSymbol, cachedStates, cachedSymbols, checkedStates);
+          solveFSAByStep(machine, nextSymbol, cachedStates, cachedSymbols, checkedStates);
           for(const state of cachedStates)
           {
-            const node = machineController.getFirstGraphNodeByLabel(graph, state.state);
+            const node = state.state.getSource();
 
             //Couldn't find the node that was solved for this step...
-            if (!node) throw new Error("Could not find node by label \'" + state.state + "\'");
+            if (!node) throw new Error("Could not find node \'" + state.state + "\'");
 
             targets.add(node);
           }
