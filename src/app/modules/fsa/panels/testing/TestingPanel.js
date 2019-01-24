@@ -169,6 +169,7 @@ class TestingPanel extends React.Component
       document.getElementById("test-name").innerHTML = "";
   }
 
+  //Override
   render()
   {
     const currentModule = this.props.currentModule;

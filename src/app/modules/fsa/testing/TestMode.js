@@ -1,3 +1,4 @@
+//FIXME: FSABUILDER: these should be the other ones
 import { solveDFA } from 'machine/util/solveDFA.js';
 import { solveNFA, solveNFAbyStep } from 'machine/util/solveNFA.js';
 
@@ -55,12 +56,6 @@ class TestMode
 
   onStart()
   {
-    //Check the machine, if DFA, then it must be a valid DFA
-    /*if (this.machineController.getMachineType() == "DFA")
-    {
-      const dfa = this.machineController.getMachineBuilder().toDFA();
-      if (!dfa.validate()) return;
-    }*/
     this.prepareForNewTest();
     this.started = true;
     this.skipToEnd = false;
@@ -281,6 +276,7 @@ class TestMode
     let startState = machine.getStartState();
     for (let curr_state of machine.doClosureTransition(startState))
     {
+      //FIXME: FSABUILDER: when converting, getFirstGraphNodeByLabel should be by id
       this.cachedStates.push({state: curr_state, index: 0});
       const node = this.machineController.getFirstGraphNodeByLabel(graph, curr_state);
       if (!node) throw new Error("Found null target");

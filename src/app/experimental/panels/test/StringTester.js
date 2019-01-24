@@ -1,4 +1,5 @@
 import Eventable from 'util/Eventable.js';
+//FIXME: FSABUILDER: these should be the other ones
 import { solveNFAbyStep } from 'machine/util/solveNFA.js';
 
 import TapeContext from './TapeContext.js';
@@ -12,8 +13,6 @@ class TestTapeContext extends TapeContext
     this._tester = tester;
     this._graphController = graphController;
     this._machineController = machineController;
-
-    this._cachedGraphHash = graphController.getGraph().getHashCode(false);
   }
 
   //Override

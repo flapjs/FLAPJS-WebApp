@@ -69,7 +69,6 @@ class AnalysisPanel extends React.Component
     const machineController = currentModule.getMachineController();
 
     const graph = graphController.getGraph();
-    const machineBuilder = machineController.getMachineBuilder();
     const machineType = machineController.getMachineType();
 
     return <div className={"panel-container " + this.props.className} id="analysis" ref={ref=>this.container=ref} style={this.props.style}>

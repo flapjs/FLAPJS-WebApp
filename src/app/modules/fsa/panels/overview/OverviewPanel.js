@@ -85,7 +85,6 @@ class OverviewPanel extends React.Component
     const machineController = currentModule.getMachineController();
 
     const graph = graphController.getGraph();
-    const machineBuilder = machineController.getMachineBuilder();
 
     return <div className={"panel-container " + this.props.className} id="overview" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title">

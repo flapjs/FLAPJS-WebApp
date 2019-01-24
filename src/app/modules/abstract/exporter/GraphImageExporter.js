@@ -2,11 +2,13 @@ import AbstractGraphExporter from './AbstractGraphExporter.js';
 
 import PNGIcon from 'icons/flat/PNGIcon.js';
 import JPGIcon from 'icons/flat/JPGIcon.js';
-import { downloadSVG } from 'util/Downloader.js';
+import XMLIcon from 'icons/flat/XMLIcon.js';
+import SVGIcon from 'icons/flat/SVGIcon.js';
+import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG, downloadImageFromSVG } from 'util/Downloader.js';
 
 class GraphImageExporter extends AbstractGraphExporter
 {
-  constructor(imageType='png')
+  constructor(imageType=FILE_TYPE_PNG)
   {
     super();
     this._imageType = imageType;
@@ -21,7 +23,7 @@ class GraphImageExporter extends AbstractGraphExporter
     const height = workspaceDim.height;
     const svg = workspace.getSVGForExport(width, height);
 
-    downloadSVG(filename, this._imageType, svg, width, height);
+    downloadImageFromSVG(filename, this._imageType, svg, width, height);
   }
 
   //Override
@@ -41,8 +43,9 @@ class GraphImageExporter extends AbstractGraphExporter
   {
     switch(this._imageType)
     {
-      case 'png': return I18N.toString("file.export.png.hint");
-      case 'jpg': return I18N.toString("file.export.jpg.hint");
+      case FILE_TYPE_PNG: return I18N.toString("file.export.png.hint");
+      case FILE_TYPE_JPG: return I18N.toString("file.export.jpg.hint");
+      case FILE_TYPE_SVG: return I18N.toString("file.export.svg.hint");
       default: return super.getTitle();
     }
   }
@@ -52,8 +55,9 @@ class GraphImageExporter extends AbstractGraphExporter
   {
     switch(this._imageType)
     {
-      case 'png': return I18N.toString("file.export.png");
-      case 'jpg': return I18N.toString("file.export.jpg");
+      case FILE_TYPE_PNG: return I18N.toString("file.export.png");
+      case FILE_TYPE_JPG: return I18N.toString("file.export.jpg");
+      case FILE_TYPE_SVG: return I18N.toString("file.export.svg");
       default: return super.getLabel();
     }
   }
@@ -69,8 +73,9 @@ class GraphImageExporter extends AbstractGraphExporter
   {
     switch(this._imageType)
     {
-      case 'png': return PNGIcon;
-      case 'jpg': return JPGIcon;
+      case FILE_TYPE_PNG: return PNGIcon;
+      case FILE_TYPE_JPG: return JPGIcon;
+      case FILE_TYPE_SVG: return SVGIcon;
       default: return null;
     }
   }
