@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: row;
 
-  border-bottom: 1px solid var(--color-drawer-text);
+  border-bottom: 1px solid var(--color-panel-text);
 }
 :local(.test_item_container):last-of-type {
   border-bottom: none;
@@ -25,19 +25,19 @@
 }
 
 :local(.test_button):hover {
-  color: var(--color-drawer-text-active);
+  color: var(--color-panel-text-active);
 }
 :local(.test_button):disabled {
-  color: var(--color-drawer-text-disabled);
+  color: var(--color-panel-text-disabled);
 }
 :local(.delete_button) {
-  color: var(--color-drawer-text);
+  color: var(--color-panel-text);
 }
 :local(.delete_button):hover {
-  color: var(--color-drawer-text-active);
+  color: var(--color-panel-text-active);
 }
 :local(.delete_button):disabled {
-  color: var(--color-drawer-text-disabled);
+  color: var(--color-panel-text-disabled);
 }
 
 :local(.test_button), :local(.delete_button) {
@@ -47,7 +47,7 @@
   background: white;
 }
 :local(.test_item_container):hover {
-  background: var(--color-drawer-back-detail);
+  background: var(--color-panel-back-detail);
 }
 
 :local(.test_input) {

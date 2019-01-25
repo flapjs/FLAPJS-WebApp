@@ -3,10 +3,10 @@
   padding: 0.3em;
 
   border-radius: 0.5em;
-  background: var(--color-drawer-back-input);
+  background: var(--color-panel-back-input);
 }
 :local(.element_container):first-of-type {
-  outline: 0.15em dashed var(--color-drawer-back-detail);
+  outline: 0.15em dashed var(--color-panel-back-detail);
   outline-offset: 0.15em;
   margin-right: 0.3em;
   margin-left: -0.15em;
@@ -26,15 +26,15 @@
 }
 :local(.element_container).accept input {
   /*text-decoration: underline;*/
-  border-color: var(--color-drawer-back-detail);
+  border-color: var(--color-panel-back-detail);
 }
 
 :local(.element_container).empty {
-  background: var(--color-drawer-error);
+  background: var(--color-panel-error);
 }
 :local(.element_container).custom input {
-  color: var(--color-drawer-text-active);
+  color: var(--color-panel-text-active);
 }
 :local(.element_container).error input {
-  color: var(--color-drawer-error);
+  color: var(--color-panel-error);
 }

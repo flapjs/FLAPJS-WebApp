@@ -11,14 +11,14 @@
   align-self: flex-start;
 }
 :local(.add_button):hover {
-  color: var(--color-drawer-text-active);
+  color: var(--color-panel-text-active);
 }
 
 :local(.first_marker) {
   font-size: inherit;
   margin-top: auto;
   margin-bottom: auto;
-  fill: var(--color-drawer-text-subtle);
+  fill: var(--color-panel-back-detail);
   margin-left: -0.5em;
 
   transform: rotate(90deg);

@@ -11,5 +11,5 @@
   align-self: flex-start;
 }
 :local(.add_button):hover {
-  color: var(--color-drawer-text-active);
+  color: var(--color-panel-text-active);
 }

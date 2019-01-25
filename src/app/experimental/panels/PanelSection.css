@@ -7,15 +7,15 @@
   flex-direction: row-reverse;
 
   padding: 0.1em;
-  border-bottom: 1px solid var(--color-drawer-back-detail);
-  background: var(--color-drawer-back);
+  border-bottom: 1px solid var(--color-panel-back-detail);
+  background: var(--color-panel-back);
 }
 :local(.section_header):hover {
-  background: var(--color-drawer-back-detail);
+  background: var(--color-panel-back-detail);
 }
 :local(.section_header):disabled {
-  color: var(--color-drawer-text-disabled);
-  background: var(--color-drawer-back);
+  color: var(--color-panel-text-disabled);
+  background: var(--color-panel-back);
 }
 :local(.section_header) svg {
   width: 2em;
@@ -40,7 +40,7 @@
   margin-bottom: 0.5em;
   margin-left: 0.5em;
   padding-left: 0.5em;
-  border-left: 1px solid var(--color-drawer-back-detail);
+  border-left: 1px solid var(--color-panel-back-detail);
 
   display: none;
 }

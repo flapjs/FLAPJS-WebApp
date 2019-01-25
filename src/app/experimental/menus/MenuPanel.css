@@ -39,6 +39,7 @@
   width: 16vmin;
 }
 :local(.panel_button) label {
+  padding: 0.5em 0;
   flex: 1;
   font-size: 6vmin;
   align-self: center;

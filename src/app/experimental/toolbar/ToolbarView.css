@@ -13,6 +13,15 @@
   --color-toolbar-text-active: var(--color-accent);
   --color-toolbar-text-disabled: var(--color-primary-dark);
 
+  --color-panel-back: var(--color-toolbar-back);
+  --color-panel-back-detail: var(--color-toolbar-back-detail);
+  --color-panel-text: var(--color-toolbar-text);
+  --color-panel-text-active: var(--color-toolbar-text-active);
+  --color-panel-text-disabled: var(--color-toolbar-text-disabled);
+  --color-panel-back-input: var(--color-surface-lite);
+  --color-panel-error: var(--color-error);
+  --color-panel-accent: var(--color-toolbar-highlight);
+
   z-index: 1000;
   display: flex;
   flex-direction: column;

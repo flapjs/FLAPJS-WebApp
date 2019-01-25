@@ -39,7 +39,6 @@
 
   --color-drawer-back: var(--color-surface);
   --color-drawer-back-detail: var(--color-surface-dark);
-  --color-drawer-back-input: var(--color-surface-lite);
   --color-drawer-text: var(--color-surface-text);
   --color-drawer-text-active: var(--color-surface-active);
   --color-drawer-text-disabled: var(--color-surface-dark);
@@ -52,6 +51,15 @@
   --color-drawer-tab-text-active: var(--color-surface-active);
   --color-drawer-tab-highlight: var(--color-accent);
   --color-drawer-shadow: rgba(0, 0, 0, 0.5);
+
+  --color-panel-back: var(--color-drawer-back);
+  --color-panel-back-detail: var(--color-drawer-back-detail);
+  --color-panel-text: var(--color-drawer-text);
+  --color-panel-text-active: var(--color-drawer-text-active);
+  --color-panel-text-disabled: var(--color-drawer-text-disabled);
+  --color-panel-back-input: var(--color-surface-lite);
+  --color-panel-error: var(--color-drawer-error);
+  --color-panel-accent: var(--color-drawer-tab-highlight);
 
   position: relative;
   z-index: 500;

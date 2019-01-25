@@ -208,7 +208,6 @@ class App extends React.Component
           menuProps={moduleMenuProps}
           hide={isFullscreen}
           title={moduleName}>
-
           <ToolbarButton title="New" icon={PageEmptyIcon}
             onClick={() => UserUtil.userClearGraph(this, false, () => this._toolbar.closeBar())}/>
           <ToolbarUploadButton title="Upload" icon={UploadIcon} accept={graphImporter.getImportFileTypes().join(",")}
@@ -240,14 +239,6 @@ class App extends React.Component
             onClick={()=>window.open(HELP_URL, '_blank')}/>
           <ToolbarButton title={I18N.toString("component.options.title")} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>this._toolbar.setCurrentMenu(1)}/>
-
-          <button onClick={() => {
-            const nextModuleClass = this.getCurrentModule() instanceof Module ? DefaultModule : Module;
-            this.setCurrentModuleClass(nextModuleClass);
-          }}>
-            {"Change to Module"}
-          </button>
-
         </ToolbarView>
 
         <DrawerView ref={ref=>this._drawer=ref} className="app-content"

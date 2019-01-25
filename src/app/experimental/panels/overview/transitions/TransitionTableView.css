@@ -1,5 +1,5 @@
 :local(.table_container) table {
-  color: var(--color-drawer-text);
+  color: var(--color-panel-text);
 }
 
 :local(.table_container) td, :local(.table_container) th {
@@ -7,7 +7,7 @@
   padding: 0.3em;
 
   border-radius: 0.5em;
-  background: var(--color-drawer-back-input);
+  background: var(--color-panel-back-input);
 }
 
 :local(.table_container) td {
@@ -20,5 +20,5 @@
   opacity: 0.3;
 }
 :local(.table_entry).error {
-  color: var(--color-drawer-error);
+  color: var(--color-panel-error);
 }

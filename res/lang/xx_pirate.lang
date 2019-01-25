@@ -59,6 +59,7 @@ options.checkerrors.mode.immediate = No quarter given!
 
 options.autolabel = Name yer powder monkeys
 options.skipwelcome = Straight t' the sea
+options.exitwarning = Straight t' port
 //options.swapinputs = Hand me yer cutlass
 
 options.testing.stepmode = Swab the deck!

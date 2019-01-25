@@ -1,5 +1,5 @@
 import React from 'react';
-import Style from './ExportPanel.css';
+import Style from '../MenuPanel.css';
 
 import IconButton from 'experimental/components/IconButton.js';
 

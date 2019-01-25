@@ -96,6 +96,7 @@ options.checkerrors.mode.immediate = Immediate
 
 options.autolabel = Automatic State Labels
 options.skipwelcome = Skip Welcome Page
+options.exitwarning = Disable Exit Warning
 //options.swapinputs = Swap Input Controls
 
 options.testing.stepmode = Step-by-Step Mode

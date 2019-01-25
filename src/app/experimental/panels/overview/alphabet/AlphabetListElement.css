@@ -3,7 +3,7 @@
   padding: 0.3em;
 
   border-radius: 0.5em;
-  background: var(--color-drawer-back-input);
+  background: var(--color-panel-back-input);
 }
 :local(.element_container) input {
   background: none;
@@ -20,11 +20,11 @@
 }
 
 :local(.element_container).empty {
-  background: var(--color-drawer-error);
+  background: var(--color-panel-error);
 }
 :local(.element_container).error input {
-  color: var(--color-drawer-error);
+  color: var(--color-panel-error);
 }
 :local(.element_container):not(.used) input {
-  color: var(--color-drawer-text-active);
+  color: var(--color-panel-text-active);
 }

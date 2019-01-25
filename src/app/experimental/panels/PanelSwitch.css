@@ -3,7 +3,7 @@
   margin: 0.1em 0;
   padding: 0.2em;
 
-  /*border: 1px solid var(--color-drawer-back-detail);*/
+  /*border: 1px solid var(--color-panel-back-detail);*/
   border-radius: 1em;
 }
 
@@ -26,7 +26,7 @@
   font-size: 1.3em;
   width: 2em;
   height: 1em;
-  background: var(--color-drawer-back-input);
+  background: var(--color-panel-back-input);
   border-radius: 1em;
 
   cursor: pointer;
@@ -38,7 +38,7 @@
   width: 1em;
   height: 1em;
   border-radius: 1em;
-  background: var(--color-drawer-text-active);
+  background: var(--color-panel-text-active);
 
   transition: transform 0.3s ease;
 }
@@ -47,18 +47,18 @@
   transform: translate3d(100%, 0, 0);
 }
 :local(.switch_container).active :local(.panel_switch) {
-  background: var(--color-drawer-tab-highlight);
+  background: var(--color-panel-accent);
 }
 :local(.switch_container).disabled :local(.switch_label) {
-  color: var(--color-drawer-text-disabled);
+  color: var(--color-panel-text-disabled);
   cursor: auto;
 }
 :local(.switch_container).disabled :local(.panel_switch) {
   background: transparent;
-  border: 1px dashed var(--color-drawer-back-detail);
+  border: 1px dashed var(--color-panel-back-detail);
   margin: -1px;
   cursor: auto;
 }
 :local(.switch_container).disabled :local(.switch_slider) {
-  background: var(--color-drawer-back-input);
+  background: var(--color-panel-back-input);
 }

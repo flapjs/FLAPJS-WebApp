@@ -6,7 +6,7 @@
   padding: 0.5em;
   padding-top: 0.5em;
   border-radius: 1em;
-  border: 1px solid var(--color-drawer-back-detail);
+  border: 1px solid var(--color-panel-back-detail);
 }
 :local(.test_control_tray) {
   display: flex;
@@ -16,13 +16,13 @@
   flex: 1;
   height: 3em;
 
-  color: var(--color-drawer-text);
+  color: var(--color-panel-text);
 }
 :local(.test_control_button):hover {
-  color: var(--color-drawer-text-active);
+  color: var(--color-panel-text-active);
 }
 :local(.test_control_button):disabled {
-  color: var(--color-drawer-text-disabled);
+  color: var(--color-panel-text-disabled);
 }
 
 :local(.test_list_container) {
@@ -38,7 +38,7 @@
 }
 :local(.test_list_scroll_container) {
   border-radius: 1em;
-  border: 1px solid var(--color-drawer-text);
+  border: 1px solid var(--color-panel-text);
   max-height: 40vh;
   overflow-x: hidden;
   overflow-y: auto;
@@ -56,23 +56,23 @@
   height: 1.8em;
 
   border-radius: 1em;
-  border: 1px solid var(--color-drawer-text);
-  color: var(--color-drawer-text);
+  border: 1px solid var(--color-panel-text);
+  color: var(--color-panel-text);
 }
 :local(.test_list_add):hover, :local(.test_list_runall):hover {
-  color: var(--color-drawer-text-active);
+  color: var(--color-panel-text-active);
 }
 :local(.test_list_add):hover :local(.test_list_count) {
   opacity: 1;
 }
 :local(.test_list_add):disabled, :local(.test_list_runall):disabled {
-  color: var(--color-drawer-text-disabled);
+  color: var(--color-panel-text-disabled);
 }
 :local(.test_list_count) {
   position: absolute;
   right: 1em;
   line-height: 1.8em;
-  color: var(--color-drawer-text);
+  color: var(--color-panel-text);
   opacity: 0;
 
   transition: opacity 0.3s ease 1s;

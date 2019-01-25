@@ -10,7 +10,7 @@
 :local(.prefix_editor) {
   width: 6em;
 
-  background: var(--color-drawer-back-input);
+  background: var(--color-panel-back-input);
   outline: none;
 
   font-size: 1.2em;
