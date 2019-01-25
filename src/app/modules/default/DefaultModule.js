@@ -23,6 +23,8 @@ class DefaultModule extends AbstractModule
   {
     super(app);
 
+    this._workspace = null;
+
     const inputAdapter = app.getInputAdapter();
     this._inputController = new DefaultInputController(this, inputAdapter);
     this._graphController = new DefaultGraphController(this);
@@ -38,6 +40,9 @@ class DefaultModule extends AbstractModule
   initialize(app)
   {
     super.initialize(app);
+
+    const workspace = app.workspace;
+    this._workspace = workspace;
   }
 
   //Override
