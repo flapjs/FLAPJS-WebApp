@@ -13,6 +13,7 @@
   fill: var(--color-viewport-error);
 }
 :local(.trash_container).hide {
+  pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
