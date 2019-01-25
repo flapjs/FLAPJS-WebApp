@@ -26,6 +26,15 @@ class PanelSection extends React.Component
   }
 
   //Override
+  componentDidUpdate()
+  {
+    if (this.state.open && this.props.disabled)
+    {
+      this.setState({open: false});
+    }
+  }
+
+  //Override
   render()
   {
     const isOpen = this.state.open;

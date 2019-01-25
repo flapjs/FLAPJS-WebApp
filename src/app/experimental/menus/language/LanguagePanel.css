@@ -34,11 +34,8 @@
   color: var(--color-toolbar-text-disabled);
   background: var(--color-toolbar-menu-disabled);
 }
-:local(.panel_button) svg {
-  padding: 0.5em 0;
-  width: 16vmin;
-}
 :local(.panel_button) label {
+  padding: 0.5em 0;
   flex: 1;
   font-size: 6vmin;
   align-self: center;

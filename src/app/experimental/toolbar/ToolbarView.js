@@ -107,6 +107,7 @@ class ToolbarView extends React.Component
   //Override
   render()
   {
+    const title = this.props.title;
     const toolbarMenus = this.props.menus;
     const toolbarMenuIndex = this.state.menuIndex;
     const ToolbarMenu = toolbarMenuIndex >= 0 ? toolbarMenus[toolbarMenuIndex] : null;
@@ -135,7 +136,7 @@ class ToolbarView extends React.Component
             </div>}
         </div>
         <div ref={ref=>this.toolbarElement=ref} className={Style.bar_toolbar}>
-          <ToolbarTitle className={Style.toolbar_title}/>
+          <ToolbarTitle className={Style.toolbar_title} title={title}/>
 
           <div className={Style.toolbar_button_container}>
             {this.renderToolbarButtons(this.props.children)}

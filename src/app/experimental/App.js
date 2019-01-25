@@ -11,6 +11,7 @@ import UploadDropZone from 'experimental/components/UploadDropZone.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
+import LanguagePanel from 'experimental/menus/language/LanguagePanel.js';
 
 import EditPane from 'experimental/EditPane.js';
 import TapePane from 'experimental/TapePane.js';
@@ -49,6 +50,7 @@ import LocalSave from 'system/localsave/LocalSave.js';
 import DefaultModule from 'modules/default/DefaultModule.js';
 import Module from 'modules/fsa/FSAModule.js';
 
+const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
 
 const SMOOTH_OFFSET_DAMPING = 0.4;
@@ -183,9 +185,10 @@ class App extends React.Component
     const graphImporter = currentModule.getGraphImporter();
     const inputActionMode = inputController.isActionMode();
 
+    const moduleName = currentModule.getLocalizedModuleName();
     const modulePanels = [TestingPanel, OverviewPanel, AnalysisPanel];
     const modulePanelProps = {currentModule: currentModule, app: this};
-    const moduleMenus = currentModule.getModuleMenus().concat([ExportPanel, OptionPanel]);
+    const moduleMenus = currentModule.getModuleMenus().concat([ExportPanel, OptionPanel, LanguagePanel]);
     const moduleMenuProps = {currentModule: currentModule, app: this};
     const moduleViews = currentModule.getModuleViews().concat([EditPane, TapePane]);
     const moduleViewProps = {currentModule: currentModule, app: this};
@@ -203,7 +206,8 @@ class App extends React.Component
         <ToolbarView ref={ref=>this._toolbar=ref} className="app-bar"
           menus={moduleMenus}
           menuProps={moduleMenuProps}
-          hide={isFullscreen}>
+          hide={isFullscreen}
+          title={moduleName}>
 
           <ToolbarButton title="New" icon={PageEmptyIcon}
             onClick={() => UserUtil.userClearGraph(this, false, () => this._toolbar.closeBar())}/>
@@ -228,8 +232,10 @@ class App extends React.Component
             onClick={()=>this._toolbar.setCurrentMenu(0)}
             disabled={graphController.getGraph().isEmpty()}/>
           <ToolbarDivider/>
-          <ToolbarButton title="Report a Bug" icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}/>
-          <ToolbarButton title="Language" icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}/>
+          <ToolbarButton title="Report a Bug" icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+            onClick={()=>window.open(BUGREPORT_URL, '_blank')}/>
+          <ToolbarButton title="Language" icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+            onClick={()=>this._toolbar.setCurrentMenu(2)}/>
           <ToolbarButton title="Help" icon={HelpIcon}
             onClick={()=>window.open(HELP_URL, '_blank')}/>
           <ToolbarButton title={I18N.toString("component.options.title")} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}

@@ -35,6 +35,7 @@ component.overview.title = Description
 component.exporting.title = Exporting
 component.options.title = Options
 component.analysis.title = Analysis
+component.language.title = Language
 
 component.toolbar.title = Toolbar
 component.workspace.title = Workspace
