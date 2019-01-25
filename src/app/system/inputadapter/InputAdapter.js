@@ -183,9 +183,16 @@ class InputAdapter
     if (!this.hasInputHandlers()) return false;
 
     const mouse = this._viewport.transformScreenToView(e.clientX, e.clientY);
-    this._pointer.setPosition(mouse.x, mouse.y);
+    const pointer = this._pointer;
+    pointer.setPosition(mouse.x, mouse.y);
 
-    //Can update target here for hover effects...
+    if (this.handleEvent('onMoveInputEvent', pointer))
+    {
+      e.stopPropagation();
+      e.preventDefault();
+
+      this.cancelInputEvent();
+    }
   }
 
   onMouseDownThenMove(e)

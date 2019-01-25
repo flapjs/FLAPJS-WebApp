@@ -8,12 +8,8 @@ import PanelSwitch from 'experimental/panels/PanelSwitch.js';
 
 import StateListView from './states/StateListView.js';
 import AlphabetListView from './alphabet/AlphabetListView.js';
-//import TransitionChartView from './transitions/TransitionChartView.js';
-//import TransitionTableView from './transitions/TransitionTableView.js';
-//HACK: this is only to support the old FSABuilder (remove this once finished)
-import TransitionTable from './transitions/TransitionTable.js';
-import TransitionFunction from './transitions/TransitionFunction.js';
-
+import TransitionChartView from './transitions/TransitionChartView.js';
+import TransitionTableView from './transitions/TransitionTableView.js';
 import AutoStateLabelView from './AutoStateLabelView.js';
 
 const MACHINE_TYPE_DFA = "DFA";
@@ -82,8 +78,7 @@ class OverviewPanel extends React.Component
     const currentModule = this.props.currentModule;
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
-    //HACK: Re-enable this.
-    //const machineType = machineController.getMachineBuilder().getMachine().isDeterministic() ? MACHINE_TYPE_DFA : MACHINE_TYPE_NFA;
+    const machineType = machineController.getMachineBuilder().getMachine().isDeterministic() ? MACHINE_TYPE_DFA : MACHINE_TYPE_NFA;
     const autoRename = graphController.shouldAutoRenameNodes();
 
     const drawerFull = drawer.isDrawerFullscreen();
@@ -94,14 +89,12 @@ class OverviewPanel extends React.Component
         style={this.props.style}
         title={OverviewPanel.TITLE}>
 
-        {/*
         <select className={Style.machine_type_select}
           value={machineType}
           onChange={this.onMachineTypeChange}>
           <option>{MACHINE_TYPE_DFA}</option>
           <option>{MACHINE_TYPE_NFA}</option>
         </select>
-        */}
 
         <PanelDivider/>
 
@@ -114,19 +107,11 @@ class OverviewPanel extends React.Component
 
         <PanelDivider/>
 
-        {/*
-        <PanelSection title={"Transition Chart"} full={drawerFull}>
+        <PanelSection title={"Transition Chart"} full={drawerFull} disabled={graphController.getGraph().getEdgeCount() <= 0}>
           <TransitionChartView machineController={machineController}/>
         </PanelSection>
-        <PanelSection title={"Transition Table"} full={drawerFull}>
+        <PanelSection title={"Transition Table"} full={drawerFull} disabled={graphController.getGraph().getNodeCount() <= 0}>
           <TransitionTableView machineController={machineController}/>
-        </PanelSection>
-        */}
-        <PanelSection title={"Transition Chart"} full={drawerFull}>
-          <TransitionFunction machineController={machineController}/>
-        </PanelSection>
-        <PanelSection title={"Transition Table"} full={drawerFull}>
-          <TransitionTable machineController={machineController}/>
         </PanelSection>
 
         <PanelDivider/>
@@ -139,9 +124,20 @@ class OverviewPanel extends React.Component
 
         <PanelDivider/>
 
-        <PanelSwitch id={"overview-auto-label"} checked={autoRename} onChange={this.onAutoLabelChange} title={"Auto rename nodes"}/>
-        <PanelSwitch id={"overview-auto-layout"} checked={false} onChange={this.onAutoLayoutChange} title={"Auto layout nodes"} disabled={true}/>
-        <PanelSwitch id={"overview-snap-grid"} checked={false} onChange={this.onSnapToGridChange} title={"Snap-to-grid"} disabled={true}/>
+        <PanelSwitch id={"overview-auto-label"}
+          checked={autoRename}
+          title={"Auto rename nodes"}
+          onChange={this.onAutoLabelChange}/>
+        <PanelSwitch id={"overview-auto-layout"}
+          checked={false}
+          title={"Auto layout nodes"}
+          disabled={true}
+          onChange={this.onAutoLayoutChange}/>
+        <PanelSwitch id={"overview-snap-grid"}
+          checked={false}
+          title={"Snap-to-grid"}
+          disabled={true}
+          onChange={this.onSnapToGridChange}/>
 
       </PanelContainer>
     );

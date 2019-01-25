@@ -38,6 +38,14 @@ class AbstractInputHandler
   onDblInputEvent(pointer) { return false; }
 
   /**
+   * Called by InputAdapter when input movess. The input is called before drag
+   * logic.
+   * Returns true if the event should be consumed. If consumed, the event will
+   * not propagate to other trigger other events (i.e. dragging events).
+   */
+  onMoveInputEvent(pointer) { return false; }
+
+  /**
    * Called by InputAdapter before a drag begins. The input could be either
    * an Alt or non-Alt input.
    * Returns true if the event should be consumed. If consumed, the event will
