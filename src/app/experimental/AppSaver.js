@@ -19,7 +19,7 @@ class AppSaver extends AbstractLocalSaver
     const data = LocalSave.loadFromStorage("graph-" + moduleName);
     if (data)
     {
-      const exporter = module.getDefaultGraphExporter();
+      const exporter = module.getGraphController().getDefaultGraphExporter();
       exporter.importFromData(data, module);
     }
 
@@ -39,7 +39,7 @@ class AppSaver extends AbstractLocalSaver
     const module = this._app.getCurrentModule();
     const moduleName = module.getModuleName();
 
-    const exporter = module.getDefaultGraphExporter();
+    const exporter = module.getGraphController().getDefaultGraphExporter();
     const data = exporter.exportToData(module);
     LocalSave.saveToStorage("graph-" + moduleName, data);
   }

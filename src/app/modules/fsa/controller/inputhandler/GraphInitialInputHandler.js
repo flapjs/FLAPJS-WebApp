@@ -44,7 +44,8 @@ class GraphInitialInputHandler extends GraphElementInputHandler
       graphController.applyAutoRename();
 
       //Emit event
-      graphController.emit("nodeInitial", graph, inputController.ghostInitialMarker, prevInitial);
+      graphController.onGraphIntentChangeInitial(inputController.ghostInitialMarker, prevInitial);
+      //graphController.emit("nodeInitial", graph, inputController.ghostInitialMarker, prevInitial);
     }
 
     //Reset ghost initial marker

@@ -61,7 +61,8 @@ class GraphEdgeInputHandler extends GraphElementInputHandler
     else
     {
       //Do nothing, since should have moved to position
-      graphController.emit("edgeMove", graph, target, target.getQuadratic(), graphController.prevQuad);
+      graphController.onGraphIntentMoveEdge(target, target.getQuadratic(), graphController.prevQuad);
+      //graphController.emit("edgeMove", graph, target, target.getQuadratic(), graphController.prevQuad);
     }
     return true;
   }

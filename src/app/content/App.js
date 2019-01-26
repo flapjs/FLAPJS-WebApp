@@ -51,6 +51,8 @@ class App extends React.Component
 
     this.undoManager = new UndoManager();
 
+    this._saver = new AppSaver(this);
+
     //Modules should handle its own initialization, regardless of web state
     //Also, loading from file should be handled by modules themselves
     const ModuleClass = props.moduleClass || Module;
@@ -194,7 +196,7 @@ class App extends React.Component
 
     if (fileBlob)
     {
-      this.props.app.getCurrentModule().getGraphImporter().importFile(fileBlob, this._module)
+      this.props.app.getCurrentModule().getGraphController().getGraphImporter().importFile(fileBlob, this._module)
         .catch((e) => {
           Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
         });

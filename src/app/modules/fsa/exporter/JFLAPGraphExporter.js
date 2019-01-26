@@ -27,14 +27,15 @@ class JFLAPGraphExporter extends AbstractGraphExporter
         const graph = graphController.getGraph();
 
         //TODO: this should not be here, this should exist somewhere in graphController
-        graphController.emit("userPreImportGraph", graph);
+        //graphController.emit("userPreImportGraph", graph);
+        module.captureGraphEvent();
 
         try
         {
           const xmlData = new DOMParser().parseFromString(data, "text/xml");
           XMLGraphParser.parse(xmlData, graph);
 
-          graphController.emit("userImportGraph", graph);
+          //graphController.emit("userImportGraph", graph);
 
           if (machineController)
           {
@@ -50,7 +51,8 @@ class JFLAPGraphExporter extends AbstractGraphExporter
         }
         finally
         {
-          graphController.emit("userPostImportGraph", graph);
+          //graphController.emit("userPostImportGraph", graph);
+          module.captureGraphEvent();
         }
       };
 

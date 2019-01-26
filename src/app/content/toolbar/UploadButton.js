@@ -15,7 +15,7 @@ class UploadButton extends React.Component
     const files = e.target.files;
     if (files.length > 0)
     {
-      this.props.app.getCurrentModule().getGraphImporter().importFile(files[0], this.props.app.getCurrentModule())
+      this.props.app.getCurrentModule().getGraphController().getGraphImporter().importFile(files[0], this.props.app.getCurrentModule())
         .catch((e) => {
           Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
           console.error(e);
@@ -39,7 +39,7 @@ class UploadButton extends React.Component
       <input id={inputID} type="file" name="import"
         style={{display:"none"}}
         onChange={this.onUploadFileChange}
-        accept={this.props.app.getCurrentModule().getGraphImporter().getImportFileTypes().join(",")}/>
+        accept={this.props.app.getCurrentModule().getGraphController().getGraphImporter().getImportFileTypes().join(",")}/>
       <label htmlFor={inputID}>
         {this.props.children}
       </label>

@@ -33,8 +33,9 @@ class ExportPanel extends React.Component
   render()
   {
     const module = this.props.currentModule;
-    const graphExporters = module.getGraphExporters();
-    const imageExporters = module.getImageExporters();
+    const graphController = module.getGraphController();
+    const graphExporters = graphController.getGraphExporters();
+    const imageExporters = graphController.getImageExporters();
 
     return (
       <div id={this.props.id}

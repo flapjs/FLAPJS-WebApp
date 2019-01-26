@@ -134,11 +134,13 @@ class GraphNodeInputHandler extends GraphElementInputHandler
       {
         const dx = x - graphController.prevX;
         const dy = y - graphController.prevY;
-        graphController.emit("nodeMoveAll", graph, picker.getSelection(graph), dx, dy);
+        graphController.onGraphIntentMoveAllNodes(picker.getSelection(graph), dx, dy);
+        //graphController.emit("nodeMoveAll", graph, picker.getSelection(graph), dx, dy);
       }
       else
       {
-        graphController.emit("nodeMove", graph, target, x, y, graphController.prevX, graphController.prevY);
+        graphController.onGraphIntentMoveNode(target, x, y, graphController.prevX, graphController.prevY);
+        //graphController.emit("nodeMove", graph, target, x, y, graphController.prevX, graphController.prevY);
       }
       return true;
     }

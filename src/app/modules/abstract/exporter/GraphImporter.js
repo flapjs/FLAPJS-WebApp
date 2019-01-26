@@ -12,7 +12,7 @@ class GraphImporter
 
     let result = Promise.reject();
     const fileName = fileBlob.name;
-    const exporters = module.getGraphExporters();
+    const exporters = module.getGraphController().getGraphExporters();
 
     for(const exporter of exporters)
     {
@@ -33,7 +33,7 @@ class GraphImporter
     if (!data) throw new Error("Unable to import null data");
 
     let result = Promise.reject();
-    const exporters = module.getGraphExporters();
+    const exporters = module.getGraphController().getGraphExporters();
 
     for(const exporter of exporters)
     {
@@ -50,7 +50,7 @@ class GraphImporter
 
   getImportFileTypes()
   {
-    return this._module.getGraphExporters().map(e => {
+    return this._module.getGraphController().getGraphExporters().map(e => {
       if (!e.canImport() || !e.doesSupportFile()) return null;
       return '.' + e.getFileType();
     });

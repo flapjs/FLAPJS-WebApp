@@ -102,7 +102,8 @@ class FSAGraphExporter extends AbstractGraphExporter
         const graph = graphController.getGraph();
 
         //TODO: this should not be here, this should exist somewhere in graphController
-        graphController.emit("userPreImportGraph", graph);
+        //graphController.emit("userPreImportGraph", graph);
+        module.captureGraphEvent();
 
         try
         {
@@ -110,7 +111,7 @@ class FSAGraphExporter extends AbstractGraphExporter
 
           this.fromJSON(jsonData, module);
 
-          graphController.emit("userImportGraph", graph);
+          //graphController.emit("userImportGraph", graph);
 
           if (machineController)
           {
@@ -126,7 +127,8 @@ class FSAGraphExporter extends AbstractGraphExporter
         }
         finally
         {
-          graphController.emit("userPostImportGraph", graph);
+          //graphController.emit("userPostImportGraph", graph);
+          module.captureGraphEvent();
         }
       };
 

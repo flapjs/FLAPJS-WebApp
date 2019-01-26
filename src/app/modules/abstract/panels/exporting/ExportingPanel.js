@@ -36,8 +36,9 @@ class ExportingPanel extends React.Component
   render()
   {
     const module = this.props.currentModule;
-    const graphExporters = module.getGraphExporters();
-    const imageExporters = module.getImageExporters();
+    const graphController = module.getGraphController();
+    const graphExporters = graphController.getGraphExporters();
+    const imageExporters = graphController.getImageExporters();
 
     return <div className={"panel-container " + this.props.className} id="exporting" ref={ref=>this.container=ref} style={this.props.style}>
       <div className="panel-title">

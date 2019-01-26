@@ -35,7 +35,7 @@ class HotKeys
     if (event.which == 83 && (event.metaKey || event.ctrlKey))
     {
       //Save as machine file
-      const exporter = this.app.getCurrentModule().getDefaultGraphExporter();
+      const exporter = this.graphController.getDefaultGraphExporter();
       const machineName = this.machineController.getMachineName();
       exporter.exportToFile(machineName, this.app.getCurrentModule());
 
@@ -62,7 +62,7 @@ class HotKeys
     else if (event.which == 80 && (event.metaKey || event.ctrlKey))
     {
       //Export to PNG
-      const imageExporters = this.app.getCurrentModule().getImageExporters();
+      const imageExporters = this.graphController.getImageExporters();
       if (imageExporter.length >= 1)
       {
         const exporter = imageExporters[0];

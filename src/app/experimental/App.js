@@ -182,7 +182,7 @@ class App extends React.Component
     const inputController = currentModule.getInputController();
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
-    const graphImporter = currentModule.getGraphImporter();
+    const graphImporter = graphController.getGraphImporter();
     const inputActionMode = inputController.isActionMode();
 
     const moduleName = currentModule.getLocalizedModuleName();

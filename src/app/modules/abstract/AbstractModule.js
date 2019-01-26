@@ -6,12 +6,6 @@ import OptionsPanel from './panels/options/OptionsPanel.js';
 
 import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG } from 'util/Downloader.js';
 
-export const DEFAULT_GRAPH_EXPORTERS = [];
-export const DEFAULT_IMAGE_EXPORTERS = [
-  new GraphImageExporter(FILE_TYPE_PNG),
-  new GraphImageExporter(FILE_TYPE_JPG),
-  new GraphImageExporter(FILE_TYPE_SVG)
-];
 //TODO: This is inserted by Drawer.js, not used here. (which is weird)
 export const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
 
@@ -20,8 +14,6 @@ class AbstractModule
   constructor(app)
   {
     if (!app) throw new Error("Missing app for module class");
-
-    this._importer = new GraphImporter(this);
   }
 
   initialize(app)
@@ -64,16 +56,6 @@ class AbstractModule
   getInputController() { throw new Error("Missing input controller for module \'" + this.getModuleName() + "\'"); }
   getGraphController() { throw new Error("Missing graph controller for module \'" + this.getModuleName() + "\'"); }
   getMachineController() { throw new Error("Missing machine controller for module \'" + this.getModuleName() + "\'"); }
-  getDefaultGraphExporter()
-  {
-    const exporters = this.getGraphExporters();
-    if (exporters.length > 0) return exporters[0];
-
-    throw new Error("Missing default graph exporter for module \'" + this.getModuleName() + "\'");
-  }
-  getImageExporters() { return DEFAULT_IMAGE_EXPORTERS; }
-  getGraphExporters() { return DEFAULT_GRAPH_EXPORTERS; }
-  getGraphImporter() { return this._importer; }
   getModulePanels() { return []; }
   getModuleViews() { return []; }
   getModuleMenus() { return []; }

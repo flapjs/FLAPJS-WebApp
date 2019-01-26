@@ -75,7 +75,7 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
         if (inputController.isNewEdge)
         {
           graphController.openLabelEditor(target, x, y, null, true, () => {
-            graphController.emit("userPostCreateEdge", graph, target);
+            graphController.onGraphIntentFinishEdge(target);
           });
         }
         else
@@ -90,12 +90,12 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
         inputController.isNewEdge = false;
 
         //Emit event
-        graphController.emit("userCreateEdge", graph, target);
+        graphController.onGraphIntentCreateEdge(target);
       }
       else if (graphController.prevEdgeTo !== null)
       {
         //Emit event
-        graphController.emit("edgeDestination", graph, target, target.getDestinationNode(), graphController.prevEdgeTo, graphController.prevQuad);
+        graphController.onGraphIntentChangeDestination(target, target.getDestinationNode(), graphController.prevEdgeTo, graphController.prevQuad);
       }
 
       return true;
