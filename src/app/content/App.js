@@ -23,6 +23,8 @@ import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
 
+import AppSaver from 'experimental/AppSaver.js';
+
 const SMOOTH_OFFSET_DAMPING = 0.4;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 10;
@@ -56,6 +58,8 @@ class App extends React.Component
 
     this.hotKeys = new HotKeys();
     this.tutorial = new Tutorial();
+
+    this._saver = new AppSaver(this);
 
     this.state = {
       isOpen: true,
@@ -92,13 +96,13 @@ class App extends React.Component
     //Begin tutorial
     this.tutorial.start(this);
 
-    LocalSave.registerHandler(this);
+    LocalSave.registerHandler(this._saver);
   }
 
   //Override
   componentWillUnmount()
   {
-    LocalSave.unregisterHandler(this);
+    LocalSave.unregisterHandler(this._saver);
 
     this.hotKeys.destroy();
 
@@ -112,29 +116,6 @@ class App extends React.Component
     workspaceDOM.removeEventListener("dragover", this.onDragOver);
     workspaceDOM.removeEventListener("dragenter", this.onDragEnter);
     workspaceDOM.removeEventListener("dragleave", this.onDragLeave);
-  }
-
-  //Ducktype(AbstractLocalSaver)
-  onLoadSave()
-  {
-    const moduleName = this._module.getModuleName();
-
-    const data = LocalSave.loadFromStorage("graph-" + moduleName);
-    if (data)
-    {
-      const exporter = this._module.getDefaultGraphExporter();
-      exporter.importFromData(data, this._module);
-    }
-  }
-
-  //Ducktype(AbstractLocalSaver)
-  onAutoSave()
-  {
-    const moduleName = this._module.getModuleName();
-
-    const exporter = this._module.getDefaultGraphExporter();
-    const data = exporter.exportToData(this._module);
-    LocalSave.saveToStorage("graph-" + moduleName, data);
   }
 
   //Called to prevent default file open

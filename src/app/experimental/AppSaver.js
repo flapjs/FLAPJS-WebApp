@@ -22,6 +22,9 @@ class AppSaver extends AbstractLocalSaver
       const exporter = module.getDefaultGraphExporter();
       exporter.importFromData(data, module);
     }
+
+    //HACK: not all modules have this
+    if (module.captureGraphEvent) module.captureGraphEvent();
   }
 
   //Override
