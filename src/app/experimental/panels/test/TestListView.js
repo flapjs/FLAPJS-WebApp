@@ -13,11 +13,15 @@ import DownloadIcon from 'experimental/iconset/DownloadIcon.js';
 import CrossIcon from 'experimental/iconset/CrossIcon.js';
 import AddIcon from 'experimental/iconset/AddIcon.js';
 import RunningManIcon from 'experimental/iconset/RunningManIcon.js';
+import WalkingManIcon from 'experimental/iconset/WalkingManIcon.js';
 
 import TestItem, {SUCCESS_MODE, FAILURE_MODE, WORKING_MODE, DEFAULT_MODE} from './TestItem.js';
 
+import GraphChangeHandler from 'experimental/GraphChangeHandler.js';
+
 const ACCEPT_FILE_TYPES = ['.txt'];
 const TEST_FILENAME = "test.txt";
+const TEST_REFRESH_TICKS = 30;
 
 class TestListView extends React.Component
 {
@@ -36,6 +40,27 @@ class TestListView extends React.Component
     this.onTestDelete = this.onTestDelete.bind(this);
     this.onTestTest = this.onTestTest.bind(this);
     this.onTestRunAll = this.onTestRunAll.bind(this);
+    this.onGraphChange = this.onGraphChange.bind(this);
+  }
+
+  //Override
+  componentDidMount()
+  {
+    this.props.graphController.getGraphChangeHandler().addListener(this.onGraphChange);
+  }
+
+  //Override
+  componentWillUnmount()
+  {
+    this.props.graphController.getGraphChangeHandler().removeListener(this.onGraphChange);
+  }
+
+  onGraphChange(graph)
+  {
+    for(const test of this._testList)
+    {
+      test.ref.resetStatus();
+    }
   }
 
   onTestNew(e)
@@ -123,10 +148,19 @@ class TestListView extends React.Component
   onTestRunAll(e)
   {
     const tester = this.props.tester;
-    for(const test of this._testList)
-    {
-      //this.onTestTest(null, test.ref, true);
+    let i = 0;
+
+    const nextTest = () => {
+      const test = this._testList[i];
+      this.onTestTest(null, test.ref, true, () => {
+        ++i;
+        if (i < this._testList.length)
+        {
+          nextTest();
+        }
+      });
     }
+    nextTest();
   }
 
   onTestDelete(e, item)
@@ -134,7 +168,7 @@ class TestListView extends React.Component
     //Already handled in render()
   }
 
-  onTestTest(e, item, forceImmediate=false)
+  onTestTest(e, item, forceImmediate=false, callback=null)
   {
     const immediate = forceImmediate || this.props.immediate;
     const tester = this.props.tester;
@@ -153,7 +187,11 @@ class TestListView extends React.Component
 
     if (immediate)
     {
-      tester.runTest(graphController, machineController, true);
+      const promise = tester.runTest(graphController, machineController, true);
+      if (callback)
+      {
+        promise.then(callback);
+      }
     }
   }
 
@@ -161,7 +199,7 @@ class TestListView extends React.Component
   {
     return this._testList.length <= 0;
   }
-
+  
   //Override
   render()
   {
@@ -235,7 +273,7 @@ class TestListView extends React.Component
             </div>
           </div>
           <IconButton className={Style.test_list_runall}
-            title={"Run All"} disabled={true} onClick={this.onTestRunAll}>
+            title={"Run All"} onClick={this.onTestRunAll}>
             <RunningManIcon/>
           </IconButton>
         </div>

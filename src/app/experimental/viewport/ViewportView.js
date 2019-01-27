@@ -1,44 +1,56 @@
 import React from 'react';
 import Style from './ViewportView.css';
 
+const VIEWPORT_DEFAULT_VIEW_INDEX = 0;
+
 class ViewportView extends React.Component
 {
   constructor(props)
   {
     super(props);
 
+    this.ref = null;
+
     this.state = {
-      index: 0
+      viewIndex: VIEWPORT_DEFAULT_VIEW_INDEX
     };
   }
 
-  setViewIndex(index)
+  setCurrentView(viewIndex)
   {
-    this.setState({index: index});
+    if (!this.props.views) return;
+    if (viewIndex >= this.props.views.length) viewIndex = VIEWPORT_DEFAULT_VIEW_INDEX;
+
+    //Open and set tab index
+    this.setState({viewIndex: viewIndex});
   }
 
-  getViewIndex()
+  getCurrentViewIndex()
   {
-    return this.state.index;
+    return this.state.viewIndex;
+  }
+
+  isCurrentView(viewIndex)
+  {
+    return this.state.viewIndex === viewIndex;
   }
 
   //Override
   render()
   {
+    const viewportViews = this.props.views;
+    const viewportViewIndex = this.state.viewIndex;
+    const ViewportViewPane = viewportViewIndex >= 0 ? viewportViews[viewportViewIndex] : null;
+
     return (
-      <React.Fragment>
-        {React.Children.map(this.props.children, (child, i) => {
-          if (this.state.index !== i) return;
-          return (
-            <div id={this.props.id}
-              className={Style.view_container +
-                " " + this.props.className}
-              style={this.props.style}>
-              {child}
-            </div>
-          );
-        })}
-      </React.Fragment>
+      <div ref={ref=>this.ref=ref}
+        id={this.props.id}
+        className={Style.view_container +
+          " " + this.props.className}
+        style={this.props.style}>
+        {ViewportViewPane &&
+          <ViewportViewPane {...this.props.viewProps} viewport={this}/>}
+      </div>
     );
   }
 }

@@ -13,12 +13,12 @@ class FormalDefinition extends React.Component {
   }
 
   render() {
-    const machineBuilder = this.props.machineBuilder;
-    const machine = machineBuilder.getMachine();
-    const states = machine.getStates();
-    const finalStates = machine.getFinalStates();
-    const alphabet = machine.getAlphabet().sort();
-    let isNFA = machineBuilder.getMachineType() == "NFA";
+    const machineController = this.props.machineController;
+    const machine = machineController.getMachineBuilder().getMachine();
+    const states = machineController.getStates();
+    const finalStates = machineController.getFinalStates();
+    const alphabet = machineController.getAlphabet().sort();
+    let isNFA = machineController.getMachineType() == "NFA";
     return <div className="formaldef-container">
       <h2>{"M = (Q, \u03A3, \u03b4, q0, F)"}</h2>
       <div>

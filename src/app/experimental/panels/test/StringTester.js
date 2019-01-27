@@ -1,5 +1,6 @@
 import Eventable from 'util/Eventable.js';
-import { solveNFAbyStep } from 'machine/util/solveNFA.js';
+
+import { solveFSAByStep } from 'modules/fsa/machine/FSAUtils.js';
 
 import TapeContext from './TapeContext.js';
 
@@ -12,8 +13,6 @@ class TestTapeContext extends TapeContext
     this._tester = tester;
     this._graphController = graphController;
     this._machineController = machineController;
-
-    this._cachedGraphHash = graphController.getGraph().getHashCode(false);
   }
 
   //Override
@@ -105,6 +104,14 @@ class StringTester
     this.registerEvent("stopTest");
   }
 
+  //TODO: a hack to get current targets.
+  get targets()
+  {
+    if (this._cachePath.length <= 0) return [];
+    const cache = this._cachePath[this._cachePath.length - 1];
+    return cache.targets;
+  }
+
   startTest(testString, graphController, machineController)
   {
     if (!testString) testString = "";
@@ -178,109 +185,61 @@ class StringTester
 
   stepForward(graphController, machineController, cacheStep=true)
   {
+    const machine = machineController.getMachineBuilder().getMachine();
+
     if (this._testIndex >= this._testString.length) return false;
     ++this._testIndex;
 
     if (this._cachePath.length <= this._testIndex)
     {
       //Calculate current step...
-      const targets = new Set();
-      let cachedStates, cachedSymbols, checkedStates = null;
+      let cachedStates, cachedSymbols = null;
+      const isResult = this._testIndex === this._testString.length;
 
-      if (this._testIndex === this._testString.length && this._cachedResult === null)
+      //Initialize first step...
+      if (this._testIndex <= 0)
       {
-        //Run the solver one last time for the result...
+        cachedStates = [];
+        cachedSymbols = [];
 
-        //If it's also the first time though...
-        if (this._testIndex <= 0)
+        const startState = machine.getStartState();
+        for (const currentState of machine.doClosureTransition(startState))
         {
-          cachedStates = [];
-          cachedSymbols = [];
-          checkedStates = [];
-
-          const graph = graphController.getGraph();
-          const machine = machineController.getMachineBuilder().getMachine();
-          const startState = machine.getStartState();
-          for (let curr_state of machine.doClosureTransition(startState))
-          {
-            cachedStates.push({state: curr_state, index: 0});
-          }
-        }
-        else
-        {
-          const prevCache = this._cachePath[this._testIndex - 1];
-          cachedStates = prevCache.states.slice();
-          cachedSymbols = prevCache.symbols.slice();
-          checkedStates = prevCache.checked.slice();
-        }
-
-        const machine = machineController.getMachineBuilder().getMachine();
-        const graph = graphController.getGraph();
-        this._cachedResult = solveNFAbyStep(machine, null, cachedStates, cachedSymbols, checkedStates);
-        for(const state of cachedStates)
-        {
-          const node = machineController.getFirstGraphNodeByLabel(graph, state.state);
-
-          //Couldn't find the node that was solved for this step...
-          if (!node) throw new Error("Could not find node by label \'" + state.state + "\'");
-
-          targets.add(node);
+          cachedStates.push({state: currentState, index: 0});
         }
       }
       else
       {
-        const nextSymbol = this._testString[this._testIndex];
+        const prevCache = this._cachePath[this._testIndex - 1];
+        cachedStates = prevCache.states.slice();
+        cachedSymbols = prevCache.symbols.slice();
 
-        //Initialize first step...
-        if (this._testIndex <= 0)
-        {
-          cachedStates = [];
-          cachedSymbols = [];
-          checkedStates = [];
-
-          const graph = graphController.getGraph();
-          const machine = machineController.getMachineBuilder().getMachine();
-          const startState = machine.getStartState();
-          for (let curr_state of machine.doClosureTransition(startState))
-          {
-            cachedStates.push({state: curr_state, index: 0});
-            const node = machineController.getFirstGraphNodeByLabel(graph, curr_state);
-
-            //Couldn't find the node that was solved for this step...
-            if (!node) throw new Error("Could not find node by label \'" + state.state + "\'");
-
-            targets.add(node);
-          }
-        }
         //Do the remaining steps...
-        else
-        {
-          const prevCache = this._cachePath[this._testIndex - 1];
-          cachedStates = prevCache.states.slice();
-          cachedSymbols = prevCache.symbols.slice();
-          checkedStates = prevCache.checked.slice();
+        const nextSymbol = this._testString[this._testIndex - 1];
+        solveFSAByStep(machine, nextSymbol, cachedStates, cachedSymbols);
+      }
 
-          const machine = machineController.getMachineBuilder().getMachine();
-          const graph = graphController.getGraph();
-          solveNFAbyStep(machine, nextSymbol, cachedStates, cachedSymbols, checkedStates);
-          for(const state of cachedStates)
-          {
-            const node = machineController.getFirstGraphNodeByLabel(graph, state.state);
-
-            //Couldn't find the node that was solved for this step...
-            if (!node) throw new Error("Could not find node by label \'" + state.state + "\'");
-
-            targets.add(node);
-          }
-        }
+      //Do one last step for result...
+      if (isResult)
+      {
+        this._cachedResult = solveFSAByStep(machine, null, cachedStates, cachedSymbols);
       }
 
       //Store current step...
+      const targets = new Set();
+      for(const cachedState of cachedStates)
+      {
+        const node = cachedState.state.getSource();
+
+        //Couldn't find the node that was solved for this step...
+        if (!node) throw new Error("Could not find node \'" + cachedState.state + "\'");
+
+        targets.add(node);
+      }
       const nextCache = {
         targets: Array.from(targets),
         states: cachedStates,
-        symbols: cachedSymbols,
-        checked: checkedStates
+        symbols: cachedSymbols
       };
       this._cachePath.push(nextCache);
     }

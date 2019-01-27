@@ -124,7 +124,7 @@ class AlphabetTag extends React.Component
   {
     const symbol = this.state.symbol != null ? this.state.symbol : this.props.src;
     const isUsed = false;
-    //TODO: const isUsed = this.props.src && this.props.machineController.getMachineBuilder().getMachine().getUsedAlphabet().includes(symbol);
+    //TODO: const isUsed = this.props.src && this.props.machineController.isUsedSymbol(symbol);
     return <div className={"alphatag-container" +
       (isUsed ? " usedtag" : "") +
       (this.props.src && (!symbol || symbol.length == 0) ? " emptytag" : "") +

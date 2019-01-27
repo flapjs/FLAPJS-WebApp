@@ -5,7 +5,11 @@ import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
 import FSAGraphLabeler from 'modules/fsa/graph/FSAGraphLabeler.js';
 
+import GraphChangeHandler from 'experimental/GraphChangeHandler.js';
+
 const NODE_SPAWN_RADIUS = 64;
+const DEFAULT_AUTO_RENAME = true;
+const GRAPH_REFRESH_RATE = 30;
 
 class GraphController extends AbstractModuleGraphController
 {
@@ -15,6 +19,7 @@ class GraphController extends AbstractModuleGraphController
 
     this.inputController = null;
     this.machineController = null;
+    this._graphChangeHandler = new GraphChangeHandler(GRAPH_REFRESH_RATE);
 
     this.labelEditorElement = null;
     this.tester = null;
@@ -26,6 +31,10 @@ class GraphController extends AbstractModuleGraphController
     this.prevEdgeTo = null;
     this.prevX = 0;
     this.prevY = 0;
+
+
+    this.shouldAutoLabel = false;
+    this.onGraphNodeLabelChange = this.onGraphNodeLabelChange.bind(this);
 
     //The difference between controller events vs graph events is: controller has user-intent
 
@@ -110,12 +119,27 @@ class GraphController extends AbstractModuleGraphController
 
     this.inputController = module.getInputController();
     this.machineController = module.getMachineController();
+
+    this.setAutoRenameNodes(DEFAULT_AUTO_RENAME);
   }
 
   //Override
   destroy(module)
   {
     super.destroy(module);
+  }
+
+  //Override
+  update(module)
+  {
+    super.update(module);
+
+    this._graphChangeHandler.update(this._graph);
+  }
+
+  getGraphChangeHandler()
+  {
+    return this._graphChangeHandler;
   }
 
   applyAutoLayout()
@@ -148,6 +172,29 @@ class GraphController extends AbstractModuleGraphController
         node.setNodeLabel(graphLabeler.getDefaultNodeLabel());
       }
     }
+  }
+
+  //Auto renaming
+  onGraphNodeLabelChange(graph, node, targetNodes, prevX, prevY)
+  {
+    this.applyAutoRename();
+  }
+  setAutoRenameNodes(enable)
+  {
+    const prev = this.shouldAutoLabel;
+    this.shouldAutoLabel = enable;
+    if (prev != enable && enable)
+    {
+      this.on("userDeleteNodes", this.onGraphNodeLabelChange);
+    }
+    else
+    {
+      this.removeEventListener("userDeleteNodes", this.onGraphNodeLabelChange);
+    }
+  }
+  shouldAutoRenameNodes()
+  {
+    return this.shouldAutoLabel;
   }
 
   renameNode(node, name)

@@ -51,21 +51,34 @@
   --color-selection-border: #000000;
 
 
-
-  --color-main: darkgray;
-  --color-alt: lightgray;
   --color-accent: gold;
-  --color-back: white;
-  --color-surface: gray;
-  --color-error: tomato;
 
-  --color-main-text: white;
-  --color-alt-text: black;
+  --color-primary: olivedrab;
+  --color-primary-text: #F7F5E6;
+  --color-primary-lite: olive;
+  --color-primary-dark: darkolivegreen;
 
-  --color-main-lite: white;
-  --color-main-dark: gray;
-  --color-alt-lite: white;
-  --color-alt-dark: gray;
+  --color-surface: #AAAAAA;
+  --color-surface-text: black;
+  --color-surface-active: white;
+  --color-surface-lite: #CCCCCC;
+  --color-surface-dark: #777777;
+
+  --color-error: #B05454;
+  --color-surface-error: #C77575;
+  --color-surface-error-dark: #B54A4A;
+
+  --color-success: #00FF00;
+  --color-surface-success: #A1C797;
+  --color-surface-success-dark: #468C34;
+
+  --color-warning: #E6CB53;
+  --color-surface-warning: #D6A922;
+  --color-surface-warning-dark: #AD8715;
+
+  --color-background: white;
+  --color-background-lite: lightgray;
+  --color-background-active: gray;
 }
 .app-container {
   position: relative;

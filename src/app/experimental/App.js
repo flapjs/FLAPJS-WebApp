@@ -11,10 +11,12 @@ import UploadDropZone from 'experimental/components/UploadDropZone.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
+import LanguagePanel from 'experimental/menus/language/LanguagePanel.js';
 
 import EditPane from 'experimental/EditPane.js';
 import TapePane from 'experimental/TapePane.js';
 
+import OverviewPanel from 'experimental/panels/overview/OverviewPanel.js';
 import AnalysisPanel from 'experimental/panels/analysis/AnalysisPanel.js';
 import TestingPanel from 'experimental/panels/test/TestingPanel.js';
 
@@ -47,9 +49,13 @@ import LocalSave from 'system/localsave/LocalSave.js';
 
 import DefaultModule from 'modules/default/DefaultModule.js';
 import Module from 'modules/fsa/FSAModule.js';
-import StringTester from 'experimental/panels/test/StringTester.js';
 
+const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
+
+const SMOOTH_OFFSET_DAMPING = 0.4;
+const MIN_SCALE = 0.1;
+const MAX_SCALE = 10;
 
 class App extends React.Component
 {
@@ -65,9 +71,9 @@ class App extends React.Component
     //These need to be initialized before module
     this._inputAdapter = new InputAdapter();
     this._inputAdapter.getViewport()
-      .setMinScale(0.1)
-      .setMaxScale(10)
-      .setOffsetDamping(0.4);
+      .setMinScale(MIN_SCALE)
+      .setMaxScale(MAX_SCALE)
+      .setOffsetDamping(SMOOTH_OFFSET_DAMPING);
     this._undoManager = new UndoManager();
 
     this._hotKeyManager = new HotKeyManager();
@@ -80,8 +86,7 @@ class App extends React.Component
 
     this._saver = new AppSaver(this);
 
-    this._tester = new StringTester();
-
+    //TODO: This is only used to control transitions (do we really need it?)
     this._init = false;
 
     this.state = {
@@ -107,7 +112,6 @@ class App extends React.Component
     this._hotKeyManager.initialize();
 
     LocalSave.registerHandler(this._saver);
-    LocalSave.initialize();
 
     this._init = true;
   }
@@ -118,7 +122,6 @@ class App extends React.Component
     this._init = false;
 
     LocalSave.unregisterHandler(this._saver);
-    LocalSave.terminate();
 
     this._hotKeyManager.destroy();
 
@@ -148,39 +151,47 @@ class App extends React.Component
   getHotKeyManager() { return this._hotKeyManager; }
 
   //Override
+  componentDidUpdate()
+  {
+    const currentModule = this.state.module;
+    const inputAdapter = this._inputAdapter;
+
+    inputAdapter.update();
+    currentModule.update(this);
+
+    //Disable hotkeys when graph is not in view
+    this._hotKeyManager.setEnabled(
+      !(this._toolbar && this._toolbar.isBarOpen()) &&
+      !(this._drawer && this._drawer.isDrawerOpen() &&
+        this._drawer.isDrawerFullscreen())
+      );
+  }
+
+  //Override
   render()
   {
     const currentModule = this.state.module;
-
-    if (this._init)
-    {
-      this._inputAdapter.update();
-      currentModule.update(this);
-
-      //Disable hotkeys when graph is not in view
-      this._hotKeyManager.setEnabled(
-        !(this._toolbar && this._toolbar.isBarOpen()) &&
-        !(this._drawer && this._drawer.isDrawerOpen() &&
-          this._drawer.isDrawerFullscreen())
-        );
-    }
+    const inputAdapter = this._inputAdapter;
 
     const hasSmallWidth = this._mediaQuerySmallWidthList.matches;
     const hasSmallHeight = this._mediaQuerySmallHeightList.matches;
     const isFullscreen = this.state.hide;
 
     const undoManager = this._undoManager;
-    const viewport = this._inputAdapter.getViewport();
+    const viewport = inputAdapter.getViewport();
     const inputController = currentModule.getInputController();
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
     const graphImporter = currentModule.getGraphImporter();
-    const inputActionMode = inputController.isActionMode(graphController);
+    const inputActionMode = inputController.isActionMode();
 
-    const modulePanels = currentModule.getModulePanels().concat([TestingPanel, AnalysisPanel]);
+    const moduleName = currentModule.getLocalizedModuleName();
+    const modulePanels = [TestingPanel, OverviewPanel, AnalysisPanel];
     const modulePanelProps = {currentModule: currentModule, app: this};
-    const moduleMenus = [ExportPanel, OptionPanel];
+    const moduleMenus = currentModule.getModuleMenus().concat([ExportPanel, OptionPanel, LanguagePanel]);
     const moduleMenuProps = {currentModule: currentModule, app: this};
+    const moduleViews = currentModule.getModuleViews().concat([EditPane, TapePane]);
+    const moduleViewProps = {currentModule: currentModule, app: this};
 
     const GRAPH_RENDER_LAYER = "graph";
     const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
@@ -195,8 +206,8 @@ class App extends React.Component
         <ToolbarView ref={ref=>this._toolbar=ref} className="app-bar"
           menus={moduleMenus}
           menuProps={moduleMenuProps}
-          hide={isFullscreen}>
-
+          hide={isFullscreen}
+          title={moduleName}>
           <ToolbarButton title="New" icon={PageEmptyIcon}
             onClick={() => UserUtil.userClearGraph(this, false, () => this._toolbar.closeBar())}/>
           <ToolbarUploadButton title="Upload" icon={UploadIcon} accept={graphImporter.getImportFileTypes().join(",")}
@@ -220,20 +231,14 @@ class App extends React.Component
             onClick={()=>this._toolbar.setCurrentMenu(0)}
             disabled={graphController.getGraph().isEmpty()}/>
           <ToolbarDivider/>
-          <ToolbarButton title="Report a Bug" icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}/>
-          <ToolbarButton title="Language" icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}/>
+          <ToolbarButton title="Report a Bug" icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+            onClick={()=>window.open(BUGREPORT_URL, '_blank')}/>
+          <ToolbarButton title="Language" icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+            onClick={()=>this._toolbar.setCurrentMenu(2)}/>
           <ToolbarButton title="Help" icon={HelpIcon}
             onClick={()=>window.open(HELP_URL, '_blank')}/>
           <ToolbarButton title={I18N.toString("component.options.title")} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>this._toolbar.setCurrentMenu(1)}/>
-
-          <button onClick={() => {
-            const nextModuleClass = this.getCurrentModule() instanceof Module ? DefaultModule : Module;
-            this.setCurrentModuleClass(nextModuleClass);
-          }}>
-            {"Change to Module"}
-          </button>
-
         </ToolbarView>
 
         <DrawerView ref={ref=>this._drawer=ref} className="app-content"
@@ -278,9 +283,9 @@ class App extends React.Component
 
               <HotKeyView hotKeyManager={this._hotKeyManager}/>
 
-              <ViewportView ref={ref=>this._viewport=ref}>
-                {<EditPane app={this} module={currentModule} viewport={viewport}/>}
-                {<TapePane app={this} module={currentModule} viewport={viewport} tester={this._tester}/>}
+              <ViewportView ref={ref=>this._viewport=ref}
+                views={moduleViews}
+                viewProps={moduleViewProps}>
               </ViewportView>
 
             </div>

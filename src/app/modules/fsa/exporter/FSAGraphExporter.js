@@ -12,7 +12,6 @@ class FSAGraphExporter extends AbstractGraphExporter
   {
     const graphController = module.getGraphController();
     const machineController = module.getMachineController();
-    const machineBuilder = machineController.getMachineBuilder();
     const graph = graphController.getGraph();
 
     const metadata = '_metadata' in data ? data['_metadata'] : {};
@@ -25,12 +24,12 @@ class FSAGraphExporter extends AbstractGraphExporter
     const machineType = machineData.type;
     if (machineType) machineController.setMachineType(machineType);
     const customSymbols = machineData.symbols;
-    if (customSymbols)
+    if (customSymbols && Array.isArray(customSymbols))
     {
-      machineBuilder._symbols.length = 0;
+      machineController.clearCustomSymbols();
       for(const symbol of customSymbols)
       {
-        machineBuilder._symbols.push(symbol);
+        machineController.addCustomSymbol(symbol);
       }
     }
     const statePrefix = machineData.statePrefix;
@@ -46,7 +45,6 @@ class FSAGraphExporter extends AbstractGraphExporter
   {
     const graphController = module.getGraphController();
     const machineController = module.getMachineController();
-    const machineBuilder = machineController.getMachineBuilder();
 
     const dst = {};
     dst["_metadata"] = {

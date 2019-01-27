@@ -265,7 +265,7 @@ class DrawerView extends React.Component
 
   onDrawerHandleGrab(e)
   {
-    if (!this._handlingGrab)
+    if (!this._handlingGrab && this.state.open)
     {
       this._handlingGrab = true;
       this._prevWidth = getCSSDrawerWidth(this.drawerElement);
@@ -388,7 +388,7 @@ class DrawerView extends React.Component
                         (disabled ? " disabled " : "")}>
                       <ComponentClass className={Style.drawer_panel}
                         {...this.props.panelProps}
-                        drawer={this.ref}/>
+                        drawer={this}/>
                     </div>
                   );
                 })}

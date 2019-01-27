@@ -29,10 +29,13 @@ const I18N = {
     request.setRequestHeader("Content-Type", "text/strings");
     request.send();
   },
-  loadLanguageFile(langFile)
+  loadLanguageFile(langFile, shouldReset=false)
   {
     //Clear language mapping of any previous languages
-    this.languageMapping.clear();
+    if (shouldReset)
+    {
+      this.languageMapping.clear();
+    }
 
     //Load langugage file
     let separator, key, value;

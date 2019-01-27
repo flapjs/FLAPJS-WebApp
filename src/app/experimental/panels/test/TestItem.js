@@ -7,6 +7,7 @@ import CheckCircleIcon from 'experimental/iconset/CheckCircleIcon.js';
 import CrossCircleIcon from 'experimental/iconset/CrossCircleIcon.js';
 import PendingIcon from 'experimental/iconset/PendingIcon.js';
 import RunningManIcon from 'experimental/iconset/RunningManIcon.js';
+import WalkingManIcon from 'experimental/iconset/WalkingManIcon.js';
 
 export const DEFAULT_MODE = "default";
 export const SUCCESS_MODE = "success";
@@ -61,6 +62,18 @@ class TestItem extends React.Component
     }
   }
 
+  resetStatus(callback=null)
+  {
+    if (this.state.status !== DEFAULT_MODE)
+    {
+      this.setState({status: DEFAULT_MODE}, callback);
+    }
+    else if (callback)
+    {
+      callback();
+    }
+  }
+
   getValue()
   {
     return this.state.value;
@@ -88,7 +101,7 @@ class TestItem extends React.Component
 
     const onTest = this.props.onTest;
     const showTest = true;
-    
+
     const active = this.props.active;
     const subtitle = this.props.subtitle;
     const placeholder = this.props.placeholder;

@@ -1,16 +1,33 @@
 class AbstractModuleMachineController
 {
-  constructor(module)
+  constructor(module, machineBuilder)
   {
-    this._module = module;
+    if (!module) throw new Error("Missing module for machine controller");
+    if (!machineBuilder) throw new Error("Missing machine builder for machine controller");
 
-    //throw new Error("Missing implementation for graph controller \'" + this.getModule().getModuleName() + "\'");
+    this._module = module;
+    this._machineBuilder = machineBuilder;
+    this._machineUpdateTicks = 0;
+    this._machineUpdateRate = 30;
   }
 
   initialize(module) {}
   destroy(module) {}
-  update(module) {}
-  
+
+  update(module)
+  {
+    if (--this._machineUpdateTicks <= 0)
+    {
+      this._machineBuilder.update(module);
+      this._machineUpdateTicks = this._machineUpdateRate;
+    }
+  }
+
+  getMachineBuilder()
+  {
+    return this._machineBuilder;
+  }
+
   getModule()
   {
     return this._module;

@@ -1,0 +1,24 @@
+:local(.table_container) table {
+  color: var(--color-panel-text);
+}
+
+:local(.table_container) td, :local(.table_container) th {
+  margin: 0.2em;
+  padding: 0.3em;
+
+  border-radius: 0.5em;
+  background: var(--color-panel-back-input);
+}
+
+:local(.table_container) td {
+  font-size: 1.2em;
+  font-family: monospace;
+  text-align: center;
+}
+
+:local(.table_entry):not(.error).disabled, :local(.table_axis_header).disabled {
+  opacity: 0.3;
+}
+:local(.table_entry).error {
+  color: var(--color-panel-error);
+}

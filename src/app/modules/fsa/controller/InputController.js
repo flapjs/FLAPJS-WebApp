@@ -1,8 +1,13 @@
 import AbstractModuleInputController from 'modules/abstract/AbstractModuleInputController.js';
 
 import GraphPicker from './GraphPicker.js';
-import Node from 'modules/fsa/graph/FSANode.js';
-import Edge from 'modules/fsa/graph/FSAEdge.js';
+
+import GraphNodeInputHandler from './inputhandler/GraphNodeInputHandler.js';
+import GraphEdgeInputHandler from './inputhandler/GraphEdgeInputHandler.js';
+import GraphEndpointInputHandler from './inputhandler/GraphEndpointInputHandler.js';
+import GraphInitialInputHandler from './inputhandler/GraphInitialInputHandler.js';
+import SelectionBoxInputHandler from './inputhandler/SelectionBoxInputHandler.js';
+import GraphNodeCreateInputHandler from './inputhandler/GraphNodeCreateInputHandler.js';
 
 const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
 
@@ -36,6 +41,19 @@ class InputController extends AbstractModuleInputController
     this._trashMode = false;
 
     this._disabled = false;
+
+    //TODO: this works, it's just not attached to anything
+    this._snapToGrid = false;
+    this._snapSize = 48;
+
+    this._inputHandlers = [
+      new GraphNodeInputHandler(),
+      new GraphEdgeInputHandler(),
+      new GraphEndpointInputHandler(),
+      new GraphInitialInputHandler(),
+      new SelectionBoxInputHandler(this._picker),
+      new GraphNodeCreateInputHandler()
+    ];
   }
 
   //Override
@@ -55,6 +73,8 @@ class InputController extends AbstractModuleInputController
   //Override
   update(module)
   {
+    super.update(module);
+
     const graph = this._graphController.getGraph();
     const picker = this._picker;
     const x = this._inputAdapter.getPointerX();
@@ -133,70 +153,18 @@ class InputController extends AbstractModuleInputController
 
     const inputController = this;
     const graphController = this._graphController;
-
-    const x = pointer.x;
-    const y = pointer.y;
-
-    const graph = graphController.getGraph();
     const picker = inputController.getPicker();
-    picker.updateTarget(graph, x, y);
+    picker.updateTarget(graphController.getGraph(), pointer.x, pointer.y);
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
-    //If is in trash mode... capture all events!
-    if (inputController.isTrashMode())
+    for(const handler of this._inputHandlers)
     {
-      //Click to delete node
-      if (targetType === 'node')
+      if (handler.isTargetable(inputController, pointer, target, targetType) &&
+        handler.onAction(inputController, graphController, pointer, target))
       {
-        //So that the emitted 'delete' events can use this
-        graphController.prevX = target.x;
-        graphController.prevY = target.y;
-
-        //If there exists selected states, delete them all!
-        if (picker.hasSelection())
-        {
-          //Delete all selected nodes
-          graphController.deleteSelectedNodes(target);
-        }
-        else
-        {
-          //Delete a single node
-          graphController.deleteTargetNode(target);
-        }
-
         return true;
       }
-      else if (targetType === 'edge' || targetType === 'endpoint')
-      {
-        //Delete a single edge
-        graphController.deleteTargetEdge(target);
-        return true;
-      }
-
-      //Clicked on something you cannot delete
-      //return true;
-      return false;
-    }
-
-    //If not in Trash Mode, then events should pass through to here...
-    //Otherwise, ALL events are captured to prevent ALL default behavior.
-
-    if (!inputController.isMoveMode() && targetType === 'node')
-    {
-      graphController.toggleNode(target);
-      return true;
-    }
-    //Edit label for selected edge
-    else if (targetType === 'edge')
-    {
-      graphController.openLabelEditor(target, x, y);
-      return true;
-    }
-    else if (targetType !== 'none')
-    {
-      //So double click can occur only if not on objects...
-      return true;
     }
 
     //Override
@@ -208,20 +176,26 @@ class InputController extends AbstractModuleInputController
   {
     if (this._disabled) return super.onDblInputEvent(pointer);
 
+    const inputController = this;
     const graphController = this._graphController;
-    const x = pointer.x;
-    const y = pointer.y;
+    const picker = inputController.getPicker();
+    const target = picker.initialTarget;
+    const targetType = picker.initialTargetType;
 
-    if (!this.isTrashMode())
-    {
-      //Create state at position
-      graphController.createNode(x, y);
-      return true;
-    }
-    else
+    //Make sure it is not in trash mode
+    if (inputController.isTrashMode())
     {
       graphController.emit("tryCreateWhileTrash");
-      return true;
+      return false;
+    }
+
+    for(const handler of this._inputHandlers)
+    {
+      if (handler.isTargetable(inputController, pointer, target, targetType) &&
+        handler.onDblAction(inputController, graphController, pointer, target))
+      {
+        return true;
+      }
     }
 
     //Override
@@ -235,146 +209,28 @@ class InputController extends AbstractModuleInputController
 
     const inputController = this;
     const graphController = this._graphController;
-
-    const graph = graphController.getGraph();
     const picker = inputController.getPicker();
-    const x = pointer.x;
-    const y = pointer.y;
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
-    const viewport = inputController.getInputAdapter().getViewport();
+    //Make sure it is not in new edge mode
+    inputController.isNewEdge = false;
 
-    //If is in move mode...
-    if (inputController.isMoveMode())
+    //Make sure it is not in trash mode
+    if (inputController.isTrashMode())
     {
-      //Make sure it is not in trash mode
-      if (inputController.isTrashMode())
+      graphController.emit("tryCreateWhileTrash");
+      return false;
+    }
+
+    for(const handler of this._inputHandlers)
+    {
+      if (handler.isTargetable(inputController, pointer, target, targetType) &&
+        handler.onDragStart(inputController, graphController, pointer, target))
       {
-        //inputController.setMoveMode(false, true);//Set to false
-
-        graphController.emit("tryCreateWhileTrash");
-        return false;
-      }
-
-      //Make sure it is not in new edge mode
-      inputController.isNewEdge = false;
-
-      //Makes sure that placeholders are not quadratics!
-      if (targetType === 'edge' && target.isPlaceholder())
-      {
-        //inputController.setMoveMode(false, true);//Set to false
-
-        //Ignore drag event...
-        return false;
-      }
-      //Moving node (and selected nodes)
-      else if (targetType === 'node')
-      {
-        //target MUST be an instance of Node...
-        if (!(target instanceof Node))
-          throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Node.");
-
-        //Ready to move node(s)...
-        graphController.prevX = target.x;
-        graphController.prevY = target.y;
-        return true;
-      }
-      //Moving edge center point
-      else if (targetType === 'edge')
-      {
-        //target MUST be an instance of Edge...
-        if (!(target instanceof Edge))
-          throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Edge.");
-
-        //Makes sure that placeholders are not quadratics!
-        if (target.isPlaceholder())
-        {
-          //inputController.setMoveMode(false, true);//Set to false
-          return false;
-        }
-
-        //Save previous quadratics
-        const targetQuad = target.getQuadratic();
-        graphController.prevQuad.radians = targetQuad.radians;
-        graphController.prevQuad.length = targetQuad.length;
-
-        //Ready to move the edge vertex to pointer...
-        return true;
-      }
-      //Moving initial marker
-      else if (targetType === 'initial')
-      {
-        inputController.ghostInitialMarker = pointer;
-
-        //Ready to move the initial marker to another state...
         return true;
       }
     }
-    //If is NOT in move mode...
-    else
-    {
-      //If input dragged a node...
-      if (targetType === 'node')
-      {
-        if (!inputController.isTrashMode())
-        {
-          const edge = graph.createEdge(target, pointer);
-          edge.setEdgeLabel(graphController.getGraphLabeler().getDefaultEdgeLabel());
-
-          //Redirect pointer to refer to the edge as the new target
-          picker.setInitialTarget(edge, "endpoint");
-          inputController.isNewEdge = true;
-
-          //Reset previous quad values for new proxy edge
-          const edgeQuad = edge.getQuadratic();
-          graphController.prevQuad.radians = edgeQuad.radians;
-          graphController.prevQuad.length = edgeQuad.length;
-
-          //Ready to move proxy edge to pointer...
-          //inputController.setMoveMode(true, true);
-          return true;
-        }
-        else
-        {
-          graphController.emit("tryCreateWhileTrash");
-          return false;
-        }
-      }
-      else if (targetType == 'edge')
-      {
-        //Do nothing.
-        return false;
-      }
-      //If input dragged nothing...
-      else if (targetType === 'none')
-      {
-        //Begin selection box...
-        picker.beginSelection(graph, x, y);
-        return true;
-      }
-    }
-
-    //In either moving or not... moving endpoints
-    if (targetType === 'endpoint')
-    {
-      //target MUST be an instance of Edge...
-      if (!(target instanceof Edge))
-        throw new Error("Invalid target " + target + " for type \'" + targetType + "\'. Must be an instance of Edge.");
-
-      const targetQuad = target.getQuadratic();
-      graphController.prevQuad.radians = targetQuad.radians;
-      graphController.prevQuad.length = targetQuad.length;
-
-      graphController.prevEdgeTo = target.getDestinationNode();
-      inputController.isNewEdge = inputController.isMoveMode() ? false : true;
-
-      //Ready to move the edge endpoint to pointer...
-      return true;
-    }
-
-    //All input should be handled
-    //throw new Error("Unknown target type \'" + targetType + "\'.");
 
     //Override
     return super.onDragStart(pointer);
@@ -387,79 +243,17 @@ class InputController extends AbstractModuleInputController
 
     const inputController = this;
     const graphController = this._graphController;
-    const graph = graphController.getGraph();
-
     const picker = inputController.getPicker();
-    const x = pointer.x;
-    const y = pointer.y;
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
-    //If is in move mode...
-    if (inputController.isMoveMode())
+    for(const handler of this._inputHandlers)
     {
-      //Continue to move node(s)
-      if (targetType === 'node')
+      if (handler.isTargetable(inputController, pointer, target, targetType) &&
+        handler.onDragMove(inputController, graphController, pointer, target))
       {
-        if (picker.hasSelection())
-        {
-          graphController.moveMultipleNodesTo(pointer, picker.getSelection(graph), x, y);
-        }
-        else
-        {
-          graphController.moveNodeTo(pointer, target, x, y);
-        }
         return true;
       }
-      //Continue to move edge vertex
-      else if (targetType === 'edge')
-      {
-        graphController.moveEdgeTo(pointer, target, x, y);
-        return true;
-      }
-      //Continue to move edge endpoint
-      else if (targetType === 'endpoint')
-      {
-        graphController.moveEndpointTo(pointer, target, x, y);
-        return true;
-      }
-      //Continue to move initial
-      else if (targetType === 'initial')
-      {
-        //Move initial marker to node or pointer
-        const dst = picker.getNodeAt(graph, x, y) || pointer;
-        inputController.ghostInitialMarker = dst;
-        return true;
-      }
-      //Continue to move graph
-      else if (targetType === 'none')
-      {
-        //Call super controller at the end...
-      }
-      else
-      {
-        //All move drag should be handled
-        throw new Error("Unknown target type \'" + targetType + "\'.");
-      }
-    }
-    //If is NOT in move mode...
-    else
-    {
-      if (inputController.isNewEdge)
-      {
-        graphController.moveEndpointTo(pointer, target, x, y);
-        return true;
-      }
-
-      //If the selection box is active...
-      if (picker.isSelecting())
-      {
-        //Update the selection box
-        picker.updateSelection(graph, x, y);
-        return true;
-      }
-
-      //Otherwise, don't do anything. Cause even input drags will become move drags.
     }
 
     //Override
@@ -473,194 +267,16 @@ class InputController extends AbstractModuleInputController
 
     const inputController = this;
     const graphController = this._graphController;
-
-    const graph = graphController.getGraph();
     const picker = inputController.getPicker();
-    const x = pointer.x;
-    const y = pointer.y;
-    picker.updateTarget(graph, x, y);
+    picker.updateTarget(graphController.getGraph(), pointer.x, pointer.y);
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
-    //If is in move mode...
-    if (inputController.isMoveMode() || inputController.isNewEdge)
+    for(const handler of this._inputHandlers)
     {
-      //If stopped dragging a node...
-      if (targetType === 'node')
+      if (handler.isTargetable(inputController, pointer, target, targetType) &&
+        handler.onDragStop(inputController, graphController, pointer, target))
       {
-        //Delete it if withing trash area...
-        if (inputController.isTrashMode())
-        {
-          //If there exists selected states, delete them all!
-          if (picker.hasSelection())
-          {
-            graphController.deleteSelectedNodes(target);
-          }
-          else
-          {
-            //Delete a single node
-            graphController.deleteTargetNode(target);
-          }
-
-          return true;
-        }
-        //If dragged to an empty space (not trash)
-        else
-        {
-          //Do nothing, since should have moved to position
-          if (picker.hasSelection())
-          {
-            const dx = x - graphController.prevX;
-            const dy = y - graphController.prevY;
-            graphController.emit("nodeMoveAll", graph, picker.getSelection(graph), dx, dy);
-          }
-          else
-          {
-            graphController.emit("nodeMove", graph, target, x, y, graphController.prevX, graphController.prevY);
-          }
-          return true;
-        }
-      }
-      //If stopped dragging a edge...
-      else if (targetType === 'edge')
-      {
-        //Delete it if withing trash area...
-        if (inputController.isTrashMode())
-        {
-          graphController.deleteTargetEdge(target);
-        }
-        else
-        {
-          //Do nothing, since should have moved to position
-          graphController.emit("edgeMove", graph, target, target.getQuadratic(), graphController.prevQuad);
-        }
-        return true;
-      }
-      //If stopped dragging a endpoint...
-      else if (inputController.isNewEdge || targetType === 'endpoint')
-      {
-        //Delete it if withing trash area...
-        if (inputController.isTrashMode())
-        {
-          graphController.deleteTargetEdge(target);
-          return true;
-        }
-        //If hovering over a node...
-        else if (target.getDestinationNode() instanceof Node)
-        {
-          const result = graph.formatEdge(target);
-
-          //If a different edge is the result of the target...
-          if (result !== target)
-          {
-            //Allow the user to edit the merged labels
-            graphController.openLabelEditor(result, x, y, result.getEdgeLabel(), false);
-
-            //Delete the merged label
-            graph.deleteEdge(target);
-            return true;
-          }
-          //Open label editor if a new edge...
-          else
-          {
-            if (inputController.isNewEdge)
-            {
-              graphController.openLabelEditor(target, x, y, null, true, () => {
-                graphController.emit("userPostCreateEdge", graph, target);
-              });
-            }
-            else
-            {
-              graphController.openLabelEditor(target, x, y);
-            }
-          }
-
-          if (inputController.isNewEdge)
-          {
-            //Must be after openLabelEditor() to allow the function to check it...
-            inputController.isNewEdge = false;
-
-            //Emit event
-            graphController.emit("userCreateEdge", graph, target);
-          }
-          else if (graphController.prevEdgeTo !== null)
-          {
-            //Emit event
-            graphController.emit("edgeDestination", graph, target, target.getDestinationNode(), graphController.prevEdgeTo, graphController.prevQuad);
-          }
-
-          return true;
-        }
-        //If hovering over anything else...
-        else
-        {
-          //Destroy any edge that no longer have a destination
-          if (inputController.shouldDestroyPointlessEdges)
-          {
-            if (!inputController.isNewEdge)
-            {
-              graphController.deleteTargetEdge(target);
-            }
-            else
-            {
-              graph.deleteEdge(target);
-            }
-            return true;
-          }
-          //Keep edges as placeholders (used in DFA's)
-          else
-          {
-            target.changeDestinationNode(null);
-
-            //Open label editor if default edge...
-            if (target.getEdgeLabel().length <= 0)
-            {
-              graphController.openLabelEditor(target, x, y);
-            }
-            return true;
-          }
-        }
-      }
-      else if (targetType === 'initial')
-      {
-        //If valid initial object to mark...
-        if (inputController.ghostInitialMarker instanceof Node)
-        {
-          const prevInitial = graph.getStartNode();
-
-          //Set the new object as the initial node
-          graph.setStartNode(inputController.ghostInitialMarker);
-
-          //Emit event
-          graphController.emit("nodeInitial", graph, inputController.ghostInitialMarker, prevInitial);
-        }
-
-        //Reset ghost initial marker
-        inputController.ghostInitialMarker = null;
-        return true;
-      }
-      else if (targetType === 'none')
-      {
-        //Do nothing. It should already be moved.
-      }
-      else if (super.onDragStop(pointer))
-      {
-        return true;
-      }
-      else
-      {
-        //All move drag should be handled
-        throw new Error("Unknown target type \'" + targetType + "\'.");
-      }
-    }
-    //If is NOT in move mode...
-    else
-    {
-      //If was trying to select...
-      if (picker.isSelecting())
-      {
-        //Stop selecting stuff, fool.
-        picker.endSelection(graph, x, y);
         return true;
       }
     }
@@ -717,11 +333,11 @@ class InputController extends AbstractModuleInputController
     return this._inputAdapter.isDragging();
   }
 
-  isActionMode(graphController)
+  isActionMode()
   {
     return this._inputAdapter.isPointerActive() ?
       //Is considered an input when NOT moving or when creating a new edge...
-      graphController.isNewEdge || !this.isMoveMode() :
+      this.isNewEdge || !this.isMoveMode() :
       //If not active, just show default input...
       !this._swapMouseScheme;
   }

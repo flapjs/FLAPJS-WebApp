@@ -7,6 +7,7 @@ import Config from 'config.js';
 //import Modules from './Modules.js';
 //import Module from 'modules/default/DefaultModule.js';
 import Module from 'modules/fsa/FSAModule.js';
+import ModuleLoader from 'modules/ModuleLoader.js';
 
 import HotKeys from './HotKeys.js';
 import LocalSave from 'system/localsave/LocalSave.js';
@@ -21,6 +22,12 @@ import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
+
+import AppSaver from 'experimental/AppSaver.js';
+
+const SMOOTH_OFFSET_DAMPING = 0.4;
+const MIN_SCALE = 0.1;
+const MAX_SCALE = 10;
 
 class App extends React.Component
 {
@@ -38,34 +45,21 @@ class App extends React.Component
     //These need to be initialized before module
     this.inputAdapter = new InputAdapter();
     this.inputAdapter.getViewport()
-      .setMinScale(Config.MIN_SCALE)
-      .setMaxScale(Config.MAX_SCALE)
-      .setOffsetDamping(Config.SMOOTH_OFFSET_DAMPING);
+      .setMinScale(MIN_SCALE)
+      .setMaxScale(MAX_SCALE)
+      .setOffsetDamping(SMOOTH_OFFSET_DAMPING);
 
     this.undoManager = new UndoManager();
 
     //Modules should handle its own initialization, regardless of web state
     //Also, loading from file should be handled by modules themselves
-    this._module = new Module(this);
-    /*
-    Modules['fsa'].fetch((Module) => {
-      const prevModule = this._module;
-      if (prevModule && this._init)
-      {
-        prevModule.destroy(this);
-      }
-
-      this._module = new Module(this);
-
-      if (this._init)
-      {
-        this._module.initialize(this);
-      }
-    });
-    */
+    const ModuleClass = props.moduleClass || Module;
+    this._module = new ModuleClass(this);
 
     this.hotKeys = new HotKeys();
     this.tutorial = new Tutorial();
+
+    this._saver = new AppSaver(this);
 
     this.state = {
       isOpen: true,
@@ -78,8 +72,6 @@ class App extends React.Component
     this.onDragEnter = this.onDragEnter.bind(this);
     this.onDragLeave = this.onDragLeave.bind(this);
     this.onFileDrop = this.onFileDrop.bind(this);
-
-    this._init = false;
   }
 
   //Override
@@ -104,17 +96,13 @@ class App extends React.Component
     //Begin tutorial
     this.tutorial.start(this);
 
-    LocalSave.registerHandler(this);
-    LocalSave.initialize();
-
-    this._init = true;
+    LocalSave.registerHandler(this._saver);
   }
 
   //Override
   componentWillUnmount()
   {
-    LocalSave.unregisterHandler(this);
-    LocalSave.terminate();
+    LocalSave.unregisterHandler(this._saver);
 
     this.hotKeys.destroy();
 
@@ -128,31 +116,6 @@ class App extends React.Component
     workspaceDOM.removeEventListener("dragover", this.onDragOver);
     workspaceDOM.removeEventListener("dragenter", this.onDragEnter);
     workspaceDOM.removeEventListener("dragleave", this.onDragLeave);
-
-    this._init = false;
-  }
-
-  //Ducktype(AbstractLocalSaver)
-  onLoadSave()
-  {
-    const moduleName = this._module.getModuleName();
-
-    const data = LocalSave.loadFromStorage("graph-" + moduleName);
-    if (data)
-    {
-      const exporter = this._module.getDefaultGraphExporter();
-      exporter.importFromData(data, this._module);
-    }
-  }
-
-  //Ducktype(AbstractLocalSaver)
-  onAutoSave()
-  {
-    const moduleName = this._module.getModuleName();
-
-    const exporter = this._module.getDefaultGraphExporter();
-    const data = exporter.exportToData(this._module);
-    LocalSave.saveToStorage("graph-" + moduleName, data);
   }
 
   //Called to prevent default file open
@@ -310,18 +273,21 @@ class App extends React.Component
     return this.undoManager;
   }
 
+  //Override
+  componentDidUpdate()
+  {
+    this.inputAdapter.update();
+    this._module.update(this);
+  }
+
+  //Override
   render()
   {
     const currentModule = this._module;
     const screen = this.workspace ? this.workspace.ref : null;
 
-    if (this._init)
-    {
-      this.inputAdapter.update();
-      currentModule.update(this);
-    }
-
-    return <div className="app-container" ref={ref=>this.container=ref}>
+    return <div className="app-container" ref={ref=>this.container=ref}
+      style={{animation: ModuleLoader.isModuleLoading() ? "fadeout 1s" : "fadein 1s"}}>
       <Toolbar ref={ref=>this.toolbar=ref}
         app={this}
         currentModule={currentModule}

@@ -1,0 +1,4 @@
+:local(.panel_divider) {
+  border: 1px solid var(--color-panel-text);
+  margin: 0.5em 0em;
+}

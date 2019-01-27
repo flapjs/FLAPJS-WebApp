@@ -33,9 +33,9 @@
 
   opacity: 0;
 }
-:local(.icon_button).icon-button-show-label svg {
+:local(.icon_button).hint svg {
   opacity: 0.1;
 }
-:local(.icon_button).icon-button-show-label label {
+:local(.icon_button).hint label {
   opacity: 1;
 }

@@ -2,17 +2,25 @@
 :local(.app_bar) {
   --toolbar-height: 80px;
 
-  --color-toolbar-highlight: gold;
-  --color-toolbar-back: olivedrab;
-  --color-toolbar-back-detail: olive;
-  --color-toolbar-menu: olivedrab;
-  --color-toolbar-menu-detail: darkolivegreen;
-  --color-toolbar-menu-active: olivedrab;
-  --color-toolbar-menu-disabled: olivedrab;
-  --color-toolbar-text: white;
-  --color-toolbar-text-active: gold;
-  --color-toolbar-text-disabled: darkolivegreen;
-  --color-toolbar-text-invert: black;
+  --color-toolbar-highlight: var(--color-accent);
+  --color-toolbar-back: var(--color-primary);
+  --color-toolbar-back-detail: var(--color-primary-lite);
+  --color-toolbar-menu: var(--color-primary);
+  --color-toolbar-menu-detail: var(--color-primary-dark);
+  --color-toolbar-menu-active: var(--color-primary);
+  --color-toolbar-menu-disabled: var(--color-primary);
+  --color-toolbar-text: var(--color-primary-text);
+  --color-toolbar-text-active: var(--color-accent);
+  --color-toolbar-text-disabled: var(--color-primary-dark);
+
+  --color-panel-back: var(--color-toolbar-back);
+  --color-panel-back-detail: var(--color-toolbar-back-detail);
+  --color-panel-text: var(--color-toolbar-text);
+  --color-panel-text-active: var(--color-toolbar-text-active);
+  --color-panel-text-disabled: var(--color-toolbar-text-disabled);
+  --color-panel-back-input: var(--color-surface-lite);
+  --color-panel-error: var(--color-error);
+  --color-panel-accent: var(--color-toolbar-highlight);
 
   z-index: 1000;
   display: flex;

@@ -10,11 +10,11 @@ class TransitionFunction extends React.Component {
   }
 
   render() {
-    const machineBuilder = this.props.machineBuilder;
-    const machine = machineBuilder.getMachine();
-    const states = machine.getStates();
-    const alphabet = machine.getAlphabet().sort();
-    let isNFA = machineBuilder.getMachineType() == "NFA";
+    const machineController = this.props.machineController;
+    const machine = machineController.getMachineBuilder().getMachine();
+    const states = machineController.getStates();
+    const alphabet = machineController.getAlphabet().sort();
+    let isNFA = machineController.getMachineType() == "NFA";
     return(
         <InfoBlock title="Transition Chart">
           <div className="transitionfunction-container">

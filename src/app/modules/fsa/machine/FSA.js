@@ -1,5 +1,5 @@
 import GraphElement from 'graph/GraphElement.js';
-import { guid } from 'util/MathHelper.js';
+import { guid, stringHash } from 'util/MathHelper.js';
 
 const FROM_STATE_INDEX = 0;
 const SYMBOL_INDEX = 1;
@@ -30,6 +30,11 @@ export class State
 
   getStateID() { return this._id; }
   getSource() { return this._src; }
+
+  getHashString()
+  {
+    return this._id;
+  }
 }
 
 export class Transition
@@ -56,6 +61,11 @@ export class Transition
   addSymbol(symbol) { this._symbols.push(symbol); }
   hasSymbol(symbol) { return this._symbols.includes(symbol); }
   getSymbols() { return this._symbols; }
+
+  getHashString()
+  {
+    return this._from.getHashString() + ":" + this._symbols.join(",") + ":" + this._to.getHashString();
+  }
 }
 
 class FSA
@@ -495,9 +505,9 @@ class FSA
 
     if (custom)
     {
-      if (!this._customAlphabet.has(symbol))
+      if (!this._customSymbols.has(symbol))
       {
-        this._customAlphabet.add(symbol);
+        this._customSymbols.add(symbol);
 
         //Add symbol to alphabet if missing...
         if (!this._alphabet.has(symbol)) this._alphabet.set(symbol, 0);
@@ -505,9 +515,9 @@ class FSA
     }
     else
     {
-      if (this._customAlphabet.has(symbol))
+      if (this._customSymbols.has(symbol))
       {
-        this._customAlphabet.delete(symbol);
+        this._customSymbols.delete(symbol);
 
         //If symbol is unused, delete it
         if (this._alphabet.has(symbol) && this._alphabet.get(symbol) <= 0) this._alphabet.delete(symbol)
@@ -517,12 +527,17 @@ class FSA
 
   isCustomSymbol(symbol)
   {
-    return this._customAlphabet.has(symbol);
+    return this._customSymbols.has(symbol);
   }
 
   getCustomSymbols()
   {
     return this._customSymbols;
+  }
+
+  clearCustomSymbols()
+  {
+    this._customSymbols.clear();
   }
 
   isUsedSymbol(symbol)
@@ -550,9 +565,7 @@ class FSA
     }
     this._startState = state;
   }
-
   isStartState(state) { return this._startState === state; }
-
   getStartState() { return this._startState; }
 
   setFinalState(state, final=true)
@@ -580,7 +593,7 @@ class FSA
   isFinalState(state) { return this._finalStates.has(state); }
   getFinalStates() { return this._finalStates; }
 
-  doTransition(state, symbol, dst=[])
+  doTransition(state, symbol, forceNondeterminism=false, dst=[])
   {
     if (!state) return dst;
     if (!this._states.has(state.getStateID())) throw new Error("Unable to find source state with id \'" + state.getStateID() + "\'");
@@ -598,7 +611,7 @@ class FSA
           dst.push(transition.getDestinationState());
 
           //There will only ever be 1 transition for deterministic machines
-          if (this._deterministic) return dst;
+          if (!forceNondeterminism && this._deterministic) return dst;
         }
       }
     }
@@ -676,6 +689,30 @@ class FSA
     }
 
     return dst;
+  }
+
+  getHashCode()
+  {
+    let string = "";
+    for(const state of this._states.values())
+    {
+      string += state.getHashString() + ",";
+    }
+    string += "|";
+    for(const transition of this._transitions.values())
+    {
+      string += transition.getHashString() + ",";
+    }
+    string += "|";
+    for(const state of this._finalStates)
+    {
+      string += state.getHashString();
+    }
+    string += "|";
+    string += this._startState ? this._startState.getHashString() : "";
+    string += "|";
+    string += this._deterministic ? "d" : "n";
+    return stringHash(string);
   }
 }
 
