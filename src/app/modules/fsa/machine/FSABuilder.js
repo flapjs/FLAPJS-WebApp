@@ -27,6 +27,7 @@ class FSABuilder extends AbstractMachineBuilder
 		dst.clear();
 
 		const nodeLabels = new Map();
+		const nodeOutgoings = new Map();
 		const edgeSymbols = new Set();
 		const edgePlaceholders = [];
 		const edgeEmpties = [];
@@ -91,6 +92,12 @@ class FSABuilder extends AbstractMachineBuilder
               transitionSymbol = symbol;
           }
 
+					let outSymbols = nodeOutgoings.get(srcState);
+					if (!outSymbols) nodeOutgoings.set(srcState, outSymbols = new Map());
+					let outEdges = outSymbols.get(transitionSymbol);
+					if (!outEdges) outSymbols.set(transitionSymbol, outEdges = new Array());
+					outEdges.push(edge);
+
           //Add to machine...
 					dst.addTransition(srcState, dstState, transitionSymbol);
 				}
@@ -103,9 +110,64 @@ class FSABuilder extends AbstractMachineBuilder
 		}
 
     //Check for duplicate node labels
-    //Check for duplicate/missing edge labels
-    //Check for edge placeholders
-    //Check for empty transitions
+		for(const [nodeLabel, sharedStates] of nodeLabels.entries())
+		{
+			warnings.push({
+				name: "duplicate state name",
+				label: nodeLabel,
+				nodes: sharedStates.map(e => e.getSource())
+			});
+		}
+
+    //Check for incomplete edge
+		for(const edge of edgePlaceholders)
+		{
+			errors.push({
+				name: "incomplete transition",
+				edge: edge
+			});
+		}
+
+		if (deterministic)
+		{
+	    //Check for empty transitions
+			for(const edge of edgeEmpties)
+			{
+				errors.push({
+					name: "empty transition",
+					edge: edge
+				});
+			}
+
+	    //Check for duplicate edge labels
+			//Check for missing edge labels
+			for(const [state, edgeMapping] of nodeOutgoings.entries())
+			{
+				for(const symbol of edgeSymbols)
+				{
+					const edges = edgeMapping.get(symbol);
+					if (edges)
+					{
+						if (edges.length !== 1)
+						{
+							errors.push({
+								name: "duplicate transition",
+								edges: edges,
+								symbol: symbol
+							});
+						}
+					}
+					else
+					{
+						errors.push({
+							name: "missing transition",
+							node: state.getSource(),
+							symbol: symbol
+						});
+					}
+				}
+			}
+		}
 
 		if (errors.length <= 0)
 		{
