@@ -3,6 +3,13 @@ import FSA, { EMPTY_SYMBOL, State } from './FSA.js';
 import FSANode from 'modules/fsa/graph/FSANode.js';
 import FSAEdge, { EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
 
+const ERROR_UNREACHABLE_STATE = "unreachable_state";
+const ERROR_DUPLICATE_STATE = "duplicate_state";
+const ERROR_INCOMPLETE_TRANSITION = "incomplete_transition";
+const ERROR_DUPLICATE_TRANSITION = "duplicate_transition";
+const ERROR_MISSING_TRANSITION = "missing_transition";
+const ERROR_EMPTY_TRANSITION = "empty_transition";
+
 class FSABuilder extends AbstractMachineBuilder
 {
 	constructor()
@@ -74,10 +81,12 @@ class FSABuilder extends AbstractMachineBuilder
 
           if (symbol === EMPTY_CHAR)
           {
+						//For empties
             edgeEmpties.push(edge);
           }
           else
           {
+						//For used symbol
             edgeSymbols.add(symbol);
           }
 
@@ -92,6 +101,7 @@ class FSABuilder extends AbstractMachineBuilder
               transitionSymbol = symbol;
           }
 
+					//For duplicate/missing transitions
 					let outSymbols = nodeOutgoings.get(srcState);
 					if (!outSymbols) nodeOutgoings.set(srcState, outSymbols = new Map());
 					let outEdges = outSymbols.get(transitionSymbol);
@@ -113,29 +123,39 @@ class FSABuilder extends AbstractMachineBuilder
 		for(const [nodeLabel, sharedStates] of nodeLabels.entries())
 		{
 			warnings.push({
-				name: "duplicate state name",
+				name: ERROR_DUPLICATE_STATE,
 				label: nodeLabel,
 				nodes: sharedStates.map(e => e.getSource())
 			});
 		}
 
     //Check for incomplete edge
-		for(const edge of edgePlaceholders)
+		if (edgePlaceholders.length > 0)
 		{
 			errors.push({
-				name: "incomplete transition",
-				edge: edge
+				name: ERROR_INCOMPLETE_TRANSITION,
+				edges: edgePlaceholders
+			});
+		}
+
+		//Check for unreachable nodes
+		const unreachables = getUnreachableNodes(graph);
+		if (unreachables && unreachables.length > 0)
+		{
+			warnings.push({
+				name: ERROR_UNREACHABLE_STATE,
+				nodes: unreachables
 			});
 		}
 
 		if (deterministic)
 		{
 	    //Check for empty transitions
-			for(const edge of edgeEmpties)
+			if (edgeEmpties.length > 0)
 			{
 				errors.push({
-					name: "empty transition",
-					edge: edge
+					name: ERROR_EMPTY_TRANSITION,
+					edges: edgeEmpties
 				});
 			}
 
@@ -151,7 +171,7 @@ class FSABuilder extends AbstractMachineBuilder
 						if (edges.length !== 1)
 						{
 							errors.push({
-								name: "duplicate transition",
+								name: ERROR_DUPLICATE_TRANSITION,
 								edges: edges,
 								symbol: symbol
 							});
@@ -160,7 +180,7 @@ class FSABuilder extends AbstractMachineBuilder
 					else
 					{
 						errors.push({
-							name: "missing transition",
+							name: ERROR_MISSING_TRANSITION,
 							node: state.getSource(),
 							symbol: symbol
 						});
@@ -181,12 +201,61 @@ class FSABuilder extends AbstractMachineBuilder
 		}
 	}
 
+	getUnreachableNodes(graph)
+	{
+		const openList = graph.getNodes().slice();
+		const index = openList.indexOf(startNode);
+		openList.splice(index, 1);
+
+		const queue = [];
+		queue.push(startNode);
+
+		while(queue.length > 0)
+		{
+			const nextNode = queue.pop();
+
+		}
+
+    if (graph.getNodeCount() <= 1) return [];
+
+    const edges = graph.getEdges();
+    const nodes = graph.getNodes().slice();
+		const startNode = graph.getStartNode();
+		const startIndex = nodes.indexOf(startNode);
+		if (startIndex < 0) return [];
+		nodes.splice(startIndex, 1);
+
+    let nextNodes = [];
+    nextNodes.push(startNode);
+
+    while(nextNodes.length > 0)
+    {
+      const node = nextNodes.pop();
+      for(const edge of edges)
+      {
+        if (edge.getSourceNode() === node)
+        {
+          const i = nodes.indexOf(edge.getDestinationNode());
+          if (i >= 0)
+          {
+						const nextNode = nodes[i];
+            nodes.splice(i, 1);
+            nextNodes.push(nextNode);
+          }
+        }
+      }
+    }
+
+    return nodes;
+	}
+
 	//Override
 	getMachine()
 	{
 		return this._machine;
 	}
 }
+
 //Representations ->
 //Truth
 
