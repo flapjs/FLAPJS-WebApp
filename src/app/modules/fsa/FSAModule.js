@@ -20,7 +20,7 @@ import EventManager from './EventManager.js';
 import LabelEditor from './editor/LabelEditor.js';
 import TestingManager from './testing/TestingManager.js';
 
-import StringTester from 'experimental/panels/test/StringTester.js';
+import StringTester from 'experimental/panels/testing/StringTester.js';
 
 import SafeGraphEventHandler from './SafeGraphEventHandler.js';
 

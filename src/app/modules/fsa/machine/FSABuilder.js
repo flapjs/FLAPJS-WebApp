@@ -139,7 +139,7 @@ class FSABuilder extends AbstractMachineBuilder
 		}
 
 		//Check for unreachable nodes
-		const unreachables = getUnreachableNodes(graph);
+		const unreachables = this.getUnreachableNodes(graph);
 		if (unreachables && unreachables.length > 0)
 		{
 			warnings.push({
