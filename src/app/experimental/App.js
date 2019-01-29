@@ -202,10 +202,8 @@ class App extends React.Component
 
     const GRAPH_RENDER_LAYER = "graph";
     const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
-    const VIEWPORT_RENDER_LAYER = "viewport";
     const GraphRenderer = currentModule.getRenderer(GRAPH_RENDER_LAYER);
     const GraphOverlayRenderer = currentModule.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
-    const ViewportRenderer = currentModule.getRenderer(VIEWPORT_RENDER_LAYER);
 
     return (
       <div className="app-container">
