@@ -112,6 +112,7 @@ class ToolbarView extends React.Component
     const toolbarMenuIndex = this.state.menuIndex;
     const ToolbarMenu = toolbarMenuIndex >= 0 ? toolbarMenus[toolbarMenuIndex] : null;
     const showCustomToolbarMenu = ToolbarMenu != null;
+    const onTitleClick = this.props.onTitleClick;
 
     const hasButtons = React.Children.count(this.props.children) > 0;
     const isBarOpen = this.state.open;
@@ -136,7 +137,9 @@ class ToolbarView extends React.Component
             </div>}
         </div>
         <div ref={ref=>this.toolbarElement=ref} className={Style.bar_toolbar}>
-          <ToolbarTitle className={Style.toolbar_title} title={title}/>
+          <ToolbarTitle className={Style.toolbar_title}
+            title={title}
+            onClick={onTitleClick}/>
 
           <div className={Style.toolbar_button_container}>
             {this.renderToolbarButtons(this.props.children)}

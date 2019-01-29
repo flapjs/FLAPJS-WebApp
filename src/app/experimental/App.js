@@ -16,6 +16,7 @@ import LanguagePanel from 'experimental/menus/language/LanguagePanel.js';
 import EditPane from 'experimental/EditPane.js';
 import TapePane from 'experimental/TapePane.js';
 
+import AboutPanel from 'experimental/panels/about/AboutPanel.js';
 import OverviewPanel from 'experimental/panels/overview/OverviewPanel.js';
 import AnalysisPanel from 'experimental/panels/analysis/AnalysisPanel.js';
 import TestingPanel from 'experimental/panels/test/TestingPanel.js';
@@ -98,6 +99,7 @@ class App extends React.Component
     this._mediaQuerySmallHeightList = window.matchMedia("only screen and (min-height: 400px)");
 
     //Notifications.addMessage("Welcome to Flap.js");
+    this.onModuleTitleClick = this.onModuleTitleClick.bind(this);
   }
 
   //Override
@@ -129,6 +131,11 @@ class App extends React.Component
     currentModule.destroy(this);
 
     this._inputAdapter.destroy();
+  }
+
+  onModuleTitleClick(e)
+  {
+    this._drawer.setCurrentTab(0);
   }
 
   get workspace() { return this._workspace; }
@@ -186,7 +193,7 @@ class App extends React.Component
     const inputActionMode = inputController.isActionMode();
 
     const moduleName = currentModule.getLocalizedModuleName();
-    const modulePanels = [TestingPanel, OverviewPanel, AnalysisPanel];
+    const modulePanels = [AboutPanel, TestingPanel, OverviewPanel, AnalysisPanel];
     const modulePanelProps = {currentModule: currentModule, app: this};
     const moduleMenus = currentModule.getModuleMenus().concat([ExportPanel, OptionPanel, LanguagePanel]);
     const moduleMenuProps = {currentModule: currentModule, app: this};
@@ -207,7 +214,8 @@ class App extends React.Component
           menus={moduleMenus}
           menuProps={moduleMenuProps}
           hide={isFullscreen}
-          title={moduleName}>
+          title={moduleName}
+          onTitleClick={this.onModuleTitleClick}>
           <ToolbarButton title="New" icon={PageEmptyIcon}
             onClick={() => UserUtil.userClearGraph(this, false, () => this._toolbar.closeBar())}/>
           <ToolbarUploadButton title="Upload" icon={UploadIcon} accept={graphImporter.getImportFileTypes().join(",")}

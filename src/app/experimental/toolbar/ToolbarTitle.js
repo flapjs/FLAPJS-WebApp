@@ -30,6 +30,7 @@ class ToolbarTitle extends React.Component
   {
     const title = this.props.title;
     const offline = !(navigator && navigator.onLine);
+    const onClick = this.props.onClick;
 
     return (
       <div id={this.props.id}
@@ -41,7 +42,7 @@ class ToolbarTitle extends React.Component
             defaultValue={DEFAULT_TITLE}/>
           {offline && <OfflineIcon className={Style.offline_status}/>}
         </span>
-        <div className={Style.title_subtitle}>
+        <div className={Style.title_subtitle} onClick={onClick}>
           {title}
         </div>
       </div>

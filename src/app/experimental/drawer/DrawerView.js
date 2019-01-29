@@ -14,6 +14,7 @@ const DRAWER_HANDLE_CUSTOM_SNAP_WIDTH = 300;
 
 const DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE = true;
 const DRAWER_SHOULD_HIDE_TAB_LIST = false;
+const DRAWER_SHOULD_HIDE_FIRST_PANEL = true;
 
 export const DRAWER_WIDTH_TYPE_FULL = "full";
 export const DRAWER_WIDTH_TYPE_MIN = "min";
@@ -323,6 +324,7 @@ class DrawerView extends React.Component
     const showDrawerHandle = isDrawerOpen || this._handlingGrab;
     const shouldDrawerOpenFull = this._isfull;
     const shouldHideDrawerContent = (DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE && (this._handlingGrab || this._handlingResize)) || !isDrawerOpen;
+    const shouldHideFirstDrawerPanel = DRAWER_SHOULD_HIDE_FIRST_PANEL;
     const showDrawerTabs = isDrawerOpen || !DRAWER_SHOULD_HIDE_TAB_LIST;
 
     //Used to handle sideways logic

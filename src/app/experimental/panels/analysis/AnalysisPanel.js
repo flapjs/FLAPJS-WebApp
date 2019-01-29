@@ -80,19 +80,19 @@ class AnalysisPanel extends React.Component
         style={this.props.style}
         title={AnalysisPanel.TITLE}>
         <PanelSection title={"Optimizations"} initial={true}>
-          <PanelCheckbox ref={ref=>this.optimizeUnreachOption=ref} className={Style.panel_checkbox}
+          <PanelCheckbox ref={ref=>this.optimizeUnreachOption=ref}
             id="opt-unreach" title="Unreachables" value="unreach"/>
-          <PanelCheckbox ref={ref=>this.optimizeRedundOption=ref} className={Style.panel_checkbox} disabled={true}
+          <PanelCheckbox ref={ref=>this.optimizeRedundOption=ref} disabled={true}
             id="opt-redund" title="Redundant States" value="redund"/>
-          <button className={Style.panel_button} onClick={this.onOptimizeMachine} disabled={!this.canOptimize()}>Optimize</button>
+          <button className={Style.analysis_button} onClick={this.onOptimizeMachine} disabled={!this.canOptimize()}>Optimize</button>
         </PanelSection>
         {
           machineController.getMachineType() == "DFA" ?
-            <button className={Style.panel_button} onClick={this.onConvertToNFA}>
+            <button className={Style.analysis_button} onClick={this.onConvertToNFA}>
               {I18N.toString("action.overview.convertnfa")}
             </button>
           : machineController.getMachineType() == "NFA" ?
-            <button className={Style.panel_button} onClick={this.onConvertToDFA}>
+            <button className={Style.analysis_button} onClick={this.onConvertToDFA}>
               {I18N.toString("action.overview.convertdfa")}
             </button>
           : null
