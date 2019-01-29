@@ -20,11 +20,6 @@ class FSABuilder extends AbstractMachineBuilder
 	}
 
 	//Override
-	onGraphChange(graph)
-	{
-		this.attemptBuild(graph, this._machine, this._errors, this._warnings);
-	}
-
 	attemptBuild(graph, dst, errors=[], warnings=[])
 	{
 		errors.length = 0;
@@ -59,9 +54,12 @@ class FSABuilder extends AbstractMachineBuilder
 				dst.setStartState(state);
 			}
 
-			//Check for duplicates
+			//Check for duplicate states
 			if (nodeLabels.has(nodeLabel)) nodeLabels.get(nodeLabel).push(state);
 			else nodeLabels.set(nodeLabel, [state]);
+
+			//For duplicate transitions
+			nodeOutgoings.set(state, new Map());
 		}
 
 		for (const edge of graphEdges)
@@ -103,7 +101,6 @@ class FSABuilder extends AbstractMachineBuilder
 
 					//For duplicate/missing transitions
 					let outSymbols = nodeOutgoings.get(srcState);
-					if (!outSymbols) nodeOutgoings.set(srcState, outSymbols = new Map());
 					let outEdges = outSymbols.get(transitionSymbol);
 					if (!outEdges) outSymbols.set(transitionSymbol, outEdges = new Array());
 					outEdges.push(edge);
@@ -164,6 +161,7 @@ class FSABuilder extends AbstractMachineBuilder
 
 	    //Check for duplicate edge labels
 			//Check for missing edge labels
+			const missingSymbols = [];
 			for(const [state, edgeMapping] of nodeOutgoings.entries())
 			{
 				for(const symbol of edgeSymbols)
@@ -182,12 +180,18 @@ class FSABuilder extends AbstractMachineBuilder
 					}
 					else
 					{
-						errors.push({
-							name: ERROR_MISSING_TRANSITION,
-							node: state.getSource(),
-							symbol: symbol
-						});
+						missingSymbols.push(symbol);
 					}
+				}
+
+				if (missingSymbols.length > 0)
+				{
+					errors.push({
+						name: ERROR_MISSING_TRANSITION,
+						node: state.getSource(),
+						symbols: missingSymbols.slice()
+					});
+					missingSymbols.length = 0;
 				}
 			}
 		}

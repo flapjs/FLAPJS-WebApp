@@ -1,9 +1,9 @@
 .notification-container {
   position: fixed;
-  top: var(--toolbar-height);
+  /*top: var(--toolbar-height);*/
   z-index: 999;
 
-  max-height: calc(100vh - var(--toolbar-height));
+  max-height: calc(100vh - var(--toolbar-height) - 25px);
   overflow-y: scroll;
 }
 .notification-container > * {

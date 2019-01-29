@@ -17,6 +17,7 @@ class StateMissingTransitionErrorMessage extends React.Component
       }
       this.targetLabel += target.getNodeLabel();
     }
+    this.targetLabel += " for " + props.message.value.symbol;
 
     this.onClick = this.onClick.bind(this);
   }

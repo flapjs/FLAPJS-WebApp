@@ -7,20 +7,20 @@ class AbstractMachineController
 
     this._module = module;
     this._machineBuilder = machineBuilder;
-    this._machineUpdateTicks = 0;
-    this._machineUpdateRate = 30;
   }
 
-  initialize(module) {}
-  destroy(module) {}
+  initialize(module)
+  {
+    this._machineBuilder.initialize(module);
+  }
+
+  destroy(module)
+  {
+    this._machineBuilder.destroy(module);
+  }
 
   update(module)
   {
-    if (--this._machineUpdateTicks <= 0)
-    {
-      this._machineBuilder.update(module);
-      this._machineUpdateTicks = this._machineUpdateRate;
-    }
   }
 
   getMachineBuilder()

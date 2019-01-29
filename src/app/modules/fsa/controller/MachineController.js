@@ -44,8 +44,6 @@ class MachineController extends AbstractMachineController
   {
     super.initialize(module);
 
-    this.graphController = module.getGraphController();
-
     //HACK: this is only to support the old FSABuilder (remove this once finished)
     //this.getMachineBuilder().initialize(module);
   }

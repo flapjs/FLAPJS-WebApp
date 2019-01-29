@@ -21,6 +21,7 @@ import LabelEditor from './editor/LabelEditor.js';
 import TestingManager from './testing/TestingManager.js';
 
 import StringTester from 'experimental/panels/testing/StringTester.js';
+import FSAErrorChecker from './FSAErrorChecker.js';
 
 import SafeGraphEventHandler from './SafeGraphEventHandler.js';
 
@@ -40,6 +41,8 @@ class FSAModule extends AbstractModule
     this._inputController = new InputController(this, app.getInputAdapter());
     this._graphController = new GraphController(this);
     this._machineController = new MachineController(this);
+
+    this._errorChecker = new FSAErrorChecker(this._graphController, this._machineController);
 
     //Deprecated (should be anyways)
     //this._eventManager = new EventManager(app.getUndoManager());

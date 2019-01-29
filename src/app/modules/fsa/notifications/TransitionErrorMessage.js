@@ -1,4 +1,5 @@
 import React from 'react';
+import GraphNode from 'graph/GraphNode.js';
 
 import { ARROW } from 'machine/Symbols.js';
 
@@ -17,7 +18,9 @@ class TransitionErrorMessage extends React.Component
       {
         this.targetLabel += ", ";
       }
-      this.targetLabel += "(" + target.getSourceNode().getNodeLabel() + ", " + (target.getDestinationNode() ? target.getDestinationNode().getNodeLabel() : "null") + ") " + ARROW + " " + target.getEdgeLabel();
+      this.targetLabel += "(" + target.getSourceNode().getNodeLabel() + ", " +
+        target.getEdgeLabel() + ") " +
+        ARROW + " " + (target.getDestinationNode() instanceof GraphNode ? target.getDestinationNode().getNodeLabel() : "null");
     }
 
     this.onClick = this.onClick.bind(this);

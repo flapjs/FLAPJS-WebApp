@@ -1,30 +1,36 @@
+import MachineChangeHandler from 'experimental/MachineChangeHandler.js';
+
 class AbstractMachineBuilder
 {
   constructor()
   {
-		this._graph = null;
-		this._cachedGraphHash = 0;
+    this._machineChangeHandler = new MachineChangeHandler();
 
     this._errors = [];
     this._warnings = [];
+
+    this.onGraphChange = this.onGraphChange.bind(this);
   }
 
-  update(module)
+  initialize(module)
   {
-    const graphController = module.getGraphController();
-    const machineController = module.getMachineController();
-    const graph = this._graph = graphController.getGraph();
-    const graphHash = graph.getHashCode(false);
-    if (graphHash !== this._cachedGraphHash)
-    {
-      this._cachedGraphHash = graphHash;
-      this.onGraphChange(graph);
-    }
+    module.getGraphController().getGraphChangeHandler().addListener(this.onGraphChange);
+  }
+
+  destroy(module)
+  {
+    module.getGraphController().getGraphChangeHandler().removeListener(this.onGraphChange);
   }
 
   onGraphChange(graph)
   {
-    throw new Error("Missing machine update operation for graph change");
+    this.attemptBuild(graph, this.getMachine(), this._errors, this._warnings);
+    this._machineChangeHandler.update(this);
+  }
+
+  attemptBuild(graph, dst, errors, warnings)
+  {
+    throw new Error("Missing machine build operation");
   }
 
   getMachineErrors()
@@ -35,6 +41,11 @@ class AbstractMachineBuilder
   getMachineWarnings()
   {
     return this._warnings;
+  }
+
+  getMachineChangeHandler()
+  {
+    return this._machineChangeHandler;
   }
 
   isMachineValid()
