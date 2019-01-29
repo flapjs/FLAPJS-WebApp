@@ -1,9 +1,10 @@
 import React from 'react';
 import Style from './TestingPanel.css';
 
-import TestListView from './TestListView.js';
-
+import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSwitch from 'experimental/panels/PanelSwitch.js';
+
+import TestListView from './TestListView.js';
 
 class TestingPanel extends React.Component
 {
@@ -66,19 +67,17 @@ class TestingPanel extends React.Component
     const errorCheck = this.state.errorCheck;
 
     return (
-      <div id={this.props.id}
+      <PanelContainer id={this.props.id}
         className={Style.panel_container +
           " " + this.props.className}
-        style={this.props.style}>
-        <div className={Style.panel_title}>
-          <h1>{TestingPanel.TITLE}</h1>
-        </div>
-        <div className={Style.panel_content}>
-          <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode}/>
-          <PanelSwitch id={"testing-step-test"} checked={stepMode} onChange={this.onStepTestChange} title={"Step testing"}/>
-          <PanelSwitch id={"testing-error-check"} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={"Auto error checking"} disabled={true}/>
-        </div>
-      </div>
+        style={this.props.style}
+        title={TestingPanel.TITLE}>
+
+        <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode}/>
+        <PanelSwitch id={"testing-step-test"} checked={stepMode} onChange={this.onStepTestChange} title={"Step testing"}/>
+        <PanelSwitch id={"testing-error-check"} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={"Auto error checking"} disabled={true}/>
+
+      </PanelContainer>
     );
   }
 }
