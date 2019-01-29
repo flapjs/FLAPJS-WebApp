@@ -1,4 +1,4 @@
-import AbstractModuleInputController from 'modules/abstract/AbstractModuleInputController.js';
+import AbstractInputController from 'modules/abstract/AbstractInputController.js';
 
 import GraphPicker from './GraphPicker.js';
 import Node from 'graph/GraphNode.js';
@@ -7,7 +7,7 @@ import Edge from 'graph/QuadraticEdge.js';
 const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
 const STR_TRANSITION_DEFAULT_LABEL = "";
 
-class DefaultInputController extends AbstractModuleInputController
+class DefaultInputController extends AbstractInputController
 {
   constructor(module, inputAdapter)
   {

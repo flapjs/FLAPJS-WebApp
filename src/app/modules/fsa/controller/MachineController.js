@@ -1,4 +1,4 @@
-import AbstractModuleMachineController from 'modules/abstract/AbstractModuleMachineController.js';
+import AbstractMachineController from 'modules/abstract/AbstractMachineController.js';
 import Eventable from 'util/Eventable.js';
 
 import FSABuilder from 'modules/fsa/machine/FSABuilder.js';
@@ -9,7 +9,7 @@ import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import { convertToDFA } from 'machine/util/convertNFA.js';
 import DFA from 'machine/DFA.js';
 
-class MachineController extends AbstractModuleMachineController
+class MachineController extends AbstractMachineController
 {
   constructor(module)
   {

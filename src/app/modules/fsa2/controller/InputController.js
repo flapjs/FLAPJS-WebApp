@@ -1,6 +1,6 @@
-import AbstractModuleInputController from 'modules/abstract/AbstractModuleInputController.js';
+import AbstractInputController from 'modules/abstract/AbstractInputController.js';
 
-class InputController extends AbstractModuleInputController
+class InputController extends AbstractInputController
 {
   constructor(module, inputAdapter)
   {

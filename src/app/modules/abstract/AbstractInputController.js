@@ -2,7 +2,7 @@ import AbstractInputHandler from 'system/inputadapter/AbstractInputHandler.js';
 
 import ViewportInputHandler from './ViewportInputHandler.js';
 
-class AbstractModuleInputController extends AbstractInputHandler
+class AbstractInputController extends AbstractInputHandler
 {
   constructor(module, inputAdapter)
   {
@@ -51,4 +51,4 @@ class AbstractModuleInputController extends AbstractInputHandler
   }
 }
 
-export default AbstractModuleInputController;
+export default AbstractInputController;

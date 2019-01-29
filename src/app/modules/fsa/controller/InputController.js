@@ -1,4 +1,4 @@
-import AbstractModuleInputController from 'modules/abstract/AbstractModuleInputController.js';
+import AbstractInputController from 'modules/abstract/AbstractInputController.js';
 
 import GraphPicker from './GraphPicker.js';
 
@@ -11,7 +11,7 @@ import GraphNodeCreateInputHandler from './inputhandler/GraphNodeCreateInputHand
 
 const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
 
-class InputController extends AbstractModuleInputController
+class InputController extends AbstractInputController
 {
   constructor(module, inputAdapter)
   {

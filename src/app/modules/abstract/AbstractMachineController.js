@@ -1,4 +1,4 @@
-class AbstractModuleMachineController
+class AbstractMachineController
 {
   constructor(module, machineBuilder)
   {
@@ -34,4 +34,4 @@ class AbstractModuleMachineController
   }
 }
 
-export default AbstractModuleMachineController;
+export default AbstractMachineController;
