@@ -1,4 +1,4 @@
-import AbstractModuleGraphController from 'modules/abstract/AbstractModuleGraphController.js';
+import AbstractGraphController from 'modules/abstract/AbstractGraphController.js';
 
 import Eventable from 'util/Eventable.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
@@ -12,7 +12,7 @@ const NODE_SPAWN_RADIUS = 64;
 const DEFAULT_AUTO_RENAME = true;
 const GRAPH_REFRESH_RATE = 30;
 
-class GraphController extends AbstractModuleGraphController
+class GraphController extends AbstractGraphController
 {
   constructor(module)
   {

@@ -1,4 +1,4 @@
-import AbstractModuleGraphController from 'modules/abstract/AbstractModuleGraphController.js';
+import AbstractGraphController from 'modules/abstract/AbstractGraphController.js';
 
 import Config from 'config.js';
 import Eventable from 'util/Eventable.js';
@@ -10,7 +10,7 @@ import QuadraticEdge from 'graph/QuadraticEdge.js';
 
 import DefaultGraphLabeler from './DefaultGraphLabeler.js';
 
-class DefaultGraphController extends AbstractModuleGraphController
+class DefaultGraphController extends AbstractGraphController
 {
   constructor(module)
   {

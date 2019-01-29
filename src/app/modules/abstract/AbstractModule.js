@@ -1,10 +1,5 @@
-import GraphImporter from './exporter/GraphImporter.js';
-import GraphImageExporter from './exporter/GraphImageExporter.js';
-
 import ExportingPanel from './panels/exporting/ExportingPanel.js';
 import OptionsPanel from './panels/options/OptionsPanel.js';
-
-import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG } from 'util/Downloader.js';
 
 //TODO: This is inserted by Drawer.js, not used here. (which is weird)
 export const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];

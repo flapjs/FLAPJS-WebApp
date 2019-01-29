@@ -22,17 +22,10 @@ import TestingManager from './testing/TestingManager.js';
 
 import StringTester from 'experimental/panels/test/StringTester.js';
 
-import FSAGraphExporter from './exporter/FSAGraphExporter.js';
-import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
-
 import SafeGraphEventHandler from './SafeGraphEventHandler.js';
 
 const VERSION = "0.0.1";
 const PANELS = [AboutPanel, TestingPanel, OverviewPanel, AnalysisPanel];
-const EXPORTERS = [
-  new FSAGraphExporter(),
-  new JFLAPGraphExporter()
-];
 
 class FSAModule extends AbstractModule
 {
@@ -141,8 +134,6 @@ class FSAModule extends AbstractModule
   getGraphController() { return this._graphController; }
   //Override
   getMachineController() { return this._machineController; }
-  //Override
-  getGraphExporters() { return EXPORTERS; }
   //Override
   getModuleVersion() { return VERSION; }
   //Override

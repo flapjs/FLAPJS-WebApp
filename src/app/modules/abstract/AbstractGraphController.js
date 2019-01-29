@@ -1,3 +1,8 @@
+import GraphImporter from './exporter/GraphImporter.js';
+import GraphImageExporter from './exporter/GraphImageExporter.js';
+
+import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG } from 'util/Downloader.js';
+
 export const DEFAULT_GRAPH_EXPORTERS = [];
 export const DEFAULT_IMAGE_EXPORTERS = [
   new GraphImageExporter(FILE_TYPE_PNG),
@@ -28,7 +33,7 @@ class AbstractGraphController
   {
     const exporters = this.getGraphExporters();
     if (exporters.length > 0) return exporters[0];
-    throw new Error("Missing default graph exporter for module \'" + this.getModuleName() + "\'");
+    throw new Error("Missing default graph exporter for module \'" + this.getModule().getModuleName() + "\'");
   }
   getImageExporters() { return DEFAULT_IMAGE_EXPORTERS; }
   getGraphExporters() { return DEFAULT_GRAPH_EXPORTERS; }

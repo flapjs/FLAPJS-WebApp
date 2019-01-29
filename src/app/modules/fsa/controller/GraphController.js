@@ -1,4 +1,4 @@
-import AbstractModuleGraphController from 'modules/abstract/AbstractModuleGraphController.js';
+import AbstractGraphController from 'modules/abstract/AbstractGraphController.js';
 
 import Eventable from 'util/Eventable.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
@@ -8,11 +8,19 @@ import FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
 
 import GraphChangeHandler from 'experimental/GraphChangeHandler.js';
 
+import FSAGraphExporter from 'modules/fsa/exporter/FSAGraphExporter.js';
+import JFLAPGraphExporter from 'modules/fsa/exporter/JFLAPGraphExporter.js';
+
+const EXPORTERS = [
+  new FSAGraphExporter(),
+  new JFLAPGraphExporter()
+];
+
 const NODE_SPAWN_RADIUS = 64;
 const DEFAULT_AUTO_RENAME = true;
 const GRAPH_REFRESH_RATE = 30;
 
-class GraphController extends AbstractModuleGraphController
+class GraphController extends AbstractGraphController
 {
   constructor(module)
   {
@@ -136,6 +144,9 @@ class GraphController extends AbstractModuleGraphController
 
     this._graphChangeHandler.update(this._graph);
   }
+
+  //Override
+  getGraphExporters() { return EXPORTERS; }
 
   getGraphChangeHandler()
   {
