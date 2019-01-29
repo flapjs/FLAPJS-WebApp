@@ -3,12 +3,12 @@ import FSA, { EMPTY_SYMBOL, State } from './FSA.js';
 import FSANode from 'modules/fsa/graph/FSANode.js';
 import FSAEdge, { EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
 
-const ERROR_UNREACHABLE_STATE = "unreachable_state";
-const ERROR_DUPLICATE_STATE = "duplicate_state";
-const ERROR_INCOMPLETE_TRANSITION = "incomplete_transition";
-const ERROR_DUPLICATE_TRANSITION = "duplicate_transition";
-const ERROR_MISSING_TRANSITION = "missing_transition";
-const ERROR_EMPTY_TRANSITION = "empty_transition";
+export const ERROR_UNREACHABLE_STATE = "unreachable_state";
+export const ERROR_DUPLICATE_STATE = "duplicate_state";
+export const ERROR_INCOMPLETE_TRANSITION = "incomplete_transition";
+export const ERROR_DUPLICATE_TRANSITION = "duplicate_transition";
+export const ERROR_MISSING_TRANSITION = "missing_transition";
+export const ERROR_EMPTY_TRANSITION = "empty_transition";
 
 class FSABuilder extends AbstractMachineBuilder
 {
@@ -122,11 +122,14 @@ class FSABuilder extends AbstractMachineBuilder
     //Check for duplicate node labels
 		for(const [nodeLabel, sharedStates] of nodeLabels.entries())
 		{
-			warnings.push({
-				name: ERROR_DUPLICATE_STATE,
-				label: nodeLabel,
-				nodes: sharedStates.map(e => e.getSource())
-			});
+			if (sharedStates.length > 1)
+			{
+				warnings.push({
+					name: ERROR_DUPLICATE_STATE,
+					label: nodeLabel,
+					nodes: sharedStates.map(e => e.getSource())
+				});
+			}
 		}
 
     //Check for incomplete edge
