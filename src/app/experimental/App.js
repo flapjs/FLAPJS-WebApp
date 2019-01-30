@@ -16,11 +16,6 @@ import LanguagePanel from 'experimental/menus/language/LanguagePanel.js';
 import EditPane from 'experimental/EditPane.js';
 import TapePane from 'experimental/TapePane.js';
 
-import AboutPanel from 'experimental/panels/about/AboutPanel.js';
-import OverviewPanel from 'experimental/panels/overview/OverviewPanel.js';
-import AnalysisPanel from 'experimental/panels/analysis/AnalysisPanel.js';
-import TestingPanel from 'experimental/panels/testing/TestingPanel.js';
-
 import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU } from 'experimental/toolbar/ToolbarButton.js';
 import ToolbarDivider from 'experimental/toolbar/ToolbarDivider.js';
 import ToolbarUploadButton from 'experimental/toolbar/ToolbarUploadButton.js';
@@ -193,7 +188,7 @@ class App extends React.Component
     const inputActionMode = inputController.isActionMode();
 
     const moduleName = currentModule.getLocalizedModuleName();
-    const modulePanels = [AboutPanel, TestingPanel, OverviewPanel, AnalysisPanel];
+    const modulePanels = currentModule.getModulePanels();
     const modulePanelProps = {currentModule: currentModule, app: this};
     const moduleMenus = currentModule.getModuleMenus().concat([ExportPanel, OptionPanel, LanguagePanel]);
     const moduleMenuProps = {currentModule: currentModule, app: this};

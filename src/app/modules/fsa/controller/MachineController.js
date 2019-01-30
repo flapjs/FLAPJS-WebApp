@@ -1,9 +1,9 @@
 import AbstractMachineController from 'modules/abstract/AbstractMachineController.js';
 import Eventable from 'util/Eventable.js';
 
-import FSABuilder from 'modules/fsa/machine/FSABuilder.js';
+//import FSABuilder from 'modules/fsa/machine/FSABuilder.js';
 //HACK: this is only to support the old FSABuilder (remove this once finished)
-//import FSABuilder from 'modules/fsa/builder/FSABuilder.js';
+import FSABuilder from 'modules/fsa/builder/FSABuilder.js';
 
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import { convertToDFA } from 'machine/util/convertNFA.js';
@@ -44,8 +44,7 @@ class MachineController extends AbstractMachineController
   {
     super.initialize(module);
 
-    //HACK: this is only to support the old FSABuilder (remove this once finished)
-    //this.getMachineBuilder().initialize(module);
+    this.graphController = module.getGraphController();
   }
 
   //Override
@@ -62,16 +61,16 @@ class MachineController extends AbstractMachineController
 
   getMachineType()
   {
-    return this._machineBuilder.getMachine().isDeterministic() ? "DFA" : "NFA";
+    //return this._machineBuilder.getMachine().isDeterministic() ? "DFA" : "NFA";
     //HACK: this is only to support the old FSABuilder (remove this once finished)
-    //return this._machineBuilder.isDeterministic() ? "DFA" : "NFA";
+    return this._machineBuilder.isDeterministic() ? "DFA" : "NFA";
   }
 
   setMachineType(machineType)
   {
-    this._machineBuilder.getMachine().setDeterministic(machineType === 'DFA');
+    //this._machineBuilder.getMachine().setDeterministic(machineType === 'DFA');
     //HACK: this is only to support the old FSABuilder (remove this once finished)
-    //this._machineBuilder.setDeterministic(machineType === 'DFA');
+    this._machineBuilder.setDeterministic(machineType === 'DFA');
   }
 
   getMachineName()
@@ -346,9 +345,9 @@ class MachineController extends AbstractMachineController
 
   getCustomSymbols()
   {
-    return Array.from(this._machineBuilder.getMachine().getCustomSymbols());
+    //return Array.from(this._machineBuilder.getMachine().getCustomSymbols());
     //HACK: this is only to support the old FSABuilder (remove this once finished)
-    //return this.getMachineBuilder()._symbols;
+    return this.getMachineBuilder()._symbols;
   }
 
   isCustomSymbol(symbol)
@@ -358,16 +357,16 @@ class MachineController extends AbstractMachineController
 
   addCustomSymbol(symbol)
   {
-    this._machineBuilder.getMachine().setCustomSymbol(symbol);
+    //this._machineBuilder.getMachine().setCustomSymbol(symbol);
     //HACK: this is only to support the old FSABuilder (remove this once finished)
-    //this._machineBuilder.addCustomSymbol(symbol);
+    this._machineBuilder.addCustomSymbol(symbol);
   }
 
   clearCustomSymbols()
   {
-    this._machineBuilder.getMachine().clearCustomSymbols();
+    //this._machineBuilder.getMachine().clearCustomSymbols();
     //HACK: this is only to support the old FSABuilder (remove this once finished)
-    //this.getMachineBuilder()._symbols.length = 0;
+    this.getMachineBuilder()._symbols.length = 0;
   }
 }
 Eventable.mixin(MachineController);

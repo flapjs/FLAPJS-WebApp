@@ -22,15 +22,17 @@ class FSABuilder extends AbstractMachineBuilder
     this.machineController = null;
   }
 
+  //Override
   initialize(module)
   {
+    super.initialize(module);
     this.tester = module.getTestingManager();
     this.graphController = module.getGraphController();
     this.machineController = module.getMachineController();
   }
 
   //Override
-  onGraphChange(graph=null)
+  onGraphChange(graph)
   {
     if (!this.tester) return;
 
