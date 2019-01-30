@@ -12,6 +12,12 @@ Modules['fsa'] = {
   fetch: function(callback) { import(/* webpackChunkName: "module_fsa" */ 'modules/fsa/FSAModule.js').then(({ default: _ }) => callback( _ )); }
 };
 
+Modules['fsa2'] = {
+  name: "Finite State Automata",
+  version: "2.0.0",
+  fetch: function(callback) { import(/* webpackChunkName: "module_fsa2" */ 'modules/fsa2/FSAModule.js').then(({ default: _ }) => callback( _ )); }
+};
+
 Modules['pda'] = {
   name: "Pushdown Automata",
   version: "1.0.0",

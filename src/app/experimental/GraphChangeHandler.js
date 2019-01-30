@@ -53,7 +53,6 @@ class GraphChangeHandler
       const graphHash = graph.getHashCode(false);
       if (graphHash !== this._cachedGraphHash)
       {
-        console.log("UPDATE!");
         this._cachedGraphHash = graphHash;
         for(const listener of this._listeners)
         {
