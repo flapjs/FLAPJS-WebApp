@@ -1,4 +1,4 @@
-import { convertToDFA } from './convertFSA.js';
+import { convertToDFA } from './ConvertFSA.js';
 
 export function isEquivalentFSA(fsa1, fsa2)
 {
