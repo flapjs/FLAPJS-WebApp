@@ -1,8 +1,8 @@
 import * as TEST from '../Tester.js';
-import NFA from 'machine/NFA.js';
-import DFA from 'machine/DFA.js';
-import { minimizeFSA } from 'machine/util/minimizeFSA.js';
-import {isEquivalentFSA} from 'machine/util/equalFSA.js';
+import NFA from 'modules/fsa/machine/NFA.js';
+import DFA from 'modules/fsa/machine/DFA.js';
+import { minimizeFSA } from 'modules/fsa/machine/util/minimizeFSA.js';
+import {isEquivalentFSA} from 'modules/fsa/machine/util/equalFSA.js';
 
 {
 let machine = new DFA();

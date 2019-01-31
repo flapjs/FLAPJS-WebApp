@@ -1,8 +1,8 @@
 import AbstractMachineBuilder from 'modules/abstract/AbstractMachineBuilder.js';
 
 import FSAErrorChecker from './FSAErrorChecker.js';
-import DFA from 'machine/DFA.js';
-import NFA from 'machine/NFA.js';
+import DFA from 'modules/fsa/machine/DFA.js';
+import NFA from 'modules/fsa/machine/NFA.js';
 import Node from 'modules/fsa/graph/FSANode.js';
 
 class FSABuilder extends AbstractMachineBuilder

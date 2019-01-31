@@ -1,5 +1,5 @@
-import DFA from 'machine/DFA.js';
-import { EMPTY } from 'machine/Symbols.js';
+import DFA from 'modules/fsa/machine/DFA.js';
+import { EMPTY } from 'modules/fsa/machine/Symbols.js';
 
 export function convertToDFA(nfa, dst=null)
 {

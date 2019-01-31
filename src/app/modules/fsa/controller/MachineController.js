@@ -6,8 +6,8 @@ import Eventable from 'util/Eventable.js';
 import FSABuilder from 'modules/fsa/builder/FSABuilder.js';
 
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
-import { convertToDFA } from 'machine/util/convertNFA.js';
-import DFA from 'machine/DFA.js';
+import { convertToDFA } from 'modules/fsa/machine/util/convertNFA.js';
+import DFA from 'modules/fsa/machine/DFA.js';
 
 class MachineController extends AbstractMachineController
 {

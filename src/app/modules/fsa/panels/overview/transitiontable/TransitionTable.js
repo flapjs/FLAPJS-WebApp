@@ -2,8 +2,8 @@ import React from 'react';
 import './TransitionTable.css';
 
 import InfoBlock from '../infoblock/InfoBlock.js';
-import NFA from 'machine/NFA.js';
-import { EMPTY } from 'machine/Symbols.js';
+import NFA from 'modules/fsa/machine/NFA.js';
+import { EMPTY } from 'modules/fsa/machine/Symbols.js';
 
 const SRC = 0;
 const SYMBOL = 1;

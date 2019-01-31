@@ -2,7 +2,7 @@ import React from 'react';
 import './TestingInput.css';
 
 import Config from 'config.js';
-import { EMPTY } from 'machine/Symbols.js';
+import { EMPTY } from 'modules/fsa/machine/Symbols.js';
 
 import IconButton from 'icons/IconButton.js';
 import AddIcon from 'icons/AddIcon.js';

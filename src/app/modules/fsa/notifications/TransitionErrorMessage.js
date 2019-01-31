@@ -1,7 +1,7 @@
 import React from 'react';
 import GraphNode from 'graph/GraphNode.js';
 
-import { ARROW } from 'machine/Symbols.js';
+import { ARROW } from 'modules/fsa/machine/Symbols.js';
 
 class TransitionErrorMessage extends React.Component
 {

@@ -1,5 +1,5 @@
-import DFA from 'machine/DFA.js';
-import { convertToDFA } from 'machine/util/convertNFA.js';
+import DFA from 'modules/fsa/machine/DFA.js';
+import { convertToDFA } from 'modules/fsa/machine/util/convertNFA.js';
 
 export function isEquivalentFSA(fsa1, fsa2)
 {

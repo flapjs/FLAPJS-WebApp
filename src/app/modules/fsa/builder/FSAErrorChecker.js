@@ -1,5 +1,5 @@
 import Config from 'config.js';
-import { EMPTY } from 'machine/Symbols.js';
+import { EMPTY } from 'modules/fsa/machine/Symbols.js';
 
 import Notifications from 'system/notification/Notifications.js';
 import StateUnreachableWarningMessage from 'modules/fsa/notifications/StateUnreachableWarningMessage.js';

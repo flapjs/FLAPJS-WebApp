@@ -1,6 +1,6 @@
 import { guid } from 'util/MathHelper.js';
 
-import { solveNFA } from 'machine/util/solveNFA.js';
+import { solveNFA } from 'modules/fsa/machine/util/solveNFA.js';
 
 const SUCCESS = true;
 const FAILURE = false;

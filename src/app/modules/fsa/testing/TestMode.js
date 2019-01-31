@@ -1,8 +1,8 @@
 //FIXME: FSABUILDER: these should be the other ones
-import { solveDFA } from 'machine/util/solveDFA.js';
-import { solveNFA, solveNFAbyStep } from 'machine/util/solveNFA.js';
+import { solveDFA } from 'modules/fsa/machine/util/solveDFA.js';
+import { solveNFA, solveNFAbyStep } from 'modules/fsa/machine/util/solveNFA.js';
 
-import { DFA } from 'machine/DFA.js';
+import { DFA } from 'modules/fsa/machine/DFA.js';
 
 const STEPTIME = 500;
 const SKIPTIME = 50;

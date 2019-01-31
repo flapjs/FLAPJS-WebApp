@@ -1,5 +1,5 @@
-import {convertToDFA} from "machine/util/convertNFA.js"
-import DFA from 'machine/DFA.js';
+import {convertToDFA} from 'modules/fsa/machine/util/convertNFA.js';
+import DFA from 'modules/fsa/machine/DFA.js';
 const SRC = 0;
 const SYMBOL = 1;
 const DST = 2;
