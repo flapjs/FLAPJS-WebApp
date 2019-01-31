@@ -19,7 +19,6 @@ import GraphLayout from './graph/GraphLayout.js';
 import LabelEditor from './editor/LabelEditor.js';
 import TestingManager from './testing/TestingManager.js';
 
-import StringTester from 'modules/fsa2/tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 
 import SafeGraphEventHandler from './graph/SafeGraphEventHandler.js';
@@ -47,8 +46,6 @@ class FSAModule extends AbstractModule
     //this._eventManager = new EventManager(app.getUndoManager());
     //Deprecated
     this._testingManager = new TestingManager();
-    //Use this instead
-    this._tester = new StringTester();
   }
 
   //Override
