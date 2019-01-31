@@ -13,7 +13,6 @@ import TestingPanel from './components/panels/testing/TestingPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 
 import Notifications from 'system/notification/Notifications.js';
-import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 import LabelEditor from './editor/LabelEditor.js';
