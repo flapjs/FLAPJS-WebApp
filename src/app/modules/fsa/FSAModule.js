@@ -19,7 +19,7 @@ import GraphLayout from './graph/GraphLayout.js';
 import LabelEditor from './editor/LabelEditor.js';
 import TestingManager from './testing/TestingManager.js';
 
-import StringTester from 'experimental/panels/testing/StringTester.js';
+import StringTester from 'modules/fsa2/tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 
 import SafeGraphEventHandler from './SafeGraphEventHandler.js';

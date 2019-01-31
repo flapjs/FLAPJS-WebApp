@@ -4,19 +4,28 @@ import InputController from './controller/InputController.js';
 import GraphController from './controller/GraphController.js';
 import MachineController from './controller/MachineController.js';
 
-import GraphRenderer from './renderer/GraphRenderer.js';
-import GraphOverlayRenderer from './renderer/GraphOverlayRenderer.js';
+import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
+import FSAGraphOverlayRenderer from './renderer/FSAGraphOverlayRenderer.js';
 
-import AboutPanel from 'experimental/panels/about/AboutPanel.js';
-import OverviewPanel from 'experimental/panels/overview/OverviewPanel.js';
-import TestingPanel from 'experimental/panels/testing/TestingPanel.js';
-import AnalysisPanel from 'experimental/panels/analysis/AnalysisPanel.js';
+import AboutPanel from './components/panels/about/AboutPanel.js';
+import OverviewPanel from './components/panels/overview/OverviewPanel.js';
+import TestingPanel from './components/panels/testing/TestingPanel.js';
+import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 
 const MODULE_NAME = "fsa";
 const MODULE_VERSION = "0.0.1";
-const MODULE_PANELS = [AboutPanel, OverviewPanel, TestingPanel, AnalysisPanel];
-const MODULE_MENUS = [];
-const MODULE_VIEWS = [];
+const MODULE_PANELS = [
+  AboutPanel,
+  OverviewPanel,
+  TestingPanel,
+  AnalysisPanel
+];
+const MODULE_MENUS = [
+
+];
+const MODULE_VIEWS = [
+
+];
 
 class FSAModule extends AbstractModule
 {
@@ -35,9 +44,9 @@ class FSAModule extends AbstractModule
     switch(renderLayer)
     {
       case "graph":
-        return GraphRenderer;
+        return FSAGraphRenderer;
       case "graphoverlay":
-        return GraphOverlayRenderer;
+        return FSAGraphOverlayRenderer;
     }
     return null;
   }
@@ -58,7 +67,7 @@ class FSAModule extends AbstractModule
   //Override
   getModuleName() { return MODULE_NAME; }
   //Override
-  getLocalizedModuleName() { return /*the machine type name*/ "FSA"; }
+  getLocalizedModuleName() { return /*TODO: the machine type name*/ "FSA"; }
 }
 
 export default FSAModule;
