@@ -596,6 +596,7 @@ class FSA
   doTransition(state, symbol, forceNondeterminism=false, dst=[])
   {
     if (!state) return dst;
+    if (!(state instanceof State)) throw new Error("Invalid state instance type \'" + (typeof state) + "\'");
     if (!this._states.has(state.getStateID())) throw new Error("Unable to find source state with id \'" + state.getStateID() + "\'");
 
     if (!symbol) symbol = EMPTY_SYMBOL;
