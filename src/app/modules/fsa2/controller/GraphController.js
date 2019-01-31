@@ -31,7 +31,6 @@ class GraphController extends AbstractGraphController
     this._graphChangeHandler = new GraphChangeHandler(GRAPH_REFRESH_RATE);
 
     this.labelEditorElement = null;
-    this.tester = null;
 
     this.prevQuad = {
       radians: 0, length: 0,
@@ -54,7 +53,6 @@ class GraphController extends AbstractGraphController
   initialize(module)
   {
     super.initialize(module);
-    this.tester = module.getTestingManager();
 
     this.inputController = module.getInputController();
     this.machineController = module.getMachineController();

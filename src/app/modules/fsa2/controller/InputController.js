@@ -135,13 +135,6 @@ class InputController extends AbstractInputController
       }
     }
 
-    //Disable all graph input when in step-by-step mode
-    if (graphController.tester.getStepByStepMode())
-    {
-      //Consume event!
-      return true;
-    }
-
     //Override
     return super.onPreInputEvent(pointer);
   }
