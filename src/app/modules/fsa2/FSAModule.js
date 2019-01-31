@@ -17,7 +17,7 @@ import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 import LabelEditor from './editor/LabelEditor.js';
-import SafeGraphEventHandler from './graph/SafeGraphEventHandler.js';
+import SafeGraphEventHandler from 'modules/fsa/graph/SafeGraphEventHandler.js';
 
 const MODULE_NAME = "fsa";
 const MODULE_VERSION = "0.0.1";

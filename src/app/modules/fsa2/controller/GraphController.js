@@ -4,7 +4,7 @@ import Eventable from 'util/Eventable.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
 import FSAGraphLabeler from 'modules/fsa/graph/FSAGraphLabeler.js';
-import FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
+import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
 
 import GraphChangeHandler from 'experimental/GraphChangeHandler.js';
 

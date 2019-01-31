@@ -3,7 +3,10 @@ import './Drawer.css';
 
 import DrawerExpander from './DrawerExpander.js';
 
-import { DEFAULT_PANELS } from 'modules/abstract/AbstractModule.js';
+import ExportingPanel from 'content/panels/exporting/ExportingPanel.js';
+import OptionsPanel from 'content/panels/options/OptionsPanel.js';
+
+const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
 const DEFAULT_TAB_INDEX = 0;
 
 const MAX_PANEL_THRESHOLD = 50;

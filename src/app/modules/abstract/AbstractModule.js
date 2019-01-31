@@ -1,9 +1,3 @@
-import ExportingPanel from './panels/exporting/ExportingPanel.js';
-import OptionsPanel from './panels/options/OptionsPanel.js';
-
-//TODO: This is inserted by Drawer.js, not used here. (which is weird)
-export const DEFAULT_PANELS = [ExportingPanel, OptionsPanel];
-
 class AbstractModule
 {
   constructor(app)
