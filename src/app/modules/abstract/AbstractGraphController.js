@@ -12,17 +12,18 @@ export const DEFAULT_IMAGE_EXPORTERS = [
 
 class AbstractGraphController
 {
-  constructor(module, graph, labeler)
+  constructor(module, graph, labeler, parser)
   {
     if (!module) throw new Error("Missing module for graph controller");
     if (!graph) throw new Error("Missing graph for graph controller");
     if (!labeler) throw new Error("Missing graph labeler for graph controller");
+    if (!parser) throw new Error("Missing graph parser for graph controller");
 
     this._module = module;
     this._graph = graph;
-    this._labeler = labeler;
-    this._labeler.setGraphController(this);
     this._importer = new GraphImporter(module);
+    this._labeler = labeler;
+    this._parser = parser;
   }
 
   initialize(module) {}
@@ -38,9 +39,17 @@ class AbstractGraphController
   getImageExporters() { return DEFAULT_IMAGE_EXPORTERS; }
   getGraphExporters() { return DEFAULT_GRAPH_EXPORTERS; }
   getGraphImporter() { return this._importer; }
-  getGraphParser(type)
+  getGraphParser(type="JSON")
   {
-    throw new Error("Unsupported type for graph parser \'" + type + "\'");
+    const parsers = this._parser;
+    if (parsers && type in parsers)
+    {
+      return parsers[type];
+    }
+    else
+    {
+      throw new Error("Unsupported type for graph parser \'" + type + "\'");
+    }
   }
   getGraphLabeler() { return this._labeler; }
   getGraph() { return this._graph; }

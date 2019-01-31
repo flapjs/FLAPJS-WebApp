@@ -1,5 +1,4 @@
 import AbstractEventHandler from 'system/undomanager/AbstractEventHandler.js';
-import { JSON as JSONParser } from './FSAGraphParser.js';
 
 class SafeGraphEventHandler extends AbstractEventHandler
 {
@@ -8,7 +7,9 @@ class SafeGraphEventHandler extends AbstractEventHandler
     super();
 
     this._graphController = graphController;
-    this._graphData = JSONParser.objectify(graphController.getGraph());
+
+    const parser = graphController.getGraphParser();
+    this._graphData = parser.objectify(graphController.getGraph());
   }
 
   //Override
@@ -28,7 +29,9 @@ class SafeGraphEventHandler extends AbstractEventHandler
   //Override
   applyRedo(undoManager)
   {
-    JSONParser.parse(this._graphData, this._graphController.getGraph());
+    const graphController = this._graphController;
+    const parser = graphController.getGraphParser();
+    parser.parse(this._graphData, graphController.getGraph());
   }
 }
 export default SafeGraphEventHandler;

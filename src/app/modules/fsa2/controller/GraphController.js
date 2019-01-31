@@ -30,6 +30,8 @@ class GraphController extends AbstractGraphController
     this.machineController = null;
     this._graphChangeHandler = new GraphChangeHandler(GRAPH_REFRESH_RATE);
 
+    this.getGraphLabeler().setGraphController(this);
+
     this.labelEditorElement = null;
 
     this.prevQuad = {

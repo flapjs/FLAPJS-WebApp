@@ -13,10 +13,10 @@ import TestingPanel from './components/panels/testing/TestingPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 
 import Notifications from 'system/notification/Notifications.js';
+import SafeGraphEventHandler from 'graph/SafeGraphEventHandler.js';
 import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 import LabelEditor from './editor/LabelEditor.js';
-import SafeGraphEventHandler from 'modules/fsa/graph/SafeGraphEventHandler.js';
 
 const MODULE_NAME = "fsa";
 const MODULE_VERSION = "0.0.1";

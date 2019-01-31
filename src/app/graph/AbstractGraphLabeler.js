@@ -1,15 +1,6 @@
 class AbstractGraphLabeler
 {
-  constructor()
-  {
-    this._graphController = null;
-  }
-
-  setGraphController(graphController)
-  {
-    this._graphController = graphController;
-    return this;
-  }
+  constructor() {}
 
   getDefaultNodeLabel()
   {
@@ -29,11 +20,6 @@ class AbstractGraphLabeler
   getEdgeLabelFormatter()
   {
     throw new Error("Edge label formatting is not supported");
-  }
-
-  getGraphController()
-  {
-    return this._graphController;
   }
 }
 

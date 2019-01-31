@@ -12,6 +12,13 @@ class FSAGraphLabeler extends AbstractGraphLabeler
     super();
 
     this._prefix = DEFAULT_NODE_LABEL_PREFIX;
+    this._graphController = null;
+  }
+
+  setGraphController(graphController)
+  {
+    this._graphController = graphController;
+    return this;
   }
 
   setDefaultNodeLabelPrefix(prefix)
@@ -27,7 +34,7 @@ class FSAGraphLabeler extends AbstractGraphLabeler
   //Override
   getDefaultNodeLabel()
   {
-    const graph = this.getGraphController().getGraph();
+    const graph = this._graphController.getGraph();
     const otherNodes = [];
     let nodeIndex = 0;
 
