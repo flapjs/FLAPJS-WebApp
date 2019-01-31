@@ -1,6 +1,6 @@
 import Eventable from 'util/Eventable.js';
 
-import { solveFSAByStep } from 'modules/fsa/machine/FSAUtils.js';
+import { solveFSAByStep } from 'modules/fsa2/machine/FSAUtils.js';
 
 import TapeContext from './TapeContext.js';
 

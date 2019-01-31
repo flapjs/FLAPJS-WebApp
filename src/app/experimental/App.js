@@ -43,8 +43,7 @@ import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
 import LocalSave from 'system/localsave/LocalSave.js';
 
-import DefaultModule from 'modules/default/DefaultModule.js';
-import Module from 'modules/fsa/FSAModule.js';
+import Module from 'modules/fsa2/FSAModule.js';
 
 const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";

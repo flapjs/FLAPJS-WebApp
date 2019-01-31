@@ -1,5 +1,5 @@
-import FSA, { EMPTY_SYMBOL } from 'modules/fsa/machine/FSA.js';
-import { isEquivalentFSA, isEquivalentDFA } from 'modules/fsa/machine/FSAUtils.js';
+import FSA, { EMPTY_SYMBOL } from '../FSA.js';
+import { isEquivalentFSA, isEquivalentDFA } from '../FSAUtils.js';
 
 describe("Testing equivalency between empty DFA machines", () => {
   const dfa1 = new FSA(true);

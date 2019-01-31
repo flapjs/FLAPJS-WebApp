@@ -1,4 +1,4 @@
-import FSA, { State } from 'modules/fsa/machine/FSA.js';
+import FSA, { State } from '../FSA.js';
 
 export function convertToNFA(fsa, dst=new FSA(false))
 {

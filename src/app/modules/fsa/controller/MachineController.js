@@ -1,7 +1,7 @@
 import AbstractMachineController from 'modules/abstract/AbstractMachineController.js';
 import Eventable from 'util/Eventable.js';
 
-//import FSABuilder from 'modules/fsa/machine/FSABuilder.js';
+//import FSABuilder from 'modules/fsa2/machine/FSABuilder.js';
 //HACK: this is only to support the old FSABuilder (remove this once finished)
 import FSABuilder from 'modules/fsa/builder/FSABuilder.js';
 

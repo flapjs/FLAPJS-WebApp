@@ -1,5 +1,5 @@
-import FSA, { EMPTY_SYMBOL } from 'modules/fsa/machine/FSA.js';
-import { solveFSA, solveFSAByStep } from 'modules/fsa/machine/FSAUtils.js';
+import FSA, { EMPTY_SYMBOL } from '../FSA.js';
+import { solveFSA, solveFSAByStep } from '../FSAUtils.js';
 
 function testSolveFSA(machine, testString, expectedResult=true)
 {

@@ -22,7 +22,7 @@ import TestingManager from './testing/TestingManager.js';
 import StringTester from 'modules/fsa2/tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 
-import SafeGraphEventHandler from './SafeGraphEventHandler.js';
+import SafeGraphEventHandler from './graph/SafeGraphEventHandler.js';
 
 const VERSION = "0.0.1";
 const PANELS = [AboutPanel, TestingPanel, OverviewPanel, AnalysisPanel];
@@ -104,11 +104,6 @@ class FSAModule extends AbstractModule
   getTestingManager()
   {
     return this._testingManager;
-  }
-
-  getDefaultGraphLayout()
-  {
-    return GraphLayout;
   }
 
   getLabelEditor()

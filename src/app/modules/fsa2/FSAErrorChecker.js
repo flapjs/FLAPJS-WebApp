@@ -1,15 +1,15 @@
 import Notifications from 'system/notification/Notifications.js';
-import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
-import StateUnreachableWarningMessage from 'modules/fsa/notifications/StateUnreachableWarningMessage.js';
-import StateMissingTransitionErrorMessage from 'modules/fsa/notifications/StateMissingTransitionErrorMessage.js';
-import StateErrorMessage from 'modules/fsa/notifications/StateErrorMessage.js';
+import TransitionErrorMessage from './notifications/TransitionErrorMessage.js';
+import StateUnreachableWarningMessage from './notifications/StateUnreachableWarningMessage.js';
+import StateMissingTransitionErrorMessage from './notifications/StateMissingTransitionErrorMessage.js';
+import StateErrorMessage from './notifications/StateErrorMessage.js';
 
 import { ERROR_UNREACHABLE_STATE,
   ERROR_DUPLICATE_STATE,
   ERROR_INCOMPLETE_TRANSITION,
   ERROR_DUPLICATE_TRANSITION,
   ERROR_MISSING_TRANSITION,
-  ERROR_EMPTY_TRANSITION } from 'modules/fsa/machine/FSABuilder.js';
+  ERROR_EMPTY_TRANSITION } from './machine/FSABuilder.js';
 
 const ERROR_MESSAGE_TAG = "fsa_build_error";
 

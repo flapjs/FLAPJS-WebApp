@@ -1,8 +1,9 @@
 import AbstractGraphExporter from 'modules/abstract/exporter/AbstractGraphExporter.js';
 
-import JSONFileIcon from 'icons/flat/JSONIcon.js';
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import { downloadText } from 'util/Downloader.js';
+
+import JSONFileIcon from 'experimental/iconset/flat/JSONFileIcon.js';
 
 class FSAGraphExporter extends AbstractGraphExporter
 {
@@ -102,7 +103,6 @@ class FSAGraphExporter extends AbstractGraphExporter
         const graph = graphController.getGraph();
 
         //TODO: this should not be here, this should exist somewhere in graphController
-        //graphController.emit("userPreImportGraph", graph);
         module.captureGraphEvent();
 
         try
@@ -110,8 +110,6 @@ class FSAGraphExporter extends AbstractGraphExporter
           const jsonData = JSON.parse(data);
 
           this.fromJSON(jsonData, module);
-
-          //graphController.emit("userImportGraph", graph);
 
           if (machineController)
           {
@@ -127,7 +125,6 @@ class FSAGraphExporter extends AbstractGraphExporter
         }
         finally
         {
-          //graphController.emit("userPostImportGraph", graph);
           module.captureGraphEvent();
         }
       };

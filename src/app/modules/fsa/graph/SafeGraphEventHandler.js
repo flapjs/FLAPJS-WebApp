@@ -1,5 +1,5 @@
 import AbstractEventHandler from 'system/undomanager/AbstractEventHandler.js';
-import { JSON as JSONParser } from 'modules/fsa/graph/FSAGraphParser.js';
+import { JSON as JSONParser } from './FSAGraphParser.js';
 
 class SafeGraphEventHandler extends AbstractEventHandler
 {

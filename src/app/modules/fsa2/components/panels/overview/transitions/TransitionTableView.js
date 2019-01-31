@@ -2,7 +2,7 @@ import React from 'react';
 import Style from './TransitionTableView.css';
 
 import { EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
-import { EMPTY_SYMBOL } from 'modules/fsa/machine/FSA.js';
+import { EMPTY_SYMBOL } from 'modules/fsa2/machine/FSA.js';
 
 const SYMBOL_AXIS = "symbols";
 const STATE_AXIS = "states";

@@ -2,7 +2,7 @@ import React from 'react';
 import Style from './TransitionChartView.css';
 
 import { EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
-import { EMPTY_SYMBOL } from 'modules/fsa/machine/FSA.js';
+import { EMPTY_SYMBOL } from 'modules/fsa2/machine/FSA.js';
 
 class TransitionChartView extends React.Component
 {
