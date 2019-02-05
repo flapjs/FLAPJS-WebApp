@@ -84,8 +84,10 @@ class App extends React.Component
     //TODO: This is only used to control transitions (do we really need it?)
     this._init = false;
 
+    const ModuleClass = props.moduleClass || Module;
+
     this.state = {
-      module: new Module(this),
+      module: new ModuleClass(this),
       hide: false
     };
 
