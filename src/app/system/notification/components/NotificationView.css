@@ -6,7 +6,26 @@
 
   max-height: calc(100vh - var(--toolbar-height) - 25px);
   overflow-y: scroll;
+
+  color: var(--color-notification-text);
 }
 .notification-container > * {
   margin: 5px;
+}
+
+.notification-message-type-default {
+  border-top: 6px solid var(--color-notification-info-dark);
+  background: var(--color-notification-info);
+}
+.notification-message-type-error {
+  border-color: var(--color-notification-error-dark)!important;
+  background-color: var(--color-notification-error)!important;
+}
+.notification-message-type-warning {
+  border-color: var(--color-notification-warning-dark)!important;
+  background-color: var(--color-notification-warning)!important;
+}
+.notification-message-type-success {
+  border-color: var(--color-notification-success-dark)!important;
+  background-color: var(--color-notification-success)!important;
 }

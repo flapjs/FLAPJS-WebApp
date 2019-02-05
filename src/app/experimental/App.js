@@ -37,8 +37,8 @@ import IconButton from 'experimental/components/IconButton.js';
 import HotKeyManager, {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'experimental/hotkey/HotKeyManager.js';
 import HotKeyView from 'experimental/hotkey/HotKeyView.js';
 
+import NotificationView from 'experimental/notification/NotificationView.js';
 import Notifications from 'system/notification/Notifications.js';
-import NotificationView from 'system/notification/components/NotificationView.js';
 
 import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
