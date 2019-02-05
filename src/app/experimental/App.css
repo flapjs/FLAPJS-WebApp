@@ -35,7 +35,18 @@
   --color-surface-warning: #D6A922;
   --color-surface-warning-dark: #AD8715;
 }
-.app-container {
+
+/*For hiding scrollbars*/
+::-webkit-scrollbar {
+  display: none;
+}
+/*
+* {
+  -ms-overflow-style: none;
+}
+*/
+
+:local(.app_container) {
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -44,7 +55,8 @@
   /* TODO: For production, add this back in. */
   overflow: hidden;
 }
-.app-bar.open ~ .app-content {
+
+:local(.app_bar).open ~ :local(.app_content) {
   visibility: hidden;
   transition: visibility 0s linear 0.3s;
 }

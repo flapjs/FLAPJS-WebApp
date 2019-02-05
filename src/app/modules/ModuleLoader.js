@@ -1,7 +1,7 @@
 import React from 'react';
 import Router from 'router.js';
 
-import App from 'content/App.js'
+import App from 'content/App.js';
 import Modules from 'modules/Modules.js';
 
 const MODULE_LOAD_DELAY = 300;
@@ -27,6 +27,8 @@ class ModuleLoader extends React.Component
       return;
     }
 
+    const useExperimental = moduleInfo['experimental'];
+
     //Overwrite any past calls...
     if (MODULE_TIMEOUT) clearTimeout(MODULE_TIMEOUT);
 
@@ -34,7 +36,18 @@ class ModuleLoader extends React.Component
       moduleInfo.fetch((moduleClass) => {
         MODULE_TIMEOUT = null;
         IS_DEFAULT_MODULE = false;
-        Router.routeTo(ModuleLoader, {moduleClass: moduleClass});
+        if (useExperimental)
+        {
+          import(/* webpackChunkName: "experimental" */ 'experimental/App.js')
+            .then(({ default: _ }) => Router.routeTo(ModuleLoader, {
+              moduleClass: moduleClass,
+              appClass: _
+            }));
+        }
+        else
+        {
+          Router.routeTo(ModuleLoader, {moduleClass: moduleClass});
+        }
       });
     }, MODULE_LOAD_DELAY);
   }
@@ -54,7 +67,8 @@ class ModuleLoader extends React.Component
   {
     MODULE_TIMEOUT = setTimeout(() => {
       MODULE_TIMEOUT = null;
-      Router.routeTo(App, {moduleClass: this.props.moduleClass});
+      const AppClass = this.props.appClass || App;
+      Router.routeTo(AppClass, {moduleClass: this.props.moduleClass});
     }, MODULE_LOAD_DELAY);
   }
 

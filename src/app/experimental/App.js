@@ -1,6 +1,6 @@
 import React from 'react';
 import { hot } from 'react-hot-loader/root';
-import './App.css';
+import Style from './App.css';
 
 import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION_VERTICAL, DRAWER_BAR_DIRECTION_HORIZONTAL } from 'experimental/drawer/DrawerView.js';
 import ToolbarView from 'experimental/toolbar/ToolbarView.js';
@@ -213,9 +213,9 @@ class App extends React.Component
     const GraphOverlayRenderer = currentModule.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
 
     return (
-      <div className="app-container">
+      <div className={Style.app_container}>
 
-        <ToolbarView ref={ref=>this._toolbar=ref} className="app-bar"
+        <ToolbarView ref={ref=>this._toolbar=ref} className={Style.app_bar}
           menus={moduleMenus}
           menuProps={moduleMenuProps}
           hide={isFullscreen}
@@ -254,7 +254,7 @@ class App extends React.Component
             onClick={()=>this._toolbar.setCurrentMenu(1)}/>
         </ToolbarView>
 
-        <DrawerView ref={ref=>this._drawer=ref} className="app-content"
+        <DrawerView ref={ref=>this._drawer=ref} className={Style.app_content}
           panels={modulePanels}
           panelProps={modulePanelProps}
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}

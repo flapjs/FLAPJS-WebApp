@@ -55,8 +55,8 @@ class OptionPanel extends React.Component
 
   onChangeModule(e, useExperimental=false)
   {
-    const moduleClass = e.target.value;
-    ModuleLoader.loadModule(moduleClass, moduleClass['experimental']);
+    const moduleName = e.target.value;
+    ModuleLoader.loadModule(moduleName);
   }
 
   //Override
@@ -146,7 +146,8 @@ class OptionPanel extends React.Component
             {Object.keys(Modules).map(e => {
               const mod = Modules[e];
               return (
-                <option key={e} value={e}>
+                <option key={e} value={e}
+                  disabled={!mod['experimental']}>
                   {mod.name + " (" + mod.version + ")"}
                 </option>
               );
@@ -175,7 +176,7 @@ class OptionPanel extends React.Component
 
           <PanelDivider/>
 
-          <button onClick={() => {
+          <button className={Style.options_button} onClick={() => {
             if (window.confirm("This will clear any cached or saved data. Are you sure you want to continue?"))
             {
               LocalSave.setStringToStorage("enableExperimental", "false");
@@ -186,7 +187,7 @@ class OptionPanel extends React.Component
               window.alert("It's done! Restart to apply changes!");
             }
           }}>
-            {"Get out of Experimental Mode"}
+            {"Get out of Experimental Mode and return to Safety"}
           </button>
         </div>
       </div>

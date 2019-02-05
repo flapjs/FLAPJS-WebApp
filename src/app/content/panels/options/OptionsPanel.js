@@ -223,7 +223,8 @@ class OptionsPanel extends React.Component
 
   onChangeModule(e)
   {
-    ModuleLoader.loadModule(e.target.value);
+    const moduleName = e.target.value;
+    ModuleLoader.loadModule(moduleName);
   }
 
   //Override
@@ -349,7 +350,10 @@ class OptionsPanel extends React.Component
             disabled={!ENABLE_MODULES}>
           {Object.keys(Modules).map(e => {
             const mod = Modules[e];
-            return <option key={e} value={e}>{mod.name + " (" + mod.version + ")"}</option>
+            return <option key={e} value={e}
+              disabled={mod['experimental']}>
+              {mod.name + " (" + mod.version + ")"}
+            </option>
           })}
           </select>
 
@@ -368,30 +372,23 @@ class OptionsPanel extends React.Component
             {
               window.alert("Please restart to begin the awakening...");
             }
-            else if (window.confirm("Be careful! This will PERMANENTLY change " +
-              "your app and is intended only for debugging purposes. You " +
-              "should only enable this if you know what you are doing. Are " +
-              "you sure about this?"))
+            else if (window.confirm("Be careful! These features are still being "
+            + "tested. Some things may break (more than usual). Are you sure "
+            + "about this?"))
             {
-              if (window.confirm("Seriously, THIS CAN BREAK THE APP " +
-                "PERMANENTLY! So only proceed if you are absolutely sure " +
-                "about this. Ask a member of the dev team for assistance."))
+              if (window.confirm("Will be you an amazing human and report any bugs found?"))
               {
-                if (window.prompt("Well, at this point, you are either a " +
-                "member of the dev team (welcome to the team) or you have " +
-                "been instructed to do so by a member of the dev team " +
-                "(hello human). Please ask them for the password:") === "I solemnly swear I am up to no good.")
+                if (window.confirm("Alright, here we go. Last chance to "
+                + "leave. All those who cannot bear the responsibility, leave "
+                + "now or prepare to enter."))
                 {
-                  if (window.confirm("Alright, here we go. Last chance to " +
-                  "leave. Cancel it now or restart and face the consequences."))
-                  {
-                    LocalSave.setStringToStorage("enableExperimental", "true");
-                  }
+                  LocalSave.setStringToStorage("enableExperimental", "true");
+                  window.alert("Experimental changes applied. Please restart the browser.");
                 }
-                else
-                {
-                  window.alert("Sorry, it looks like you are a normal human. Have a hug. <3");
-                }
+              }
+              else
+              {
+                window.alert("Sorry, it looks like you are a normal human. Have a hug. <3");
               }
             }
           }}>
