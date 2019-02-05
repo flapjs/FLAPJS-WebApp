@@ -26,6 +26,8 @@ class GraphController extends AbstractGraphController
   {
     super(module, new FSAGraph(), new FSAGraphLabeler(), FSAGraphParser);
 
+    this._labeler.setGraphController(this);
+    
     this.inputController = null;
     this.machineController = null;
     this._graphChangeHandler = new GraphChangeHandler(GRAPH_REFRESH_RATE);
