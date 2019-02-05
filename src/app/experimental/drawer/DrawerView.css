@@ -70,6 +70,7 @@
 
   box-shadow: 0px 0px 5px var(--color-drawer-shadow);
   background: var(--color-drawer-back);
+  color: var(--color-drawer-text);
 
   /* Drawer sliding */
   margin-left: calc(var(--drawer-handle-width) + var(--drawer-tab-height) - var(--drawer-width));

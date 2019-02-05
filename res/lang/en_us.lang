@@ -51,6 +51,24 @@ options.category.colors = Colors
 options.category.shortcuts = Shortcuts
 options.category.general = General
 
+//New Colors
+options.--color-accent = Accent Color
+options.--color-primary = Primary Color
+options.--color-primary-text = Text Color
+options.--color-background = Background Color
+options.--color-error = Error Color
+options.--color-success = Success Color
+options.--color-warning = Warning Color
+options.--color-surface = Main Color
+options.--color-surface-text = Text Color
+options.--color-surface-active = Active Color
+options.--color-surface-error = Error Color
+options.--color-surface-success = Success Color
+options.--color-surface-warning = Warning Color
+options.--color-graph-node = Node Color
+options.--color-graph-text = Text Color
+options.--color-graph-select = Select Color
+
 //Toolbar
 options.--color-toolbar-main = Main Color
 options.--color-toolbar-accent = Accent Color

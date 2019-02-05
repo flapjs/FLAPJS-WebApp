@@ -31,6 +31,7 @@ import SettingsIcon from 'experimental/iconset/SettingsIcon.js';
 
 import * as UserUtil from 'experimental/UserUtil.js';
 import AppSaver from 'experimental/AppSaver.js';
+import ColorSaver from 'experimental/ColorSaver.js';
 
 import IconButton from 'experimental/components/IconButton.js';
 import HotKeyManager, {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'experimental/hotkey/HotKeyManager.js';
@@ -42,6 +43,7 @@ import NotificationView from 'system/notification/components/NotificationView.js
 import InputAdapter from 'system/inputadapter/InputAdapter.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
 import LocalSave from 'system/localsave/LocalSave.js';
+import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
 
 import Module from 'modules/fsa2/FSAModule.js';
 
@@ -79,6 +81,9 @@ class App extends React.Component
     this._hotKeyManager.registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
     this._hotKeyManager.registerAltHotKey("Show Hints", () => { IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL })
 
+    this._styleOpts = new StyleOptionRegistry();
+    this._colorSaver = new ColorSaver(this._styleOpts);
+
     this._saver = new AppSaver(this);
 
     //TODO: This is only used to control transitions (do we really need it?)
@@ -109,7 +114,10 @@ class App extends React.Component
 
     this._hotKeyManager.initialize();
 
+    this._colorSaver.initialize();
+
     LocalSave.registerHandler(this._saver);
+    LocalSave.registerHandler(this._colorSaver);
 
     this._init = true;
   }
@@ -120,7 +128,9 @@ class App extends React.Component
     this._init = false;
 
     LocalSave.unregisterHandler(this._saver);
+    LocalSave.unregisterHandler(this._colorSaver);
 
+    this._colorSaver.destroy();
     this._hotKeyManager.destroy();
 
     const currentModule = this.getCurrentModule();
@@ -152,6 +162,7 @@ class App extends React.Component
   getInputAdapter() { return this._inputAdapter; }
   getUndoManager() { return this._undoManager; }
   getHotKeyManager() { return this._hotKeyManager; }
+  getStyleOpts() { return this._styleOpts; }
 
   //Override
   componentDidUpdate()

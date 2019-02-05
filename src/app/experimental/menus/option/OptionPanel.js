@@ -2,6 +2,7 @@ import React from 'react';
 import Style from './OptionPanel.css';
 
 import LocalSave from 'system/localsave/LocalSave.js';
+import StyleInput from 'system/styleopt/components/StyleInput.js';
 
 import PanelSection from 'experimental/panels/PanelSection.js';
 import PanelSwitch from 'experimental/panels/PanelSwitch.js';
@@ -33,13 +34,14 @@ class OptionPanel extends React.Component
 
   onChangeTheme(e)
   {
+    const opts = this.props.app.getStyleOpts();
     const prevTheme = this.state.theme;
     const theme = e.target.value;
     if (prevTheme === theme) return;
 
     if (theme === "default")
     {
-      for(let option of this.styleOpts.getOptions())
+      for(let option of opts.getOptions())
       {
         option.resetStyle();
       }
@@ -57,6 +59,8 @@ class OptionPanel extends React.Component
   render()
   {
     const module = this.props.currentModule;
+    const opts = this.props.app.getStyleOpts();
+
     return (
       <div id={this.props.id}
         className={Style.panel_container +
@@ -67,12 +71,76 @@ class OptionPanel extends React.Component
         </div>
         <div className={Style.panel_content}>
 
-          <PanelSection title={"Customize stuff"}>
-            <p>If only there was cool stuff here...</p>
-          </PanelSection>
+          <div>
+            <div id="options-theme-select-container">
+              <label htmlFor="options-theme-select">Theme</label>
+              <select id="options-theme-select" className="panel-select" value={this.state.theme} onChange={this.onChangeTheme} disabled={this.state.customTheme}>
+                <option value="default">Default</option>
+                <option value="ucsd" disabled={true}>UC San Diego (Coming Soon)</option>
+                <option value="duke" disabled={true}>Duke University (Coming Soon)</option>
+              </select>
+              {
+                !this.state.customTheme &&
+                <button className="panel-button" onClick={() => this.setState({customTheme: true})}>
+                  {I18N.toString("action.options.changetheme")}
+                </button>
+              }
+            </div>
+            {
+              this.state.customTheme && <div>
 
-          <PanelSection title={"What?"}>
-          </PanelSection>
+                <PanelSection title={"General Colors"} full={true}>
+                  {opts.getPropsByGroup("general").map(e => (
+                    <div key={e}>
+                      <StyleInput value={opts.getOptionByProp(e)}
+                        title={I18N.toString("options." + e)}/>
+                    </div>
+                  ))}
+                </PanelSection>
+
+                <PanelSection title={"Surface Colors"} full={true}>
+                  {opts.getPropsByGroup("surface").map(e => (
+                    <div key={e}>
+                      <StyleInput value={opts.getOptionByProp(e)}
+                        title={I18N.toString("options." + e)}/>
+                    </div>
+                  ))}
+                </PanelSection>
+
+                <PanelSection title={"Graph Colors"} full={true}>
+                  {opts.getPropsByGroup("graph").map(e => (
+                    <div key={e}>
+                      <StyleInput value={opts.getOptionByProp(e)}
+                        title={I18N.toString("options." + e)}/>
+                    </div>
+                  ))}
+                </PanelSection>
+
+                <button className="panel-button" onClick={(e) => {
+                  for(let option of opts.getOptions())
+                  {
+                    option.resetStyle();
+                  }
+                  this.setState({customTheme: false});
+                }}>{I18N.toString("action.options.reset")}</button>
+              </div>
+            }
+          </div>
+
+          <select id="options-experimental-modules"
+            className="panel-select"
+            value={this.props.currentModule.getModuleName()}
+            onChange={this.onChangeModule}
+            disabled={!ENABLE_MODULES}>
+          {Object.keys(Modules).map(e => {
+            const mod = Modules[e];
+            return (
+              <option key={e} value={e}>
+                {mod.name + " (" + mod.version + ")"}
+              </option>
+            );
+          })}
+          </select>
 
           <button onClick={() => {
             if (window.confirm("This will clear any cached or saved data. Are you sure you want to continue?"))

@@ -61,8 +61,6 @@ class App extends React.Component
     this.hotKeys = new HotKeys();
     this.tutorial = new Tutorial();
 
-    this._saver = new AppSaver(this);
-
     this.state = {
       isOpen: true,
       isDangerous: false,
