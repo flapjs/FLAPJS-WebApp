@@ -3,6 +3,7 @@ const Modules = {};
 Modules['default'] = {
   name: "Default",
   version: "1.0.0",
+  experimental: true,
   fetch: function(callback) { import(/* webpackChunkName: "module_default" */ 'modules/default/DefaultModule.js').then(({ default: _ }) => callback( _ )); }
 };
 

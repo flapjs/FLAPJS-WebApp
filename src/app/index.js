@@ -7,6 +7,7 @@ import Changelog from 'changelog.js';
 //Router: imports
 import Router from 'router.js';
 import App from 'content/App.js';
+import ModuleLoader from 'modules/ModuleLoader.js';
 import LandingPage from 'landing/components/LandingPage.js';
 
 //Config: imports
@@ -76,14 +77,20 @@ function loadApplication()
   root = document.getElementById("root");
 
   //This should be the same as the one referred to by OptionsPanel
-  if (LocalSave.getStringFromStorage("enableExperimental") === "true")
+  if (LocalSave.getStringFromStorage("skipWelcome") === "true")
   {
-    import(/* webpackChunkName: "experimental" */ 'experimental/App.js')
-      .then(({ default: _ }) => Router.routeTo( _ ));
-  }
-  else if (LocalSave.getStringFromStorage("skipWelcome") === "true")
-  {
-    Router.routeTo(App);
+    if (!ModuleLoader.loadModuleFromStorage())
+    {
+      if (LocalSave.getStringFromStorage("enableExperimental") === "true")
+      {
+        import(/* webpackChunkName: "experimental" */ 'experimental/App.js')
+          .then(({ default: _ }) => Router.routeTo( _ ));
+      }
+      else
+      {
+        Router.routeTo(App);
+      }
+    }
   }
   else
   {

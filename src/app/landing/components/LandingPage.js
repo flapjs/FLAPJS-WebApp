@@ -7,6 +7,7 @@ import Router from 'router.js';
 import Logo from './Logo.js';
 import Quote from './Quote.js';
 
+import ModuleLoader from 'modules/ModuleLoader.js';
 import App from 'content/App.js';
 
 const LAUNCH_BUTTON_TEXT = "Launch Workspace";
@@ -95,8 +96,18 @@ class LandingPage extends React.Component
 
   onLaunchButton(e)
   {
-    //import(/* webpackChunkName: "content" */ 'content/App.js').then(({ default: _ }) => { Router.routeTo( _ ); });
-    Router.routeTo(App);
+    if (!ModuleLoader.loadModuleFromStorage())
+    {
+      if (LocalSave.getStringFromStorage("enableExperimental") === "true")
+      {
+        import(/* webpackChunkName: "experimental" */ 'experimental/App.js')
+          .then(({ default: _ }) => Router.routeTo( _ ));
+      }
+      else
+      {
+        Router.routeTo(App);
+      }
+    }
   }
 
   onTutorialButton(e)
