@@ -53,9 +53,10 @@ class OptionPanel extends React.Component
     this.setState({theme: theme});
   }
 
-  onChangeModule(e)
+  onChangeModule(e, useExperimental=false)
   {
-    ModuleLoader.loadModule(e.target.value);
+    const moduleClass = e.target.value;
+    ModuleLoader.loadModule(moduleClass, moduleClass['experimental']);
   }
 
   //Override
@@ -177,9 +178,10 @@ class OptionPanel extends React.Component
           <button onClick={() => {
             if (window.confirm("This will clear any cached or saved data. Are you sure you want to continue?"))
             {
+              LocalSave.setStringToStorage("enableExperimental", "false");
+
               try { LocalSave.terminate(); }
               catch(e){/* Ignore if it fails. */}
-              LocalSave.clearStorage();
 
               window.alert("It's done! Restart to apply changes!");
             }

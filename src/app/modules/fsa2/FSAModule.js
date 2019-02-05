@@ -18,7 +18,7 @@ import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 import LabelEditor from './editor/LabelEditor.js';
 
-const MODULE_NAME = "fsa";
+const MODULE_NAME = "fsa2";
 const MODULE_VERSION = "0.0.1";
 const MODULE_PANELS = [
   AboutPanel,

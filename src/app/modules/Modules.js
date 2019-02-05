@@ -15,6 +15,7 @@ Modules['fsa'] = {
 Modules['fsa2'] = {
   name: "Finite State Automata",
   version: "2.0.0",
+  experimental: true,
   fetch: function(callback) { import(/* webpackChunkName: "module_fsa2" */ 'modules/fsa2/FSAModule.js').then(({ default: _ }) => callback( _ )); }
 };
 
