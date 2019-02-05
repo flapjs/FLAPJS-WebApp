@@ -298,6 +298,8 @@ class FSA
 
   getStates() { return this._states.values(); }
 
+  getStateCount() { return this._states.size; }
+
   addTransition(from, to, symbol)
   {
     if (!this.hasState(from)) throw new Error("Trying to add a transition to unknown state with label \'" + state.getStateLabel() + "\'");

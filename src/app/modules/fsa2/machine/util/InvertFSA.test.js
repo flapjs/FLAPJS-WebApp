@@ -6,17 +6,11 @@ describe("Trying to invert an empty NFA machine", () => {
   const inverted = invertFSA(nfa, nfa);
 
   test("is still empty", () => {
-    const states = inverted.getStates();
-    let count = 0;
-    for(const state of states)
-    {
-      ++count;
-    }
-    expect(count).toBe(0);
+    expect(inverted.getStateCount()).toBe(0);
   });
 });
 
-describe("Trying to invert a single state state machine", () => {
+describe("Trying to invert a single-state state machine", () => {
   const nfa = new FSA(false);
   const state0 = nfa.createState("q0");
   nfa.addTransition(state0, state0, "0");
