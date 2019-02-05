@@ -1,6 +1,5 @@
 :local(.notification_container) {
   position: fixed;
-  /*top: var(--toolbar-height);*/
   z-index: 999;
 
   max-height: calc(100vh - var(--toolbar-height) - 25px);
@@ -17,14 +16,14 @@
   background: var(--color-surface);
 }
 .notification-message-type-error {
-  border-color: var(--color-surface-error-dark)!important;
-  background-color: var(--color-surface-error)!important;
+  border-top: 6px solid var(--color-surface-error-dark)!important;
+  background: var(--color-surface-error)!important;
 }
 .notification-message-type-warning {
-  border-color: var(--color-surface-warning-dark)!important;
-  background-color: var(--color-surface-warning)!important;
+  border-top: 6px solid var(--color-surface-warning-dark)!important;
+  background: var(--color-surface-warning)!important;
 }
 .notification-message-type-success {
-  border-color: var(--color-surface-success-dark)!important;
-  background-color: var(--color-surface-success)!important;
+  border-top: 6px solid var(--color-surface-success-dark)!important;
+  background: var(--color-surface-success)!important;
 }

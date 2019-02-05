@@ -18,14 +18,14 @@
   background: var(--color-notification-info);
 }
 .notification-message-type-error {
-  border-color: var(--color-notification-error-dark)!important;
-  background-color: var(--color-notification-error)!important;
+  border-top: 6px solid var(--color-notification-error-dark)!important;
+  background: var(--color-notification-error)!important;
 }
 .notification-message-type-warning {
-  border-color: var(--color-notification-warning-dark)!important;
-  background-color: var(--color-notification-warning)!important;
+  border-top: 6px solid var(--color-notification-warning-dark)!important;
+  background: var(--color-notification-warning)!important;
 }
 .notification-message-type-success {
-  border-color: var(--color-notification-success-dark)!important;
-  background-color: var(--color-notification-success)!important;
+  border-top: 6px solid var(--color-notification-success-dark)!important;
+  background: var(--color-notification-success)!important;
 }
