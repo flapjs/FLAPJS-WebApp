@@ -49,7 +49,6 @@ class ColorSaver extends AbstractLocalSaver
       //Set style
       opts.getOptionByProp(opt.prop + "-dark").setStyle(result);
     }
-
     opts.registerStyleOption(root, "--color-graph-node", "color", "graph");
     opts.registerStyleOption(root, "--color-graph-text", "color", "graph");
     opts.registerStyleOption(root, "--color-graph-select", "color", "graph");
@@ -70,7 +69,6 @@ class ColorSaver extends AbstractLocalSaver
     opts.registerStyleOption(root, "--color-background-active", "color", "hidden");
     opts.registerStyleOption(root, "--color-background-lite", "color", "hidden");
 
-    opts.registerStyleOption(root, "--color-error", "color", "general");
     opts.registerStyleOption(root, "--color-success", "color", "general");
     opts.registerStyleOption(root, "--color-warning", "color", "general");
 

@@ -1,6 +1,6 @@
 /********* APP BAR *********/
 :local(.app_bar) {
-  --toolbar-height: 80px;
+  --toolbar-height: 70px;
 
   --color-toolbar-highlight: var(--color-accent);
   --color-toolbar-back: var(--color-primary);
