@@ -383,6 +383,9 @@ class OptionsPanel extends React.Component
                 + "now or prepare to enter."))
                 {
                   LocalSave.setStringToStorage("enableExperimental", "true");
+
+                  //TODO: This is only to force use default module, remove later.
+                  LocalSave.setStringToStorage("currentModule", "");
                   window.alert("Experimental changes applied. Please restart the browser.");
                 }
               }

@@ -180,6 +180,8 @@ class OptionPanel extends React.Component
             if (window.confirm("This will clear any cached or saved data. Are you sure you want to continue?"))
             {
               LocalSave.setStringToStorage("enableExperimental", "false");
+              //TODO: This is only to force use default module, remove later.
+              LocalSave.setStringToStorage("currentModule", "");
 
               try { LocalSave.terminate(); }
               catch(e){/* Ignore if it fails. */}
