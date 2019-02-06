@@ -4,6 +4,7 @@ const SYMBOL = 1;
 const DST = 2;
 const POP_SYMBOL = 3;
 const PUSH_SYMBOL = 4;
+import { EMPTY } from './Symbols.js';
 
 class PDA
 {
@@ -38,7 +39,7 @@ class PDA
     this._states.splice(this._states.indexOf(state), 1);
   }
 
-  newTransition(fromState, toState, symbol, popSymbol, pushSymbol)
+  newTransition(fromState,  symbol, toState,popSymbol, pushSymbol)
   {
     if (!this._states.includes(fromState))
     {
@@ -157,16 +158,90 @@ class PDA
     }
   }
 
-  doTransition(state, symbol)
+  //do all transitions with current state and given input
+  doTransition(state, symbol, stack = [])
   {
+    const result = [];
     for(const transition of this._transitions)
     {
-      if (transition[SRC] == state && transition[SYMBOL] == symbol)
+      if (transition[SRC] == state && transition[SYMBOL] == symbol && (transition[POP_SYMBOL] == stack[stack.length-1] || transition[POP_SYMBOL] == EMPTY))
       {
-        return transition[DST];
+        var newStack = stack.slice();
+        if(transition[POP_SYMBOL] != EMPTY)
+        {
+          newStack.pop()
+        }
+        if (transition[PUSH_SYMBOL] != EMPTY)
+        {
+          newStack.push(transition[PUSH_SYMBOL])
+        }
+        result.push[transition[DST],newStack];
       }
     }
-    return null;
+    return result;
+  }
+
+  //get all reachable state from current state without any input
+  doClosureTransition(state,stack,dst=[])
+  {
+    const result = dst;
+    result.push([state,stack]);
+    for(let i = 0; i < result.length; ++i)
+    {
+      const transitions = this.getOutgoingTransitions(result[i][0]);
+      for(const transition of transitions)
+      {
+        if (transition[SYMBOL] == EMPTY && (transition[POP_SYMBOL] == stack[stack.length-1] || transition[POP_SYMBOL] == EMPTY))
+        {
+          var newStack = stack.slice();
+          if(transition[POP_SYMBOL] != EMPTY)
+          {
+            newStack.pop()
+          }
+          if (transition[PUSH_SYMBOL] != EMPTY)
+          {
+            newStack.push(transition[PUSH_SYMBOL]);
+          }
+          const dst = transition[DST];
+          if (!result.includes([dst,newStack]))
+          {
+            result.push([dst,newStack]);
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  //get all state from current state and read a symbol
+  doTerminalTransition(state, symbol, stack, dst=[])
+  {
+    const result = dst;
+    for(const transition of this._transitions)
+    {
+      if (transition[SRC] == state && transition[SYMBOL] == symbol && (transition[POP_SYMBOL] == stack[stack.length-1] || transition[POP_SYMBOL] == EMPTY))
+      {
+        var newStack = stack.slice();
+        if(transition[POP_SYMBOL] != EMPTY)
+        {
+          newStack.pop()
+        }
+        if (transition[PUSH_SYMBOL] != EMPTY)
+        {
+          newStack.push(transition[PUSH_SYMBOL]);
+        }
+        //Get closure on destination states
+        const res = this.doClosureTransition(transition[DST],newStack);
+        for(const r of res)
+        {
+          if (!result.includes(r))
+          {
+            result.push(r);
+          }
+        }
+      }
+    }
+    return result;
   }
 
   isFinalState(state)
@@ -238,7 +313,9 @@ class PDA
     for(const transition of this._transitions)
     {
       if (transition[SRC] == state)
-      result.push(transition);
+      {
+        result.push(transition);
+      }
     }
     return result;
   }
