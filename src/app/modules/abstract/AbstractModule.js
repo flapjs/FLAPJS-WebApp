@@ -3,7 +3,11 @@ class AbstractModule
   constructor(app)
   {
     if (!app) throw new Error("Missing app for module class");
+
+    this._app = app;
   }
+  
+  getApp() { return this._app; }
 
   initialize(app)
   {
