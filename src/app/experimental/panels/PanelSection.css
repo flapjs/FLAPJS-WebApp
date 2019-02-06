@@ -18,6 +18,8 @@
   background: var(--color-panel-back);
 }
 :local(.section_header) svg {
+  max-width: 2em;
+  max-height: 2em;
   width: 2em;
   height: 2em;
 }
@@ -27,12 +29,13 @@
   width: 100%;
   padding-left: 5px;
 
-  font-size: 1.2em;
+  /*TODO: Remove all !important here in the future, this is only to fix compat with old App*/
+  font-size: 1.2em!important;
 
   /* Override default icon button styles */
-  display: inline-block;
-  position: relative;
-  opacity: 1;
+  display: inline-block!important;
+  position: relative!important;
+  opacity: 1!important;
 }
 
 :local(.section_content_container) {
