@@ -8,6 +8,7 @@ import Logo from './Logo.js';
 import Quote from './Quote.js';
 
 import ModuleLoader from 'modules/ModuleLoader.js';
+import LocalSave from 'system/localsave/LocalSave.js';
 import App from 'content/App.js';
 
 const LAUNCH_BUTTON_TEXT = "Launch Workspace";
