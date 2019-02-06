@@ -1,11 +1,7 @@
 import React from 'react';
-import './DefaultLabelEditor.css';
+import './LabelEditor.css';
 
 import GraphEdge from 'graph/GraphEdge.js';
-
-import Config from 'config.js';
-import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
-
 import FormattedInput from 'system/formattedinput/FormattedInput.js';
 
 //TODO: This is equivalent to 4em for toolbar height
@@ -14,11 +10,26 @@ const EDITOR_OFFSET_Y = -36;
 const DELETE_KEY = 8;
 const DELETE_FORWARD_KEY = 46;
 
-const RECOMMENDED_SYMBOLS = ["0", "1"];
-const DEFAULT_SYMBOLS = [EMPTY_CHAR];
-const DELETE_ON_EMPTY = true;
+function setLabelForTarget(target, value)
+{
+  if (target instanceof GraphEdge)
+  {
+    target.setEdgeLabel(value);
+  }
+  else
+  {
+    target.setNodeLabel(value);
+  }
+}
 
-class DefaultLabelEditor extends React.Component
+function getLabelForTarget(target)
+{
+  return target instanceof GraphEdge ?
+    target.getEdgeLabel() :
+    target.getNodeLabel();
+}
+
+class LabelEditor extends React.Component
 {
   constructor(props)
   {
@@ -29,7 +40,6 @@ class DefaultLabelEditor extends React.Component
 
     //HACK: this is so if the click is focused back to the label editor, then it will NOT close
     this._timer = null;
-    this._prevValue = "";
 
     this.state = {
       target: null,
@@ -41,7 +51,7 @@ class DefaultLabelEditor extends React.Component
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  openEditor(targetElement, defaultText=null, replace=true, callback=null)
+  openEditor(targetEdge, defaultText=null, replace=true, callback=null)
   {
     //If not yet initilized, ignore any editor access
     if (!this.inputElement || !this.parentElement)
@@ -51,18 +61,15 @@ class DefaultLabelEditor extends React.Component
 
     this.setState((prev, props) => {
       return {
-        target: targetElement,
+        target: targetEdge,
         callback: callback
       };
     });
 
-    const targetLabel = targetElement instanceof GraphEdge ?
-      targetElement.getEdgeLabel() :
-      targetElement.getNodeLabel();
-    this.inputElement.resetValue(targetLabel, () => {
+    const edgeLabel = getLabelForTarget(targetEdge);
+    this.inputElement.resetValue(edgeLabel, () => {
       if (defaultText) this.inputElement.setValue(defaultText);
 
-      this._prevValue = targetLabel;
       this.parentElement.focus();
       this.inputElement.focus(replace);
     });
@@ -77,50 +84,19 @@ class DefaultLabelEditor extends React.Component
     }
 
     //Save data
-    const targetElement = this.state.target;
-    if (targetElement !== null)
+    if (this.state.target !== null)
     {
       if (saveOnExit)
       {
         let value = this.inputElement.value;
-        if (targetElement instanceof GraphEdge)
-        {
-          targetElement.setEdgeLabel(value);
-        }
-        else
-        {
-          targetElement.setNodeLabel(value);
-        }
+        setLabelForTarget(this.state.target, value);
       }
       else
       {
-        const targetLabel = targetElement instanceof GraphEdge ?
-          targetElement.getEdgeLabel() :
-          targetElement.getNodeLabel();
-        if (!targetLabel)
+        if (!getLabelForTarget(this.state.target))
         {
           //Make sure its empty (and let edge handle default labels)
-          if (targetElement instanceof GraphEdge)
-          {
-            targetElement.setEdgeLabel(null);
-          }
-          else
-          {
-            targetElement.setNodeLabel(null);
-          }
-
-          //Delete it since it is not a valid element
-          if (DELETE_ON_EMPTY)
-          {
-            if (targetElement instanceof GraphEdge)
-            {
-              this.props.graphController.getGraph().deleteEdge(targetElement);
-            }
-            else
-            {
-              this.props.graphController.getGraph().deleteNode(targetElement)
-            }
-          }
+          setLabelForTarget(this.state.target, null);
         }
       }
 
@@ -149,17 +125,10 @@ class DefaultLabelEditor extends React.Component
     e.stopPropagation();
   }
 
-  appendSymbol(symbol)
-  {
-    this.inputElement.appendValue(symbol, SYMBOL_SEPARATOR);
-    this.inputElement.focus(false);
-  }
-
   onSubmit(newValue, prevValue)
   {
-    //this._prevValue = newValue;
     //If the value has changed or the value remained empty...
-    if (newValue != prevValue)
+    if (newValue !== prevValue)
     {
       //this.closeEditor(true);
     }
@@ -194,15 +163,26 @@ class DefaultLabelEditor extends React.Component
     {
       targetStyle.visibility = "visible";
 
-      //Assumes target is an instance of Edge
-      const center = target instanceof GraphEdge ?
-        target.getCenterPoint() :
-        target/* GraphNode themselves have x/y attribs */;
+      let x = 0;
+      let y = 0;
+
+      if (target instanceof GraphEdge)
+      {
+        const center = target.getCenterPoint();
+        x = center.x;
+        y = center.y;
+      }
+      else
+      {
+        x = target.x;
+        y = target.y;
+      }
+
       const screenPos = transformViewToScreen(screen,
-        center.x + viewport.getOffsetX(),
-        center.y + viewport.getOffsetY());
-      const x = screenPos.x;
-      const y = screenPos.y + LABEL_OFFSET_Y + EDITOR_OFFSET_Y;
+        x + viewport.getOffsetX(),
+        y + viewport.getOffsetY());
+      x = screenPos.x;
+      y = screenPos.y + LABEL_OFFSET_Y + EDITOR_OFFSET_Y;
       const offsetX = -(this.parentElement.offsetWidth / 2);
       const offsetY = -(this.parentElement.offsetHeight / 2);
 
@@ -225,8 +205,10 @@ class DefaultLabelEditor extends React.Component
       <FormattedInput className="label-editor-input" ref={ref=>this.inputElement=ref}
         formatter={this.onFormat}
         onSubmit={this.onSubmit}
-        captureOnExit={"none"}
-        multiline={true}/>
+        multiline={true}
+        captureOnExit={"none"}/>
+      <div className="label-editor-tray">
+      </div>
     </div>;
   }
 }
@@ -240,4 +222,4 @@ function transformViewToScreen(svg, x, y)
   };
 }
 
-export default DefaultLabelEditor;
+export default LabelEditor;

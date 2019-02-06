@@ -21,7 +21,7 @@ class GraphImageExporter extends AbstractGraphExporter
     const workspaceDim = workspace.ref.viewBox.baseVal;
     const width = workspaceDim.width;
     const height = workspaceDim.height;
-    const svg = workspace.getSVGForExport(width, height);
+    const svg = workspace.getSVGForExport(width, height, module);
 
     downloadImageFromSVG(filename, this._imageType, svg, width, height);
   }

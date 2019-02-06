@@ -25,11 +25,11 @@ class NodalGraphRenderer extends React.Component
 
     const edgeClass = graph.getEdgeClass();
     let EdgeRenderer = null;
-    if (edgeClass instanceof GraphEdge)
+    if (edgeClass === GraphEdge)
     {
       EdgeRenderer = GraphEdgeRenderer;
     }
-    else if (edgeClass instanceof QuadraticEdge)
+    else if (edgeClass === QuadraticEdge)
     {
       EdgeRenderer = QuadraticEdgeRenderer;
     }

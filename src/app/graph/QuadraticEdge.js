@@ -1,6 +1,6 @@
 import GraphEdge from 'graph/GraphEdge.js';
 
-class GraphCurvedEdge extends GraphEdge
+class QuadraticEdge extends GraphEdge
 {
   constructor(id, from, to=null)
   {
@@ -329,4 +329,4 @@ function getMidPoint(x1, y1, x2, y2, dst={x: 0, y: 0})
   return dst;
 }
 
-export default GraphCurvedEdge;
+export default QuadraticEdge;

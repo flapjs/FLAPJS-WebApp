@@ -227,7 +227,7 @@ class FormattedInput extends React.Component
   formatValue(value)
   {
     const formatter = this.props.formatter;
-    const result = formatter(value);
+    const result = formatter ? formatter(value) : value;
     return result || "";
   }
 

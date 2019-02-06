@@ -1,8 +1,9 @@
 import AbstractGraphExporter from 'modules/abstract/exporter/AbstractGraphExporter.js';
 
-import JSONFileIcon from 'icons/flat/JSONIcon.js';
 import { JSON as JSONGraphParser } from 'graph/parser/NodalGraphParser.js';
 import { downloadText } from 'util/Downloader.js';
+
+import JSONFileIcon from 'experimental/iconset/flat/JSONFileIcon.js';
 
 class DefaultGraphExporter extends AbstractGraphExporter
 {
@@ -11,16 +12,24 @@ class DefaultGraphExporter extends AbstractGraphExporter
   fromJSON(data, module)
   {
     const graphController = module.getGraphController();
+    const machineController = module.getMachineController();
     const graph = graphController.getGraph();
 
     const metadata = '_metadata' in data ? data['_metadata'] : {};
     const newGraph = JSONGraphParser.parse(data.graphData, graph);
+
+    //HACK: this should be calculated elsewhere
+    const machineData = data.machineData;
+    const machineName = machineData.name;
+    if (machineName) machineController.setMachineName(machineName);
+
     return newGraph;
   }
 
   toJSON(graphData, module)
   {
     const graphController = module.getGraphController();
+    const machineController = module.getMachineController();
 
     const dst = {};
     dst["_metadata"] = {
@@ -29,6 +38,9 @@ class DefaultGraphExporter extends AbstractGraphExporter
       timestamp: new Date().toString()
     };
     dst["graphData"] = graphData;
+    dst["machineData"] = {
+      name: machineController.getMachineName()
+    };
     return dst;
   }
 
@@ -48,6 +60,12 @@ class DefaultGraphExporter extends AbstractGraphExporter
   }
 
   //Override
+  doesSupportData()
+  {
+    return true;
+  }
+
+  //Override
   importFromFile(fileBlob, module)
   {
     return new Promise((resolve, reject) => {
@@ -60,12 +78,13 @@ class DefaultGraphExporter extends AbstractGraphExporter
       const reader = new FileReader();
       reader.onload = e => {
         const graphController = module.getGraphController();
+        const machineController = module.getMachineController();
         const data = e.target.result;
         const name = filename.substring(0, filename.length - this.getFileType().length - 1);
         const graph = graphController.getGraph();
 
         //TODO: this should not be here, this should exist somewhere in graphController
-        graphController.emit("userPreImportGraph", graph);
+        module.captureGraphEvent();
 
         try
         {
@@ -73,7 +92,10 @@ class DefaultGraphExporter extends AbstractGraphExporter
 
           this.fromJSON(jsonData, module);
 
-          graphController.emit("userImportGraph", graph);
+          if (machineController)
+          {
+            machineController.setMachineName(name);
+          }
 
           resolve();
         }
@@ -84,7 +106,7 @@ class DefaultGraphExporter extends AbstractGraphExporter
         }
         finally
         {
-          graphController.emit("userPostImportGraph", graph);
+          module.captureGraphEvent();
         }
       };
 
@@ -107,19 +129,40 @@ class DefaultGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  doesSupportData() { return true; }
+  doesSupportFile()
+  {
+    return true;
+  }
+
   //Override
-  doesSupportFile() { return true; }
+  canImport()
+  {
+    return true;
+  }
+
   //Override
-  canImport() { return true; }
+  getTitle()
+  {
+    return I18N.toString("file.export.machine.hint");
+  }
+
   //Override
-  getTitle() { return "Save machine to JSON"; }
+  getLabel()
+  {
+    return I18N.toString("file.export.machine");
+  }
+
   //Override
-  getLabel() { return "Save machine to JSON"; }
+  getFileType()
+  {
+    return "json";
+  }
+
   //Override
-  getFileType() { return "json"; }
-  //Override
-  getIconClass() { return JSONFileIcon; }
+  getIconClass()
+  {
+    return JSONFileIcon;
+  }
 }
 
 export default DefaultGraphExporter;

@@ -4,10 +4,10 @@
   outline: none;
   z-index: 2;
 
-  width: 8em;
+  max-width: 8em;
   resize: vertical;
 
-  background: var(--color-labeleditor-main);
+  background: var(--color-surface-lite);
   display: inline-block;
 
   padding: 4px;
@@ -26,7 +26,7 @@
 
   font-size: 24px;
   text-align: center;
-  border-bottom: 1px solid var(--color-labeleditor-text);
+  border-bottom: 1px solid var(--color-surface-text);
 }
 .label-editor-tray {
   width: 100%;
@@ -54,7 +54,7 @@
   left: calc(50% - 10px); /* controls horizontal position */
   border-width: 10px 10px 0; /* vary these values to change the angle of the vertex */
   border-style: solid;
-  border-color: var(--color-labeleditor-main) transparent;
+  border-color: var(--color-surface-lite) transparent;
   display: block;
   width: 0;
   z-index: -1;

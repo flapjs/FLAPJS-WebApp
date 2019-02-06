@@ -4,25 +4,34 @@ import Style from './ToolbarTitle.css';
 import FormattedInput from 'system/formattedinput/FormattedInput.js';
 import OfflineIcon from 'experimental/iconset/OfflineIcon.js';
 
-const DEFAULT_TITLE = "Untitled";
-
 class ToolbarTitle extends React.Component
 {
   constructor(props)
   {
     super(props);
 
-    this.ref = null;
+    this.inputElement = null;
+
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   setTitle(title)
   {
-    this.ref.resetValue(title);
+    this.inputElement.resetValue(title);
   }
 
   getTitle()
   {
-    return this.ref.value;
+    return this.inputElement.value;
+  }
+
+  onSubmit(newValue, prevValue)
+  {
+    //If the value has changed or the value remained empty...
+    if (newValue !== prevValue)
+    {
+      if (this.props.onChange) this.props.onChange(newValue);
+    }
   }
 
   //Override
@@ -38,8 +47,9 @@ class ToolbarTitle extends React.Component
           " " + this.props.className}
         style={this.props.style}>
         <span className={Style.title_input_container}>
-          <FormattedInput ref={ref=>this.ref=ref}
-            defaultValue={DEFAULT_TITLE}/>
+          <FormattedInput ref={ref=>this.inputElement=ref}
+            defaultValue={this.props.defaultValue}
+            onSubmit={this.onSubmit}/>
           {offline && <OfflineIcon className={Style.offline_status}/>}
         </span>
         <div className={Style.title_subtitle} onClick={onClick}>

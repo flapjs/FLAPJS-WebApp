@@ -39,6 +39,7 @@ class FSAGraph extends NodalGraph
 
   //This is more like addEdge() without adding it to the graph and just returns the result
   //This should only be called once when completing an edge
+  //Override
   formatEdge(edge)
   {
     const edgeSource = edge.getSourceNode();

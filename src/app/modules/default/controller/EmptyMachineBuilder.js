@@ -1,6 +1,6 @@
 import AbstractMachineBuilder from 'modules/abstract/AbstractMachineBuilder.js';
 
-class DefaultMachineBuilder extends AbstractMachineBuilder
+class EmptyMachineBuilder extends AbstractMachineBuilder
 {
   constructor()
   {
@@ -14,4 +14,4 @@ class DefaultMachineBuilder extends AbstractMachineBuilder
   }
 }
 
-export default DefaultMachineBuilder;
+export default EmptyMachineBuilder;

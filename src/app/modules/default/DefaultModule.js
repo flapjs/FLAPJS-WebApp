@@ -1,21 +1,29 @@
 import AbstractModule from 'modules/abstract/AbstractModule.js';
 
-import DefaultGraphExporter from './DefaultGraphExporter.js';
+import InputController from './controller/InputController.js';
+import GraphController from './controller/GraphController.js';
+import MachineController from './controller/MachineController.js';
 
-import DefaultInputController from './DefaultInputController.js';
-import DefaultGraphController from './DefaultGraphController.js';
-import DefaultMachineController from './DefaultMachineController.js';
+import NodalGraphRenderer from 'graph/renderer/NodalGraphRenderer.js';
+import DefaultGraphOverlayRenderer from './renderer/DefaultGraphOverlayRenderer.js';
 
-import DefaultPanel from './DefaultPanel.js';
-import DefaultGraphRenderer from './DefaultGraphRenderer.js';
-import DefaultGraphOverlayRenderer from './DefaultGraphOverlayRenderer.js';
-import DefaultViewportRenderer from './DefaultViewportRenderer.js';
+import AboutPanel from './components/panels/about/AboutPanel.js';
 
-import DefaultLabelEditor from './DefaultLabelEditor.js';
+import Notifications from 'system/notification/Notifications.js';
+import SafeGraphEventHandler from 'graph/SafeGraphEventHandler.js';
+import LabelEditor from './editor/LabelEditor.js';
 
-const VERSION = "0.0.1";
-const PANELS = [DefaultPanel];
-const EXPORTERS = [new DefaultGraphExporter()];
+const MODULE_NAME = "default";
+const MODULE_VERSION = "0.0.1";
+const MODULE_PANELS = [
+  AboutPanel
+];
+const MODULE_MENUS = [
+
+];
+const MODULE_VIEWS = [
+
+];
 
 class DefaultModule extends AbstractModule
 {
@@ -25,36 +33,38 @@ class DefaultModule extends AbstractModule
 
     this._workspace = null;
 
-    const inputAdapter = app.getInputAdapter();
-    this._inputController = new DefaultInputController(this, inputAdapter);
-    this._graphController = new DefaultGraphController(this);
-    this._machineController = new DefaultMachineController(this);
-  }
+    this._inputController = new InputController(this, app.getInputAdapter());
+    this._graphController = new GraphController(this);
+    this._machineController = new MachineController(this);
 
-  getLabelEditor()
-  {
-    return DefaultLabelEditor;
+    this._undoManager = app.getUndoManager();
   }
 
   //Override
   initialize(app)
   {
+    this._workspace = app.workspace;
+
     super.initialize(app);
 
-    const workspace = app.workspace;
-    this._workspace = workspace;
+    //Notify on create in delete mode
+    const tryCreateWhileTrash = () => {
+      if (this._inputController.isTrashMode())
+      {
+        Notifications.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
+      }
+    };
+    this._graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
   }
 
-  //Override
-  destroy(app)
+  captureGraphEvent()
   {
-    super.destroy(app);
+    this._undoManager.captureEvent(new SafeGraphEventHandler(this._graphController));
   }
 
-  //Override
-  update(app)
+  getLabelEditor()
   {
-    super.update(app);
+    return LabelEditor;
   }
 
   //Override
@@ -63,11 +73,9 @@ class DefaultModule extends AbstractModule
     switch(renderLayer)
     {
       case "graph":
-        return DefaultGraphRenderer;
+        return NodalGraphRenderer;
       case "graphoverlay":
         return DefaultGraphOverlayRenderer;
-      case "viewport":
-        return DefaultViewportRenderer;
     }
     return null;
   }
@@ -78,13 +86,15 @@ class DefaultModule extends AbstractModule
   //Override
   getMachineController() { return this._machineController; }
   //Override
-  getGraphExporters() { return EXPORTERS; }
+  getModulePanels() { return MODULE_PANELS; }
   //Override
-  getModuleVersion() { return VERSION; }
+  getModuleViews() { return MODULE_VIEWS; }
   //Override
-  getModulePanels() { return PANELS; }
+  getModuleMenus() { return MODULE_MENUS; }
   //Override
-  getModuleName() { return "default"; }
+  getModuleVersion() { return MODULE_VERSION; }
+  //Override
+  getModuleName() { return MODULE_NAME; }
   //Override
   getLocalizedModuleName() { return "Default"; }
 }

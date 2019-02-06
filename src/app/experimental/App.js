@@ -101,6 +101,7 @@ class App extends React.Component
 
     //Notifications.addMessage("Welcome to Flap.js");
     this.onModuleTitleClick = this.onModuleTitleClick.bind(this);
+    this.onModuleTitleChange = this.onModuleTitleChange.bind(this);
   }
 
   //Override
@@ -142,6 +143,11 @@ class App extends React.Component
   onModuleTitleClick(e)
   {
     this._drawer.setCurrentTab(0);
+  }
+
+  onModuleTitleChange(value)
+  {
+    this.getCurrentModule().getMachineController().renameMachine(value);
   }
 
   get workspace() { return this._workspace; }
@@ -220,6 +226,8 @@ class App extends React.Component
           menuProps={moduleMenuProps}
           hide={isFullscreen}
           title={moduleName}
+          defaultValue={machineController.getMachineName()}
+          onTitleChange={this.onModuleTitleChange}
           onTitleClick={this.onModuleTitleClick}>
           <ToolbarButton title="New" icon={PageEmptyIcon}
             onClick={() => UserUtil.userClearGraph(this, false, () => this._toolbar.closeBar())}/>
