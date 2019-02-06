@@ -3,11 +3,12 @@ import AbstractInputController from 'modules/abstract/AbstractInputController.js
 import GraphPicker from './GraphPicker.js';
 
 import GraphNodeInputHandler from './inputhandler/GraphNodeInputHandler.js';
-import GraphEdgeInputHandler from './inputhandler/GraphEdgeInputHandler.js';
-import GraphEndpointInputHandler from './inputhandler/GraphEndpointInputHandler.js';
 import GraphInitialInputHandler from './inputhandler/GraphInitialInputHandler.js';
-import SelectionBoxInputHandler from './inputhandler/SelectionBoxInputHandler.js';
-import GraphNodeCreateInputHandler from './inputhandler/GraphNodeCreateInputHandler.js';
+
+import GraphEdgeInputHandler from 'modules/default/controller/inputhandler/GraphEdgeInputHandler.js';
+import GraphEndpointInputHandler from 'modules/default/controller/inputhandler/GraphEndpointInputHandler.js';
+import GraphNodeCreateInputHandler from 'modules/default/controller/inputhandler/GraphNodeCreateInputHandler.js';
+import SelectionBoxInputHandler from 'modules/default/controller/inputhandler/SelectionBoxInputHandler.js';
 
 const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
 
