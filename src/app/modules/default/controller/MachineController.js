@@ -7,9 +7,7 @@ class MachineController extends AbstractMachineController
   constructor(module)
   {
     super(module, new EmptyMachineBuilder());
-
-    this.machineName = null;
-
+    
     this.graphController = null;
   }
 
@@ -35,37 +33,16 @@ class MachineController extends AbstractMachineController
 
   getMachineName()
   {
-    return this.machineName || I18N.toString("file.untitled");
+    return this.getModule().getApp().getSession().getProjectName();
   }
 
   setMachineName(machineName)
   {
-    if (!machineName || machineName.length <= 0)
-    {
-      this.machineName = null;
-    }
-    else
-    {
-      this.machineName = machineName;
-    }
-
-    const value = this.getMachineName();
-    const element = document.getElementById('window-title');
-    const string = element.innerHTML;
-    const separator = string.indexOf('-');
-    if (separator !== -1)
-    {
-      element.innerHTML = string.substring(0, separator).trim() + " - " + value;
-    }
-    else
-    {
-      element.innerHTML = string + " - " + value;
-    }
+    this.getModule().getApp().getSession().setProjectName(machineName);
   }
 
   renameMachine(machineName)
   {
-    const prev = this.machineName;
     this.setMachineName(machineName);
   }
 }

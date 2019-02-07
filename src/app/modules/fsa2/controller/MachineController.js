@@ -10,9 +10,7 @@ class MachineController extends AbstractMachineController
   constructor(module)
   {
     super(module, new FSABuilder());
-
-    this.machineName = null;
-
+    
     this.graphController = null;
   }
 
