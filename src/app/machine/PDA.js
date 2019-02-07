@@ -191,9 +191,9 @@ class PDA
       const transitions = this.getOutgoingTransitions(result[i][0]);
       for(const transition of transitions)
       {
-        if (transition[SYMBOL] == EMPTY && (transition[POP_SYMBOL] == stack[stack.length-1] || transition[POP_SYMBOL] == EMPTY))
+        if (transition[SYMBOL] == EMPTY && (transition[POP_SYMBOL] == result[i][1][result[i][1].length-1] || transition[POP_SYMBOL] == EMPTY))
         {
-          var newStack = stack.slice();
+          var newStack = result[i][1].slice();
           if(transition[POP_SYMBOL] != EMPTY)
           {
             newStack.pop()

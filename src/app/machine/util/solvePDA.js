@@ -20,7 +20,6 @@ export function solvePDA(pda, input)
   while(cachedStates.length > 0)
   {
     symbol = input.next().value;
-    console.log(cachedStates)
     if (solvePDAbyStep(pda, symbol, cachedStates, cachedSymbols, checkedStates)==true)
     {
       return true;
@@ -59,10 +58,6 @@ export function solvePDAbyStep(pda, symbol, cachedStates, cachedSymbols, checked
     {
       //Read to next state...
       nextIndex = cstate.index + 1;
-      console.log(symbol)
-      console.log(state)
-      console.log(stack)
-      console.log(pda.doTerminalTransition(state, symbol,stack))
       for(let res of pda.doTerminalTransition(state, symbol,stack))
       {
         nextStates.push({state: res[0], stack:res[1], index: nextIndex});
