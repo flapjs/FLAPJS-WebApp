@@ -1,9 +1,9 @@
-import FSA, { EMPTY_SYMBOL } from '../FSA.js';
-import { invertFSA } from '../FSAUtils.js';
+import FSA from '../FSA.js';
+import { invertDFA } from '../FSAUtils.js';
 
-describe("Trying to invert an empty NFA machine", () => {
-  const nfa = new FSA(false);
-  const inverted = invertFSA(nfa, nfa);
+describe("Trying to invert an empty DFA machine", () => {
+  const dfa = new FSA(true);
+  const inverted = invertDFA(dfa, dfa);
 
   test("is still empty", () => {
     expect(inverted.getStateCount()).toBe(0);
@@ -11,10 +11,10 @@ describe("Trying to invert an empty NFA machine", () => {
 });
 
 describe("Trying to invert a single-state state machine", () => {
-  const nfa = new FSA(false);
-  const state0 = nfa.createState("q0");
-  nfa.addTransition(state0, state0, "0");
-  const inverted = invertFSA(nfa);
+  const dfa = new FSA(true);
+  const state0 = dfa.createState("q0");
+  dfa.addTransition(state0, state0, "0");
+  const inverted = invertDFA(dfa);
 
   test("single state still exists", () => {
     const states = inverted.getStatesByLabel("q0");
@@ -23,7 +23,7 @@ describe("Trying to invert a single-state state machine", () => {
   });
 
   test("single state is inverted", () => {
-    const oldFinalStates = Array.from(nfa.getFinalStates());
+    const oldFinalStates = Array.from(dfa.getFinalStates());
     const newFinalStates = Array.from(inverted.getFinalStates());
     expect(oldFinalStates).toHaveLength(0);
     expect(newFinalStates).toHaveLength(1);
@@ -41,7 +41,7 @@ describe("Trying to invert a multiple state state machine", () => {
   dfa.addTransition(state1, state0, "1");
   dfa.setFinalState(state0, true);
 
-  const inverted = invertFSA(dfa);
+  const inverted = invertDFA(dfa);
   const invFinalStates = Array.from(inverted.getFinalStates());
   const invState0 = inverted.getStateByID(state0.getStateID());
   const invState1 = inverted.getStateByID(state1.getStateID());

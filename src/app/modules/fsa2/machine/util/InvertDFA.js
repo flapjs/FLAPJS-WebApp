@@ -1,6 +1,6 @@
 import FSA from '../FSA.js';
 
-export function invertFSA(fsa, dst=new FSA(fsa.isDeterministic()))
+export function invertDFA(fsa, dst=new FSA(true))
 {
   dst.copy(fsa);
 

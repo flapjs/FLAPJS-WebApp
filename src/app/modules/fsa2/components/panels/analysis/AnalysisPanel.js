@@ -21,7 +21,7 @@ class AnalysisPanel extends React.Component
 
     this.onConvertToDFA = this.onConvertToDFA.bind(this);
     this.onConvertToNFA = this.onConvertToNFA.bind(this);
-    this.onInvertFSA = this.onInvertFSA.bind(this);
+    this.onInvertDFA = this.onInvertDFA.bind(this);
 
     this.onOptimizeMachine = this.onOptimizeMachine.bind(this);
   }
@@ -54,7 +54,7 @@ class AnalysisPanel extends React.Component
     machineController.convertMachineTo("NFA");
   }
 
-  onInvertFSA(e)
+  onInvertDFA(e)
   {
     const currentModule = this.props.currentModule;
     const machineController = currentModule.getMachineController();
@@ -105,7 +105,7 @@ class AnalysisPanel extends React.Component
             </button>
           : null
         }
-        <button className={Style.analysis_button} onClick={this.onInvertFSA}>
+        <button className={Style.analysis_button} onClick={this.onInvertDFA}>
           {"Invert " + machineController.getMachineType()}
         </button>
       </PanelContainer>

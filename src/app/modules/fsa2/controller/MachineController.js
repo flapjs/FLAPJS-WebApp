@@ -1,7 +1,7 @@
 import AbstractMachineController from 'modules/abstract/AbstractMachineController.js';
 
 import FSABuilder from 'modules/fsa2/machine/FSABuilder.js';
-import { convertToDFA, invertFSA } from 'modules/fsa2/machine/FSAUtils.js';
+import { convertToDFA, invertDFA } from 'modules/fsa2/machine/FSAUtils.js';
 
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 
@@ -144,7 +144,7 @@ class MachineController extends AbstractMachineController
   invertMachine()
   {
     const machine = this.getMachineBuilder().getMachine();
-    const result = invertFSA(machine, machine);
+    const result = invertDFA(machine, machine);
 
     //Update final states
     for(const state of result.getStates())
