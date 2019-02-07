@@ -198,9 +198,7 @@ class MachineController extends AbstractMachineController
   getAlphabet()
   {
     const machine = this._machineBuilder.getMachine();
-    const result = [];
-    machine.getAlphabet(result);
-    return result;
+    return Array.from(machine.getAlphabet());
   }
 
   isUsedSymbol(symbol)
@@ -210,7 +208,7 @@ class MachineController extends AbstractMachineController
 
   createSymbol(symbol)
   {
-    this.getMachineBuilder().addCustomSymbol(symbol);
+    this.addCustomSymbol(symbol);
   }
 
   deleteSymbol(symbol)

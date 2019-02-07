@@ -63,7 +63,7 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
       if (result !== target)
       {
         //Allow the user to edit the merged labels
-        graphController.openLabelEditor(result, x, y, result.getEdgeLabel(), false);
+        graphController.openLabelEditor(result, result.getEdgeLabel());
 
         //Delete the merged label
         graph.deleteEdge(target);
@@ -74,13 +74,11 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
       {
         if (inputController.isNewEdge)
         {
-          graphController.openLabelEditor(target, x, y, null, true, () => {
-            graphController.onGraphIntentFinishEdge(target);
-          });
+          graphController.openLabelEditor(result, "", (target, value) => graphController.onGraphIntentFinishEdge(target));
         }
         else
         {
-          graphController.openLabelEditor(target, x, y);
+          graphController.openLabelEditor(target, target.getEdgeLabel());
         }
       }
 
@@ -124,7 +122,7 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
         //Open label editor if default edge...
         if (target.getEdgeLabel().length <= 0)
         {
-          graphController.openLabelEditor(target, x, y);
+          graphController.openLabelEditor(target, target.getEdgeLabel());
         }
         return true;
       }

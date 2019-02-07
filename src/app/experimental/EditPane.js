@@ -22,19 +22,12 @@ class EditPane extends React.Component
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
     const inputActionMode = inputController.isActionMode();
-    const LabelEditor = currentModule.getLabelEditor();
 
     return (
       <div id={this.props.id}
         className={Style.view_pane +
           " " + this.props.className}
         style={this.props.style}>
-        { LabelEditor &&
-          <LabelEditor ref={ref=>graphController.labelEditorElement=ref}
-          inputController={inputController}
-          graphController={graphController}
-          machineController={machineController}
-          screen={app._workspace ? app._workspace.ref : null}/> }
         <NavbarWidget className={Style.view_widget} style={{right: 0}}
           app={app}/>
         <div className={Style.view_widget} style={{bottom: 0, left: 0}}>

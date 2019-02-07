@@ -19,6 +19,7 @@ const EXPORTERS = [
 const NODE_SPAWN_RADIUS = 64;
 const DEFAULT_AUTO_RENAME = true;
 const GRAPH_REFRESH_RATE = 30;
+const DELETE_ON_EMPTY = true;
 
 class GraphController extends AbstractGraphController
 {
@@ -343,25 +344,30 @@ class GraphController extends AbstractGraphController
     }
   }
 
-  openLabelEditor(target, x, y, placeholder=null, replace=true, callback=null)
+  openLabelEditor(target, defaultValue=null, callback=null)
   {
-    if (!this.labelEditorElement)
-    {
-      if (callback) callback();
-      return;
-    }
-
-    const prevLabel = placeholder || target.getEdgeLabel();
-    this.labelEditorElement.openEditor(target, placeholder, replace, () => {
-      const label = target.getEdgeLabel();
-      if (prevLabel.length > 0 && label != prevLabel)
+    const labelEditor = this.getModule().getApp().getLabelEditorComponent();
+    const prevLabel = defaultValue;
+    labelEditor.openEditor(target, defaultValue, (target, value) => {
+      if (DELETE_ON_EMPTY && (!value || value.length <= 0))
       {
-        this.getModule().captureGraphEvent();
+        //Assumes target is GraphEdge
+        this._graph.deleteEdge(target);
       }
-
-      if (callback)
+      else
       {
-        callback();
+        target.setEdgeLabel(value);
+        if (!prevLabel || (prevLabel.length > 0 && value !== prevLabel))
+        {
+          this.getModule().captureGraphEvent();
+        }
+        if (callback) callback(target, value);
+      }
+    }, (target) => {
+      if (DELETE_ON_EMPTY && (!prevLabel || prevLabel.length <= 0))
+      {
+        //Assumes target is GraphEdge
+        this._graph.deleteEdge(target);
       }
     });
   }

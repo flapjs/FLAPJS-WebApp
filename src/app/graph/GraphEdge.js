@@ -87,6 +87,7 @@ class GraphEdge extends GraphElement
     return dst;
   }
 
+  //Override
   getCenterPoint(dst={x: 0, y: 0})
   {
     const from = this._from;

@@ -12,6 +12,14 @@ class GraphNode extends GraphElement
     this._label = "";
   }
 
+  //Override
+  getCenterPoint(dst={x: 0, y: 0})
+  {
+    dst.x = this.x;
+    dst.y = this.y;
+    return dst;
+  }
+
   setNodeLabel(label)
   {
     this._label = label;

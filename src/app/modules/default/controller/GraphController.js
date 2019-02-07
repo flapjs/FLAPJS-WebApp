@@ -341,26 +341,24 @@ class GraphController extends AbstractGraphController
     }
   }
 
-  openLabelEditor(target, x, y, placeholder=null, replace=true, callback=null)
+  openLabelEditor(target, defaultValue=null, callback=null)
   {
-    if (!this.labelEditorElement)
-    {
-      if (callback) callback();
-      return;
-    }
-
-    const prevLabel = placeholder || (target instanceof GraphNode ? target.getNodeLabel() : target.getEdgeLabel());
-    this.labelEditorElement.openEditor(target, placeholder, replace, () => {
-      const label = target instanceof GraphNode ? target.getNodeLabel() : target.getEdgeLabel();
-      if (prevLabel && prevLabel.length > 0 && label != prevLabel)
+    const labelEditor = this.getModule().getApp().getLabelEditorComponent();
+    const prevLabel = defaultValue;
+    labelEditor.openEditor(target, defaultValue, (target, value) => {
+      if (target instanceof GraphNode)
+      {
+        target.setNodeLabel(value);
+      }
+      else
+      {
+        target.setEdgeLabel(value);
+      }
+      if (!prevLabel || (prevLabel.length > 0 && value !== prevLabel))
       {
         this.getModule().captureGraphEvent();
       }
-
-      if (callback)
-      {
-        callback();
-      }
+      if (callback) callback(target, value);
     });
   }
 

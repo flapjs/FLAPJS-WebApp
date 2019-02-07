@@ -39,7 +39,7 @@ class GraphNodeInputHandler extends GraphElementInputHandler
     else
     {
       //Edit label for selected node
-      graphController.openLabelEditor(target, pointer.x, pointer.y);
+      graphController.openLabelEditor(target, target.getNodeLabel());
     }
 
     return false;

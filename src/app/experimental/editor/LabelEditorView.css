@@ -1,0 +1,24 @@
+:local(.editor_container) {
+  position: absolute;
+  display: none;
+  padding: 0.5em;
+  background: var(--color-background-lite);
+  border-radius: 0.5em;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+:local(.editor_container).open {
+  display: block;
+}
+:local(.editor_container) input, :local(.editor_container) textarea {
+  outline: none;
+  border: none;
+  background: none;
+  border-bottom: 1px solid black;
+  text-align: center;
+  font-size: 1.5em;
+  width: 4em;
+}
+
+:local(.tray_container) {
+
+}

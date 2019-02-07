@@ -11,7 +11,6 @@ import AboutPanel from './components/panels/about/AboutPanel.js';
 
 import Notifications from 'system/notification/Notifications.js';
 import SafeGraphEventHandler from 'graph/SafeGraphEventHandler.js';
-import LabelEditor from './editor/LabelEditor.js';
 
 const MODULE_NAME = "default";
 const MODULE_VERSION = "0.0.1";
@@ -60,11 +59,6 @@ class DefaultModule extends AbstractModule
   captureGraphEvent()
   {
     this._undoManager.captureEvent(new SafeGraphEventHandler(this._graphController));
-  }
-
-  getLabelEditor()
-  {
-    return LabelEditor;
   }
 
   //Override

@@ -8,6 +8,7 @@ import WorkspaceView from 'experimental/workspace/WorkspaceView.js';
 import ViewportView from 'experimental/viewport/ViewportView.js';
 import TooltipView, { ONESHOT_MODE } from 'experimental/tooltip/TooltipView.js';
 import UploadDropZone from 'experimental/components/UploadDropZone.js';
+import LabelEditorView from 'experimental/editor/LabelEditorView.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
@@ -65,6 +66,7 @@ class App extends React.Component
     this._toolbar = null;
     this._drawer = null;
     this._viewport = null;
+    this._labeleditor = null;
 
     //These need to be initialized before module
     this._inputAdapter = new InputAdapter();
@@ -157,6 +159,9 @@ class App extends React.Component
   get workspace() { return this._workspace; }
   get viewport() { return this._inputAdapter.getViewport(); }
 
+  getWorkspaceComponent() { return this._workspace; }
+  getLabelEditorComponent() { return this._labeleditor; }
+
   setCurrentModuleClass(ModuleClass)
   {
     const prevModule = this.getCurrentModule();
@@ -208,6 +213,7 @@ class App extends React.Component
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
     const graphImporter = graphController.getGraphImporter();
+    const graphLabeler = graphController.getGraphLabeler();
     const inputActionMode = inputController.isActionMode();
 
     const moduleName = currentModule.getLocalizedModuleName();
@@ -220,8 +226,10 @@ class App extends React.Component
 
     const GRAPH_RENDER_LAYER = "graph";
     const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
+    const LABEL_EDITOR_RENDER_LAYER = "labeleditor";
     const GraphRenderer = currentModule.getRenderer(GRAPH_RENDER_LAYER);
     const GraphOverlayRenderer = currentModule.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
+    const LabelEditorRenderer = currentModule.getRenderer(LABEL_EDITOR_RENDER_LAYER);
 
     return (
       <div className={Style.app_container}>
@@ -273,7 +281,7 @@ class App extends React.Component
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
           hide={isFullscreen}>
-          
+
           <UploadDropZone>
             <div className="viewport">
 
@@ -304,6 +312,15 @@ class App extends React.Component
                   GraphOverlayRenderer &&
                   <GraphOverlayRenderer currentModule={currentModule} parent={this._workspace}/>}
               </WorkspaceView>
+
+              <LabelEditorView ref={ref=>this._labeleditor=ref}
+                labeler={graphLabeler}
+                viewport={viewport}
+                saveOnExit={true}>
+                {/* LabelEditor objects */
+                  LabelEditorRenderer &&
+                  <LabelEditorRenderer currentModule={currentModule} parent={this._labeleditor}/>}
+              </LabelEditorView>
 
               <NotificationView notificationManager={Notifications}>
               </NotificationView>

@@ -5,6 +5,13 @@ class GraphElement
     this._id = id;
   }
 
+  getCenterPoint(dst={x: 0, y: 0})
+  {
+    dst.x = 0;
+    dst.y = 0;
+    return dst;
+  }
+
   setGraphElementID(graphElementID)
   {
     this._id = graphElementID;

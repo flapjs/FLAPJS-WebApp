@@ -18,7 +18,7 @@ class GraphEdgeInputHandler extends GraphElementInputHandler
     else
     {
       //Edit label for selected edge
-      graphController.openLabelEditor(target, pointer.x, pointer.y);
+      graphController.openLabelEditor(target, target.getEdgeLabel());
     }
     return true;
   }

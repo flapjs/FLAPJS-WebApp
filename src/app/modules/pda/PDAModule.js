@@ -6,6 +6,7 @@ import MachineController from './controller/MachineController.js';
 
 import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
 import FSAGraphOverlayRenderer from './renderer/FSAGraphOverlayRenderer.js';
+import FSALabelEditorRenderer from './renderer/FSALabelEditorRenderer.js';
 
 import AboutPanel from './components/panels/about/AboutPanel.js';
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
@@ -16,7 +17,6 @@ import Notifications from 'system/notification/Notifications.js';
 import SafeGraphEventHandler from 'graph/SafeGraphEventHandler.js';
 import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
-import LabelEditor from './editor/LabelEditor.js';
 
 const MODULE_NAME = "pda";
 const MODULE_VERSION = "0.0.1";
@@ -72,11 +72,6 @@ class PDAModule extends AbstractModule
     this._undoManager.captureEvent(new SafeGraphEventHandler(this._graphController));
   }
 
-  getLabelEditor()
-  {
-    return LabelEditor;
-  }
-
   //Override
   getRenderer(renderLayer)
   {
@@ -86,6 +81,8 @@ class PDAModule extends AbstractModule
         return FSAGraphRenderer;
       case "graphoverlay":
         return FSAGraphOverlayRenderer;
+      case "labeleditor":
+        return FSALabelEditorRenderer;
     }
     return null;
   }
