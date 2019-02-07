@@ -93,21 +93,24 @@ class AnalysisPanel extends React.Component
           <PanelCheckbox ref={ref=>this.optimizeRedundOption=ref} disabled={true}
             id="opt-redund" title="Redundant States" value="redund"/>
           <button className={Style.analysis_button} onClick={this.onOptimizeMachine} disabled={!this.canOptimize()}>Optimize</button>
+          {
+            machineController.getMachineType() == "DFA" ?
+              <button className={Style.analysis_button} onClick={this.onConvertToNFA}>
+                {I18N.toString("action.overview.convertnfa")}
+              </button>
+            : machineController.getMachineType() == "NFA" ?
+              <button className={Style.analysis_button} onClick={this.onConvertToDFA}>
+                {I18N.toString("action.overview.convertdfa")}
+              </button>
+            : null
+          }
         </PanelSection>
-        {
-          machineController.getMachineType() == "DFA" ?
-            <button className={Style.analysis_button} onClick={this.onConvertToNFA}>
-              {I18N.toString("action.overview.convertnfa")}
-            </button>
-          : machineController.getMachineType() == "NFA" ?
-            <button className={Style.analysis_button} onClick={this.onConvertToDFA}>
-              {I18N.toString("action.overview.convertdfa")}
-            </button>
-          : null
-        }
-        <button className={Style.analysis_button} onClick={this.onInvertDFA}>
-          {"Invert " + machineController.getMachineType()}
-        </button>
+        <PanelSection title={"Related Machines"} initial={true}>
+          {machineController.getMachineType() === "DFA" &&
+            <button className={Style.analysis_button} onClick={this.onInvertDFA}>
+              {"Flip all accept states"}
+            </button>}
+        </PanelSection>
       </PanelContainer>
     );
   }
