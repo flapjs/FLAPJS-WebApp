@@ -1,0 +1,14 @@
+:local(.machine_type_select) {
+  font-size: 1em;
+  outline: none;
+}
+
+:local(.autolayout_button) {
+  outline: none;
+  cursor: pointer;
+  margin: 0.3em;
+  font-size: 1em;
+  border-radius: 1em;
+  background: var(--color-panel-text-active);
+  color: var(--color-panel-text);
+}

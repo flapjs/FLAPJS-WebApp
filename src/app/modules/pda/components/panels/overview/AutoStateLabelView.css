@@ -1,0 +1,26 @@
+:local(.select_container) {
+  margin: 0.3em;
+}
+
+:local(.select_label) {
+  display: block;
+  margin-bottom: 0.2em;
+}
+
+:local(.prefix_editor) {
+  width: 6em;
+
+  background: var(--color-panel-back-input);
+  outline: none;
+
+  font-size: 1.2em;
+  font-family: monospace;
+
+  padding: 0.3em;
+  border: none;
+  border-radius: 0.5em;
+}
+
+:local(.postfix_selector) {
+  margin-left: 1em;
+}

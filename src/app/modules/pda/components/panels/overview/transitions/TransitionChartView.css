@@ -1,0 +1,21 @@
+:local(.chart_container) table {
+  color: var(--color-panel-text);
+}
+
+:local(.chart_container) td, :local(.chart_container) th {
+  margin: 0.2em;
+  padding: 0.3em;
+
+  border-radius: 0.5em;
+  background: var(--color-panel-back-input);
+}
+
+:local(.chart_container) td {
+  font-size: 1.2em;
+  font-family: monospace;
+  text-align: center;
+}
+
+:local(.chart_key).error, :local(.chart_value).error {
+  color: var(--color-panel-error);
+}

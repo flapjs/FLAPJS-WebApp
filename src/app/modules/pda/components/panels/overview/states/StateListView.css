@@ -1,0 +1,25 @@
+:local(.list_container) {
+  display: flex;
+}
+:local(.element_list) {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+:local(.add_button) {
+  align-self: flex-start;
+}
+:local(.add_button):hover {
+  color: var(--color-panel-text-active);
+}
+
+:local(.first_marker) {
+  font-size: inherit;
+  margin-top: auto;
+  margin-bottom: auto;
+  fill: var(--color-panel-back-detail);
+  margin-left: -0.5em;
+
+  transform: rotate(90deg);
+}

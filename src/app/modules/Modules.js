@@ -23,7 +23,8 @@ Modules['fsa2'] = {
 Modules['pda'] = {
   name: "Pushdown Automata",
   version: "1.0.0",
-  fetch: function(callback) { throw new Error("Module not yet implemented. Sorry :("); }
+  experimental: true,
+  fetch: function(callback) { import(/* webpackChunkName: "module_pda" */ 'modules/pda/PDAModule.js').then(({ default: _ }) => callback( _ )); }
 };
 
 Modules['tm'] = {
