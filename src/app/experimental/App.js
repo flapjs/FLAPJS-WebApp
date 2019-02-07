@@ -133,6 +133,8 @@ class App extends React.Component
   {
     this._init = false;
 
+    Notifications.clearMessages();
+
     LocalSave.unregisterHandler(this._saver);
     LocalSave.unregisterHandler(this._colorSaver);
 
