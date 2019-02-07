@@ -83,6 +83,7 @@ class OptionPanel extends React.Component
                     <option value="default">Default</option>
                     <option value="ucsd" disabled={true}>UC San Diego (Coming Soon)</option>
                     <option value="duke" disabled={true}>Duke University (Coming Soon)</option>
+                    <option value="mit" disabled={true}>MIT (Coming Soon)</option>
                   </select>
                   {
                     !this.state.customTheme &&
