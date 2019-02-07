@@ -45,6 +45,7 @@ import UndoManager from 'system/undomanager/UndoManager.js';
 import LocalSave from 'system/localsave/LocalSave.js';
 import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
 
+import Session from 'session/Session.js';
 import Module from 'modules/fsa2/FSAModule.js';
 
 const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
@@ -71,6 +72,7 @@ class App extends React.Component
       .setMinScale(MIN_SCALE)
       .setMaxScale(MAX_SCALE)
       .setOffsetDamping(SMOOTH_OFFSET_DAMPING);
+
     this._undoManager = new UndoManager();
 
     this._hotKeyManager = new HotKeyManager();
@@ -86,13 +88,15 @@ class App extends React.Component
 
     this._saver = new AppSaver(this);
 
+    this._session = new Session(this);
+
     //TODO: This is only used to control transitions (do we really need it?)
     this._init = false;
 
     const ModuleClass = props.moduleClass || Module;
+    this._module = new ModuleClass(this);
 
     this.state = {
-      module: new ModuleClass(this),
       hide: false
     };
 
@@ -164,16 +168,17 @@ class App extends React.Component
     });
   }
 
-  getCurrentModule() { return this.state.module; }
+  getCurrentModule() { return this._module; }
   getInputAdapter() { return this._inputAdapter; }
   getUndoManager() { return this._undoManager; }
   getHotKeyManager() { return this._hotKeyManager; }
   getStyleOpts() { return this._styleOpts; }
+  getSession() { return this._session; }
 
   //Override
   componentDidUpdate()
   {
-    const currentModule = this.state.module;
+    const currentModule = this._module;
     const inputAdapter = this._inputAdapter;
 
     inputAdapter.update();
@@ -190,7 +195,7 @@ class App extends React.Component
   //Override
   render()
   {
-    const currentModule = this.state.module;
+    const currentModule = this._module;
     const inputAdapter = this._inputAdapter;
 
     const hasSmallWidth = this._mediaQuerySmallWidthList.matches;
@@ -268,6 +273,7 @@ class App extends React.Component
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
           hide={isFullscreen}>
+          
           <UploadDropZone>
             <div className="viewport">
 
