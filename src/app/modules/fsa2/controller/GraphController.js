@@ -18,7 +18,7 @@ const EXPORTERS = [
 ];
 
 const NODE_SPAWN_RADIUS = 64;
-const DEFAULT_AUTO_RENAME = false;
+const DEFAULT_AUTO_RENAME = true;
 const GRAPH_REFRESH_RATE = 30;
 const DELETE_ON_EMPTY = true;
 
