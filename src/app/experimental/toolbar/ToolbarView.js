@@ -26,6 +26,7 @@ class ToolbarView extends React.Component
     };
 
     this.onBarExpand = this.onBarExpand.bind(this);
+    this.onTitleChange = this.onTitleChange.bind(this);
   }
 
   openBar(callback=null)
@@ -90,6 +91,11 @@ class ToolbarView extends React.Component
     }
   }
 
+  onTitleChange(value)
+  {
+    this.props.session.setProjectName(value);
+  }
+
   renderMenuButtons(children)
   {
     return React.Children.map(children, child => {
@@ -113,7 +119,8 @@ class ToolbarView extends React.Component
     const ToolbarMenu = toolbarMenuIndex >= 0 ? toolbarMenus[toolbarMenuIndex] : null;
     const showCustomToolbarMenu = ToolbarMenu != null;
     const onTitleClick = this.props.onTitleClick;
-    const onTitleChange = this.props.onTitleChange;
+
+    const session = this.props.session;
 
     const hasButtons = React.Children.count(this.props.children) > 0;
     const isBarOpen = this.state.open;
@@ -140,8 +147,8 @@ class ToolbarView extends React.Component
         <div ref={ref=>this.toolbarElement=ref} className={Style.bar_toolbar}>
           <ToolbarTitle className={Style.toolbar_title}
             title={title}
-            defaultValue={this.props.defaultValue}
-            onChange={onTitleChange}
+            defaultValue={session.getProjectName()}
+            onChange={this.onTitleChange}
             onClick={onTitleClick}/>
 
           <div className={Style.toolbar_button_container}>
