@@ -1,7 +1,7 @@
 import AbstractMachineController from 'modules/abstract/AbstractMachineController.js';
 
 import FSABuilder from 'modules/fsa2/machine/FSABuilder.js';
-import { convertToDFA } from 'modules/fsa2/machine/FSAUtils.js';
+import { convertToDFA, invertFSA } from 'modules/fsa2/machine/FSAUtils.js';
 
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 
@@ -10,7 +10,7 @@ class MachineController extends AbstractMachineController
   constructor(module)
   {
     super(module, new FSABuilder());
-    
+
     this.graphController = null;
   }
 
@@ -138,6 +138,19 @@ class MachineController extends AbstractMachineController
     else
     {
       throw new Error("Conversion scheme between \'" + currentMachineType + "\' to \'" + machineType + "\' is not supported");
+    }
+  }
+
+  invertMachine()
+  {
+    const machine = this.getMachineBuilder().getMachine();
+    const result = invertFSA(machine, machine);
+
+    //Update final states
+    for(const state of result.getStates())
+    {
+      const src = state.getSource();
+      src.setNodeAccept(machine.isFinalState(state));
     }
   }
 
