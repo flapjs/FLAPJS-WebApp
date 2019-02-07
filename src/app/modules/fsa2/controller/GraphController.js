@@ -1,6 +1,7 @@
 import AbstractGraphController from 'modules/abstract/AbstractGraphController.js';
 
 import Eventable from 'util/Eventable.js';
+import GraphEdge from 'graph/GraphEdge.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
 import FSAGraphLabeler from 'modules/fsa/graph/FSAGraphLabeler.js';
@@ -17,7 +18,7 @@ const EXPORTERS = [
 ];
 
 const NODE_SPAWN_RADIUS = 64;
-const DEFAULT_AUTO_RENAME = true;
+const DEFAULT_AUTO_RENAME = false;
 const GRAPH_REFRESH_RATE = 30;
 const DELETE_ON_EMPTY = true;
 
@@ -43,8 +44,7 @@ class GraphController extends AbstractGraphController
     this.prevX = 0;
     this.prevY = 0;
 
-
-    this.shouldAutoLabel = false;
+    this.shouldAutoLabel = DEFAULT_AUTO_RENAME;
 
     //The difference between controller events vs graph events is: controller has user-intent
 
@@ -59,8 +59,6 @@ class GraphController extends AbstractGraphController
 
     this.inputController = module.getInputController();
     this.machineController = module.getMachineController();
-
-    this.setAutoRenameNodes(DEFAULT_AUTO_RENAME);
   }
 
   //Override
@@ -166,6 +164,10 @@ class GraphController extends AbstractGraphController
   {
     const prev = this.shouldAutoLabel;
     this.shouldAutoLabel = enable;
+    if (enable && !prev)
+    {
+      this.applyAutoRename();
+    }
   }
 
   shouldAutoRenameNodes()
@@ -186,12 +188,12 @@ class GraphController extends AbstractGraphController
 
   createNode(x, y)
   {
-    const newNodeLabel = this.getGraphLabeler().getDefaultNodeLabel();
-
     if (typeof x === 'undefined') x = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
     if (typeof y === 'undefined') y = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
 
     const node = this.getGraph().createNode(x, y);
+
+    const newNodeLabel = this.getGraphLabeler().getDefaultNodeLabel();
     node.setNodeLabel(newNodeLabel);
 
     this.getModule().captureGraphEvent();
@@ -349,14 +351,22 @@ class GraphController extends AbstractGraphController
     const labelEditor = this.getModule().getApp().getLabelEditorComponent();
     const prevLabel = defaultValue;
     labelEditor.openEditor(target, defaultValue, (target, value) => {
-      if (DELETE_ON_EMPTY && (!value || value.length <= 0))
+      if (DELETE_ON_EMPTY && (!value || value.length <= 0) && target instanceof GraphEdge)
       {
         //Assumes target is GraphEdge
         this._graph.deleteEdge(target);
       }
       else
       {
-        target.setEdgeLabel(value);
+        if (target instanceof GraphEdge)
+        {
+          target.setEdgeLabel(value);
+        }
+        else
+        {
+          target.setNodeLabel(value);
+        }
+
         if (!prevLabel || (prevLabel.length > 0 && value !== prevLabel))
         {
           this.getModule().captureGraphEvent();
@@ -364,7 +374,7 @@ class GraphController extends AbstractGraphController
         if (callback) callback(target, value);
       }
     }, (target) => {
-      if (DELETE_ON_EMPTY && (!prevLabel || prevLabel.length <= 0))
+      if (DELETE_ON_EMPTY && (!prevLabel || prevLabel.length <= 0) && target instanceof GraphEdge)
       {
         //Assumes target is GraphEdge
         this._graph.deleteEdge(target);

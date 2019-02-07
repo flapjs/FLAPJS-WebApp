@@ -41,6 +41,11 @@ class GraphNodeInputHandler extends GraphElementInputHandler
       graphController.toggleNode(target);
       return true;
     }
+    else
+    {
+      //Edit label for selected node
+      graphController.openLabelEditor(target, target.getNodeLabel());
+    }
 
     return false;
   }

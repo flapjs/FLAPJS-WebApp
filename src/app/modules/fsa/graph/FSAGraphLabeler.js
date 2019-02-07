@@ -34,28 +34,41 @@ class FSAGraphLabeler extends AbstractGraphLabeler
   //Override
   getDefaultNodeLabel()
   {
-    const graph = this._graphController.getGraph();
-    const otherNodes = [];
-    let nodeIndex = 0;
-
-    const startNode = graph.getStartNode();
-    if (startNode && startNode.getNodeCustom()) nodeIndex = 1;
-
-    let newNodeLabel = this.getDefaultNodeLabelPrefix() + nodeIndex;
-    while(graph.getNodesByLabel(newNodeLabel, otherNodes).length > 0)
+    if (!this._graphController.shouldAutoRenameNodes())
     {
-      otherNodes.length = 0;
-      ++nodeIndex;
-      newNodeLabel = this.getDefaultNodeLabelPrefix() + nodeIndex;
+      return this.getDefaultNodeLabelPrefix();
     }
+    else
+    {
+      const graph = this._graphController.getGraph();
+      const otherNodes = [];
+      let nodeIndex = 0;
 
-    return newNodeLabel;
+      const startNode = graph.getStartNode();
+      if (startNode && startNode.getNodeCustom()) nodeIndex = 1;
+
+      let newNodeLabel = this.getDefaultNodeLabelPrefix() + nodeIndex;
+      while(graph.getNodesByLabel(newNodeLabel, otherNodes).length > 0)
+      {
+        otherNodes.length = 0;
+        ++nodeIndex;
+        newNodeLabel = this.getDefaultNodeLabelPrefix() + nodeIndex;
+      }
+
+      return newNodeLabel;
+    }
   }
 
   //Override
   getDefaultEdgeLabel()
   {
     return "";
+  }
+
+  //Override
+  getNodeLabelFormatter()
+  {
+    return (string) => string || "";
   }
 
   //Override

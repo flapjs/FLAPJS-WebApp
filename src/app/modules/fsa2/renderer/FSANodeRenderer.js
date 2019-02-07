@@ -30,7 +30,7 @@ class FSANodeRenderer extends React.Component
           <circle className="graph-node-inner"
             cx={node.x}
             cy={node.y}
-            r={node.getNodeSize() * 0.8}
+            r={node.getNodeSize() * 0.75}
             fill="none"
 
             stroke="#000000"/>}

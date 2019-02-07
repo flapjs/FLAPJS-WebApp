@@ -33,8 +33,7 @@ class LabelEditorView extends React.Component
     this._targetOnSubmit = onSubmit;
     this._targetOnCancel = onCancel;
 
-    //const formatter = this.props.labeler.getLabelFormatter(target);
-    const formatter = this.props.labeler.getEdgeLabelFormatter();
+    const formatter = this.props.labeler.getLabelFormatter(this._target);
     this.inputComponent.setFormatter(formatter);
 
     this.setState({open: true}, () => {
@@ -60,6 +59,11 @@ class LabelEditorView extends React.Component
   isEditorOpen()
   {
     return this.state.open;
+  }
+
+  getTarget()
+  {
+    return this._target;
   }
 
   onInputSubmit(value)
