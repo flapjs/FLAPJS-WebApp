@@ -62,12 +62,6 @@ class FSAErrorChecker
       {
         switch(warning.name)
         {
-          case ERROR_DUPLICATE_STATE:
-            Notifications.addMessage({
-              text: "Found duplicate nodes of similar names",
-              targets: warning.nodes},
-              "warning", ERROR_MESSAGE_TAG, StateErrorMessage, props, false);
-          break;
           case ERROR_UNREACHABLE_STATE:
             Notifications.addMessage(warning.nodes,
               "warning", ERROR_MESSAGE_TAG, StateUnreachableWarningMessage, props, false);
@@ -79,6 +73,12 @@ class FSAErrorChecker
       {
         switch(error.name)
         {
+          case ERROR_DUPLICATE_STATE:
+            Notifications.addMessage({
+              text: "Found duplicate nodes of similar names",
+              targets: error.nodes},
+              "error", ERROR_MESSAGE_TAG, StateErrorMessage, props, false);
+          break;
           case ERROR_INCOMPLETE_TRANSITION:
             Notifications.addMessage({
               text: I18N.toString("message.error.incomplete"),

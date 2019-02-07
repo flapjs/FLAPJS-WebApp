@@ -121,7 +121,7 @@ class FSABuilder extends AbstractMachineBuilder
 		{
 			if (sharedStates.length > 1)
 			{
-				warnings.push({
+				errors.push({
 					name: ERROR_DUPLICATE_STATE,
 					label: nodeLabel,
 					nodes: sharedStates.map(e => e.getSource())
