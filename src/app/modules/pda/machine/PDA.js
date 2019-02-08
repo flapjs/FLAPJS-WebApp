@@ -87,6 +87,21 @@ export class Transition
     return false;
   }
 
+  getSymbolsByReadPop(read, pop=null, dst=[])
+  {
+    for(const symbol of this._symbols.values())
+    {
+      if (symbol.getReadSymbol() === read)
+      {
+        if (!pop || symbol.getPopSymbol() === pop)
+        {
+          dst.push(symbol);
+        }
+      }
+    }
+    return dst;
+  }
+
   getSymbols() { return this._symbols.values(); }
 
   getHashString()
@@ -289,19 +304,21 @@ class PDA
 
   getStateCount() { return this._states.size; }
 
-  addTransition(from, to, symbol)
+  addTransition(from, to, readSymbol, popSymbol, pushSymbol)
   {
     if (!this.hasState(from)) throw new Error("Trying to add a transition to unknown state with label \'" + state.getStateLabel() + "\'");
     if (!this.hasState(to)) throw new Error("Trying to add a transition to unknown state with label \'" + state.getStateLabel() + "\'");
-    if (!symbol) throw new Error("Cannot add transition for null symbol - use the empty symbol instead");
+    if (!readSymbol) throw new Error("Cannot add transition for null read symbol - use the empty symbol instead");
+    if (!popSymbol) throw new Error("Cannot add transition for null pop symbol - use the empty symbol instead");
+    if (!pushSymbol) throw new Error("Cannot add transition for null push symbol - use the empty symbol instead");
 
     const transitionKey = from.getStateID() + "->" + to.getStateID();
     if (this._transitions.has(transitionKey))
     {
       const transition = this._transitions.get(transitionKey);
-      if (!transition.hasSymbol(symbol))
+      if (!transition.hasSymbol(readSymbol, popSymbol, pushSymbol))
       {
-        transition.addSymbol(symbol);
+        transition.addSymbol(readSymbol, popSymbol, pushSymbol);
       }
       else
       {
@@ -311,11 +328,13 @@ class PDA
     }
     else
     {
-      this._transitions.set(transitionKey, new Transition(from, to, [symbol]));
+      const newTransition = new Transition(from, to);
+      newTransition.addSymbol(readSymbol, popSymbol, pushSymbol);
+      this._transitions.set(transitionKey, newTransition);
     }
 
     //Add to alphabet...
-    this._incrSymbolCount(symbol);
+    this._incrSymbolCount(readSymbol);
     return true;
   }
 
@@ -584,13 +603,13 @@ class PDA
   isFinalState(state) { return this._finalStates.has(state); }
   getFinalStates() { return this._finalStates; }
 
-  doTransition(state, symbol, dst=[])
+  doTransition(state, readSymbol, dst=[])
   {
     if (!state) return dst;
     if (!(state instanceof State)) throw new Error("Invalid state instance type \'" + (typeof state) + "\'");
     if (!this._states.has(state.getStateID())) throw new Error("Unable to find source state with id \'" + state.getStateID() + "\'");
 
-    if (!symbol) symbol = EMPTY_SYMBOL;
+    if (!readSymbol) readSymbol = EMPTY_SYMBOL;
 
     const fromTransitionKey = state.getStateID() + "->";
     for(const key of this._transitions.keys())
@@ -598,21 +617,33 @@ class PDA
       if (key.startsWith(fromTransitionKey))
       {
         const transition = this._transitions.get(key);
-        if (transition.hasSymbol(symbol))
+        const toState = transition.getDestinationState();
+
+        const validSymbols = [];
+        transition.getSymbolsByReadPop(readSymbol, stack[stack.length - 1], validSymbols);
+        transition.getSymbolsByReadPop(readSymbol, EMPTY_SYMBOL, validSymbols);
+        for(const validSymbol of validSymbols)
         {
-          dst.push(transition.getDestinationState());
+          const newStack = stack.slice();
+          const validPop = validSymbol.getPopSymbol();
+          const validPush = validSymbol.getPushSymbol();
+
+          if (validPop !== EMPTY_SYMBOL) newStack.pop();
+          if (validPush !== EMPTY_SYMBOL) newStack.push(validPush);
+
+          dst.push([toState, newStack]);
         }
       }
     }
     return dst;
   }
 
-  doTerminalTransition(state, symbol, dst=[])
+  doTerminalTransition(state, readSymbol, stack, dst=[])
   {
     if (!state) return dst;
     if (!this._states.has(state.getStateID())) throw new Error("Unable to find source state with id \'" + state.getStateID() + "\'");
 
-    if (!symbol) symbol = EMPTY_SYMBOL;
+    if (!readSymbol) readSymbol = EMPTY_SYMBOL;
 
     const fromTransitionKey = state.getStateID() + "->";
     for(const key of this._transitions.keys())
@@ -620,13 +651,37 @@ class PDA
       if (key.startsWith(fromTransitionKey))
       {
         const transition = this._transitions.get(key);
-        if (transition.hasSymbol(symbol))
+        const toState = transition.getDestinationState();
+
+        const validSymbols = [];
+        transition.getSymbolsByReadPop(readSymbol, stack[stack.length - 1], validSymbols);
+        transition.getSymbolsByReadPop(readSymbol, EMPTY_SYMBOL, validSymbols);
+        for(const validSymbol of validSymbols)
         {
-          const toState = transition.getDestinationState();
-          const result = this.doClosureTransition(toState);
+          const newStack = stack.slice();
+          const validPop = validSymbol.getPopSymbol();
+          const validPush = validSymbol.getPushSymbol();
+
+          if (validPop !== EMPTY_SYMBOL) newStack.pop();
+          if (validPush !== EMPTY_SYMBOL) newStack.push(validPush);
+
+          const result = this.doClosureTransition(toState, newStack);
           for(const s of result)
           {
-            if (!dst.includes(s)) dst.push(s);
+            //Checks if dst includes the new destination and stack pair
+            let flag = false;
+            for(const pair of dst)
+            {
+              if (pair[0] === s[0])
+              {
+                if (isEqualStack(pair[1], s[1]))
+                {
+                  flag = true;
+                  break;
+                }
+              }
+            }
+            if (!flag) dst.push(s);
           }
         }
       }
@@ -635,23 +690,46 @@ class PDA
     return dst;
   }
 
-  doClosureTransition(state, dst=[])
+  doClosureTransition(state, stack, dst=[])
   {
     if (!state) return dst;
 
-    dst.push(state);
+    dst.push([state, stack]);
     for(let i = 0; i < dst.length; ++i)
     {
-      const transitions = this.getOutgoingTransitions(dst[i]);
+      const thisPair = dst[i];
+      const thisState = thisPair[0];
+      const thisStack = thisPair[1];
+      const transitions = this.getOutgoingTransitions(thisState);
       for(const transition of transitions)
       {
-        if (transition[SYMBOL_INDEX] === EMPTY_SYMBOL)
+        const readSymbol = transition[READ_SYMBOL_INDEX];
+        const popSymbol = transition[POP_SYMBOL_INDEX];
+        const pushSymbol = transition[PUSH_SYMBOL_INDEX];
+
+        if (readSymbol === EMPTY_SYMBOL &&
+          (popSymbol === thisStack[thisStack.length - 1] ||
+          popSymbol === EMPTY_SYMBOL))
         {
+          const newStack = thisStack.slice();
           const toState = transition[TO_STATE_INDEX];
-          if (!dst.includes(toState))
+          if (popSymbol !== EMPTY_SYMBOL) newStack.pop();
+          if (pushSymbol !== EMPTY_SYMBOL) newStack.push(pushSymbol);
+
+          //Checks if dst includes the new destination and stack pair
+          let flag = false;
+          for(const pair of dst)
           {
-            dst.push(toState);
+            if (pair[0] === toState)
+            {
+              if (isEqualStack(pair[1], newStack))
+              {
+                flag = true;
+                break;
+              }
+            }
           }
+          if (!flag) dst.push([toState, newStack]);
         }
       }
     }
@@ -672,7 +750,13 @@ class PDA
         const symbols = transition.getSymbols();
         for(const symbol of symbols)
         {
-          dst.push([state, symbol, transition.getDestinationState()]);
+          dst.push([
+            state,
+            symbol.getReadSymbol(),
+            transition.getDestinationState(),
+            symbol.getPopSymbol(),
+            symbol.getPushSymbol()
+          ]);
         }
       }
     }
@@ -701,6 +785,22 @@ class PDA
     string += this._startState ? this._startState.getHashString() : "";
     return stringHash(string);
   }
+}
+
+function isEqualStack(stack1, stack2)
+{
+  const temp = [];
+  for(const element of stack1)
+  {
+    temp.push(element);
+  }
+  for(const element of stack2)
+  {
+    const i = temp.indexOf(element);
+    if (i === -1) return false;
+    temp.splice(i, 1);
+  }
+  return temp.length <= 0;
 }
 
 export default PDA;
