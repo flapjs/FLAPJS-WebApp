@@ -1,4 +1,4 @@
-import PDA from 'modules/fsa/machine/PDA.js'
+import PDA from 'modules/pda/machine/PDA.js'
 import { EMPTY } from 'modules/fsa/machine/Symbols.js';
 import { solvePDA, solvePDAbyStep } from './solvePDA.js';
 
@@ -271,7 +271,7 @@ describe("Testing PDA machine: \'8*\'", () => {
   testSolvePDA(machine, "aaaabbbbbb", true);
 });
 
-//machine accept palindroms with odd length
+
 describe("Testing PDA machine: \'9*\'", () => {
   const machine = new PDA();
   const state1 = machine.newState("q1");
@@ -295,5 +295,31 @@ describe("Testing PDA machine: \'9*\'", () => {
   testSolvePDA(machine, "[[]", false);
   testSolvePDA(machine, "[[[]][][]", false);
   testSolvePDA(machine, "[][][][", false);
+
+});
+
+
+describe("Testing PDA machine: \'10*\'", () => {
+  const machine = new PDA();
+  const state1 = machine.newState("q1");
+  const state2 = machine.newState("q2");
+  const state3 = machine.newState("q3");
+  const state4 = machine.newState("q4");
+  machine.newTransition(state1,"0", state1, EMPTY, "0")
+  machine.newTransition(state1,"1", state1,EMPTY,"1");
+  machine.newTransition(state1,EMPTY,state2, EMPTY, EMPTY);
+  machine.newTransition(state2,"0", state2, "1","0")
+  machine.newTransition(state2,"1", state2, "0","1")
+  machine.newTransition(state2,"0",state3, "1", EMPTY);
+  machine.newTransition(state2,"0",state4, "0", EMPTY);
+  machine.setStartState(state1);
+  machine.setFinalState(state3);
+
+  test("machine accepts the empty string since start state is also final", () => {
+    expect(solvePDA(machine, "")).toBe(false);
+  });
+
+  //Test strings
+  testSolvePDA(machine, "010", true);
 
 });

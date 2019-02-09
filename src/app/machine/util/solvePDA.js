@@ -1,4 +1,4 @@
-import PDA from 'modules/fsa/machine/PDA.js'
+import PDA from 'modules/pda/machine/PDA.js'
 import { EMPTY } from 'modules/fsa/machine/Symbols.js'
 
 
