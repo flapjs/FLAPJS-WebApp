@@ -14,9 +14,9 @@ class Regex {
     }
 
     areParenthesisBalanced() {
-        count = 0;
-        expression = getExpression();
-		for (i = 0; i < expression.length; i++) {
+        let count = 0;
+        let expression = this.getExpression();
+		for (let i = 0; i < expression.length; i++) {
 			if (expression.charAt(i) == '(')
 				count++;
 			else if (expression.charAt(i) == ')')
@@ -28,10 +28,10 @@ class Regex {
     }
 
     isExpressionValid() {
-        expression = getExpression();
+        let expression = this.getExpression();
 		if (expression.length == 0)
 			throw new Error("The expression must be nonempty.");
-		if (!areParenthesesBalanced())
+		if (!this.areParenthesisBalanced())
 			throw new Error("The parentheses are unbalanced!");
         switch(expression.charAt(0)) {
             //Only '(' or a symbol can be the first character
@@ -41,18 +41,19 @@ class Regex {
             case CONCAT:
                 throw new Error("Operators are poorly formatted.");
         }
-        for (i = 1; i < expression.length; i++) {
-			currChar = expression.charAt(i);
-			prevChar = expression.charAt(i - 1);
+        for (let i = 1; i < expression.length; i++) {
+			let currChar = expression.charAt(i);
+			let prevChar = expression.charAt(i - 1);
 			switch (currChar) {
     			case UNION:
+                case CONCAT:
                     // UNION can't be the last character
     				if (i == expression.length - 1)
     					throw new UnsupportedOperationException(
     							"Operators are poorly formatted.");
     			case ')':
     			case KLEENE:
-                    // Must be preceded with a symbol 
+                    // Must be preceded with a symbol
     				if (prevChar == '(' || prevChar == UNION || prevChar == CONCAT)
     					throw new Error("Operators are poorly formatted.");
     				break;
@@ -71,20 +72,20 @@ class Regex {
     }
 
     insertConcatSymbols(){
-        result="";
-        expression = getExpression();
-        for(i=0; i < expression.length; i++){
-            currChar = expression.charAt(i);
+        let result="";
+        let expression = this.getExpression();
+        for(let i=0; i < expression.length; i++){
+            let currChar = expression.charAt(i);
             result += currChar;
             if( i + 1 < expression.length){
-                nextChar = expression.charAt(i + 1);
+                let nextChar = expression.charAt(i + 1);
                 if(currChar != '(' && currChar != UNION &&
                     nextChar != ')' && nextChar != UNION && nextChar != KLEENE){
                     result+=CONCAT;
                 }
             }
         }
-        return result;
+        this.setExpression(result);
     }
 
 }

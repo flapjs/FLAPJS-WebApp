@@ -2,12 +2,6 @@ import { EMPTY , CONCAT , UNION , KLEENE } from 'machine/Symbols.js';
 import Regex from 'machine/Regex.js';
 
 class ASTNode {
-    constructor() {
-        this._symbol = EMPTY;
-        this._isTerminal = true;
-        this._parent = null;
-        this._children = [];
-    }
 
     constructor(symbol, isTerminal, parentNode) {
         this._symbol = symbol;
@@ -17,8 +11,9 @@ class ASTNode {
     }
 
     addChild(childNode) {
-        if(hasRoomForChildren()) {
+        if(this.hasRoomForChildren()) {
             this._children.push(childNode);
+            this._isTerminal = false;
         }
         else {
             throw new Error("Trying to add more than 2 children to an ASTNode");
@@ -27,7 +22,7 @@ class ASTNode {
 
     replaceChild(originalChild, newChild) {
         if(this._children.includes(originalChild)) {
-            index = this._children.indexOf(originalChild);
+            let index = this._children.indexOf(originalChild);
             this._children[index] = newChild;
         }
         else {
@@ -44,7 +39,7 @@ class ASTNode {
     }
 
     setTerminal(isTerminal) {
-        this._istTerminal = isTerminal;
+        this._isTerminal = isTerminal;
     }
 
     getSymbol() {
@@ -75,18 +70,19 @@ class RegexParser {
 
     parseRegex(regex) {
         if(regex.isExpressionValid()) {
-            currNode = this.rootNode;
-            openParenStack = [];
-            expression = regex.getExpression();
+            let currNode = this.rootNode;
+            let openParenStack = [];
+            let expression = regex.getExpression();
 
             for(const char of expression) {
                 switch(char) {
                     case '(':
                         if(!currNode) {
-                            rootNode = currNode = new ASTNode('(', false, null);
+                            currNode = new ASTNode('(', false, null);
+                            this.rootNode = currNode;
                         }
                         else {
-                            newNode = new ASTNode('(', false, currNode)
+                            let newNode = new ASTNode('(', false, currNode)
                             currNode.addChild(newNode);
                             currNode = newNode;
                         }
@@ -96,48 +92,67 @@ class RegexParser {
                         currNode = openParenStack.pop();
                         break;
                     case KLEENE:
-                        kleeneNode = new ASTNode(KLEENE, false, originalParent);
-                        makeParentOf(kleeneNode, currNode);
+                        let kleeneNode = new ASTNode(KLEENE, false, currNode.getParent());
+                        this.makeParentOf(kleeneNode, currNode);
                         currNode = kleeneNode;
                         break;
                     case CONCAT:
                         if(!currNode.getParent()) {
-                            concatNode = new ASTNode(CONCAT, false, null);
-                            concatNode.addChild(currNode);
-                            currNode.setParent(concatNode);
+                            let concatNode = new ASTNode(CONCAT, false, null);
+                            this.makeParentOf(concatNode, currNode);
                             currNode = concatNode;
                         }
                         else {
-                            originalParent = currNode.getParent();
-                            parentSym = originalParent.getSymbol();
-                            if(parentSym == UNION) {
-                                concatNode = new ASTNode(CONCAT, false, originalParent);
-                                makeParentOf(concatNode, currNode);
-                                currNode = concatNode;
-                            }
-                            else if (parentSym == CONCAT) {
-                                grandparent = originalParent.getParent();
-                                concatNode = new ASTNode(CONCAT, false, grandparent);
-                                makeParentOf(concatNode, originalParent);
+                            let originalParent = currNode.getParent();
+                            let parentSym = originalParent.getSymbol();
+                            if(parentSym == CONCAT) {
+                                let grandparent = originalParent.getParent();
+                                let concatNode = new ASTNode(CONCAT, false, grandparent);
+                                this.makeParentOf(concatNode, originalParent);
                                 currNode = concatNode;
                             }
                             else {
-                                throw new Error ("Operators of regular expression are poorly formatted");
+                                let concatNode = new ASTNode(CONCAT, false, originalParent);
+                                this.makeParentOf(concatNode, currNode);
+                                currNode = concatNode;
                             }
                         }
-
                         break;
+
                     case UNION:
                         if(!currNode.getParent()) {
-                            unionNode = new ASTNode(UNION, false, null);
-                            unionNode.addChild(currNode);
-                            currNode.setParent(unionNode);
+                            let unionNode = new ASTNode(UNION, false, null);
+                            this.makeParentOf(unionNode, currNode);
                             currNode = unionNode;
                         }
                         else {
-                            originalParent = currNode.getParent();
-                            parentSym = originalParent.getSymbol();
-
+                            let originalParent = currNode.getParent();
+                            let sym = originalParent.getSymbol();
+                            if(sym == '(') {
+                                let unionNode = new ASTNode(UNION, false, originalParent);
+                                this.makeParentOf(unionNode, currNode);
+                                currNode = unionNode;
+                            }
+                            else {
+                                let grandparent = originalParent.getParent();
+                                let unionNode = new ASTNode(UNION, false, grandparent);
+                                this.makeParentOf(unionNode, originalParent);
+                                currNode = unionNode;
+                            }
+                        }
+                        break;
+                    case ' ':
+                        break;
+                    //For symbols
+                    default:
+                        if(!currNode) {
+                            currNode = new ASTNode(char, true, null);
+                            this.rootNode = currNode;
+                        }
+                        else {
+                            let symbolNode = new ASTNode(char, true, currNode);
+                            currNode.addChild(symbolNode);
+                            currNode = symbolNode;
                         }
                 }
             }
@@ -145,11 +160,17 @@ class RegexParser {
     }
 
     makeParentOf(newParentNode, targetNode) {
-        originalParent = targetNode.getParent();
+        let originalParent = targetNode.getParent();
         newParentNode.setParent(originalParent);
         newParentNode.addChild(targetNode);
-        originalParent.replaceChild(targetNode, newParentNode);
+        if(originalParent != null) {
+            originalParent.replaceChild(targetNode, newParentNode);
+        }
         targetNode.setParent(newParentNode);
+
+        if(this.rootNode == targetNode) {
+            this.rootNode = newParentNode;
+        }
     }
 }
 
