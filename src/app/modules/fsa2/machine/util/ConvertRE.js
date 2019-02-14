@@ -10,6 +10,7 @@ import REParser from '../REParser.js';
 // Construction of NFA is done using Thompson's algorithm
 export function convertToNFA(re)
 {
+  re.insertConcatSymbols();
 	const parser = new REParser();
 	parser.parseRegex(re);
 	const nfa = ASTtoNFA(parser.rootNode);
@@ -32,7 +33,7 @@ function ASTtoNFA(astNode)
 	case UNION:
 		return or(ASTtoNFA(astNode._children[0]), ASTtoNFA(astNode._children[1]));
 	case '(':
-		return ASTtoNFA(astNode._children[0])
+		return ASTtoNFA(astNode._children[0]);
 	default:
 		throw new Error("You've got a weird node in the AST tree with symbol " + astNode.getSymbol());
 	}
@@ -89,7 +90,7 @@ function concat(a, b)
   		result.addTransition(newFromState, newToState, symbol);
     }
 	}
-  
+
   for(const finalState of a.getFinalStates())
   {
     const newFinalState = aStateMap.get(finalState);
