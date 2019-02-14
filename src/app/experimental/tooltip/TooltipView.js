@@ -20,6 +20,13 @@ class TooltipView extends React.Component
     };
   }
 
+  //Override
+  componentWillUnmount()
+  {
+    clearTimeout(this._tooltipTimeout);
+    this._tooltipTimeout = null;
+  }
+
   setTooltipIndex(index)
   {
     this.setState({index: index});
