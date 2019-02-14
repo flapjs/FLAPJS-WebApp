@@ -89,10 +89,12 @@ function concat(a, b)
   		result.addTransition(newFromState, newToState, symbol);
     }
 	}
-
-  const aFinalState = a.getFinalStates()[0];
-  const newFinalState = aStateMap.get(aFinalState);
-  result.addTransition(newFinalState, firstBState, EMPTY_SYMBOL);
+  
+  for(const finalState of a.getFinalStates())
+  {
+    const newFinalState = aStateMap.get(finalState);
+    result.addTransition(newFinalState, firstBState, EMPTY_SYMBOL);
+  }
 
 	const bTransitions = b.getTransitions();
 	for (const transition of bTransitions)
