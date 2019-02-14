@@ -4,15 +4,13 @@ import Style from './StackAlphabetListView.css';
 import IconButton from 'experimental/components/IconButton.js';
 import BoxAddIcon from 'experimental/iconset/BoxAddIcon.js';
 
-import AlphabetListElement from './AlphabetListElement.js';
+import StackAlphabetListElement from './StackAlphabetListElement.js';
 
 class StackAlphabetListView extends React.Component
 {
   constructor(props)
   {
     super(props);
-
-    this.stackAlphabet = [];
 
     this.newSymbolComponent = null;
 
@@ -49,30 +47,28 @@ class StackAlphabetListView extends React.Component
       const machine = machineController.getMachineBuilder().getMachine();
       if (nextSymbol.length > 0)
       {
-        if (this.stackAlphabet.includes(nextSymbol))
+        if (!machine.isStackSymbol(nextSymbol))
         {
           if (symbol)
           {
-            //Rename
-            const i = this.stackAlphabet.indexOf(symbol);
-            this.stackAlphabet[i] = nextSymbol;
+            //None other have the same name. Rename it!
+            machineController.renameStackSymbol(symbol, nextSymbol);
           }
           else
           {
-            //Create
-            this.stackAlphabet.push(nextSymbol);
+            //None other have the same name. Create it!
+            machineController.createStackSymbol(nextSymbol);
           }
         }
         else
         {
-          //Already there, do nothing.
+          //Found something already named that! Ignore!
         }
       }
       else if (symbol)
       {
         //Delete!
-        const i = this.stackAlphabet.indexOf(symbol);
-        this.stackAlphabet.splice(i, 1);
+        machineController.deleteStackSymbol(symbol);
       }
     }
 
@@ -92,23 +88,23 @@ class StackAlphabetListView extends React.Component
       //If there are more than 1 symbols by the same name,
       //OR if the duplicate symbol found is NOT the same symbol
       const machine = machineController.getMachineBuilder().getMachine();
-      if (this.stackAlphabet.includes(symbol) && symbol !== element.props.symbol)
+      if (machine.isStackSymbol(symbol) && symbol !== element.props.symbol)
       {
         throw new Error("Not a valid symbol");
       }
     }
   }
 
-  renderAlphabetList(machine, alphabet)
+  renderStackAlphabetList(machine, alphabet)
   {
     const result = [];
     for(const symbol of alphabet)
     {
       if (!symbol) continue;
 
-      result.push(<AlphabetListElement key={symbol}
+      result.push(<StackAlphabetListElement key={symbol}
         symbol={symbol}
-        used={machine.isUsedSymbol(symbol)}
+        used={machine.isUsedStackSymbol(symbol)}
         onFocus={this.onElementFocus}
         onBlur={this.onElementBlur}
         onChange={this.onElementChange}/>);
@@ -121,15 +117,15 @@ class StackAlphabetListView extends React.Component
   {
     const machineController = this.props.machineController;
     const machine = machineController.getMachineBuilder().getMachine();
-    const alphabet = this.stackAlphabet;
+    const alphabet = machine.getStackAlphabet();
 
     return (
       <div id={this.props.id}
         className={Style.list_container}
         style={this.props.style}>
         <div className={Style.element_list}>
-          {this.renderAlphabetList(machine, alphabet)}
-          <AlphabetListElement
+          {this.renderStackAlphabetList(machine, alphabet)}
+          <StackAlphabetListElement
             ref={ref=>this.newSymbolComponent=ref}
             style={{display: this.state.useNewSymbol ? "block" : "none"}}
             symbol={""}
@@ -138,7 +134,7 @@ class StackAlphabetListView extends React.Component
             onChange={this.onElementChange}/>
         </div>
         <IconButton className={Style.add_button}
-          title="Add Stack Symbol"
+          title="Add Stack"
           onClick={this.onElementAdd}>
           <BoxAddIcon/>
         </IconButton>

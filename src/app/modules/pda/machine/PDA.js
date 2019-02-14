@@ -142,10 +142,12 @@ class PDA
     this._states = new Map();
     //symbol -> symbol use counter
     this._alphabet = new Map();
+    this._stackAlphabet = new Map();
     //transition key (from + to) -> transition object
     this._transitions = new Map();
     this._finalStates = new Set();
     this._customSymbols = new Set();
+    this._customStackSymbols = new Set();
     this._startState = null;
 
     this._errors = [];
@@ -156,38 +158,44 @@ class PDA
    * reflected in both. However, changes to transitions, alphabet, and final
    * states will not propagate.
    */
-  copy(fsa)
+   //FIXME: This is not a valid copy
+  copy(pda)
   {
     //You are already yourself, don't copy nothing.
-    if (fsa === this) return;
+    if (pda === this) return;
 
     //Make room for the copy...
     this.clear();
 
     //Copy state
-    for(const [key, value] of fsa._states.entries())
+    for(const [key, value] of pda._states.entries())
     {
       const result = value.copy();
       this._states.set(key, result);
 
       //Copy start state
-      if (fsa.isStartState(value))
+      if (pda.isStartState(value))
       {
         this._startState = result;
       }
       //Copy final states
-      if (fsa.isFinalState(value))
+      if (pda.isFinalState(value))
       {
         this._finalStates.add(result);
       }
     }
     //Copy alphabet
-    for(const [key, value] of fsa._alphabet.entries())
+    for(const [key, value] of pda._alphabet.entries())
     {
       this._alphabet.set(key, value);
     }
+    //Copy stack alphabet
+    for(const [key, value] of pda._stackAlphabet.entries())
+    {
+      this._stackAlphabet.set(key, value);
+    }
     //Copy transitions
-    for(const [key, value] of fsa._transitions.entries())
+    for(const [key, value] of pda._transitions.entries())
     {
       const result = value.copy();
       result._from = this._states.get(value.getSourceState().getStateID());
@@ -195,13 +203,18 @@ class PDA
       this._transitions.set(key, result);
     }
     //Copy custom symbols
-    for(const symbol of fsa._customSymbols)
+    for(const symbol of pda._customSymbols)
     {
       this._customSymbols.add(symbol);
     }
+    //Copy custom stack symbols
+    for(const symbol of pda._customStackSymbols)
+    {
+      this._customStackSymbols.add(symbol);
+    }
 
     //Copy errors
-    for(const error of fsa._errors)
+    for(const error of pda._errors)
     {
     //WARNING: if the error's store state objects, they need to be redirected to the copies
       this._errors.push(error);
@@ -212,9 +225,11 @@ class PDA
   {
     this._states.clear();
     this._alphabet.clear();
+    this._stackAlphabet.clear();
     this._transitions.clear();
     this._finalStates.clear();
     this._customSymbols.clear();
+    this._customStackSymbols.clear();
     this._startState = null;
 
     this._errors.length = 0;
@@ -335,9 +350,12 @@ class PDA
 
     //Add to alphabet...
     this._incrSymbolCount(readSymbol);
+    this._incrStackSymbolCount(popSymbol);
+    this._incrStackSymbolCount(pushSymbol);
     return true;
   }
 
+  //FIXME: not yet implemented
   removeTransition(from, to, symbol=null)
   {
     const transitionKey = from.getStateID() + "->" + to.getStateID();
@@ -408,6 +426,15 @@ class PDA
     this._alphabet.set(symbol, symbolCount + 1);
   }
 
+  _incrStackSymbolCount(stackSymbol)
+  {
+    //Don't add empty symbol to the stack alphabet
+    if (stackSymbol === EMPTY_SYMBOL) return;
+
+    const symbolCount = this._stackAlphabet.get(stackSymbol) || 0;
+    this._stackAlphabet.set(stackSymbol, symbolCount + 1);
+  }
+
   _decrSymbolCount(symbol)
   {
     if (!this._alphabet.has(symbol)) throw new Error("Unable to find valid transition symbol in alphabet");
@@ -434,6 +461,35 @@ class PDA
     {
       //Still being used by someone...
       this._alphabet.set(symbol, symbolCount - 1);
+    }
+  }
+
+  _decrStackSymbolCount(symbol)
+  {
+    if (!this._stackAlphabet.has(symbol)) throw new Error("Unable to find valid transition symbol in alphabet");
+
+    //Empty symbol is not in the alphabet
+    if (symbol === EMPTY_SYMBOL) return;
+
+    const symbolCount = this._stackAlphabet.get(symbol);
+    //Delete the symbol, since it is no longer used...
+    if (symbolCount <= 1)
+    {
+      if (!this.isCustomStackSymbol(symbol))
+      {
+        //Regular symbols are removed if unused...
+        this._stackAlphabet.delete(symbol);
+      }
+      else
+      {
+        //Custom symbols stay in the alphabet, even if unused...
+        this._stackAlphabet.set(symbol, 0);
+      }
+    }
+    else
+    {
+      //Still being used by someone...
+      this._stackAlphabet.set(symbol, symbolCount - 1);
     }
   }
 
@@ -565,6 +621,80 @@ class PDA
     return this._alphabet.keys();
   }
 
+  /********** STACK ALPHABET **********/
+
+  changeStackSymbol(symbol, newSymbol)
+  {
+    if (symbol === EMPTY_SYMBOL) throw new Error("Cannot change the empty symbol");
+    if (newSymbol === EMPTY_SYMBOL) throw new Error("Cannot change to the empty symbol");
+    if (this._stackAlphabet.has(newSymbol)) throw new Error("Cannot change symbol to another existing symbol");
+
+    throw new Error("Not yet implemented");
+  }
+
+  removeStackSymbol(symbol)
+  {
+    throw new Error("Not yet implemented");
+  }
+
+  setCustomStackSymbol(symbol, custom=true)
+  {
+    if (symbol === EMPTY_SYMBOL) throw new Error("Cannot change the empty symbol as a custom symbol");
+
+    if (custom)
+    {
+      if (!this._customStackSymbols.has(symbol))
+      {
+        this._customStackSymbols.add(symbol);
+
+        //Add symbol to alphabet if missing...
+        if (!this._stackAlphabet.has(symbol)) this._stackAlphabet.set(symbol, 0);
+      }
+    }
+    else
+    {
+      if (this._customStackSymbols.has(symbol))
+      {
+        this._customStackSymbols.delete(symbol);
+
+        //If symbol is unused, delete it
+        if (this._stackAlphabet.has(symbol) && this._stackAlphabet.get(symbol) <= 0) this._stackAlphabet.delete(symbol)
+      }
+    }
+  }
+
+  isCustomStackSymbol(symbol)
+  {
+    return this._customStackSymbols.has(symbol);
+  }
+
+  getCustomStackSymbols()
+  {
+    return this._customStackSymbols;
+  }
+
+  clearCustomStackSymbols()
+  {
+    this._customStackSymbols.clear();
+  }
+
+  isUsedStackSymbol(symbol)
+  {
+    return this._stackAlphabet.has(symbol) && this._stackAlphabet.get(symbol) > 0;
+  }
+
+  isStackSymbol(symbol)
+  {
+    return this._stackAlphabet.has(symbol);
+  }
+
+  getStackAlphabet()
+  {
+    return this._stackAlphabet.keys();
+  }
+
+  /********** OTHER **********/
+
   setStartState(state)
   {
     const stateID = state.getStateID();
@@ -603,7 +733,7 @@ class PDA
   isFinalState(state) { return this._finalStates.has(state); }
   getFinalStates() { return this._finalStates; }
 
-  doTransition(state, readSymbol, dst=[])
+  doTransition(state, readSymbol, stack, dst=[])
   {
     if (!state) return dst;
     if (!(state instanceof State)) throw new Error("Invalid state instance type \'" + (typeof state) + "\'");

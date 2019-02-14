@@ -2,18 +2,16 @@ import AbstractGraphController from 'modules/abstract/AbstractGraphController.js
 
 import Eventable from 'util/Eventable.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
-import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
-import FSAGraphLabeler from 'modules/fsa/graph/FSAGraphLabeler.js';
-import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
+import PDAGraph from 'modules/pda/graph/PDAGraph.js';
+import PDAGraphLabeler from 'modules/pda/graph/PDAGraphLabeler.js';
+import * as PDAGraphParser from 'modules/pda/graph/PDAGraphParser.js';
 
 import GraphChangeHandler from 'experimental/GraphChangeHandler.js';
 
-import FSAGraphExporter from './exporter/FSAGraphExporter.js';
-import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
+import PDAGraphExporter from './exporter/PDAGraphExporter.js';
 
 const EXPORTERS = [
-  new FSAGraphExporter(),
-  new JFLAPGraphExporter()
+  new PDAGraphExporter()
 ];
 
 const NODE_SPAWN_RADIUS = 64;
@@ -25,7 +23,7 @@ class GraphController extends AbstractGraphController
 {
   constructor(module)
   {
-    super(module, new FSAGraph(), new FSAGraphLabeler(), FSAGraphParser);
+    super(module, new PDAGraph(), new PDAGraphLabeler(), PDAGraphParser);
 
     this.inputController = null;
     this.machineController = null;

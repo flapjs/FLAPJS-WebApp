@@ -1,11 +1,11 @@
 import React from 'react';
-import './FSAGraphRenderer.css';
+import './PDAGraphRenderer.css';
 
-import FSANodeRenderer from './FSANodeRenderer.js';
-import FSAEdgeRenderer from './FSAEdgeRenderer.js';
+import PDANodeRenderer from './PDANodeRenderer.js';
+import PDAEdgeRenderer from './PDAEdgeRenderer.js';
 import InitialMarkerRenderer from './InitialMarkerRenderer.js';
 
-class FSAGraphRenderer extends React.Component
+class PDAGraphRenderer extends React.Component
 {
   constructor(props)
   {
@@ -23,8 +23,8 @@ class FSAGraphRenderer extends React.Component
 
     return (
       <g>
-        {graph.getNodes().map((e, i) => <FSANodeRenderer key={e.getGraphElementID() || i} node={e}/>)}
-        {graph.getEdges().map((e, i) => <FSAEdgeRenderer key={e.getGraphElementID() || i} edge={e}/>)}
+        {graph.getNodes().map((e, i) => <PDANodeRenderer key={e.getGraphElementID() || i} node={e}/>)}
+        {graph.getEdges().map((e, i) => <PDAEdgeRenderer key={e.getGraphElementID() || i} edge={e}/>)}
 
         {/* Initial marker and ghost */}
         { graph.getStartNode() && (inputController.ghostInitialMarker == null ?
@@ -35,4 +35,4 @@ class FSAGraphRenderer extends React.Component
   }
 }
 
-export default FSAGraphRenderer;
+export default PDAGraphRenderer;

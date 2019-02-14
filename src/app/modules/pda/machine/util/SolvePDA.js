@@ -13,9 +13,9 @@ export function solvePDA(pda, input)
   //(index refers to the "level" of computation)
   cachedStates.push({state: startState, stack: [], index: 0});
   //...and any state defined similarly by closure
-  for (const relatedState of pda.doClosureTransition(startState, []))
+  for (const relatedStateAndStack of pda.doClosureTransition(startState, []))
   {
-    cachedStates.push({state: relatedState[0] ,stack : relatedState[1], index: 0});
+    cachedStates.push({state: relatedStateAndStack[0], stack : relatedStateAndStack[1], index: 0});
   }
 
   //The next symbol to compute...
@@ -45,7 +45,7 @@ export function solvePDA(pda, input)
 //TODO: When an empty transition occurs, it does a closure transition.
 //The closure chain will be stored as a group
 //Any future transitions must not re-enter the group
-export function solvePDAbyStep(pda, symbol, cachedStates, cachedSymbols)
+export function solvePDAByStep(pda, symbol, cachedStates, cachedSymbols)
 {
   //initialize variables
   let state = null;

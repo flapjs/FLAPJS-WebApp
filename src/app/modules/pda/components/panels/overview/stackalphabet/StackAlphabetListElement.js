@@ -1,10 +1,10 @@
 import React from 'react';
-import Style from './AlphabetListElement.css';
+import Style from './StackAlphabetListElement.css';
 
 const SUBMIT_KEY_CODE = "Enter";
 const CANCEL_KEY_CODE = "Escape";
 
-class AlphabetListElement extends React.Component
+class StackAlphabetListElement extends React.Component
 {
   constructor(props)
   {
@@ -136,4 +136,4 @@ class AlphabetListElement extends React.Component
   }
 }
 
-export default AlphabetListElement;
+export default StackAlphabetListElement;

@@ -3,7 +3,7 @@ import React from 'react';
 import SelectionBoxRenderer from 'experimental/renderer/SelectionBoxRenderer.js';
 import HighlightRenderer from 'experimental/renderer/HighlightRenderer.js';
 
-class FSAGraphOverlayRenderer extends React.Component
+class PDAGraphOverlayRenderer extends React.Component
 {
   constructor(props)
   {
@@ -65,4 +65,4 @@ class FSAGraphOverlayRenderer extends React.Component
   }
 }
 
-export default FSAGraphOverlayRenderer;
+export default PDAGraphOverlayRenderer;

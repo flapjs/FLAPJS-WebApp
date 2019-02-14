@@ -1,6 +1,6 @@
 import React from 'react';
 
-class FSANodeRenderer extends React.Component
+class PDANodeRenderer extends React.Component
 {
   constructor(props)
   {
@@ -51,4 +51,4 @@ class FSANodeRenderer extends React.Component
   }
 }
 
-export default FSANodeRenderer;
+export default PDANodeRenderer;

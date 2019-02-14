@@ -1,11 +1,11 @@
 import AbstractGraphExporter from 'modules/abstract/exporter/AbstractGraphExporter.js';
 
-import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
+import { JSON as JSONGraphParser } from 'modules/pda/graph/PDAGraphParser.js';
 import { downloadText } from 'util/Downloader.js';
 
 import JSONFileIcon from 'experimental/iconset/flat/JSONFileIcon.js';
 
-class FSAGraphExporter extends AbstractGraphExporter
+class PDAGraphExporter extends AbstractGraphExporter
 {
   constructor() { super(); }
 
@@ -22,8 +22,6 @@ class FSAGraphExporter extends AbstractGraphExporter
     const machineData = data.machineData;
     const machineName = machineData.name;
     if (machineName) machineController.setMachineName(machineName);
-    const machineType = machineData.type;
-    if (machineType) machineController.setMachineType(machineType);
     const customSymbols = machineData.symbols;
     if (customSymbols && Array.isArray(customSymbols))
     {
@@ -56,7 +54,6 @@ class FSAGraphExporter extends AbstractGraphExporter
     dst["graphData"] = graphData;
     dst["machineData"] = {
       name: machineController.getMachineName(),
-      type: machineController.getMachineType(),
       symbols: machineController.getCustomSymbols(),
       statePrefix: graphController.getGraphLabeler().getDefaultNodeLabelPrefix()
     };
@@ -184,4 +181,4 @@ class FSAGraphExporter extends AbstractGraphExporter
   }
 }
 
-export default FSAGraphExporter;
+export default PDAGraphExporter;

@@ -1,7 +1,6 @@
 import AbstractMachineController from 'modules/abstract/AbstractMachineController.js';
 
-import FSABuilder from 'modules/fsa2/machine/FSABuilder.js';
-import { convertToDFA } from 'modules/fsa2/machine/FSAUtils.js';
+import PDABuilder from 'modules/pda/machine/PDABuilder.js';
 
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 
@@ -9,7 +8,7 @@ class MachineController extends AbstractMachineController
 {
   constructor(module)
   {
-    super(module, new FSABuilder());
+    super(module, new PDABuilder());
 
     this.machineName = null;
 
@@ -36,16 +35,6 @@ class MachineController extends AbstractMachineController
     super.update(module);
   }
 
-  getMachineType()
-  {
-    return this._machineBuilder.getMachine().isDeterministic() ? "DFA" : "NFA";
-  }
-
-  setMachineType(machineType)
-  {
-    this._machineBuilder.getMachine().setDeterministic(machineType === 'DFA');
-  }
-
   getMachineName()
   {
     return this.getModule().getApp().getSession().getProjectName();
@@ -59,15 +48,6 @@ class MachineController extends AbstractMachineController
   renameMachine(machineName)
   {
     this.setMachineName(machineName);
-  }
-
-  changeMachineTo(machineType)
-  {
-    const prev = this.getMachineType();
-    if (prev != machineType)
-    {
-      this.setMachineType(machineType);
-    }
   }
 
   getFirstGraphNodeByLabel(graph, label)
@@ -118,29 +98,6 @@ class MachineController extends AbstractMachineController
 
     //Auto layout graph
     GraphLayout.applyLayout(graph);
-  }
-
-  convertMachineTo(machineType)
-  {
-    const currentMachineType = this.getMachineType();
-
-    //Already converted machine...
-    if (currentMachineType === machineType) return;
-
-    if (machineType == "DFA" && currentMachineType == "NFA")
-    {
-      const result = convertToDFA(this.getMachineBuilder().getMachine());
-      this.setGraphToMachine(this.graphController.getGraph(), result);
-      this.setMachineType(machineType);
-    }
-    else if (machineType == "NFA" && currentMachineType == "DFA")
-    {
-      this.changeMachineTo(machineType);
-    }
-    else
-    {
-      throw new Error("Conversion scheme between \'" + currentMachineType + "\' to \'" + machineType + "\' is not supported");
-    }
   }
 
   getUnreachableNodes()

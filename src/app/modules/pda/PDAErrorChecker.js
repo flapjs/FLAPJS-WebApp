@@ -1,19 +1,15 @@
 import Notifications from 'system/notification/Notifications.js';
 import TransitionErrorMessage from './notifications/TransitionErrorMessage.js';
 import StateUnreachableWarningMessage from './notifications/StateUnreachableWarningMessage.js';
-import StateMissingTransitionErrorMessage from './notifications/StateMissingTransitionErrorMessage.js';
 import StateErrorMessage from './notifications/StateErrorMessage.js';
 
 import { ERROR_UNREACHABLE_STATE,
   ERROR_DUPLICATE_STATE,
-  ERROR_INCOMPLETE_TRANSITION,
-  ERROR_DUPLICATE_TRANSITION,
-  ERROR_MISSING_TRANSITION,
-  ERROR_EMPTY_TRANSITION } from './machine/FSABuilder.js';
+  ERROR_INCOMPLETE_TRANSITION } from './machine/PDABuilder.js';
 
-const ERROR_MESSAGE_TAG = "fsa_build_error";
+const ERROR_MESSAGE_TAG = "pda_build_error";
 
-class FSAErrorChecker
+class PDAErrorChecker
 {
   constructor(graphController, machineController)
   {
@@ -85,28 +81,10 @@ class FSAErrorChecker
               targets: error.edges
             }, "error", ERROR_MESSAGE_TAG, TransitionErrorMessage, props, false);
           break;
-          case ERROR_DUPLICATE_TRANSITION:
-            Notifications.addMessage({
-              text: I18N.toString("message.error.dupe"),
-              targets: error.edges},
-              "error", ERROR_MESSAGE_TAG, TransitionErrorMessage, props, false);
-          break;
-          case ERROR_MISSING_TRANSITION:
-            Notifications.addMessage({
-              targets: [error.node],
-              symbol: error.symbols
-            }, "error", ERROR_MESSAGE_TAG, StateMissingTransitionErrorMessage, props, false);
-          break;
-          case ERROR_EMPTY_TRANSITION:
-            Notifications.addMessage({
-              text: I18N.toString("message.error.empty"),
-              targets: error.edges},
-              "error", ERROR_MESSAGE_TAG, TransitionErrorMessage, props, false);
-          break;
         }
       }
     }
   }
 }
 
-export default FSAErrorChecker;
+export default PDAErrorChecker;

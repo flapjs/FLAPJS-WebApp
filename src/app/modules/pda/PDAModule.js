@@ -4,9 +4,9 @@ import InputController from './controller/InputController.js';
 import GraphController from './controller/GraphController.js';
 import MachineController from './controller/MachineController.js';
 
-import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
-import FSAGraphOverlayRenderer from './renderer/FSAGraphOverlayRenderer.js';
-import FSALabelEditorRenderer from './renderer/FSALabelEditorRenderer.js';
+import PDAGraphRenderer from './renderer/PDAGraphRenderer.js';
+import PDAGraphOverlayRenderer from './renderer/PDAGraphOverlayRenderer.js';
+import PDALabelEditorRenderer from './renderer/PDALabelEditorRenderer.js';
 
 import AboutPanel from './components/panels/about/AboutPanel.js';
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
@@ -16,7 +16,7 @@ import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 import Notifications from 'system/notification/Notifications.js';
 import SafeGraphEventHandler from 'graph/SafeGraphEventHandler.js';
 import StringTester from './tester/StringTester.js';
-import FSAErrorChecker from './FSAErrorChecker.js';
+import PDAErrorChecker from './PDAErrorChecker.js';
 
 const MODULE_NAME = "pda";
 const MODULE_VERSION = "0.0.1";
@@ -46,7 +46,7 @@ class PDAModule extends AbstractModule
     this._machineController = new MachineController(this);
 
     this._undoManager = app.getUndoManager();
-    this._errorChecker = new FSAErrorChecker(this._graphController, this._machineController);
+    this._errorChecker = new PDAErrorChecker(this._graphController, this._machineController);
     this._tester = new StringTester();
   }
 
@@ -78,11 +78,11 @@ class PDAModule extends AbstractModule
     switch(renderLayer)
     {
       case "graph":
-        return FSAGraphRenderer;
+        return PDAGraphRenderer;
       case "graphoverlay":
-        return FSAGraphOverlayRenderer;
+        return PDAGraphOverlayRenderer;
       case "labeleditor":
-        return FSALabelEditorRenderer;
+        return PDALabelEditorRenderer;
     }
     return null;
   }

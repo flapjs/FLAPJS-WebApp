@@ -1,13 +1,13 @@
 import React from 'react';
-import Style from './FSALabelEditorRenderer.css';
+import Style from './PDALabelEditorRenderer.css';
 
 import PatternInputButton from 'system/patterninput/PatternInputButton.js';
-import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
+import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/pda/graph/PDAEdge.js';
 
 const RECOMMENDED_SYMBOLS = ["0", "1"];
 const DEFAULT_SYMBOLS = [EMPTY_CHAR];
 
-class FSALabelEditorRenderer extends React.Component
+class PDALabelEditorRenderer extends React.Component
 {
   constructor(props)
   {
@@ -53,4 +53,4 @@ class FSALabelEditorRenderer extends React.Component
   }
 }
 
-export default FSALabelEditorRenderer;
+export default PDALabelEditorRenderer;

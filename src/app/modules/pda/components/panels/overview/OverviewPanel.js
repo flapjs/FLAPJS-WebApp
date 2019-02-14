@@ -9,10 +9,7 @@ import PanelSwitch from 'experimental/panels/PanelSwitch.js';
 import StateListView from './states/StateListView.js';
 import AlphabetListView from './alphabet/AlphabetListView.js';
 import StackAlphabetListView from './stackalphabet/StackAlphabetListView.js';
-import TransitionChartView from './transitions/TransitionChartView.js';
-import TransitionTableView from './transitions/TransitionTableView.js';
 import AutoStateLabelView from './AutoStateLabelView.js';
-
 
 class OverviewPanel extends React.Component
 {
@@ -73,15 +70,6 @@ class OverviewPanel extends React.Component
         </PanelSection>
         <PanelSection title={"Stack Alphabet"} initial={true} full={drawerFull}>
           <StackAlphabetListView machineController={machineController}/>
-        </PanelSection>
-
-        <PanelDivider/>
-
-        <PanelSection title={"Transition Chart"} full={drawerFull} disabled={graphController.getGraph().getEdgeCount() <= 0}>
-          <TransitionChartView machineController={machineController}/>
-        </PanelSection>
-        <PanelSection title={"Transition Table"} full={drawerFull} disabled={graphController.getGraph().getNodeCount() <= 0}>
-          <TransitionTableView machineController={machineController}/>
         </PanelSection>
 
         <PanelDivider/>

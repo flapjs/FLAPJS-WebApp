@@ -1,6 +1,6 @@
 import Eventable from 'util/Eventable.js';
 
-import { solveFSAByStep } from 'modules/fsa2/machine/FSAUtils.js';
+import { solvePDAByStep } from 'modules/pda/machine/PDAUtils.js';
 
 import TapeContext from './TapeContext.js';
 
@@ -203,9 +203,9 @@ class StringTester
         cachedSymbols = [];
 
         const startState = machine.getStartState();
-        for (const currentState of machine.doClosureTransition(startState))
+        for (const relatedStateAndStack of machine.doClosureTransition(startState, []))
         {
-          cachedStates.push({state: currentState, index: 0});
+          cachedStates.push({state: relatedStateAndStack[0], stack: relatedStateAndStack[1], index: 0});
         }
       }
       else
@@ -216,13 +216,13 @@ class StringTester
 
         //Do the remaining steps...
         const nextSymbol = this._testString[this._testIndex - 1];
-        solveFSAByStep(machine, nextSymbol, cachedStates, cachedSymbols);
+        solvePDAByStep(machine, nextSymbol, cachedStates, cachedSymbols);
       }
 
       //Do one last step for result...
       if (isResult)
       {
-        this._cachedResult = solveFSAByStep(machine, null, cachedStates, cachedSymbols);
+        this._cachedResult = solvePDAByStep(machine, null, cachedStates, cachedSymbols);
       }
 
       //Store current step...

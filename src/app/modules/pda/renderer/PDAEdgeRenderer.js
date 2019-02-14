@@ -7,7 +7,7 @@ const GRAPH_EDGE_LABEL_STYLE_NAME = "graph-edge-label";
 const ARROW_WIDTH = 10;
 const SIXTH_PI = Math.PI / 6;
 
-class FSAEdgeRenderer extends React.Component
+class PDAEdgeRenderer extends React.Component
 {
   constructor(props)
   {
@@ -49,7 +49,7 @@ class FSAEdgeRenderer extends React.Component
     }
 
     //Draw multiple labels
-    const labels = edge.getEdgeSymbolsFromLabel();
+    const labels = edge.getEdgeLinesFromLabel();
     let dy = 0;
 
     const cx = (center && center.x || 0);
@@ -96,4 +96,4 @@ class FSAEdgeRenderer extends React.Component
   }
 }
 
-export default FSAEdgeRenderer;
+export default PDAEdgeRenderer;
