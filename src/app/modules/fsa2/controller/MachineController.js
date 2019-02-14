@@ -1,5 +1,7 @@
 import AbstractMachineController from 'modules/abstract/AbstractMachineController.js';
 
+import {EMPTY_SYMBOL} from 'modules/fsa2/machine/FSA.js';
+import {EMPTY_CHAR, SYMBOL_SEPARATOR} from 'modules/fsa/graph/FSAEdge.js';
 import FSABuilder from 'modules/fsa2/machine/FSABuilder.js';
 import { convertToDFA, invertDFA } from 'modules/fsa2/machine/FSAUtils.js';
 
@@ -85,34 +87,46 @@ class MachineController extends AbstractMachineController
   {
     graph.clear();
 
+    if (machine.getStateCount() <= 0) return;
+
     //Add all states
+    let stateMap = new Map();
     let node;
     for(const state of machine.getStates())
     {
       node = graph.createNode(0, 0);
-      node.setNodeLabel(state);
-      if (machine.isFinalState(state))
-      {
-        node.setNodeAccept(true);
-      }
+      node.setNodeLabel(state.getStateLabel());
+      if (machine.isFinalState(state)) node.setNodeAccept(true);
+      stateMap.set(state, node);
     }
 
     //Add all transitions
     let edge, from, to, read, labels, flag;
     for(let transition of machine.getTransitions())
     {
-      from = this.getFirstGraphNodeByLabel(graph, transition[0]);
-      read = transition[1];
-      to = this.getFirstGraphNodeByLabel(graph, transition[2]);
+      from = stateMap.get(transition.getSourceState());
+      to = stateMap.get(transition.getDestinationState());
+      read = [];
+      for(const symbol of transition.getSymbols())
+      {
+        if (symbol === EMPTY_SYMBOL)
+        {
+          read.push(EMPTY_CHAR);
+        }
+        else
+        {
+          read.push(symbol);
+        }
+      }
       edge = graph.createEdge(from, to);
-      edge.setEdgeLabel(read);
+      edge.setEdgeLabel(read.join(SYMBOL_SEPARATOR));
       const formattedEdge = graph.formatEdge(edge);
       if (edge != formattedEdge) graph.deleteEdge(edge);
     }
 
     //Set start state
     const startState = machine.getStartState();
-    graph.setStartNode(this.getFirstGraphNodeByLabel(graph, startState));
+    graph.setStartNode(stateMap.get(startState));
 
     //Auto layout graph
     GraphLayout.applyLayout(graph);

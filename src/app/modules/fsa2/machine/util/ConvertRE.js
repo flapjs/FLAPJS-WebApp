@@ -4,17 +4,16 @@ import {EMPTY,
 	UNION,
 	KLEENE} from '../RE.js';
 
-const SRC = 0;
-const SYMBOL = 1;
-const DST = 2;
+import REParser from '../REParser.js';
 
 // Return NFA representation of the input regular expression
 // Construction of NFA is done using Thompson's algorithm
 export function convertToNFA(re)
 {
-	const parser = new RegexParser();
+	const parser = new REParser();
 	parser.parseRegex(re);
-	return ASTtoNFA(parser.rootNode);
+	const nfa = ASTtoNFA(parser.rootNode);
+  return nfa;
 }
 
 function ASTtoNFA(astNode)
@@ -82,9 +81,13 @@ function concat(a, b)
 	const aTransitions = a.getTransitions();
 	for (const transition of aTransitions)
 	{
-    const newFromState = aStateMap.get(transition[SRC]);
-    const newToState = aStateMap.get(transition[DST]);
-		result.addTransition(newFromState, newToState, transition[SYMBOL]);
+    const newFromState = aStateMap.get(transition.getSourceState());
+    const newToState = aStateMap.get(transition.getDestinationState());
+    if (newFromState === null || newToState === null) throw new Error("Unable to find state endpoints for transition");
+    for(const symbol of transition.getSymbols())
+    {
+  		result.addTransition(newFromState, newToState, symbol);
+    }
 	}
 
   const aFinalState = a.getFinalStates()[0];
@@ -94,9 +97,13 @@ function concat(a, b)
 	const bTransitions = b.getTransitions();
 	for (const transition of bTransitions)
 	{
-    const newFromState = bStateMap.get(transition[SRC]);
-    const newToState = bStateMap.get(transition[DST]);
-		result.addTransition(newFromState, newToState, transition[SYMBOL]);
+    const newFromState = bStateMap.get(transition.getSourceState());
+    const newToState = bStateMap.get(transition.getDestinationState());
+    if (newFromState === null || newToState === null) throw new Error("Unable to find state endpoints for transition");
+    for(const symbol of transition.getSymbols())
+    {
+  		result.addTransition(newFromState, newToState, symbol);
+    }
 	}
 
 	result.setStartState(firstAState);
@@ -129,14 +136,18 @@ function kleene(a)
   const aTransitions = a.getTransitions();
 	for (const transition of aTransitions)
 	{
-    const newFromState = aStateMap.get(transition[SRC]);
-    const newToState = aStateMap.get(transition[DST]);
-		result.addTransition(newFromState, newToState, transition[SYMBOL]);
+    const newFromState = stateMap.get(transition.getSourceState());
+    const newToState = stateMap.get(transition.getDestinationState());
+    if (newFromState === null || newToState === null) throw new Error("Unable to find state endpoints for transition");
+    for(const symbol of transition.getSymbols())
+    {
+  		result.addTransition(newFromState, newToState, symbol);
+    }
 	}
 
 	result.addTransition(lastAState, lastState, EMPTY_SYMBOL);
 	result.addTransition(lastAState, firstAState, EMPTY_SYMBOL);
-	result.addTransition(firstState, lastState, EMPTY);
+	result.addTransition(firstState, lastState, EMPTY_SYMBOL);
 
 	result.setStartState(firstState);
 	result.setFinalState(lastState);
@@ -179,9 +190,13 @@ function or(a, b)
   const aTransitions = a.getTransitions();
 	for (const transition of aTransitions)
 	{
-    const newFromState = aStateMap.get(transition[SRC]);
-    const newToState = aStateMap.get(transition[DST]);
-    result.addTransition(newFromState, newToState, transition[SYMBOL]);
+    const newFromState = aStateMap.get(transition.getSourceState());
+    const newToState = aStateMap.get(transition.getDestinationState());
+    if (newFromState === null || newToState === null) throw new Error("Unable to find state endpoints for transition");
+    for(const symbol of transition.getSymbols())
+    {
+  		result.addTransition(newFromState, newToState, symbol);
+    }
 	}
 	result.addTransition(lastAState, lastState, EMPTY_SYMBOL);
 
@@ -190,9 +205,13 @@ function or(a, b)
   const bTransitions = b.getTransitions();
 	for (const transition of bTransitions)
 	{
-    const newFromState = bStateMap.get(transition[SRC]);
-    const newToState = bStateMap.get(transition[DST]);
-    result.addTransition(newFromState, newToState, transition[SYMBOL]);
+    const newFromState = bStateMap.get(transition.getSourceState());
+    const newToState = bStateMap.get(transition.getDestinationState());
+    if (newFromState === null || newToState === null) throw new Error("Unable to find state endpoints for transition");
+    for(const symbol of transition.getSymbols())
+    {
+  		result.addTransition(newFromState, newToState, symbol);
+    }
 	}
 	result.addTransition(lastBState, lastState, EMPTY_SYMBOL);
 

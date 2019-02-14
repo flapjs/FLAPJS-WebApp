@@ -8,9 +8,9 @@ export const KLEENE = "*";
 
 class RE
 {
-  constructor()
+  constructor(expression="")
   {
-    this._expression = "";
+    this._expression = expression;
 
     this._errors = [];
   }
@@ -61,7 +61,7 @@ class RE
     {
       this._errors.push(e);
     }
-    
+
     return false;
   }
   isValid() { return this._errors.length == 0; }
@@ -103,7 +103,7 @@ class RE
               case CONCAT:
                   // UNION can't be the last character
   				if (i == expression.length - 1)
-  					throw new UnsupportedOperationException(
+  					throw new Error(
   							"Operators are poorly formatted.");
   			case ')':
   			case KLEENE:
