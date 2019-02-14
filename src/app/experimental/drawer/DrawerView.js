@@ -35,7 +35,8 @@ class DrawerView extends React.Component
     this.state = {
       open: false,
       tabIndex: 0,
-      soloClass: null
+      soloClass: null,
+      viewportColor: null
     };
 
     //When drawer is currently changing size intentfully
@@ -141,6 +142,16 @@ class DrawerView extends React.Component
   isCurrentTab(tabIndex)
   {
     return this.state.tabIndex === tabIndex;
+  }
+
+  setViewportColor(color)
+  {
+    this.state.viewportColor = color;
+  }
+
+  getViewportColor()
+  {
+    return this.state.viewportColor;
   }
 
   setDrawerSoloClass(soloClass, callback=null)
@@ -330,6 +341,12 @@ class DrawerView extends React.Component
     //Used to handle sideways logic
     this._sideways = shouldDrawerBarSideways;
 
+    let viewportStyle = {};
+    if (this.state.viewportColor !== null)
+    {
+      viewportStyle['outlineColor'] = this.state.viewportColor;
+    }
+
     return (
       <div ref={ref=>this.ref=ref}
       id={this.props.id}
@@ -337,7 +354,7 @@ class DrawerView extends React.Component
         (isDrawerSideBottom ? " column " : "") +
         (" " + this.props.className)}
       style={this.props.style}>
-        <div className={Style.app_viewport}>
+        <div className={Style.app_viewport} style={viewportStyle}>
           {this.props.children}
         </div>
         <div ref={ref=>this.drawerElement=ref}

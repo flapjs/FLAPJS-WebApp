@@ -299,6 +299,14 @@ class InputController extends AbstractInputController
   setTrashMode(enabled)
   {
     this._trashMode = enabled;
+    if (enabled)
+    {
+      this._module.getApp()._drawer.setViewportColor("var(--color-viewport-error)");
+    }
+    else
+    {
+      this._module.getApp()._drawer.setViewportColor(null);
+    }
   }
 
   isTrashMode()

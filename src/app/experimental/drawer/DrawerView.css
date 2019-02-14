@@ -28,8 +28,10 @@
 
   background: var(--color-viewport-back);
   color: var(--color-viewport-text);
-  outline: 10px dashed var(--color-viewport-outline);
-  outline-offset: -30px;
+  outline: 1em dashed var(--color-viewport-outline);
+  outline-offset: -2em;
+
+  transition: outline-color 0.1s ease;
 }
 /********* APP DRAWER *********/
 :local(.app_drawer) {
