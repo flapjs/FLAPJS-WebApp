@@ -26,7 +26,7 @@ export function solvePDA(pda, input)
   while(cachedStates.length > 0)
   {
     symbol = input.next().value;
-    if (solvePDAbyStep(pda, symbol, cachedStates, cachedSymbols))
+    if (solvePDAByStep(pda, symbol, cachedStates, cachedSymbols))
     {
       return true;
     }

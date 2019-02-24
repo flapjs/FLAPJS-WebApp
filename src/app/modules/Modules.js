@@ -30,36 +30,42 @@ Modules['pda'] = {
 Modules['tm'] = {
   name: "Turing Machine",
   version: "1.0.0",
+  disabled: true,
   fetch: function(callback) { throw new Error("Module not yet implemented. Sorry :("); }
 };
 
 Modules['dfs'] = {
   name: "Depth-First Search",
   version: "1.0.0",
+  disabled: true,
   fetch: function(callback) { throw new Error("Module not yet implemented. Sorry :("); }
 };
 
 Modules['hlsm'] = {
   name: "High Level State Machine",
   version: "1.0.0",
+  disabled: true,
   fetch: function(callback) { throw new Error("Module not yet implemented. Sorry :("); }
 };
 
 Modules['rbt'] = {
   name: "Red-Black Tree",
   version: "1.0.0",
+  disabled: true,
   fetch: function(callback) { throw new Error("Module not yet implemented. Sorry :("); }
 };
 
 Modules['mealy'] = {
   name: "Mealy Machine",
   version: "1.0.0",
+  disabled: true,
   fetch: function(callback) { throw new Error("Module not yet implemented. Sorry :("); }
 };
 
 Modules['moore'] = {
   name: "Moore Machine",
   version: "1.0.0",
+  disabled: true,
   fetch: function(callback) { throw new Error("Module not yet implemented. Sorry :("); }
 };
 

@@ -148,7 +148,7 @@ class OptionPanel extends React.Component
               const mod = Modules[e];
               return (
                 <option key={e} value={e}
-                  disabled={!mod['experimental']}>
+                  disabled={!mod['experimental'] || mod['disabled']}>
                   {mod.name + " (" + mod.version + ")"}
                 </option>
               );
