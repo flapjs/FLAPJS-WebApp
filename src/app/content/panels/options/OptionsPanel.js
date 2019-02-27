@@ -351,7 +351,7 @@ class OptionsPanel extends React.Component
           {Object.keys(Modules).map(e => {
             const mod = Modules[e];
             return <option key={e} value={e}
-              disabled={mod['experimental']}>
+              disabled={mod['experimental'] || mod['disabled']}>
               {mod.name + " (" + mod.version + ")"}
             </option>
           })}

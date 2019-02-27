@@ -30,7 +30,7 @@ class GraphNodeRenderer extends React.Component
           fill={fill}
           stroke={stroke}/>
 
-        //Label
+        {/*Label*/}
         <text className={GRAPH_NODE_LABEL_STYLE_NAME}
           x={node.x} y={node.y + 4}
           pointerEvents="none"

@@ -7,6 +7,11 @@ const GRAPH_EDGE_LABEL_STYLE_NAME = "graph-edge-label";
 const ARROW_WIDTH = 10;
 const SIXTH_PI = Math.PI / 6;
 
+export const ARROW_UNDIRECTED = "undirected";
+export const ARROW_DIRECTED = "directed";
+export const ARROW_REDIRECTED = "redirected";
+export const ARROW_BIDIRECTED = "bidirected";
+
 class GraphEdgeRenderer extends React.Component
 {
   constructor(props)
@@ -18,6 +23,7 @@ class GraphEdgeRenderer extends React.Component
   render()
   {
     const stroke = this.props.stroke || "#000000";
+    const arrow = this.props.arrow || ARROW_UNDIRECTED;
 
     const edge = this.props.edge;
     const start = edge.getStartPoint();
@@ -26,9 +32,30 @@ class GraphEdgeRenderer extends React.Component
     const label = edge.getEdgeLabel();
     const edgeDir = edge.getEdgeDirection();
 
-    //Straight line
-    let arrowAngle = Math.atan2(start.x - end.x, start.y - end.y) + Math.PI;
-    let quadLine = "L " + end.x + " " + end.y;
+    //Calculate curved lines...
+    let arrowAngle;
+    let quadLine;
+    let flipLabel;
+    if (this.props.quadratic && edge.isQuadratic())
+    {
+      const quad = edge.getQuadratic();
+      const quadCoords = edge.getQuadraticAsCoords();
+
+      //Quadratic curve
+      //center = (midpoint + the quadratic offset) + the quadratic offset
+      const cx = center.x + quadCoords.x;
+      const cy = center.y + quadCoords.y;
+      arrowAngle = Math.atan2(cx - end.x, cy - end.y) + Math.PI;
+      quadLine = "Q " + cx + " " + cy + " " + end.x + " " + end.y;
+      flipLabel = quadCoords.y > 0;
+    }
+    else
+    {
+      //Straight line
+      arrowAngle = Math.atan2(start.x - end.x, start.y - end.y) + Math.PI;
+      quadLine = "L " + end.x + " " + end.y;
+      flipLabel = false;
+    }
 
     //Draw multiple labels
     const labels = label ? label.split('\n') : [];
@@ -37,20 +64,55 @@ class GraphEdgeRenderer extends React.Component
     const cx = (center && center.x || 0);
     const cy = (center && center.y || 0);
 
+    let arrowHead;
+    switch(arrow)
+    {
+      case ARROW_DIRECTED:
+        arrowHead = "M " +
+          (end.x - (ARROW_WIDTH * Math.sin(arrowAngle - SIXTH_PI))) + " " +
+          (end.y - (ARROW_WIDTH * Math.cos(arrowAngle - SIXTH_PI))) + " " +
+          "L " + end.x + " " + end.y + " " +
+          "L " +
+          (end.x - (ARROW_WIDTH * Math.sin(arrowAngle + SIXTH_PI))) + " " +
+          (end.y - (ARROW_WIDTH * Math.cos(arrowAngle + SIXTH_PI)));
+        break;
+      case ARROW_REDIRECTED:
+        arrowHead = "M " +
+          (start.x + (ARROW_WIDTH * Math.sin(arrowAngle - SIXTH_PI))) + " " +
+          (start.y + (ARROW_WIDTH * Math.cos(arrowAngle - SIXTH_PI))) + " " +
+          "L " + start.x + " " + start.y + " " +
+          "L " +
+          (start.x + (ARROW_WIDTH * Math.sin(arrowAngle + SIXTH_PI))) + " " +
+          (start.y + (ARROW_WIDTH * Math.cos(arrowAngle + SIXTH_PI)));
+        break;
+      case ARROW_BIDIRECTED:
+        arrowHead = "M " +
+          (start.x + (ARROW_WIDTH * Math.sin(arrowAngle - SIXTH_PI))) + " " +
+          (start.y + (ARROW_WIDTH * Math.cos(arrowAngle - SIXTH_PI))) + " " +
+          "L " + start.x + " " + start.y + " " +
+          "L " +
+          (start.x + (ARROW_WIDTH * Math.sin(arrowAngle + SIXTH_PI))) + " " +
+          (start.y + (ARROW_WIDTH * Math.cos(arrowAngle + SIXTH_PI))) + " " +
+          "M " +
+          (end.x - (ARROW_WIDTH * Math.sin(arrowAngle - SIXTH_PI))) + " " +
+          (end.y - (ARROW_WIDTH * Math.cos(arrowAngle - SIXTH_PI))) + " " +
+          "L " + end.x + " " + end.y + " " +
+          "L " +
+          (end.x - (ARROW_WIDTH * Math.sin(arrowAngle + SIXTH_PI))) + " " +
+          (end.y - (ARROW_WIDTH * Math.cos(arrowAngle + SIXTH_PI)));
+        break;
+      case ARROW_UNDIRECTED:
+      default:
+        arrowHead = "";
+        break;
+    }
+
     return (
       <g className={GRAPH_EDGE_CONTAINER_STYLE_NAME}>
         //Draw lines
-        <path className={GRAPH_EDGE_BODY_STYLE_NAME} id={"edge:" + edge.getGraphElementID()}
-          d={
-            "M " + start.x + " " + start.y + " " +
-            quadLine + " " +
-            "M " +
-              (end.x - (ARROW_WIDTH * Math.sin(arrowAngle - SIXTH_PI))) + " " +
-              (end.y - (ARROW_WIDTH * Math.cos(arrowAngle - SIXTH_PI))) + " " +
-            "L " + end.x + " " + end.y + " " +
-            "L " +
-              (end.x - (ARROW_WIDTH * Math.sin(arrowAngle + SIXTH_PI))) + " " +
-              (end.y - (ARROW_WIDTH * Math.cos(arrowAngle + SIXTH_PI)))}
+        <path id={"edge:" + edge.getGraphElementID()}
+          className={GRAPH_EDGE_BODY_STYLE_NAME}
+          d={"M " + start.x + " " + start.y + " " + quadLine + " " + arrowHead}
           fill="none"
 
           stroke={stroke}/>
@@ -64,7 +126,7 @@ class GraphEdgeRenderer extends React.Component
             return <text
               key={str + "." + i}
               className={GRAPH_EDGE_LABEL_STYLE_NAME}
-              transform={"translate(0, " + yy + ")"}
+              transform={"translate(0, " + yy + ")" + (flipLabel ? " scale(-1, -1)" : "")}
               alignmentBaseline="central"
               pointerEvents="none"
               style={{userSelect: "none"}}
