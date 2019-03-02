@@ -26,22 +26,6 @@ class HotKeyManager
     this.onKeyUp = this.onKeyUp.bind(this);
   }
 
-  initialize()
-  {
-    window.addEventListener('keydown', this.onKeyDown);
-    window.addEventListener('keyup', this.onKeyUp);
-
-    this._enabled = true;
-  }
-
-  destroy()
-  {
-    this._enabled = false;
-
-    window.removeEventListener('keydown', this.onKeyDown);
-    window.removeEventListener('keyup', this.onKeyUp);
-  }
-
   registerHotKey(name, keys, callback)
   {
     if (!Array.isArray(keys)) throw new Error("Must be an array of key codes");
@@ -73,7 +57,9 @@ class HotKeyManager
       callback: callback
     };
 
-    this._hotkeys.push(result);
+    this._hotkeys.unshift(result);
+
+    return this;
   }
 
   //HACK: Cause hotkey manager does not allow 'control' hotkeys. This is the exception.
@@ -90,6 +76,26 @@ class HotKeyManager
       shiftKey: false,
       callback: callback
     };
+
+    return this;
+  }
+
+  //Override
+  onSessionStart(session)
+  {
+    window.addEventListener('keydown', this.onKeyDown);
+    window.addEventListener('keyup', this.onKeyUp);
+
+    this._enabled = true;
+  }
+
+  //Override
+  onSessionStop(session)
+  {
+    this._enabled = false;
+
+    window.removeEventListener('keydown', this.onKeyDown);
+    window.removeEventListener('keyup', this.onKeyUp);
   }
 
   setEnabled(enabled)

@@ -37,7 +37,9 @@ class OptionPanel extends React.Component
 
   onChangeTheme(e)
   {
-    const opts = this.props.app.getStyleOpts();
+    const session = this.props.session;
+    const app = session.getApp();
+    const opts = app.getStyleOpts();
     const prevTheme = this.state.theme;
     const theme = e.target.value;
     if (prevTheme === theme) return;
@@ -62,8 +64,9 @@ class OptionPanel extends React.Component
   //Override
   render()
   {
-    const module = this.props.currentModule;
-    const opts = this.props.app.getStyleOpts();
+    const session = this.props.session;
+    const currentModule = session.getCurrentModule();
+    const opts = session.getApp().getStyleOpts();
 
     return (
       <div id={this.props.id}
@@ -141,7 +144,7 @@ class OptionPanel extends React.Component
           <PanelSection title="Module">
             <select id="options-experimental-modules"
               className="panel-select"
-              value={this.props.currentModule.getModuleName()}
+              value={currentModule.getModuleName()}
               onChange={this.onChangeModule}
               disabled={!ENABLE_MODULES}>
             {Object.keys(Modules).map(e => {

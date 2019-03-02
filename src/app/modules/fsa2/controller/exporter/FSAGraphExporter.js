@@ -21,7 +21,7 @@ class FSAGraphExporter extends AbstractGraphExporter
     //HACK: this should be calculated elsewhere
     const machineData = data.machineData;
     const machineName = machineData.name;
-    if (machineName) machineController.setMachineName(machineName);
+    if (machineName) module.getApp().getSession().setProjectName(machineName);
     const machineType = machineData.type;
     if (machineType) machineController.setMachineType(machineType);
     const customSymbols = machineData.symbols;
@@ -55,7 +55,7 @@ class FSAGraphExporter extends AbstractGraphExporter
     };
     dst["graphData"] = graphData;
     dst["machineData"] = {
-      name: machineController.getMachineName(),
+      name: module.getApp().getSession().getProjectName(),
       type: machineController.getMachineType(),
       symbols: machineController.getCustomSymbols(),
       statePrefix: graphController.getGraphLabeler().getDefaultNodeLabelPrefix()
@@ -111,10 +111,7 @@ class FSAGraphExporter extends AbstractGraphExporter
 
           this.fromJSON(jsonData, module);
 
-          if (machineController)
-          {
-            machineController.setMachineName(name);
-          }
+          module.getApp().getSession().setProjectName(name);
 
           resolve();
         }

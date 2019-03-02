@@ -14,7 +14,8 @@ class TapePane extends React.Component
   //Override
   componentDidMount()
   {
-    const currentModule = this.props.currentModule;
+    const session = this.props.session;
+    const currentModule = session.getCurrentModule();
     const inputController = currentModule.getInputController();
 
     inputController.setDisabled(true);
@@ -23,7 +24,8 @@ class TapePane extends React.Component
   //Override
   componentWillUnmount()
   {
-    const currentModule = this.props.currentModule;
+    const session = this.props.session;
+    const currentModule = session.getCurrentModule();
     const inputController = currentModule.getInputController();
 
     inputController.setDisabled(false);
@@ -32,8 +34,10 @@ class TapePane extends React.Component
   //Override
   render()
   {
-    const app = this.props.app;
-    const currentModule = this.props.currentModule;
+    const session = this.props.session;
+    const currentModule = session.getCurrentModule();
+    const app = session.getApp();
+
     const viewport = this.props.viewport;
     const tester = currentModule._tester;
     const inputController = currentModule.getInputController();

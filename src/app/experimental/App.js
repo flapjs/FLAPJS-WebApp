@@ -13,9 +13,7 @@ import LabelEditorView from 'experimental/editor/LabelEditorView.js';
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
 import LanguagePanel from 'experimental/menus/language/LanguagePanel.js';
-
 import EditPane from 'experimental/EditPane.js';
-import TapePane from 'experimental/TapePane.js';
 
 import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU } from 'experimental/toolbar/ToolbarButton.js';
 import ToolbarDivider from 'experimental/toolbar/ToolbarDivider.js';
@@ -35,19 +33,23 @@ import AppSaver from 'experimental/AppSaver.js';
 import ColorSaver from 'experimental/ColorSaver.js';
 
 import IconButton from 'experimental/components/IconButton.js';
-import HotKeyManager, {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'experimental/hotkey/HotKeyManager.js';
-import HotKeyView from 'experimental/hotkey/HotKeyView.js';
 
 import NotificationView from 'experimental/notification/NotificationView.js';
 import Notifications from 'system/notification/Notifications.js';
 
 import InputAdapter from 'system/inputadapter/InputAdapter.js';
-import UndoManager from 'system/undomanager/UndoManager.js';
 import LocalSave from 'system/localsave/LocalSave.js';
 import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
 
 import Session from 'session/Session.js';
 import ExportManager from 'manager/ExportManager.js';
+import DrawerManager from 'manager/DrawerManager.js';
+import MenuManager from 'manager/MenuManager.js';
+import ViewportManager from 'manager/ViewportManager.js';
+import HotKeyManager from 'manager/hotkey/HotKeyManager.js';
+import HotKeyView from 'manager/hotkey/HotKeyView.js';
+import UndoManager from 'manager/undo/UndoManager.js';
+
 import Module from 'modules/fsa2/FSAModule.js';
 
 const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
@@ -76,25 +78,25 @@ class App extends React.Component
       .setMaxScale(MAX_SCALE)
       .setOffsetDamping(SMOOTH_OFFSET_DAMPING);
 
-    this._undoManager = new UndoManager();
-
     this._styleOpts = new StyleOptionRegistry();
     this._colorSaver = new ColorSaver(this._styleOpts);
 
     this._saver = new AppSaver(this);
 
+    this._undoManager = new UndoManager();
     this._hotKeyManager = new HotKeyManager();
-    this._hotKeyManager.registerAltHotKey("Show Hints", () => { IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL });
-    
     this._exportManager = new ExportManager(this);
-    this._session = new Session(this, props.moduleClass || Module)
-      .addListener(this._exportManager);
+    this._drawerManager = new DrawerManager();
+    this._menuManager = new MenuManager();
+    this._viewportManager = new ViewportManager();
 
-    this._hotKeyManager.registerHotKey("Export to PNG", [CTRL_KEY, 'KeyP'], () => {console.log("Export!")});
-    this._hotKeyManager.registerHotKey("Save as JSON", [CTRL_KEY, 'KeyS'], () => {console.log("Save!")});
-    this._hotKeyManager.registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {console.log("New!")});
-    this._hotKeyManager.registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")});
-    this._hotKeyManager.registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
+    this._session = new Session(this, props.moduleClass || Module)
+      .addListener(this._undoManager)
+      .addListener(this._hotKeyManager)
+      .addListener(this._exportManager)
+      .addListener(this._drawerManager)
+      .addListener(this._menuManager)
+      .addListener(this._viewportManager);
 
     //TODO: This is only used to control transitions (do we really need it?)
     this._init = false;
@@ -116,9 +118,19 @@ class App extends React.Component
     const workspaceDOM = this._workspace.ref;
     this._inputAdapter.initialize(workspaceDOM);
 
+    //Default values
+    this._menuManager
+      .addPanelClass(ExportPanel)
+      .addPanelClass(OptionPanel)
+      .addPanelClass(LanguagePanel);
+    this._viewportManager
+      .addViewClass(EditPane);
+    this._hotKeyManager
+      .registerAltHotKey("Show Hints", () => {IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL});
+
+    //Start session
     this._session.start(this.props.moduleClass || Module);
 
-    this._hotKeyManager.initialize();
     this._colorSaver.initialize();
 
     LocalSave.registerHandler(this._saver);
@@ -138,7 +150,6 @@ class App extends React.Component
     LocalSave.unregisterHandler(this._colorSaver);
 
     this._colorSaver.destroy();
-    this._hotKeyManager.destroy();
 
     this._session.stop();
 
@@ -156,13 +167,16 @@ class App extends React.Component
   getWorkspaceComponent() { return this._workspace; }
   getLabelEditorComponent() { return this._labeleditor; }
 
+  getUndoManager() { return this._undoManager; }
+  getHotKeyManager() { return this._hotKeyManager; }
   getExportManager() { return this._exportManager; }
+  getDrawerManager() { return this._drawerManager; }
+  getMenuManager() { return this._menuManager; }
+  getViewportManager() { return this._viewportManager; }
 
   getSession() { return this._session; }
   getCurrentModule() { return this._session.getCurrentModule(); }
   getInputAdapter() { return this._inputAdapter; }
-  getUndoManager() { return this._undoManager; }
-  getHotKeyManager() { return this._hotKeyManager; }
   getStyleOpts() { return this._styleOpts; }
   getSession() { return this._session; }
 
@@ -203,14 +217,20 @@ class App extends React.Component
     const inputActionMode = inputController.isActionMode();
 
     const exportManager = this._exportManager;
+    const drawerManager = this._drawerManager;
+    const menuManager = this._menuManager;
+    const viewportManager = this._viewportManager;
+
+    const drawerPanelClasses = drawerManager.getPanelClasses();
+    const drawerPanelProps = drawerManager.getPanelProps() || {session: session};
+
+    const menuPanelClasses = menuManager.getPanelClasses();
+    const menuPanelProps = menuManager.getPanelProps() || {session: session};
+
+    const viewportViewClasses = viewportManager.getViewClasses();
+    const viewportViewProps = viewportManager.getViewProps() || {currentModule: currentModule, app: this, session: session};
 
     const moduleName = currentModule.getLocalizedModuleName();
-    const modulePanels = currentModule.getModulePanels();
-    const modulePanelProps = {currentModule: currentModule, app: this, session: session};
-    const moduleMenus = currentModule.getModuleMenus().concat([ExportPanel, OptionPanel, LanguagePanel]);
-    const moduleMenuProps = {currentModule: currentModule, app: this, session: session};
-    const moduleViews = currentModule.getModuleViews().concat([EditPane, TapePane]);
-    const moduleViewProps = {currentModule: currentModule, app: this, session: session};
 
     const GRAPH_RENDER_LAYER = "graph";
     const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
@@ -223,8 +243,8 @@ class App extends React.Component
       <div className={Style.app_container}>
 
         <ToolbarView ref={ref=>this._toolbar=ref} className={Style.app_bar}
-          menus={moduleMenus}
-          menuProps={moduleMenuProps}
+          menus={menuPanelClasses}
+          menuProps={menuPanelProps}
           hide={isFullscreen}
           title={moduleName}
           session={session}
@@ -263,8 +283,8 @@ class App extends React.Component
         </ToolbarView>
 
         <DrawerView ref={ref=>this._drawer=ref} className={Style.app_content}
-          panels={modulePanels}
-          panelProps={modulePanelProps}
+          panels={drawerPanelClasses}
+          panelProps={drawerPanelProps}
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
           direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
           hide={isFullscreen}>
@@ -315,8 +335,8 @@ class App extends React.Component
               <HotKeyView hotKeyManager={this._hotKeyManager}/>
 
               <ViewportView ref={ref=>this._viewport=ref}
-                views={moduleViews}
-                viewProps={moduleViewProps}>
+                views={viewportViewClasses}
+                viewProps={viewportViewProps}>
               </ViewportView>
 
             </div>

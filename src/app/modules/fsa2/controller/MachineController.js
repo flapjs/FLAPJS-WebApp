@@ -46,21 +46,6 @@ class MachineController extends AbstractMachineController
     this._machineBuilder.getMachine().setDeterministic(machineType === 'DFA');
   }
 
-  getMachineName()
-  {
-    return this.getModule().getApp().getSession().getProjectName();
-  }
-
-  setMachineName(machineName)
-  {
-    this.getModule().getApp().getSession().setProjectName(machineName);
-  }
-
-  renameMachine(machineName)
-  {
-    this.setMachineName(machineName);
-  }
-
   changeMachineTo(machineType)
   {
     const prev = this.getMachineType();

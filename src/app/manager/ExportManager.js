@@ -60,9 +60,10 @@ class ExportManager
 
   tryExportToFile(exporter=null)
   {
-    const currentModule = this._app.getSession().getCurrentModule();
+    const session = this._app.getSession();
+    const currentModule = session.getCurrentModule();
+    const fileName = session.getProjectName();
     const machineController = currentModule.getMachineController();
-    const fileName = machineController.getMachineName();
     if (!exporter) exporter = this.getDefaultExporter();
     exporter.exportToFile(fileName, currentModule)
   }

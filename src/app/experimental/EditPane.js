@@ -15,8 +15,10 @@ class EditPane extends React.Component
   //Override
   render()
   {
-    const app = this.props.app;
-    const currentModule = this.props.currentModule;
+    const session = this.props.session;
+    const currentModule = session.getCurrentModule();
+    const app = session.getApp();
+    
     const viewport = this.props.viewport;
     const inputController = currentModule.getInputController();
     const graphController = currentModule.getGraphController();

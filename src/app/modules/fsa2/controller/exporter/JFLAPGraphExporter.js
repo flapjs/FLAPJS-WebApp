@@ -37,10 +37,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
 
           //graphController.emit("userImportGraph", graph);
 
-          if (machineController)
-          {
-            machineController.setMachineName(name);
-          }
+          module.getApp().getSession().setProjectName(name);
 
           resolve();
         }

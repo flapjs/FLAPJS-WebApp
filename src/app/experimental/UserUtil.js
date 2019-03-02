@@ -7,7 +7,7 @@ export function userClearGraph(app, graphOnly=false, callback=null)
     if (!graphOnly)
     {
       app.getUndoManager().clear();
-      module.getMachineController().setMachineName(null);
+      app.getSession().setProjectName(null);
     }
     if (callback) callback();
   }

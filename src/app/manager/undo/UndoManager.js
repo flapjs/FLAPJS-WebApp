@@ -8,6 +8,18 @@ class UndoManager
     this.offsetIndex = 0;
   }
 
+  //DuckType(SessionListener)
+  onSessionStart(session)
+  {
+
+  }
+
+  //DuckType(SessionListener)
+  onSessionStop(session)
+  {
+    this.clear();
+  }
+
   clear()
   {
     this.history.length = 0;

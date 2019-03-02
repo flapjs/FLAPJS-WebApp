@@ -26,7 +26,7 @@ class LanguagePanel extends React.Component
   //Override
   render()
   {
-    const module = this.props.currentModule;
+    const session = this.props.session;
 
     return (
       <div id={this.props.id}

@@ -18,6 +18,9 @@ import SafeGraphEventHandler from 'graph/SafeGraphEventHandler.js';
 import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 
+import TapePane from 'experimental/TapePane.js';
+import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'manager/hotkey/HotKeyManager.js';
+
 import FSAGraphExporter from './controller/exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './controller/exporter/JFLAPGraphExporter.js';
 import GraphImageExporter from 'modules/abstract/exporter/GraphImageExporter.js';
@@ -25,18 +28,6 @@ import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG } from 'util/Downloader.js'
 
 const MODULE_NAME = "fsa2";
 const MODULE_VERSION = "0.0.1";
-const MODULE_PANELS = [
-  AboutPanel,
-  OverviewPanel,
-  TestingPanel,
-  AnalysisPanel
-];
-const MODULE_MENUS = [
-
-];
-const MODULE_VIEWS = [
-
-];
 
 class FSAModule extends AbstractModule
 {
@@ -60,6 +51,23 @@ class FSAModule extends AbstractModule
       .addExporter(new GraphImageExporter(FILE_TYPE_PNG))
       .addExporter(new GraphImageExporter(FILE_TYPE_JPG))
       .addExporter(new GraphImageExporter(FILE_TYPE_SVG));
+
+    app.getViewportManager()
+      .addViewClass(TapePane);
+
+    app.getDrawerManager()
+      .setPanelProps({currentModule: this, app: app, session: app.getSession()})
+      .addPanelClass(AboutPanel)
+      .addPanelClass(OverviewPanel)
+      .addPanelClass(TestingPanel)
+      .addPanelClass(AnalysisPanel);
+
+    app.getHotKeyManager()
+      .registerHotKey("Export to PNG", [CTRL_KEY, 'KeyP'], () => {console.log("Export!")})
+      .registerHotKey("Save as JSON", [CTRL_KEY, 'KeyS'], () => {console.log("Save!")})
+      .registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {console.log("New!")})
+      .registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")})
+      .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
   }
 
   //Override
