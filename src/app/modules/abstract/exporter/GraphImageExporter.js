@@ -21,7 +21,6 @@ class GraphImageExporter extends AbstractGraphExporter
   {
     const inputController = currentModule.getInputController();
     const graphController = currentModule.getGraphController();
-    const styleOpts = currentModule.getApp().getStyleOpts();
 
     const viewport = inputController.getInputAdapter().getViewport();
     const offsetX = viewport.getOffsetX();

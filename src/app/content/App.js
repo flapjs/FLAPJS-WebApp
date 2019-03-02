@@ -23,7 +23,7 @@ import Notifications from 'system/notification/Notifications.js';
 import NotificationView from 'system/notification/components/NotificationView.js';
 import UndoManager from 'system/undomanager/UndoManager.js';
 
-import AppSaver from 'experimental/AppSaver.js';
+import AppSaver from './AppSaver.js';
 
 const SMOOTH_OFFSET_DAMPING = 0.4;
 const MIN_SCALE = 0.1;

@@ -1,4 +1,7 @@
 import AbstractGraphController from 'modules/abstract/AbstractGraphController.js';
+import GraphImporter from 'modules/abstract/exporter/GraphImporter.js';
+import GraphImageExporter from 'modules/abstract/exporter/GraphImageExporter.js';
+import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG } from 'util/Downloader.js';
 
 import Eventable from 'util/Eventable.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
@@ -10,6 +13,12 @@ import GraphChangeHandler from 'experimental/GraphChangeHandler.js';
 
 import FSAGraphExporter from 'modules/fsa/exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from 'modules/fsa/exporter/JFLAPGraphExporter.js';
+
+export const DEFAULT_IMAGE_EXPORTERS = [
+  new GraphImageExporter(FILE_TYPE_PNG),
+  new GraphImageExporter(FILE_TYPE_JPG),
+  new GraphImageExporter(FILE_TYPE_SVG)
+];
 
 const EXPORTERS = [
   new FSAGraphExporter(),
@@ -26,8 +35,10 @@ class GraphController extends AbstractGraphController
   {
     super(module, new FSAGraph(), new FSAGraphLabeler(), FSAGraphParser);
 
+    this._importer = new GraphImporter(module);
+
     this._labeler.setGraphController(this);
-    
+
     this.inputController = null;
     this.machineController = null;
     this._graphChangeHandler = new GraphChangeHandler(GRAPH_REFRESH_RATE);
@@ -149,6 +160,20 @@ class GraphController extends AbstractGraphController
 
   //Override
   getGraphExporters() { return EXPORTERS; }
+
+  //TODO: From AbstractModule(but not for experimental)
+  getDefaultGraphExporter()
+  {
+    const exporters = this.getGraphExporters();
+    if (exporters.length > 0) return exporters[0];
+    throw new Error("Missing default graph exporter for module \'" + this.getModule().getModuleName() + "\'");
+  }
+
+  //TODO: From AbstractModule(but not for experimental)
+  getImageExporters() { return DEFAULT_IMAGE_EXPORTERS; }
+
+  //TODO: From AbstractModule(but not for experimental)
+  getGraphImporter() { return this._importer; }
 
   getGraphChangeHandler()
   {
