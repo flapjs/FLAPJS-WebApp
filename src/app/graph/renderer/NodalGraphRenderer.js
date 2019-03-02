@@ -1,7 +1,7 @@
 import React from 'react';
 
 import GraphNodeRenderer from './GraphNodeRenderer.js';
-import GraphEdgeRenderer, {ARROW_DIRECTED} from './GraphEdgeRenderer.js';
+import GraphEdgeRenderer from './GraphEdgeRenderer.js';
 
 import GraphEdge from '../GraphEdge.js';
 import QuadraticEdge from '../QuadraticEdge.js';
@@ -29,9 +29,7 @@ class NodalGraphRenderer extends React.Component
           node={e}/>)}
         {graph.getEdges().map(
           (e, i) => <GraphEdgeRenderer key={e.getGraphElementID() || i}
-          edge={e}
-          quadratic={e instanceof QuadraticEdge}
-          arrow={ARROW_DIRECTED}/>)}
+          edge={e}/>)}
       </g>
     );
   }
