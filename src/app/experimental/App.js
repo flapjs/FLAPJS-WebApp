@@ -47,6 +47,7 @@ import LocalSave from 'system/localsave/LocalSave.js';
 import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
 
 import Session from 'session/Session.js';
+import ExportManager from 'manager/ExportManager.js';
 import Module from 'modules/fsa2/FSAModule.js';
 
 const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
@@ -77,26 +78,26 @@ class App extends React.Component
 
     this._undoManager = new UndoManager();
 
-    this._hotKeyManager = new HotKeyManager();
-    this._hotKeyManager.registerHotKey("Export to PNG", [CTRL_KEY, 'KeyP'], () => {console.log("Export!")});
-    this._hotKeyManager.registerHotKey("Save as JSON", [CTRL_KEY, 'KeyS'], () => {console.log("Save!")});
-    this._hotKeyManager.registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {console.log("New!")});
-    this._hotKeyManager.registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")});
-    this._hotKeyManager.registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
-    this._hotKeyManager.registerAltHotKey("Show Hints", () => { IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL })
-
     this._styleOpts = new StyleOptionRegistry();
     this._colorSaver = new ColorSaver(this._styleOpts);
 
     this._saver = new AppSaver(this);
 
-    this._session = new Session(this);
+    this._hotKeyManager = new HotKeyManager();
+    this._hotKeyManager.registerAltHotKey("Show Hints", () => { IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL });
+    
+    this._exportManager = new ExportManager(this);
+    this._session = new Session(this, props.moduleClass || Module)
+      .addListener(this._exportManager);
+
+    this._hotKeyManager.registerHotKey("Export to PNG", [CTRL_KEY, 'KeyP'], () => {console.log("Export!")});
+    this._hotKeyManager.registerHotKey("Save as JSON", [CTRL_KEY, 'KeyS'], () => {console.log("Save!")});
+    this._hotKeyManager.registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {console.log("New!")});
+    this._hotKeyManager.registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")});
+    this._hotKeyManager.registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
 
     //TODO: This is only used to control transitions (do we really need it?)
     this._init = false;
-
-    const ModuleClass = props.moduleClass || Module;
-    this._module = new ModuleClass(this);
 
     this.state = {
       hide: false
@@ -115,11 +116,9 @@ class App extends React.Component
     const workspaceDOM = this._workspace.ref;
     this._inputAdapter.initialize(workspaceDOM);
 
-    const currentModule = this.getCurrentModule();
-    currentModule.initialize(this);
+    this._session.start(this.props.moduleClass || Module);
 
     this._hotKeyManager.initialize();
-
     this._colorSaver.initialize();
 
     LocalSave.registerHandler(this._saver);
@@ -141,8 +140,7 @@ class App extends React.Component
     this._colorSaver.destroy();
     this._hotKeyManager.destroy();
 
-    const currentModule = this.getCurrentModule();
-    currentModule.destroy(this);
+    this._session.stop();
 
     this._inputAdapter.destroy();
   }
@@ -158,18 +156,10 @@ class App extends React.Component
   getWorkspaceComponent() { return this._workspace; }
   getLabelEditorComponent() { return this._labeleditor; }
 
-  setCurrentModuleClass(ModuleClass)
-  {
-    const prevModule = this.getCurrentModule();
-    prevModule.destroy(this);
+  getExportManager() { return this._exportManager; }
 
-    const currentModule = new ModuleClass(this);
-    this.setState({ module: currentModule }, () => {
-      currentModule.initialize(this);
-    });
-  }
-
-  getCurrentModule() { return this._module; }
+  getSession() { return this._session; }
+  getCurrentModule() { return this._session.getCurrentModule(); }
   getInputAdapter() { return this._inputAdapter; }
   getUndoManager() { return this._undoManager; }
   getHotKeyManager() { return this._hotKeyManager; }
@@ -179,7 +169,7 @@ class App extends React.Component
   //Override
   componentDidUpdate()
   {
-    const currentModule = this._module;
+    const currentModule = this._session.getCurrentModule();
     const inputAdapter = this._inputAdapter;
 
     inputAdapter.update();
@@ -196,7 +186,7 @@ class App extends React.Component
   //Override
   render()
   {
-    const currentModule = this._module;
+    const currentModule = this._session.getCurrentModule();
     const inputAdapter = this._inputAdapter;
 
     const hasSmallWidth = this._mediaQuerySmallWidthList.matches;
@@ -209,17 +199,18 @@ class App extends React.Component
     const inputController = currentModule.getInputController();
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
-    const graphImporter = graphController.getGraphImporter();
     const graphLabeler = graphController.getGraphLabeler();
     const inputActionMode = inputController.isActionMode();
 
+    const exportManager = this._exportManager;
+
     const moduleName = currentModule.getLocalizedModuleName();
     const modulePanels = currentModule.getModulePanels();
-    const modulePanelProps = {currentModule: currentModule, app: this};
+    const modulePanelProps = {currentModule: currentModule, app: this, session: session};
     const moduleMenus = currentModule.getModuleMenus().concat([ExportPanel, OptionPanel, LanguagePanel]);
-    const moduleMenuProps = {currentModule: currentModule, app: this};
+    const moduleMenuProps = {currentModule: currentModule, app: this, session: session};
     const moduleViews = currentModule.getModuleViews().concat([EditPane, TapePane]);
-    const moduleViewProps = {currentModule: currentModule, app: this};
+    const moduleViewProps = {currentModule: currentModule, app: this, session: session};
 
     const GRAPH_RENDER_LAYER = "graph";
     const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
@@ -240,9 +231,9 @@ class App extends React.Component
           onTitleClick={this.onModuleTitleClick}>
           <ToolbarButton title="New" icon={PageEmptyIcon}
             onClick={() => UserUtil.userClearGraph(this, false, () => this._toolbar.closeBar())}/>
-          <ToolbarUploadButton title="Upload" icon={UploadIcon} accept={graphImporter.getImportFileTypes().join(",")}
-            onUpload={file => {
-              graphImporter.importFile(file, currentModule)
+          <ToolbarUploadButton title="Upload" icon={UploadIcon} accept={exportManager.getImportFileTypes().join(",")}
+            onUpload={fileBlob => {
+              exportManager.tryImportFromFile(fileBlob)
                 .catch((e) => {
                   Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
                   console.error(e);

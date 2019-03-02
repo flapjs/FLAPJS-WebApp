@@ -13,18 +13,20 @@ class AppSaver extends AbstractLocalSaver
   //Override
   onLoadSave()
   {
-    const module = this._app.getCurrentModule();
-    const moduleName = module.getModuleName();
+    const app = this._app;
+    const session = app.getSession();
+    const currentModule = session.getCurrentModule();
+    const currentModuleName = currentModule.getModuleName();
 
-    const data = LocalSave.loadFromStorage("graph-" + moduleName);
+    const data = LocalSave.loadFromStorage("graph-" + currentModuleName);
     if (data)
     {
-      const exporter = module.getGraphController().getDefaultGraphExporter();
-      exporter.importFromData(data, module);
+      const exporter = app.getExportManager().getDefaultExporter();
+      exporter.importFromData(data, currentModule);
     }
 
     //HACK: not all modules have this
-    if (module.captureGraphEvent) module.captureGraphEvent();
+    if (currentModule.captureGraphEvent) currentModule.captureGraphEvent();
   }
 
   //Override
@@ -36,12 +38,14 @@ class AppSaver extends AbstractLocalSaver
   //Override
   onAutoSave()
   {
-    const module = this._app.getCurrentModule();
-    const moduleName = module.getModuleName();
+    const app = this._app;
+    const session = app.getSession();
+    const currentModule = session.getCurrentModule();
+    const currentModuleName = currentModule.getModuleName();
 
-    const exporter = module.getGraphController().getDefaultGraphExporter();
-    const data = exporter.exportToData(module);
-    LocalSave.saveToStorage("graph-" + moduleName, data);
+    const exporter = app.getExportManager().getDefaultExporter();
+    const data = exporter.exportToData(currentModule);
+    LocalSave.saveToStorage("graph-" + currentModuleName, data);
   }
 
   getApp()

@@ -18,6 +18,11 @@ import SafeGraphEventHandler from 'graph/SafeGraphEventHandler.js';
 import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 
+import FSAGraphExporter from './controller/exporter/FSAGraphExporter.js';
+import JFLAPGraphExporter from './controller/exporter/JFLAPGraphExporter.js';
+import GraphImageExporter from 'modules/abstract/exporter/GraphImageExporter.js';
+import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG } from 'util/Downloader.js';
+
 const MODULE_NAME = "fsa2";
 const MODULE_VERSION = "0.0.1";
 const MODULE_PANELS = [
@@ -48,6 +53,13 @@ class FSAModule extends AbstractModule
     this._undoManager = app.getUndoManager();
     this._errorChecker = new FSAErrorChecker(this._graphController, this._machineController);
     this._tester = new StringTester();
+
+    app.getExportManager()
+      .addExporter(new FSAGraphExporter())
+      .addExporter(new JFLAPGraphExporter())
+      .addExporter(new GraphImageExporter(FILE_TYPE_PNG))
+      .addExporter(new GraphImageExporter(FILE_TYPE_JPG))
+      .addExporter(new GraphImageExporter(FILE_TYPE_SVG));
   }
 
   //Override

@@ -1,13 +1,47 @@
 class Session
 {
-  constructor(app)
+  constructor(app, ModuleClass)
   {
     this._app = app;
     this._name = I18N.toString("file.untitled");
     this._module = null;
+    this._moduleClass = null;
+
+    this._listeners = [];
+
+    //TODO: this shouldn't live here... (it should be in start())
+    this._moduleClass = ModuleClass;
+    this._module = new ModuleClass(this._app);
   }
 
-  //TODO: not yet used...
+  addListener(listener)
+  {
+    this._listeners.push(listener);
+    return this;
+  }
+
+  start(ModuleClass)
+  {
+    for(const listener of this._listeners)
+    {
+      listener.onSessionStart(this);
+    }
+
+    this._module.initialize(this._app);
+  }
+
+  stop()
+  {
+    for(const listener of this._listeners)
+    {
+      listener.onSessionStop(this);
+    }
+
+    this._module.destroy(this._app);
+    this._moduleClass = null;
+    this._module = null;
+  }
+
   getCurrentModule()
   {
     return this._module;

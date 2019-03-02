@@ -18,12 +18,7 @@ class ExportPanel extends React.Component
       <IconButton key={exporter.getFileType()}
         className={Style.panel_button}
         title={exporter.getLabel()}
-        onClick={() => {
-          const currentModule = this.props.currentModule;
-          const machineController = currentModule.getMachineController();
-          const filename = machineController.getMachineName();
-          exporter.exportToFile(filename, currentModule);
-        }}>
+        onClick={() => this.props.session.getApp().getExportManager().tryExportToFile(exporter)}>
         <IconClass/>
       </IconButton>
     );
@@ -32,10 +27,9 @@ class ExportPanel extends React.Component
   //Override
   render()
   {
-    const module = this.props.currentModule;
-    const graphController = module.getGraphController();
-    const graphExporters = graphController.getGraphExporters();
-    const imageExporters = graphController.getImageExporters();
+    const session = this.props.session;
+    const exportManager = session.getApp().getExportManager();
+    const exporters = exportManager.getExporters();
 
     return (
       <div id={this.props.id}
@@ -46,8 +40,7 @@ class ExportPanel extends React.Component
           <h1>{I18N.toString("component.exporting.title")}</h1>
         </div>
         <div className={Style.panel_content}>
-          {graphExporters.map(e => this.renderExporterButton(e))}
-          {imageExporters.map(e => this.renderExporterButton(e))}
+          {exporters.map(e => this.renderExporterButton(e))}
         </div>
       </div>
     );

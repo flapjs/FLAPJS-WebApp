@@ -9,14 +9,6 @@ import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
 
 import GraphChangeHandler from 'experimental/GraphChangeHandler.js';
 
-import FSAGraphExporter from './exporter/FSAGraphExporter.js';
-import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
-
-const EXPORTERS = [
-  new FSAGraphExporter(),
-  new JFLAPGraphExporter()
-];
-
 const NODE_SPAWN_RADIUS = 64;
 const DEFAULT_AUTO_RENAME = true;
 const GRAPH_REFRESH_RATE = 30;
@@ -74,9 +66,6 @@ class GraphController extends AbstractGraphController
 
     this._graphChangeHandler.update(this._graph);
   }
-
-  //Override
-  getGraphExporters() { return EXPORTERS; }
 
   getGraphChangeHandler()
   {

@@ -1,15 +1,3 @@
-import GraphImporter from './exporter/GraphImporter.js';
-import GraphImageExporter from './exporter/GraphImageExporter.js';
-
-import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG } from 'util/Downloader.js';
-
-export const DEFAULT_GRAPH_EXPORTERS = [];
-export const DEFAULT_IMAGE_EXPORTERS = [
-  new GraphImageExporter(FILE_TYPE_PNG),
-  new GraphImageExporter(FILE_TYPE_JPG),
-  new GraphImageExporter(FILE_TYPE_SVG)
-];
-
 class AbstractGraphController
 {
   constructor(module, graph, labeler, parser)
@@ -21,7 +9,6 @@ class AbstractGraphController
 
     this._module = module;
     this._graph = graph;
-    this._importer = new GraphImporter(module);
     this._labeler = labeler;
     this._parser = parser;
   }
@@ -30,15 +17,6 @@ class AbstractGraphController
   destroy(module) {}
   update(module) {}
 
-  getDefaultGraphExporter()
-  {
-    const exporters = this.getGraphExporters();
-    if (exporters.length > 0) return exporters[0];
-    throw new Error("Missing default graph exporter for module \'" + this.getModule().getModuleName() + "\'");
-  }
-  getImageExporters() { return DEFAULT_IMAGE_EXPORTERS; }
-  getGraphExporters() { return DEFAULT_GRAPH_EXPORTERS; }
-  getGraphImporter() { return this._importer; }
   getGraphParser(type="JSON")
   {
     const parsers = this._parser;
