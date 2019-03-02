@@ -5,26 +5,50 @@ const ENDPOINT_RADIUS_SQU = ENDPOINT_RADIUS * ENDPOINT_RADIUS;
 
 class GraphPicker
 {
-  constructor()
+  constructor(graphController)
   {
-    this.selectionBox = {
-      fromX: 0, fromY: 0,
-      toX: 0, toY: 0,
-      visible: false
-    };
-    this.targets = [];
-
     this.target = null;
     this.targetType = "";
 
     this.initialTarget = null;
     this.initialTargetType = "";
+
+    this._prevX = 0;
+    this._prevY = 0;
   }
 
   setInitialTarget(target, type)
   {
     this.initialTarget = target;
     this.initialTargetType = type;
+  }
+
+  updateHoverTarget(graph, x, y)
+  {
+    if (this._prevX !== x || this._prevY !== y)
+    {
+      this._prevX = x;
+      this._prevY = y;
+
+      //Update target
+      this.updateTarget(graph, x, y);
+
+      //HACK: to make the cursor look like a pointer when targeting
+      if (this.hasTarget())
+      {
+        document.body.style.cursor = "pointer";
+      }
+      else
+      {
+        document.body.style.cursor = "auto";
+      }
+    }
+  }
+
+  updateInitialTarget(graph, x, y)
+  {
+    this.updateTarget(graph, x, y);
+    this.setInitialTarget(this.target, this.targetType);
   }
 
   updateTarget(graph, x, y)
@@ -138,97 +162,11 @@ class GraphPicker
     return null;
   }
 
-  getSelectionBox()
-  {
-    return this.selectionBox;
-  }
-
-  getSelection(graph, forceUpdate=false)
-  {
-    if (forceUpdate)
-    {
-      const box = this.selectionBox;
-      const mx = Math.max(box.toX, box.fromX);
-      const my = Math.max(box.toY, box.fromY);
-      const lx = Math.min(box.toX, box.fromX);
-      const ly = Math.min(box.toY, box.fromY);
-      this.clearSelection();
-      getNodesWithin(graph, lx, ly, mx, my, this.targets);
-    }
-
-    return this.targets;
-  }
-
-  hasSelection()
-  {
-    return this.targets.length > 0;
-  }
-
-  clearSelection()
-  {
-    this.targets.length = 0;
-  }
-
-  isTargetInSelection(target)
-  {
-    return this.targets.includes(target || this.target);
-  }
 
   isTarget(target)
   {
     return this.target == target;
   }
-
-  beginSelection(graph, x, y)
-  {
-    const box = this.selectionBox;
-    box.fromX = box.toX = x;
-    box.fromY = box.toY = y;
-    this.clearSelection();
-
-    box.visible = true;
-  }
-
-  updateSelection(graph, x, y)
-  {
-    const box = this.selectionBox;
-    box.toX = x;
-    box.toY = y;
-    this.getSelection(graph, true);
-  }
-
-  endSelection(graph, x, y)
-  {
-    const box = this.selectionBox;
-    box.toX = x;
-    box.toY = y;
-    this.getSelection(graph, true);
-
-    box.visible = false;
-  }
-
-  isSelecting()
-  {
-    return this.selectionBox.visible;
-  }
-}
-
-function getNodesWithin(graph, x1, y1, x2, y2, dst)
-{
-  const fromX = Math.min(x1, x2);
-  const fromY = Math.min(y1, y2);
-  const toX = Math.max(x1, x2);
-  const toY = Math.max(y1, y2);
-
-  for(const node of graph.getNodes())
-  {
-    if (node.x >= fromX && node.x < toX &&
-        node.y >= fromY && node.y < toY)
-    {
-      dst.push(node);
-    }
-  }
-  return dst;
 }
 
 export default GraphPicker;

@@ -19,6 +19,7 @@ import StringTester from './tester/StringTester.js';
 import PDAErrorChecker from './PDAErrorChecker.js';
 
 const MODULE_NAME = "pda";
+const MODULE_LOCALIZED_NAME = "PDA";
 const MODULE_VERSION = "0.0.1";
 const MODULE_PANELS = [
   AboutPanel,
@@ -32,6 +33,11 @@ const MODULE_MENUS = [
 const MODULE_VIEWS = [
 
 ];
+const MODULE_RENDERERS = {
+  graph: PDAGraphRenderer,
+  graphoverlay: PDAGraphOverlayRenderer,
+  labeleditor: PDALabelEditorRenderer
+};
 
 class PDAModule extends AbstractModule
 {
@@ -73,25 +79,18 @@ class PDAModule extends AbstractModule
   }
 
   //Override
-  getRenderer(renderLayer)
-  {
-    switch(renderLayer)
-    {
-      case "graph":
-        return PDAGraphRenderer;
-      case "graphoverlay":
-        return PDAGraphOverlayRenderer;
-      case "labeleditor":
-        return PDALabelEditorRenderer;
-    }
-    return null;
-  }
-  //Override
   getInputController() { return this._inputController; }
   //Override
   getGraphController() { return this._graphController; }
   //Override
   getMachineController() { return this._machineController; }
+  //Override
+  getRenderer(renderLayer)
+  {
+    return renderLayer in MODULE_RENDERERS ?
+      MODULE_RENDERERS[renderLayer] :
+      null;
+  }
   //Override
   getModulePanels() { return MODULE_PANELS; }
   //Override
@@ -103,7 +102,7 @@ class PDAModule extends AbstractModule
   //Override
   getModuleName() { return MODULE_NAME; }
   //Override
-  getLocalizedModuleName() { return "PDA"; }
+  getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
 }
 
 export default PDAModule;

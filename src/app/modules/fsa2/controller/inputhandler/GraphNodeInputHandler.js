@@ -14,6 +14,7 @@ class GraphNodeInputHandler extends GraphElementInputHandler
   onAction(inputController, graphController, pointer, target)
   {
     const picker = inputController.getPicker();
+    const selectionBox = inputController.getSelectionBox();
 
     //Click to delete node
     if (inputController.isTrashMode())
@@ -23,7 +24,7 @@ class GraphNodeInputHandler extends GraphElementInputHandler
       graphController.prevY = target.y;
 
       //If there exists selected states, delete them all!
-      if (picker.hasSelection())
+      if (selectionBox.hasSelection())
       {
         //Delete all selected nodes
         graphController.deleteSelectedNodes(target);
@@ -85,6 +86,7 @@ class GraphNodeInputHandler extends GraphElementInputHandler
   onDragMove(inputController, graphController, pointer, target)
   {
     const picker = inputController.getPicker();
+    const selectionBox = inputController.getSelectionBox();
     const graph = graphController.getGraph();
     let x = pointer.x;
     let y = pointer.y;
@@ -96,9 +98,9 @@ class GraphNodeInputHandler extends GraphElementInputHandler
       y = Math.round(y / snapSize) * snapSize;
     }
 
-    if (picker.hasSelection())
+    if (selectionBox.hasSelection())
     {
-      graphController.moveMultipleNodesTo(pointer, picker.getSelection(graph), x, y);
+      graphController.moveMultipleNodesTo(pointer, selectionBox.getSelection(graph), x, y);
     }
     else
     {
@@ -111,6 +113,7 @@ class GraphNodeInputHandler extends GraphElementInputHandler
   onDragStop(inputController, graphController, pointer, target)
   {
     const picker = inputController.getPicker();
+    const selectionBox = inputController.getSelectionBox();
     const graph = graphController.getGraph();
     const x = pointer.x;
     const y = pointer.y;
@@ -119,7 +122,7 @@ class GraphNodeInputHandler extends GraphElementInputHandler
     if (inputController.isTrashMode())
     {
       //If there exists selected states, delete them all!
-      if (picker.hasSelection())
+      if (selectionBox.hasSelection())
       {
         graphController.deleteSelectedNodes(target);
       }
@@ -135,11 +138,11 @@ class GraphNodeInputHandler extends GraphElementInputHandler
     else
     {
       //Do nothing, since should have moved to position
-      if (picker.hasSelection())
+      if (selectionBox.hasSelection())
       {
         const dx = x - graphController.prevX;
         const dy = y - graphController.prevY;
-        graphController.onGraphIntentMoveAllNodes(picker.getSelection(graph), dx, dy);
+        graphController.onGraphIntentMoveAllNodes(selectionBox.getSelection(graph), dx, dy);
         //graphController.emit("nodeMoveAll", graph, picker.getSelection(graph), dx, dy);
       }
       else

@@ -27,13 +27,15 @@ class FSAGraphOverlayRenderer extends React.Component
     const machineErrors = machineBuilder.getMachineErrors();
     const machineWarnings = machineBuilder.getMachineWarnings();
     const picker = inputController.getPicker();
-    const selectionBox = picker.getSelectionBox();
+    const selectionBox = inputController.getSelectionBox();
+    const selectionBoundingBox = selectionBox.getSelectionBox();
 
     return (
       <g>
         {/* Selected elements */}
-        { picker.hasSelection() &&
-          picker.getSelection(graph).map((e, i) =>
+        { selectionBox &&
+          selectionBox.hasSelection() &&
+          selectionBox.getSelection(graph).map((e, i) =>
             <HighlightRenderer key={e.getGraphElementID()}
               className={inputController.isTrashMode() ?
                 "highlight-error" :
@@ -41,9 +43,10 @@ class FSAGraphOverlayRenderer extends React.Component
               target={e} type="node"/>) }
 
         {/* Selection box */}
-        <SelectionBoxRenderer visible={selectionBox.visible}
-          fromX={selectionBox.fromX} fromY={selectionBox.fromY}
-          toX={selectionBox.toX} toY={selectionBox.toY}/>
+        { selectionBoundingBox &&
+          <SelectionBoxRenderer visible={selectionBoundingBox.visible}
+            fromX={selectionBoundingBox.fromX} fromY={selectionBoundingBox.fromY}
+            toX={selectionBoundingBox.toX} toY={selectionBoundingBox.toY}/> }
 
         {/* Node test targets */}
         { currentModule._tester.targets && currentModule._tester.targets.map((e, i) => {
@@ -53,8 +56,9 @@ class FSAGraphOverlayRenderer extends React.Component
         })}
 
         {/* Hover markers */}
-        { picker.hasTarget() &&
-          !picker.isTargetInSelection() &&
+        { picker &&
+          picker.hasTarget() &&
+          !selectionBox.isTargetInSelection(picker.target) &&
           <HighlightRenderer className={inputController.isTrashMode() ?
             "highlight-error" :
             "highlight-select"}

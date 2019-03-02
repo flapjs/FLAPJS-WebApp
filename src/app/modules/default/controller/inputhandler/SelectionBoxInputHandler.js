@@ -2,11 +2,11 @@ import InputHandler from './InputHandler.js';
 
 class SelectionBoxInputHandler extends InputHandler
 {
-  constructor(picker)
+  constructor(selectionBox)
   {
     super();
 
-    this._picker = picker;
+    this._selectionBox = selectionBox;
   }
 
   //Override
@@ -21,7 +21,7 @@ class SelectionBoxInputHandler extends InputHandler
     if (!inputController.isMoveMode())
     {
       //Begin selection box...
-      this._picker.beginSelection(graphController.getGraph(), pointer.x, pointer.y);
+      this._selectionBox.beginSelection(graphController.getGraph(), pointer.x, pointer.y);
       return true;
     }
 
@@ -31,10 +31,10 @@ class SelectionBoxInputHandler extends InputHandler
   onDragMove(inputController, graphController, pointer, target)
   {
     //If the selection box is active...
-    if (this._picker.isSelecting())
+    if (this._selectionBox.isSelecting())
     {
       //Update the selection box
-      this._picker.updateSelection(graphController.getGraph(), pointer.x, pointer.y);
+      this._selectionBox.updateSelection(graphController.getGraph(), pointer.x, pointer.y);
       return true;
     }
 
@@ -45,10 +45,10 @@ class SelectionBoxInputHandler extends InputHandler
   onDragStop(inputController, graphController, pointer, target)
   {
     //If was trying to select...
-    if (this._picker.isSelecting())
+    if (this._selectionBox.isSelecting())
     {
       //Stop selecting stuff, fool.
-      this._picker.endSelection(graphController.getGraph(), pointer.x, pointer.y);
+      this._selectionBox.endSelection(graphController.getGraph(), pointer.x, pointer.y);
       return true;
     }
 

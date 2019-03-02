@@ -27,6 +27,14 @@ Modules['pda'] = {
   fetch: function(callback) { import(/* webpackChunkName: "module_pda" */ 'modules/pda/PDAModule.js').then(({ default: _ }) => callback( _ )); }
 };
 
+Modules['re'] = {
+  name: "Regular Expression",
+  version: "1.0.0",
+  experimental: true,
+  disabled: true,
+  fetch: function(callback) { throw new Error("Module not yet implemented. Sorry :("); }
+};
+
 Modules['tm'] = {
   name: "Turing Machine",
   version: "1.0.0",
