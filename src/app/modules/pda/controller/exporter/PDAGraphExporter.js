@@ -1,4 +1,4 @@
-import AbstractGraphExporter from 'modules/abstract/exporter/AbstractGraphExporter.js';
+import AbstractGraphExporter from 'manager/export/AbstractGraphExporter.js';
 
 import { JSON as JSONGraphParser } from 'modules/pda/graph/PDAGraphParser.js';
 import { downloadText } from 'util/Downloader.js';

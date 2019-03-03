@@ -1,4 +1,4 @@
-import AbstractGraphExporter from 'modules/abstract/exporter/AbstractGraphExporter.js';
+import AbstractGraphExporter from './AbstractGraphExporter.js';
 
 import XMLFileIcon from 'icons/flat/XMLIcon.js';
 import { XML as XMLGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';

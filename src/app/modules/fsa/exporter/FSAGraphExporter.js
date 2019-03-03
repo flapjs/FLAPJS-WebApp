@@ -1,4 +1,4 @@
-import AbstractGraphExporter from 'modules/abstract/exporter/AbstractGraphExporter.js';
+import AbstractGraphExporter from './AbstractGraphExporter.js';
 
 import JSONFileIcon from 'icons/flat/JSONIcon.js';
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';

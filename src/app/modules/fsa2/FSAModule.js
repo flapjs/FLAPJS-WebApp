@@ -31,7 +31,7 @@ import {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY} from 'manager/Re
 
 import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
-import GraphImageExporter from 'modules/abstract/exporter/GraphImageExporter.js';
+import GraphImageExporter from './exporter/GraphImageExporter.js';
 import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG } from 'util/Downloader.js';
 
 const MODULE_NAME = "fsa2";

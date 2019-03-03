@@ -1,5 +1,5 @@
 import AbstractGraphController from 'modules/abstract/AbstractGraphController.js';
-import GraphImageExporter from 'modules/abstract/exporter/GraphImageExporter.js';
+import GraphImageExporter from '../exporter/GraphImageExporter.js';
 import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG } from 'util/Downloader.js';
 
 import GraphImporter from './GraphImporter.js';
