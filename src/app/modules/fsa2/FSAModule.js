@@ -8,7 +8,6 @@ import MachineController from './controller/MachineController.js';
 import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
 import FSAGraphOverlayRenderer from './renderer/FSAGraphOverlayRenderer.js';
 import FSALabelEditorRenderer from './renderer/FSALabelEditorRenderer.js';
-import LabelEditorView from 'experimental/editor/LabelEditorView.js';
 
 import AboutPanel from './components/panels/about/AboutPanel.js';
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
@@ -19,6 +18,9 @@ import Notifications from 'system/notification/Notifications.js';
 import SafeGraphEventHandler from 'graph/SafeGraphEventHandler.js';
 import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
+
+import LabelEditorManager from 'manager/labeleditor/LabelEditorManager.js';
+import LabelEditorView from 'manager/labeleditor/LabelEditorView.js';
 
 import ViewportInputHandler from 'modules/abstract/ViewportInputHandler.js';
 
@@ -45,9 +47,12 @@ class FSAModule extends AbstractModule
     this._graphController = new GraphController(this);
     this._machineController = new MachineController(this);
 
-    this._labeleditor = null;
     this._errorChecker = new FSAErrorChecker(this._graphController, this._machineController);
     this._tester = new StringTester();
+
+    this._labelEditorManager = new LabelEditorManager()
+      .setLabelEditorRenderer(FSALabelEditorRenderer)
+      .setLabeler(this._graphController.getGraphLabeler());
 
     app.getInputAdapter()
       .addInputHandler(this._inputController)
@@ -77,26 +82,14 @@ class FSAModule extends AbstractModule
       .registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")})
       .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
 
-    const graphLabeler = this._graphController.getGraphLabeler();
-    const viewport = app.getInputAdapter().getViewport();
-
     app.getRenderManager()
-      .registerRenderer(RENDER_LAYER_WORKSPACE, props => (
+      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
         <>
           {/* Graph objects */
             <FSAGraphRenderer currentModule={this} parent={props.workspace}/>}
           {/* Graph overlays */
             <FSAGraphOverlayRenderer currentModule={this} parent={props.workspace}/>}
         </>
-      ))
-      .registerRenderer(RENDER_LAYER_WORKSPACE_OVERLAY, props => (
-        <LabelEditorView ref={ref=>this._labeleditor=ref}
-          labeler={graphLabeler}
-          viewport={viewport}
-          saveOnExit={true}>
-          {/* LabelEditor objects */
-            <FSALabelEditorRenderer currentModule={this} parent={this._labeleditor}/>}
-        </LabelEditorView>
       ));
 
     app.getUndoManager()
@@ -110,6 +103,8 @@ class FSAModule extends AbstractModule
   {
     super.initialize(app);
 
+    this._labelEditorManager.onSessionStart(app.getSession());
+
     //Notify on create in delete mode
     const tryCreateWhileTrash = () => {
       if (this._inputController.isTrashMode())
@@ -120,7 +115,15 @@ class FSAModule extends AbstractModule
     this._graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
   }
 
-  getLabelEditorComponent() { return this._labeleditor; }
+  //Override
+  destroy(app)
+  {
+    super.destroy(app);
+
+    this._labelEditorManager.onSessionStop(app.getSession());
+  }
+
+  getLabelEditorManager() { return this._labelEditorManager; }
 
   getInputController() { return this._inputController; }
   getMachineController() { return this._machineController; }

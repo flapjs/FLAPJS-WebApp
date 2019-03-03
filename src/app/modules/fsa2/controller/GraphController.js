@@ -337,7 +337,7 @@ class GraphController extends AbstractGraphController
 
   openLabelEditor(target, defaultValue=null, callback=null)
   {
-    const labelEditor = this.getModule().getLabelEditorComponent();
+    const labelEditor = this.getModule().getLabelEditorManager().getLabelEditorComponent();
     const prevLabel = defaultValue;
     labelEditor.openEditor(target, defaultValue, (target, value) => {
       if (DELETE_ON_EMPTY && (!value || value.length <= 0) && target instanceof GraphEdge)

@@ -40,7 +40,7 @@ import LocalSave from 'system/localsave/LocalSave.js';
 import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
 
 import Session from 'session/Session.js';
-import ExportManager from 'manager/ExportManager.js';
+import ExportManager from 'manager/export/ExportManager.js';
 import DrawerManager from 'manager/DrawerManager.js';
 import MenuManager from 'manager/MenuManager.js';
 import ViewportManager from 'manager/ViewportManager.js';
@@ -91,7 +91,7 @@ class App extends React.Component
     this._viewportManager = new ViewportManager();
     this._renderManager = new RenderManager();
 
-    this._session = new Session(this, props.moduleClass || Module)
+    this._session = new Session(this)
       .addListener(this._undoManager)
       .addListener(this._hotKeyManager)
       .addListener(this._exportManager)
@@ -205,7 +205,7 @@ class App extends React.Component
     const inputAdapter = this._inputAdapter;
     const viewport = inputAdapter.getViewport();
     const currentModule = session.getCurrentModule();
-    const moduleName = currentModule.getLocalizedModuleName();
+    const currentModuleLocalizedName = currentModule ? currentModule.getLocalizedModuleName() : null;
 
     const hasSmallWidth = this._mediaQuerySmallWidthList.matches;
     const hasSmallHeight = this._mediaQuerySmallHeightList.matches;
@@ -226,10 +226,10 @@ class App extends React.Component
     const viewportViewProps = viewportManager.getViewProps() || {session: session};
     const defaultExporter = exportManager.getDefaultExporter();
 
-    const WorkspaceRenderer = renderManager.getRendererByLayer(RENDER_LAYER_WORKSPACE);
-    const WorkspaceOverlayRenderer = renderManager.getRendererByLayer(RENDER_LAYER_WORKSPACE_OVERLAY);
-    const ViewportRenderer = renderManager.getRendererByLayer(RENDER_LAYER_VIEWPORT);
-    const ViewportOverlayRenderer = renderManager.getRendererByLayer(RENDER_LAYER_VIEWPORT_OVERLAY);
+    const workspaceRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_WORKSPACE);
+    const workspaceOverlayRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_WORKSPACE_OVERLAY);
+    const viewportRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_VIEWPORT);
+    const viewportOverlayRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_VIEWPORT_OVERLAY);
 
     return (
       <div className={Style.app_container}>
@@ -238,7 +238,7 @@ class App extends React.Component
           menus={menuPanelClasses}
           menuProps={menuPanelProps}
           hide={isFullscreen}
-          title={moduleName}
+          title={currentModuleLocalizedName}
           session={session}
           onTitleClick={this.onModuleTitleClick}>
           <ToolbarButton title="New" icon={PageEmptyIcon}
@@ -299,13 +299,15 @@ class App extends React.Component
 
               <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>
                 {/* RENDER_LAYER_WORKSPACE */
-                  WorkspaceRenderer &&
-                  <WorkspaceRenderer workspace={this._workspace}/>}
+                  workspaceRenderers &&
+                  workspaceRenderers.map((WorkspaceRenderer, i) =>
+                    <WorkspaceRenderer key={currentModuleLocalizedName + ":" + i} workspace={this._workspace}/>)}
               </WorkspaceView>
 
               {/* RENDER_LAYER_WORKSPACE_OVERLAY */
-                WorkspaceOverlayRenderer &&
-                <WorkspaceOverlayRenderer workspace={this._workspace}/>}
+                workspaceOverlayRenderers &&
+                workspaceOverlayRenderers.map((WorkspaceOverlayRenderer, i) =>
+                  <WorkspaceOverlayRenderer key={currentModuleLocalizedName + ":" + i} workspace={this._workspace}/>)}
 
               <NotificationView notificationManager={Notifications}>
               </NotificationView>
@@ -317,13 +319,15 @@ class App extends React.Component
                 views={viewportViewClasses}
                 viewProps={viewportViewProps}>
                 {/* RENDER_LAYER_VIEWPORT */
-                  ViewportRenderer &&
-                  <ViewportRenderer viewport={this._viewport}/>}
+                  viewportRenderers &&
+                  viewportRenderers.map((ViewportRenderer, i) =>
+                    <ViewportRenderer key={currentModuleLocalizedName + ":" + i} viewport={this._viewport}/>)}
               </ViewportView>
 
               {/* RENDER_LAYER_VIEWPORT_OVERLAY */
-                ViewportOverlayRenderer &&
-                <ViewportOverlayRenderer viewport={this._viewport}/>}
+                viewportOverlayRenderers &&
+                viewportOverlayRenderers.map((ViewportOverlayRenderer, i) =>
+                  <ViewportOverlayRenderer key={currentModuleLocalizedName + ":" + i} viewport={this._viewport}/>)}
 
             </div>
           </UploadDropZone>

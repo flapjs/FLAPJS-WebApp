@@ -8,10 +8,6 @@ class Session
     this._moduleClass = null;
 
     this._listeners = [];
-
-    //TODO: this shouldn't live here... (it should be in start())
-    this._moduleClass = ModuleClass;
-    this._module = new ModuleClass(this._app);
   }
 
   addListener(listener)
@@ -22,6 +18,9 @@ class Session
 
   start(ModuleClass)
   {
+    this._moduleClass = ModuleClass;
+    this._module = new ModuleClass(this._app);
+    
     for(const listener of this._listeners)
     {
       listener.onSessionStart(this);

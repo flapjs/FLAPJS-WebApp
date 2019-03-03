@@ -10,9 +10,16 @@ class RenderManager
     this._renderMapping = new Map();
   }
 
-  registerRenderer(layerID, rendererClass)
+  addRenderer(layerID, rendererClass)
   {
-    this._renderMapping.set(layerID, rendererClass);
+    if (this._renderMapping.has(layerID))
+    {
+      this._renderMapping.get(layerID).push(rendererClass);
+    }
+    else
+    {
+      this._renderMapping.set(layerID, [rendererClass]);
+    }
     return this;
   }
 
@@ -28,7 +35,7 @@ class RenderManager
     this._renderMapping.clear();
   }
 
-  getRendererByLayer(layerID)
+  getRenderersByLayer(layerID)
   {
     return this._renderMapping.get(layerID);
   }
