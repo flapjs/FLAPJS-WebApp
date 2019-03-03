@@ -101,9 +101,13 @@ class FSAGraphExporter extends AbstractGraphExporter
         const data = e.target.result;
         const name = filename.substring(0, filename.length - this.getFileType().length - 1);
         const graph = graphController.getGraph();
+        const prevGraphHash = graph.getHashCode(true);
 
         //TODO: this should not be here, this should exist somewhere in graphController
-        module.getApp().getUndoManager().captureEvent();
+        if (!graph.isEmpty())
+        {
+          module.getApp().getUndoManager().captureEvent();
+        }
 
         try
         {
@@ -122,7 +126,11 @@ class FSAGraphExporter extends AbstractGraphExporter
         }
         finally
         {
-          module.getApp().getUndoManager().captureEvent();
+          const nextGraphHash = graph.getHashCode(true);
+          if (prevGraphHash !== nextGraphHash)
+          {
+            module.getApp().getUndoManager().captureEvent();
+          }
         }
       };
 

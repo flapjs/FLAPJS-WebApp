@@ -27,7 +27,10 @@ class NodalGraphModule
 
     app.getDrawerManager()
       .addPanelClass(props => (
-        <PanelContainer title={"Your Average Graph Editor"}>
+        <PanelContainer id={props.id}
+          className={props.className}
+          style={props.style}
+          title={"Your Average Graph Editor"}>
           <p>{"Brought to you with \u2764 by the Flap.js team."}</p>
           <p>{"<- Tap on a tab to begin!"}</p>
         </PanelContainer>

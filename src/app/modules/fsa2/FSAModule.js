@@ -69,7 +69,10 @@ class FSAModule extends AbstractModule
 
     app.getDrawerManager()
       .addPanelClass(props => (
-        <PanelContainer title={"Finite State Automata"}>
+        <PanelContainer id={props.id}
+          className={props.className}
+          style={props.style}
+          title={"Finite State Automata"}>
           <p>{"Brought to you with \u2764 by the Flap.js team."}</p>
           <p>{"<- Tap on a tab to begin!"}</p>
         </PanelContainer>

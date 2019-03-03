@@ -25,10 +25,10 @@ class AppSaver extends AbstractLocalSaver
       if (exporter)
       {
         exporter.importFromData(data, currentModule);
+
+        app.getUndoManager().captureEvent();
       }
     }
-
-    app.getUndoManager().captureEvent();
   }
 
   //Override
