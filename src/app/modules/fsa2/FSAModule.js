@@ -36,13 +36,10 @@ class FSAModule extends AbstractModule
   {
     super(app);
 
-    this._workspace = null;
-
     this._inputController = new InputController(this, app.getInputAdapter());
     this._graphController = new GraphController(this);
     this._machineController = new MachineController(this);
 
-    this._undoManager = app.getUndoManager();
     this._errorChecker = new FSAErrorChecker(this._graphController, this._machineController);
     this._tester = new StringTester();
 
@@ -57,7 +54,6 @@ class FSAModule extends AbstractModule
       .addViewClass(TapePane);
 
     app.getDrawerManager()
-      .setPanelProps({currentModule: this, app: app, session: app.getSession()})
       .addPanelClass(AboutPanel)
       .addPanelClass(OverviewPanel)
       .addPanelClass(TestingPanel)
@@ -75,7 +71,6 @@ class FSAModule extends AbstractModule
       .registerRenderer(RENDER_LAYER_WORKSPACE_OVERLAY, FSAGraphOverlayRenderer)
       .registerRenderer(RENDER_LAYER_LABELEDITOR, FSALabelEditorRenderer);
 
-
     app.getUndoManager()
       .setEventHandlerFactory((args) => {
         return new SafeGraphEventHandler(this._graphController);
@@ -85,8 +80,6 @@ class FSAModule extends AbstractModule
   //Override
   initialize(app)
   {
-    this._workspace = app.workspace;
-
     super.initialize(app);
 
     //Notify on create in delete mode

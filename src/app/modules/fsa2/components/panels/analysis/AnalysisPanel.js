@@ -28,7 +28,8 @@ class AnalysisPanel extends React.Component
 
   onDeleteAllUnreachable(e)
   {
-    const currentModule = this.props.currentModule;
+    const session = this.props.session;
+    const currentModule = session.getCurrentModule();
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
     const unreachableArray = machineController.getUnreachableNodes();
@@ -37,7 +38,8 @@ class AnalysisPanel extends React.Component
 
   onConvertToDFA(e)
   {
-    const currentModule = this.props.currentModule;
+    const session = this.props.session;
+    const currentModule = session.getCurrentModule();
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
     const props = {graphController: graphController, machineController: machineController};
@@ -49,14 +51,16 @@ class AnalysisPanel extends React.Component
 
   onConvertToNFA(e)
   {
-    const currentModule = this.props.currentModule;
+    const session = this.props.session;
+const currentModule = session.getCurrentModule();
     const machineController = currentModule.getMachineController();
     machineController.convertMachineTo("NFA");
   }
 
   onInvertDFA(e)
   {
-    const currentModule = this.props.currentModule;
+    const session = this.props.session;
+const currentModule = session.getCurrentModule();
     const machineController = currentModule.getMachineController();
     machineController.invertMachine();
   }
@@ -78,7 +82,8 @@ class AnalysisPanel extends React.Component
   //Override
   render()
   {
-    const currentModule = this.props.currentModule;
+    const session = this.props.session;
+    const currentModule = session.getCurrentModule();
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
 

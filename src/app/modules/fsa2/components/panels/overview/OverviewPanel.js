@@ -32,7 +32,8 @@ class OverviewPanel extends React.Component
   {
     const newValue = e.target.value;
 
-    const currentModule = this.props.currentModule;
+    const session = this.props.session;
+    const currentModule = session.getCurrentModule();
     const machineController = currentModule.getMachineController();
     const machine = machineController.getMachineBuilder().getMachine();
 
@@ -75,7 +76,8 @@ class OverviewPanel extends React.Component
   render()
   {
     const drawer = this.props.drawer;
-    const currentModule = this.props.currentModule;
+    const session = this.props.session;
+    const currentModule = session.getCurrentModule();
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
     const machineType = machineController.getMachineBuilder().getMachine().isDeterministic() ? MACHINE_TYPE_DFA : MACHINE_TYPE_NFA;

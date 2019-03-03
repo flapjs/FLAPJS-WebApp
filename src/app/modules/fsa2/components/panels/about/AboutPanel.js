@@ -13,7 +13,7 @@ class AboutPanel extends React.Component
   //Override
   render()
   {
-    const currentModule = this.props.currentModule;
+    const session = this.props.session;
 
     return (
       <PanelContainer id={this.props.id}
