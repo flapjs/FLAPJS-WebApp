@@ -253,7 +253,8 @@ class App extends React.Component
                 .finally(() => {
                   this._toolbar.closeBar();
                 });
-            }}/>
+            }}
+            disabled={!defaultExporter || !defaultExporter.canImport(currentModule)}/>
           <ToolbarButton title="Undo" icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
             disabled={!undoManager.canUndo()}
             onClick={()=>undoManager.undo()}/>

@@ -22,7 +22,10 @@ class AppSaver extends AbstractLocalSaver
     if (data)
     {
       const exporter = app.getExportManager().getDefaultExporter();
-      exporter.importFromData(data, currentModule);
+      if (exporter)
+      {
+        exporter.importFromData(data, currentModule);
+      }
     }
 
     app.getUndoManager().captureEvent();
@@ -43,8 +46,11 @@ class AppSaver extends AbstractLocalSaver
     const currentModuleName = currentModule.getModuleName();
 
     const exporter = app.getExportManager().getDefaultExporter();
-    const data = exporter.exportToData(currentModule);
-    LocalSave.saveToStorage("graph-" + currentModuleName, data);
+    if (exporter)
+    {
+      const data = exporter.exportToData(currentModule);
+      LocalSave.saveToStorage("graph-" + currentModuleName, data);
+    }
   }
 
   getApp()

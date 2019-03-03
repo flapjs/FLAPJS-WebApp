@@ -44,7 +44,7 @@ class UndoManager
     }
     else
     {
-      throw new Error("Missing default undo event handler for capture");
+      console.error("Missing default undo event handler for capture");
     }
   }
 
