@@ -76,7 +76,7 @@ class GraphController extends AbstractGraphController
   {
     GraphLayout.applyLayout(this.getGraph());
 
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   applyAutoRename()
@@ -104,7 +104,7 @@ class GraphController extends AbstractGraphController
 
   onGraphIntentImport()
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentCreateEdge(edge)
@@ -113,32 +113,32 @@ class GraphController extends AbstractGraphController
 
   onGraphIntentFinishEdge(edge)
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentMoveEdge(edge, nextQuad, prevQuad)
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentChangeDestination(edge, destinationNode, prevDestination, prevQuad)
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentChangeInitial(nextInitial, prevInitial)
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentMoveNode(node, nextX, nextY, prevX, prevY)
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentMoveAllNodes(nodes, dx, dy)
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentDeleteNodes(node, targetNodes, prevX, prevY)
@@ -172,7 +172,7 @@ class GraphController extends AbstractGraphController
     node.setNodeLabel(name);
     node.setNodeCustom(true);
 
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   createNode(x, y)
@@ -185,7 +185,7 @@ class GraphController extends AbstractGraphController
     const newNodeLabel = this.getGraphLabeler().getDefaultNodeLabel();
     node.setNodeLabel(newNodeLabel);
 
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
     return node;
   }
 
@@ -197,7 +197,7 @@ class GraphController extends AbstractGraphController
     node.setNodeAccept(result);
 
     //Emit event
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   deleteSelectedNodes(selectedNode)
@@ -216,7 +216,7 @@ class GraphController extends AbstractGraphController
 
     //Emit event
     this.onGraphIntentDeleteNodes(selectedNode, selection, this.prevX, this.prevY);
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   deleteTargetNode(target)
@@ -225,7 +225,7 @@ class GraphController extends AbstractGraphController
 
     //Emit event
     this.onGraphIntentDeleteNodes(target, [target], this.prevX, this.prevY);
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   deleteTargetNodes(targets)
@@ -240,7 +240,7 @@ class GraphController extends AbstractGraphController
 
     //Emit event
     this.onGraphIntentDeleteNodes(targets[0], targets, this.prevX, this.prevY);
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   deleteTargetEdge(target)
@@ -248,7 +248,7 @@ class GraphController extends AbstractGraphController
     this.getGraph().deleteEdge(target);
 
     //Emit event
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   deleteTargetEdges(targets)
@@ -358,7 +358,7 @@ class GraphController extends AbstractGraphController
 
         if (!prevLabel || (prevLabel.length > 0 && value !== prevLabel))
         {
-          this.getModule().captureGraphEvent();
+          this.getModule().getApp().getUndoManager().captureEvent();
         }
         if (callback) callback(target, value);
       }

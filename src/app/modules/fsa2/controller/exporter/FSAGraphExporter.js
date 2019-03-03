@@ -103,7 +103,7 @@ class FSAGraphExporter extends AbstractGraphExporter
         const graph = graphController.getGraph();
 
         //TODO: this should not be here, this should exist somewhere in graphController
-        module.captureGraphEvent();
+        module.getApp().getUndoManager().captureEvent();
 
         try
         {
@@ -122,7 +122,7 @@ class FSAGraphExporter extends AbstractGraphExporter
         }
         finally
         {
-          module.captureGraphEvent();
+          module.getApp().getUndoManager().captureEvent();
         }
       };
 

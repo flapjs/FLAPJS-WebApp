@@ -27,8 +27,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
         const graph = graphController.getGraph();
 
         //TODO: this should not be here, this should exist somewhere in graphController
-        //graphController.emit("userPreImportGraph", graph);
-        module.captureGraphEvent();
+        module.getApp().getUndoManager().captureEvent();
 
         try
         {
@@ -48,8 +47,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
         }
         finally
         {
-          //graphController.emit("userPostImportGraph", graph);
-          module.captureGraphEvent();
+          module.getApp().getUndoManager().captureEvent();
         }
       };
 

@@ -6,6 +6,14 @@ class UndoManager
   {
     this.history = [];
     this.offsetIndex = 0;
+
+    this._handlerFactory = null;
+  }
+
+  setEventHandlerFactory(factory)
+  {
+    this._handlerFactory = factory;
+    return this;
   }
 
   //DuckType(SessionListener)
@@ -20,13 +28,27 @@ class UndoManager
     this.clear();
   }
 
-  clear()
+  captureEvent(...args)
   {
-    this.history.length = 0;
-    this.offsetIndex = 0;
+    if (typeof this._handlerFactory === 'function')
+    {
+      const handler = this._handlerFactory(args);
+      if (handler)
+      {
+        this.captureEventAsHandler(handler);
+      }
+      else
+      {
+        throw new Error("Cannot create valid undo event handler for capture");
+      }
+    }
+    else
+    {
+      throw new Error("Missing default undo event handler for capture");
+    }
   }
 
-  captureEvent(eventHandler)
+  captureEventAsHandler(eventHandler)
   {
     //Pop it all until current event
     while(this.offsetIndex > 0)
@@ -92,6 +114,12 @@ class UndoManager
   canRedo()
   {
     return this.offsetIndex > 0;
+  }
+
+  clear()
+  {
+    this.history.length = 0;
+    this.offsetIndex = 0;
   }
 }
 

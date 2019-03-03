@@ -20,6 +20,7 @@ import FSAErrorChecker from './FSAErrorChecker.js';
 
 import TapePane from 'experimental/TapePane.js';
 import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'manager/hotkey/HotKeyManager.js';
+import {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY, RENDER_LAYER_LABELEDITOR} from 'manager/RenderManager.js';
 
 import FSAGraphExporter from './controller/exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './controller/exporter/JFLAPGraphExporter.js';
@@ -68,6 +69,17 @@ class FSAModule extends AbstractModule
       .registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {console.log("New!")})
       .registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")})
       .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
+
+    app.getRenderManager()
+      .registerRenderer(RENDER_LAYER_WORKSPACE, FSAGraphRenderer)
+      .registerRenderer(RENDER_LAYER_WORKSPACE_OVERLAY, FSAGraphOverlayRenderer)
+      .registerRenderer(RENDER_LAYER_LABELEDITOR, FSALabelEditorRenderer);
+
+
+    app.getUndoManager()
+      .setEventHandlerFactory((args) => {
+        return new SafeGraphEventHandler(this._graphController);
+      });
   }
 
   //Override
@@ -87,37 +99,12 @@ class FSAModule extends AbstractModule
     this._graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
   }
 
-  captureGraphEvent()
-  {
-    this._undoManager.captureEvent(new SafeGraphEventHandler(this._graphController));
-  }
-
-  //Override
-  getRenderer(renderLayer)
-  {
-    switch(renderLayer)
-    {
-      case "graph":
-        return FSAGraphRenderer;
-      case "graphoverlay":
-        return FSAGraphOverlayRenderer;
-      case "labeleditor":
-        return FSALabelEditorRenderer;
-    }
-    return null;
-  }
   //Override
   getInputController() { return this._inputController; }
   //Override
   getGraphController() { return this._graphController; }
   //Override
   getMachineController() { return this._machineController; }
-  //Override
-  getModulePanels() { return MODULE_PANELS; }
-  //Override
-  getModuleViews() { return MODULE_VIEWS; }
-  //Override
-  getModuleMenus() { return MODULE_MENUS; }
   //Override
   getModuleVersion() { return MODULE_VERSION; }
   //Override

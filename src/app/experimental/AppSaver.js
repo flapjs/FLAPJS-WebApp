@@ -25,8 +25,7 @@ class AppSaver extends AbstractLocalSaver
       exporter.importFromData(data, currentModule);
     }
 
-    //HACK: not all modules have this
-    if (currentModule.captureGraphEvent) currentModule.captureGraphEvent();
+    app.getUndoManager().captureEvent();
   }
 
   //Override

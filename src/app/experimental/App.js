@@ -49,6 +49,7 @@ import ViewportManager from 'manager/ViewportManager.js';
 import HotKeyManager from 'manager/hotkey/HotKeyManager.js';
 import HotKeyView from 'manager/hotkey/HotKeyView.js';
 import UndoManager from 'manager/undo/UndoManager.js';
+import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY, RENDER_LAYER_LABELEDITOR} from 'manager/RenderManager.js';
 
 import Module from 'modules/fsa2/FSAModule.js';
 
@@ -89,6 +90,7 @@ class App extends React.Component
     this._drawerManager = new DrawerManager();
     this._menuManager = new MenuManager();
     this._viewportManager = new ViewportManager();
+    this._renderManager = new RenderManager();
 
     this._session = new Session(this, props.moduleClass || Module)
       .addListener(this._undoManager)
@@ -96,7 +98,8 @@ class App extends React.Component
       .addListener(this._exportManager)
       .addListener(this._drawerManager)
       .addListener(this._menuManager)
-      .addListener(this._viewportManager);
+      .addListener(this._viewportManager)
+      .addListener(this._renderManager);
 
     //TODO: This is only used to control transitions (do we really need it?)
     this._init = false;
@@ -173,12 +176,14 @@ class App extends React.Component
   getDrawerManager() { return this._drawerManager; }
   getMenuManager() { return this._menuManager; }
   getViewportManager() { return this._viewportManager; }
+  getRenderManager() { return this._renderManager; }
 
   getSession() { return this._session; }
+
   getCurrentModule() { return this._session.getCurrentModule(); }
+
   getInputAdapter() { return this._inputAdapter; }
   getStyleOpts() { return this._styleOpts; }
-  getSession() { return this._session; }
 
   //Override
   componentDidUpdate()
@@ -220,6 +225,7 @@ class App extends React.Component
     const drawerManager = this._drawerManager;
     const menuManager = this._menuManager;
     const viewportManager = this._viewportManager;
+    const renderManager = this._renderManager;
 
     const drawerPanelClasses = drawerManager.getPanelClasses();
     const drawerPanelProps = drawerManager.getPanelProps() || {session: session};
@@ -228,16 +234,13 @@ class App extends React.Component
     const menuPanelProps = menuManager.getPanelProps() || {session: session};
 
     const viewportViewClasses = viewportManager.getViewClasses();
-    const viewportViewProps = viewportManager.getViewProps() || {currentModule: currentModule, app: this, session: session};
+    const viewportViewProps = viewportManager.getViewProps() || {session: session};
 
     const moduleName = currentModule.getLocalizedModuleName();
 
-    const GRAPH_RENDER_LAYER = "graph";
-    const GRAPH_OVERLAY_RENDER_LAYER = "graphoverlay";
-    const LABEL_EDITOR_RENDER_LAYER = "labeleditor";
-    const GraphRenderer = currentModule.getRenderer(GRAPH_RENDER_LAYER);
-    const GraphOverlayRenderer = currentModule.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
-    const LabelEditorRenderer = currentModule.getRenderer(LABEL_EDITOR_RENDER_LAYER);
+    const GraphRenderer = renderManager.getRendererByLayer(RENDER_LAYER_WORKSPACE);
+    const GraphOverlayRenderer = renderManager.getRendererByLayer(RENDER_LAYER_WORKSPACE_OVERLAY);
+    const LabelEditorRenderer = renderManager.getRendererByLayer(RENDER_LAYER_LABELEDITOR);
 
     return (
       <div className={Style.app_container}>
