@@ -18,7 +18,6 @@ class NodalGraphRenderer extends React.Component
   {
     //Inherits props from parent
     const currentModule = this.props.currentModule;
-    const inputController = currentModule.getInputController();
     const graphController = currentModule.getGraphController();
     const graph = graphController.getGraph();
 

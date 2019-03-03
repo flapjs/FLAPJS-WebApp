@@ -1,6 +1,6 @@
 import AbstractInputController from 'modules/abstract/AbstractInputController.js';
-import ViewportInputHandler from 'modules/abstract/ViewportInputHandler.js';
 
+import ViewportInputHandler from './ViewportInputHandler.js';
 import GraphPicker from './GraphPicker.js';
 
 import GraphNodeInputHandler from './inputhandler/GraphNodeInputHandler.js';

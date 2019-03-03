@@ -1,14 +1,15 @@
 import AbstractInputController from 'modules/abstract/AbstractInputController.js';
 
+//import NodalGraphPicker from 'graph/picker/NodalGraphPicker.js';
+import GraphNodeSelectionBox from 'graph/GraphNodeSelectionBox.js';
 import GraphPicker from './GraphPicker.js';
 
 import GraphNodeInputHandler from './inputhandler/GraphNodeInputHandler.js';
 import GraphInitialInputHandler from './inputhandler/GraphInitialInputHandler.js';
 
-import GraphEdgeInputHandler from 'modules/default/controller/inputhandler/GraphEdgeInputHandler.js';
-import GraphEndpointInputHandler from 'modules/default/controller/inputhandler/GraphEndpointInputHandler.js';
-import GraphNodeCreateInputHandler from 'modules/default/controller/inputhandler/GraphNodeCreateInputHandler.js';
-import SelectionBoxInputHandler from 'modules/default/controller/inputhandler/SelectionBoxInputHandler.js';
+import GraphEdgeInputHandler from './inputhandler/GraphEdgeInputHandler.js';
+import GraphEndpointInputHandler from './inputhandler/GraphEndpointInputHandler.js';
+import GraphNodeCreateInputHandler from './inputhandler/GraphNodeCreateInputHandler.js';
 
 const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
 
@@ -18,13 +19,9 @@ class InputController extends AbstractInputController
   {
     super(module, inputAdapter);
 
-    this._picker = new GraphPicker();
-
+    this._picker = null;
+    this._selectionBox = new GraphNodeSelectionBox();
     this._graphController = null;
-
-    //Used to check if target needs to be updated for the hover effect
-    this.prevPointerX = 0;
-    this.prevPointerY = 0;
 
     //Make sure this is always false when moving endpoints
     this.isNewEdge = false;
@@ -52,7 +49,6 @@ class InputController extends AbstractInputController
       new GraphEdgeInputHandler(),
       new GraphEndpointInputHandler(),
       new GraphInitialInputHandler(),
-      new SelectionBoxInputHandler(this._picker),
       new GraphNodeCreateInputHandler()
     ];
   }
@@ -63,6 +59,8 @@ class InputController extends AbstractInputController
     super.initialize(module);
 
     this._graphController = module.getGraphController();
+    //this._picker = new NodalGraphPicker(this._graphController);
+    this._picker = new GraphPicker(this._graphController);
   }
 
   //Override
@@ -78,27 +76,10 @@ class InputController extends AbstractInputController
 
     const graph = this._graphController.getGraph();
     const picker = this._picker;
+
     const x = this._inputAdapter.getPointerX();
     const y = this._inputAdapter.getPointerY();
-
-    if (x != this.prevPointerX || y != this.prevPointerY)
-    {
-      this.prevPointerX = x;
-      this.prevPointerY = y;
-
-      //Update target
-      picker.updateTarget(graph, x, y);
-
-      //HACK: to make the cursor look like a pointer when targeting
-      if (picker.hasTarget())
-      {
-        document.body.style.cursor = "pointer";
-      }
-      else
-      {
-        document.body.style.cursor = "auto";
-      }
-    }
+    picker.updateHoverTarget(graph, x, y);
   }
 
   setDisabled(disabled)
@@ -121,18 +102,17 @@ class InputController extends AbstractInputController
 
     const graph = graphController.getGraph();
     const picker = inputController.getPicker();
-    picker.updateTarget(graph, pointer.x, pointer.y);
-    picker.setInitialTarget(picker.target, picker.targetType);
+    picker.updateInitialTarget(graph, pointer.x, pointer.y);
 
     const target = picker.initialTarget;
     const targetType = picker.initialTargetType;
 
-    if (picker.hasSelection())
+    if (this._selectionBox.hasSelection())
     {
       //Unselect everything is clicked on something other than nodes...
-      if (targetType != "node" || !picker.isTargetInSelection(target))
+      if (targetType != "node" || !this._selectionBox.isTargetInSelection(target))
       {
-        picker.clearSelection();
+        this._selectionBox.clearSelection();
       }
     }
 
@@ -299,6 +279,14 @@ class InputController extends AbstractInputController
   setTrashMode(enabled)
   {
     this._trashMode = enabled;
+    if (enabled)
+    {
+      this._module.getApp()._drawer.setViewportColor("var(--color-viewport-error)");
+    }
+    else
+    {
+      this._module.getApp()._drawer.setViewportColor(null);
+    }
   }
 
   isTrashMode()
@@ -339,6 +327,11 @@ class InputController extends AbstractInputController
   getPicker()
   {
     return this._picker;
+  }
+
+  getSelectionBox()
+  {
+    return this._selectionBox;
   }
 }
 

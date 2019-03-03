@@ -10,8 +10,6 @@ class MachineController extends AbstractMachineController
   {
     super(module, new PDABuilder());
 
-    this.machineName = null;
-
     this.graphController = null;
   }
 
@@ -33,21 +31,6 @@ class MachineController extends AbstractMachineController
   update(module)
   {
     super.update(module);
-  }
-
-  getMachineName()
-  {
-    return this.getModule().getApp().getSession().getProjectName();
-  }
-
-  setMachineName(machineName)
-  {
-    this.getModule().getApp().getSession().setProjectName(machineName);
-  }
-
-  renameMachine(machineName)
-  {
-    this.setMachineName(machineName);
   }
 
   getFirstGraphNodeByLabel(graph, label)

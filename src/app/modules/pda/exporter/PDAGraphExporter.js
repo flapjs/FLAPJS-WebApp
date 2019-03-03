@@ -21,7 +21,7 @@ class PDAGraphExporter extends AbstractGraphExporter
     //HACK: this should be calculated elsewhere
     const machineData = data.machineData;
     const machineName = machineData.name;
-    if (machineName) machineController.setMachineName(machineName);
+    if (machineName) module.getApp().getSession().setProjectName(machineName);
     const customSymbols = machineData.symbols;
     if (customSymbols && Array.isArray(customSymbols))
     {
@@ -53,7 +53,7 @@ class PDAGraphExporter extends AbstractGraphExporter
     };
     dst["graphData"] = graphData;
     dst["machineData"] = {
-      name: machineController.getMachineName(),
+      name: module.getApp().getSession().getProjectName(),
       symbols: machineController.getCustomSymbols(),
       statePrefix: graphController.getGraphLabeler().getDefaultNodeLabelPrefix()
     };
@@ -98,9 +98,13 @@ class PDAGraphExporter extends AbstractGraphExporter
         const data = e.target.result;
         const name = filename.substring(0, filename.length - this.getFileType().length - 1);
         const graph = graphController.getGraph();
+        const prevGraphHash = graph.getHashCode(true);
 
         //TODO: this should not be here, this should exist somewhere in graphController
-        module.captureGraphEvent();
+        if (!graph.isEmpty())
+        {
+          module.getApp().getUndoManager().captureEvent();
+        }
 
         try
         {
@@ -108,10 +112,7 @@ class PDAGraphExporter extends AbstractGraphExporter
 
           this.fromJSON(jsonData, module);
 
-          if (machineController)
-          {
-            machineController.setMachineName(name);
-          }
+          module.getApp().getSession().setProjectName(name);
 
           resolve();
         }
@@ -122,7 +123,11 @@ class PDAGraphExporter extends AbstractGraphExporter
         }
         finally
         {
-          module.captureGraphEvent();
+          const nextGraphHash = graph.getHashCode(true);
+          if (prevGraphHash !== nextGraphHash)
+          {
+            module.getApp().getUndoManager().captureEvent();
+          }
         }
       };
 
@@ -151,9 +156,15 @@ class PDAGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  canImport()
+  canImport(module)
   {
     return true;
+  }
+
+  //Override
+  canExport(module)
+  {
+    return !module.getGraphController().getGraph().isEmpty();
   }
 
   //Override

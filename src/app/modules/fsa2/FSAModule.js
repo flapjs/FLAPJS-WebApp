@@ -3,13 +3,20 @@ import PanelContainer from 'experimental/panels/PanelContainer.js';
 
 import AbstractModule from 'modules/abstract/AbstractModule.js';
 
-import InputController from './controller/InputController.js';
-import GraphController from './controller/GraphController.js';
+import InputController from 'modules/nodalgraph/controller/InputController.js';
+import GraphController from 'modules/nodalgraph/controller/GraphController.js';
+import SelectionBoxInputHandler from 'modules/nodalgraph/controller/SelectionBoxInputHandler.js';
+import ViewportInputHandler from 'modules/nodalgraph/controller/ViewportInputHandler.js';
+
 import MachineController from './controller/MachineController.js';
 
+import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
+import FSAGraphLabeler from 'modules/fsa/graph/FSAGraphLabeler.js';
+import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
+
 import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
-import FSAGraphOverlayRenderer from './renderer/FSAGraphOverlayRenderer.js';
 import FSALabelEditorRenderer from './renderer/FSALabelEditorRenderer.js';
+import GraphInputRenderer from 'modules/nodalgraph/controller/renderer/GraphInputRenderer.js';
 
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
 import TestingPanel from './components/panels/testing/TestingPanel.js';
@@ -20,9 +27,6 @@ import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 
 import LabelEditorManager from 'manager/labeleditor/LabelEditorManager.js';
-import LabelEditorView from 'manager/labeleditor/LabelEditorView.js';
-
-import ViewportInputHandler from 'modules/abstract/ViewportInputHandler.js';
 
 import EditPane from './components/views/EditPane.js';
 import TapePane from './components/views/TapePane.js';
@@ -44,7 +48,7 @@ class FSAModule extends AbstractModule
     super(app);
 
     this._inputController = new InputController(this, app.getInputAdapter());
-    this._graphController = new GraphController(this);
+    this._graphController = new GraphController(this, new FSAGraph(), new FSAGraphLabeler(), FSAGraphParser);
     this._machineController = new MachineController(this);
 
     this._errorChecker = new FSAErrorChecker(this._graphController, this._machineController);
@@ -56,6 +60,7 @@ class FSAModule extends AbstractModule
 
     app.getInputAdapter()
       .addInputHandler(this._inputController)
+      .addInputHandler(new SelectionBoxInputHandler(this._inputController, this._graphController, this._inputController.getSelectionBox()))
       .addInputHandler(new ViewportInputHandler());
 
     app.getExportManager()
@@ -93,9 +98,10 @@ class FSAModule extends AbstractModule
         <>
           {/* Graph objects */
             <FSAGraphRenderer currentModule={this} parent={props.workspace}/>}
-          {/* Graph overlays */
-            <FSAGraphOverlayRenderer currentModule={this} parent={props.workspace}/>}
         </>
+      ))
+      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+        <GraphInputRenderer currentModule={this}/>
       ));
 
     app.getUndoManager()

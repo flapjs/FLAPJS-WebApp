@@ -19,10 +19,9 @@ class GraphImageExporter extends AbstractGraphExporter
 
   processSVGForExport(element, width, height, currentModule)
   {
-    const inputController = currentModule.getInputController();
     const graphController = currentModule.getGraphController();
 
-    const viewport = inputController.getInputAdapter().getViewport();
+    const viewport = currentModule.getApp().getInputAdapter().getViewport();
     const offsetX = viewport.getOffsetX();
     const offsetY = viewport.getOffsetY();
     const bounds = graphController.getGraph().getBoundingRect();

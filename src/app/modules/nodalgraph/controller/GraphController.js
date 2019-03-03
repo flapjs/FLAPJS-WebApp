@@ -1,18 +1,10 @@
 import AbstractGraphController from 'modules/abstract/AbstractGraphController.js';
 
 import Eventable from 'util/Eventable.js';
+import GraphEdge from 'graph/GraphEdge.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
-import PDAGraph from 'modules/pda/graph/PDAGraph.js';
-import PDAGraphLabeler from 'modules/pda/graph/PDAGraphLabeler.js';
-import * as PDAGraphParser from 'modules/pda/graph/PDAGraphParser.js';
 
 import GraphChangeHandler from 'experimental/GraphChangeHandler.js';
-
-import PDAGraphExporter from './exporter/PDAGraphExporter.js';
-
-const EXPORTERS = [
-  new PDAGraphExporter()
-];
 
 const NODE_SPAWN_RADIUS = 64;
 const DEFAULT_AUTO_RENAME = true;
@@ -21,12 +13,11 @@ const DELETE_ON_EMPTY = true;
 
 class GraphController extends AbstractGraphController
 {
-  constructor(module)
+  constructor(module, graph, labeler, parser)
   {
-    super(module, new PDAGraph(), new PDAGraphLabeler(), PDAGraphParser);
+    super(module, graph, labeler, parser);
 
     this.inputController = null;
-    this.machineController = null;
     this._graphChangeHandler = new GraphChangeHandler(GRAPH_REFRESH_RATE);
 
     this.getGraphLabeler().setGraphController(this);
@@ -41,8 +32,7 @@ class GraphController extends AbstractGraphController
     this.prevX = 0;
     this.prevY = 0;
 
-
-    this.shouldAutoLabel = false;
+    this.shouldAutoLabel = DEFAULT_AUTO_RENAME;
 
     //The difference between controller events vs graph events is: controller has user-intent
 
@@ -56,9 +46,6 @@ class GraphController extends AbstractGraphController
     super.initialize(module);
 
     this.inputController = module.getInputController();
-    this.machineController = module.getMachineController();
-
-    this.setAutoRenameNodes(DEFAULT_AUTO_RENAME);
   }
 
   //Override
@@ -75,9 +62,6 @@ class GraphController extends AbstractGraphController
     this._graphChangeHandler.update(this._graph);
   }
 
-  //Override
-  getGraphExporters() { return EXPORTERS; }
-
   getGraphChangeHandler()
   {
     return this._graphChangeHandler;
@@ -87,7 +71,7 @@ class GraphController extends AbstractGraphController
   {
     GraphLayout.applyLayout(this.getGraph());
 
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   applyAutoRename()
@@ -115,7 +99,7 @@ class GraphController extends AbstractGraphController
 
   onGraphIntentImport()
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentCreateEdge(edge)
@@ -124,32 +108,32 @@ class GraphController extends AbstractGraphController
 
   onGraphIntentFinishEdge(edge)
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentMoveEdge(edge, nextQuad, prevQuad)
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentChangeDestination(edge, destinationNode, prevDestination, prevQuad)
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentChangeInitial(nextInitial, prevInitial)
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentMoveNode(node, nextX, nextY, prevX, prevY)
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentMoveAllNodes(nodes, dx, dy)
   {
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   onGraphIntentDeleteNodes(node, targetNodes, prevX, prevY)
@@ -164,6 +148,10 @@ class GraphController extends AbstractGraphController
   {
     const prev = this.shouldAutoLabel;
     this.shouldAutoLabel = enable;
+    if (enable && !prev)
+    {
+      this.applyAutoRename();
+    }
   }
 
   shouldAutoRenameNodes()
@@ -179,20 +167,20 @@ class GraphController extends AbstractGraphController
     node.setNodeLabel(name);
     node.setNodeCustom(true);
 
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   createNode(x, y)
   {
-    const newNodeLabel = this.getGraphLabeler().getDefaultNodeLabel();
-
     if (typeof x === 'undefined') x = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
     if (typeof y === 'undefined') y = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
 
     const node = this.getGraph().createNode(x, y);
+
+    const newNodeLabel = this.getGraphLabeler().getDefaultNodeLabel();
     node.setNodeLabel(newNodeLabel);
 
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
     return node;
   }
 
@@ -204,7 +192,7 @@ class GraphController extends AbstractGraphController
     node.setNodeAccept(result);
 
     //Emit event
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   deleteSelectedNodes(selectedNode)
@@ -223,7 +211,7 @@ class GraphController extends AbstractGraphController
 
     //Emit event
     this.onGraphIntentDeleteNodes(selectedNode, selection, this.prevX, this.prevY);
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   deleteTargetNode(target)
@@ -232,7 +220,7 @@ class GraphController extends AbstractGraphController
 
     //Emit event
     this.onGraphIntentDeleteNodes(target, [target], this.prevX, this.prevY);
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   deleteTargetNodes(targets)
@@ -247,7 +235,7 @@ class GraphController extends AbstractGraphController
 
     //Emit event
     this.onGraphIntentDeleteNodes(targets[0], targets, this.prevX, this.prevY);
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   deleteTargetEdge(target)
@@ -255,7 +243,7 @@ class GraphController extends AbstractGraphController
     this.getGraph().deleteEdge(target);
 
     //Emit event
-    this.getModule().captureGraphEvent();
+    this.getModule().getApp().getUndoManager().captureEvent();
   }
 
   deleteTargetEdges(targets)
@@ -344,25 +332,33 @@ class GraphController extends AbstractGraphController
 
   openLabelEditor(target, defaultValue=null, callback=null)
   {
-    const labelEditor = this.getModule().getApp().getLabelEditorComponent();
+    const labelEditor = this.getModule().getLabelEditorManager().getLabelEditorComponent();
     const prevLabel = defaultValue;
     labelEditor.openEditor(target, defaultValue, (target, value) => {
-      if (DELETE_ON_EMPTY && (!value || value.length <= 0))
+      if (DELETE_ON_EMPTY && (!value || value.length <= 0) && target instanceof GraphEdge)
       {
         //Assumes target is GraphEdge
         this._graph.deleteEdge(target);
       }
       else
       {
-        target.setEdgeLabel(value);
+        if (target instanceof GraphEdge)
+        {
+          target.setEdgeLabel(value);
+        }
+        else
+        {
+          target.setNodeLabel(value);
+        }
+
         if (!prevLabel || (prevLabel.length > 0 && value !== prevLabel))
         {
-          this.getModule().captureGraphEvent();
+          this.getModule().getApp().getUndoManager().captureEvent();
         }
         if (callback) callback(target, value);
       }
     }, (target) => {
-      if (DELETE_ON_EMPTY && (!prevLabel || prevLabel.length <= 0))
+      if (DELETE_ON_EMPTY && (!prevLabel || prevLabel.length <= 0) && target instanceof GraphEdge)
       {
         //Assumes target is GraphEdge
         this._graph.deleteEdge(target);
