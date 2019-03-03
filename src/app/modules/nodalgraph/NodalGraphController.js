@@ -7,9 +7,7 @@ class NodalGraphController
   constructor(currentModule, nodalGraph)
   {
     this._module = currentModule;
-
     this._nodalGraph = nodalGraph;
-
     this._graphChangeHandler = new GraphChangeHandler(GRAPH_REFRESH_RATE);
   }
 

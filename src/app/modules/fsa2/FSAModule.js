@@ -1,4 +1,6 @@
 import React from 'react';
+import PanelContainer from 'experimental/panels/PanelContainer.js';
+
 import AbstractModule from 'modules/abstract/AbstractModule.js';
 
 import InputController from './controller/InputController.js';
@@ -9,13 +11,11 @@ import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
 import FSAGraphOverlayRenderer from './renderer/FSAGraphOverlayRenderer.js';
 import FSALabelEditorRenderer from './renderer/FSALabelEditorRenderer.js';
 
-import AboutPanel from './components/panels/about/AboutPanel.js';
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
 import TestingPanel from './components/panels/testing/TestingPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 
 import Notifications from 'system/notification/Notifications.js';
-import SafeGraphEventHandler from 'graph/SafeGraphEventHandler.js';
 import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 
@@ -27,12 +27,12 @@ import ViewportInputHandler from 'modules/abstract/ViewportInputHandler.js';
 import EditPane from './components/views/EditPane.js';
 import TapePane from './components/views/TapePane.js';
 import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'manager/hotkey/HotKeyManager.js';
-import {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY} from 'manager/RenderManager.js';
+import {RENDER_LAYER_WORKSPACE} from 'manager/RenderManager.js';
 
 import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
-import GraphImageExporter from './exporter/GraphImageExporter.js';
-import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG } from 'util/Downloader.js';
+import {DEFAULT_IMAGE_EXPORTERS} from 'modules/nodalgraph/NodalGraphImageExporter.js';
+import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
 
 const MODULE_NAME = "fsa2";
 const MODULE_VERSION = "0.0.1";
@@ -61,16 +61,19 @@ class FSAModule extends AbstractModule
     app.getExportManager()
       .addExporter(new FSAGraphExporter())
       .addExporter(new JFLAPGraphExporter())
-      .addExporter(new GraphImageExporter(FILE_TYPE_PNG))
-      .addExporter(new GraphImageExporter(FILE_TYPE_JPG))
-      .addExporter(new GraphImageExporter(FILE_TYPE_SVG));
+      .addExporters(DEFAULT_IMAGE_EXPORTERS);
 
     app.getViewportManager()
       .addViewClass(EditPane)
       .addViewClass(TapePane);
 
     app.getDrawerManager()
-      .addPanelClass(AboutPanel)
+      .addPanelClass(props => (
+        <PanelContainer title={"Finite State Automata"}>
+          <p>{"Brought to you with \u2764 by the Flap.js team."}</p>
+          <p>{"<- Tap on a tab to begin!"}</p>
+        </PanelContainer>
+      ))
       .addPanelClass(OverviewPanel)
       .addPanelClass(TestingPanel)
       .addPanelClass(AnalysisPanel);
@@ -93,8 +96,8 @@ class FSAModule extends AbstractModule
       ));
 
     app.getUndoManager()
-      .setEventHandlerFactory((args) => {
-        return new SafeGraphEventHandler(this._graphController);
+      .setEventHandlerFactory((...args) => {
+        return new SafeGraphEventHandler(this._graphController, this._graphController.getGraphParser());
       });
   }
 
