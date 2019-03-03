@@ -75,7 +75,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  canImport()
+  canImport(module)
   {
     return true;
   }

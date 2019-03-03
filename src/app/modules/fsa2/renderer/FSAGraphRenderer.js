@@ -23,6 +23,13 @@ class FSAGraphRenderer extends React.Component
 
     return (
       <g>
+        {/* Graph origin crosshair */
+          !graph.isEmpty() &&
+          <>
+            <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="var(--color-viewport-back-detail)"/>
+            <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="var(--color-viewport-back-detail)"/>
+          </>}
+
         {graph.getNodes().map((e, i) => <FSANodeRenderer key={e.getGraphElementID() || i} node={e}/>)}
         {graph.getEdges().map((e, i) => <FSAEdgeRenderer key={e.getGraphElementID() || i} edge={e}/>)}
 

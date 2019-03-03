@@ -1,3 +1,4 @@
+import React from 'react';
 import AbstractModule from 'modules/abstract/AbstractModule.js';
 
 import InputController from './controller/InputController.js';
@@ -7,6 +8,7 @@ import MachineController from './controller/MachineController.js';
 import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
 import FSAGraphOverlayRenderer from './renderer/FSAGraphOverlayRenderer.js';
 import FSALabelEditorRenderer from './renderer/FSALabelEditorRenderer.js';
+import LabelEditorView from 'experimental/editor/LabelEditorView.js';
 
 import AboutPanel from './components/panels/about/AboutPanel.js';
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
@@ -18,12 +20,15 @@ import SafeGraphEventHandler from 'graph/SafeGraphEventHandler.js';
 import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 
-import TapePane from 'experimental/TapePane.js';
-import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'manager/hotkey/HotKeyManager.js';
-import {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY, RENDER_LAYER_LABELEDITOR} from 'manager/RenderManager.js';
+import ViewportInputHandler from 'modules/abstract/ViewportInputHandler.js';
 
-import FSAGraphExporter from './controller/exporter/FSAGraphExporter.js';
-import JFLAPGraphExporter from './controller/exporter/JFLAPGraphExporter.js';
+import EditPane from './components/views/EditPane.js';
+import TapePane from './components/views/TapePane.js';
+import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'manager/hotkey/HotKeyManager.js';
+import {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY} from 'manager/RenderManager.js';
+
+import FSAGraphExporter from './exporter/FSAGraphExporter.js';
+import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
 import GraphImageExporter from 'modules/abstract/exporter/GraphImageExporter.js';
 import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG } from 'util/Downloader.js';
 
@@ -40,8 +45,13 @@ class FSAModule extends AbstractModule
     this._graphController = new GraphController(this);
     this._machineController = new MachineController(this);
 
+    this._labeleditor = null;
     this._errorChecker = new FSAErrorChecker(this._graphController, this._machineController);
     this._tester = new StringTester();
+
+    app.getInputAdapter()
+      .addInputHandler(this._inputController)
+      .addInputHandler(new ViewportInputHandler());
 
     app.getExportManager()
       .addExporter(new FSAGraphExporter())
@@ -51,6 +61,7 @@ class FSAModule extends AbstractModule
       .addExporter(new GraphImageExporter(FILE_TYPE_SVG));
 
     app.getViewportManager()
+      .addViewClass(EditPane)
       .addViewClass(TapePane);
 
     app.getDrawerManager()
@@ -66,10 +77,27 @@ class FSAModule extends AbstractModule
       .registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")})
       .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
 
+    const graphLabeler = this._graphController.getGraphLabeler();
+    const viewport = app.getInputAdapter().getViewport();
+
     app.getRenderManager()
-      .registerRenderer(RENDER_LAYER_WORKSPACE, FSAGraphRenderer)
-      .registerRenderer(RENDER_LAYER_WORKSPACE_OVERLAY, FSAGraphOverlayRenderer)
-      .registerRenderer(RENDER_LAYER_LABELEDITOR, FSALabelEditorRenderer);
+      .registerRenderer(RENDER_LAYER_WORKSPACE, props => (
+        <>
+          {/* Graph objects */
+            <FSAGraphRenderer currentModule={this} parent={props.workspace}/>}
+          {/* Graph overlays */
+            <FSAGraphOverlayRenderer currentModule={this} parent={props.workspace}/>}
+        </>
+      ))
+      .registerRenderer(RENDER_LAYER_WORKSPACE_OVERLAY, props => (
+        <LabelEditorView ref={ref=>this._labeleditor=ref}
+          labeler={graphLabeler}
+          viewport={viewport}
+          saveOnExit={true}>
+          {/* LabelEditor objects */
+            <FSALabelEditorRenderer currentModule={this} parent={this._labeleditor}/>}
+        </LabelEditorView>
+      ));
 
     app.getUndoManager()
       .setEventHandlerFactory((args) => {
@@ -92,12 +120,12 @@ class FSAModule extends AbstractModule
     this._graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
   }
 
-  //Override
+  getLabelEditorComponent() { return this._labeleditor; }
+
   getInputController() { return this._inputController; }
-  //Override
-  getGraphController() { return this._graphController; }
-  //Override
   getMachineController() { return this._machineController; }
+  getGraphController() { return this._graphController; }
+
   //Override
   getModuleVersion() { return MODULE_VERSION; }
   //Override

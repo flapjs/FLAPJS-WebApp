@@ -32,9 +32,14 @@ class AbstractGraphExporter
     return false;
   }
 
-  canImport()
+  canImport(module)
   {
     return false;
+  }
+
+  canExport(module)
+  {
+    return true;
   }
 
   getTitle()

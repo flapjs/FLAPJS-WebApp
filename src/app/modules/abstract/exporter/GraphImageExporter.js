@@ -89,7 +89,7 @@ class GraphImageExporter extends AbstractGraphExporter
   }
 
   //Override
-  canImport()
+  canImport(module)
   {
     return false;
   }

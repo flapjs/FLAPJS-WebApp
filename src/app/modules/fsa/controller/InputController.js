@@ -1,4 +1,5 @@
 import AbstractInputController from 'modules/abstract/AbstractInputController.js';
+import ViewportInputHandler from 'modules/abstract/ViewportInputHandler.js';
 
 import GraphPicker from './GraphPicker.js';
 
@@ -16,6 +17,9 @@ class InputController extends AbstractInputController
   constructor(module, inputAdapter)
   {
     super(module, inputAdapter);
+
+    inputAdapter.addInputHandler(this);
+    inputAdapter.addInputHandler(new ViewportInputHandler());
 
     this._picker = new GraphPicker();
 

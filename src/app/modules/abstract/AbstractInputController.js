@@ -1,7 +1,5 @@
 import AbstractInputHandler from 'system/inputadapter/AbstractInputHandler.js';
 
-import ViewportInputHandler from './ViewportInputHandler.js';
-
 class AbstractInputController extends AbstractInputHandler
 {
   constructor(module, inputAdapter)
@@ -13,8 +11,6 @@ class AbstractInputController extends AbstractInputHandler
 
     this._module = module;
     this._inputAdapter = inputAdapter;
-    inputAdapter.addInputHandler(this);
-    inputAdapter.addInputHandler(new ViewportInputHandler());
   }
 
   initialize(module) {}

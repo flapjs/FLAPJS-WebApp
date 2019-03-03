@@ -14,7 +14,7 @@ class ViewportManager
 
   addViewClass(viewClass)
   {
-    this._viewClasses.unshift(viewClass);
+    this._viewClasses.push(viewClass);
     return this;
   }
 

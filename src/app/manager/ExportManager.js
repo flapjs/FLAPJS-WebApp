@@ -46,7 +46,7 @@ class ExportManager
 
     for(const exporter of exporters)
     {
-      if (exporter.canImport() && exporter.doesSupportFile() && fileName.endsWith(exporter.getFileType()))
+      if (exporter.canImport(currentModule) && exporter.doesSupportFile() && fileName.endsWith(exporter.getFileType()))
       {
         result = result.catch(e => exporter.importFromFile(fileBlob, currentModule));
       }
@@ -70,8 +70,10 @@ class ExportManager
 
   getImportFileTypes()
   {
+    const session = this._app.getSession();
+    const currentModule = session.getCurrentModule();
     return this._exporters.map(e => {
-      if (!e.canImport() || !e.doesSupportFile()) return null;
+      if (!e.canImport(currentModule) || !e.doesSupportFile()) return null;
       return '.' + e.getFileType();
     });
   }

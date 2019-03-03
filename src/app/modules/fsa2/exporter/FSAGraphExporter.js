@@ -151,9 +151,15 @@ class FSAGraphExporter extends AbstractGraphExporter
   }
 
   //Override
-  canImport()
+  canImport(module)
   {
     return true;
+  }
+
+  //Override
+  canExport(module)
+  {
+    return !module.getGraphController().getGraph().isEmpty();
   }
 
   //Override

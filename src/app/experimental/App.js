@@ -8,14 +8,12 @@ import WorkspaceView from 'experimental/workspace/WorkspaceView.js';
 import ViewportView from 'experimental/viewport/ViewportView.js';
 import TooltipView, { ONESHOT_MODE } from 'experimental/tooltip/TooltipView.js';
 import UploadDropZone from 'experimental/components/UploadDropZone.js';
-import LabelEditorView from 'experimental/editor/LabelEditorView.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
 import LanguagePanel from 'experimental/menus/language/LanguagePanel.js';
-import EditPane from 'experimental/EditPane.js';
 
-import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU } from 'experimental/toolbar/ToolbarButton.js';
+import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU} from 'experimental/toolbar/ToolbarButton.js';
 import ToolbarDivider from 'experimental/toolbar/ToolbarDivider.js';
 import ToolbarUploadButton from 'experimental/toolbar/ToolbarUploadButton.js';
 import PageEmptyIcon from 'experimental/iconset/PageEmptyIcon.js';
@@ -49,7 +47,8 @@ import ViewportManager from 'manager/ViewportManager.js';
 import HotKeyManager from 'manager/hotkey/HotKeyManager.js';
 import HotKeyView from 'manager/hotkey/HotKeyView.js';
 import UndoManager from 'manager/undo/UndoManager.js';
-import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY, RENDER_LAYER_LABELEDITOR} from 'manager/RenderManager.js';
+import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
+  RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'manager/RenderManager.js';
 
 import Module from 'modules/fsa2/FSAModule.js';
 
@@ -126,8 +125,6 @@ class App extends React.Component
       .addPanelClass(ExportPanel)
       .addPanelClass(OptionPanel)
       .addPanelClass(LanguagePanel);
-    this._viewportManager
-      .addViewClass(EditPane);
     this._hotKeyManager
       .registerAltHotKey("Show Hints", () => {IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL});
 
@@ -168,7 +165,6 @@ class App extends React.Component
   get viewport() { return this._inputAdapter.getViewport(); }
 
   getWorkspaceComponent() { return this._workspace; }
-  getLabelEditorComponent() { return this._labeleditor; }
 
   getUndoManager() { return this._undoManager; }
   getHotKeyManager() { return this._hotKeyManager; }
@@ -205,22 +201,17 @@ class App extends React.Component
   //Override
   render()
   {
-    const currentModule = this._session.getCurrentModule();
+    const session = this._session;
     const inputAdapter = this._inputAdapter;
+    const viewport = inputAdapter.getViewport();
+    const currentModule = session.getCurrentModule();
+    const moduleName = currentModule.getLocalizedModuleName();
 
     const hasSmallWidth = this._mediaQuerySmallWidthList.matches;
     const hasSmallHeight = this._mediaQuerySmallHeightList.matches;
     const isFullscreen = this.state.hide;
 
-    const session = this._session;
     const undoManager = this._undoManager;
-    const viewport = inputAdapter.getViewport();
-    const inputController = currentModule.getInputController();
-    const graphController = currentModule.getGraphController();
-    const machineController = currentModule.getMachineController();
-    const graphLabeler = graphController.getGraphLabeler();
-    const inputActionMode = inputController.isActionMode();
-
     const exportManager = this._exportManager;
     const drawerManager = this._drawerManager;
     const menuManager = this._menuManager;
@@ -229,18 +220,16 @@ class App extends React.Component
 
     const drawerPanelClasses = drawerManager.getPanelClasses();
     const drawerPanelProps = drawerManager.getPanelProps() || {session: session};
-
     const menuPanelClasses = menuManager.getPanelClasses();
     const menuPanelProps = menuManager.getPanelProps() || {session: session};
-
     const viewportViewClasses = viewportManager.getViewClasses();
     const viewportViewProps = viewportManager.getViewProps() || {session: session};
+    const defaultExporter = exportManager.getDefaultExporter();
 
-    const moduleName = currentModule.getLocalizedModuleName();
-
-    const GraphRenderer = renderManager.getRendererByLayer(RENDER_LAYER_WORKSPACE);
-    const GraphOverlayRenderer = renderManager.getRendererByLayer(RENDER_LAYER_WORKSPACE_OVERLAY);
-    const LabelEditorRenderer = renderManager.getRendererByLayer(RENDER_LAYER_LABELEDITOR);
+    const WorkspaceRenderer = renderManager.getRendererByLayer(RENDER_LAYER_WORKSPACE);
+    const WorkspaceOverlayRenderer = renderManager.getRendererByLayer(RENDER_LAYER_WORKSPACE_OVERLAY);
+    const ViewportRenderer = renderManager.getRendererByLayer(RENDER_LAYER_VIEWPORT);
+    const ViewportOverlayRenderer = renderManager.getRendererByLayer(RENDER_LAYER_VIEWPORT_OVERLAY);
 
     return (
       <div className={Style.app_container}>
@@ -273,7 +262,7 @@ class App extends React.Component
             onClick={()=>undoManager.redo()}/>
           <ToolbarButton title={I18N.toString("component.exporting.title")} icon={DownloadIcon}
             onClick={()=>this._toolbar.setCurrentMenu(0)}
-            disabled={graphController.getGraph().isEmpty()}/>
+            disabled={!defaultExporter || !defaultExporter.canExport(currentModule)}/>
           <ToolbarDivider/>
           <ToolbarButton title="Report a Bug" icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>window.open(BUGREPORT_URL, '_blank')}/>
@@ -295,7 +284,7 @@ class App extends React.Component
           <UploadDropZone>
             <div className="viewport">
 
-              <TooltipView mode={ONESHOT_MODE} visible={/* For the initial fade-in animation */this._init && graphController.getGraph().isEmpty()}>
+              <TooltipView mode={ONESHOT_MODE} visible={/* TODO: For the initial fade-in animation */this._init && !undoManager.canUndo()}>
                 <label>{I18N.toString("message.workspace.empty")}</label>
                 <label>{"If you need help, try the \'?\' at the top."}</label>
                 <label>{"Or you can choose to do nothing."}</label>
@@ -309,38 +298,32 @@ class App extends React.Component
               </TooltipView>
 
               <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>
-                {/* Graph origin crosshair */
-                  !graphController.getGraph().isEmpty() &&
-                  <React.Fragment>
-                    <line className="graph-ui" x1="0" y1="-5" x2="0" y2="5" stroke="var(--color-viewport-back-detail)"/>
-                    <line className="graph-ui" x1="-5" y1="0" x2="5" y2="0" stroke="var(--color-viewport-back-detail)"/>
-                  </React.Fragment>}
-                {/* Graph objects */
-                  GraphRenderer &&
-                  <GraphRenderer currentModule={currentModule} parent={this._workspace}/>}
-                {/* Graph overlays */
-                  GraphOverlayRenderer &&
-                  <GraphOverlayRenderer currentModule={currentModule} parent={this._workspace}/>}
+                {/* RENDER_LAYER_WORKSPACE */
+                  WorkspaceRenderer &&
+                  <WorkspaceRenderer workspace={this._workspace}/>}
               </WorkspaceView>
 
-              <LabelEditorView ref={ref=>this._labeleditor=ref}
-                labeler={graphLabeler}
-                viewport={viewport}
-                saveOnExit={true}>
-                {/* LabelEditor objects */
-                  LabelEditorRenderer &&
-                  <LabelEditorRenderer currentModule={currentModule} parent={this._labeleditor}/>}
-              </LabelEditorView>
+              {/* RENDER_LAYER_WORKSPACE_OVERLAY */
+                WorkspaceOverlayRenderer &&
+                <WorkspaceOverlayRenderer workspace={this._workspace}/>}
 
               <NotificationView notificationManager={Notifications}>
               </NotificationView>
 
-              <HotKeyView hotKeyManager={this._hotKeyManager}/>
+              {this._hotKeyManager.isEnabled() &&
+                <HotKeyView hotKeyManager={this._hotKeyManager}/>}
 
               <ViewportView ref={ref=>this._viewport=ref}
                 views={viewportViewClasses}
                 viewProps={viewportViewProps}>
+                {/* RENDER_LAYER_VIEWPORT */
+                  ViewportRenderer &&
+                  <ViewportRenderer viewport={this._viewport}/>}
               </ViewportView>
+
+              {/* RENDER_LAYER_VIEWPORT_OVERLAY */
+                ViewportOverlayRenderer &&
+                <ViewportOverlayRenderer viewport={this._viewport}/>}
 
             </div>
           </UploadDropZone>

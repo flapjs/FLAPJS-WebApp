@@ -1,9 +1,9 @@
 import React from 'react';
-import Style from './viewport/ViewportView.css';
+import Style from 'experimental/viewport/ViewportView.css';
 
-import ModeSelectTray from './widgets/ModeSelectTray.js';
-import TrashCanWidget from './widgets/TrashCanWidget.js';
-import NavbarWidget from './widgets/NavbarWidget.js';
+import ModeSelectTray from 'experimental/widgets/ModeSelectTray.js';
+import TrashCanWidget from 'experimental/widgets/TrashCanWidget.js';
+import NavbarWidget from 'experimental/widgets/NavbarWidget.js';
 
 class EditPane extends React.Component
 {
@@ -18,11 +18,10 @@ class EditPane extends React.Component
     const session = this.props.session;
     const currentModule = session.getCurrentModule();
     const app = session.getApp();
-    
+
     const viewport = this.props.viewport;
     const inputController = currentModule.getInputController();
     const graphController = currentModule.getGraphController();
-    const machineController = currentModule.getMachineController();
     const inputActionMode = inputController.isActionMode();
 
     return (

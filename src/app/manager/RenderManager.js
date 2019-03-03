@@ -1,7 +1,7 @@
 export const RENDER_LAYER_WORKSPACE = "workspace";
-export const RENDER_LAYER_WORKSPACE_OVERLAY = "workspace_overlay";
-export const RENDER_LAYER_LABELEDITOR = "labeleditor";
+export const RENDER_LAYER_WORKSPACE_OVERLAY = "workspace-overlay";
 export const RENDER_LAYER_VIEWPORT = "viewport";
+export const RENDER_LAYER_VIEWPORT_OVERLAY = "viewport-overlay";
 
 class RenderManager
 {
