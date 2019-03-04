@@ -10,7 +10,7 @@ import DefaultGraphOverlayRenderer from './renderer/DefaultGraphOverlayRenderer.
 import AboutPanel from './components/panels/about/AboutPanel.js';
 
 import Notifications from 'system/notification/Notifications.js';
-import SafeGraphEventHandler from 'graph/SafeGraphEventHandler.js';
+import SafeGraphEventHandler from 'system/undomanager/SafeGraphEventHandler.js';
 
 const MODULE_NAME = "default";
 const MODULE_VERSION = "0.0.1";

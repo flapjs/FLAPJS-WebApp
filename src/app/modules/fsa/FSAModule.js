@@ -19,7 +19,7 @@ import GraphLayout from './graph/GraphLayout.js';
 import LabelEditor from './editor/LabelEditor.js';
 import TestingManager from './testing/TestingManager.js';
 
-import SafeGraphEventHandler from 'graph/SafeGraphEventHandler.js';
+import SafeGraphEventHandler from 'system/undomanager/SafeGraphEventHandler.js';
 
 const VERSION = "0.0.1";
 const PANELS = [AboutPanel, TestingPanel, OverviewPanel, AnalysisPanel];
