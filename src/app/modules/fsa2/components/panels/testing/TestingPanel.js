@@ -8,9 +8,6 @@ import PanelSection from 'experimental/panels/PanelSection.js';
 
 import TestListView from './TestListView.js';
 
-import RE from 'modules/fsa2/machine/RE.js';
-import {convertToNFA} from 'modules/fsa2/machine/REUtils.js';
-
 class TestingPanel extends React.Component
 {
   constructor(props)
@@ -85,20 +82,6 @@ class TestingPanel extends React.Component
         <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode}/>
         <PanelSwitch id={"testing-step-test"} checked={stepMode} onChange={this.onStepTestChange} title={"Step testing"}/>
         <PanelSwitch id={"testing-error-check"} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={"Auto error checking"} disabled={true}/>
-
-        <PanelDivider/>
-
-        <PanelSection title="Regular Expressions" full={true}>
-          <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode}/>
-          <h2>Temporary Regular Expression Stuff</h2>
-          <input ref={ref=>this.inputElement=ref}type="text"/>
-          <button onClick={() => {
-            const value = this.inputElement.value;
-            const re = new RE(value);
-            const nfa = convertToNFA(re);
-            machineController.setGraphToMachine(graphController.getGraph(), nfa);
-          }}>Convert To NFA</button>
-        </PanelSection>
 
       </PanelContainer>
     );

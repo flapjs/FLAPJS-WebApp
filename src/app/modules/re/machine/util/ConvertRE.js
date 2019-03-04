@@ -1,4 +1,4 @@
-import FSA, {EMPTY_SYMBOL} from '../FSA.js';
+import FSA, {EMPTY_SYMBOL} from 'modules/fsa2/machine/FSA.js';
 import {EMPTY,
   CONCAT,
 	UNION,
