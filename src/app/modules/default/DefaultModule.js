@@ -24,6 +24,7 @@ const MODULE_VIEWS = [
 
 ];
 
+//DEPRECATED! - use NodalGraphModule instead
 class DefaultModule extends AbstractModule
 {
   constructor(app)
