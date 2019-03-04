@@ -3,11 +3,7 @@ import PanelContainer from 'experimental/panels/PanelContainer.js';
 
 import AbstractModule from 'modules/abstract/AbstractModule.js';
 
-import InputController from 'modules/nodalgraph/controller/InputController.js';
-import GraphController from 'modules/nodalgraph/controller/GraphController.js';
-import SelectionBoxInputHandler from 'modules/nodalgraph/controller/SelectionBoxInputHandler.js';
-import ViewportInputHandler from 'modules/nodalgraph/controller/ViewportInputHandler.js';
-
+import NodalGraphInputManager from 'modules/nodalgraph/manager/NodalGraphInputManager.js';
 import MachineController from './controller/MachineController.js';
 
 import PDAGraph from './graph/PDAGraph.js';
@@ -22,11 +18,8 @@ import OverviewPanel from './components/panels/overview/OverviewPanel.js';
 import TestingPanel from './components/panels/testing/TestingPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 
-import Notifications from 'system/notification/Notifications.js';
 import StringTester from './tester/StringTester.js';
 import PDAErrorChecker from './PDAErrorChecker.js';
-
-import LabelEditorManager from 'manager/labeleditor/LabelEditorManager.js';
 
 import EditPane from './components/views/EditPane.js';
 import TapePane from './components/views/TapePane.js';
@@ -47,22 +40,19 @@ class PDAModule extends AbstractModule
   {
     super(app);
 
-    this._inputController = new InputController(this, app.getInputAdapter());
-    this._graphController = new GraphController(this, new PDAGraph(), new PDAGraphLabeler(), PDAGraphParser);
+    this._inputManager = new NodalGraphInputManager(this,
+      new PDAGraph(),
+      new PDAGraphLabeler(),
+      PDAGraphParser,
+      PDALabelEditorRenderer);
     this._machineController = new MachineController(this);
 
-    this._errorChecker = new PDAErrorChecker(this._graphController, this._machineController);
+    this._errorChecker = new PDAErrorChecker(
+      this._inputManager.getGraphController(),
+      this._machineController);
     this._tester = new StringTester();
 
-    this._labelEditorManager = new LabelEditorManager()
-      .setLabelEditorRenderer(PDALabelEditorRenderer)
-      .setLabeler(this._graphController.getGraphLabeler());
-
-    app.getInputAdapter()
-      .addInputHandler(this._inputController)
-      .addInputHandler(new SelectionBoxInputHandler(this._inputController, this._graphController, this._inputController.getSelectionBox()))
-      .addInputHandler(new ViewportInputHandler());
-
+    //TODO: These should have a pre/post handlers...
     app.getExportManager()
       .addExporter(new PDAGraphExporter())
       .addExporters(DEFAULT_IMAGE_EXPORTERS);
@@ -105,7 +95,7 @@ class PDAModule extends AbstractModule
 
     app.getUndoManager()
       .setEventHandlerFactory((...args) => {
-        return new SafeGraphEventHandler(this._graphController, this._graphController.getGraphParser());
+        return new SafeGraphEventHandler(this._inputManager.getGraphController(), this._inputManager.getGraphParser());
       });
   }
 
@@ -114,16 +104,7 @@ class PDAModule extends AbstractModule
   {
     super.initialize(app);
 
-    this._labelEditorManager.onSessionStart(app.getSession());
-
-    //Notify on create in delete mode
-    const tryCreateWhileTrash = () => {
-      if (this._inputController.isTrashMode())
-      {
-        Notifications.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
-      }
-    };
-    this._graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
+    this._inputManager.onSessionStart(app.getSession());
   }
 
   //Override
@@ -131,14 +112,13 @@ class PDAModule extends AbstractModule
   {
     super.destroy(app);
 
-    this._labelEditorManager.onSessionStop(app.getSession());
+    this._inputManager.onSessionStop(app.getSession());
   }
 
-  getLabelEditorManager() { return this._labelEditorManager; }
-
-  getInputController() { return this._inputController; }
-  getGraphController() { return this._graphController; }
+  getInputManager() { return this._inputManager; }
+  getInputController() { return this._inputManager.getInputController(); }
   getMachineController() { return this._machineController; }
+  getGraphController() { return this._inputManager.getGraphController(); }
 
   //Override
   getModuleVersion() { return MODULE_VERSION; }
