@@ -8,6 +8,9 @@ import PanelSection from 'experimental/panels/PanelSection.js';
 
 import TestListView from './TestListView.js';
 
+import Notifications from 'system/notification/Notifications.js';
+import {ERROR_MESSAGE_TAG} from 'modules/fsa2/FSAErrorChecker.js';
+
 class TestingPanel extends React.Component
 {
   constructor(props)
@@ -17,8 +20,7 @@ class TestingPanel extends React.Component
     this.inputElement = null;
 
     this.state = {
-      stepMode: false,
-      errorCheck: false
+      stepMode: false
     };
 
     this.onStepTestChange = this.onStepTestChange.bind(this);
@@ -54,9 +56,15 @@ class TestingPanel extends React.Component
 
   onAutoErrorCheckChange(e)
   {
-    this.setState((prev, props) => {
-      return {errorCheck: !prev.errorCheck};
-    });
+    const currentModule = this.props.session.getCurrentModule();
+    const errorChecker = currentModule.getErrorChecker();
+    const errorCheck = errorChecker.isErrorChecking();
+    errorChecker.setErrorChecking(!errorCheck);
+    if (errorCheck)
+    {
+      //Turning it off
+      Notifications.clearMessages(ERROR_MESSAGE_TAG);
+    }
   }
 
   //Override
@@ -67,10 +75,11 @@ class TestingPanel extends React.Component
     const currentModule = session.getCurrentModule();
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
-    const tester = currentModule._tester;
+    const tester = currentModule.getStringTester();
+    const errorChecker = currentModule.getErrorChecker();
 
     const stepMode = this.state.stepMode;
-    const errorCheck = this.state.errorCheck;
+    const errorCheck = errorChecker.isErrorChecking();
 
     return (
       <PanelContainer id={this.props.id}
@@ -81,7 +90,7 @@ class TestingPanel extends React.Component
 
         <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode}/>
         <PanelSwitch id={"testing-step-test"} checked={stepMode} onChange={this.onStepTestChange} title={"Step testing"}/>
-        <PanelSwitch id={"testing-error-check"} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={"Auto error checking"} disabled={true}/>
+        <PanelSwitch id={"testing-error-check"} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={"Auto error checking"}/>
 
       </PanelContainer>
     );

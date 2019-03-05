@@ -11,7 +11,7 @@ import { ERROR_UNREACHABLE_STATE,
   ERROR_MISSING_TRANSITION,
   ERROR_EMPTY_TRANSITION } from './machine/FSABuilder.js';
 
-const ERROR_MESSAGE_TAG = "fsa_build_error";
+export const ERROR_MESSAGE_TAG = "fsa_build_error";
 
 class FSAErrorChecker
 {
@@ -19,7 +19,7 @@ class FSAErrorChecker
   {
     this._graphController = graphController;
     this._machineController = machineController;
-    this._showErrorOnChange = true;
+    this._showErrorOnChange = false;
 
     this.onMachineChange = this.onMachineChange.bind(this);
 
@@ -36,7 +36,7 @@ class FSAErrorChecker
 
   setErrorChecking(enabled)
   {
-    this._showErrorOnChange = false;
+    this._showErrorOnChange = enabled;
   }
 
   isErrorChecking()

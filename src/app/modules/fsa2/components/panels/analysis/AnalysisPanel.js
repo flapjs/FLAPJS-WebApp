@@ -110,7 +110,7 @@ const currentModule = session.getCurrentModule();
             : null
           }
         </PanelSection>
-        <PanelSection title={"Related Machines"} initial={true}>
+        <PanelSection title={"Related Machines"}>
           {machineController.getMachineType() === "DFA" &&
             <button className={Style.analysis_button} onClick={this.onInvertDFA}>
               {"Flip all accept states"}
