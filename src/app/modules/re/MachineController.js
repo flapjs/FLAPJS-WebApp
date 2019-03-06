@@ -23,6 +23,11 @@ class MachineController
     this._expressionChangeHandler.update(this._machine.getExpression());
   }
 
+  clear()
+  {
+    this.setMachineExpression("");
+  }
+
   getEquivalentFSA()
   {
     if (!this._equalFSA || (stringHash(this._machine.getExpression()) !== this._equalREHash))
@@ -40,7 +45,7 @@ class MachineController
 
   getMachineExpression()
   {
-    return this._machine.getExpression();
+    return this._machine.getExpression() || "";
   }
 
   getMachine()
@@ -50,7 +55,7 @@ class MachineController
 
   getExpressionChangeHandler()
   {
-    return this._graphChangeHandler;
+    return this._expressionChangeHandler;
   }
 }
 

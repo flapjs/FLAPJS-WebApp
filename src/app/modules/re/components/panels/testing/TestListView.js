@@ -127,12 +127,6 @@ class TestListView extends React.Component
 
   onTestClose(e)
   {
-    const tester = this.props.tester;
-    if (tester.isTesting())
-    {
-      tester.stopTest();
-    }
-
     this._testList.length = 0;
   }
 
@@ -147,12 +141,11 @@ class TestListView extends React.Component
 
   onTestRunAll(e)
   {
-    const tester = this.props.tester;
     let i = 0;
 
     const nextTest = () => {
       const test = this._testList[i];
-      this.onTestTest(null, test.ref, true, () => {
+      this.onTestTest(null, test.ref, () => {
         ++i;
         if (i < this._testList.length)
         {
@@ -179,7 +172,10 @@ class TestListView extends React.Component
     const result = solveFSA(fsa, itemValue);
     item.setState({status: result ? SUCCESS_MODE : FAILURE_MODE});
 
-    if (callback) callback();
+    if (callback)
+    {
+      callback();
+    }
   }
 
   isEmpty()
@@ -190,8 +186,6 @@ class TestListView extends React.Component
   //Override
   render()
   {
-    const tester = this.props.tester;
-
     const machineController = this.props.machineController;
 
     const empty = this.isEmpty();

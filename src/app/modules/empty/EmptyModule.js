@@ -25,12 +25,17 @@ class EmptyModule
   }
 
   //Override
+  clear(app)
+  {
+  }
+
+  //Override
   getModuleVersion() { return MODULE_VERSION; }
   //Override
   getModuleName() { return MODULE_NAME; }
   //Override
   getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
-
+  //Override
   getApp() { return this._app; }
 }
 

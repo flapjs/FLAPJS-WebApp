@@ -10,10 +10,12 @@ import REParser from '../REParser.js';
 // Construction of NFA is done using Thompson's algorithm
 export function convertToNFA(re)
 {
+  const prevExpression = re.getExpression();
   re.insertConcatSymbols();
 	const parser = new REParser();
 	parser.parseRegex(re);
 	const nfa = ASTtoNFA(parser.rootNode);
+  re.setExpression(prevExpression);
   return nfa;
 }
 

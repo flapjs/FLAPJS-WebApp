@@ -88,6 +88,12 @@ class NodalGraphModule
     this._inputManager.onSessionStop(app.getSession());
   }
 
+  //Override
+  clear(app)
+  {
+    UserUtil.userClearGraph(app, false, () => app.getToolbarComponent().closeBar());
+  }
+
   getInputManager() { return this._inputManager; }
   getInputController() { return this._inputManager.getInputController(); }
   getGraphController() { return this._inputManager.getGraphController(); }

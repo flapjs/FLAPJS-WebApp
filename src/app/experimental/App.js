@@ -49,6 +49,7 @@ import HotKeyView from 'manager/hotkey/HotKeyView.js';
 import UndoManager from 'manager/undo/UndoManager.js';
 import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
   RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'manager/RenderManager.js';
+import TooltipManager from 'manager/TooltipManager.js';
 
 import Module from 'modules/fsa2/FSAModule.js';
 
@@ -90,6 +91,7 @@ class App extends React.Component
     this._menuManager = new MenuManager();
     this._viewportManager = new ViewportManager();
     this._renderManager = new RenderManager();
+    this._tooltipManager = new TooltipManager();
 
     this._session = new Session(this)
       .addListener(this._undoManager)
@@ -98,7 +100,8 @@ class App extends React.Component
       .addListener(this._drawerManager)
       .addListener(this._menuManager)
       .addListener(this._viewportManager)
-      .addListener(this._renderManager);
+      .addListener(this._renderManager)
+      .addListener(this._tooltipManager);
 
     //TODO: This is only used to control transitions (do we really need it?)
     this._init = false;
@@ -165,6 +168,7 @@ class App extends React.Component
   get viewport() { return this._inputAdapter.getViewport(); }
 
   getWorkspaceComponent() { return this._workspace; }
+  getToolbarComponent() { return this._toolbar; }
 
   getUndoManager() { return this._undoManager; }
   getHotKeyManager() { return this._hotKeyManager; }
@@ -173,6 +177,7 @@ class App extends React.Component
   getMenuManager() { return this._menuManager; }
   getViewportManager() { return this._viewportManager; }
   getRenderManager() { return this._renderManager; }
+  getTooltipManager() { return this._tooltipManager; }
 
   getSession() { return this._session; }
 
@@ -217,6 +222,7 @@ class App extends React.Component
     const menuManager = this._menuManager;
     const viewportManager = this._viewportManager;
     const renderManager = this._renderManager;
+    const tooltipManager = this._tooltipManager;
 
     const drawerPanelClasses = drawerManager.getPanelClasses();
     const drawerPanelProps = drawerManager.getPanelProps() || {session: session};
@@ -241,9 +247,9 @@ class App extends React.Component
           title={currentModuleLocalizedName}
           session={session}
           onTitleClick={this.onModuleTitleClick}>
-          <ToolbarButton title="New" icon={PageEmptyIcon}
-            onClick={() => UserUtil.userClearGraph(this, false, () => this._toolbar.closeBar())}/>
-          <ToolbarUploadButton title="Upload" icon={UploadIcon} accept={exportManager.getImportFileTypes().join(",")}
+          <ToolbarButton title={I18N.toString("action.toolbar.newmachine")} icon={PageEmptyIcon}
+            onClick={() => currentModule.clear(this)}/>
+          <ToolbarUploadButton title={I18N.toString("action.toolbar.uploadmachine")} icon={UploadIcon} accept={exportManager.getImportFileTypes().join(",")}
             onUpload={fileBlob => {
               exportManager.tryImportFromFile(fileBlob)
                 .catch((e) => {
@@ -255,21 +261,21 @@ class App extends React.Component
                 });
             }}
             disabled={!defaultExporter || !defaultExporter.canImport(currentModule)}/>
-          <ToolbarButton title="Undo" icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+          <ToolbarButton title={I18N.toString("action.toolbar.undo")} icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
             disabled={!undoManager.canUndo()}
             onClick={()=>undoManager.undo()}/>
-          <ToolbarButton title="Redo" icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+          <ToolbarButton title={I18N.toString("action.toolbar.redo")} icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
             disabled={!undoManager.canRedo()}
             onClick={()=>undoManager.redo()}/>
           <ToolbarButton title={I18N.toString("component.exporting.title")} icon={DownloadIcon}
             onClick={()=>this._toolbar.setCurrentMenu(0)}
             disabled={!defaultExporter || !defaultExporter.canExport(currentModule)}/>
           <ToolbarDivider/>
-          <ToolbarButton title="Report a Bug" icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+          <ToolbarButton title={I18N.toString("action.toolbar.bug")} icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>window.open(BUGREPORT_URL, '_blank')}/>
-          <ToolbarButton title="Language" icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+          <ToolbarButton title={I18N.toString("action.toolbar.lang")} icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>this._toolbar.setCurrentMenu(2)}/>
-          <ToolbarButton title="Help" icon={HelpIcon}
+          <ToolbarButton title={I18N.toString("action.toolbar.help")} icon={HelpIcon}
             onClick={()=>window.open(HELP_URL, '_blank')}/>
           <ToolbarButton title={I18N.toString("component.options.title")} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>this._toolbar.setCurrentMenu(1)}/>
@@ -285,17 +291,9 @@ class App extends React.Component
           <UploadDropZone>
             <div className="viewport">
 
-              <TooltipView mode={ONESHOT_MODE} visible={/* TODO: For the initial fade-in animation */this._init && !undoManager.canUndo()}>
-                <label>{I18N.toString("message.workspace.empty")}</label>
-                <label>{"If you need help, try the \'?\' at the top."}</label>
-                <label>{"Or you can choose to do nothing."}</label>
-                <label>{"I can't do anything about that."}</label>
-                <label>{"You really should consider doing something though, for the sake of both of us."}</label>
-                <label>{"Of course, it is your free will."}</label>
-                <label>{"You do you."}</label>
-                <label>{"Please do something."}</label>
-                <label>{"I need my job."}</label>
-                <label>{I18N.toString("message.workspace.empty")}</label>
+              <TooltipView mode={tooltipManager.getTransitionMode()}
+                visible={/* TODO: For the initial fade-in animation */this._init && !undoManager.canUndo()}>
+                {tooltipManager.getTooltips().map((e, i) => <label key={e + ":" + i}>{e}</label>)}
               </TooltipView>
 
               <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>
