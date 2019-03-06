@@ -246,9 +246,9 @@ class App extends React.Component
           title={currentModuleLocalizedName}
           session={session}
           onTitleClick={this.onModuleTitleClick}>
-          <ToolbarButton title="New" icon={PageEmptyIcon}
+          <ToolbarButton title={I18N.toString("action.toolbar.newmachine")} icon={PageEmptyIcon}
             onClick={() => UserUtil.userClearGraph(this, false, () => this._toolbar.closeBar())}/>
-          <ToolbarUploadButton title="Upload" icon={UploadIcon} accept={exportManager.getImportFileTypes().join(",")}
+          <ToolbarUploadButton title={I18N.toString("action.toolbar.uploadmachine")} icon={UploadIcon} accept={exportManager.getImportFileTypes().join(",")}
             onUpload={fileBlob => {
               exportManager.tryImportFromFile(fileBlob)
                 .catch((e) => {
@@ -260,21 +260,21 @@ class App extends React.Component
                 });
             }}
             disabled={!defaultExporter || !defaultExporter.canImport(currentModule)}/>
-          <ToolbarButton title="Undo" icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+          <ToolbarButton title={I18N.toString("action.toolbar.undo")} icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
             disabled={!undoManager.canUndo()}
             onClick={()=>undoManager.undo()}/>
-          <ToolbarButton title="Redo" icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+          <ToolbarButton title={I18N.toString("action.toolbar.redo")} icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
             disabled={!undoManager.canRedo()}
             onClick={()=>undoManager.redo()}/>
           <ToolbarButton title={I18N.toString("component.exporting.title")} icon={DownloadIcon}
             onClick={()=>this._toolbar.setCurrentMenu(0)}
             disabled={!defaultExporter || !defaultExporter.canExport(currentModule)}/>
           <ToolbarDivider/>
-          <ToolbarButton title="Report a Bug" icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+          <ToolbarButton title={I18N.toString("action.toolbar.bug")} icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>window.open(BUGREPORT_URL, '_blank')}/>
-          <ToolbarButton title="Language" icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+          <ToolbarButton title={I18N.toString("action.toolbar.lang")} icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>this._toolbar.setCurrentMenu(2)}/>
-          <ToolbarButton title="Help" icon={HelpIcon}
+          <ToolbarButton title={I18N.toString("action.toolbar.help")} icon={HelpIcon}
             onClick={()=>window.open(HELP_URL, '_blank')}/>
           <ToolbarButton title={I18N.toString("component.options.title")} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>this._toolbar.setCurrentMenu(1)}/>
