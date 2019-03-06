@@ -229,6 +229,101 @@ class MachineController extends AbstractMachineController
   {
     this._machineBuilder.getMachine().clearCustomSymbols();
   }
+
+  getStackAlphabet()
+  {
+    const machine = this._machineBuilder.getMachine();
+    return Array.from(machine.getStackAlphabet());
+  }
+
+  isUsedStackSymbol(symbol)
+  {
+    return !this.isCustomStackSymbol(symbol);
+  }
+
+  createStackSymbol(symbol)
+  {
+    this.addCustomStackSymbol(symbol);
+  }
+
+  deleteStackSymbol(symbol)
+  {
+    let edge = null;
+    let index = null;
+    let result = null;
+    const targets = [];
+
+    const graph = this.graphController.getGraph();
+    for(let i = graph.getEdges().length - 1; i >= 0; --i)
+    {
+      edge = graph.getEdges()[i];
+      index = edge.getEdgeLabel().indexOf(symbol);
+      if (index >= 0)
+      {
+        result = edge.getEdgeLabel().substring(0, index) + edge.getEdgeLabel().substring(index + 1);
+        if (result.length > 0)
+        {
+          edge.setEdgeLabel(result);
+        }
+        else
+        {
+          edge.setEdgeLabel("");
+          graph.deleteEdge(edge);
+        }
+        targets.push(edge);
+      }
+    }
+
+    if (targets.length <= 0)
+    {
+      this.getMachineBuilder().removeCustomStackSymbol(symbol);
+    }
+  }
+
+  renameStackSymbol(prevSymbol, nextSymbol)
+  {
+    let edge = null;
+    let result = null;
+    const targets = [];
+
+    const graph = this.graphController.getGraph();
+    const length = graph.getEdges().length;
+    for(let i = 0; i < length; ++i)
+    {
+      edge = graph.getEdges()[i];
+      let result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
+      if (result != edge.getEdgeLabel())
+      {
+        targets.push(edge);
+      }
+      edge.setEdgeLabel(result);
+    }
+
+    if (targets.length <= 0)
+    {
+      this.getMachineBuilder().renameCustomStackSymbol(prevSymbol, nextSymbol);
+    }
+  }
+
+  getCustomStackSymbols()
+  {
+    return Array.from(this._machineBuilder.getMachine().getCustomStackSymbols());
+  }
+
+  isCustomStackSymbol(symbol)
+  {
+    return this._machineBuilder.isCustomStackSymbol(symbol);
+  }
+
+  addCustomStackSymbol(symbol)
+  {
+    this._machineBuilder.getMachine().setCustomStackSymbol(symbol);
+  }
+
+  clearCustomStackSymbols()
+  {
+    this._machineBuilder.getMachine().clearCustomStackSymbols();
+  }
 }
 
 export default MachineController;

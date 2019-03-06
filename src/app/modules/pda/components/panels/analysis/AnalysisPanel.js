@@ -20,7 +20,7 @@ class AnalysisPanel extends React.Component
   onDeleteAllUnreachable(e)
   {
     const session = this.props.session;
-    const currentModule = session.getSession().getCurrentModule();
+    const currentModule = session.getCurrentModule();
     const graphController = currentModule.getGraphController();
     const machineController = currentModule.getMachineController();
     const unreachableArray = machineController.getUnreachableNodes();

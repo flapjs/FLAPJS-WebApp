@@ -39,9 +39,22 @@ class NodalGraphInputManager
     return this;
   }
 
+  update(currentModule)
+  {
+    const inputController = this.getInputController();
+    const graphController = this.getGraphController();
+    inputController.update(currentModule);
+    graphController.update(currentModule);
+  }
+
   //DuckType(SessionListener)
   onSessionStart(session)
   {
+    const inputController = this.getInputController();
+    const graphController = this.getGraphController();
+    inputController.initialize(this);
+    graphController.initialize(this);
+    
     this._labelEditorManager.onSessionStart(session);
 
     //Notify on create in delete mode
@@ -58,6 +71,11 @@ class NodalGraphInputManager
   onSessionStop(session)
   {
     this._labelEditorManager.onSessionStop(session);
+
+    const inputController = this.getInputController();
+    const graphController = this.getGraphController();
+    graphController.destroy(session.getCurrentModule());
+    inputController.destroy(session.getCurrentModule());
   }
 
   getLabelEditorManager() { return this._labelEditorManager; }

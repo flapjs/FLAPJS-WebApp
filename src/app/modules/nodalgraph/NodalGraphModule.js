@@ -1,16 +1,23 @@
 import React from 'react';
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 
-import NodalGraphController from './NodalGraphController.js';
-import NodalGraphExporter from './NodalGraphExporter.js';
-import {DEFAULT_IMAGE_EXPORTERS} from './NodalGraphImageExporter.js';
-import SafeGraphEventHandler from './SafeGraphEventHandler.js';
+import NodalGraphInputManager from 'modules/nodalgraph/manager/NodalGraphInputManager.js';
+
+import NodalGraphRenderer from 'graph/renderer/NodalGraphRenderer.js';
+import GraphInputRenderer from 'modules/nodalgraph/controller/renderer/GraphInputRenderer.js';
 
 import NodalGraph from 'graph/NodalGraph.js';
 import GraphNode from 'graph/GraphNode.js';
 import QuadraticEdge from 'graph/QuadraticEdge.js';
+import EmptyGraphLabeler from './EmptyGraphLabeler.js';
+import * as NodalGraphParser from 'graph/parser/NodalGraphParser.js';
 
-import {JSON as JSONGraphParser} from 'graph/parser/NodalGraphParser.js';
+import EditPane from './components/views/EditPane.js';
+import {RENDER_LAYER_WORKSPACE} from 'manager/RenderManager.js';
+
+import NodalGraphExporter from './NodalGraphExporter.js';
+import {DEFAULT_IMAGE_EXPORTERS} from './NodalGraphImageExporter.js';
+import SafeGraphEventHandler from './SafeGraphEventHandler.js';
 
 const MODULE_NAME = "nodalgraph";
 const MODULE_VERSION = "0.0.1";
@@ -22,8 +29,11 @@ class NodalGraphModule
   {
     this._app = app;
 
-    this._graphController = new NodalGraphController(this, new NodalGraph(GraphNode, QuadraticEdge));
-    this._graphParser = JSONGraphParser;
+    this._inputManager = new NodalGraphInputManager(this,
+      new NodalGraph(GraphNode, QuadraticEdge),
+      new EmptyGraphLabeler(),
+      NodalGraphParser,
+      null);
 
     app.getDrawerManager()
       .addPanelClass(props => (
@@ -40,30 +50,47 @@ class NodalGraphModule
       .addExporter(new NodalGraphExporter())
       .addExporters(DEFAULT_IMAGE_EXPORTERS);
 
+    app.getViewportManager()
+      .addViewClass(EditPane);
+
+    app.getRenderManager()
+      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+        <>
+          {/* Graph objects */
+            <NodalGraphRenderer currentModule={this} parent={props.workspace}/>}
+        </>
+      ))
+      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+        <GraphInputRenderer currentModule={this}/>
+      ));
+
     app.getUndoManager()
       .setEventHandlerFactory((...args) => {
-        return new SafeGraphEventHandler(this._graphController, this._graphParser);
+        return new SafeGraphEventHandler(this._inputManager.getGraphController(), this._inputManager.getGraphParser());
       });
   }
 
   //Override
   initialize(app)
   {
+    this._inputManager.onSessionStart(app.getSession());
   }
 
   //Override
   update(app)
   {
+    this._inputManager.update(this);
   }
 
   //Override
   destroy(app)
   {
+    this._inputManager.onSessionStop(app.getSession());
   }
 
-  getGraphParser() { return this._graphParser; }
-  getGraphController() { return this._graphController; }
-  getInputController() { return this._inputController; }
+  getInputManager() { return this._inputManager; }
+  getInputController() { return this._inputManager.getInputController(); }
+  getGraphController() { return this._inputManager.getGraphController(); }
 
   //Override
   getModuleVersion() { return MODULE_VERSION; }

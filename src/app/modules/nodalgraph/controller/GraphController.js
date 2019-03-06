@@ -197,8 +197,8 @@ class GraphController extends AbstractGraphController
 
   deleteSelectedNodes(selectedNode)
   {
-    const picker = this.inputController.getPicker();
-    const selection = picker.getSelection(this.getGraph()).slice();
+    const selectionBox = this.inputController.getSelectionBox();
+    const selection = selectionBox.getSelection(this.getGraph()).slice();
 
     //Remove from graph
     for(const node of selection)
@@ -207,7 +207,7 @@ class GraphController extends AbstractGraphController
     }
 
     //Remove from selection
-    picker.clearSelection();
+    selectionBox.clearSelection();
 
     //Emit event
     this.onGraphIntentDeleteNodes(selectedNode, selection, this.prevX, this.prevY);
