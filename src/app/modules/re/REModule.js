@@ -7,6 +7,8 @@ import OverviewPanel from './components/panels/overview/OverviewPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 import TestingPanel from './components/panels/testing/TestingPanel.js';
 
+import ExpressionView from './components/views/ExpressionView.js';
+
 const MODULE_NAME = "re";
 const MODULE_VERSION = "0.0.1";
 const MODULE_LOCALIZED_NAME = "RE";
@@ -32,6 +34,9 @@ class REModule
       .addPanelClass(OverviewPanel)
       .addPanelClass(AnalysisPanel)
       .addPanelClass(TestingPanel);
+
+    app.getViewportManager()
+      .addViewClass(ExpressionView);
   }
 
   //Override

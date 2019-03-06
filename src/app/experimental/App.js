@@ -49,6 +49,7 @@ import HotKeyView from 'manager/hotkey/HotKeyView.js';
 import UndoManager from 'manager/undo/UndoManager.js';
 import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
   RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'manager/RenderManager.js';
+import TooltipManager from 'manager/TooltipManager.js';
 
 import Module from 'modules/fsa2/FSAModule.js';
 
@@ -90,6 +91,7 @@ class App extends React.Component
     this._menuManager = new MenuManager();
     this._viewportManager = new ViewportManager();
     this._renderManager = new RenderManager();
+    this._tooltipManager = new TooltipManager();
 
     this._session = new Session(this)
       .addListener(this._undoManager)
@@ -98,7 +100,8 @@ class App extends React.Component
       .addListener(this._drawerManager)
       .addListener(this._menuManager)
       .addListener(this._viewportManager)
-      .addListener(this._renderManager);
+      .addListener(this._renderManager)
+      .addListener(this._tooltipManager);
 
     //TODO: This is only used to control transitions (do we really need it?)
     this._init = false;
@@ -173,6 +176,7 @@ class App extends React.Component
   getMenuManager() { return this._menuManager; }
   getViewportManager() { return this._viewportManager; }
   getRenderManager() { return this._renderManager; }
+  getTooltipManager() { return this._tooltipManager; }
 
   getSession() { return this._session; }
 
@@ -217,6 +221,7 @@ class App extends React.Component
     const menuManager = this._menuManager;
     const viewportManager = this._viewportManager;
     const renderManager = this._renderManager;
+    const tooltipManager = this._tooltipManager;
 
     const drawerPanelClasses = drawerManager.getPanelClasses();
     const drawerPanelProps = drawerManager.getPanelProps() || {session: session};
@@ -285,17 +290,9 @@ class App extends React.Component
           <UploadDropZone>
             <div className="viewport">
 
-              <TooltipView mode={ONESHOT_MODE} visible={/* TODO: For the initial fade-in animation */this._init && !undoManager.canUndo()}>
-                <label>{I18N.toString("message.workspace.empty")}</label>
-                <label>{"If you need help, try the \'?\' at the top."}</label>
-                <label>{"Or you can choose to do nothing."}</label>
-                <label>{"I can't do anything about that."}</label>
-                <label>{"You really should consider doing something though, for the sake of both of us."}</label>
-                <label>{"Of course, it is your free will."}</label>
-                <label>{"You do you."}</label>
-                <label>{"Please do something."}</label>
-                <label>{"I need my job."}</label>
-                <label>{I18N.toString("message.workspace.empty")}</label>
+              <TooltipView mode={tooltipManager.getTransitionMode()}
+                visible={/* TODO: For the initial fade-in animation */this._init && !undoManager.canUndo()}>
+                {tooltipManager.getTooltips().map((e, i) => <label key={e + ":" + i}>{e}</label>)}
               </TooltipView>
 
               <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>

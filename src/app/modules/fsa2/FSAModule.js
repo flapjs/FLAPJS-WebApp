@@ -96,6 +96,18 @@ class FSAModule
       .setEventHandlerFactory((...args) => {
         return new SafeGraphEventHandler(this._inputManager.getGraphController(), this._inputManager.getGraphParser());
       });
+
+    app.getTooltipManager()
+      .addTooltip(I18N.toString("message.workspace.empty"))
+      .addTooltip("If you need help, try the \'?\' at the top.")
+      .addTooltip("Or you can choose to do nothing.")
+      .addTooltip("I can't do anything about that.")
+      .addTooltip("You really should consider doing something though, for the sake of both of us.")
+      .addTooltip("Of course, it is your free will.")
+      .addTooltip("You do you.")
+      .addTooltip("Please do something.")
+      .addTooltip("I need my job.")
+      .addTooltip(I18N.toString("message.workspace.empty"));
   }
 
   //Override
