@@ -293,3 +293,29 @@ describe("Testing PDA machine: \'9*\'", () => {
   testSolvePDA(machine, "[][][][", false);
 
 });
+
+describe("Testing PDA machine: \'10*\'", () => {
+  const machine = new PDA();
+  const state1 = machine.createState("q1");
+  const state2 = machine.createState("q2");
+  const state3 = machine.createState("q3");
+  const state4 = machine.createState("q4");
+  machine.addTransition(state1, state1,"0", EMPTY_SYMBOL, "0")
+  machine.addTransition(state1, state1,"1",EMPTY_SYMBOL,"1");
+  machine.addTransition(state1,state2, EMPTY_SYMBOL,EMPTY_SYMBOL, EMPTY_SYMBOL);
+  machine.addTransition(state2, state2, "0","1","0")
+  machine.addTransition(state2, state2,"1", "0","1")
+  machine.addTransition(state2,state3, "0","1", EMPTY_SYMBOL);
+  machine.addTransition(state2,state4, "0","0", EMPTY_SYMBOL);
+  machine.setStartState(state1);
+  machine.setFinalState(state3);
+
+  test("machine accepts the empty string since start state is also final", () => {
+    expect(solvePDA(machine, "")).toBe(false);
+  });
+
+  //Test strings
+  testSolvePDA(machine, "010", true);
+  testSolvePDA(machine, "100", false);
+
+});

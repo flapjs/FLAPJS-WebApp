@@ -22,7 +22,17 @@ class PDABuilder extends AbstractMachineBuilder
 		errors.length = 0;
 		warnings.length = 0;
 
+    const customSymbols = Array.from(dst.getCustomSymbols());
+    const customStackSymbols = Array.from(dst.getCustomStackSymbols());
 		dst.clear();
+    for(const symbol of customSymbols)
+    {
+      dst.setCustomSymbol(symbol);
+    }
+    for(const stackSymbol of customStackSymbols)
+    {
+      dst.setCustomStackSymbol(stackSymbol);
+    }
 
 		const nodeLabels = new Map();
 		const nodeOutgoings = new Map();
