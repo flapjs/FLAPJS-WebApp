@@ -792,7 +792,18 @@ class PDA
           const validPop = validSymbol.getPopSymbol();
           const validPush = validSymbol.getPushSymbol();
 
-          if (validPop !== EMPTY_SYMBOL) newStack.pop();
+          if (validPop !== EMPTY_SYMBOL)
+          {
+            if(stack.length == 0)
+            {
+              continue;
+            }
+            else
+            {
+              newStack.pop();
+            }
+
+          }
           if (validPush !== EMPTY_SYMBOL) newStack.push(validPush);
 
           const result = this.doClosureTransition(toState, newStack);
