@@ -20,7 +20,7 @@ class Session
   {
     this._moduleClass = ModuleClass;
     this._module = new ModuleClass(this._app);
-    
+
     for(const listener of this._listeners)
     {
       listener.onSessionStart(this);

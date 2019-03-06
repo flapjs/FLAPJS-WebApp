@@ -168,6 +168,7 @@ class App extends React.Component
   get viewport() { return this._inputAdapter.getViewport(); }
 
   getWorkspaceComponent() { return this._workspace; }
+  getToolbarComponent() { return this._toolbar; }
 
   getUndoManager() { return this._undoManager; }
   getHotKeyManager() { return this._hotKeyManager; }
@@ -247,7 +248,7 @@ class App extends React.Component
           session={session}
           onTitleClick={this.onModuleTitleClick}>
           <ToolbarButton title={I18N.toString("action.toolbar.newmachine")} icon={PageEmptyIcon}
-            onClick={() => UserUtil.userClearGraph(this, false, () => this._toolbar.closeBar())}/>
+            onClick={() => currentModule.clear(this)}/>
           <ToolbarUploadButton title={I18N.toString("action.toolbar.uploadmachine")} icon={UploadIcon} accept={exportManager.getImportFileTypes().join(",")}
             onUpload={fileBlob => {
               exportManager.tryImportFromFile(fileBlob)

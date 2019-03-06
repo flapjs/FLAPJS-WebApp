@@ -137,6 +137,12 @@ class FSAModule
     machineController.destroy(this);
   }
 
+  //Override
+  clear(app)
+  {
+    UserUtil.userClearGraph(app, false, () => app.getToolbarComponent().closeBar());
+  }
+
   getInputManager() { return this._inputManager; }
 
   getInputController() { return this._inputManager.getInputController(); }

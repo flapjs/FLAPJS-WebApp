@@ -55,6 +55,13 @@ class REModule
   {
   }
 
+  //Override
+  clear(app)
+  {
+    this._machineController.setMachineExpression("");
+    this._app.getToolbarComponent().closeBar();
+  }
+
   getMachineController() { return this._machineController; }
 
   //Override
