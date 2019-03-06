@@ -11,3 +11,6 @@
   pointer-events: all;
   cursor: pointer;
 }
+:local(.upload_input):disabled {
+  cursor: auto;
+}

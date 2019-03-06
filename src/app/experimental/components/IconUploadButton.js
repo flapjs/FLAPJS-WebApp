@@ -38,6 +38,7 @@ class IconUploadButton extends React.Component
         disabled={this.props.disabled}>
         <input type="file" name="import"
           className={Style.upload_input}
+          disabled={this.props.disabled}
           accept={accept}
           onChange={this.onFileUpload}/>
         {this.props.children}
