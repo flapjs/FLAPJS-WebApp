@@ -27,11 +27,13 @@ class GraphInputRenderer extends React.Component
         <SelectionBoxRenderer currentModule={currentModule}/>
 
         {/* Node test targets */}
-        { currentModule._tester.targets && currentModule._tester.targets.map((e, i) => {
-          return <HighlightRenderer key={e.getGraphElementID()}
-            className="highlight-test graph-gui"
-            target={e} type="node" offset="6"/>;
-        })}
+        { currentModule._tester &&
+          currentModule._tester.targets &&
+          currentModule._tester.targets.map((e, i) => {
+            return <HighlightRenderer key={e.getGraphElementID()}
+              className="highlight-test graph-gui"
+              target={e} type="node" offset="6"/>;
+          })}
 
         {/* Hover markers */}
         { picker &&

@@ -7,7 +7,7 @@ import { ERROR_UNREACHABLE_STATE,
   ERROR_DUPLICATE_STATE,
   ERROR_INCOMPLETE_TRANSITION } from './machine/PDABuilder.js';
 
-const ERROR_MESSAGE_TAG = "pda_build_error";
+export const ERROR_MESSAGE_TAG = "pda_build_error";
 
 class PDAErrorChecker
 {
@@ -15,7 +15,7 @@ class PDAErrorChecker
   {
     this._graphController = graphController;
     this._machineController = machineController;
-    this._showErrorOnChange = true;
+    this._showErrorOnChange = false;
 
     this.onMachineChange = this.onMachineChange.bind(this);
 
@@ -32,7 +32,7 @@ class PDAErrorChecker
 
   setErrorChecking(enabled)
   {
-    this._showErrorOnChange = false;
+    this._showErrorOnChange = enabled;
   }
 
   isErrorChecking()

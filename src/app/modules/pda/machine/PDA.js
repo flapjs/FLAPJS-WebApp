@@ -497,72 +497,14 @@ class PDA
   {
     if (symbol === EMPTY_SYMBOL) throw new Error("Cannot change the empty symbol");
     if (newSymbol === EMPTY_SYMBOL) throw new Error("Cannot change to the empty symbol");
-    if (this._alphabet.has(newSymbol)) throw new Error("Cannot change symbol to another existing symbol");
+    if (this._stackAlphabet.has(newSymbol)) throw new Error("Cannot change symbol to another existing symbol");
 
-    for(const transition of this._transitions.values())
-    {
-      const symbols = transition.getSymbols();
-      const index = symbols.indexOf(symbol);
-
-      //Change the symbol from the transition
-      if (index >= 0)
-      {
-        symbols[index] = newSymbol;
-      }
-    }
-
-    //Exchange symbol counts...
-    const count = this._alphabet.get(symbol);
-    this._alphabet.set(newSymbol, count);
-    this._alphabet.delete(symbol);
-
-    //Check if custom symbol...
-    if (this._customSymbols.has(symbol))
-    {
-      this._customSymbols.delete(symbol);
-      this._customSymbols.add(newSymbol);
-    }
+    throw new Error("Not yet implemented");
   }
 
   removeSymbol(symbol)
   {
-    const cache = [];
-    for(const [key, transition] of this._transitions.entries())
-    {
-      const symbols = transition.getSymbols();
-      const index = symbols.indexOf(symbol);
-
-      //Delete the symbol from the transition
-      if (index >= 0)
-      {
-        symbols.splice(index, 1);
-
-        //If no more symbols, make sure to delete it from the map later...
-        if (symbols.length <= 0)
-        {
-          cache.push(key);
-        }
-      }
-    }
-
-    //Delete any transitions that have no more symbols...
-    for(const transitionKey of cache)
-    {
-      this._transitions.delete(transitionKey);
-    }
-
-    //Remove from alphabet if possible...
-    if (symbol !== EMPTY_SYMBOL)
-    {
-      if (this._customSymbols.has(symbol))
-      {
-        this._alphabet.set(symbol, 0);
-      }
-      else
-      {
-        this._alphabet.delete(symbol);
-      }
-    }
+    throw new Error("Not yet implemented");
   }
 
   setCustomSymbol(symbol, custom=true)

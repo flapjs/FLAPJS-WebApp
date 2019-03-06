@@ -1,8 +1,6 @@
 import React from 'react';
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 
-import AbstractModule from 'modules/abstract/AbstractModule.js';
-
 import NodalGraphInputManager from 'modules/nodalgraph/manager/NodalGraphInputManager.js';
 import MachineController from './controller/MachineController.js';
 
@@ -34,11 +32,11 @@ import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
 const MODULE_NAME = "fsa2";
 const MODULE_VERSION = "0.0.1";
 
-class FSAModule extends AbstractModule
+class FSAModule
 {
   constructor(app)
   {
-    super(app);
+    this._app = app;
 
     this._inputManager = new NodalGraphInputManager(this,
       new FSAGraph(),
@@ -103,23 +101,38 @@ class FSAModule extends AbstractModule
   //Override
   initialize(app)
   {
-    super.initialize(app);
+    const machineController = this.getMachineController();
+    machineController.initialize(this);
 
     this._inputManager.onSessionStart(app.getSession());
   }
 
   //Override
+  update(app)
+  {
+    this._inputManager.update(this);
+
+    const machineController = this.getMachineController();
+    machineController.update(this);
+  }
+
+  //Override
   destroy(app)
   {
-    super.destroy(app);
-
     this._inputManager.onSessionStop(app.getSession());
+
+    const machineController = this.getMachineController();
+    machineController.destroy(this);
   }
 
   getInputManager() { return this._inputManager; }
+
   getInputController() { return this._inputManager.getInputController(); }
   getMachineController() { return this._machineController; }
   getGraphController() { return this._inputManager.getGraphController(); }
+
+  getErrorChecker() { return this._errorChecker; }
+  getStringTester() { return this._tester; }
 
   //Override
   getModuleVersion() { return MODULE_VERSION; }
@@ -127,6 +140,7 @@ class FSAModule extends AbstractModule
   getModuleName() { return MODULE_NAME; }
   //Override
   getLocalizedModuleName() { return this._machineController.getMachineType(); }
+  getApp() { return this._app; }
 }
 
 export default FSAModule;

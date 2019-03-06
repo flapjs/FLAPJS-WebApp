@@ -3,8 +3,6 @@ import Style from './TestingPanel.css';
 
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSwitch from 'experimental/panels/PanelSwitch.js';
-import PanelDivider from 'experimental/panels/PanelDivider.js';
-import PanelSection from 'experimental/panels/PanelSection.js';
 
 import TestListView from './TestListView.js';
 
@@ -16,9 +14,7 @@ class TestingPanel extends React.Component
   constructor(props)
   {
     super(props);
-
-    this.inputElement = null;
-
+    
     this.state = {
       stepMode: false
     };

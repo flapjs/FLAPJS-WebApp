@@ -1,6 +1,8 @@
 import React from 'react';
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 
+import MachineController from './MachineController.js';
+
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 
@@ -13,6 +15,8 @@ class REModule
   constructor(app)
   {
     this._app = app;
+
+    this._machineController = new MachineController();
 
     app.getDrawerManager()
       .addPanelClass(props => (
@@ -36,12 +40,15 @@ class REModule
   //Override
   update(app)
   {
+    this._machineController.update();
   }
 
   //Override
   destroy(app)
   {
   }
+
+  getMachineController() { return this._machineController; }
 
   //Override
   getModuleVersion() { return MODULE_VERSION; }

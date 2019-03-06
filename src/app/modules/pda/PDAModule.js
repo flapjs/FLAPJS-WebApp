@@ -34,11 +34,11 @@ const MODULE_NAME = "pda";
 const MODULE_LOCALIZED_NAME = "PDA";
 const MODULE_VERSION = "0.0.1";
 
-class PDAModule extends AbstractModule
+class PDAModule
 {
   constructor(app)
   {
-    super(app);
+    this._app = app;
 
     this._inputManager = new NodalGraphInputManager(this,
       new PDAGraph(),
@@ -102,23 +102,38 @@ class PDAModule extends AbstractModule
   //Override
   initialize(app)
   {
-    super.initialize(app);
+    const machineController = this.getMachineController();
+    machineController.initialize(this);
 
     this._inputManager.onSessionStart(app.getSession());
   }
 
   //Override
+  update(app)
+  {
+    this._inputManager.update(this);
+
+    const machineController = this.getMachineController();
+    machineController.update(this);
+  }
+
+  //Override
   destroy(app)
   {
-    super.destroy(app);
-
     this._inputManager.onSessionStop(app.getSession());
+
+    const machineController = this.getMachineController();
+    machineController.destroy(this);
   }
 
   getInputManager() { return this._inputManager; }
+
   getInputController() { return this._inputManager.getInputController(); }
   getMachineController() { return this._machineController; }
   getGraphController() { return this._inputManager.getGraphController(); }
+
+  getErrorChecker() { return this._errorChecker; }
+  getStringTester() { return this._tester; }
 
   //Override
   getModuleVersion() { return MODULE_VERSION; }
@@ -126,6 +141,7 @@ class PDAModule extends AbstractModule
   getModuleName() { return MODULE_NAME; }
   //Override
   getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
+  getApp() { return this._app; }
 }
 
 export default PDAModule;
