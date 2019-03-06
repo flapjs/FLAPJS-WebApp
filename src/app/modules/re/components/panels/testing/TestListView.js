@@ -145,7 +145,7 @@ class TestListView extends React.Component
 
     const nextTest = () => {
       const test = this._testList[i];
-      this.onTestTest(null, test.ref, true, () => {
+      this.onTestTest(null, test.ref, () => {
         ++i;
         if (i < this._testList.length)
         {
@@ -172,7 +172,10 @@ class TestListView extends React.Component
     const result = solveFSA(fsa, itemValue);
     item.setState({status: result ? SUCCESS_MODE : FAILURE_MODE});
 
-    if (callback) callback();
+    if (callback)
+    {
+      callback();
+    }
   }
 
   isEmpty()
