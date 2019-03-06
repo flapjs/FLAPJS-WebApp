@@ -17,6 +17,7 @@ class ExpressionView extends React.Component
     const machineController = currentModule.getMachineController();
 
     machineController.setMachineExpression(e.target.value);
+    session.getApp().getUndoManager().captureEvent();
   }
 
   //Override

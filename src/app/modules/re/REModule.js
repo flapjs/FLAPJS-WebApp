@@ -2,6 +2,8 @@ import React from 'react';
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 
 import MachineController from './MachineController.js';
+import REGraphExporter from './exporter/REGraphExporter.js';
+import SafeExpressionEventHandler from './SafeExpressionEventHandler.js';
 
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
@@ -37,6 +39,14 @@ class REModule
 
     app.getViewportManager()
       .addViewClass(ExpressionView);
+
+    app.getUndoManager()
+      .setEventHandlerFactory((...args) => {
+        return new SafeExpressionEventHandler(this._machineController);
+      });
+
+    app.getExportManager()
+      .addExporter(new REGraphExporter());
   }
 
   //Override
