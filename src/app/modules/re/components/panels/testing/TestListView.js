@@ -127,12 +127,6 @@ class TestListView extends React.Component
 
   onTestClose(e)
   {
-    const tester = this.props.tester;
-    if (tester.isTesting())
-    {
-      tester.stopTest();
-    }
-
     this._testList.length = 0;
   }
 
@@ -147,7 +141,6 @@ class TestListView extends React.Component
 
   onTestRunAll(e)
   {
-    const tester = this.props.tester;
     let i = 0;
 
     const nextTest = () => {
@@ -190,8 +183,6 @@ class TestListView extends React.Component
   //Override
   render()
   {
-    const tester = this.props.tester;
-
     const machineController = this.props.machineController;
 
     const empty = this.isEmpty();

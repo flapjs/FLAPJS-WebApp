@@ -5,6 +5,7 @@ import MachineController from './MachineController.js';
 
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
+import TestingPanel from './components/panels/testing/TestingPanel.js';
 
 const MODULE_NAME = "re";
 const MODULE_VERSION = "0.0.1";
@@ -29,7 +30,8 @@ class REModule
         </PanelContainer>
       ))
       .addPanelClass(OverviewPanel)
-      .addPanelClass(AnalysisPanel);
+      .addPanelClass(AnalysisPanel)
+      .addPanelClass(TestingPanel);
   }
 
   //Override

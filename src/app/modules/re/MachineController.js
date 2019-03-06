@@ -50,7 +50,7 @@ class MachineController
 
   getExpressionChangeHandler()
   {
-    return this._graphChangeHandler;
+    return this._expressionChangeHandler;
   }
 }
 
