@@ -12,10 +12,6 @@ class ExpressionView extends React.Component
 
     this._inputElement = null;
 
-    this.state = {
-      error: "None"
-    };
-
     this.onInputChange = this.onInputChange.bind(this);
   }
 
@@ -41,12 +37,16 @@ class ExpressionView extends React.Component
     const currentModule = session.getCurrentModule();
     const machineController = currentModule.getMachineController();
 
+    const error = !machineController.getMachine().isValid();
+
     return (
       <div id={this.props.id}
         className={Style.view_pane +
           " " + this.props.className}
         style={this.props.style}>
-        <div className={Style.view_widget + " " + ExpressionViewStyle.expression}>
+        <div className={Style.view_widget + " " +
+          ExpressionViewStyle.expression + " " +
+          (error ? "error" : "")}>
           <input ref={ref=>this._inputElement=ref}value={machineController.getMachineExpression()} onChange={this.onInputChange}/>
         </div>
         <div className={Style.view_widget + " " + ExpressionViewStyle.expression_tray + " " + ExpressionViewStyle.tray_important}>

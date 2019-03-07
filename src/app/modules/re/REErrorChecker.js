@@ -18,7 +18,6 @@ class REErrorChecker
   {
     if (this._showErrorOnChange)
     {
-      this._machineController.getMachine().validate();
       this.showErrors();
     }
   }

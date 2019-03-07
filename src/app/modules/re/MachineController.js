@@ -44,6 +44,7 @@ class MachineController
   setMachineExpression(string)
   {
     this._machine.setExpression(string);
+    this._machine.validate();
   }
 
   getMachineExpression()

@@ -13,6 +13,9 @@
   width: 100%;
   height: 100%;
 }
+:local(.expression).error input {
+  color: var(--color-viewport-error);
+}
 
 :local(.expression_tray) {
   bottom: 0;
