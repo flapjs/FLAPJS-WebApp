@@ -1,6 +1,8 @@
 import React from 'react';
 import Style from 'experimental/viewport/ViewportView.css';
 
+import ExpressionViewStyle from './ExpressionView.css';
+
 class ExpressionView extends React.Component
 {
   constructor(props)
@@ -32,7 +34,7 @@ class ExpressionView extends React.Component
         className={Style.view_pane +
           " " + this.props.className}
         style={this.props.style}>
-        <div className={Style.view_widget} style={{top: "50%", left: "50%"}}>
+        <div className={Style.view_widget + " " + ExpressionViewStyle.expression}>
           <input value={machineController.getMachineExpression()} onChange={this.onInputChange}/>
         </div>
       </div>

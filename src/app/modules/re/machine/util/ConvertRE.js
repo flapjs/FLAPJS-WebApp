@@ -11,6 +11,7 @@ import REParser from '../REParser.js';
 export function convertToNFA(re)
 {
   const prevExpression = re.getExpression();
+  re.setExpression(prevExpression.replace(/\s/g,''));
   re.insertConcatSymbols();
 	const parser = new REParser();
 	parser.parseRegex(re);
