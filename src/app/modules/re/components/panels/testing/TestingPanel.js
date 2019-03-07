@@ -8,6 +8,9 @@ import PanelSection from 'experimental/panels/PanelSection.js';
 
 import TestListView from './TestListView.js';
 
+import Notifications from 'system/notification/Notifications.js';
+import {ERROR_MESSAGE_TAG} from 'modules/re/REErrorChecker.js';
+
 class TestingPanel extends React.Component
 {
   constructor(props)
@@ -27,6 +30,11 @@ class TestingPanel extends React.Component
     {
       //Turning it off
       Notifications.clearMessages(ERROR_MESSAGE_TAG);
+    }
+    else
+    {
+      const machineController = currentModule.getMachineController();
+      errorChecker.onExpressionChange(machineController.getMachineExpression());
     }
   }
 

@@ -14,10 +14,11 @@ class REErrorChecker
     machineController.getExpressionChangeHandler().addListener(this.onExpressionChange);
   }
 
-  onExpressionChange(machineBuilder)
+  onExpressionChange(expression)
   {
     if (this._showErrorOnChange)
     {
+      this._machineController.getMachine().validate();
       this.showErrors();
     }
   }

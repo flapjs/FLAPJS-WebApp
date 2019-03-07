@@ -23,7 +23,6 @@ class MachineController
 
   update()
   {
-    this._machine.validate();
     this._expressionChangeHandler.update(this._machine.getExpression());
   }
 
