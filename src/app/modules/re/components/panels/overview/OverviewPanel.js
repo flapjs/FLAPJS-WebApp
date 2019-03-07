@@ -23,7 +23,9 @@ class OverviewPanel extends React.Component
         className={this.props.className}
         style={this.props.style}
         title={OverviewPanel.TITLE}>
-        <label>Legends tell of an amazing human rising from the void beyond and fulfilling the emptiness below...</label>
+        <PanelSection title={"Symbol Key"} initial={true}>
+          <label>Legends tell of an amazing human rising from the void beyond and fulfilling the emptiness below...</label>
+        </PanelSection>
       </PanelContainer>
     );
   }

@@ -5,7 +5,10 @@ import {convertToNFA} from './machine/REUtils.js';
 
 import ExpressionChangeHandler from './ExpressionChangeHandler.js';
 
+import Notifications from 'system/notification/Notifications.js';
+
 const EXPRESSION_REFRESH_RATE = 30;
+const ERROR_MESSAGE_TAG = "re_parse_error"
 
 class MachineController
 {
@@ -20,6 +23,7 @@ class MachineController
 
   update()
   {
+    this._machine.validate();
     this._expressionChangeHandler.update(this._machine.getExpression());
   }
 
@@ -46,6 +50,11 @@ class MachineController
   getMachineExpression()
   {
     return this._machine.getExpression() || "";
+  }
+
+  getMachineErrors()
+  {
+    return this._machine.getErrors();
   }
 
   getMachine()
