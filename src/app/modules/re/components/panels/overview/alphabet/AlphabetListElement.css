@@ -1,0 +1,30 @@
+:local(.element_container) {
+  margin: 0.2em;
+  padding: 0.3em;
+
+  border-radius: 0.5em;
+  background: var(--color-panel-back-input);
+}
+:local(.element_container) input {
+  background: none;
+  outline: none;
+  padding: 1px;
+  margin: -3px;
+  height: calc(100% - 1px);
+
+  font-size: 1.2em;
+  font-family: monospace;
+
+  border: 3px solid transparent;
+  border-radius: 0.5em;
+}
+
+:local(.element_container).empty {
+  background: var(--color-panel-error);
+}
+:local(.element_container).error input {
+  color: var(--color-panel-error);
+}
+:local(.element_container):not(.used) input {
+  color: var(--color-panel-text-active);
+}

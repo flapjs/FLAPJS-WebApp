@@ -31,6 +31,35 @@ class MachineController
     this.setMachineExpression("");
   }
 
+  isSymbol(symbol)
+  {
+    return false;
+  }
+
+  isUsedSymbol(symbol)
+  {
+    return this.isSymbol(symbol);
+  }
+
+  renameSymbol(symbol, nextSymbol)
+  {
+    const prevExpression = this._machine.getExpression();
+    const nextExpression = prevExpression.replace(symbol, nextSymbol);
+    this.setMachineExpression(nextExpression);
+  }
+
+  deleteSymbol(symbol)
+  {
+    const prevExpression = this._machine.getExpression();
+    const nextExpression = prevExpression.replace(symbol, '');
+    this.setMachineExpression(nextExpression);
+  }
+
+  getMachineTerminals()
+  {
+    return [];
+  }
+
   getEquivalentFSA()
   {
     if (!this._equalFSA || (stringHash(this._machine.getExpression()) !== this._equalREHash))
