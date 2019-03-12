@@ -4,6 +4,8 @@ import ExpressionViewStyle from './ExpressionView.css';
 
 import {EMPTY, UNION, KLEENE} from 'modules/re/machine/RE.js';
 
+const UNION_CHAR = "\u222A";
+
 class ExpressionView extends React.Component
 {
   constructor(props)
@@ -21,7 +23,10 @@ class ExpressionView extends React.Component
     const currentModule = session.getCurrentModule();
     const machineController = currentModule.getMachineController();
 
-    machineController.setMachineExpression(e.target.value);
+    const value = e.target.value;
+    const result = value.replace(UNION_CHAR, UNION);
+
+    machineController.setMachineExpression(result);
     session.getApp().getUndoManager().captureEvent();
   }
 
@@ -39,6 +44,8 @@ class ExpressionView extends React.Component
 
     const error = !machineController.getMachine().isValid();
 
+    const readableValue = machineController.getMachineExpression().replace(UNION, UNION_CHAR);
+
     return (
       <div id={this.props.id}
         className={Style.view_pane +
@@ -47,7 +54,7 @@ class ExpressionView extends React.Component
         <div className={Style.view_widget + " " +
           ExpressionViewStyle.expression + " " +
           (error ? "error" : "")}>
-          <input ref={ref=>this._inputElement=ref}value={machineController.getMachineExpression()} onChange={this.onInputChange}/>
+          <input ref={ref=>this._inputElement=ref} value={readableValue} onChange={this.onInputChange}/>
         </div>
         <div className={Style.view_widget + " " + ExpressionViewStyle.expression_tray + " " + ExpressionViewStyle.tray_important}>
           <button onClick={() => {this._appendSymbol(machineController, EMPTY)}}>{EMPTY}</button>

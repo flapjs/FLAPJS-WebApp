@@ -72,8 +72,14 @@ class REModule
   //Override
   clear(app)
   {
-    this._machineController.setMachineExpression("");
-    this._app.getToolbarComponent().closeBar();
+    if (window.confirm(I18N.toString("alert.graph.clear")))
+    {
+      const module = app.getCurrentModule();
+      this._machineController.setMachineExpression("");
+      app.getUndoManager().clear();
+      app.getSession().setProjectName(null);
+      app.getToolbarComponent().closeBar();
+    }
   }
 
   getMachineController() { return this._machineController; }
