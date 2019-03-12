@@ -126,6 +126,7 @@ file.export.jff = Save machine for JFLAP
 file.export.png = Export diagram as PNG
 file.export.jpg = Export diagram as JPG
 file.export.svg = Export diagram as SVG
+file.export.convertfsa = Save equivalent FSA for Flap.js
 
 file.export.machine.hint = Save machine as .json
 file.export.jff.hint = Save machine as .jff
