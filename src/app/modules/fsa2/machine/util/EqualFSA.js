@@ -1,4 +1,6 @@
 import { convertToDFA } from './ConvertFSA.js';
+import { intersectDFA } from './IntersectFSA.js';
+import { invertDFA } from './InvertDFA.js';
 import FSA from '../FSA.js';
 
 export function isEquivalentFSA(fsa1, fsa2)
@@ -40,52 +42,8 @@ function intersectionOfComplement(m1, m2) {
     if (!commonAlphabet)
         return null;
 
-    const result = new FSA(false);
-    const pairToStateMap = new Map();
-    for (const state1 of m1.getStates()) {
-        for (const state2 of m2.getStates()) {
-            let newLabel = state1.getStateLabel() + "_" + state2.getStateLabel();
-            let newState = result.createState(newLabel);
-            pairToStateMap.set(newLabel, newState);
-            // (q1, q2) is the resultant start state
-            if(m1.isStartState(state1) && m2.isStartState(state2)) {
-                result.setStartState(newState);
-            }
-            // F1 x (Q2 \ F2) are all the resultant final states
-            if(m1.isFinalState(state1) && !m2.isFinalState(state2)) {
-                result.setFinalState(newState);
-            }
-        }
-    }
-
-    // Add transitions
-    for (const state1 of m1.getStates()) {
-        for (const state2 of m2.getStates()) {
-            for (const symbol of commonAlphabet) {
-                let dest1, dest2;
-
-                for (const transition of m1.getOutgoingTransitions(state1)) {
-                    // As a DFA, there should only be one transition with this symbol
-                    if (transition[1] == symbol) {
-                        dest1 = transition[2];
-                        break;
-                    }
-                }
-                for (const transition of m2.getOutgoingTransitions(state2)) {
-                    if (transition[1] == symbol) {
-                        dest2 = transition[2];
-                        break;
-                    }
-                }
-                if(dest1 && dest2) {
-                    let from = pairToStateMap.get(state1.getStateLabel() + "_" + state2.getStateLabel());
-                    let to = pairToStateMap.get(dest1.getStateLabel() + "_" + dest2.getStateLabel());
-                    result.addTransition(from, to, symbol);
-                }
-            }
-        }
-    }
-    return result;
+    const inverted = invertDFA(m2);
+    return intersectDFA(m1, inverted);
 }
 
 function isLanguageNotEmpty(dfa) {
