@@ -34,7 +34,7 @@ class OverviewPanel extends React.Component
         <PanelSection title={"Terminals"} initial={true} full={drawerFull}>
           <AlphabetListView machineController={machineController}/>
         </PanelSection>
-        <PanelSection title={"Symbol Key"} initial={true} full={drawerFull}>
+        <PanelSection title={"Symbol Key"} initial={true} full={true}>
           <table>
           <tbody>
             <tr><td>Epsilon</td><td>{EMPTY}</td></tr>
