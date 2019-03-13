@@ -144,13 +144,23 @@ class RE
 				if (i == expression.length - 1)
 					throw new Error(
 						"Operators are poorly formatted.");
+                // Empty set cannot be catted
+                if (currChar == CONCAT && prevChar == EMPTY_SET)
+                    throw new Error("Empty set can only be part of a union or used by itself");
 			case ')':
 			case KLEENE:
 			case PLUS:
 				// Must be preceded with a symbol
 				if (prevChar == '(' || prevChar == UNION || prevChar == CONCAT)
 					throw new Error("Operators are poorly formatted.");
-				break;
+                // Kleene and Plus cannot be applied to empty set
+                if ((currChar == KLEENE || currChar == PLUS) && prevChar == EMPTY_SET)
+                    throw new Error("Empty set can only be part of a union or used by itself");
+                break;
+            case EMPTY_SET:
+                if (prevChar == CONCAT)
+                    throw new Error("Empty set can only be part of a union or used by itself");
+                break;
 				/*
             // "Epsilon must not cat with anything else" Error deemed moot
   			case EMPTY:
