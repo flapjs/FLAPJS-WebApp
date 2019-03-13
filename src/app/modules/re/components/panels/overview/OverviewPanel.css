@@ -8,3 +8,7 @@
   background: var(--color-panel-text-active);
   color: var(--color-panel-text);
 }
+
+td {
+    width: 8em;
+}

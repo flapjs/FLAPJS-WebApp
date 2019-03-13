@@ -60,7 +60,7 @@ function ASTtoNFA(astNode, re)
 function emptySet()
 {
     const result = new FSA(false);
-    const state0 = new result.createState("q0");
+    const state0 = result.createState("q0");
     result.setStartState(state0);
     return result;
 }
@@ -70,6 +70,10 @@ function emptySet()
 function sigma(re){
     const terminals = re.getTerminals();
     const charNFAs = [];
+
+    if (terminals.size == 0) {
+        return emptySet()
+    }
     // Build NFAs for each terminal in the terminal set
     for(const terminal of terminals) {
         charNFAs.push(character(terminal));
