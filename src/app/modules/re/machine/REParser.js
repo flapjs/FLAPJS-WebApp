@@ -170,7 +170,7 @@ class REParser {
                             currNode = symbolNode;
                         }
                         // Add terminals to the regex's terminal set
-                        if (char != SIGMA && char != EMPTY_SET) {
+                        if (char != SIGMA && char != EMPTY_SET && char != EMPTY) {
                             regex.addTerminal(char);
                         }
                 }
