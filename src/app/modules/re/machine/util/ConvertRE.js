@@ -2,7 +2,9 @@ import FSA, {EMPTY_SYMBOL} from 'modules/fsa2/machine/FSA.js';
 import {EMPTY,
   CONCAT,
 	UNION,
-	KLEENE} from '../RE.js';
+	KLEENE,
+    SIGMA,
+    EMPTY_SET} from '../RE.js';
 
 import REParser from '../REParser.js';
 
@@ -13,32 +15,68 @@ export function convertToNFA(re)
   const prevExpression = re.getExpression();
   re.insertConcatSymbols();
 	const parser = new REParser();
-	parser.parseRegex(re);
-	const nfa = ASTtoNFA(parser.rootNode);
+	parser.parseRegex(re);         //Create parse tree and add terminals to re's terminal set
+	const nfa = ASTtoNFA(parser.rootNode, re);
   re.setExpression(prevExpression);
   return nfa;
 }
 
-function ASTtoNFA(astNode)
+function ASTtoNFA(astNode, re)
 {
-	//Base case, terminal nodes are characters in the alphabet
+	//Base case, terminal nodes are characters in the alphabet OR
+    //the EmptySet or Sigma
 	if (astNode.isTerminal())
 	{
-		return character(astNode.getSymbol());
+        switch (astNode.getSymbol())
+        {
+            case EMPTY_SET:
+                return emptySet();
+            case SIGMA:
+                return sigma(re);
+            default:
+                return character(astNode.getSymbol());
+        }
 	}
 	switch (astNode.getSymbol())
 	{
 	case KLEENE:
-		return kleene(ASTtoNFA(astNode._children[0]));
+		return kleene(ASTtoNFA(astNode._children[0] , re));
 	case CONCAT:
-		return concat(ASTtoNFA(astNode._children[0]), ASTtoNFA(astNode._children[1]));
+		return concat(ASTtoNFA(astNode._children[0] , re), ASTtoNFA(astNode._children[1] , re));
 	case UNION:
-		return or(ASTtoNFA(astNode._children[0]), ASTtoNFA(astNode._children[1]));
+		return or(ASTtoNFA(astNode._children[0] , re), ASTtoNFA(astNode._children[1] , re));
 	case '(':
-		return ASTtoNFA(astNode._children[0]);
+		return ASTtoNFA(astNode._children[0] , re);
 	default:
 		throw new Error("You've got a weird node in the AST tree with symbol " + astNode.getSymbol());
 	}
+}
+
+// For the empty set, the NFA is a start state, with no final state, nor transitions.
+function emptySet()
+{
+    const result = new FSA(false);
+    const state0 = new result.createState("q0");
+    result.setStartState(state0);
+    return result;
+}
+
+// For Sigma, the NFA is just the union of all the terminals in the regular expression
+// e.g. if Sigma = {0, 1}, then as a regular expression it is just 0 U 1
+function sigma(re){
+    const terminals = re.getTerminals();
+    const charNFAs = [];
+    // Build NFAs for each terminal in the terminal set
+    for(const terminal of terminals) {
+        charNFAs.push(character(terminal));
+    }
+    // Unionize them into one big union NFA to return
+    while( charNFAs.length > 1 )
+    {
+        charNFAs[0] = or(charNFAs[0], charNFAs[1]);     // Accumulate in the 0th index
+        charNFAs.splice(1, 1);                          // Shift down from 1st index
+    }
+    return charNFAs[0]
 }
 
 // For a symbol of the alphabet, the NFA is two states, a start and a finish state,

@@ -1,5 +1,5 @@
 import {convertToNFA} from '../REUtils.js';
-import FSA, {EMPTY_SYMBOL} from '../FSA.js';
+import FSA, {EMPTY_SYMBOL} from '../../../fsa2/machine/FSA.js';
 import RE, {EMPTY, CONCAT, UNION, KLEENE} from '../RE.js';
 
 function testConvertRE(convertedFSA, expectedFSA, expectedResult=true) {

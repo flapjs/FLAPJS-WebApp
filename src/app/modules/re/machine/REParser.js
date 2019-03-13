@@ -1,4 +1,4 @@
-import RE, {EMPTY, CONCAT, UNION, KLEENE} from './RE.js';
+import RE, {EMPTY, CONCAT, UNION, KLEENE, SIGMA, EMPTY_SET} from './RE.js';
 
 class ASTNode {
 
@@ -152,6 +152,10 @@ class REParser {
                             let symbolNode = new ASTNode(char, true, currNode);
                             currNode.addChild(symbolNode);
                             currNode = symbolNode;
+                        }
+                        // Add terminals to the regex's terminal set
+                        if (char != SIGMA && char != EMPTY_SET) {
+                            regex.addTerminal(char);
                         }
                 }
             }

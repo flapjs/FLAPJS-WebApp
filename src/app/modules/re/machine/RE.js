@@ -5,13 +5,16 @@ export const EMPTY = "\u03B5";
 export const CONCAT = ".";
 export const UNION = "U";
 export const KLEENE = "*";
+export const SIGMA = "\u03A3";
+export const EMPTY_SET = "\u2205";
+export const PLUS = "+";
 
 class RE
 {
   constructor(expression="")
   {
     this._expression = expression;
-
+    this._terminals = new Set();
     this._errors = [];
   }
 
@@ -30,8 +33,14 @@ class RE
 
     this._expression = re._expression;
 
+    //Copy terminals
+    for(const terminal of re._terminals)
+    {
+        this._terminals.add(terminal);
+    }
+
     //Copy errors
-    for(const error of fsa._errors)
+    for(const error of re._errors)
     {
       //WARNING: if the error's store state objects, they need to be redirected to the copies
       this._errors.push(error);
@@ -41,7 +50,7 @@ class RE
   clear()
   {
     this._expression = "";
-
+    this._terminals.clear();
     this._errors.length = 0;
   }
 
@@ -66,6 +75,10 @@ class RE
   }
   isValid() { return this._errors.length == 0; }
   getErrors() { return this._errors; }
+
+  addTerminal(x) { this._terminals.add(x); }
+  hasTerminal(x) { return this._terminals.has(x); }
+  getTerminals() { return this._terminals; }
 
   areParenthesisBalanced() {
       let count = 0;
@@ -111,6 +124,8 @@ class RE
   				if (prevChar == '(' || prevChar == UNION || prevChar == CONCAT)
   					throw new Error("Operators are poorly formatted.");
   				break;
+            /*
+            // "Epsilon must not cat with anything else" Error deemed moot
   			case EMPTY:
   				if (prevChar != '(' && prevChar != UNION)
   					throw new Error("Epsilon must not cat with anything else.");
@@ -120,6 +135,7 @@ class RE
   				if (nextChar != ')' && nextChar != UNION && nextChar != KLEENE)
   					throw new Error("Epsilon must not cat with anything else.");
   				break;
+            */
 		}
 	}
 	return expression;
