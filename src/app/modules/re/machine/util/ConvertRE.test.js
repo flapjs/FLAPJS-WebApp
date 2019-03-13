@@ -1,6 +1,6 @@
 import {convertToNFA} from '../REUtils.js';
-import FSA, {EMPTY_SYMBOL} from '../FSA.js';
-import RE, {EMPTY, CONCAT, UNION, KLEENE} from '../RE.js';
+import FSA, {EMPTY_SYMBOL} from 'modules/fsa2/machine/FSA.js';
+import RE, {EMPTY, CONCAT, UNION, KLEENE, SIGMA, EMPTY_SET} from '../RE.js';
 
 function testConvertRE(convertedFSA, expectedFSA, expectedResult=true) {
     test("Test Converted RE to FSA equivalence with FSA", () => {
@@ -99,8 +99,8 @@ describe("Converting RE - \"a\": ", () => {
     testConvertRE(convertToNFA(regex), machine, true);
 });
 
-// RE of simple union "a | b" (including within parenthesis "(a | b)")
-describe("Converting RE - \"a | b\"", () => {
+// RE of simple union "a " + UNION + " b" (including within parenthesis "(a " + UNION + " b)")
+describe("Converting RE - \"a " + UNION + " b\"", () => {
     let machine = new FSA(false);
     const state0 = machine.createState("q0");
     const state1 = machine.createState("q1");
@@ -117,10 +117,10 @@ describe("Converting RE - \"a | b\"", () => {
     machine.setStartState(state0);
     machine.setFinalState(state5);
 
-    let regex = new RE("a|b");
+    let regex = new RE("a" + UNION + "b");
     testConvertRE(convertToNFA(regex), machine, true);
 
-    regex = new RE("(a|b)");
+    regex = new RE("(a" + UNION + "b)");
     testConvertRE(convertToNFA(regex), machine, true);
 });
 
@@ -144,8 +144,8 @@ describe("Converting RE - \"ab\"", () => {
     testConvertRE(convertToNFA(regex), machine, true);
 });
 
-// RE of simple kleene star "a*" (including within parenthesis "(a*)" and (a)*)
-describe("Converting RE - \"a*\"", () => {
+// RE of simple kleene star "a" + KLEENE + "" (including within parenthesis "(a" + KLEENE + ")" and (a)" + KLEENE + ")
+describe("Converting RE - \"a" + KLEENE + "\"", () => {
     let machine = new FSA(false);
     const state0 = machine.createState("q0");
     const state1 = machine.createState("q1");
@@ -159,13 +159,13 @@ describe("Converting RE - \"a*\"", () => {
     machine.setStartState(state0);
     machine.setFinalState(state3);
 
-    let regex = new RE("a*");
+    let regex = new RE("a" + KLEENE);
     testConvertRE(convertToNFA(regex), machine, true);
 
-    regex = new RE("(a*)");
+    regex = new RE("(a" + KLEENE + ")");
     testConvertRE(convertToNFA(regex), machine, true);
 
-    regex = new RE("(a)*");
+    regex = new RE("(a)" + KLEENE);
     testConvertRE(convertToNFA(regex), machine, true);
 });
 
@@ -190,8 +190,8 @@ describe("Converting RE - \"abc\"", () => {
     testConvertRE(convertToNFA(regex), machine, true);
 });
 
-// Chain of unions "a|b|c"
-describe("Converting RE - \"a|b|c\"", () => {
+// Chain of unions "a" + UNION + "b" + UNION + "c"
+describe("Converting RE - \"a" + UNION + "b" + UNION + "c\"", () => {
     let machine = new FSA(false);
     const state0 = machine.createState("q0");
     const state1 = machine.createState("q1");
@@ -217,12 +217,12 @@ describe("Converting RE - \"a|b|c\"", () => {
     machine.setStartState(state0);
     machine.setFinalState(state9);
 
-    let regex = new RE("a|b|c");
+    let regex = new RE("a" + UNION + "b" + UNION + "c");
     testConvertRE(convertToNFA(regex), machine, true);
 });
 
 // Mix of union and concat to test that concat has higher precedence
-describe("Converting RE - \"ab|c\" and \"a|bc\"", () => {
+describe("Converting RE - \"ab" + UNION + "c\" and \"a" + UNION + "bc\"", () => {
     let machine = new FSA(false);
     let state0 = machine.createState("q0");
     let state1 = machine.createState("q1");
@@ -243,7 +243,7 @@ describe("Converting RE - \"ab|c\" and \"a|bc\"", () => {
     machine.setStartState(state0);
     machine.setFinalState(state7);
 
-    let regex = new RE("ab|c");
+    let regex = new RE("ab" + UNION + "c");
     testConvertRE(convertToNFA(regex), machine, true);
 
     machine = new FSA(false);
@@ -266,13 +266,13 @@ describe("Converting RE - \"ab|c\" and \"a|bc\"", () => {
     machine.setStartState(state0);
     machine.setFinalState(state7);
 
-    regex = new RE("a|bc");
+    regex = new RE("a" + UNION + "bc");
     testConvertRE(convertToNFA(regex), machine, true);
 });
 
 
 // Mix of union and kleene star
-describe("Converting RE - \"a|b*\" and \"(a|b)*\"", () => {
+describe("Converting RE - \"a" + UNION + "b" + KLEENE + "\" and \"(a" + UNION + "b)" + KLEENE + "\"", () => {
     let machine = new FSA(false);
     let state0 = machine.createState("q0");
     let state1 = machine.createState("q1");
@@ -295,7 +295,7 @@ describe("Converting RE - \"a|b*\" and \"(a|b)*\"", () => {
     machine.setStartState(state0);
     machine.setFinalState(state7);
 
-    let regex = new RE("a|b*");
+    let regex = new RE("a" + UNION + "b" + KLEENE);
     testConvertRE(convertToNFA(regex), machine, true);
 
     machine = new FSA(false);
@@ -320,13 +320,13 @@ describe("Converting RE - \"a|b*\" and \"(a|b)*\"", () => {
     machine.setStartState(state0);
     machine.setFinalState(state7);
 
-    regex = new RE("(a|b)*");
+    regex = new RE("(a" + UNION + "b)" + KLEENE);
     testConvertRE(convertToNFA(regex), machine, true);
 });
 
 
 // Mix of concat and kleene star
-describe("Converting RE - \"ab*\" and \"(ab)*\"", () => {
+describe("Converting RE - \"ab" + KLEENE + "\" and \"(ab)" + KLEENE + "\"", () => {
     let machine = new FSA(false);
     let state0 = machine.createState("q0");
     let state1 = machine.createState("q1");
@@ -344,7 +344,7 @@ describe("Converting RE - \"ab*\" and \"(ab)*\"", () => {
     machine.setStartState(state0);
     machine.setFinalState(state5);
 
-    let regex = new RE("ab*");
+    let regex = new RE("ab" + KLEENE);
     testConvertRE(convertToNFA(regex), machine, true);
 
     machine = new FSA(false);
@@ -364,13 +364,13 @@ describe("Converting RE - \"ab*\" and \"(ab)*\"", () => {
     machine.setStartState(state0);
     machine.setFinalState(state5);
 
-    regex = new RE("(ab)*");
+    regex = new RE("(ab)" + KLEENE);
     testConvertRE(convertToNFA(regex), machine, true);
 });
 
 
-// Mix of union, concat, and kleene "(a|bc)*"
-describe("Converting RE - \"(a|bc)*\"", () => {
+// Mix of union, concat, and kleene "(a" + UNION + "bc)" + KLEENE + ""
+describe("Converting RE - \"(a" + UNION + "bc)" + KLEENE + "\"", () => {
     let machine = new FSA(false);
     const state0 = machine.createState("q0");
     const state1 = machine.createState("q1");
@@ -397,13 +397,13 @@ describe("Converting RE - \"(a|bc)*\"", () => {
     machine.setStartState(state0);
     machine.setFinalState(state9);
 
-    let regex = new RE("(a|bc)*");
+    let regex = new RE("(a" + UNION + "bc)" + KLEENE);
     testConvertRE(convertToNFA(regex), machine, true);
 });
 
 
 // THE ULTIMATE TEST!
-describe("Converting RE - \"(ab|(a|bc)*c*)*\"", () => {
+describe("Converting RE - \"(ab" + UNION + "(a" + UNION + "bc)" + KLEENE + "c" + KLEENE + ")" + KLEENE + "\"", () => {
     let machine = new FSA(false);
     const state0 = machine.createState("q0");
     const state1 = machine.createState("q1");
@@ -460,6 +460,6 @@ describe("Converting RE - \"(ab|(a|bc)*c*)*\"", () => {
     machine.setStartState(state0);
     machine.setFinalState(state21);
 
-    let regex = new RE("(ab|(a|bc)*c*)*");
+    let regex = new RE("(ab" + UNION + "(a" + UNION + "bc)" + KLEENE + "c" + KLEENE + ")" + KLEENE);
     testConvertRE(convertToNFA(regex), machine, true);
 });

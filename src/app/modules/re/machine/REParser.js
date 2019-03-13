@@ -1,12 +1,13 @@
-import RE, {EMPTY, CONCAT, UNION, KLEENE} from './RE.js';
+import RE, {EMPTY, CONCAT, UNION, KLEENE, SIGMA, EMPTY_SET} from './RE.js';
 
 class ASTNode {
 
-    constructor(symbol, isTerminal, parentNode) {
+    constructor(symbol, isTerminal, parentNode, index) {
         this._symbol = symbol;
         this._isTerminal = isTerminal;
         this._parent = parentNode;
-        this._children = []
+        this._children = [];
+        this._index = index;
     }
 
     addChild(childNode) {
@@ -60,6 +61,14 @@ class ASTNode {
     getChildren() {
         return this._children;
     }
+
+    getIndex() {
+        return this._index;
+    }
+
+    setIndex(index) {
+        this._index = index;
+    }
 }
 
 class REParser {
@@ -72,16 +81,18 @@ class REParser {
             let currNode = this.rootNode;
             let openParenStack = [];
             let expression = regex.getExpression();
+            let index = -1;
 
             for(const char of expression) {
+                index++;
                 switch(char) {
                     case '(':
                         if(!currNode) {
-                            currNode = new ASTNode('(', false, null);
+                            currNode = new ASTNode('(', false, null, index);
                             this.rootNode = currNode;
                         }
                         else {
-                            let newNode = new ASTNode('(', false, currNode)
+                            let newNode = new ASTNode('(', false, currNode, index);
                             currNode.addChild(newNode);
                             currNode = newNode;
                         }
@@ -91,13 +102,13 @@ class REParser {
                         currNode = openParenStack.pop();
                         break;
                     case KLEENE:
-                        let kleeneNode = new ASTNode(KLEENE, false, currNode.getParent());
+                        let kleeneNode = new ASTNode(KLEENE, false, currNode.getParent(), index);
                         this.makeParentOf(kleeneNode, currNode);
                         currNode = kleeneNode;
                         break;
                     case CONCAT:
                         if(!currNode.getParent()) {
-                            let concatNode = new ASTNode(CONCAT, false, null);
+                            let concatNode = new ASTNode(CONCAT, false, null, index);
                             this.makeParentOf(concatNode, currNode);
                             currNode = concatNode;
                         }
@@ -106,12 +117,12 @@ class REParser {
                             let parentSym = originalParent.getSymbol();
                             if(parentSym == CONCAT) {
                                 let grandparent = originalParent.getParent();
-                                let concatNode = new ASTNode(CONCAT, false, grandparent);
+                                let concatNode = new ASTNode(CONCAT, false, grandparent, index);
                                 this.makeParentOf(concatNode, originalParent);
                                 currNode = concatNode;
                             }
                             else {
-                                let concatNode = new ASTNode(CONCAT, false, originalParent);
+                                let concatNode = new ASTNode(CONCAT, false, originalParent, index);
                                 this.makeParentOf(concatNode, currNode);
                                 currNode = concatNode;
                             }
@@ -120,7 +131,7 @@ class REParser {
 
                     case UNION:
                         if(!currNode.getParent()) {
-                            let unionNode = new ASTNode(UNION, false, null);
+                            let unionNode = new ASTNode(UNION, false, null, index);
                             this.makeParentOf(unionNode, currNode);
                             currNode = unionNode;
                         }
@@ -128,13 +139,13 @@ class REParser {
                             let originalParent = currNode.getParent();
                             let sym = originalParent.getSymbol();
                             if(sym == '(') {
-                                let unionNode = new ASTNode(UNION, false, originalParent);
+                                let unionNode = new ASTNode(UNION, false, originalParent, index);
                                 this.makeParentOf(unionNode, currNode);
                                 currNode = unionNode;
                             }
                             else {
                                 let grandparent = originalParent.getParent();
-                                let unionNode = new ASTNode(UNION, false, grandparent);
+                                let unionNode = new ASTNode(UNION, false, grandparent, index);
                                 this.makeParentOf(unionNode, originalParent);
                                 currNode = unionNode;
                             }
@@ -145,13 +156,17 @@ class REParser {
                     //For symbols
                     default:
                         if(!currNode) {
-                            currNode = new ASTNode(char, true, null);
+                            currNode = new ASTNode(char, true, null, index);
                             this.rootNode = currNode;
                         }
                         else {
-                            let symbolNode = new ASTNode(char, true, currNode);
+                            let symbolNode = new ASTNode(char, true, currNode, index);
                             currNode.addChild(symbolNode);
                             currNode = symbolNode;
+                        }
+                        // Add terminals to the regex's terminal set
+                        if (char != SIGMA && char != EMPTY_SET) {
+                            regex.addTerminal(char);
                         }
                 }
             }
