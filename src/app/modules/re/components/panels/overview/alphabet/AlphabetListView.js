@@ -130,12 +130,14 @@ class TerminalListView extends React.Component
             onBlur={this.onElementBlur}
             onChange={this.onElementChange}/>
         </div>
-        <IconButton className={Style.add_button}
-          title="Add Terminal"
-          onClick={this.onElementAdd}
-          disabled={true}>
-          <BoxAddIcon/>
-        </IconButton>
+        {/*
+          <IconButton className={Style.add_button}
+            title="Add Terminal"
+            onClick={this.onElementAdd}
+            disabled={true}>
+            <BoxAddIcon/>
+          </IconButton>
+        */}
       </div>
     );
   }

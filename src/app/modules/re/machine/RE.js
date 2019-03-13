@@ -79,6 +79,7 @@ class RE
   addTerminal(x) { this._terminals.add(x); }
   hasTerminal(x) { return this._terminals.has(x); }
   getTerminals() { return this._terminals; }
+  clearTerminals() { this._terminals.clear(); }
 
   areParenthesisBalanced() {
       let count = 0;
