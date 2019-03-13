@@ -24,7 +24,7 @@ class ExpressionView extends React.Component
     const machineController = currentModule.getMachineController();
 
     const value = e.target.value;
-    const result = value.replace(UNION_CHAR, UNION);
+    const result = value.replace(new RegExp(UNION_CHAR, 'g'), UNION);
 
     machineController.setMachineExpression(result);
     session.getApp().getUndoManager().captureEvent();
@@ -44,7 +44,7 @@ class ExpressionView extends React.Component
 
     const error = !machineController.getMachine().isValid();
 
-    const readableValue = machineController.getMachineExpression().replace(UNION, UNION_CHAR);
+    const readableValue = machineController.getMachineExpression().replace(new RegExp(UNION, 'g'), UNION_CHAR);
 
     return (
       <div id={this.props.id}
@@ -58,7 +58,7 @@ class ExpressionView extends React.Component
         </div>
         <div className={Style.view_widget + " " + ExpressionViewStyle.expression_tray + " " + ExpressionViewStyle.tray_important}>
           <button onClick={() => {this._appendSymbol(machineController, EMPTY)}}>{EMPTY}</button>
-          <button onClick={() => {this._appendSymbol(machineController, UNION)}}>{UNION}</button>
+          <button onClick={() => {this._appendSymbol(machineController, UNION)}}>{UNION_CHAR}</button>
           <button onClick={() => {this._appendSymbol(machineController, KLEENE)}}>{KLEENE}</button>
         </div>
 
