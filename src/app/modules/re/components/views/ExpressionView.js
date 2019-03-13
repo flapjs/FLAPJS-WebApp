@@ -2,7 +2,7 @@ import React from 'react';
 import Style from 'experimental/viewport/ViewportView.css';
 import ExpressionViewStyle from './ExpressionView.css';
 
-import {EMPTY, UNION, KLEENE} from 'modules/re/machine/RE.js';
+import {EMPTY, UNION, KLEENE, SIGMA, EMPTY_SET, PLUS} from 'modules/re/machine/RE.js';
 
 const UNION_CHAR = "\u222A";
 
@@ -41,7 +41,7 @@ class ExpressionView extends React.Component
     const session = this.props.session;
     const currentModule = session.getCurrentModule();
     const machineController = currentModule.getMachineController();
-
+    const terminals = machineController.getMachineTerminals();
     const error = !machineController.getMachine().isValid();
 
     const readableValue = machineController.getMachineExpression().replace(new RegExp(UNION, 'g'), UNION_CHAR);
@@ -60,11 +60,17 @@ class ExpressionView extends React.Component
           <button onClick={() => {this._appendSymbol(machineController, EMPTY)}}>{EMPTY}</button>
           <button onClick={() => {this._appendSymbol(machineController, UNION)}}>{UNION_CHAR}</button>
           <button onClick={() => {this._appendSymbol(machineController, KLEENE)}}>{KLEENE}</button>
+          <button onClick={() => {this._appendSymbol(machineController, PLUS)}}>{PLUS}</button>
+          <button onClick={() => {this._appendSymbol(machineController, SIGMA)}}>{SIGMA}</button>
+          <button onClick={() => {this._appendSymbol(machineController, EMPTY_SET)}}>{EMPTY_SET}</button>
         </div>
 
         <div className={Style.view_widget + " " + ExpressionViewStyle.expression_tray + " " + ExpressionViewStyle.tray_symbol}>
-          <button onClick={() => {this._appendSymbol(machineController, "a")}}>{"a"}</button>
-          <button onClick={() => {this._appendSymbol(machineController, "b")}}>{"b"}</button>
+          {terminals.map(e => {
+            return (
+              <button key={e} onClick={() => {this._appendSymbol(machineController, e)}}>{e}</button>
+            );
+          })}
         </div>
       </div>
     );

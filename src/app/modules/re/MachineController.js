@@ -59,7 +59,7 @@ class MachineController
 
   getMachineTerminals()
   {
-    return this._machine.getTerminals();
+    return Array.from(this._machine.getTerminals());
   }
 
   getEquivalentFSA()
@@ -75,8 +75,10 @@ class MachineController
   setMachineExpression(string)
   {
     this._machine.setExpression(string);
-    this._parser.parseRegex(this._machine);
-    this._machine.validate();
+    if (this._machine.validate())
+    {
+      this._parser.parseRegex(this._machine);
+    }
   }
 
   getMachineExpression()
