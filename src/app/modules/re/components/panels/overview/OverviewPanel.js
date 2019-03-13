@@ -36,12 +36,12 @@ class OverviewPanel extends React.Component
         </PanelSection>
         <PanelSection title={"Symbol Key"} initial={true} full={drawerFull}>
           <table>
-            <tr><td>Epsilon</td>    <td>{EMPTY}</td></tr>
-            <tr><td>Union</td>    <td>{UNION}</td></tr>
-            <tr><td>Kleene Star</td>    <td>{KLEENE}</td></tr>
-            <tr><td>Kleene Plus</td>    <td>{PLUS}</td></tr>
-            <tr><td>Sigma</td>    <td>{SIGMA}</td></tr>
-            <tr><td>Empty Set</td>    <td>{EMPTY_SET}</td></tr>
+            <tr><td>Epsilon</td><td>{EMPTY}</td></tr>
+            <tr><td>Union</td><td>{UNION}</td></tr>
+            <tr><td>Kleene Star</td><td>{KLEENE}</td></tr>
+            <tr><td>Kleene Plus</td><td>{PLUS}</td></tr>
+            <tr><td>Sigma</td><td>{SIGMA}</td></tr>
+            <tr><td>Empty Set</td><td>{EMPTY_SET}</td></tr>
           </table>
         </PanelSection>
       </PanelContainer>
