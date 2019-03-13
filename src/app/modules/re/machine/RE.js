@@ -97,8 +97,8 @@ class RE
 
   isExpressionValid() {
       let expression = this.getExpression();
-	if (expression.length == 0)
-		throw new Error("The expression must be nonempty.");
+		if (!expression || expression.length == 0) return true;
+		  //throw new Error("The expression must be nonempty.");
 	if (!this.areParenthesisBalanced())
 		throw new Error("The parentheses are unbalanced!");
       switch(expression.charAt(0)) {
@@ -141,7 +141,7 @@ class RE
             */
 		}
 	}
-	return expression;
+	return true;
   }
 
   insertConcatSymbols(){
