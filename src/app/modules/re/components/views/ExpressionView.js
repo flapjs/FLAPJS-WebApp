@@ -32,7 +32,9 @@ class ExpressionView extends React.Component
 
   _appendSymbol(machineController, symbol)
   {
+    const session = this.props.session;
     machineController.setMachineExpression(machineController.getMachineExpression() + symbol);
+    session.getApp().getUndoManager().captureEvent();
   }
 
   //Override
