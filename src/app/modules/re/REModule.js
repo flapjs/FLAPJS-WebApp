@@ -3,6 +3,7 @@ import PanelContainer from 'experimental/panels/PanelContainer.js';
 
 import MachineController from './MachineController.js';
 import REGraphExporter from './exporter/REGraphExporter.js';
+import REErrorChecker from './REErrorChecker.js';
 import SafeExpressionEventHandler from './SafeExpressionEventHandler.js';
 
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
@@ -22,6 +23,7 @@ class REModule
     this._app = app;
 
     this._machineController = new MachineController();
+    this._errorChecker = new REErrorChecker(this._machineController);
 
     app.getDrawerManager()
       .addPanelClass(props => (
@@ -73,6 +75,7 @@ class REModule
   }
 
   getMachineController() { return this._machineController; }
+  getErrorChecker() { return this._errorChecker; }
 
   //Override
   getModuleVersion() { return MODULE_VERSION; }

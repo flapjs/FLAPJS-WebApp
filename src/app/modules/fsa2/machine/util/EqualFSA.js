@@ -1,4 +1,5 @@
 import { convertToDFA } from './ConvertFSA.js';
+import FSA from '../FSA.js';
 
 export function isEquivalentFSA(fsa1, fsa2)
 {
@@ -7,6 +8,138 @@ export function isEquivalentFSA(fsa1, fsa2)
   return isEquivalentDFA(dfa1, dfa2);
 };
 
+export function isEquivalentDFA(dfa1, dfa2) {
+    // L(M3) = L(M1) && !L(M2)
+    let m3 = intersectionOfComplement(dfa1, dfa2);
+    if (!m3) {
+        console.log("dfa1 and dfa2 use different alphabets");
+        return false;
+    }
+    let m3acceptssomething = isLanguageNotEmpty(m3)
+    if(m3acceptssomething) {
+        console.log(`dfa1 accepts ${m3acceptssomething} while dfa2 doesn't`)
+        return false
+    }
+    let m4 = intersectionOfComplement(dfa2, dfa1);
+    if (!m4) {
+        console.log("dfa1 and dfa2 use different alphabets");
+        return false;
+    }
+    let m4acceptssometing = isLanguageNotEmpty(m4)
+    if(m4acceptssometing) {
+        console.log(`dfa2 accepts ${m4acceptssomething} while dfa1 doesn't`);
+        return false;
+    }
+    return true;
+    // L(M4) = L(M2) && !L(M1)
+}
+
+function intersectionOfComplement(m1, m2) {
+    // Returns false if used alphabet is different, else returns the common alphabet
+    const commonAlphabet = haveTheSameUsedAlphabet(m1, m2);
+    if (!commonAlphabet)
+        return null;
+
+    const result = new FSA(false);
+    const pairToStateMap = new Map();
+    for (const state1 of m1.getStates()) {
+        for (const state2 of m2.getStates()) {
+            let newLabel = state1.getStateLabel() + "_" + state2.getStateLabel();
+            let newState = result.createState(newLabel);
+            pairToStateMap.set(newLabel, newState);
+            // (q1, q2) is the resultant start state
+            if(m1.isStartState(state1) && m2.isStartState(state2)) {
+                result.setStartState(newState);
+            }
+            // F1 x (Q2 \ F2) are all the resultant final states
+            if(m1.isFinalState(state1) && !m2.isFinalState(state2)) {
+                result.setFinalState(newState);
+            }
+        }
+    }
+
+    // Add transitions
+    for (const state1 of m1.getStates()) {
+        for (const state2 of m2.getStates()) {
+            for (const symbol of commonAlphabet) {
+                let dest1, dest2;
+
+                for (const transition of m1.getOutgoingTransitions(state1)) {
+                    // As a DFA, there should only be one transition with this symbol
+                    if (transition[1] == symbol) {
+                        dest1 = transition[2];
+                        break;
+                    }
+                }
+                for (const transition of m2.getOutgoingTransitions(state2)) {
+                    if (transition[1] == symbol) {
+                        dest2 = transition[2];
+                        break;
+                    }
+                }
+                if(dest1 && dest2) {
+                    let from = pairToStateMap.get(state1.getStateLabel() + "_" + state2.getStateLabel());
+                    let to = pairToStateMap.get(dest1.getStateLabel() + "_" + dest2.getStateLabel());
+                    result.addTransition(from, to, symbol);
+                }
+            }
+        }
+    }
+    return result;
+}
+
+function isLanguageNotEmpty(dfa) {
+    //Perform BFS from start state. If a final state can be reached, then the language
+    //is not empty, and the path is a witness. Else if no final states are ever reached,
+    //the language is empty
+    const explored = [];
+    const frontier = [dfa.getStartState()];
+    const path = new Map();
+    path.set(dfa.getStartState(), "");
+
+    while (frontier.length) {
+        let current = frontier.shift();
+        explored.push(current);
+        let pathUpTill = path.get(current);
+
+        if (dfa.isFinalState(current)) {
+            return pathUpTill;
+        }
+        for (const transition of dfa.getOutgoingTransitions(current)) {
+            let dest = transition[2];
+            if(!explored.includes(dest) && !frontier.includes(dest)) {
+                frontier.push(dest);
+                let symbol = transition[1];
+                path.set(dest, pathUpTill + symbol);
+            }
+        }
+    }
+    return false;
+}
+
+function haveTheSameUsedAlphabet(m1, m2) {
+    let alphabet1 = new Set();
+    let alphabet2 = new Set();
+    for (const symbol of m1.getAlphabet()) {
+        if (m1.isUsedSymbol(symbol)) {
+            alphabet1.add(symbol);
+        }
+    }
+    for (const symbol of m2.getAlphabet()) {
+        if (m2.isUsedSymbol(symbol)) {
+            alphabet2.add(symbol);
+        }
+    }
+    if (alphabet1.size != alphabet2.size)
+        return false;
+    for (const symbol of alphabet1) {
+        if (!alphabet2.has(symbol))
+            return false;
+    }
+    return alphabet1;
+}
+
+/*
 export function isEquivalentDFA(dfa1, dfa2)
 {
   //Union the alphabets
@@ -173,3 +306,5 @@ function union(set1, set2)
   }
   return Array.from(set);
 }
+
+*/

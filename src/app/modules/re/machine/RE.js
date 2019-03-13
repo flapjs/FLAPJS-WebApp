@@ -3,7 +3,7 @@ import { guid, stringHash } from 'util/MathHelper.js';
 
 export const EMPTY = "\u03B5";
 export const CONCAT = ".";
-export const UNION = "U";
+export const UNION = "\u222A";
 export const KLEENE = "*";
 export const SIGMA = "\u03A3";
 export const EMPTY_SET = "\u2205";
