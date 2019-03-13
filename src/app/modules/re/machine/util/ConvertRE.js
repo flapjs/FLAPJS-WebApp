@@ -4,7 +4,8 @@ import {EMPTY,
 	UNION,
 	KLEENE,
     SIGMA,
-    EMPTY_SET} from '../RE.js';
+    EMPTY_SET,
+    PLUS} from '../RE.js';
 
 import REParser from '../REParser.js';
 
@@ -42,6 +43,8 @@ function ASTtoNFA(astNode, re)
 	{
 	case KLEENE:
 		return kleene(ASTtoNFA(astNode._children[0] , re));
+    case PLUS:
+        return plus(ASTtoNFA(astNode._children[0], re));
 	case CONCAT:
 		return concat(ASTtoNFA(astNode._children[0] , re), ASTtoNFA(astNode._children[1] , re));
 	case UNION:
@@ -196,6 +199,11 @@ function kleene(a)
 	result.setStartState(firstState);
 	result.setFinalState(lastState);
 	return result;
+}
+
+function plus(a)
+{
+    return concat(a, kleene(a));
 }
 
 function or(a, b)

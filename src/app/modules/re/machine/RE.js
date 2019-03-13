@@ -106,6 +106,7 @@ class RE
           case UNION:
           case KLEENE:
           case CONCAT:
+          case PLUS:
               throw new Error("Operators are poorly formatted.");
       }
       for (let i = 1; i < expression.length; i++) {
@@ -120,6 +121,7 @@ class RE
   							"Operators are poorly formatted.");
   			case ')':
   			case KLEENE:
+            case PLUS:
                   // Must be preceded with a symbol
   				if (prevChar == '(' || prevChar == UNION || prevChar == CONCAT)
   					throw new Error("Operators are poorly formatted.");
@@ -150,7 +152,7 @@ class RE
           if( i + 1 < expression.length){
               let nextChar = expression.charAt(i + 1);
               if(currChar != '(' && currChar != UNION &&
-                  nextChar != ')' && nextChar != UNION && nextChar != KLEENE){
+                  nextChar != ')' && nextChar != UNION && nextChar != KLEENE && nextChar != PLUS){
                   result+=CONCAT;
               }
           }

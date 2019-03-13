@@ -1,4 +1,4 @@
-import RE, {EMPTY, CONCAT, UNION, KLEENE, SIGMA, EMPTY_SET} from './RE.js';
+import RE, {EMPTY, CONCAT, UNION, KLEENE, SIGMA, EMPTY_SET, PLUS} from './RE.js';
 
 class ASTNode {
 
@@ -105,6 +105,11 @@ class REParser {
                         let kleeneNode = new ASTNode(KLEENE, false, currNode.getParent(), index);
                         this.makeParentOf(kleeneNode, currNode);
                         currNode = kleeneNode;
+                        break;
+                    case PLUS:
+                        let plusNode = new ASTNode(PLUS, false, currNode.getParent(), index);
+                        this.makeParentOf(plusNode, currNode);
+                        currNode = plusNode;
                         break;
                     case CONCAT:
                         if(!currNode.getParent()) {
