@@ -3,6 +3,7 @@ import PanelContainer from 'experimental/panels/PanelContainer.js';
 
 import MachineController from './MachineController.js';
 import REGraphExporter from './exporter/REGraphExporter.js';
+import REtoFSAGraphExporter from './exporter/REtoFSAGraphExporter.js';
 import REErrorChecker from './REErrorChecker.js';
 import SafeExpressionEventHandler from './SafeExpressionEventHandler.js';
 
@@ -48,7 +49,8 @@ class REModule
       });
 
     app.getExportManager()
-      .addExporter(new REGraphExporter());
+      .addExporter(new REGraphExporter())
+      .addExporter(new REtoFSAGraphExporter());
   }
 
   //Override
@@ -70,8 +72,14 @@ class REModule
   //Override
   clear(app)
   {
-    this._machineController.setMachineExpression("");
-    this._app.getToolbarComponent().closeBar();
+    if (window.confirm(I18N.toString("alert.graph.clear")))
+    {
+      const module = app.getCurrentModule();
+      this._machineController.setMachineExpression("");
+      app.getUndoManager().clear();
+      app.getSession().setProjectName(null);
+      app.getToolbarComponent().closeBar();
+    }
   }
 
   getMachineController() { return this._machineController; }

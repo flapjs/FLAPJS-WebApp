@@ -3,7 +3,7 @@ import { guid, stringHash } from 'util/MathHelper.js';
 
 export const EMPTY = "\u03B5";
 export const CONCAT = ".";
-export const UNION = "\u222A";
+export const UNION = "U";
 export const KLEENE = "*";
 export const SIGMA = "\u03A3";
 export const EMPTY_SET = "\u2205";
@@ -79,6 +79,7 @@ class RE
   addTerminal(x) { this._terminals.add(x); }
   hasTerminal(x) { return this._terminals.has(x); }
   getTerminals() { return this._terminals; }
+  clearTerminals() { this._terminals.clear(); }
 
   areParenthesisBalanced() {
       let count = 0;

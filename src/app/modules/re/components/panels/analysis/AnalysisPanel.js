@@ -16,7 +16,8 @@ class AnalysisPanel extends React.Component
 
   onConvertToNFA(e)
   {
-    //TODO: not yet implemented.
+    const exportManager = this.props.session.getApp().getExportManager();
+    exportManager.tryExportToFile(exportManager.getExporters()[1]);
   }
 
   //Override
@@ -30,7 +31,7 @@ class AnalysisPanel extends React.Component
         style={this.props.style}
         title={AnalysisPanel.TITLE}>
         <PanelSection title={"Optimizations"} initial={true}>
-          <button className={Style.analysis_button} onClick={this.onConvertToNFa} disabled={true}>
+          <button className={Style.analysis_button} onClick={this.onConvertToNFA}>
             {I18N.toString("action.overview.convertnfa")}
           </button>
         </PanelSection>

@@ -77,6 +77,8 @@ class REParser {
     }
 
     parseRegex(regex) {
+      this.rootNode = null;
+      regex.clearTerminals();
         if(regex.isExpressionValid()) {
             let currNode = this.rootNode;
             let openParenStack = [];
