@@ -26,6 +26,7 @@ import BugIcon from 'experimental/iconset/BugIcon.js';
 import WorldIcon from 'experimental/iconset/WorldIcon.js';
 import HelpIcon from 'experimental/iconset/HelpIcon.js';
 import SettingsIcon from 'experimental/iconset/SettingsIcon.js';
+import EditPencilIcon from 'experimental/iconset/EditPencilIcon.js';
 
 import * as UserUtil from 'experimental/UserUtil.js';
 import AppSaver from 'experimental/AppSaver.js';
@@ -290,7 +291,7 @@ class App extends React.Component
             onClick={()=>window.open(HELP_URL, '_blank')}/>
           <ToolbarButton title={I18N.toString("component.options.title")} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_OPTION)}/>
-          <ToolbarButton title={"Change Module"} icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+          <ToolbarButton title={"Change Module"} icon={EditPencilIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_MODULE)}/>
         </ToolbarView>
 
