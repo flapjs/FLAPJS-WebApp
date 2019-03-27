@@ -73,10 +73,11 @@ class GraphImageExporter extends AbstractGraphExporter
   exportToFile(filename, module)
   {
     const workspace = module.getApp().workspace;
-    const workspaceDim = workspace.ref.viewBox.baseVal;
+    const svgElement = workspace.getSVGElement();
+    const workspaceDim = svgElement.viewBox.baseVal;
     const width = workspaceDim.width;
     const height = workspaceDim.height;
-    const svg = this.processSVGForExport(workspace.ref, width, height, module);
+    const svg = this.processSVGForExport(svgElement, width, height, module);
 
     downloadImageFromSVG(filename, this._imageType, svg, width, height);
   }

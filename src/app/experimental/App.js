@@ -4,10 +4,10 @@ import Style from './App.css';
 
 import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION_VERTICAL, DRAWER_BAR_DIRECTION_HORIZONTAL } from 'experimental/drawer/DrawerView.js';
 import ToolbarView from 'experimental/toolbar/ToolbarView.js';
-import WorkspaceView from 'experimental/workspace/WorkspaceView.js';
 import ViewportView from 'experimental/viewport/ViewportView.js';
 import TooltipView, { ONESHOT_MODE } from 'experimental/tooltip/TooltipView.js';
 import UploadDropZone from 'experimental/components/UploadDropZone.js';
+import ViewportComponent from 'input/components/ViewportComponent.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
@@ -37,7 +37,6 @@ import IconButton from 'experimental/components/IconButton.js';
 import NotificationView from 'experimental/notification/NotificationView.js';
 import Notifications from 'system/notification/Notifications.js';
 
-import InputAdapter from 'input/InputAdapter.js';
 import LocalSave from 'system/localsave/LocalSave.js';
 import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
 
@@ -76,13 +75,6 @@ class App extends React.Component
     this._drawer = null;
     this._viewport = null;
     this._labeleditor = null;
-
-    //These need to be initialized before module
-    this._inputAdapter = new InputAdapter();
-    this._inputAdapter.getViewport()
-      .setMinScale(MIN_SCALE)
-      .setMaxScale(MAX_SCALE)
-      .setOffsetDamping(SMOOTH_OFFSET_DAMPING);
 
     this._styleOpts = new StyleOptionRegistry();
     this._colorSaver = new ColorSaver(this._styleOpts);
@@ -126,9 +118,6 @@ class App extends React.Component
   //Override
   componentDidMount()
   {
-    const workspaceDOM = this._workspace.ref;
-    this._inputAdapter.initialize(workspaceDOM);
-
     //Start session
     this._session.startSession(this);
   }
@@ -137,8 +126,6 @@ class App extends React.Component
   componentWillUnmount()
   {
     this._session.stopSession(this);
-
-    this._inputAdapter.destroy();
   }
 
   onSessionStart(session)
@@ -177,9 +164,6 @@ class App extends React.Component
     this._drawer.setCurrentTab(0);
   }
 
-  get workspace() { return this._workspace; }
-  get viewport() { return this._inputAdapter.getViewport(); }
-
   getWorkspaceComponent() { return this._workspace; }
   getToolbarComponent() { return this._toolbar; }
 
@@ -193,10 +177,8 @@ class App extends React.Component
   getTooltipManager() { return this._tooltipManager; }
 
   getSession() { return this._session; }
-
   getCurrentModule() { return this._session.getCurrentModule(); }
-
-  getInputAdapter() { return this._inputAdapter; }
+  getInputAdapter() { return this._workspace.getInputAdapter(); }
   getStyleOpts() { return this._styleOpts; }
 
   isExperimental() { return true; }
@@ -204,8 +186,6 @@ class App extends React.Component
   //Override
   componentDidUpdate()
   {
-    this._inputAdapter.update();
-
     this._session.updateSession(this);
 
     //Disable hotkeys when graph is not in view
@@ -220,8 +200,6 @@ class App extends React.Component
   render()
   {
     const session = this._session;
-    const inputAdapter = this._inputAdapter;
-    const viewport = inputAdapter.getViewport();
     const currentModule = session.getCurrentModule();
     const currentModuleLocalizedName = currentModule ? currentModule.getLocalizedModuleName() : null;
 
@@ -310,12 +288,12 @@ class App extends React.Component
                 {tooltipManager.getTooltips().map((e, i) => <label key={e + ":" + i}>{e}</label>)}
               </TooltipView>
 
-              <WorkspaceView ref={ref=>this._workspace=ref} viewport={viewport}>
+              <ViewportComponent ref={ref=>this._workspace=ref}>
                 {/* RENDER_LAYER_WORKSPACE */
                   workspaceRenderers &&
                   workspaceRenderers.map((WorkspaceRenderer, i) =>
                     <WorkspaceRenderer key={currentModuleLocalizedName + ":" + i} workspace={this._workspace}/>)}
-              </WorkspaceView>
+              </ViewportComponent>
 
               {/* RENDER_LAYER_WORKSPACE_OVERLAY */
                 workspaceOverlayRenderers &&

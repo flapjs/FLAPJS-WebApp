@@ -1,8 +1,13 @@
 import React from 'react';
+import Style from './ViewportComponent.css';
+
 import InputAdapter from '../InputAdapter.js';
 import AbstractInputHandler from '../AbstractInputHandler.js';
 
 const DEFAULT_VIEW_SIZE = 300;
+const SMOOTH_OFFSET_DAMPING = 0.4;
+const MIN_SCALE = 0.1;
+const MAX_SCALE = 10;
 
 class ViewportComponent extends React.Component
 {
@@ -13,6 +18,10 @@ class ViewportComponent extends React.Component
     this._ref = React.createRef();
 
     this._inputAdapter = new InputAdapter();
+    this._inputAdapter.getViewport()
+      .setMinScale(MIN_SCALE)
+      .setMaxScale(MAX_SCALE)
+      .setOffsetDamping(SMOOTH_OFFSET_DAMPING);
   }
 
   addInputHandler(inputHandler)
@@ -32,6 +41,12 @@ class ViewportComponent extends React.Component
   componentWillUnmount()
   {
     this._inputAdapter.terminate();
+  }
+
+  //Override
+  componentDidUpdate()
+  {
+    this._inputAdapter.update();
   }
 
   getSVGTransformString()
@@ -61,18 +76,18 @@ class ViewportComponent extends React.Component
   //Override
   render()
   {
-    this._inputAdapter.update();
-
     const viewBox = this.getSVGViewBoxString(this.props.viewSize || DEFAULT_VIEW_SIZE);
     const transform = this.getSVGTransformString();
 
     return (
       <svg ref={this._ref}
         id={this.props.id}
-        className={this.props.className}
+        className={Style.viewport_component + " " + this.props.className}
         style={this.props.style}
-        viewBox={viewBox} transform={transform}>
-        {this.props.children}
+        viewBox={viewBox}>
+        <g transform={transform}>
+          {this.props.children}
+        </g>
       </svg>
     );
   }

@@ -1,4 +1,4 @@
-.workspace-container {
+:local(.viewport_component) {
   position: absolute;
   left: 0;
   top: 0;
