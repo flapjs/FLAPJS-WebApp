@@ -54,6 +54,11 @@ class FSAModule extends AbstractModule
 
     super.initialize(app);
 
+    app.getUndoManager()
+      .setEventHandlerFactory((...args) => {
+        return new SafeGraphEventHandler(this._graphController);
+      });
+
     //this._eventManager.initialize(this);
 
     this._testingManager.initialize(this, viewport);
