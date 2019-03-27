@@ -11,6 +11,7 @@ Modules['nodalgraph'] = {
   name: "Nodal Graph",
   version: "1.0.0",
   experimental: true,
+  disabled: true,
   fetch: function(callback) { import(/* webpackChunkName: "module_nodalgraph" */ 'modules/nodalgraph/NodalGraphModule.js').then(({ default: _ }) => callback( _ )); }
 };
 
