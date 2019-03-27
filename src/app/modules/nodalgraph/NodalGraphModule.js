@@ -19,6 +19,8 @@ import NodalGraphExporter from './NodalGraphExporter.js';
 import {DEFAULT_IMAGE_EXPORTERS} from './NodalGraphImageExporter.js';
 import SafeGraphEventHandler from './SafeGraphEventHandler.js';
 
+import * as UserUtil from 'experimental/UserUtil.js';
+
 const MODULE_NAME = "nodalgraph";
 const MODULE_VERSION = "0.0.1";
 const MODULE_LOCALIZED_NAME = "NodalGraph";

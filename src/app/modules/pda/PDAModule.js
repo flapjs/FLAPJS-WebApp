@@ -30,6 +30,8 @@ import PDAGraphExporter from './exporter/PDAGraphExporter.js';
 import {DEFAULT_IMAGE_EXPORTERS} from 'modules/nodalgraph/NodalGraphImageExporter.js';
 import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
 
+import * as UserUtil from 'experimental/UserUtil.js';
+
 const MODULE_NAME = "pda";
 const MODULE_LOCALIZED_NAME = "PDA";
 const MODULE_VERSION = "0.0.1";

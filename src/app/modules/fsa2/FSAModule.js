@@ -29,6 +29,8 @@ import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
 import {DEFAULT_IMAGE_EXPORTERS} from 'modules/nodalgraph/NodalGraphImageExporter.js';
 import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
 
+import * as UserUtil from 'experimental/UserUtil.js';
+
 const MODULE_NAME = "fsa2";
 const MODULE_VERSION = "0.0.1";
 
