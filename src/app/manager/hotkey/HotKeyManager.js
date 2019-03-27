@@ -94,6 +94,11 @@ class HotKeyManager
   {
     this._enabled = false;
 
+    this._prevHotKey = null;
+    this._repeatCount = 0;
+    this._hotkeys.length = 0;
+    this._altHotkey = null;
+
     window.removeEventListener('keydown', this.onKeyDown);
     window.removeEventListener('keyup', this.onKeyUp);
   }

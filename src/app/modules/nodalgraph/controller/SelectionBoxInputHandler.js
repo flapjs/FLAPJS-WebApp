@@ -1,4 +1,4 @@
-import AbstractInputHandler from 'system/inputadapter/AbstractInputHandler.js';
+import AbstractInputHandler from 'input/AbstractInputHandler.js';
 
 class SelectionBoxInputHandler extends AbstractInputHandler
 {

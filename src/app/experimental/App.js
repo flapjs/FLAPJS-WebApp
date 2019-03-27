@@ -35,7 +35,7 @@ import IconButton from 'experimental/components/IconButton.js';
 import NotificationView from 'experimental/notification/NotificationView.js';
 import Notifications from 'system/notification/Notifications.js';
 
-import InputAdapter from 'system/inputadapter/InputAdapter.js';
+import InputAdapter from 'input/InputAdapter.js';
 import LocalSave from 'system/localsave/LocalSave.js';
 import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
 
@@ -50,8 +50,6 @@ import UndoManager from 'manager/undo/UndoManager.js';
 import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
   RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'manager/RenderManager.js';
 import TooltipManager from 'manager/TooltipManager.js';
-
-import Module from 'modules/fsa2/FSAModule.js';
 
 const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
@@ -93,7 +91,7 @@ class App extends React.Component
     this._renderManager = new RenderManager();
     this._tooltipManager = new TooltipManager();
 
-    this._session = new Session(this)
+    this._session = new Session()
       .addListener(this._undoManager)
       .addListener(this._hotKeyManager)
       .addListener(this._exportManager)
@@ -101,7 +99,8 @@ class App extends React.Component
       .addListener(this._menuManager)
       .addListener(this._viewportManager)
       .addListener(this._renderManager)
-      .addListener(this._tooltipManager);
+      .addListener(this._tooltipManager)
+      .addListener(this);
 
     //TODO: This is only used to control transitions (do we really need it?)
     this._init = false;
@@ -123,6 +122,20 @@ class App extends React.Component
     const workspaceDOM = this._workspace.ref;
     this._inputAdapter.initialize(workspaceDOM);
 
+    //Start session
+    this._session.startSession(this);
+  }
+
+  //Override
+  componentWillUnmount()
+  {
+    this._session.stopSession(this);
+
+    this._inputAdapter.destroy();
+  }
+
+  onSessionStart(session)
+  {
     //Default values
     this._menuManager
       .addPanelClass(ExportPanel)
@@ -130,9 +143,6 @@ class App extends React.Component
       .addPanelClass(LanguagePanel);
     this._hotKeyManager
       .registerAltHotKey("Show Hints", () => {IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL});
-
-    //Start session
-    this._session.start(this.props.moduleClass || Module);
 
     this._colorSaver.initialize();
 
@@ -142,8 +152,7 @@ class App extends React.Component
     this._init = true;
   }
 
-  //Override
-  componentWillUnmount()
+  onSessionStop(session)
   {
     this._init = false;
 
@@ -153,10 +162,6 @@ class App extends React.Component
     LocalSave.unregisterHandler(this._colorSaver);
 
     this._colorSaver.destroy();
-
-    this._session.stop();
-
-    this._inputAdapter.destroy();
   }
 
   onModuleTitleClick(e)
@@ -186,14 +191,19 @@ class App extends React.Component
   getInputAdapter() { return this._inputAdapter; }
   getStyleOpts() { return this._styleOpts; }
 
+  isExperimental() { return true; }
+
   //Override
   componentDidUpdate()
   {
-    const currentModule = this._session.getCurrentModule();
     const inputAdapter = this._inputAdapter;
-
     inputAdapter.update();
-    currentModule.update(this);
+
+    const currentModule = this._session.getCurrentModule();
+    if (currentModule)
+    {
+      currentModule.update(this);
+    }
 
     //Disable hotkeys when graph is not in view
     this._hotKeyManager.setEnabled(

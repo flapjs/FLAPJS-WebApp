@@ -51,7 +51,11 @@ class FSAModule
       this._inputManager.getGraphController(),
       this._machineController);
     this._tester = new StringTester();
+  }
 
+  //Override
+  initialize(app)
+  {
     //TODO: These should have a pre/post handlers...
     app.getExportManager()
       .addExporter(new FSAGraphExporter())
@@ -110,11 +114,7 @@ class FSAModule
       .addTooltip("Please do something.")
       .addTooltip("I need my job.")
       .addTooltip(I18N.toString("message.workspace.empty"));
-  }
 
-  //Override
-  initialize(app)
-  {
     const machineController = this.getMachineController();
     machineController.initialize(this);
 

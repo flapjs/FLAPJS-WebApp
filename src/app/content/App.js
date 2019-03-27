@@ -273,6 +273,8 @@ class App extends React.Component
     return this.undoManager;
   }
 
+  isExperimental() { return false; }
+
   //Override
   componentDidUpdate()
   {

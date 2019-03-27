@@ -79,17 +79,14 @@ function loadApplication()
   //This should be the same as the one referred to by OptionsPanel
   if (LocalSave.getStringFromStorage("skipWelcome") === "true")
   {
-    if (!ModuleLoader.loadModuleFromStorage())
+    if (LocalSave.getStringFromStorage("enableExperimental") === "true")
     {
-      if (LocalSave.getStringFromStorage("enableExperimental") === "true")
-      {
-        import(/* webpackChunkName: "experimental" */ 'experimental/App.js')
-          .then(({ default: _ }) => Router.routeTo( _ ));
-      }
-      else
-      {
-        Router.routeTo(App);
-      }
+      import(/* webpackChunkName: "experimental" */ 'experimental/App.js')
+        .then(({ default: _ }) => Router.routeTo( _ ));
+    }
+    else
+    {
+      Router.routeTo(App);
     }
   }
   else

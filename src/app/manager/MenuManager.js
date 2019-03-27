@@ -21,12 +21,13 @@ class MenuManager
   //DuckType(SessionListener)
   onSessionStart(session)
   {
-    
   }
 
   //DuckType(SessionListener)
   onSessionStop(session)
   {
+    session.getApp().getToolbarComponent().closeBar();
+    
     this._panelClasses.length = 0;
     this._panelProps = null;
   }

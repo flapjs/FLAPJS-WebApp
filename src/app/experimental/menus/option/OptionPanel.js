@@ -9,7 +9,6 @@ import PanelDivider from 'experimental/panels/PanelDivider.js';
 import PanelSwitch from 'experimental/panels/PanelSwitch.js';
 
 import Modules from 'modules/Modules.js'
-import ModuleLoader from 'modules/ModuleLoader.js';
 
 import PreviewView from './PreviewView.js';
 
@@ -57,8 +56,9 @@ class OptionPanel extends React.Component
 
   onChangeModule(e, useExperimental=false)
   {
+    const session = this.props.session;
     const moduleName = e.target.value;
-    ModuleLoader.loadModule(moduleName);
+    session.restartSession(session.getApp(), moduleName);
   }
 
   //Override
