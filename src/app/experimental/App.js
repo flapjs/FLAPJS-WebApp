@@ -70,7 +70,7 @@ class App extends React.Component
   {
     super(props);
 
-    this._workspace = null;
+    this._workspace = React.createRef();
     this._toolbar = null;
     this._drawer = null;
     this._viewport = null;
@@ -164,7 +164,7 @@ class App extends React.Component
     this._drawer.setCurrentTab(0);
   }
 
-  getWorkspaceComponent() { return this._workspace; }
+  getWorkspaceComponent() { return this._workspace.current; }
   getToolbarComponent() { return this._toolbar; }
 
   getUndoManager() { return this._undoManager; }
@@ -178,7 +178,7 @@ class App extends React.Component
 
   getSession() { return this._session; }
   getCurrentModule() { return this._session.getCurrentModule(); }
-  getInputAdapter() { return this._workspace.getInputAdapter(); }
+  getInputAdapter() { return this.getWorkspaceComponent().getInputAdapter(); }
   getStyleOpts() { return this._styleOpts; }
 
   isExperimental() { return true; }
@@ -288,17 +288,17 @@ class App extends React.Component
                 {tooltipManager.getTooltips().map((e, i) => <label key={e + ":" + i}>{e}</label>)}
               </TooltipView>
 
-              <ViewportComponent ref={ref=>this._workspace=ref}>
+              <ViewportComponent ref={this._workspace}>
                 {/* RENDER_LAYER_WORKSPACE */
                   workspaceRenderers &&
                   workspaceRenderers.map((WorkspaceRenderer, i) =>
-                    <WorkspaceRenderer key={currentModuleLocalizedName + ":" + i} workspace={this._workspace}/>)}
+                    <WorkspaceRenderer key={currentModuleLocalizedName + ":" + i} workspace={this.getWorkspaceComponent()}/>)}
               </ViewportComponent>
 
               {/* RENDER_LAYER_WORKSPACE_OVERLAY */
                 workspaceOverlayRenderers &&
                 workspaceOverlayRenderers.map((WorkspaceOverlayRenderer, i) =>
-                  <WorkspaceOverlayRenderer key={currentModuleLocalizedName + ":" + i} workspace={this._workspace}/>)}
+                  <WorkspaceOverlayRenderer key={currentModuleLocalizedName + ":" + i} workspace={this.getWorkspaceComponent()}/>)}
 
               <NotificationView notificationManager={Notifications}>
               </NotificationView>
