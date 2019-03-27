@@ -58,6 +58,7 @@ class InputController extends AbstractInputController
   {
     super.initialize(module);
 
+    this._module = module;
     this._graphController = module.getGraphController();
     //this._picker = new NodalGraphPicker(this._graphController);
     this._picker = new GraphPicker(this._graphController);
