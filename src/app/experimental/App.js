@@ -12,6 +12,7 @@ import UploadDropZone from 'experimental/components/UploadDropZone.js';
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
 import LanguagePanel from 'experimental/menus/language/LanguagePanel.js';
+import ModuleLoaderPanel from 'experimental/menus/moduleloader/ModuleLoaderPanel.js';
 
 import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU} from 'experimental/toolbar/ToolbarButton.js';
 import ToolbarDivider from 'experimental/toolbar/ToolbarDivider.js';
@@ -57,6 +58,11 @@ const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.
 const SMOOTH_OFFSET_DAMPING = 0.4;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 10;
+
+const MENU_INDEX_EXPORT = 0;
+const MENU_INDEX_OPTION = 1;
+const MENU_INDEX_LANGUAGE = 2;
+const MENU_INDEX_MODULE = 3;
 
 class App extends React.Component
 {
@@ -138,9 +144,10 @@ class App extends React.Component
   {
     //Default values
     this._menuManager
-      .addPanelClass(ExportPanel)
-      .addPanelClass(OptionPanel)
-      .addPanelClass(LanguagePanel);
+      .addPanelClass(ExportPanel)//MENU_INDEX_EXPORT
+      .addPanelClass(OptionPanel)//MENU_INDEX_OPTION
+      .addPanelClass(LanguagePanel)//MENU_INDEX_LANGUAGE
+      .addPanelClass(ModuleLoaderPanel);//MENU_INDEX_MODULE
     this._hotKeyManager
       .registerAltHotKey("Show Hints", () => {IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL});
 
@@ -196,14 +203,9 @@ class App extends React.Component
   //Override
   componentDidUpdate()
   {
-    const inputAdapter = this._inputAdapter;
-    inputAdapter.update();
+    this._inputAdapter.update();
 
-    const currentModule = this._session.getCurrentModule();
-    if (currentModule)
-    {
-      currentModule.update(this);
-    }
+    this._session.updateSession(this);
 
     //Disable hotkeys when graph is not in view
     this._hotKeyManager.setEnabled(
@@ -248,8 +250,7 @@ class App extends React.Component
     const viewportOverlayRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_VIEWPORT_OVERLAY);
 
     return (
-      <div className={Style.app_container}>
-
+      <div className={Style.app_container + (currentModule ? " active " : "")}>
         <ToolbarView ref={ref=>this._toolbar=ref} className={Style.app_bar}
           menus={menuPanelClasses}
           menuProps={menuPanelProps}
@@ -278,17 +279,19 @@ class App extends React.Component
             disabled={!undoManager.canRedo()}
             onClick={()=>undoManager.redo()}/>
           <ToolbarButton title={I18N.toString("component.exporting.title")} icon={DownloadIcon}
-            onClick={()=>this._toolbar.setCurrentMenu(0)}
+            onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_EXPORT)}
             disabled={!defaultExporter || !defaultExporter.canExport(currentModule)}/>
           <ToolbarDivider/>
           <ToolbarButton title={I18N.toString("action.toolbar.bug")} icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
             onClick={()=>window.open(BUGREPORT_URL, '_blank')}/>
           <ToolbarButton title={I18N.toString("action.toolbar.lang")} icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-            onClick={()=>this._toolbar.setCurrentMenu(2)}/>
+            onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_LANGUAGE)}/>
           <ToolbarButton title={I18N.toString("action.toolbar.help")} icon={HelpIcon}
             onClick={()=>window.open(HELP_URL, '_blank')}/>
           <ToolbarButton title={I18N.toString("component.options.title")} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-            onClick={()=>this._toolbar.setCurrentMenu(1)}/>
+            onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_OPTION)}/>
+          <ToolbarButton title={"Change Module"} icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+            onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_MODULE)}/>
         </ToolbarView>
 
         <DrawerView ref={ref=>this._drawer=ref} className={Style.app_content}
@@ -341,7 +344,6 @@ class App extends React.Component
             </div>
           </UploadDropZone>
         </DrawerView>
-
       </div>
     );
   }

@@ -4,17 +4,20 @@
 
   --color-graph-node: #FEE781;
   --color-graph-text: #000000;
+  --color-graph-text-alt: #FFFFFF;
   --color-graph-select: #808080;
 
   --color-accent: #FFCD00;
 
   --color-primary: #07889B;
   --color-primary-text: #F7F5E6;
+  --color-primary-text-alt: #000000;
   --color-primary-lite: #63ADB8;
   --color-primary-dark: #077787;
 
   --color-surface: #AAAAAA;
   --color-surface-text: #000000;
+  --color-surface-text-alt: #FFFFFF;
   --color-surface-active: #FFFFFF;
   --color-surface-lite: #CCCCCC;
   --color-surface-dark: #777777;
@@ -54,6 +57,12 @@
   flex-direction: column;
   /* TODO: For production, add this back in. */
   overflow: hidden;
+
+  opacity: 0.0;
+  transition: opacity 0.3s ease;
+}
+:local(.app_container).active {
+  opacity: 1.0;
 }
 
 :local(.app_bar).open ~ :local(.app_content) {

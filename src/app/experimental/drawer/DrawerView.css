@@ -44,6 +44,7 @@
   --color-drawer-text: var(--color-surface-text);
   --color-drawer-text-active: var(--color-surface-active);
   --color-drawer-text-disabled: var(--color-surface-dark);
+  --color-drawer-text-alt: var(--color-surface-text-alt);
   --color-drawer-error: var(--color-error);
 
   --color-drawer-handle: var(--color-surface-dark);
@@ -56,10 +57,11 @@
 
   --color-panel-back: var(--color-drawer-back);
   --color-panel-back-detail: var(--color-drawer-back-detail);
+  --color-panel-back-input: var(--color-surface-lite);
+  --color-panel-back-text: var(--color-drawer-text-alt);
   --color-panel-text: var(--color-drawer-text);
   --color-panel-text-active: var(--color-drawer-text-active);
   --color-panel-text-disabled: var(--color-drawer-text-disabled);
-  --color-panel-back-input: var(--color-surface-lite);
   --color-panel-error: var(--color-drawer-error);
   --color-panel-accent: var(--color-drawer-tab-highlight);
 

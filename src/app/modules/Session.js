@@ -97,6 +97,14 @@ class Session
     this.startSession(app, moduleName);
   }
 
+  updateSession(app)
+  {
+    if (this._module)
+    {
+      this._module.update(app);
+    }
+  }
+
   stopSession(app)
   {
     for(const listener of this._listeners)

@@ -38,7 +38,7 @@
   width: 1em;
   height: 1em;
   border-radius: 1em;
-  background: var(--color-panel-text-active);
+  background: var(--color-panel-back-text);
 
   transition: transform 0.3s ease;
 }

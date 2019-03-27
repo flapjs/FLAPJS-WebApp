@@ -4,11 +4,11 @@ import Style from './OptionPanel.css';
 import LocalSave from 'system/localsave/LocalSave.js';
 import StyleInput from 'system/styleopt/components/StyleInput.js';
 
+import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';
 import PanelDivider from 'experimental/panels/PanelDivider.js';
 import PanelSwitch from 'experimental/panels/PanelSwitch.js';
-
-import Modules from 'modules/Modules.js'
+import PanelButton from 'experimental/panels/PanelButton.js';
 
 import PreviewView from './PreviewView.js';
 
@@ -31,7 +31,6 @@ class OptionPanel extends React.Component
     };
 
     this.onChangeTheme = this.onChangeTheme.bind(this);
-    this.onChangeModule = this.onChangeModule.bind(this);
   }
 
   onChangeTheme(e)
@@ -54,13 +53,6 @@ class OptionPanel extends React.Component
     this.setState({theme: theme});
   }
 
-  onChangeModule(e, useExperimental=false)
-  {
-    const session = this.props.session;
-    const moduleName = e.target.value;
-    session.restartSession(session.getApp(), moduleName);
-  }
-
   //Override
   render()
   {
@@ -69,134 +61,112 @@ class OptionPanel extends React.Component
     const opts = session.getApp().getStyleOpts();
 
     return (
-      <div id={this.props.id}
-        className={Style.panel_container +
-          " " + this.props.className}
-        style={this.props.style}>
-        <div className={Style.panel_title}>
-          <h1>{I18N.toString("component.options.title")}</h1>
-        </div>
-        <div className={Style.panel_content}>
-
-          <PanelSection title="Theme">
-            <div style={{display: "flex"}}>
-              <div style={{width: "60%"}}>
-                <div id="options-theme-select-container">
-                  <select id="options-theme-select" className="panel-select" value={this.state.theme} onChange={this.onChangeTheme} disabled={this.state.customTheme}>
-                    <option value="default">Default</option>
-                    <option value="ucsd" disabled={true}>UC San Diego (Coming Soon)</option>
-                    <option value="duke" disabled={true}>Duke University (Coming Soon)</option>
-                    <option value="mit" disabled={true}>MIT (Coming Soon)</option>
-                  </select>
-                  {
-                    !this.state.customTheme &&
-                    <button className="panel-button" onClick={() => this.setState({customTheme: true})}>
-                      {I18N.toString("action.options.changetheme")}
-                    </button>
-                  }
-                </div>
+      <PanelContainer id={this.props.id}
+        className={this.props.className}
+        style={this.props.style}
+        title={I18N.toString("component.options.title")}>
+        <PanelSection title="Theme">
+          <div style={{display: "flex"}}>
+            <div style={{width: "60%"}}>
+              <div id="options-theme-select-container">
+                <select id="options-theme-select" className="panel-select" value={this.state.theme} onChange={this.onChangeTheme} disabled={this.state.customTheme}>
+                  <option value="default">Default</option>
+                  <option value="ucsd" disabled={true}>UC San Diego (Coming Soon)</option>
+                  <option value="duke" disabled={true}>Duke University (Coming Soon)</option>
+                  <option value="mit" disabled={true}>MIT (Coming Soon)</option>
+                </select>
                 {
-                  this.state.customTheme && <div>
-
-                    <PanelSection title={"General Colors"} full={true}>
-                      {opts.getPropsByGroup("general").map(e => (
-                        <div key={e}>
-                          <StyleInput value={opts.getOptionByProp(e)}
-                            title={I18N.toString("options." + e)}/>
-                        </div>
-                      ))}
-                    </PanelSection>
-
-                    <PanelSection title={"Surface Colors"} full={true}>
-                      {opts.getPropsByGroup("surface").map(e => (
-                        <div key={e}>
-                          <StyleInput value={opts.getOptionByProp(e)}
-                            title={I18N.toString("options." + e)}/>
-                        </div>
-                      ))}
-                    </PanelSection>
-
-                    <PanelSection title={"Graph Colors"} full={true}>
-                      {opts.getPropsByGroup("graph").map(e => (
-                        <div key={e}>
-                          <StyleInput value={opts.getOptionByProp(e)}
-                            title={I18N.toString("options." + e)}/>
-                        </div>
-                      ))}
-                    </PanelSection>
-
-                    <button className="panel-button" onClick={(e) => {
-                      for(let option of opts.getOptions())
-                      {
-                        option.resetStyle();
-                      }
-                      this.setState({customTheme: false});
-                    }}>{I18N.toString("action.options.reset")}</button>
-                  </div>
+                  !this.state.customTheme &&
+                  <PanelButton onClick={() => this.setState({customTheme: true})}>
+                    {I18N.toString("action.options.changetheme")}
+                  </PanelButton>
                 }
               </div>
-              <div>
-                <PreviewView/>
-              </div>
+              {
+                this.state.customTheme && <div>
+
+                  <PanelSection title={"General Colors"} full={true}>
+                    {opts.getPropsByGroup("general").map(e => (
+                      <div key={e}>
+                        <StyleInput value={opts.getOptionByProp(e)}
+                          title={I18N.toString("options." + e)}/>
+                      </div>
+                    ))}
+                  </PanelSection>
+
+                  <PanelSection title={"Surface Colors"} full={true}>
+                    {opts.getPropsByGroup("surface").map(e => (
+                      <div key={e}>
+                        <StyleInput value={opts.getOptionByProp(e)}
+                          title={I18N.toString("options." + e)}/>
+                      </div>
+                    ))}
+                  </PanelSection>
+
+                  <PanelSection title={"Graph Colors"} full={true}>
+                    {opts.getPropsByGroup("graph").map(e => (
+                      <div key={e}>
+                        <StyleInput value={opts.getOptionByProp(e)}
+                          title={I18N.toString("options." + e)}/>
+                      </div>
+                    ))}
+                  </PanelSection>
+
+                  <PanelButton onClick={(e) => {
+                    for(let option of opts.getOptions())
+                    {
+                      option.resetStyle();
+                    }
+                    this.setState({customTheme: false});
+                  }}>
+                    {I18N.toString("action.options.reset")}
+                  </PanelButton>
+                </div>
+              }
             </div>
-          </PanelSection>
+            <div>
+              <PreviewView/>
+            </div>
+          </div>
+        </PanelSection>
 
-          <PanelSection title="Module">
-            <select id="options-experimental-modules"
-              className="panel-select"
-              value={currentModule.getModuleName()}
-              onChange={this.onChangeModule}
-              disabled={!ENABLE_MODULES}>
-            {Object.keys(Modules).map(e => {
-              const mod = Modules[e];
-              return (
-                <option key={e} value={e}
-                  disabled={!mod['experimental'] || mod['disabled']}>
-                  {mod.name + " (" + mod.version + ")"}
-                </option>
-              );
-            })}
-            </select>
-          </PanelSection>
+        <PanelDivider/>
 
-          <PanelDivider/>
+        <PanelSwitch id={"option-skipwelcome"}
+          checked={this.state.skipWelcome}
+          title={I18N.toString("options.skipwelcome")}
+          onChange={(e) => {
+            const result = e.target.checked;
+            this.setState({skipWelcome: result});
+            LocalSave.setStringToStorage(SKIP_WELCOME_STORAGE_ID, "" + result);
+          }}/>
+        <PanelSwitch id={"option-exitwarning"}
+          checked={this.state.exitWarning}
+          title={I18N.toString("options.exitwarning")}
+          onChange={(e) => {
+            const result = e.target.checked;
+            this.setState({exitWarning: result});
+            LocalSave.setStringToStorage(DISABLE_EXIT_WARNING_STORAGE_ID, "" + result);
+          }}/>
 
-          <PanelSwitch id={"option-skipwelcome"}
-            checked={this.state.skipWelcome}
-            title={I18N.toString("options.skipwelcome")}
-            onChange={(e) => {
-              const result = e.target.checked;
-              this.setState({skipWelcome: result});
-              LocalSave.setStringToStorage(SKIP_WELCOME_STORAGE_ID, "" + result);
-            }}/>
-          <PanelSwitch id={"option-exitwarning"}
-            checked={this.state.exitWarning}
-            title={I18N.toString("options.exitwarning")}
-            onChange={(e) => {
-              const result = e.target.checked;
-              this.setState({exitWarning: result});
-              LocalSave.setStringToStorage(DISABLE_EXIT_WARNING_STORAGE_ID, "" + result);
-            }}/>
+        <PanelDivider/>
 
-          <PanelDivider/>
+        <PanelButton onClick={() => {
+          if (window.confirm("This will clear any cached or saved data. Are you sure you want to continue?"))
+          {
+            LocalSave.setStringToStorage("enableExperimental", "false");
+            //TODO: This is only to force use default module, remove later.
+            LocalSave.setStringToStorage("currentModule", "");
 
-          <button className={Style.options_button} onClick={() => {
-            if (window.confirm("This will clear any cached or saved data. Are you sure you want to continue?"))
-            {
-              LocalSave.setStringToStorage("enableExperimental", "false");
-              //TODO: This is only to force use default module, remove later.
-              LocalSave.setStringToStorage("currentModule", "");
+            try { LocalSave.terminate(); }
+            catch(e){/* Ignore if it fails. */}
 
-              try { LocalSave.terminate(); }
-              catch(e){/* Ignore if it fails. */}
-
-              window.alert("It's done! Restart to apply changes!");
-            }
-          }}>
-            {"Get out of Experimental Mode and return to Safety"}
-          </button>
-        </div>
-      </div>
+            window.alert("It's done! Restart to apply changes!");
+          }
+        }}>
+          {"Get out of Experimental Mode and return to Safety"}
+        </PanelButton>
+      </PanelContainer>
     );
   }
 }

@@ -1,0 +1,29 @@
+:local(.splash_container) {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  pointer-events: all;
+  background: rgba(0, 0, 0, 0.8);
+  opacity: 1.0;
+  transition: opacity 0.3s ease;
+}
+
+:local(.splash_container).hide {
+  pointer-events: none;
+  opacity: 0.0;
+}
+
+:local(.splash_child) {
+  width: 80%;
+  height: 80%;
+  margin: auto;
+  background: white;
+}

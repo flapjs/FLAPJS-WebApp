@@ -15,10 +15,11 @@
 
   --color-panel-back: var(--color-toolbar-back);
   --color-panel-back-detail: var(--color-toolbar-back-detail);
-  --color-panel-text: var(--color-toolbar-text);
+  --color-panel-back-input: var(--color-surface-lite);
+  --color-panel-back-text: var(--color-surface-text-alt);
+  --color-panel-text: var(--color-surface-text);
   --color-panel-text-active: var(--color-toolbar-text-active);
   --color-panel-text-disabled: var(--color-toolbar-text-disabled);
-  --color-panel-back-input: var(--color-surface-lite);
   --color-panel-error: var(--color-error);
   --color-panel-accent: var(--color-toolbar-highlight);
 
