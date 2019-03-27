@@ -39,7 +39,7 @@ import InputAdapter from 'input/InputAdapter.js';
 import LocalSave from 'system/localsave/LocalSave.js';
 import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
 
-import Session from 'session/Session.js';
+import Session from 'modules/Session.js';
 import ExportManager from 'manager/export/ExportManager.js';
 import DrawerManager from 'manager/DrawerManager.js';
 import MenuManager from 'manager/MenuManager.js';
