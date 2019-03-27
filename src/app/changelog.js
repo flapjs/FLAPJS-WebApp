@@ -1,6 +1,9 @@
 //Version 0.3.4
 const changeLog = [
-  "Added meta tags for those coming from a search engine."
+  "Added meta tags for those coming from a search engine.",
+  "Added Pushdown Automata",
+  "Added Regular Expressions",
+  "Added a whole NEW EXPERIMENTAL MODE! :D"
 ];
 
 /*
