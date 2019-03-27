@@ -14,22 +14,22 @@ export function isEquivalentDFA(dfa1, dfa2) {
     // L(M3) = L(M1) && !L(M2)
     let m3 = intersectionOfComplement(dfa1, dfa2);
     if (!m3) {
-        console.log("dfa1 and dfa2 use different alphabets");
+        //console.log("dfa1 and dfa2 use different alphabets");
         return false;
     }
     let m3acceptssomething = isLanguageNotEmpty(m3)
     if(m3acceptssomething) {
-        console.log(`dfa1 accepts ${m3acceptssomething} while dfa2 doesn't`)
+        //console.log(`dfa1 accepts ${m3acceptssomething} while dfa2 doesn't`)
         return false
     }
     let m4 = intersectionOfComplement(dfa2, dfa1);
     if (!m4) {
-        console.log("dfa1 and dfa2 use different alphabets");
+        //console.log("dfa1 and dfa2 use different alphabets");
         return false;
     }
     let m4acceptssometing = isLanguageNotEmpty(m4)
     if(m4acceptssometing) {
-        console.log(`dfa2 accepts ${m4acceptssomething} while dfa1 doesn't`);
+        //console.log(`dfa2 accepts ${m4acceptssomething} while dfa1 doesn't`);
         return false;
     }
     return true;
