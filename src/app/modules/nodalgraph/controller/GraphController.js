@@ -45,6 +45,7 @@ class GraphController extends AbstractGraphController
   {
     super.initialize(module);
 
+    this._module = module;
     this.inputController = module.getInputController();
   }
 

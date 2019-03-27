@@ -50,11 +50,12 @@ class NodalGraphInputManager
   //DuckType(SessionListener)
   onSessionStart(session)
   {
+    const currentModule = session.getCurrentModule();
     const inputController = this.getInputController();
     const graphController = this.getGraphController();
-    inputController.initialize(this);
-    graphController.initialize(this);
-    
+    inputController.initialize(currentModule);
+    graphController.initialize(currentModule);
+
     this._labelEditorManager.onSessionStart(session);
 
     //Notify on create in delete mode
@@ -72,10 +73,11 @@ class NodalGraphInputManager
   {
     this._labelEditorManager.onSessionStop(session);
 
+    const currentModule = session.getCurrentModule();
     const inputController = this.getInputController();
     const graphController = this.getGraphController();
-    graphController.destroy(session.getCurrentModule());
-    inputController.destroy(session.getCurrentModule());
+    graphController.destroy(currentModule);
+    inputController.destroy(currentModule);
   }
 
   getLabelEditorManager() { return this._labelEditorManager; }
