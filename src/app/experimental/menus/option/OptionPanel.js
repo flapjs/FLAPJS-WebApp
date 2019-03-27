@@ -6,7 +6,6 @@ import StyleInput from 'system/styleopt/components/StyleInput.js';
 
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';
-import PanelDivider from 'experimental/panels/PanelDivider.js';
 import PanelSwitch from 'experimental/panels/PanelSwitch.js';
 import PanelButton from 'experimental/panels/PanelButton.js';
 
@@ -130,8 +129,6 @@ class OptionPanel extends React.Component
           </div>
         </PanelSection>
 
-        <PanelDivider/>
-
         <PanelSwitch id={"option-skipwelcome"}
           checked={this.state.skipWelcome}
           title={I18N.toString("options.skipwelcome")}
@@ -148,8 +145,6 @@ class OptionPanel extends React.Component
             this.setState({exitWarning: result});
             LocalSave.setStringToStorage(DISABLE_EXIT_WARNING_STORAGE_ID, "" + result);
           }}/>
-
-        <PanelDivider/>
 
         <PanelButton onClick={() => {
           if (window.confirm("This will clear any cached or saved data. Are you sure you want to continue?"))
