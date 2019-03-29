@@ -1,12 +1,17 @@
-//Version 0.3.4
+//Version 0.4.0
 const changeLog = [
-  "Added meta tags for those coming from a search engine.",
-  "Added Pushdown Automata",
-  "Added Regular Expressions",
-  "Added a whole NEW EXPERIMENTAL MODE! :D"
+  "There will be changes..."
 ];
 
 /*
+  //Version 0.3.4
+  const changeLog = [
+    "Added meta tags for those coming from a search engine.",
+    "Added Pushdown Automata",
+    "Added Regular Expressions",
+    "Added a whole NEW EXPERIMENTAL MODE! :D"
+  ];
+
   //Version 0.3.3
   const changeLog = [
     "ADDED: SVG export option (thanks to moreheadm).",
