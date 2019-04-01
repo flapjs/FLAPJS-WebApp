@@ -1,4 +1,4 @@
-import Notifications from 'system/notification/Notifications.js';
+import Notifications from 'deprecated/system/notification/Notifications.js';
 
 export const ERROR_MESSAGE_TAG = "re_build_error";
 

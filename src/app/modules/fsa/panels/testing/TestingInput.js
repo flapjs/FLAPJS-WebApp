@@ -1,12 +1,12 @@
 import React from 'react';
 import './TestingInput.css';
 
-import Config from 'config.js';
+import Config from 'deprecated/config.js';
 import { EMPTY } from 'modules/fsa/machine/Symbols.js';
 
-import IconButton from 'icons/IconButton.js';
-import AddIcon from 'icons/AddIcon.js';
-import RemoveIcon from 'icons/RemoveIcon.js';
+import IconButton from 'deprecated/icons/IconButton.js';
+import AddIcon from 'deprecated/icons/AddIcon.js';
+import RemoveIcon from 'deprecated/icons/RemoveIcon.js';
 
 import StatusButton from './StatusButton.js';
 

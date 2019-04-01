@@ -1,5 +1,5 @@
 import Modules from 'modules/Modules.js';
-import LocalSave from 'system/localsave/LocalSave.js';
+import LocalSave from 'deprecated/system/localsave/LocalSave.js';
 import * as URLHelper from 'util/URLHelper.js';
 
 const DEFAULT_MODULE_ID = "fsa2"

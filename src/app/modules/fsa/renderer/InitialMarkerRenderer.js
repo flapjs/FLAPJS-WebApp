@@ -2,7 +2,7 @@ import React from 'react';
 
 import Node from 'modules/fsa/graph/FSANode.js';
 
-import Config from 'config.js';
+import Config from 'deprecated/config.js';
 
 class InitialMarkerRenderer extends React.Component
 {

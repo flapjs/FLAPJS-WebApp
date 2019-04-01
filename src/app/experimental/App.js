@@ -7,7 +7,7 @@ import ToolbarView from 'experimental/toolbar/ToolbarView.js';
 import ViewportView from 'experimental/viewport/ViewportView.js';
 import TooltipView, { ONESHOT_MODE } from 'experimental/tooltip/TooltipView.js';
 import UploadDropZone from 'experimental/components/UploadDropZone.js';
-import ViewportComponent from 'input/components/ViewportComponent.js';
+import ViewportComponent from 'util/input/components/ViewportComponent.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
@@ -35,10 +35,10 @@ import ColorSaver from 'experimental/ColorSaver.js';
 import IconButton from 'experimental/components/IconButton.js';
 
 import NotificationView from 'experimental/notification/NotificationView.js';
-import Notifications from 'system/notification/Notifications.js';
+import Notifications from 'deprecated/system/notification/Notifications.js';
 
-import LocalSave from 'system/localsave/LocalSave.js';
-import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
+import LocalSave from 'deprecated/system/localsave/LocalSave.js';
+import StyleOptionRegistry from 'deprecated/system/styleopt/StyleOptionRegistry.js';
 
 import Session from 'session/Session.js';
 import ExportManager from 'session/manager/export/ExportManager.js';

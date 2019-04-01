@@ -1,7 +1,7 @@
-import Config from 'config.js';
+import Config from 'deprecated/config.js';
 import { EMPTY } from 'modules/fsa/machine/Symbols.js';
 
-import Notifications from 'system/notification/Notifications.js';
+import Notifications from 'deprecated/system/notification/Notifications.js';
 import StateUnreachableWarningMessage from 'modules/fsa/notifications/StateUnreachableWarningMessage.js';
 import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
 

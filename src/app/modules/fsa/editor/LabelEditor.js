@@ -1,10 +1,10 @@
 import React from 'react';
 import './LabelEditor.css';
 
-import Config from 'config.js';
+import Config from 'deprecated/config.js';
 import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
 
-import FormattedInput from 'system/formattedinput/FormattedInput.js';
+import FormattedInput from 'deprecated/system/formattedinput/FormattedInput.js';
 
 //TODO: This is equivalent to 4em for toolbar height
 const LABEL_OFFSET_Y = -64;

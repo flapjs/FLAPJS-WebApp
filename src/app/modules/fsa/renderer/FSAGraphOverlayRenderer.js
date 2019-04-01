@@ -1,7 +1,7 @@
 import React from 'react';
 
-import SelectionBoxRenderer from 'content/workspace/renderer/SelectionBoxRenderer.js';
-import HighlightRenderer from 'content/workspace/renderer/HighlightRenderer.js';
+import SelectionBoxRenderer from 'deprecated/content/workspace/renderer/SelectionBoxRenderer.js';
+import HighlightRenderer from 'deprecated/content/workspace/renderer/HighlightRenderer.js';
 
 class FSAGraphOverlayRenderer extends React.Component
 {

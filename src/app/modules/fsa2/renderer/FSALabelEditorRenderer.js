@@ -3,7 +3,7 @@ import Style from './FSALabelEditorRenderer.css';
 
 import GraphEdge from 'graph/GraphEdge.js';
 import GraphNode from 'graph/GraphNode.js';
-import PatternInputButton from 'system/patterninput/PatternInputButton.js';
+import PatternInputButton from 'deprecated/system/patterninput/PatternInputButton.js';
 import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
 
 const RECOMMENDED_SYMBOLS = ["0", "1"];

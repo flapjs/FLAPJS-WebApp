@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './NotificationView.css';
 
-import NotificationMessage from 'system/notification/components/NotificationMessage.js';
+import NotificationMessage from 'deprecated/system/notification/components/NotificationMessage.js';
 
 class NotificationView extends React.Component
 {

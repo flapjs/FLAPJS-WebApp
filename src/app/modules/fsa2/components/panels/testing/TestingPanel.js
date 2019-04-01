@@ -6,7 +6,7 @@ import PanelSwitch from 'experimental/panels/PanelSwitch.js';
 
 import TestListView from './TestListView.js';
 
-import Notifications from 'system/notification/Notifications.js';
+import Notifications from 'deprecated/system/notification/Notifications.js';
 import {ERROR_MESSAGE_TAG} from 'modules/fsa2/FSAErrorChecker.js';
 
 class TestingPanel extends React.Component

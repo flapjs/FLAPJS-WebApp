@@ -6,7 +6,7 @@ import ViewportInputHandler from 'modules/nodalgraph/controller/ViewportInputHan
 
 import LabelEditorManager from 'session/manager/labeleditor/LabelEditorManager.js';
 
-import Notifications from 'system/notification/Notifications.js';
+import Notifications from 'deprecated/system/notification/Notifications.js';
 
 class NodalGraphInputManager
 {

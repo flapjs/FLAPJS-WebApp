@@ -3,7 +3,7 @@ import Style from './LabelEditorView.css';
 
 import GraphElement from 'graph/GraphElement.js';
 
-import PatternInput from 'system/patterninput/PatternInput.js';
+import PatternInput from 'deprecated/system/patterninput/PatternInput.js';
 
 class LabelEditorView extends React.Component
 {
