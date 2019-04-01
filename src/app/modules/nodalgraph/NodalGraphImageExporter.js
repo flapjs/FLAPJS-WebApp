@@ -1,4 +1,4 @@
-import AbstractGraphExporter from 'manager/export/AbstractGraphExporter.js';
+import AbstractGraphExporter from 'session/manager/export/AbstractGraphExporter.js';
 
 import PNGIcon from 'icons/flat/PNGIcon.js';
 import JPGIcon from 'icons/flat/JPGIcon.js';

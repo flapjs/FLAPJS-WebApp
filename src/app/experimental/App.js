@@ -40,17 +40,17 @@ import Notifications from 'system/notification/Notifications.js';
 import LocalSave from 'system/localsave/LocalSave.js';
 import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
 
-import Session from 'modules/Session.js';
-import ExportManager from 'manager/export/ExportManager.js';
-import DrawerManager from 'manager/DrawerManager.js';
-import MenuManager from 'manager/MenuManager.js';
-import ViewportManager from 'manager/ViewportManager.js';
-import HotKeyManager from 'manager/hotkey/HotKeyManager.js';
-import HotKeyView from 'manager/hotkey/HotKeyView.js';
-import UndoManager from 'manager/undo/UndoManager.js';
+import Session from 'session/Session.js';
+import ExportManager from 'session/manager/export/ExportManager.js';
+import DrawerManager from 'session/manager/DrawerManager.js';
+import MenuManager from 'session/manager/MenuManager.js';
+import ViewportManager from 'session/manager/ViewportManager.js';
+import HotKeyManager from 'session/manager/hotkey/HotKeyManager.js';
+import HotKeyView from 'session/manager/hotkey/HotKeyView.js';
+import UndoManager from 'session/manager/undo/UndoManager.js';
 import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
-  RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'manager/RenderManager.js';
-import TooltipManager from 'manager/TooltipManager.js';
+  RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'session/manager/RenderManager.js';
+import TooltipManager from 'session/manager/TooltipManager.js';
 
 const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";

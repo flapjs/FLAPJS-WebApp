@@ -1,7 +1,7 @@
 import React from 'react';
 
 import LabelEditorView from './LabelEditorView.js';
-import {RENDER_LAYER_WORKSPACE_OVERLAY} from 'manager/RenderManager.js';
+import {RENDER_LAYER_WORKSPACE_OVERLAY} from 'session/manager/RenderManager.js';
 
 class LabelEditorManager
 {
@@ -9,7 +9,7 @@ class LabelEditorManager
   {
     this._app = app;
 
-    this._labelEditorComponent = null;
+    this._labelEditorComponent = React.createRef();
     this._labelEditorRenderer = null;
     this._labeler = null;
   }
@@ -34,14 +34,15 @@ class LabelEditorManager
 
     const LabelEditorRenderer = this._labelEditorRenderer;
     const labeler = this._labeler;
+
     session.getApp().getRenderManager().addRenderer(RENDER_LAYER_WORKSPACE_OVERLAY, props => (
-      <LabelEditorView ref={ref=>this._labelEditorComponent=ref}
+      <LabelEditorView ref={this._labelEditorComponent}
         labeler={labeler}
         viewport={viewport}
         saveOnExit={true}>
         {/* LabelEditor objects */
           LabelEditorRenderer &&
-          <LabelEditorRenderer currentModule={currentModule} parent={this._labelEditorComponent}/>}
+          <LabelEditorRenderer currentModule={currentModule} parent={this._labelEditorComponent.current}/>}
       </LabelEditorView>
     ));
   }
@@ -51,12 +52,11 @@ class LabelEditorManager
   {
     this._labeler = null;
     this._labelEditorRenderer = null;
-    this._labelEditorComponent = null;
   }
 
   getLabelEditorComponent()
   {
-    return this._labelEditorComponent;
+    return this._labelEditorComponent.current;
   }
 }
 

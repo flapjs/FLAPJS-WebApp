@@ -4,7 +4,7 @@ import GraphController from 'modules/nodalgraph/controller/GraphController.js';
 import SelectionBoxInputHandler from 'modules/nodalgraph/controller/SelectionBoxInputHandler.js';
 import ViewportInputHandler from 'modules/nodalgraph/controller/ViewportInputHandler.js';
 
-import LabelEditorManager from 'manager/labeleditor/LabelEditorManager.js';
+import LabelEditorManager from 'session/manager/labeleditor/LabelEditorManager.js';
 
 import Notifications from 'system/notification/Notifications.js';
 

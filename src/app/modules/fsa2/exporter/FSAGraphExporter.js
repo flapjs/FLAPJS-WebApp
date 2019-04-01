@@ -1,4 +1,4 @@
-import AbstractGraphExporter from 'manager/export/AbstractGraphExporter.js';
+import AbstractGraphExporter from 'session/manager/export/AbstractGraphExporter.js';
 
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import { downloadText } from 'util/Downloader.js';

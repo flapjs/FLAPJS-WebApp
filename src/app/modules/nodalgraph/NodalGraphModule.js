@@ -13,7 +13,7 @@ import EmptyGraphLabeler from './EmptyGraphLabeler.js';
 import * as NodalGraphParser from 'graph/parser/NodalGraphParser.js';
 
 import EditPane from './components/views/EditPane.js';
-import {RENDER_LAYER_WORKSPACE} from 'manager/RenderManager.js';
+import {RENDER_LAYER_WORKSPACE} from 'session/manager/RenderManager.js';
 
 import NodalGraphExporter from './NodalGraphExporter.js';
 import {DEFAULT_IMAGE_EXPORTERS} from './NodalGraphImageExporter.js';
