@@ -59,6 +59,8 @@ const SMOOTH_OFFSET_DAMPING = 0.4;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 10;
 
+const DRAWER_INDEX_ABOUT = 0;
+
 const MENU_INDEX_EXPORT = 0;
 const MENU_INDEX_OPTION = 1;
 const MENU_INDEX_LANGUAGE = 2;
@@ -162,7 +164,18 @@ class App extends React.Component
 
   onModuleTitleClick(e)
   {
-    this._drawer.setCurrentTab(0);
+    const drawer = this._drawer;
+    if (!drawer.isDrawerOpen() || !drawer.isCurrentTab(DRAWER_INDEX_ABOUT))
+    {
+      //Open current module info panel
+      drawer.setCurrentTab(DRAWER_INDEX_ABOUT);
+    }
+    else
+    {
+      //On another click... open module change panel
+      const toolbar = this._toolbar;
+      toolbar.setCurrentMenu(MENU_INDEX_MODULE);
+    }
   }
 
   onToolbarClearButton(e)

@@ -1,6 +1,9 @@
 //Version 0.4.0
 const changeLog = [
-  "There will be changes..."
+  "Changed default color scheme. Hope you like it!",
+  "Allow double-clicking module name to change modules.",
+  "FIXED: Module change causes app to not respond.",
+  "FIXED: Auto-rename nodes cannot be toggled."
 ];
 
 /*
