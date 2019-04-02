@@ -71,9 +71,8 @@ class InputAdapter
   removeInputHandler(handler)
   {
     const index = this._handlers.indexOf(handler);
-    if (index < 0) return false;
-    this._handlers.splice(index, 1);
-    return true;
+    if (index >= 0) this._handlers.splice(index, 1);
+    return this;
   }
 
   initialize(element)
