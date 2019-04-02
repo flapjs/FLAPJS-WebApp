@@ -15,14 +15,12 @@ class NodalGraphInputManager
     this._inputController = new InputController(currentModule, currentModule.getApp().getInputAdapter());
     this._graphController = new GraphController(currentModule, nodalGraph, graphLabeler, graphParser);
 
-    this._labelEditorManager = new LabelEditorManager()
+    this._labelEditorManager = new LabelEditorManager(currentModule.getApp())
       .setLabelEditorRenderer(labelEditorRenderer)
       .setLabeler(graphLabeler);
 
-    currentModule.getApp().getInputAdapter()
-      .addInputHandler(this._inputController)
-      .addInputHandler(new SelectionBoxInputHandler(this._inputController, this._graphController, this._inputController.getSelectionBox()))
-      .addInputHandler(new ViewportInputHandler());
+    this._selectionBoxInputHandler = new SelectionBoxInputHandler(this._inputController, this._graphController, this._inputController.getSelectionBox());
+    this._viewportInputHandler = new ViewportInputHandler();
   }
 
   //Not yet implemented
@@ -51,6 +49,12 @@ class NodalGraphInputManager
   onSessionStart(session)
   {
     const currentModule = session.getCurrentModule();
+
+    currentModule.getApp().getInputAdapter()
+      .addInputHandler(this._inputController)
+      .addInputHandler(this._selectionBoxInputHandler)
+      .addInputHandler(this._viewportInputHandler);
+
     const inputController = this.getInputController();
     const graphController = this.getGraphController();
     inputController.initialize(currentModule);
@@ -71,6 +75,11 @@ class NodalGraphInputManager
   //DuckType(SessionListener)
   onSessionStop(session)
   {
+    session.getApp().getInputAdapter()
+      .removeInputHandler(this._inputController)
+      .removeInputHandler(this._selectionBoxInputHandler)
+      .removeInputHandler(this._viewportInputHandler);
+
     this._labelEditorManager.onSessionStop(session);
 
     const currentModule = session.getCurrentModule();

@@ -58,6 +58,24 @@ const AutoSave = {
       handler.onAutoSaveUnload(this._storage);
     }
     return this;
+  },
+  load()
+  {
+    if (!this._init) throw new Error("Cannot load when not yet initialized");
+
+    for(const handler of this._handlers)
+    {
+      handler.onAutoSaveLoad(this._storage);
+    }
+  },
+  unload()
+  {
+    if (!this._init) throw new Error("Cannot save when not yet initialized");
+
+    for(const handler of this._handlers)
+    {
+      handler.onAutoSaveUnload(this._storage);
+    }
   }
 };
 

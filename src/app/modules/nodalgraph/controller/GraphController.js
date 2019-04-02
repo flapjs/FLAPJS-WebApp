@@ -22,8 +22,6 @@ class GraphController extends AbstractGraphController
 
     this.getGraphLabeler().setGraphController(this);
 
-    this.labelEditorElement = null;
-
     this.prevQuad = {
       radians: 0, length: 0,
       x: 0, y: 0

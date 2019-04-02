@@ -113,6 +113,7 @@ class App extends React.Component
 
     //Notifications.addMessage("Welcome to Flap.js");
     this.onModuleTitleClick = this.onModuleTitleClick.bind(this);
+    this.onToolbarClearButton = this.onToolbarClearButton.bind(this);
   }
 
   //Override
@@ -164,6 +165,15 @@ class App extends React.Component
     this._drawer.setCurrentTab(0);
   }
 
+  onToolbarClearButton(e)
+  {
+    const currentModule = this._session.getCurrentModule();
+    if (currentModule)
+    {
+      currentModule.clear(this);
+    }
+  }
+
   getWorkspaceComponent() { return this._workspace.current; }
   getToolbarComponent() { return this._toolbar; }
 
@@ -196,10 +206,25 @@ class App extends React.Component
       );
   }
 
+  renderRenderers(renderers, props)
+  {
+    const session = this._session;
+    const sessionID = session.getSessionID();
+    if (renderers && renderers.length > 0)
+    {
+      return renderers.map((R, i) => <R key={sessionID + "." + R.constructor.name + "." + i} {...props}/>);
+    }
+    else
+    {
+      return null;
+    }
+  }
+
   //Override
   render()
   {
     const session = this._session;
+    const sessionID = session.getSessionID();
     const currentModule = session.getCurrentModule();
     const currentModuleLocalizedName = currentModule ? currentModule.getLocalizedModuleName() : null;
 
@@ -238,7 +263,8 @@ class App extends React.Component
           session={session}
           onTitleClick={this.onModuleTitleClick}>
           <ToolbarButton title={I18N.toString("action.toolbar.newmachine")} icon={PageEmptyIcon}
-            onClick={() => currentModule.clear(this)}/>
+            onClick={this.onToolbarClearButton}
+            disabled={!currentModule}/>
           <ToolbarUploadButton title={I18N.toString("action.toolbar.uploadmachine")} icon={UploadIcon} accept={exportManager.getImportFileTypes().join(",")}
             onUpload={fileBlob => {
               exportManager.tryImportFromFile(fileBlob)
@@ -289,16 +315,12 @@ class App extends React.Component
               </TooltipView>
 
               <ViewportComponent ref={this._workspace}>
-                {/* RENDER_LAYER_WORKSPACE */
-                  workspaceRenderers &&
-                  workspaceRenderers.map((WorkspaceRenderer, i) =>
-                    <WorkspaceRenderer key={currentModuleLocalizedName + ":" + i} workspace={this.getWorkspaceComponent()}/>)}
+                {/* RENDER_LAYER_WORKSPACE */}
+                {this.renderRenderers(workspaceRenderers, {workspace: this.getWorkspaceComponent()})}
               </ViewportComponent>
 
-              {/* RENDER_LAYER_WORKSPACE_OVERLAY */
-                workspaceOverlayRenderers &&
-                workspaceOverlayRenderers.map((WorkspaceOverlayRenderer, i) =>
-                  <WorkspaceOverlayRenderer key={currentModuleLocalizedName + ":" + i} workspace={this.getWorkspaceComponent()}/>)}
+              {/* RENDER_LAYER_WORKSPACE_OVERLAY */}
+              {this.renderRenderers(workspaceOverlayRenderers, {workspace: this.getWorkspaceComponent()})}
 
               <NotificationView notificationManager={Notifications}>
               </NotificationView>
@@ -309,16 +331,12 @@ class App extends React.Component
               <ViewportView ref={ref=>this._viewport=ref}
                 views={viewportViewClasses}
                 viewProps={viewportViewProps}>
-                {/* RENDER_LAYER_VIEWPORT */
-                  viewportRenderers &&
-                  viewportRenderers.map((ViewportRenderer, i) =>
-                    <ViewportRenderer key={currentModuleLocalizedName + ":" + i} viewport={this._viewport}/>)}
+                {/* RENDER_LAYER_VIEWPORT */}
+                {this.renderRenderers(viewportRenderers, {viewport: this._viewport})}
               </ViewportView>
 
-              {/* RENDER_LAYER_VIEWPORT_OVERLAY */
-                viewportOverlayRenderers &&
-                viewportOverlayRenderers.map((ViewportOverlayRenderer, i) =>
-                  <ViewportOverlayRenderer key={currentModuleLocalizedName + ":" + i} viewport={this._viewport}/>)}
+              {/* RENDER_LAYER_VIEWPORT_OVERLAY */}
+              {this.renderRenderers(viewportOverlayRenderers, {viewport: this._viewport})}
 
             </div>
           </UploadDropZone>

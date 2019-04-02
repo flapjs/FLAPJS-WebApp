@@ -1,6 +1,7 @@
 import Modules from 'modules/Modules.js';
 import LocalSave from 'deprecated/system/localsave/LocalSave.js';
 import * as URLHelper from 'util/URLHelper.js';
+import {guid} from 'util/MathHelper.js';
 
 const DEFAULT_MODULE_ID = "fsa2"
 export const CURRENT_MODULE_STORAGE_ID = "currentModule";
@@ -16,6 +17,8 @@ class Session
     this._moduleClass = null;
     this._app = null;
 
+    this._sessionID = null;
+
     this._listeners = [];
   }
 
@@ -27,6 +30,10 @@ class Session
 
   startSession(app, moduleName=null)
   {
+    if (this._module !== null) return;
+
+    console.log("[Session] Starting session for module \'" + moduleName + "\'...");
+
     //Load from storage, url, or default, if not specified...
     if (!moduleName || moduleName.length <= 0)
     {
@@ -70,6 +77,7 @@ class Session
 
         this._app = app;
         this._moduleClass = ModuleClass;
+        this._sessionID = guid();
         try
         {
           this._module = new ModuleClass(app);
@@ -84,7 +92,7 @@ class Session
         }
         catch (e)
         {
-          console.log(e);
+          console.error(e);
           window.alert("Could not load module with id \'" + moduleName + "\'");
         }
       });
@@ -93,6 +101,8 @@ class Session
 
   restartSession(app, moduleName=null)
   {
+    if (this._module === null) throw new Error("Cannot restart session that is not yet started");
+
     this.stopSession(app);
     this.startSession(app, moduleName);
   }
@@ -107,6 +117,10 @@ class Session
 
   stopSession(app)
   {
+    if (this._module === null) return;
+
+    console.log("[Session] Stopping session...");
+
     for(const listener of this._listeners)
     {
       listener.onSessionStop(this);
@@ -115,6 +129,8 @@ class Session
     this._module.destroy(this._app);
     this._moduleClass = null;
     this._module = null;
+    this._sessionID = null;
+    this._app = null;
   }
 
   setProjectName(name)
@@ -143,8 +159,10 @@ class Session
   }
 
   getProjectName() { return this._name; }
-  getApp() { return this._app; }
   getCurrentModule() { return this._module; }
+  isModuleLoaded() { return this._module !== null; }
+  getSessionID() { return this._sessionID; }
+  getApp() { return this._app; }
 }
 
 export default Session;

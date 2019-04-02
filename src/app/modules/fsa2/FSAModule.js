@@ -117,7 +117,7 @@ class FSAModule
 
     const machineController = this.getMachineController();
     machineController.initialize(this);
-
+    
     this._inputManager.onSessionStart(app.getSession());
   }
 
