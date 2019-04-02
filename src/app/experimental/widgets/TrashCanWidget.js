@@ -1,8 +1,6 @@
 import React from 'react';
 import Style from './TrashCanWidget.css';
 
-import { userClearGraph } from 'experimental/UserUtil.js';
-
 import TrashCanDetailedIcon from 'experimental/iconset/TrashCanDetailedIcon.js';
 
 const DOUBLE_TAP_TIME = 250;
@@ -55,7 +53,7 @@ class TrashCanWidget extends React.Component
       this._doubleTapTimeout = null;
       this.setState({forceActive: false});
 
-      userClearGraph(this.props.app, true);
+      this.props.app.getSession().getCurrentModule().clear(this.props.app, true);
       this.props.inputController.setTrashMode(false);
     }
     else

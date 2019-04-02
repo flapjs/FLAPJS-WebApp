@@ -28,7 +28,6 @@ import HelpIcon from 'experimental/iconset/HelpIcon.js';
 import SettingsIcon from 'experimental/iconset/SettingsIcon.js';
 import EditPencilIcon from 'experimental/iconset/EditPencilIcon.js';
 
-import * as UserUtil from 'experimental/UserUtil.js';
 import AppSaver from 'experimental/AppSaver.js';
 import ColorSaver from 'experimental/ColorSaver.js';
 

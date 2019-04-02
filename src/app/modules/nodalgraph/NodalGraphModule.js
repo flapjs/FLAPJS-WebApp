@@ -91,9 +91,9 @@ class NodalGraphModule
   }
 
   //Override
-  clear(app)
+  clear(app, graphOnly=false)
   {
-    UserUtil.userClearGraph(app, false, () => app.getToolbarComponent().closeBar());
+    UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
   }
 
   getInputManager() { return this._inputManager; }
