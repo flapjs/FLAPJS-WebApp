@@ -2,18 +2,18 @@ import StyleEntry from './StyleEntry.js';
 
 const BASE_URL = "color/";
 
-class StylePreset
+class Theme
 {
-  constructor(presetName)
+  constructor(themeName)
   {
-    this._name = presetName;
+    this._name = themeName;
 
     this._styles = new Map();
   }
 
-  static fetchPresetFile(presetName, callback)
+  static fetchThemeFile(themeName, callback)
   {
-    console.log("[StylePreset] Fetching preset file \'" + presetName + "\'...");
+    console.log("[Theme] Fetching theme file \'" + themeName + "\'...");
     const request = new XMLHttpRequest();
     request.onreadystatechange = function() {
       if (request.readyState === 4/* READY */ &&
@@ -24,29 +24,29 @@ class StylePreset
       }
     };
     request.onerror = function() {
-      console.log("[StylePreset] Unable to find preset file for \'" + presetName + "\'.");
+      console.log("[Theme] Unable to find theme file for \'" + themeName + "\'.");
     };
-    request.open("GET", BASE_URL + presetName + ".theme", true);
+    request.open("GET", BASE_URL + themeName + ".theme", true);
     request.setRequestHeader("Content-Type", "text/strings");
     request.send();
   }
 
-  static loadPresetFile(presetName, presetData, callback)
+  static loadThemeFile(themeName, themeData, callback)
   {
-    console.log("[StylePreset] Loading preset file \'" + presetName + "\'...");
+    console.log("[Theme] Loading theme file \'" + themeName + "\'...");
 
-    const result = new StylePreset(presetName);
+    const result = new Theme(themeName);
 
-    //Load preset file
+    //Load theme file
     let separator, key, value;
-    const lines = presetData.split("\n");
+    const lines = themeData.split("\n");
     for(let line of lines)
     {
       line = line.trim();
       if (line.startsWith("//")) continue;
       if (line.startsWith("//TODO:"))
       {
-        console.log("[StylePreset] Warning - found incomplete preset file: " + line.substring("//".length).trim());
+        console.log("[Theme] Warning - found incomplete theme file: " + line.substring("//".length).trim());
       }
 
       separator = line.indexOf('=');
@@ -59,7 +59,7 @@ class StylePreset
       result._styles.set(key, new StyleEntry(key, value));
     }
 
-    console.log("[StylePreset] Preset file \'" + presetName + "\' loaded.");
+    console.log("[Theme] Theme file \'" + themeName + "\' loaded.");
 
     callback(result);
   }
@@ -69,4 +69,4 @@ class StylePreset
   getName() { return this._name; }
 }
 
-export default StylePreset;
+export default Theme;

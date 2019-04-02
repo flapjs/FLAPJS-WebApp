@@ -1,9 +1,9 @@
-import StylePreset from './StylePreset.js';
+import Theme from './Theme.js';
 import StyleEntryVariable from './StyleEntryVariable.js';
 
 const DEFAULT_GROUP_NAME = "general";
 
-class StyleManager
+class ThemeManager
 {
   constructor()
   {
@@ -11,7 +11,7 @@ class StyleManager
     this._groups = new Map();
 
     this._element = null;
-    this._preset = null;
+    this._theme = null;
   }
 
   register(variableName, groupName=DEFAULT_GROUP_NAME)
@@ -45,12 +45,12 @@ class StyleManager
     }
   }
 
-  loadPreset(presetName)
+  loadTheme(themeName)
   {
-    StylePreset.fetchPresetFile(presetName, presetFile => {
-      StylePreset.loadPresetFile(presetName, presetFile, preset => {
-        this._preset = preset;
-        for(const style of preset.getStyles())
+    Theme.fetchThemeFile(themeName, themeFile => {
+      Theme.loadThemeFile(themeName, themeFile, theme => {
+        this._theme = theme;
+        for(const style of theme.getStyles())
         {
           const managedStyle = this.getStyleByName(style.getName());
           if (managedStyle)
@@ -82,16 +82,16 @@ class StyleManager
     this._element.style.setProperty(variableName, value);
   }
 
-  getPresetValue(variableName)
+  getDefaultValue(variableName)
   {
-    if (this._preset)
+    if (this._theme)
     {
-      return this._preset.getStyle(variableName).getValue();
+      return this._theme.getStyle(variableName).getValue();
     }
     else
     {
       return null;
-      //throw new Error("Unable to find style for variable \'" + variableName + "\' in missing preset");
+      //throw new Error("Unable to find style for variable \'" + variableName + "\' in missing theme");
     }
   }
 
@@ -103,7 +103,7 @@ class StyleManager
     }
     else
     {
-      return this.getPresetValue(variableName) || this.getComputedValue(variableName);
+      return this.getThemeValue(variableName) || this.getComputedValue(variableName);
     }
   }
 
@@ -132,4 +132,4 @@ class StyleManager
   }
 }
 
-export default StyleManager;
+export default ThemeManager;

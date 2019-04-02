@@ -17,7 +17,7 @@ class StyleEntryVariable extends StyleEntry
 
   resetValue()
   {
-    this.setValue(this._styleManager.getPresetValue(this._name));
+    this.setValue(this._styleManager.getDefaultValue(this._name));
   }
 
   setValue(value)
