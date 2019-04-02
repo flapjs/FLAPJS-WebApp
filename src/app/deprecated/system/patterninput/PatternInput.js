@@ -39,6 +39,12 @@ class PatternInput extends React.Component
     return this;
   }
 
+  setPlaceholder(placeholder)
+  {
+    this.placeholder = placeholder;
+    return this;
+  }
+
   onFocus(e)
   {
     if (this._skipSelect)
@@ -105,13 +111,17 @@ class PatternInput extends React.Component
 
   onChange(e)
   {
-    let value = e.target.value;
+    const target = e.target;
+    const caretPosition = target.selectionStart;
+    let value = target.value;
     if (this.formatter)
     {
       value = this.formatter(value);
     }
 
-    this.setState({value: value});
+    this.setState({value: value}, () => {
+      target.selectionEnd = caretPosition;
+    });
   }
 
   focus(select=true)
