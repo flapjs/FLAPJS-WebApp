@@ -6,13 +6,16 @@ class GraphInitialInputHandler extends GraphElementInputHandler
   constructor()
   {
     super("initial");
+
+    //Used to change render to follow pointer when moving initial marker
+    this.ghostInitialMarker = null;
   }
 
   //Override
   onDragStart(inputController, graphController, pointer, target)
   {
     //Ready to move the initial marker to another state...
-    inputController.ghostInitialMarker = pointer;
+    this.ghostInitialMarker = pointer;
     return true;
   }
 
@@ -25,7 +28,7 @@ class GraphInitialInputHandler extends GraphElementInputHandler
     const y = pointer.y;
     //Move initial marker to node or pointer
     const dst = picker.getNodeAt(graph, x, y) || pointer;
-    inputController.ghostInitialMarker = dst;
+    this.ghostInitialMarker = dst;
     return true;
   }
 
@@ -35,21 +38,21 @@ class GraphInitialInputHandler extends GraphElementInputHandler
     const graph = graphController.getGraph();
 
     //If valid initial object to mark...
-    if (inputController.ghostInitialMarker instanceof GraphNode)
+    if (this.ghostInitialMarker instanceof GraphNode)
     {
       const prevInitial = graph.getStartNode();
 
       //Set the new object as the initial node
-      graph.setStartNode(inputController.ghostInitialMarker);
+      graph.setStartNode(this.ghostInitialMarker);
       graphController.applyAutoRename();
 
       //Emit event
-      graphController.onGraphIntentChangeInitial(inputController.ghostInitialMarker, prevInitial);
-      //graphController.emit("nodeInitial", graph, inputController.ghostInitialMarker, prevInitial);
+      graphController.onGraphIntentChangeInitial(this.ghostInitialMarker, prevInitial);
+      //graphController.emit("nodeInitial", graph, this.ghostInitialMarker, prevInitial);
     }
 
     //Reset ghost initial marker
-    inputController.ghostInitialMarker = null;
+    this.ghostInitialMarker = null;
     return true;
   }
 }

@@ -19,6 +19,12 @@ import NodalGraphExporter from './NodalGraphExporter.js';
 import {DEFAULT_IMAGE_EXPORTERS} from './NodalGraphImageExporter.js';
 import SafeGraphEventHandler from './SafeGraphEventHandler.js';
 
+import GraphNodeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeInputHandler.js';
+import GraphInitialInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphInitialInputHandler.js';
+import GraphEdgeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphEdgeInputHandler.js';
+import GraphEndpointInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphEndpointInputHandler.js';
+import GraphNodeCreateInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeCreateInputHandler.js';
+
 import * as UserUtil from 'experimental/UserUtil.js';
 
 const MODULE_NAME = "nodalgraph";
@@ -36,6 +42,12 @@ class NodalGraphModule
       new EmptyGraphLabeler(),
       NodalGraphParser,
       null);
+    this._inputManager.getInputController()
+      .addInputHandler(this._nodeInputHandler = new GraphNodeInputHandler())
+      .addInputHandler(this._edgeInputHandler = new GraphEdgeInputHandler())
+      .addInputHandler(this._endpointInputHandler = new GraphEndpointInputHandler())
+      .addInputHandler(this._initialInputHandler = new GraphInitialInputHandler())
+      .addInputHandler(this._createInputHandler = new GraphNodeCreateInputHandler());
 
     app.getDrawerManager()
       .addPanelClass(props => (
