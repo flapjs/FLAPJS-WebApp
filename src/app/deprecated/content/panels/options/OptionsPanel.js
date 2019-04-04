@@ -14,7 +14,7 @@ import OptionGroup from './OptionGroup.js';
 import OptionHotkey from './OptionHotkey.js';
 
 import Modules from 'modules/Modules.js'
-import ModuleLoader from 'modules/ModuleLoader.js';
+import ModuleLoader from 'deprecated/modules/ModuleLoader.js';
 
 //This should be the same as the one referred to by index.js
 const LOCAL_STORAGE_ID = "skipWelcome";

@@ -7,7 +7,7 @@ import Config from 'deprecated/config.js';
 //import Modules from './Modules.js';
 //import Module from 'modules/default/DefaultModule.js';
 import Module from 'modules/fsa/FSAModule.js';
-import ModuleLoader from 'modules/ModuleLoader.js';
+import ModuleLoader from 'deprecated/modules/ModuleLoader.js';
 
 import HotKeys from './HotKeys.js';
 import LocalSave from 'deprecated/system/localsave/LocalSave.js';
