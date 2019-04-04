@@ -51,6 +51,12 @@ class REModule
     app.getExportManager()
       .addExporter(new REGraphExporter())
       .addExporter(new REtoFSAGraphExporter());
+
+    app.getHotKeyManager()
+      .registerHotKey("Save as JSON", [CTRL_KEY, 'KeyS'], () => {app.getExportManager().tryExportToFile(app.getExportManager().getDefaultExporter())})
+      .registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {this.clear(app)})
+      .registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {app.getUndoManager().undo()})
+      .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {app.getUndoManager().redo()});
   }
 
   //Override
