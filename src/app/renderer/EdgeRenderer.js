@@ -123,7 +123,7 @@ class EdgeRenderer extends React.Component
         {BackwardEndpointRenderer &&
           <BackwardEndpointRenderer position={fromPoint} angle={fromAngle} length={ARROW_WIDTH} color={color}/>}
         {EdgeLabelRenderer &&
-          <EdgeLabelRenderer position={centerPoint} labels={label.split('\n')} direction={direction} reverse={reverseLabel}/>}
+          <EdgeLabelRenderer position={centerPoint} labels={label.split('\n')} direction={direction} reverse={reverseLabel} color={color}/>}
       </g>
     );
   }
