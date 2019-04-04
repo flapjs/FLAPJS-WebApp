@@ -27,7 +27,7 @@ class GraphInitialInputHandler extends GraphElementInputHandler
     const x = pointer.x;
     const y = pointer.y;
     //Move initial marker to node or pointer
-    const dst = picker.getNodeAt(graph, x, y) || pointer;
+    const dst = picker.getPickHandler("node").getTargetAt(graph, x, y) || pointer;
     this.ghostInitialMarker = dst;
     return true;
   }

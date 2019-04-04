@@ -11,8 +11,8 @@ class InputController extends AbstractInputController
   constructor(module, inputAdapter)
   {
     super(module, inputAdapter);
-
-    this._picker = null;
+    
+    this._picker = new GraphPicker();
     this._selectionBox = new GraphNodeSelectionBox();
     this._graphController = null;
 
@@ -56,8 +56,6 @@ class InputController extends AbstractInputController
 
     this._module = module;
     this._graphController = module.getGraphController();
-    //this._picker = new NodalGraphPicker(this._graphController);
-    this._picker = new GraphPicker(this._graphController);
   }
 
   //Override
