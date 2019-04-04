@@ -23,6 +23,7 @@ const AutoSave = {
   destroy()
   {
     if (!this._storage.isSupported()) return;
+    if (!this._init) return;
 
     clearInterval(this._interval);
 
@@ -41,7 +42,7 @@ const AutoSave = {
       handler.onAutoSaveUpdate(this._storage);
     }
   },
-  register(handler)
+  registerHandler(handler)
   {
     this._handlers.push(handler);
     if (this._init)
@@ -50,7 +51,7 @@ const AutoSave = {
     }
     return this;
   },
-  unregister(handler)
+  unregisterHandler(handler)
   {
     this._handlers.splice(this._handlers.indexOf(handler), 1);
     if (this._init)

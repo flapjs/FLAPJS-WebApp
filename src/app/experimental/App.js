@@ -8,6 +8,7 @@ import ViewportView from 'experimental/viewport/ViewportView.js';
 import TooltipView, { ONESHOT_MODE } from 'experimental/tooltip/TooltipView.js';
 import UploadDropZone from 'experimental/components/UploadDropZone.js';
 import ViewportComponent from 'util/input/components/ViewportComponent.js';
+import IconButton from 'experimental/components/IconButton.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
@@ -31,12 +32,12 @@ import EditPencilIcon from 'experimental/iconset/EditPencilIcon.js';
 import AppSaver from 'experimental/AppSaver.js';
 import ColorSaver from 'experimental/ColorSaver.js';
 
-import IconButton from 'experimental/components/IconButton.js';
+import AutoSave from 'util/storage/AutoSave.js';
+import LocalStorage from 'util/storage/LocalStorage.js';
 
 import NotificationView from 'experimental/notification/NotificationView.js';
 import Notifications from 'deprecated/system/notification/Notifications.js';
 
-import LocalSave from 'deprecated/system/localsave/LocalSave.js';
 import StyleOptionRegistry from 'deprecated/system/styleopt/StyleOptionRegistry.js';
 
 import Session from 'session/Session.js';
@@ -120,6 +121,7 @@ class App extends React.Component
   //Override
   componentDidMount()
   {
+    AutoSave.initialize(LocalStorage);
     //Start session
     this._session.startSession(this);
   }
@@ -128,6 +130,7 @@ class App extends React.Component
   componentWillUnmount()
   {
     this._session.stopSession(this);
+    AutoSave.terminate();
   }
 
   onSessionStart(session)
@@ -143,8 +146,8 @@ class App extends React.Component
 
     this._colorSaver.initialize();
 
-    LocalSave.registerHandler(this._saver);
-    LocalSave.registerHandler(this._colorSaver);
+    AutoSave.registerHandler(this._saver);
+    AutoSave.registerHandler(this._colorSaver);
 
     this._init = true;
   }
@@ -155,8 +158,8 @@ class App extends React.Component
 
     Notifications.clearMessages();
 
-    LocalSave.unregisterHandler(this._saver);
-    LocalSave.unregisterHandler(this._colorSaver);
+    AutoSave.unregisterHandler(this._saver);
+    AutoSave.unregisterHandler(this._colorSaver);
 
     this._colorSaver.destroy();
   }
