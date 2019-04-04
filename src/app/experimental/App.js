@@ -130,7 +130,7 @@ class App extends React.Component
   componentWillUnmount()
   {
     this._session.stopSession(this);
-    AutoSave.terminate();
+    AutoSave.destroy();
   }
 
   onSessionStart(session)
