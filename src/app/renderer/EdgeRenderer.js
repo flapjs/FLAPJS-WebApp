@@ -45,7 +45,7 @@ export const DefaultLabelRenderer = props => (
             pointerEvents="none"
             style={{userSelect: "none"}}
             textAnchor="middle"
-            stroke={props.color}>
+            fill={props.color}>
             {str}
           </text>
         );
