@@ -5,7 +5,6 @@ import './App.css';
 import Config from 'deprecated/config.js';
 
 //import Modules from './Modules.js';
-//import Module from 'modules/default/DefaultModule.js';
 import Module from 'modules/fsa/FSAModule.js';
 import ModuleLoader from 'deprecated/modules/ModuleLoader.js';
 
