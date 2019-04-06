@@ -1,0 +1,29 @@
+:local(.notification_container) {
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+}
+
+:local(.notification_container) p {
+  margin-top: 0;
+}
+
+:local(.notification_container), :local(.notification_container).default {
+  border-top: 0.4em solid var(--color-surface-dark);
+  background: var(--color-surface-lite);
+}
+
+:local(.notification_container).warning {
+  border-top: 0.4em solid var(--color-surface-warning-dark);
+  background: var(--color-surface-warning);
+}
+
+:local(.notification_container).error {
+  border-top: 0.4em solid var(--color-surface-error-dark);
+  background: var(--color-surface-error);
+}
+
+:local(.notification_container).success {
+  border-top: 0.4em solid var(--color-surface-success-dark);
+  background: var(--color-surface-success);
+}
