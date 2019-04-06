@@ -7,6 +7,8 @@ import REtoFSAGraphExporter from './exporter/REtoFSAGraphExporter.js';
 import REErrorChecker from './REErrorChecker.js';
 import SafeExpressionEventHandler from './SafeExpressionEventHandler.js';
 
+import {registerNotifications} from './components/notifications/RENotifications.js';
+
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 import TestingPanel from './components/panels/testing/TestingPanel.js';
@@ -24,7 +26,14 @@ class REModule
     this._app = app;
 
     this._machineController = new MachineController();
-    this._errorChecker = new REErrorChecker(this._machineController);
+    this._errorChecker = new REErrorChecker(app,
+      this._machineController);
+  }
+
+  //Override
+  initialize(app)
+  {
+    registerNotifications(app.getNotificationManager());
 
     app.getDrawerManager()
       .addPanelClass(props => (
@@ -51,11 +60,6 @@ class REModule
     app.getExportManager()
       .addExporter(new REGraphExporter())
       .addExporter(new REtoFSAGraphExporter());
-  }
-
-  //Override
-  initialize(app)
-  {
   }
 
   //Override

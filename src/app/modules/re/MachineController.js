@@ -6,8 +6,6 @@ import {convertToNFA} from './machine/REUtils.js';
 
 import ExpressionChangeHandler from './ExpressionChangeHandler.js';
 
-import Notifications from 'deprecated/system/notification/Notifications.js';
-
 const EXPRESSION_REFRESH_RATE = 30;
 const ERROR_MESSAGE_TAG = "re_parse_error"
 
