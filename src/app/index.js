@@ -6,16 +6,16 @@ import Changelog from 'changelog.js';
 
 //Router: imports
 import Router from 'router.js';
-import App from 'content/App.js';
+import App from 'deprecated/content/App.js';
 import ModuleLoader from 'modules/ModuleLoader.js';
-import LandingPage from 'landing/components/LandingPage.js';
+import LandingPage from 'deprecated/landing/components/LandingPage.js';
 
 //Config: imports
-import Config from 'config.js';
-import { loadConfig, saveConfig } from 'config.js';
+import Config from 'deprecated/config.js';
+import { loadConfig, saveConfig } from 'deprecated/config.js';
 const AUTOSAVE_CONFIG = true;
 //LocalSave: imports
-import LocalSave from 'system/localsave/LocalSave.js';
+import LocalSave from 'deprecated/system/localsave/LocalSave.js';
 
 const SHOULD_WARN_USERS_ON_EXIT = true;
 

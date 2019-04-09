@@ -1,8 +1,6 @@
 import React from 'react';
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 
-import AbstractModule from 'modules/abstract/AbstractModule.js';
-
 import NodalGraphInputManager from 'modules/nodalgraph/manager/NodalGraphInputManager.js';
 import MachineController from './controller/MachineController.js';
 
@@ -23,8 +21,8 @@ import PDAErrorChecker from './PDAErrorChecker.js';
 
 import EditPane from './components/views/EditPane.js';
 import TapePane from './components/views/TapePane.js';
-import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'manager/hotkey/HotKeyManager.js';
-import {RENDER_LAYER_WORKSPACE} from 'manager/RenderManager.js';
+import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'session/manager/hotkey/HotKeyManager.js';
+import {RENDER_LAYER_WORKSPACE} from 'session/manager/RenderManager.js';
 
 import PDAGraphExporter from './exporter/PDAGraphExporter.js';
 import {DEFAULT_IMAGE_EXPORTERS} from 'modules/nodalgraph/NodalGraphImageExporter.js';
@@ -129,9 +127,9 @@ class PDAModule
   }
 
   //Override
-  clear(app)
+  clear(app, graphOnly=false)
   {
-    UserUtil.userClearGraph(app, false, () => app.getToolbarComponent().closeBar());
+    UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
   }
 
   getInputManager() { return this._inputManager; }

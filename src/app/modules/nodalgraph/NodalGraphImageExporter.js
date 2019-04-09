@@ -1,9 +1,9 @@
-import AbstractGraphExporter from 'manager/export/AbstractGraphExporter.js';
+import AbstractGraphExporter from 'session/manager/export/AbstractGraphExporter.js';
 
-import PNGIcon from 'icons/flat/PNGIcon.js';
-import JPGIcon from 'icons/flat/JPGIcon.js';
-import XMLIcon from 'icons/flat/XMLIcon.js';
-import SVGIcon from 'icons/flat/SVGIcon.js';
+import PNGIcon from 'deprecated/icons/flat/PNGIcon.js';
+import JPGIcon from 'deprecated/icons/flat/JPGIcon.js';
+import XMLIcon from 'deprecated/icons/flat/XMLIcon.js';
+import SVGIcon from 'deprecated/icons/flat/SVGIcon.js';
 import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG, downloadImageFromSVG } from 'util/Downloader.js';
 
 const EXPORT_PADDING_X = 30;

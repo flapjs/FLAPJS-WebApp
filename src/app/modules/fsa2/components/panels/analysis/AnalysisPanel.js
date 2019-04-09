@@ -5,7 +5,7 @@ import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';
 import PanelCheckbox from 'experimental/panels/PanelCheckbox.js';
 
-import Notifications from 'system/notification/Notifications.js';
+import Notifications from 'deprecated/system/notification/Notifications.js';
 import NFAToDFAConversionWarningMessage from 'modules/fsa2/notifications/NFAToDFAConversionWarningMessage.js';
 
 const MACHINE_CONVERSION_MESSAGE_TAG = "machine-convert";

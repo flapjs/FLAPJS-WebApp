@@ -1,5 +1,5 @@
-import AbstractLocalSaver from 'system/localsave/AbstractLocalSaver.js';
-import LocalSave from 'system/localsave/LocalSave.js';
+import AbstractLocalSaver from 'deprecated/system/localsave/AbstractLocalSaver.js';
+import LocalSave from 'deprecated/system/localsave/LocalSave.js';
 import * as ColorHelper from 'util/ColorHelper.js';
 
 class ColorSaver extends AbstractLocalSaver

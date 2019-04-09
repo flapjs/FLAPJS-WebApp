@@ -21,8 +21,8 @@ import FSAErrorChecker from './FSAErrorChecker.js';
 
 import EditPane from './components/views/EditPane.js';
 import TapePane from './components/views/TapePane.js';
-import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'manager/hotkey/HotKeyManager.js';
-import {RENDER_LAYER_WORKSPACE} from 'manager/RenderManager.js';
+import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'session/manager/hotkey/HotKeyManager.js';
+import {RENDER_LAYER_WORKSPACE} from 'session/manager/RenderManager.js';
 
 import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
@@ -140,9 +140,9 @@ class FSAModule
   }
 
   //Override
-  clear(app)
+  clear(app, graphOnly=false)
   {
-    UserUtil.userClearGraph(app, false, () => app.getToolbarComponent().closeBar());
+    UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
   }
 
   getInputManager() { return this._inputManager; }

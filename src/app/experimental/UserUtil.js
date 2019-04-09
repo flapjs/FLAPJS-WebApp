@@ -9,6 +9,10 @@ export function userClearGraph(app, graphOnly=false, callback=null)
       app.getUndoManager().clear();
       app.getSession().setProjectName(null);
     }
+    else
+    {
+      app.getUndoManager().captureEvent();
+    }
     if (callback) callback();
   }
 }

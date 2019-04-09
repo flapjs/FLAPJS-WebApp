@@ -4,9 +4,9 @@ import GraphController from 'modules/nodalgraph/controller/GraphController.js';
 import SelectionBoxInputHandler from 'modules/nodalgraph/controller/SelectionBoxInputHandler.js';
 import ViewportInputHandler from 'modules/nodalgraph/controller/ViewportInputHandler.js';
 
-import LabelEditorManager from 'manager/labeleditor/LabelEditorManager.js';
+import LabelEditorManager from 'session/manager/labeleditor/LabelEditorManager.js';
 
-import Notifications from 'system/notification/Notifications.js';
+import Notifications from 'deprecated/system/notification/Notifications.js';
 
 class NodalGraphInputManager
 {
@@ -15,7 +15,7 @@ class NodalGraphInputManager
     this._inputController = new InputController(currentModule, currentModule.getApp().getInputAdapter());
     this._graphController = new GraphController(currentModule, nodalGraph, graphLabeler, graphParser);
 
-    this._labelEditorManager = new LabelEditorManager()
+    this._labelEditorManager = new LabelEditorManager(currentModule.getApp())
       .setLabelEditorRenderer(labelEditorRenderer)
       .setLabeler(graphLabeler);
 
@@ -79,7 +79,6 @@ class NodalGraphInputManager
       .removeInputHandler(this._inputController)
       .removeInputHandler(this._selectionBoxInputHandler)
       .removeInputHandler(this._viewportInputHandler);
-
 
     this._labelEditorManager.onSessionStop(session);
 

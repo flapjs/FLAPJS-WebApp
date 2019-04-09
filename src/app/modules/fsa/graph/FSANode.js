@@ -1,5 +1,5 @@
 import GraphNode from 'graph/GraphNode.js';
-import Config from 'config.js';
+import Config from 'deprecated/config.js';
 
 class FSANode extends GraphNode
 {

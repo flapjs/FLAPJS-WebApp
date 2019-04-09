@@ -1,9 +1,9 @@
 import React from 'react';
 import Router from 'router.js';
 
-import App from 'content/App.js';
+import App from 'deprecated/content/App.js';
 import Modules from 'modules/Modules.js';
-import LocalSave from 'system/localsave/LocalSave.js';
+import LocalSave from 'deprecated/system/localsave/LocalSave.js';
 
 export const CURRENT_MODULE_STORAGE_ID = "currentModule";
 const MODULE_LOAD_DELAY = 300;

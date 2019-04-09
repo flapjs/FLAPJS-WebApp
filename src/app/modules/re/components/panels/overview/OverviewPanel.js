@@ -39,6 +39,7 @@ class OverviewPanel extends React.Component
           <tbody>
             <tr><td>Epsilon</td><td>{EMPTY}</td></tr>
             <tr><td>Union</td><td>{UNION}</td></tr>
+            <tr><td>Concat</td><td>{CONCAT}</td></tr>
             <tr><td>Kleene Star</td><td>{KLEENE}</td></tr>
             <tr><td>Kleene Plus</td><td>{PLUS}</td></tr>
             <tr><td>Sigma</td><td>{SIGMA}</td></tr>

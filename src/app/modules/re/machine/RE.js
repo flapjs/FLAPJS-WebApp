@@ -7,7 +7,7 @@ export const UNION = "U";
 export const KLEENE = "*";
 export const SIGMA = "\u03A3";
 export const EMPTY_SET = "\u2205";
-export const PLUS = "+";
+export const PLUS = "\u207A";
 
 class RE
 {
@@ -140,13 +140,9 @@ class RE
 			{
 			case UNION:
 			case CONCAT:
-				// UNION can't be the last character
+				// UNION and CONCAT can't be the last character
 				if (i == expression.length - 1)
-					throw new Error(
-						"Operators are poorly formatted.");
-                // Empty set cannot be catted
-                if (currChar == CONCAT && prevChar == EMPTY_SET)
-                    throw new Error("Empty set can only be part of a union or used by itself");
+					throw new Error("Operators are poorly formatted.");
 			case ')':
 			case KLEENE:
 			case PLUS:
@@ -155,24 +151,8 @@ class RE
 					throw new Error("Operators are poorly formatted.");
                 // Kleene and Plus cannot be applied to empty set
                 if ((currChar == KLEENE || currChar == PLUS) && prevChar == EMPTY_SET)
-                    throw new Error("Empty set can only be part of a union or used by itself");
+                    throw new Error("Empty set can only be part of a union or concatenation");
                 break;
-            case EMPTY_SET:
-                if (prevChar == CONCAT)
-                    throw new Error("Empty set can only be part of a union or used by itself");
-                break;
-				/*
-            // "Epsilon must not cat with anything else" Error deemed moot
-  			case EMPTY:
-  				if (prevChar != '(' && prevChar != UNION)
-  					throw new Error("Epsilon must not cat with anything else.");
-  				if (i == expression.length - 1)
-  					break;
-  				nextChar = string.charAt(i + 1);
-  				if (nextChar != ')' && nextChar != UNION && nextChar != KLEENE)
-  					throw new Error("Epsilon must not cat with anything else.");
-  				break;
-            */
 			}
 		}
 		return true;
@@ -189,8 +169,8 @@ class RE
 			if (i + 1 < expression.length)
 			{
 				let nextChar = expression.charAt(i + 1);
-				if (currChar != '(' && currChar != UNION &&
-					nextChar != ')' && nextChar != UNION && nextChar != KLEENE && nextChar != PLUS)
+				if (currChar != '(' && currChar != UNION && currChar != CONCAT &&
+					nextChar != ')' && nextChar != UNION && nextChar != KLEENE && nextChar != PLUS && nextChar != CONCAT)
 				{
 					result += CONCAT;
 				}

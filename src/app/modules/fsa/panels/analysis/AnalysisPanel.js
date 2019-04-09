@@ -1,7 +1,7 @@
 import React from 'react';
-import Config from 'config.js';
+import Config from 'deprecated/config.js';
 
-import Notifications from 'system/notification/Notifications.js';
+import Notifications from 'deprecated/system/notification/Notifications.js';
 import NFAToDFAConversionWarningMessage from 'modules/fsa/notifications/NFAToDFAConversionWarningMessage.js';
 
 class AnalysisPanel extends React.Component

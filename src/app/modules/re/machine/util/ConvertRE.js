@@ -91,6 +91,10 @@ function sigma(re){
 // with the transition being the symbol.
 function character(symbol)
 {
+    // Necessary for having empty in an FSA
+    if (symbol == EMPTY) {
+        symbol = EMPTY_SYMBOL;
+    }
 	const result = new FSA(false);
 	const state0 = result.createState("q0");
 	const state1 = result.createState("q1");
@@ -124,7 +128,10 @@ function concat(a, b)
     let newState = result.createState("q" + (stateIndex++));
     bStateMap.set(state, newState);
     if (firstBState === null) firstBState = newState;
-    lastBState = newState;
+    // lastBState should only be set to a final state (EMPTY_SET has none)
+    if (b.isFinalState(state)) {
+        lastBState = newState;
+    }
   }
 
 	const aTransitions = a.getTransitions();
@@ -158,7 +165,7 @@ function concat(a, b)
 	}
 
 	result.setStartState(firstAState);
-	result.setFinalState(lastBState);
+    if(lastBState != null) result.setFinalState(lastBState);
 	return result;
 }
 
@@ -225,7 +232,10 @@ function or(a, b)
     let newState = result.createState("q" + (stateIndex++));
     aStateMap.set(state, newState);
     if (firstAState === null) firstAState = newState;
-    lastAState = newState;
+    // lastAState should only be set to a final state (EMPTY_SET has none)
+    if (a.isFinalState(state)) {
+        lastAState = newState;
+    }
   }
 
   let bStateMap = new Map();
@@ -236,7 +246,10 @@ function or(a, b)
     let newState = result.createState("q" + (stateIndex++));
     bStateMap.set(state, newState);
     if (firstBState === null) firstBState = newState;
-    lastBState = newState;
+    // lastBState should only be set to a final state (EMPTY_SET has none)
+    if (b.isFinalState(state)) {
+        lastBState = newState;
+    }
   }
 
   const lastState = result.createState("q" + (stateIndex++));
@@ -254,7 +267,9 @@ function or(a, b)
   		result.addTransition(newFromState, newToState, symbol);
     }
 	}
-	result.addTransition(lastAState, lastState, EMPTY_SYMBOL);
+    if(lastAState != null) {
+	       result.addTransition(lastAState, lastState, EMPTY_SYMBOL);
+    }
 
   //B machine
 	result.addTransition(firstState, firstBState, EMPTY_SYMBOL);
@@ -269,7 +284,9 @@ function or(a, b)
   		result.addTransition(newFromState, newToState, symbol);
     }
 	}
-	result.addTransition(lastBState, lastState, EMPTY_SYMBOL);
+    if(lastBState != null) {
+	       result.addTransition(lastBState, lastState, EMPTY_SYMBOL);
+    }
 
 	result.setStartState(firstState);
 	result.setFinalState(lastState);

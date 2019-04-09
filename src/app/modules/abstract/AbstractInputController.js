@@ -1,4 +1,4 @@
-import AbstractInputHandler from 'system/inputadapter/AbstractInputHandler.js';
+import AbstractInputHandler from 'deprecated/system/inputadapter/AbstractInputHandler.js';
 
 class AbstractInputController extends AbstractInputHandler
 {

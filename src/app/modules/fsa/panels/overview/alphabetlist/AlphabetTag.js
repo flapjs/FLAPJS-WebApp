@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './AlphabetTag.css';
-import Config from 'config.js';
+import Config from 'deprecated/config.js';
 
 class AlphabetTag extends React.Component
 {
