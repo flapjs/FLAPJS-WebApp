@@ -7,13 +7,13 @@ import { downloadText } from 'util/Downloader.js';
 import TestingManager from 'modules/fsa/testing/TestingManager.js';
 import TestingInput from './TestingInput.js';
 
-import IconButton from 'icons/IconButton.js';
+import IconButton from 'deprecated/icons/IconButton.js';
 import UploadTestButton from './components/UploadTestButton.js';
 
-import UploadIcon from 'icons/UploadIcon.js';
-import CreateIcon from 'icons/PageNewContentIcon.js';
-import SaveIcon from 'icons/SaveIcon.js';
-import CloseIcon from 'icons/CloseIcon.js';
+import UploadIcon from 'deprecated/icons/UploadIcon.js';
+import CreateIcon from 'deprecated/icons/PageNewContentIcon.js';
+import SaveIcon from 'deprecated/icons/SaveIcon.js';
+import CloseIcon from 'deprecated/icons/CloseIcon.js';
 
 const TEST_FILENAME = "test.txt";
 

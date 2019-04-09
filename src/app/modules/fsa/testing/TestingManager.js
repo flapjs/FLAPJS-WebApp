@@ -1,4 +1,4 @@
-import Viewport from 'content/viewport/Viewport.js';
+import Viewport from 'deprecated/content/viewport/Viewport.js';
 import TestMode from './TestMode.js';
 import TestingInputList from './TestingInputList.js';
 

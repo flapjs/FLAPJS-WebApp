@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './PDALabelEditorRenderer.css';
 
-import PatternInputButton from 'system/patterninput/PatternInputButton.js';
+import PatternInputButton from 'deprecated/system/patterninput/PatternInputButton.js';
 import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/pda/graph/PDAEdge.js';
 
 const RECOMMENDED_SYMBOLS = ["0", "1"];

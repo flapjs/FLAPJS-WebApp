@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Config from 'config.js';
+import Config from 'deprecated/config.js';
 
 class EdgeRenderer extends React.Component
 {

@@ -1,12 +1,20 @@
-//Version 0.3.4
+//Version 0.4.0
 const changeLog = [
-  "Added meta tags for those coming from a search engine.",
-  "Added Pushdown Automata",
-  "Added Regular Expressions",
-  "Added a whole NEW EXPERIMENTAL MODE! :D"
+  "Changed default color scheme. Hope you like it!",
+  "Allow double-clicking module name to change modules.",
+  "FIXED: Module change causes app to not respond.",
+  "FIXED: Auto-rename nodes cannot be toggled."
 ];
 
 /*
+  //Version 0.3.4
+  const changeLog = [
+    "Added meta tags for those coming from a search engine.",
+    "Added Pushdown Automata",
+    "Added Regular Expressions",
+    "Added a whole NEW EXPERIMENTAL MODE! :D"
+  ];
+
   //Version 0.3.3
   const changeLog = [
     "ADDED: SVG export option (thanks to moreheadm).",

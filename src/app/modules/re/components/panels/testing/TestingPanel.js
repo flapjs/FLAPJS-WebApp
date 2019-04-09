@@ -8,7 +8,7 @@ import PanelSection from 'experimental/panels/PanelSection.js';
 
 import TestListView from './TestListView.js';
 
-import Notifications from 'system/notification/Notifications.js';
+import Notifications from 'deprecated/system/notification/Notifications.js';
 import {ERROR_MESSAGE_TAG} from 'modules/re/REErrorChecker.js';
 
 class TestingPanel extends React.Component

@@ -21,13 +21,25 @@ import FSAErrorChecker from './FSAErrorChecker.js';
 
 import EditPane from './components/views/EditPane.js';
 import TapePane from './components/views/TapePane.js';
-import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'manager/hotkey/HotKeyManager.js';
-import {RENDER_LAYER_WORKSPACE} from 'manager/RenderManager.js';
+import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'session/manager/hotkey/HotKeyManager.js';
+import {RENDER_LAYER_WORKSPACE} from 'session/manager/RenderManager.js';
 
 import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
 import {DEFAULT_IMAGE_EXPORTERS} from 'modules/nodalgraph/NodalGraphImageExporter.js';
 import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
+
+import GraphNodeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeInputHandler.js';
+import GraphInitialInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphInitialInputHandler.js';
+import GraphEdgeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphEdgeInputHandler.js';
+import GraphEndpointInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphEndpointInputHandler.js';
+import GraphNodeCreateInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeCreateInputHandler.js';
+import GraphNodeAcceptInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeAcceptInputHandler.js';
+
+import GraphNodePickHandler from 'modules/nodalgraph/controller/pickhandler/GraphNodePickHandler.js';
+import GraphEdgePickHandler from 'modules/nodalgraph/controller/pickhandler/GraphEdgePickHandler.js';
+import GraphEndpointPickHandler from 'modules/nodalgraph/controller/pickhandler/GraphEndpointPickHandler.js';
+import GraphInitialPickHandler from 'modules/nodalgraph/controller/pickhandler/GraphInitialPickHandler.js';
 
 import * as UserUtil from 'experimental/UserUtil.js';
 
@@ -45,6 +57,18 @@ class FSAModule
       new FSAGraphLabeler(),
       FSAGraphParser,
       FSALabelEditorRenderer);
+    this._inputManager.getInputController().getPicker()
+      .addPickHandler(this._initialPickHandler = new GraphInitialPickHandler())
+      .addPickHandler(this._endpointPickHandler = new GraphEndpointPickHandler())
+      .addPickHandler(this._nodePickHandler = new GraphNodePickHandler())
+      .addPickHandler(this._edgePickHandler = new GraphEdgePickHandler());
+    this._inputManager.getInputController()
+      .addInputHandler(this._nodeInputHandler = new GraphNodeInputHandler())
+      .addInputHandler(this._edgeInputHandler = new GraphEdgeInputHandler())
+      .addInputHandler(this._endpointInputHandler = new GraphEndpointInputHandler())
+      .addInputHandler(this._initialInputHandler = new GraphInitialInputHandler())
+      .addInputHandler(this._createInputHandler = new GraphNodeCreateInputHandler())
+      .addInputHandler(this._acceptInputHandler = new GraphNodeAcceptInputHandler());
     this._machineController = new MachineController(this);
 
     this._errorChecker = new FSAErrorChecker(
@@ -140,9 +164,9 @@ class FSAModule
   }
 
   //Override
-  clear(app)
+  clear(app, graphOnly=false)
   {
-    UserUtil.userClearGraph(app, false, () => app.getToolbarComponent().closeBar());
+    UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
   }
 
   getInputManager() { return this._inputManager; }

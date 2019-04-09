@@ -1,6 +1,6 @@
 import AbstractModule from 'modules/abstract/AbstractModule.js';
 
-import Notifications from 'system/notification/Notifications.js';
+import Notifications from 'deprecated/system/notification/Notifications.js';
 
 import OverviewPanel from './panels/overview/OverviewPanel.js';
 import TestingPanel from './panels/testing/TestingPanel.js';
@@ -19,7 +19,7 @@ import GraphLayout from './graph/GraphLayout.js';
 import LabelEditor from './editor/LabelEditor.js';
 import TestingManager from './testing/TestingManager.js';
 
-import SafeGraphEventHandler from 'system/undomanager/SafeGraphEventHandler.js';
+import SafeGraphEventHandler from 'deprecated/system/undomanager/SafeGraphEventHandler.js';
 
 const VERSION = "0.0.1";
 const PANELS = [AboutPanel, TestingPanel, OverviewPanel, AnalysisPanel];

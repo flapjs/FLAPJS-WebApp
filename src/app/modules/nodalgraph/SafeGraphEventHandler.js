@@ -1,4 +1,4 @@
-import AbstractEventHandler from 'manager/undo/AbstractEventHandler.js';
+import AbstractEventHandler from 'session/manager/undo/AbstractEventHandler.js';
 
 class SafeGraphEventHandler extends AbstractEventHandler
 {

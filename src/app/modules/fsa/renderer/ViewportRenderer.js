@@ -1,8 +1,8 @@
 import React from 'react';
 
-import TrashCan from 'content/viewport/TrashCan.js';
+import TrashCan from 'deprecated/content/viewport/TrashCan.js';
 import TestTray from './TestTray.js';
-import CursorMode from 'content/viewport/CursorMode.js';
+import CursorMode from 'deprecated/content/viewport/CursorMode.js';
 
 class ViewportRenderer extends React.Component
 {

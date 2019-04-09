@@ -1,4 +1,4 @@
-import Notifications from 'system/notification/Notifications.js';
+import Notifications from 'deprecated/system/notification/Notifications.js';
 import TransitionErrorMessage from './notifications/TransitionErrorMessage.js';
 import StateUnreachableWarningMessage from './notifications/StateUnreachableWarningMessage.js';
 import StateErrorMessage from './notifications/StateErrorMessage.js';

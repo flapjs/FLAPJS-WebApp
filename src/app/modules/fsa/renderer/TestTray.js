@@ -1,12 +1,12 @@
 import React from 'react';
 import './TestTray.css';
 
-import IconButton from 'icons/IconButton.js';
-import PlayIcon from 'icons/PlayIcon.js';
-import PauseIcon from 'icons/PauseIcon.js';
-import StopIcon from 'icons/StopIcon.js';
-import UndoIcon from 'icons/UndoIcon.js';
-import RedoIcon from 'icons/RedoIcon.js';
+import IconButton from 'deprecated/icons/IconButton.js';
+import PlayIcon from 'deprecated/icons/PlayIcon.js';
+import PauseIcon from 'deprecated/icons/PauseIcon.js';
+import StopIcon from 'deprecated/icons/StopIcon.js';
+import UndoIcon from 'deprecated/icons/UndoIcon.js';
+import RedoIcon from 'deprecated/icons/RedoIcon.js';
 
 const MAX_STRING_PREV_LENGTH = 2;
 const MAX_ELLIPSIS_COUNT = 3;

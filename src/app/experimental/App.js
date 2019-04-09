@@ -7,7 +7,8 @@ import ToolbarView from 'experimental/toolbar/ToolbarView.js';
 import ViewportView from 'experimental/viewport/ViewportView.js';
 import TooltipView, { ONESHOT_MODE } from 'experimental/tooltip/TooltipView.js';
 import UploadDropZone from 'experimental/components/UploadDropZone.js';
-import ViewportComponent from 'input/components/ViewportComponent.js';
+import ViewportComponent from 'util/input/components/ViewportComponent.js';
+import IconButton from 'experimental/components/IconButton.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
@@ -28,29 +29,28 @@ import HelpIcon from 'experimental/iconset/HelpIcon.js';
 import SettingsIcon from 'experimental/iconset/SettingsIcon.js';
 import EditPencilIcon from 'experimental/iconset/EditPencilIcon.js';
 
-import * as UserUtil from 'experimental/UserUtil.js';
 import AppSaver from 'experimental/AppSaver.js';
 import ColorSaver from 'experimental/ColorSaver.js';
 
-import IconButton from 'experimental/components/IconButton.js';
+import AutoSave from 'util/storage/AutoSave.js';
+import LocalStorage from 'util/storage/LocalStorage.js';
 
 import NotificationView from 'experimental/notification/NotificationView.js';
-import Notifications from 'system/notification/Notifications.js';
+import Notifications from 'deprecated/system/notification/Notifications.js';
 
-import LocalSave from 'system/localsave/LocalSave.js';
-import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
+import StyleOptionRegistry from 'deprecated/system/styleopt/StyleOptionRegistry.js';
 
-import Session from 'modules/Session.js';
-import ExportManager from 'manager/export/ExportManager.js';
-import DrawerManager from 'manager/DrawerManager.js';
-import MenuManager from 'manager/MenuManager.js';
-import ViewportManager from 'manager/ViewportManager.js';
-import HotKeyManager from 'manager/hotkey/HotKeyManager.js';
-import HotKeyView from 'manager/hotkey/HotKeyView.js';
-import UndoManager from 'manager/undo/UndoManager.js';
+import Session from 'session/Session.js';
+import ExportManager from 'session/manager/export/ExportManager.js';
+import DrawerManager from 'session/manager/DrawerManager.js';
+import MenuManager from 'session/manager/MenuManager.js';
+import ViewportManager from 'session/manager/ViewportManager.js';
+import HotKeyManager from 'session/manager/hotkey/HotKeyManager.js';
+import HotKeyView from 'session/manager/hotkey/HotKeyView.js';
+import UndoManager from 'session/manager/undo/UndoManager.js';
 import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
-  RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'manager/RenderManager.js';
-import TooltipManager from 'manager/TooltipManager.js';
+  RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'session/manager/RenderManager.js';
+import TooltipManager from 'session/manager/TooltipManager.js';
 
 const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
@@ -58,6 +58,8 @@ const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.
 const SMOOTH_OFFSET_DAMPING = 0.4;
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 10;
+
+const DRAWER_INDEX_ABOUT = 0;
 
 const MENU_INDEX_EXPORT = 0;
 const MENU_INDEX_OPTION = 1;
@@ -113,11 +115,13 @@ class App extends React.Component
 
     //Notifications.addMessage("Welcome to Flap.js");
     this.onModuleTitleClick = this.onModuleTitleClick.bind(this);
+    this.onToolbarClearButton = this.onToolbarClearButton.bind(this);
   }
 
   //Override
   componentDidMount()
   {
+    AutoSave.initialize(LocalStorage);
     //Start session
     this._session.startSession(this);
   }
@@ -126,6 +130,7 @@ class App extends React.Component
   componentWillUnmount()
   {
     this._session.stopSession(this);
+    AutoSave.destroy();
   }
 
   onSessionStart(session)
@@ -141,8 +146,8 @@ class App extends React.Component
 
     this._colorSaver.initialize();
 
-    LocalSave.registerHandler(this._saver);
-    LocalSave.registerHandler(this._colorSaver);
+    AutoSave.registerHandler(this._saver);
+    AutoSave.registerHandler(this._colorSaver);
 
     this._init = true;
   }
@@ -153,15 +158,35 @@ class App extends React.Component
 
     Notifications.clearMessages();
 
-    LocalSave.unregisterHandler(this._saver);
-    LocalSave.unregisterHandler(this._colorSaver);
+    AutoSave.unregisterHandler(this._saver);
+    AutoSave.unregisterHandler(this._colorSaver);
 
     this._colorSaver.destroy();
   }
 
   onModuleTitleClick(e)
   {
-    this._drawer.setCurrentTab(0);
+    const drawer = this._drawer;
+    if (!drawer.isDrawerOpen() || !drawer.isCurrentTab(DRAWER_INDEX_ABOUT))
+    {
+      //Open current module info panel
+      drawer.setCurrentTab(DRAWER_INDEX_ABOUT);
+    }
+    else
+    {
+      //On another click... open module change panel
+      const toolbar = this._toolbar;
+      toolbar.setCurrentMenu(MENU_INDEX_MODULE);
+    }
+  }
+
+  onToolbarClearButton(e)
+  {
+    const currentModule = this._session.getCurrentModule();
+    if (currentModule)
+    {
+      currentModule.clear(this);
+    }
   }
 
   getWorkspaceComponent() { return this._workspace.current; }
@@ -196,10 +221,25 @@ class App extends React.Component
       );
   }
 
+  renderRenderers(renderers, props)
+  {
+    const session = this._session;
+    const sessionID = session.getSessionID();
+    if (renderers && renderers.length > 0)
+    {
+      return renderers.map((R, i) => <R key={sessionID + "." + R.constructor.name + "." + i} {...props}/>);
+    }
+    else
+    {
+      return null;
+    }
+  }
+
   //Override
   render()
   {
     const session = this._session;
+    const sessionID = session.getSessionID();
     const currentModule = session.getCurrentModule();
     const currentModuleLocalizedName = currentModule ? currentModule.getLocalizedModuleName() : null;
 
@@ -238,7 +278,8 @@ class App extends React.Component
           session={session}
           onTitleClick={this.onModuleTitleClick}>
           <ToolbarButton title={I18N.toString("action.toolbar.newmachine")} icon={PageEmptyIcon}
-            onClick={() => currentModule.clear(this)}/>
+            onClick={this.onToolbarClearButton}
+            disabled={!currentModule}/>
           <ToolbarUploadButton title={I18N.toString("action.toolbar.uploadmachine")} icon={UploadIcon} accept={exportManager.getImportFileTypes().join(",")}
             onUpload={fileBlob => {
               exportManager.tryImportFromFile(fileBlob)
@@ -289,16 +330,12 @@ class App extends React.Component
               </TooltipView>
 
               <ViewportComponent ref={this._workspace}>
-                {/* RENDER_LAYER_WORKSPACE */
-                  workspaceRenderers &&
-                  workspaceRenderers.map((WorkspaceRenderer, i) =>
-                    <WorkspaceRenderer key={currentModuleLocalizedName + ":" + i} workspace={this.getWorkspaceComponent()}/>)}
+                {/* RENDER_LAYER_WORKSPACE */}
+                {this.renderRenderers(workspaceRenderers, {workspace: this.getWorkspaceComponent()})}
               </ViewportComponent>
 
-              {/* RENDER_LAYER_WORKSPACE_OVERLAY */
-                workspaceOverlayRenderers &&
-                workspaceOverlayRenderers.map((WorkspaceOverlayRenderer, i) =>
-                  <WorkspaceOverlayRenderer key={currentModuleLocalizedName + ":" + i} workspace={this.getWorkspaceComponent()}/>)}
+              {/* RENDER_LAYER_WORKSPACE_OVERLAY */}
+              {this.renderRenderers(workspaceOverlayRenderers, {workspace: this.getWorkspaceComponent()})}
 
               <NotificationView notificationManager={Notifications}>
               </NotificationView>
@@ -309,16 +346,12 @@ class App extends React.Component
               <ViewportView ref={ref=>this._viewport=ref}
                 views={viewportViewClasses}
                 viewProps={viewportViewProps}>
-                {/* RENDER_LAYER_VIEWPORT */
-                  viewportRenderers &&
-                  viewportRenderers.map((ViewportRenderer, i) =>
-                    <ViewportRenderer key={currentModuleLocalizedName + ":" + i} viewport={this._viewport}/>)}
+                {/* RENDER_LAYER_VIEWPORT */}
+                {this.renderRenderers(viewportRenderers, {viewport: this._viewport})}
               </ViewportView>
 
-              {/* RENDER_LAYER_VIEWPORT_OVERLAY */
-                viewportOverlayRenderers &&
-                viewportOverlayRenderers.map((ViewportOverlayRenderer, i) =>
-                  <ViewportOverlayRenderer key={currentModuleLocalizedName + ":" + i} viewport={this._viewport}/>)}
+              {/* RENDER_LAYER_VIEWPORT_OVERLAY */}
+              {this.renderRenderers(viewportOverlayRenderers, {viewport: this._viewport})}
 
             </div>
           </UploadDropZone>

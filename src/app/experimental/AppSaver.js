@@ -1,7 +1,6 @@
-import AbstractLocalSaver from 'system/localsave/AbstractLocalSaver.js';
-import LocalSave from 'system/localsave/LocalSave.js';
+import AbstractAutoSaveHandler from 'util/storage/AbstractAutoSaveHandler.js';
 
-class AppSaver extends AbstractLocalSaver
+class AppSaver extends AbstractAutoSaveHandler
 {
   constructor(app)
   {
@@ -11,14 +10,14 @@ class AppSaver extends AbstractLocalSaver
   }
 
   //Override
-  onLoadSave()
+  onAutoSaveLoad(dataStorage)
   {
     const app = this._app;
     const session = app.getSession();
     const currentModule = session.getCurrentModule();
     const currentModuleName = currentModule.getModuleName();
 
-    const data = LocalSave.loadFromStorage("graph-" + currentModuleName);
+    const data = dataStorage.getDataAsObject("graph-" + currentModuleName);
     if (data)
     {
       const exporter = app.getExportManager().getDefaultExporter();
@@ -32,13 +31,7 @@ class AppSaver extends AbstractLocalSaver
   }
 
   //Override
-  onUnloadSave()
-  {
-    //Don't do anything...
-  }
-
-  //Override
-  onAutoSave()
+  onAutoSaveUpdate(dataStorage)
   {
     const app = this._app;
     const session = app.getSession();
@@ -49,14 +42,17 @@ class AppSaver extends AbstractLocalSaver
     if (exporter)
     {
       const data = exporter.exportToData(currentModule);
-      LocalSave.saveToStorage("graph-" + currentModuleName, data);
+      dataStorage.setDataAsObject("graph-" + currentModuleName, data);
     }
   }
 
-  getApp()
+  //Override
+  onAutoSaveUnload(dataStorage)
   {
-    return this._app;
+    //Don't do anything...
   }
+
+  getApp() { return this._app; }
 }
 
 export default AppSaver;

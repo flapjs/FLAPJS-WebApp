@@ -26,7 +26,7 @@ class OverviewPanel extends React.Component
   onAutoLayoutApply(e)
   {
     const session = this.props.session;
-    const currentModule = session.getSession().getCurrentModule();
+    const currentModule = session.getCurrentModule();
     const graphController = currentModule.getGraphController();
     graphController.applyAutoLayout();
   }
@@ -39,7 +39,7 @@ class OverviewPanel extends React.Component
   onAutoLabelChange(e)
   {
     const session = this.props.session;
-    const currentModule = session.getSession().getCurrentModule();
+    const currentModule = session.getCurrentModule();
     const graphController = currentModule.getGraphController();
     graphController.setAutoRenameNodes(e.target.checked);
   }

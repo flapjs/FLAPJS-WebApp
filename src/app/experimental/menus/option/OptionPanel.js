@@ -1,8 +1,9 @@
 import React from 'react';
 import Style from './OptionPanel.css';
 
-import LocalSave from 'system/localsave/LocalSave.js';
-import StyleInput from 'system/styleopt/components/StyleInput.js';
+import AutoSave from 'util/storage/AutoSave.js';
+import LocalStorage from 'util/storage/LocalStorage.js';
+import StyleInput from 'deprecated/system/styleopt/components/StyleInput.js';
 
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';
@@ -25,8 +26,8 @@ class OptionPanel extends React.Component
     this.state = {
       theme: "default",
       customTheme: false,
-      skipWelcome: LocalSave.getStringFromStorage(SKIP_WELCOME_STORAGE_ID) === "true",
-      exitWarning: LocalSave.getStringFromStorage(DISABLE_EXIT_WARNING_STORAGE_ID) === "true"
+      skipWelcome: LocalStorage.getData(SKIP_WELCOME_STORAGE_ID) === "true",
+      exitWarning: LocalStorage.getData(DISABLE_EXIT_WARNING_STORAGE_ID) === "true"
     };
 
     this.onChangeTheme = this.onChangeTheme.bind(this);
@@ -135,7 +136,7 @@ class OptionPanel extends React.Component
           onChange={(e) => {
             const result = e.target.checked;
             this.setState({skipWelcome: result});
-            LocalSave.setStringToStorage(SKIP_WELCOME_STORAGE_ID, "" + result);
+            LocalStorage.setData(SKIP_WELCOME_STORAGE_ID, "" + result);
           }}/>
         <PanelSwitch id={"option-exitwarning"}
           checked={this.state.exitWarning}
@@ -143,17 +144,17 @@ class OptionPanel extends React.Component
           onChange={(e) => {
             const result = e.target.checked;
             this.setState({exitWarning: result});
-            LocalSave.setStringToStorage(DISABLE_EXIT_WARNING_STORAGE_ID, "" + result);
+            LocalStorage.setData(DISABLE_EXIT_WARNING_STORAGE_ID, "" + result);
           }}/>
 
         <PanelButton onClick={() => {
           if (window.confirm("This will clear any cached or saved data. Are you sure you want to continue?"))
           {
-            LocalSave.setStringToStorage("enableExperimental", "false");
+            LocalStorage.setData("enableExperimental", "false");
             //TODO: This is only to force use default module, remove later.
-            LocalSave.setStringToStorage("currentModule", "");
+            LocalStorage.setData("currentModule", "");
 
-            try { LocalSave.terminate(); }
+            try { AutoSave.destroy(); }
             catch(e){/* Ignore if it fails. */}
 
             window.alert("It's done! Restart to apply changes!");

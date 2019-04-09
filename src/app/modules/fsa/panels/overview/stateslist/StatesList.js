@@ -2,9 +2,9 @@ import React from 'react';
 import './StatesList.css';
 
 import InfoBlock from '../infoblock/InfoBlock.js';
-import IconButton from 'icons/IconButton.js';
-import BoxAddIcon from 'icons/BoxAddIcon.js';
-import TriangleIcon from 'icons/TriangleIcon.js';
+import IconButton from 'deprecated/icons/IconButton.js';
+import BoxAddIcon from 'deprecated/icons/BoxAddIcon.js';
+import TriangleIcon from 'deprecated/icons/TriangleIcon.js';
 
 import StateTag from './StateTag.js';
 
