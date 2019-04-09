@@ -29,6 +29,8 @@ import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
 import {DEFAULT_IMAGE_EXPORTERS} from 'modules/nodalgraph/NodalGraphImageExporter.js';
 import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
 
+import {registerNotifications} from './components/notifications/FSANotifications.js';
+
 import GraphNodeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeInputHandler.js';
 import GraphInitialInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphInitialInputHandler.js';
 import GraphEdgeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphEdgeInputHandler.js';
@@ -71,7 +73,7 @@ class FSAModule
       .addInputHandler(this._acceptInputHandler = new GraphNodeAcceptInputHandler());
     this._machineController = new MachineController(this);
 
-    this._errorChecker = new FSAErrorChecker(
+    this._errorChecker = new FSAErrorChecker(app,
       this._inputManager.getGraphController(),
       this._machineController);
     this._tester = new StringTester();
@@ -80,6 +82,8 @@ class FSAModule
   //Override
   initialize(app)
   {
+    registerNotifications(app.getNotificationManager());
+
     //TODO: These should have a pre/post handlers...
     app.getExportManager()
       .addExporter(new FSAGraphExporter())

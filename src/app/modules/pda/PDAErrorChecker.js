@@ -1,18 +1,22 @@
-import Notifications from 'deprecated/system/notification/Notifications.js';
-import TransitionErrorMessage from './notifications/TransitionErrorMessage.js';
-import StateUnreachableWarningMessage from './notifications/StateUnreachableWarningMessage.js';
-import StateErrorMessage from './notifications/StateErrorMessage.js';
+import {SUCCESS_LAYOUT_ID} from 'session/manager/notification/NotificationManager.js';
+import {
+  MACHINE_ERROR_NOTIFICATION_TAG,
+  STATE_LAYOUT_ID,
+  TRANSITION_LAYOUT_ID,
+  STATE_UNREACHABLE_LAYOUT_ID
+} from './components/notifications/PDANotifications.js';
 
-import { ERROR_UNREACHABLE_STATE,
+import {
+  ERROR_UNREACHABLE_STATE,
   ERROR_DUPLICATE_STATE,
-  ERROR_INCOMPLETE_TRANSITION } from './machine/PDABuilder.js';
-
-export const ERROR_MESSAGE_TAG = "pda_build_error";
+  ERROR_INCOMPLETE_TRANSITION
+} from './machine/PDABuilder.js';
 
 class PDAErrorChecker
 {
-  constructor(graphController, machineController)
+  constructor(app, graphController, machineController)
   {
+    this._app = app;
     this._graphController = graphController;
     this._machineController = machineController;
     this._showErrorOnChange = false;
@@ -47,10 +51,15 @@ class PDAErrorChecker
     const errors = machineBuilder.getMachineErrors();
     const warnings = machineBuilder.getMachineWarnings();
 
-    Notifications.clearMessages(ERROR_MESSAGE_TAG);
+    const app = this._app;
+    const notificationManager = app.getNotificationManager();
+
+    notificationManager.clearNotifications(MACHINE_ERROR_NOTIFICATION_TAG);
     if (errors.length <= 0 && warnings.length <= 0)
     {
-      Notifications.addMessage(I18N.toString("message.error.none"), "success", ERROR_MESSAGE_TAG, null, null, false);
+      notificationManager.pushNotification(
+        I18N.toString("message.error.none"),
+        SUCCESS_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, null, false);
     }
     else
     {
@@ -59,14 +68,14 @@ class PDAErrorChecker
         switch(warning.name)
         {
           case ERROR_DUPLICATE_STATE:
-            Notifications.addMessage({
+            notificationManager.pushNotification({
               text: "Found duplicate nodes of similar names",
-              targets: warning.nodes},
-              "warning", ERROR_MESSAGE_TAG, StateErrorMessage, props, false);
+              targets: warning.nodes
+            }, STATE_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, props, false);
           break;
           case ERROR_UNREACHABLE_STATE:
-            Notifications.addMessage(warning.nodes,
-              "warning", ERROR_MESSAGE_TAG, StateUnreachableWarningMessage, props, false);
+            notificationManager.pushNotification(warning.nodes,
+              STATE_UNREACHABLE_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, props, false);
           break;
         }
       }
@@ -76,10 +85,10 @@ class PDAErrorChecker
         switch(error.name)
         {
           case ERROR_INCOMPLETE_TRANSITION:
-            Notifications.addMessage({
+            notificationManager.pushNotification({
               text: I18N.toString("message.error.incomplete"),
               targets: error.edges
-            }, "error", ERROR_MESSAGE_TAG, TransitionErrorMessage, props, false);
+            }, TRANSITION_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, props, false);
           break;
         }
       }

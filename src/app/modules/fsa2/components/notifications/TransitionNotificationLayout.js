@@ -1,9 +1,10 @@
 import React from 'react';
+import DefaultNotificationLayout, {STYLE_TYPE_ERROR} from 'session/manager/notification/components/DefaultNotificationLayout.js';
 import GraphNode from 'graph/GraphNode.js';
 
 const ARROW = '\u2192';
 
-class TransitionErrorMessage extends React.Component
+class TransitionNotificationLayout extends React.Component
 {
   constructor(props)
   {
@@ -11,7 +12,7 @@ class TransitionErrorMessage extends React.Component
 
     this.targetIndex = 0;
     this.targetLabel = "";
-    const targets = props.message.value.targets;
+    const targets = props.message.targets;
     for(const target of targets)
     {
       if (this.targetLabel.length > 0)
@@ -28,15 +29,16 @@ class TransitionErrorMessage extends React.Component
 
   onClick(e)
   {
-    const graphController = this.props.graphController;
-    const machineController = this.props.machineController;
-    const buttonValue = e.target.value;
+    const notification = this.props.notification;
     const message = this.props.message;
-    switch(buttonValue)
+
+    const graphController = this.props.graphController;
+
+    switch(e.target.value)
     {
       case "locate":
       {
-        const targets = message.value.targets;
+        const targets = message.targets;
         const targetLength = targets.length;
         if (targetLength > 0 && this.targetIndex < targetLength)
         {
@@ -51,28 +53,38 @@ class TransitionErrorMessage extends React.Component
       break;
       case "deleteall":
       {
-        const targets = message.value.targets;
+        const targets = message.targets;
         //Delete all target edges
         graphController.deleteTargetEdges(targets);
 
         //Exit the message
-        message.close();
+        notification.close();
       }
       break;
-      default:
-        throw new Error("Unknown button value for message");
     }
   }
 
   //Override
   render()
   {
-    return <div>
-      <p>{this.props.message.value.text + ": " + this.targetLabel}</p>
-      <button value="locate" onClick={this.onClick}>{I18N.toString("message.action.locate")}</button>
-      <button value="deleteall" onClick={this.onClick}>{I18N.toString("message.action.deleteall")}</button>
-    </div>;
+    const message = this.props.message;
+
+    return (
+      <DefaultNotificationLayout id={this.props.id}
+        className={this.props.className}
+        style={this.props.style}
+        styleType={STYLE_TYPE_ERROR}
+        notification={this.props.notification}>
+          <p>{this.props.message.text + ": " + this.targetLabel}</p>
+          <button value="locate" onClick={this.onClick}>
+            {I18N.toString("message.action.locate")}
+          </button>
+          <button value="deleteall" onClick={this.onClick}>
+            {I18N.toString("message.action.deleteall")}
+          </button>
+      </DefaultNotificationLayout>
+    );
   }
 }
 
-export default TransitionErrorMessage;
+export default TransitionNotificationLayout;

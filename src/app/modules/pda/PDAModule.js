@@ -28,6 +28,8 @@ import PDAGraphExporter from './exporter/PDAGraphExporter.js';
 import {DEFAULT_IMAGE_EXPORTERS} from 'modules/nodalgraph/NodalGraphImageExporter.js';
 import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
 
+import {registerNotifications} from './components/notifications/PDANotifications.js';
+
 import GraphNodeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeInputHandler.js';
 import GraphInitialInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphInitialInputHandler.js';
 import GraphEdgeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphEdgeInputHandler.js';
@@ -71,10 +73,16 @@ class PDAModule
       .addInputHandler(this._acceptInputHandler = new GraphNodeAcceptInputHandler());
     this._machineController = new MachineController(this);
 
-    this._errorChecker = new PDAErrorChecker(
+    this._errorChecker = new PDAErrorChecker(app,
       this._inputManager.getGraphController(),
       this._machineController);
     this._tester = new StringTester();
+  }
+
+  //Override
+  initialize(app)
+  {
+    registerNotifications(app.getNotificationManager());
 
     //TODO: These should have a pre/post handlers...
     app.getExportManager()
@@ -121,11 +129,7 @@ class PDAModule
       .setEventHandlerFactory((...args) => {
         return new SafeGraphEventHandler(this._inputManager.getGraphController(), this._inputManager.getGraphParser());
       });
-  }
 
-  //Override
-  initialize(app)
-  {
     const machineController = this.getMachineController();
     machineController.initialize(this);
 

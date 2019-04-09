@@ -5,10 +5,10 @@ import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';
 import PanelCheckbox from 'experimental/panels/PanelCheckbox.js';
 
-import Notifications from 'deprecated/system/notification/Notifications.js';
-import NFAToDFAConversionWarningMessage from 'modules/fsa2/notifications/NFAToDFAConversionWarningMessage.js';
-
-const MACHINE_CONVERSION_MESSAGE_TAG = "machine-convert";
+import {
+  MACHINE_CONVERSION_LAYOUT_ID,
+  MACHINE_CONVERSION_NOTIFICATION_TAG
+} from 'modules/fsa2/components/notifications/FSANotifications.js';
 
 class AnalysisPanel extends React.Component
 {
@@ -45,8 +45,10 @@ class AnalysisPanel extends React.Component
     const props = {graphController: graphController, machineController: machineController};
 
     //Will do: machineController.convertMachineTo("DFA");
-    Notifications.addMessage(I18N.toString("message.warning.convertNFAToDFA"),
-      "warning", MACHINE_CONVERSION_MESSAGE_TAG, NFAToDFAConversionWarningMessage, props);
+    session.getApp().getNotificationManager().pushNotification(
+      I18N.toString("message.warning.convertNFAToDFA"),
+      MACHINE_CONVERSION_LAYOUT_ID, MACHINE_CONVERSION_NOTIFICATION_TAG, props, true
+    );
   }
 
   onConvertToNFA(e)
