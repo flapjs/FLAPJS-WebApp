@@ -12,6 +12,7 @@ import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 import TestingPanel from './components/panels/testing/TestingPanel.js';
 
 import ExpressionView from './components/views/ExpressionView.js';
+import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'session/manager/hotkey/HotKeyManager.js';
 
 const MODULE_NAME = "re";
 const MODULE_VERSION = "0.0.1";
