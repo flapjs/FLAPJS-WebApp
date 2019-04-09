@@ -91,6 +91,10 @@ function sigma(re){
 // with the transition being the symbol.
 function character(symbol)
 {
+    // Necessary for having empty in an FSA 
+    if (symbol == EMPTY) {
+        symbol = EMPTY_SYMBOL;
+    }
 	const result = new FSA(false);
 	const state0 = result.createState("q0");
 	const state1 = result.createState("q1");
