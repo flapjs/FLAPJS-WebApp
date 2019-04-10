@@ -1,18 +1,19 @@
 import StyleEntry from './StyleEntry.js';
 
-class StyleEntryVariable extends StyleEntry
+class SourceStyleEntry extends StyleEntry
 {
   constructor(styleManager, variableName)
   {
+    super(variableName, "#FFFFFF");
     this._styleManager = styleManager;
     this._name = variableName;
 
-    this._cachedValue = "#FFFFFF";
+    this._value = "#FFFFFF";
   }
 
   updateValue()
   {
-    this._cachedValue = this._styleManager.getComputedValue(this._name);
+    this._value = this._styleManager.getComputedValue(this._name);
   }
 
   resetValue()
@@ -22,16 +23,11 @@ class StyleEntryVariable extends StyleEntry
 
   setValue(value)
   {
-    this._cachedValue = value;
+    this._value = value;
     this._styleManager.setComputedValue(this._name, value);
   }
-
-  //Override
-  getValue() { return this._cachedValue; }
-  //Override
-  getName() { return this._name; }
 
   getStyleManager() { return this._styleManager; }
 }
 
-export default StyleEntryVariable;
+export default SourceStyleEntry;
