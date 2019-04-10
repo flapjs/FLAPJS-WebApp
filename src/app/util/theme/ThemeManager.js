@@ -1,5 +1,5 @@
 import Theme from './Theme.js';
-import StyleEntryVariable from './StyleEntryVariable.js';
+import SourceStyleEntry from './SourceStyleEntry.js';
 
 const DEFAULT_GROUP_NAME = 'general';
 
@@ -14,9 +14,10 @@ class ThemeManager
         this._theme = null;
     }
 
-    register(variableName, groupName = DEFAULT_GROUP_NAME)
+    register(variableName, groupName=DEFAULT_GROUP_NAME, styleEntry=null)
     {
-        this._styles.set(variableName, new StyleEntryVariable(this, variableName));
+        if (!styleEntry) styleEntry = new SourceStyleEntry(this, variableName);
+        this._styles.set(variableName, styleEntry);
         if (this._groups.has(groupName))
         {
             this._groups.get(groupName).push(variableName);
