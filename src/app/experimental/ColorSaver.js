@@ -4,17 +4,20 @@ import * as ColorHelper from 'util/ColorHelper.js';
 
 class ColorSaver extends AbstractLocalSaver
 {
-  constructor(styleOpts)
+  constructor(styleOpts, testOpts)
   {
     super();
 
     this._styleOpts = styleOpts;
+    this._testOpts = testOpts;
+    console.log(testOpts);
   }
 
   initialize()
   {
     const root = document.getElementById("root");
     const opts = this._styleOpts;
+    const testOpts = this._testOpts;
 
     function activeColor(opt, value)
     {
@@ -24,6 +27,8 @@ class ColorSaver extends AbstractLocalSaver
       const result = ColorHelper.RGBtoHEX(color);
       //Set style
       opts.getOptionByProp(opt.prop + "-active").setStyle(result);
+      // update function to use StyleEntryVariable instead of StyleOption
+      // console.log(testOpts.getStyles());
     }
     function liteColor(opt, value)
     {
@@ -50,6 +55,8 @@ class ColorSaver extends AbstractLocalSaver
       opts.getOptionByProp(opt.prop + "-dark").setStyle(result);
     }
     opts.registerStyleOption(root, "--color-graph-node", "color", "graph");
+    // testOpts.register("--color-graph-node", "graph");
+    // need to add more of these later
     opts.registerStyleOption(root, "--color-graph-text", "color", "graph");
     opts.registerStyleOption(root, "--color-graph-select", "color", "graph");
 
@@ -90,25 +97,33 @@ class ColorSaver extends AbstractLocalSaver
     opts.registerStyleOption(root, "--color-surface-warning-dark", "color", "hidden");
 
     opts.initialize();
+    // add initialize here
   }
 
   destroy()
   {
     const opts = this._styleOpts;
     opts.terminate();
+
+    //const testOpts = this._testOpts;
+    //testOpts.destroy();
+    // uncomment once done with other stuff
   }
 
   //Override
   onLoadSave()
   {
     const opts = this._styleOpts;
+    // const testOpts = this._testOpts;
     const data = LocalSave.loadFromStorage("prefs-color");
     for(let prop in data)
     {
       const opt = opts.getOptionByProp(prop);
+      // const testOpt = testOpts.getValue(prop);
       if (opt)
       {
         opt.setStyle(data[prop]);
+        // testOpt.setValue(data[prop]);
       }
     }
   }

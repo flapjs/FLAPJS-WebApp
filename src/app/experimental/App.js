@@ -50,6 +50,7 @@ import UndoManager from 'session/manager/undo/UndoManager.js';
 import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
   RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'session/manager/RenderManager.js';
 import TooltipManager from 'session/manager/TooltipManager.js';
+import ThemeManager from '../util/theme/ThemeManager';
 
 const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
@@ -78,10 +79,12 @@ class App extends React.Component
     this._labeleditor = null;
 
     this._styleOpts = new StyleOptionRegistry();
-    this._colorSaver = new ColorSaver(this._styleOpts);
+    this._themeManager = new ThemeManager();
 
+    this._colorSaver = new ColorSaver(this._styleOpts, this._themeManager);
+    
     this._saver = new AppSaver(this);
-
+    
     this._undoManager = new UndoManager();
     this._hotKeyManager = new HotKeyManager();
     this._exportManager = new ExportManager(this);

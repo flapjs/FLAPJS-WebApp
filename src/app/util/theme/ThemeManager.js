@@ -103,7 +103,8 @@ class ThemeManager
     }
     else
     {
-      return this.getThemeValue(variableName) || this.getComputedValue(variableName);
+      // return this.getThemeValue(variableName) || this.getComputedValue(variableName);
+      return this.getComputedValue(variableName);
     }
   }
 
@@ -129,6 +130,11 @@ class ThemeManager
     {
       return null;
     }
+  }
+
+  getStyles()
+  {
+    return this._styles.values();
   }
 }
 
