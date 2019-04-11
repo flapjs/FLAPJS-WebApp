@@ -7,19 +7,19 @@
   --color-graph-text-alt: #FFFFFF;
   --color-graph-select: #808080;
 
-  --color-accent: #FFF2BA;
+  --color-accent: #FFCD00; /*OFFICIAL UCSD COLOR*/
 
-  --color-primary: #239FAA;
+  --color-primary: #006A96; /*OFFICIAL UCSD COLOR*/
   --color-primary-text: #F7F5E6;
   --color-primary-text-alt: #000000;
-  --color-primary-lite: #7BCAD1;
-  --color-primary-dark: #1B7E87;
+  --color-primary-lite: #5AA3C1;
+  --color-primary-dark: #005173;
 
-  --color-surface: #676767;
+  --color-surface: #747678;/*OFFICIAL UCSD COLOR*/
   --color-surface-text: #FFFFFF;
   --color-surface-text-alt: #3D3D3D;
-  --color-surface-active: #3D3D3D;
-  --color-surface-lite: #909090;
+  --color-surface-active: #9A9C9F;
+  --color-surface-lite: #AFA9A0;
   --color-surface-dark: #4D4D4D;
 
   --color-background: #FFFFFF;
