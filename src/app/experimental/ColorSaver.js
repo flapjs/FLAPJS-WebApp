@@ -122,7 +122,7 @@ class ColorSaver extends AbstractAutoSaveHandler
     /** @override */
     onAutoSaveUnload(dataStorage)
     {
-    //Don't do anything...
+        //Don't do anything...
     }
 
     /** @override */

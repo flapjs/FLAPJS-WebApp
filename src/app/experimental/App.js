@@ -52,6 +52,7 @@ import RenderManager, {
 } from 'session/manager/RenderManager.js';
 import TooltipManager from 'session/manager/TooltipManager.js';
 import NotificationManager, { ERROR_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
+import ThemeManager from '../util/theme/ThemeManager';
 
 const BUGREPORT_URL = 'https://goo.gl/forms/XSil43Xl5xLHsa0E2';
 const HELP_URL = 'https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md';
@@ -80,7 +81,9 @@ class App extends React.Component
         this._labeleditor = null;
 
         this._styleOpts = new StyleOptionRegistry();
-        this._colorSaver = new ColorSaver(this._styleOpts);
+        this._themeManager = new ThemeManager();
+
+        this._colorSaver = new ColorSaver(this._styleOpts, this._themeManager);
 
         this._saver = new AppSaver(this);
 
