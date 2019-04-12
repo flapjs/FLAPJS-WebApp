@@ -11,7 +11,7 @@ export const DIRECTED_BOTH = "both";
 export const DIRECTED_NONE = "undirected";
 
 export const DefaultEndpointRenderer = props => (
-  <>
+  <React.Fragment>
     <path d={
       "M " +
         (props.position.x - (props.length * Math.sin(props.angle - SIXTH_PI))) +
@@ -27,7 +27,7 @@ export const DefaultEndpointRenderer = props => (
     }
     stroke={props.color}
     fill="none"/>
-  </>
+  </React.Fragment>
 );
 
 export const DefaultLabelRenderer = props => (

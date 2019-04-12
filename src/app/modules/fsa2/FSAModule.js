@@ -116,11 +116,9 @@ class FSAModule
       .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {app.getUndoManager().redo()});
 
     app.getRenderManager()
+      //Graph objects
       .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-        <>
-          {/* Graph objects */
-            <FSAGraphRenderer currentModule={this} parent={props.workspace}/>}
-        </>
+        <FSAGraphRenderer currentModule={this} parent={props.workspace}/>
       ))
       .addRenderer(RENDER_LAYER_WORKSPACE, props => (
         <GraphInputRenderer currentModule={this}/>
