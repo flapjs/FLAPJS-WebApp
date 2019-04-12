@@ -2,8 +2,8 @@ import React from 'react';
 import Style from './StateListView.css';
 
 import IconButton from 'experimental/components/IconButton.js';
-import BoxAddIcon from 'experimental/iconset/BoxAddIcon.js';
-import TriangleIcon from 'experimental/iconset/TriangleIcon.js';
+import BoxAddIcon from 'components/iconset/BoxAddIcon.js';
+import TriangleIcon from 'components/iconset/TriangleIcon.js';
 
 import StateListElement from './StateListElement.js';
 

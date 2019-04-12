@@ -19,16 +19,16 @@ import ModuleLoaderPanel from 'experimental/menus/moduleloader/ModuleLoaderPanel
 import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU} from 'experimental/toolbar/ToolbarButton.js';
 import ToolbarDivider from 'experimental/toolbar/ToolbarDivider.js';
 import ToolbarUploadButton from 'experimental/toolbar/ToolbarUploadButton.js';
-import PageEmptyIcon from 'experimental/iconset/PageEmptyIcon.js';
-import UndoIcon from 'experimental/iconset/UndoIcon.js';
-import RedoIcon from 'experimental/iconset/RedoIcon.js';
-import UploadIcon from 'experimental/iconset/UploadIcon.js';
-import DownloadIcon from 'experimental/iconset/DownloadIcon.js';
-import BugIcon from 'experimental/iconset/BugIcon.js';
-import WorldIcon from 'experimental/iconset/WorldIcon.js';
-import HelpIcon from 'experimental/iconset/HelpIcon.js';
-import SettingsIcon from 'experimental/iconset/SettingsIcon.js';
-import EditPencilIcon from 'experimental/iconset/EditPencilIcon.js';
+import PageEmptyIcon from 'components/iconset/PageEmptyIcon.js';
+import UndoIcon from 'components/iconset/UndoIcon.js';
+import RedoIcon from 'components/iconset/RedoIcon.js';
+import UploadIcon from 'components/iconset/UploadIcon.js';
+import DownloadIcon from 'components/iconset/DownloadIcon.js';
+import BugIcon from 'components/iconset/BugIcon.js';
+import WorldIcon from 'components/iconset/WorldIcon.js';
+import HelpIcon from 'components/iconset/HelpIcon.js';
+import SettingsIcon from 'components/iconset/SettingsIcon.js';
+import EditPencilIcon from 'components/iconset/EditPencilIcon.js';
 
 import AppSaver from 'experimental/AppSaver.js';
 import ColorSaver from 'experimental/ColorSaver.js';

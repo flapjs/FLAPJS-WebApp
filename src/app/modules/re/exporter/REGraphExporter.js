@@ -2,7 +2,7 @@ import AbstractGraphExporter from 'session/manager/export/AbstractGraphExporter.
 
 import { downloadText } from 'util/Downloader.js';
 
-import JSONFileIcon from 'experimental/iconset/flat/JSONFileIcon.js';
+import JSONFileIcon from 'components/iconset/flat/JSONFileIcon.js';
 
 class REGraphExporter extends AbstractGraphExporter
 {

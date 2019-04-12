@@ -5,7 +5,7 @@ import {TOOLBAR_CONTAINER_MENU, TOOLBAR_CONTAINER_TOOLBAR} from './ToolbarButton
 import ToolbarTitle from './ToolbarTitle.js';
 
 import IconButton from 'experimental/components/IconButton.js';
-import MenuIcon from 'experimental/iconset/MenuIcon.js';
+import MenuIcon from 'components/iconset/MenuIcon.js';
 
 const TOOLBAR_BUTTON_BUFFER = 150;
 const TOOLBAR_ALLOW_MENU_BAR = true;

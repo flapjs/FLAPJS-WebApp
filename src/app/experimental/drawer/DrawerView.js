@@ -2,7 +2,7 @@ import React from 'react';
 import Style from './DrawerView.css';
 
 import IconButton from 'experimental/components/IconButton.js';
-import ExpandDownIcon from 'experimental/iconset/ExpandDownIcon.js';
+import ExpandDownIcon from 'components/iconset/ExpandDownIcon.js';
 
 const DRAWER_WIDTH_CSSVAR = "--drawer-width";
 const DRAWER_HANDLE_DRAG_OFFSET = 6;
