@@ -109,11 +109,11 @@ class FSAModule
       .addPanelClass(AnalysisPanel);
 
     app.getHotKeyManager()
-      .registerHotKey("Export to PNG", [CTRL_KEY, 'KeyP'], () => {console.log("Export!")})
-      .registerHotKey("Save as JSON", [CTRL_KEY, 'KeyS'], () => {console.log("Save!")})
-      .registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {console.log("New!")})
-      .registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")})
-      .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
+      .registerHotKey("Export to PNG", [CTRL_KEY, 'KeyP'], () => {app.getExportManager().tryExportToFile(DEFAULT_IMAGE_EXPORTERS[0])})
+      .registerHotKey("Save as JSON", [CTRL_KEY, 'KeyS'], () => {app.getExportManager().tryExportToFile(app.getExportManager().getDefaultExporter())})
+      .registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {this.clear(app)})
+      .registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {app.getUndoManager().undo()})
+      .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {app.getUndoManager().redo()});
 
     app.getRenderManager()
       .addRenderer(RENDER_LAYER_WORKSPACE, props => (

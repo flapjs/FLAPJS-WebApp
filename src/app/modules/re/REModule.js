@@ -14,6 +14,7 @@ import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 import TestingPanel from './components/panels/testing/TestingPanel.js';
 
 import ExpressionView from './components/views/ExpressionView.js';
+import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'session/manager/hotkey/HotKeyManager.js';
 
 const MODULE_NAME = "re";
 const MODULE_VERSION = "0.0.1";
@@ -60,6 +61,12 @@ class REModule
     app.getExportManager()
       .addExporter(new REGraphExporter())
       .addExporter(new REtoFSAGraphExporter());
+
+    app.getHotKeyManager()
+      .registerHotKey("Save as JSON", [CTRL_KEY, 'KeyS'], () => {app.getExportManager().tryExportToFile(app.getExportManager().getDefaultExporter())})
+      .registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {this.clear(app)})
+      .registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {app.getUndoManager().undo()})
+      .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {app.getUndoManager().redo()});
   }
 
   //Override

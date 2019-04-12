@@ -2,7 +2,7 @@ import React from 'react';
 import Style from 'experimental/viewport/ViewportView.css';
 import ExpressionViewStyle from './ExpressionView.css';
 
-import {EMPTY, UNION, KLEENE, SIGMA, EMPTY_SET, PLUS} from 'modules/re/machine/RE.js';
+import {EMPTY, CONCAT, UNION, KLEENE, SIGMA, EMPTY_SET, PLUS} from 'modules/re/machine/RE.js';
 
 const UNION_CHAR = "\u222A";
 
@@ -59,12 +59,13 @@ class ExpressionView extends React.Component
           <input ref={ref=>this._inputElement=ref} value={readableValue} onChange={this.onInputChange}/>
         </div>
         <div className={Style.view_widget + " " + ExpressionViewStyle.expression_tray + " " + ExpressionViewStyle.tray_important}>
-          <button onClick={() => {this._appendSymbol(machineController, EMPTY)}}>{EMPTY}</button>
-          <button onClick={() => {this._appendSymbol(machineController, UNION)}}>{UNION_CHAR}</button>
-          <button onClick={() => {this._appendSymbol(machineController, KLEENE)}}>{KLEENE}</button>
-          <button onClick={() => {this._appendSymbol(machineController, PLUS)}}>{PLUS}</button>
-          <button onClick={() => {this._appendSymbol(machineController, SIGMA)}}>{SIGMA}</button>
-          <button onClick={() => {this._appendSymbol(machineController, EMPTY_SET)}}>{EMPTY_SET}</button>
+          <button title="Epsilon"       onClick={() => {this._appendSymbol(machineController, EMPTY)}}>{EMPTY}</button>
+          <button title="Union"         onClick={() => {this._appendSymbol(machineController, UNION)}}>{UNION_CHAR}</button>
+          <button title="Concat"        onClick={() => {this._appendSymbol(machineController, CONCAT)}}>{CONCAT}</button>
+          <button title="Kleene Star"   onClick={() => {this._appendSymbol(machineController, KLEENE)}}>{KLEENE}</button>
+          <button title="Kleene Plus"   onClick={() => {this._appendSymbol(machineController, PLUS)}}>{PLUS}</button>
+          <button title="Sigma"         onClick={() => {this._appendSymbol(machineController, SIGMA)}}>{SIGMA}</button>
+          <button title="Empty Set"     onClick={() => {this._appendSymbol(machineController, EMPTY_SET)}}>{EMPTY_SET}</button>
         </div>
 
         <div className={Style.view_widget + " " + ExpressionViewStyle.expression_tray + " " + ExpressionViewStyle.tray_symbol}>
