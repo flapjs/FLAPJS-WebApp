@@ -9,8 +9,13 @@ function testSolveFSA(machine, testString, expectedResult=true)
     expect(solveFSA(machine, testString)).toBe(expectedResult);
   });
 }
-
-describe("Trying to convert an empty NFA machine", () => {
+//Exmples
+describe("Example 1.7 Page 37", () => {
+  const dfa = new FSA(false);
+  const graph = new FSAGraph();
+  const builder = new FSABuilder();
+//Exercises
+describe("Exercise 1.1", () => {
   const dfa = new FSA(false);
   const graph = new FSAGraph();
   const builder = new FSABuilder();
@@ -30,7 +35,7 @@ describe("Trying to convert an empty NFA machine", () => {
   builder.attemptBuildGraph(dfa, graph);
 
   test("start state is correct?", () => {
-    expect(graph.getStartNode().getNodeLabel()).toEqual("q1");
+    expect(graph.getStartNode().getNodeLabel()).toBe("q1");
     expect(dfa.validate()).toBe(true);
     expect(dfa.isValid()).toBe(true);
   });

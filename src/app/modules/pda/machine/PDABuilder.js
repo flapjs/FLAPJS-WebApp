@@ -26,7 +26,7 @@ class PDABuilder extends AbstractMachineBuilder
     for(const state of machine.getStates())
     {
       node = dst.createNode(0, 0);
-      node.setNodeLabel(state);
+      node.setNodeLabel(state.getStateLabel());
       if (machine.isFinalState(state))
       {
         node.setNodeAccept(true);
@@ -37,9 +37,9 @@ class PDABuilder extends AbstractMachineBuilder
     let edge, from, to, read, labels, flag;
     for(let transition of machine.getTransitions())
     {
-      from = this.getFirstGraphNodeByLabel(graph, transition[0]);
+      from = this.getFirstGraphNodeByLabel(dst, transition[0]);
       read = transition[1];
-      to = this.getFirstGraphNodeByLabel(graph, transition[2]);
+      to = this.getFirstGraphNodeByLabel(dst, transition[2]);
       edge = dst.createEdge(from, to);
       edge.setEdgeLabel(read);
       const formattedEdge = dst.formatEdge(edge);
@@ -48,8 +48,8 @@ class PDABuilder extends AbstractMachineBuilder
 
     //Set start state
     const startState = machine.getStartState();
-    dst.setStartNode(this.getFirstGraphNodeByLabel(graph, startState));
-    
+    dst.setStartNode(this.getFirstGraphNodeByLabel(dst, startState));
+
     return dst;
   }
 
