@@ -5,7 +5,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --config webpack.config.js",
     "build": "cross-env NODE_ENV=production webpack --mode production --config webpack.config.js",
-    "test": "jest"
+    "test": "jest",
+    "test_dfa": "jest .\\src\\app\\modules\\fsa2\\machine\\util\\sipserTestsDFAs.test.js"
   },
   "repository": {
     "type": "git",

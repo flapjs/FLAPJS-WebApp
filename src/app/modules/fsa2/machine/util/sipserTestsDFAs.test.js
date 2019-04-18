@@ -14,6 +14,24 @@ describe("Example 1.7 Page 37", () => {
   const dfa = new FSA(false);
   const graph = new FSAGraph();
   const builder = new FSABuilder();
+  const q1 = dfa.createState("q1");
+  const q2 = dfa.createState("q2");
+  dfa.addTransition(q1,q1,"0");
+  dfa.addTransition(q1,q2,"1");
+  dfa.addTransition(q2,q2,"1");
+  dfa.addTransition(q2,q1,"0");
+  dfa.setFinalState(q2);
+
+  builder.getMachine().copy(dfa);
+  builder.attemptBuildGraph(dfa, graph);
+
+  test("start state is correct?", () => {
+    expect(graph.getStartNode().getNodeLabel()).toBe("q1");
+    expect(graph.getNodesByLabel("q2")[0].getNodeAccept()).toBe(true);
+    expect(dfa.validate()).toBe(true);
+    expect(dfa.isValid()).toBe(true);
+  });
+});
 //Exercises
 describe("Exercise 1.1", () => {
   const dfa = new FSA(false);
