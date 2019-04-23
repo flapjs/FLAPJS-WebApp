@@ -1,36 +1,31 @@
 import AbstractLocalSaver from 'deprecated/system/localsave/AbstractLocalSaver.js';
 import LocalSave from 'deprecated/system/localsave/LocalSave.js';
 import * as ColorHelper from 'util/ColorHelper.js';
+import TransformStyleEntry from 'util//theme/style/TransformStyleEntry';
 
 class ColorSaver extends AbstractLocalSaver
 {
-  constructor(styleOpts, testOpts)
+  constructor(themeManager)
   {
     super();
 
-    this._styleOpts = styleOpts;
-    this._testOpts = testOpts;
-    console.log(testOpts);
+    this._themeManager = themeManager;
   }
 
   initialize()
   {
     const root = document.getElementById("root");
-    const opts = this._styleOpts;
-    const testOpts = this._testOpts;
+    const themeManager = this._themeManager;
 
-    function activeColor(opt, value)
+    function activeColor(value)
     {
       const color = [];
       ColorHelper.HEXtoRGB(value, color);
       ColorHelper.invertRGB(color, false, color);
       const result = ColorHelper.RGBtoHEX(color);
-      //Set style
-      opts.getOptionByProp(opt.prop + "-active").setStyle(result);
-      // update function to use StyleEntryVariable instead of StyleOption
-      // console.log(testOpts.getStyles());
+      return result;
     }
-    function liteColor(opt, value)
+    function liteColor(value)
     {
       //v < 0.15 ? lighten : darken
       const color = [];
@@ -39,10 +34,9 @@ class ColorSaver extends AbstractLocalSaver
       ColorHelper.invertRGB(color, true, inverted);
       ColorHelper.blendRGB(0.39, color, inverted, color);
       const result = ColorHelper.RGBtoHEX(color);
-      //Set style
-      opts.getOptionByProp(opt.prop + "-lite").setStyle(result);
+      return result;
     }
-    function darkColor(opt, value)
+    function darkColor(value)
     {
       //v < 0.15 ? lighten : darken
       const color = [];
@@ -51,79 +45,82 @@ class ColorSaver extends AbstractLocalSaver
       ColorHelper.invertRGB(color, true, inverted);
       ColorHelper.blendRGB(0.2, color, inverted, color);
       const result = ColorHelper.RGBtoHEX(color);
-      //Set style
-      opts.getOptionByProp(opt.prop + "-dark").setStyle(result);
+      return result;
     }
-    opts.registerStyleOption(root, "--color-graph-node", "color", "graph");
-    // testOpts.register("--color-graph-node", "graph");
-    // need to add more of these later
-    opts.registerStyleOption(root, "--color-graph-text", "color", "graph");
-    opts.registerStyleOption(root, "--color-graph-select", "color", "graph");
 
-    opts.registerStyleOption(root, "--color-accent", "color", "general");
-    opts.registerStyleOption(root, "--color-primary", "color", "general", (...args) => {
-      liteColor(...args);
-      darkColor(...args);
-    });
-    opts.registerStyleOption(root, "--color-primary-text", "color", "general");
-    opts.registerStyleOption(root, "--color-primary-lite", "color", "hidden");
-    opts.registerStyleOption(root, "--color-primary-dark", "color", "hidden");
+    themeManager.register("--color-graph-node", "graph");
+    themeManager.register("--color-graph-text", "graph");
+    themeManager.register("--color-graph-select", "graph");
+    
+    themeManager.register("--color-accent", "general");
+    themeManager.register("--color-primary", "general");
+    themeManager.register("--color-primary-text", "general");
+    themeManager.register("--color-primary-lite", "hidden", new TransformStyleEntry("--color-primary-lite",
+      themeManager.getStyleByName("--color-primary"), liteColor));
+    themeManager.register("--color-primary-dark", "hidden", new TransformStyleEntry("--color-primary-dark",
+      themeManager.getStyleByName("--color-primary"), darkColor));
+    
+    themeManager.register("--color-background", "general");
+    themeManager.register("--color-background-active", "hidden", new TransformStyleEntry("--color-background-active",
+      themeManager.getStyleByName("--color-background"), activeColor));
+    themeManager.register("--color-background-lite", "hidden", new TransformStyleEntry("--color-background-lite",
+      themeManager.getStyleByName("--color-background"), liteColor));
 
-    opts.registerStyleOption(root, "--color-background", "color", "general", (...args) => {
-      activeColor(...args);
-      liteColor(...args);
-    });
-    opts.registerStyleOption(root, "--color-background-active", "color", "hidden");
-    opts.registerStyleOption(root, "--color-background-lite", "color", "hidden");
+    themeManager.register("--color-success", "general");
+    themeManager.register("--color-warning", "general");
+    
+    themeManager.register("--color-surface", "surface");
+    themeManager.register("--color-surface-text", "surface");
+    themeManager.register("--color-surface-active", "hidden", new TransformStyleEntry("--color-surface-active",
+      themeManager.getStyleByName("--color-surface"), activeColor));
+    themeManager.register("--color-surface-lite", "hidden", new TransformStyleEntry("--color-surface-lite",
+      themeManager.getStyleByName("--color-surface"), liteColor));
+    themeManager.register("--color-surface-dark", "hidden", new TransformStyleEntry("--color-surface-dark",
+      themeManager.getStyleByName("--color-surface"), darkColor));
+    
+    themeManager.register("--color-surface-error", "surface");
+    themeManager.register("--color-surface-error-dark", "hidden", new TransformStyleEntry("--color-surface-error-dark",
+      themeManager.getStyleByName("--color-surface-error"), darkColor));
+    
+    themeManager.register("--color-surface-success", "surface");
+    themeManager.register("--color-surface-success-dark", "hidden",  new TransformStyleEntry("--color-surface-success-dark",
+      themeManager.getStyleByName("--color-surface-success"), darkColor));
 
-    opts.registerStyleOption(root, "--color-success", "color", "general");
-    opts.registerStyleOption(root, "--color-warning", "color", "general");
+    themeManager.register("--color-surface-warning", "surface");
+    themeManager.register("--color-surface-warning-dark", "hidden", new TransformStyleEntry("--color-surface-warning-dark",
+      themeManager.getStyleByName("--color-surface-warning"), darkColor));
 
-    opts.registerStyleOption(root, "--color-surface", "color", "surface", (...args) => {
-      activeColor(...args);
-      liteColor(...args);
-      darkColor(...args);
-    });
-    opts.registerStyleOption(root, "--color-surface-text", "color", "surface");
-    opts.registerStyleOption(root, "--color-surface-active", "color", "surface");
-    opts.registerStyleOption(root, "--color-surface-lite", "color", "hidden");
-    opts.registerStyleOption(root, "--color-surface-dark", "color", "hidden");
-
-    opts.registerStyleOption(root, "--color-surface-error", "color", "surface", darkColor);
-    opts.registerStyleOption(root, "--color-surface-error-dark", "color", "hidden");
-    opts.registerStyleOption(root, "--color-surface-success", "color", "surface", darkColor);
-    opts.registerStyleOption(root, "--color-surface-success-dark", "color", "hidden");
-    opts.registerStyleOption(root, "--color-surface-warning", "color", "surface", darkColor);
-    opts.registerStyleOption(root, "--color-surface-warning-dark", "color", "hidden");
-
-    opts.initialize();
-    // add initialize here
+    themeManager.initialize(root);
   }
 
   destroy()
   {
-    const opts = this._styleOpts;
-    opts.terminate();
+    const themeManager = this._themeManager;
+    themeManager.destroy();
+  }
 
-    //const testOpts = this._testOpts;
-    //testOpts.destroy();
-    // uncomment once done with other stuff
+  update()
+  {
+    for(let style of this._themeManager.getStyles())
+    {
+      if(style instanceof TransformStyleEntry)
+      {
+        this._themeManager.setComputedValue(style.getName(), style.getValue());
+      }
+    }
   }
 
   //Override
   onLoadSave()
   {
-    const opts = this._styleOpts;
-    // const testOpts = this._testOpts;
+    const themeManager = this._themeManager;
     const data = LocalSave.loadFromStorage("prefs-color");
     for(let prop in data)
     {
-      const opt = opts.getOptionByProp(prop);
-      // const testOpt = testOpts.getValue(prop);
-      if (opt)
+      const opt = themeManager.getStyleByName(prop);
+      if (opt && opt instanceof SourceStyleEntry)
       {
-        opt.setStyle(data[prop]);
-        // testOpt.setValue(data[prop]);
+        opt.setValue(data[prop]);
       }
     }
   }
@@ -137,21 +134,22 @@ class ColorSaver extends AbstractLocalSaver
   //Override
   onAutoSave()
   {
-    const opts = this._styleOpts;
+    const themeManager = this._themeManager;
     const data = {};
-    for(let opt of opts.getOptions())
+
+    for(let opt of themeManager.getStyles())
     {
-      if (!opt.isDefaultStyle())
+      if (opt.getValue() != themeManager.getDefaultValue(opt.getName()))
       {
-        data[opt.prop] = opt.getStyle();
+        data[opt.prop] = opt.getValue();
       }
     }
     LocalSave.saveToStorage("prefs-color", data);
   }
 
-  getStyleOpts()
+  getThemeManager()
   {
-    return this._styleOpts;
+    return this._themeManager;
   }
 }
 

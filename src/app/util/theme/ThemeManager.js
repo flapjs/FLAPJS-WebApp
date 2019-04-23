@@ -1,23 +1,33 @@
 import Theme from './Theme.js';
-import SourceStyleEntry from './SourceStyleEntry.js';
+import SourceStyleEntry from './style/SourceStyleEntry.js';
+import StyleEntry from './style/StyleEntry.js';
 
 const DEFAULT_GROUP_NAME = "general";
+const DEFAULT_THEME_NAME = "default";
 
 class ThemeManager
 {
   constructor()
   {
     this._styles = new Map();
+    this._sourceStyles = new Map();
     this._groups = new Map();
 
     this._element = null;
     this._theme = null;
+    this._defaultTheme = null;
   }
 
   register(variableName, groupName=DEFAULT_GROUP_NAME, styleEntry=null)
   {
     if (!styleEntry) styleEntry = new SourceStyleEntry(this, variableName);
     this._styles.set(variableName, styleEntry);
+
+    if (styleEntry instanceof SourceStyleEntry)
+    {
+      this._sourceStyles.set(variableName, styleEntry);
+    }
+
     if (this._groups.has(groupName))
     {
       this._groups.get(groupName).push(variableName);
@@ -31,6 +41,21 @@ class ThemeManager
   initialize(element)
   {
     this._element = element;
+    for (const style of this._sourceStyles.values())
+    {
+      style.updateValue();
+    }
+
+    //Update default theme to current computed colors
+    const styleMapping = new Map();
+    let name, value;
+    for (const style of this._styles.values())
+    {
+      name = style.getName();
+      value = style.getValue();
+      styleMapping.set(name, new StyleEntry(name, value));
+    }
+    this._defaultTheme = new Theme(DEFAULT_THEME_NAME, styleMapping);
   }
 
   destroy()
@@ -40,7 +65,7 @@ class ThemeManager
 
   reset()
   {
-    for(const style of this._styles.values())
+    for(const style of this._sourceStyles.values())
     {
       style.resetValue();
     }
@@ -69,7 +94,7 @@ class ThemeManager
     const value = computedStyle.getPropertyValue(variableName);
     if (value)
     {
-      return value;
+      return value.trim();
     }
     else
     {
@@ -91,7 +116,7 @@ class ThemeManager
     }
     else
     {
-      return null;
+      return this._defaultTheme.getStyle(variableName).getValue();
       //throw new Error("Unable to find style for variable \'" + variableName + "\' in missing theme");
     }
   }
@@ -136,6 +161,11 @@ class ThemeManager
   getStyles()
   {
     return this._styles.values();
+  }
+
+  getSourceStyles()
+  {
+    return this._sourceStyles.values();
   }
 }
 

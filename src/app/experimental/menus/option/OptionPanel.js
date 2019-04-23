@@ -36,14 +36,16 @@ class OptionPanel extends React.Component
   {
     const session = this.props.session;
     const app = session.getApp();
-    const opts = app.getStyleOpts();
+
+    // TODO refactor
+    const opts = app.getThemeManager();
     const prevTheme = this.state.theme;
     const theme = e.target.value;
     if (prevTheme === theme) return;
 
     if (theme === "default")
     {
-      for(let option of opts.getOptions())
+      for(let option of opts.getSourceStyles())
       {
         option.resetStyle();
       }
@@ -57,7 +59,7 @@ class OptionPanel extends React.Component
   {
     const session = this.props.session;
     const currentModule = session.getCurrentModule();
-    const opts = session.getApp().getStyleOpts();
+    const opts = session.getApp().getThemeManager();
 
     return (
       <PanelContainer id={this.props.id}
@@ -85,36 +87,36 @@ class OptionPanel extends React.Component
                 this.state.customTheme && <div>
 
                   <PanelSection title={"General Colors"} full={true}>
-                    {opts.getPropsByGroup("general").map(e => (
-                      <div key={e}>
-                        <StyleInput value={opts.getOptionByProp(e)}
-                          title={I18N.toString("options." + e)}/>
+                    {opts.getStylesByGroup("general").map(e => (
+                      <div key={e.getName()}>
+                        <StyleInput value={e}
+                          title={I18N.toString("options." + e.getName())}/>
                       </div>
                     ))}
                   </PanelSection>
 
                   <PanelSection title={"Surface Colors"} full={true}>
-                    {opts.getPropsByGroup("surface").map(e => (
-                      <div key={e}>
-                        <StyleInput value={opts.getOptionByProp(e)}
-                          title={I18N.toString("options." + e)}/>
+                    {opts.getStylesByGroup("surface").map(e => (
+                      <div key={e.getName()}>
+                        <StyleInput value={e}
+                          title={I18N.toString("options." + e.getName())}/>
                       </div>
                     ))}
                   </PanelSection>
 
                   <PanelSection title={"Graph Colors"} full={true}>
-                    {opts.getPropsByGroup("graph").map(e => (
-                      <div key={e}>
-                        <StyleInput value={opts.getOptionByProp(e)}
-                          title={I18N.toString("options." + e)}/>
+                    {opts.getStylesByGroup("graph").map(e => (
+                      <div key={e.getName()}>
+                        <StyleInput value={e}
+                          title={I18N.toString("options." + e.getName())}/>
                       </div>
                     ))}
                   </PanelSection>
 
                   <PanelButton onClick={(e) => {
-                    for(let option of opts.getOptions())
+                    for(let option of opts.getSourceStyles())
                     {
-                      option.resetStyle();
+                      option.resetValue();
                     }
                     this.setState({customTheme: false});
                   }}>

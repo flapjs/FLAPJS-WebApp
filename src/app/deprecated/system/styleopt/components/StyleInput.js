@@ -15,7 +15,7 @@ class StyleInput extends React.Component
     const value = this.props.value;
     const onChange = this.props.onChange;
 
-    value.setStyle(newValue);
+    value.setValue(newValue);
     if (onChange) onChange(value);
   }
 
@@ -24,12 +24,13 @@ class StyleInput extends React.Component
   {
     const title = this.props.title;
     const value = this.props.value;
-    const propName = value.prop;
-    const inputType = value.type;
+    // const propName = value.prop;
+    const propName = value.getName();
+    const inputType = "color";
     const inputID = "styleopt-" + propName;
 
     return <span id={this.props.id} className={this.props.className} style={this.props.style}>
-      <input id={inputID} type={inputType} value={value.getStyle()} onChange={this.onChange} disabled={this.props.disabled}/>
+      <input id={inputID} type={inputType} value={value.getValue()} onChange={this.onChange} disabled={this.props.disabled}/>
       <label htmlFor={inputID}>{title}</label>
     </span>;
   }

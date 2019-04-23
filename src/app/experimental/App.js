@@ -78,10 +78,9 @@ class App extends React.Component
     this._viewport = null;
     this._labeleditor = null;
 
-    this._styleOpts = new StyleOptionRegistry();
     this._themeManager = new ThemeManager();
 
-    this._colorSaver = new ColorSaver(this._styleOpts, this._themeManager);
+    this._colorSaver = new ColorSaver(this._themeManager);
     
     this._saver = new AppSaver(this);
     
@@ -204,7 +203,7 @@ class App extends React.Component
   getSession() { return this._session; }
   getCurrentModule() { return this._session.getCurrentModule(); }
   getInputAdapter() { return this.getWorkspaceComponent().getInputAdapter(); }
-  getStyleOpts() { return this._styleOpts; }
+  getThemeManager() { return this._themeManager; }
 
   isExperimental() { return true; }
 
@@ -218,7 +217,10 @@ class App extends React.Component
       !(this._toolbar && this._toolbar.isBarOpen()) &&
       !(this._drawer && this._drawer.isDrawerOpen() &&
         this._drawer.isDrawerFullscreen())
-      );
+    );
+    
+    // TODO remove omg
+    this._colorSaver.update();
   }
 
   renderRenderers(renderers, props)

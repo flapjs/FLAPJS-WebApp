@@ -1,14 +1,14 @@
-import StyleEntry from './StyleEntry.js';
+import StyleEntry from './style/StyleEntry.js';
 
 const BASE_URL = "color/";
 
 class Theme
 {
-  constructor(themeName)
+  constructor(themeName, styleMapping=new Map())
   {
     this._name = themeName;
 
-    this._styles = new Map();
+    this._styles = styleMapping;
   }
 
   static fetchThemeFile(themeName, callback)
