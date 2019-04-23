@@ -40,6 +40,7 @@ import LocalSave from 'deprecated/system/localsave/LocalSave.js';
 import StyleOptionRegistry from 'deprecated/system/styleopt/StyleOptionRegistry.js';
 
 import Session from 'session/Session.js';
+import Broadcast from 'util/Broadcast.js';
 import ExportManager from 'session/manager/export/ExportManager.js';
 import DrawerManager from 'session/manager/DrawerManager.js';
 import MenuManager from 'session/manager/MenuManager.js';
@@ -102,6 +103,8 @@ class App extends React.Component
       .addListener(this._tooltipManager)
       .addListener(this);
 
+    this._broadcast = null;
+
     //TODO: This is only used to control transitions (do we really need it?)
     this._init = false;
 
@@ -130,6 +133,7 @@ class App extends React.Component
     this._session.stopSession(this);
   }
 
+  //TODO: onWindowStart
   onSessionStart(session)
   {
     //Default values
@@ -147,6 +151,8 @@ class App extends React.Component
     LocalSave.registerHandler(this._colorSaver);
 
     this._init = true;
+
+    this._broadcast = Broadcast.initBroadcast();
   }
 
   onSessionStop(session)
