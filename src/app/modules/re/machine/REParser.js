@@ -272,19 +272,20 @@ class REParser
 	//       0 1 2 3
 	// Returns [start_space_index, end_space_index] of the scope
 	scopeFromSpaceIndexing(regex, spaceIndex) {
-		if(spaceIndex == 0 || spaceIndex >= this.size) {
-			return [0, this.size + 1];
+		if(spaceIndex == 0) {
+			return [0, 0];
 		}
-		else if(spaceIndex > 0 && spaceIndex < this.size) {
+		else if(spaceIndex > 0 && spaceIndex <= this.size + 1) {
 			const index = spaceIndex - 1;
-			//Since there are no nodes for ')' and the scope will be outside the parenthesis anyway,
-			//try to look for the scope in higher indicies
-			if(this.closedParensIndicies.includes(index)) {
-				return this.scopeFromSpaceIndexing(regex, spaceIndex + 1);
+			const scope = this.scopeFromCharAtIndex(regex, index);
+			// scope will be null if the character selected is just an operand,
+			// so nothing should be highlighted
+			if (!scope) {
+				return [ [spaceIndex, spaceIndex],  [spaceIndex, spaceIndex] ];
 			}
 			else {
-				const scope = this.scopeFromCharAtIndex(regex, index);
-				return [scope[0], scope[1] + 1]
+				scope[1][1] += 1	//Increment last index to account for space indexing in highlighting
+				return scope
 			}
 		}
 		else {
@@ -297,24 +298,19 @@ class REParser
 	{
 		this.parseRegex(regex);
 		let currentNode = this.indexToNode.get(index);
-		while(true)
-		{
-			//The parent node is the character right after the corresponding ')',
-			// so return [index, parentIndex - 1]
-			if(currentNode.getSymbol() == '(' && currentNode.getParent() ) {
-				return [currentNode.getIndex(), this.largestIndexOfChildren(currentNode) + 1]
-			}
-			// If the currrent node is the root and isn't '(', then the entire regex is the scope
-			if(this.rootNode == currentNode) {
-				return [0, this.size - 1]
-			}
-
-			currentNode = currentNode.getParent();
-
-			if(!currentNode) {
-				throw new Error("An ASTNode that isn't the root node doesn't have a parent");
-				break;
-			}
+		let symbol = currentNode.getSymbol();
+		if(symbol == KLEENE || symbol == PLUS) {
+			let smallest = this.smallestIndexOfChildren(currentNode);
+			let largest = this.largestIndexOfChildren(currentNode);
+			return [ [smallest, smallest], [largest, largest] ];
+		}
+		else if(symbol == UNION || symbol == CONCAT) {
+			let smallest = this.smallestIndexOfChildren(currentNode);
+			let largest = this.largestIndexOfChildren(currentNode);
+			return [ [smallest, index - 1], [index + 1, largest] ];
+		}
+		else {
+			return null;
 		}
 	}
 
@@ -326,6 +322,16 @@ class REParser
 			max = Math.max(max, this.largestIndexOfChildren(child));
 		}
 		return max;
+	}
+
+	// Return child with the smallest index
+	smallestIndexOfChildren(node)
+	{
+		let min = node.getIndex();
+		for (let child of node.getChildren()) {
+			min = Math.min(min, this.smallestIndexOfChildren(child));
+		}
+		return min;
 	}
 
 }
