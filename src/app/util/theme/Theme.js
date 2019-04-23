@@ -1,22 +1,21 @@
-import StyleEntry from './StyleEntry.js';
 import Logger from 'util/logger/Logger.js';
+import StyleEntry from './style/StyleEntry.js';
 
 const LOGGER_TAG = 'Theme';
-const BASE_URL = 'color/';
+//TODO: this should be only lang/ when have server
+const BASE_URL = 'dist/theme/';
 
 class Theme
 {
-    constructor(themeName)
+    constructor(themeName, styleMapping = new Map())
     {
         this._name = themeName;
-
-        this._styles = new Map();
+        this._styles = styleMapping;
     }
 
     static fetchThemeFile(themeName, callback)
     {
         Logger.out(LOGGER_TAG, `Fetching theme file '${themeName}'...`);
-
         const request = new XMLHttpRequest();
         request.onreadystatechange = function () 
         {
@@ -51,7 +50,7 @@ class Theme
             if (line.startsWith('//')) continue;
             if (line.startsWith('//TODO:'))
             {
-                Logger.out(LOGGER_TAG, `Warning - found incomplete theme file: ${line.substring('//'.length).trim()}`);
+                Logger.out(LOGGER_TAG, `Warning - found incomplete theme file: theme file '${line.substring('//'.length).trim()}'.`);
             }
 
             separator = line.indexOf('=');
@@ -69,8 +68,20 @@ class Theme
         callback(result);
     }
 
+    addStyle(variableName, value)
+    {
+        this._styles.set(variableName, new StyleEntry(variableName, value));
+        return this;
+    }
+
+    removeStyle(variableName)
+    {
+        this._styles.delete(variableName);
+        return this;
+    }
+
     getStyles() { return this._styles.values(); }
-    getStyle(variableName) { return this._styles.get(variableName); }
+    getStyleByName(variableName) { return this._styles.get(variableName); }
     getName() { return this._name; }
 }
 

@@ -1,9 +1,8 @@
 import React from 'react';
-//import Style from './OptionPanel.css';
+import Style from './OptionPanel.css';
 
-import AutoSave from 'util/storage/AutoSave.js';
 import LocalStorage from 'util/storage/LocalStorage.js';
-import StyleInput from 'deprecated/system/styleopt/components/StyleInput.js';
+import StyleInput from 'util/theme/components/StyleInput.js';
 
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';
@@ -12,8 +11,9 @@ import PanelButton from 'experimental/panels/PanelButton.js';
 
 import PreviewView from './PreviewView.js';
 
+const HIDDEN_STYLE_GROUP_NAME = 'hidden';
+
 //This should be the same as the one referred to by index.js
-const SKIP_WELCOME_STORAGE_ID = 'skipWelcome';
 const DISABLE_EXIT_WARNING_STORAGE_ID = 'disableExitWarning';
 
 class OptionPanel extends React.Component
@@ -25,7 +25,6 @@ class OptionPanel extends React.Component
         this.state = {
             theme: 'default',
             customTheme: false,
-            skipWelcome: LocalStorage.getData(SKIP_WELCOME_STORAGE_ID) === 'true',
             exitWarning: LocalStorage.getData(DISABLE_EXIT_WARNING_STORAGE_ID) === 'true'
         };
 
@@ -36,27 +35,44 @@ class OptionPanel extends React.Component
     {
         const session = this.props.session;
         const app = session.getApp();
-        const opts = app.getStyleOpts();
+
+        const themeManager = app.getThemeManager();
         const prevTheme = this.state.theme;
         const theme = e.target.value;
         if (prevTheme === theme) return;
 
-        if (theme === 'default')
-        {
-            for(let option of opts.getOptions())
-            {
-                option.resetStyle();
-            }
-        }
+        themeManager.loadTheme(theme);
 
         this.setState({theme: theme});
     }
 
-    /** @override */
+    renderStyleGroups()
+    {
+        const themeManager = this.props.session.getApp().getThemeManager();
+        const result = [];
+        for(const groupName of themeManager.getStyleGroupNames())
+        {
+            if (groupName === HIDDEN_STYLE_GROUP_NAME) continue;
+            const styles = themeManager.getStylesByGroup(groupName);
+            result.push(
+                <PanelSection
+                    key={groupName}
+                    title={I18N.toString('options.colorgroup.' + groupName)}
+                    full={true}>
+                    {styles.map(e =>
+                        <StyleInput key={e.getName()} className={Style.input_option} value={e}
+                            title={I18N.toString('options.' + e.getName())}/>)}
+                </PanelSection>
+            );
+        }
+        return result;
+    }
+
+    //Override
     render()
     {
-        const session = this.props.session;'';
-        const opts = session.getApp().getStyleOpts();
+        const session = this.props.session;
+        const themeManager = session.getApp().getThemeManager();
 
         return (
             <PanelContainer id={this.props.id}
@@ -67,11 +83,14 @@ class OptionPanel extends React.Component
                     <div style={{display: 'flex'}}>
                         <div style={{width: '60%'}}>
                             <div id="options-theme-select-container">
-                                <select id="options-theme-select" className="panel-select" value={this.state.theme} onChange={this.onChangeTheme} disabled={this.state.customTheme}>
+                                <select id="options-theme-select" className="panel-select"
+                                    value={this.state.theme}
+                                    onChange={this.onChangeTheme}
+                                    disabled={this.state.customTheme}>
                                     <option value="default">Default</option>
-                                    <option value="ucsd" disabled={true}>UC San Diego (Coming Soon)</option>
-                                    <option value="duke" disabled={true}>Duke University (Coming Soon)</option>
-                                    <option value="mit" disabled={true}>MIT (Coming Soon)</option>
+                                    <option value="ucsd">UC San Diego</option>
+                                    <option value="duke">Duke University</option>
+                                    <option value="mit">MIT</option>
                                 </select>
                                 {
                                     !this.state.customTheme &&
@@ -81,46 +100,18 @@ class OptionPanel extends React.Component
                                 }
                             </div>
                             {
-                                this.state.customTheme && <div>
+                                this.state.customTheme &&
+                <div>
+                    {this.renderStyleGroups()}
 
-                                    <PanelSection title={'General Colors'} full={true}>
-                                        {opts.getPropsByGroup('general').map(e => (
-                                            <div key={e}>
-                                                <StyleInput value={opts.getOptionByProp(e)}
-                                                    title={I18N.toString('options.' + e)}/>
-                                            </div>
-                                        ))}
-                                    </PanelSection>
-
-                                    <PanelSection title={'Surface Colors'} full={true}>
-                                        {opts.getPropsByGroup('surface').map(e => (
-                                            <div key={e}>
-                                                <StyleInput value={opts.getOptionByProp(e)}
-                                                    title={I18N.toString('options.' + e)}/>
-                                            </div>
-                                        ))}
-                                    </PanelSection>
-
-                                    <PanelSection title={'Graph Colors'} full={true}>
-                                        {opts.getPropsByGroup('graph').map(e => (
-                                            <div key={e}>
-                                                <StyleInput value={opts.getOptionByProp(e)}
-                                                    title={I18N.toString('options.' + e)}/>
-                                            </div>
-                                        ))}
-                                    </PanelSection>
-
-                                    <PanelButton onClick={(e) => 
-                                    {
-                                        for(let option of opts.getOptions())
-                                        {
-                                            option.resetStyle();
-                                        }
-                                        this.setState({customTheme: false});
-                                    }}>
-                                        {I18N.toString('action.options.reset')}
-                                    </PanelButton>
-                                </div>
+                    <PanelButton onClick={(e) => 
+                    {
+                        themeManager.reset();
+                        this.setState({customTheme: false});
+                    }}>
+                        {I18N.toString('action.options.reset')}
+                    </PanelButton>
+                </div>
                             }
                         </div>
                         <div>
@@ -129,15 +120,6 @@ class OptionPanel extends React.Component
                     </div>
                 </PanelSection>
 
-                <PanelSwitch id={'option-skipwelcome'}
-                    checked={this.state.skipWelcome}
-                    title={I18N.toString('options.skipwelcome')}
-                    onChange={(e) => 
-                    {
-                        const result = e.target.checked;
-                        this.setState({skipWelcome: result});
-                        LocalStorage.setData(SKIP_WELCOME_STORAGE_ID, '' + result);
-                    }}/>
                 <PanelSwitch id={'option-exitwarning'}
                     checked={this.state.exitWarning}
                     title={I18N.toString('options.exitwarning')}
@@ -147,23 +129,6 @@ class OptionPanel extends React.Component
                         this.setState({exitWarning: result});
                         LocalStorage.setData(DISABLE_EXIT_WARNING_STORAGE_ID, '' + result);
                     }}/>
-
-                <PanelButton onClick={() => 
-                {
-                    if (window.confirm('This will clear any cached or saved data. Are you sure you want to continue?'))
-                    {
-                        LocalStorage.setData('enableExperimental', 'false');
-                        //TODO: This is only to force use default module, remove later.
-                        LocalStorage.setData('currentModule', '');
-
-                        try { AutoSave.destroy(); }
-                        catch(e){/* Ignore if it fails. */}
-
-                        window.alert('It\'s done! Restart to apply changes!');
-                    }
-                }}>
-                    {'Get out of Experimental Mode and return to Safety'}
-                </PanelButton>
             </PanelContainer>
         );
     }

@@ -36,8 +36,6 @@ import ColorSaver from 'experimental/ColorSaver.js';
 import AutoSave from 'util/storage/AutoSave.js';
 import LocalStorage from 'util/storage/LocalStorage.js';
 
-import StyleOptionRegistry from 'deprecated/system/styleopt/StyleOptionRegistry.js';
-
 import Session from 'session/Session.js';
 import ExportManager from 'session/manager/export/ExportManager.js';
 import DrawerManager from 'session/manager/DrawerManager.js';
@@ -80,10 +78,9 @@ class App extends React.Component
         this._viewport = null;
         this._labeleditor = null;
 
-        this._styleOpts = new StyleOptionRegistry();
         this._themeManager = new ThemeManager();
 
-        this._colorSaver = new ColorSaver(this._styleOpts, this._themeManager);
+        this._colorSaver = new ColorSaver(this._themeManager);
 
         this._saver = new AppSaver(this);
 
@@ -236,7 +233,7 @@ class App extends React.Component
     getSession() { return this._session; }
     getCurrentModule() { return this._session.getCurrentModule(); }
     getInputAdapter() { return this.getWorkspaceComponent().getInputAdapter(); }
-    getStyleOpts() { return this._styleOpts; }
+    getThemeManager() { return this._themeManager; }
 
     isExperimental() { return true; }
 

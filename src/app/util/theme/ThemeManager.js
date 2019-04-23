@@ -3,6 +3,7 @@ import SourceStyleEntry from './style/SourceStyleEntry.js';
 
 const DEFAULT_GROUP_NAME = 'general';
 const DEFAULT_THEME_NAME = 'default';
+// const COMPUTED_THEME_NAME = 'computed';
 
 class ThemeManager
 {
@@ -16,7 +17,7 @@ class ThemeManager
         this._theme = null;
     }
 
-    register(variableName, groupName=DEFAULT_GROUP_NAME, sourceStyle=null, sourceTransform=null)
+    register(variableName, groupName = DEFAULT_GROUP_NAME, sourceStyle = null, sourceTransform = null)
     {
         const styleEntry = new SourceStyleEntry(this, variableName, sourceStyle, sourceTransform);
         if (this._element)
@@ -42,7 +43,7 @@ class ThemeManager
     {
         this._styles.delete(variableName);
 
-        for(const styleGroup of this._groups.values())
+        for (const styleGroup of this._groups.values())
         {
             const index = styleGroup.indexOf(variableName);
             if (index >= 0)
@@ -69,7 +70,7 @@ class ThemeManager
     {
         this._element = element;
         this._elementTheme = new Theme(DEFAULT_THEME_NAME);
-        for(const style of this._styles.values())
+        for (const style of this._styles.values())
         {
             style.setValue(this.getComputedValue(style.getName()), false);
         }
@@ -81,7 +82,7 @@ class ThemeManager
         const theme = this._theme || this._elementTheme;
         if (theme)
         {
-            for(const style of this._styles.values())
+            for (const style of this._styles.values())
             {
                 const styleName = style.getName();
                 const themeStyle = theme.getStyleByName(styleName);
