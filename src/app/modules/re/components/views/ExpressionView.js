@@ -39,7 +39,7 @@ class ExpressionView extends React.Component
       const cursorPos = this._inputElement.selectionStart;
 
       const scope = machineController._parser.scopeFromSpaceIndexing(machineController.getMachine(), cursorPos);
-      this._inputElement.setSelectionRange(scope[0], scope[1]);
+      this._inputElement.setSelectionRange(scope[0][0], scope[1][1]);
   }
 
   _appendSymbol(machineController, symbol)
