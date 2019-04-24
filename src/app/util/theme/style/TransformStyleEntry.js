@@ -14,8 +14,6 @@ class TransformStyleEntry extends StyleEntry
   getValue()
   {
     this._value = this._transform.call(this, this._source.getValue());
-    console.log(this.getName() + ":" + this._value);
-    // this._source.setValue(this._value);
     return this._value;
   }
 
