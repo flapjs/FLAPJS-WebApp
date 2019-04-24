@@ -2,7 +2,7 @@ import React from 'react';
 import Style from './OptionPanel.css';
 
 import LocalSave from 'deprecated/system/localsave/LocalSave.js';
-import StyleInput from 'deprecated/system/styleopt/components/StyleInput.js';
+import StyleInput from 'util/theme/components/StyleInput.js';
 
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';
