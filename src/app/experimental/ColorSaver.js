@@ -19,7 +19,7 @@ class ColorSaver extends AbstractAutoSaveHandler
         // const theme = dataStorage.getData(THEME_STORAGE_ID);
         const data = dataStorage.getDataAsObject(COLOR_STORAGE_ID);
 
-        for(const key in data)
+        for (const key in data)
         {
             const style = themeManager.getStyleByName(key);
             if (style)
@@ -42,7 +42,7 @@ class ColorSaver extends AbstractAutoSaveHandler
         const data = {};
 
         const theme = themeManager.getCurrentTheme();
-        for(const style of themeManager.getStyles())
+        for (const style of themeManager.getStyles())
         {
             const styleName = style.getName();
             const styleValue = style.getValue();
