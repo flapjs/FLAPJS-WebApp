@@ -39,14 +39,14 @@ class OptionPanel extends React.Component
     const app = session.getApp();
 
     // TODO refactor
-    const opts = app.getThemeManager();
+    const themeManager = app.getThemeManager();
     const prevTheme = this.state.theme;
     const theme = e.target.value;
     if (prevTheme === theme) return;
 
     if (theme === "default")
     {
-      for(let option of opts.getSourceStyles())
+      for(let option of themeManager.getSourceStyles())
       {
         option.resetStyle();
       }

@@ -1,6 +1,7 @@
 import AbstractAutoSaveHandler from 'util/storage/AbstractAutoSaveHandler.js';
 import * as ColorHelper from 'util/ColorHelper.js';
-import TransformStyleEntry from 'util//theme/style/TransformStyleEntry';
+import SourceStyleEntry from 'util/theme/style/SourceStyleEntry.js';
+import TransformStyleEntry from 'util/theme/style/TransformStyleEntry.js';
 
 export const COLOR_STORAGE_ID = "prefs-color";
 
@@ -117,12 +118,12 @@ class ColorSaver extends AbstractAutoSaveHandler
     const themeManager = this._themeManager;
     const data = dataStorage.getDataAsObject(COLOR_STORAGE_ID);
 
-    for(let prop in data)
+    for(const key in data)
     {
-      const opt = themeManager.getStyleByName(prop);
-      if (opt && opt instanceof SourceStyleEntry)
+      const style = themeManager.getStyleByName(key);
+      if (style && style instanceof SourceStyleEntry)
       {
-        opt.setValue(data[prop]);
+        style.setValue(data[key]);
       }
     }
   }
@@ -139,11 +140,11 @@ class ColorSaver extends AbstractAutoSaveHandler
     const themeManager = this._themeManager;
     const data = {};
 
-    for(let opt of themeManager.getStyles())
+    for(let style of themeManager.getStyles())
     {
-      if (opt.getValue() != themeManager.getDefaultValue(opt.getName()))
+      if (style.getValue() !== themeManager.getDefaultValue(style.getName()))
       {
-        data[opt.prop] = opt.getValue();
+        data[style.getName()] = style.getValue();
       }
     }
     dataStorage.setDataAsObject(COLOR_STORAGE_ID, data);
