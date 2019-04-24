@@ -73,6 +73,8 @@ class App extends React.Component
   {
     super(props);
 
+    App.INSTANCE = this;
+
     this._workspace = React.createRef();
     this._toolbar = null;
     this._drawer = null;
@@ -124,7 +126,6 @@ class App extends React.Component
   //Override
   componentDidMount()
   {
-    AutoSave.initialize(LocalStorage);
     //Start session
     this._session.startSession(this);
   }
@@ -134,7 +135,32 @@ class App extends React.Component
   {
     //Stop session
     this._session.stopSession(this);
+  }
+
+  /**
+   * Called once by index.js when the window is opened, before
+   * this constructor or any React components are initialized. This also must be
+   * static since React instances are not yet available.
+   */
+  static onWindowLoad()
+  {
+    AutoSave.initialize(LocalStorage);
+  }
+
+  /**
+   * Called once by index.js when the window is closed. This is the alternative
+   * for clean up since componentWillUnmount() from React will not be called for
+   * window events. This also must be static since React instances are no longer
+   * available.
+   */
+  static onWindowUnload()
+  {
     AutoSave.destroy();
+    
+    if (App.INSTANCE)
+    {
+      App.INSTANCE.componentWillUnmount();
+    }
   }
 
   //DuckType
@@ -365,6 +391,7 @@ class App extends React.Component
     );
   }
 }
+App.INSTANCE = null;
 
 //For hotloading this class
 export default hot(App);
