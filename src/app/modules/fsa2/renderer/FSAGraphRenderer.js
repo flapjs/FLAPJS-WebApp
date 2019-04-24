@@ -34,9 +34,9 @@ class FSAGraphRenderer extends React.Component
         {graph.getEdges().map((e, i) => <FSAEdgeRenderer key={e.getGraphElementID() || i} edge={e}/>)}
 
         {/* Initial marker and ghost */}
-        { graph.getStartNode() && (inputController.ghostInitialMarker == null ?
+        { graph.getStartNode() && (inputController.getInputHandlers()[3].ghostInitialMarker == null ?
           <InitialMarkerRenderer node={graph.getStartNode()}/> :
-          <InitialMarkerRenderer node={inputController.ghostInitialMarker}/>) }
+          <InitialMarkerRenderer node={inputController.getInputHandlers()[3].ghostInitialMarker}/>) }
       </g>
     );
   }

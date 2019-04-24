@@ -17,10 +17,13 @@ class EmptyGraphLabeler extends AbstractGraphLabeler
   getDefaultEdgeLabel() { return ""; }
 
   //Override
-  getEdgeLabelFormatter() { return edgeLabelFormatter; }
+  getNodeLabelFormatter() { return labelFormatter; }
+
+  //Override
+  getEdgeLabelFormatter() { return labelFormatter; }
 }
 
-function edgeLabelFormatter(string)
+function labelFormatter(string)
 {
   return string || "";
 }

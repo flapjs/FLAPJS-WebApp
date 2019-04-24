@@ -1,11 +1,16 @@
-import Notifications from 'deprecated/system/notification/Notifications.js';
-
-export const ERROR_MESSAGE_TAG = "re_build_error";
+import {SUCCESS_LAYOUT_ID, ERROR_LAYOUT_ID} from 'session/manager/notification/NotificationManager.js';
+import {
+  MACHINE_ERROR_NOTIFICATION_TAG,
+  STATE_LAYOUT_ID,
+  TRANSITION_LAYOUT_ID,
+  STATE_UNREACHABLE_LAYOUT_ID
+} from './components/notifications/RENotifications.js';
 
 class REErrorChecker
 {
-  constructor(machineController)
+  constructor(app, machineController)
   {
+    this._app = app;
     this._machineController = machineController;
     this._showErrorOnChange = false;
 
@@ -36,16 +41,22 @@ class REErrorChecker
   {
     const errors = this._machineController.getMachine().getErrors();
 
-    Notifications.clearMessages(ERROR_MESSAGE_TAG);
+    const app = this._app;
+    const notificationManager = app.getNotificationManager();
+
+    notificationManager.clearNotifications(MACHINE_ERROR_NOTIFICATION_TAG);
     if (errors.length <= 0)
     {
-      Notifications.addMessage(I18N.toString("message.error.none"), "success", ERROR_MESSAGE_TAG, null, null, false);
+      notificationManager.pushNotification(
+        I18N.toString("message.error.none"),
+        SUCCESS_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, null, false);
     }
     else
     {
       for(const error of errors)
       {
-        Notifications.addErrorMessage(error.name + " - " + error.message, ERROR_MESSAGE_TAG, null, null, false);
+        notificationManager.pushNotification(error.name + " - " + error.message,
+          ERROR_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, null, false);
       }
     }
   }

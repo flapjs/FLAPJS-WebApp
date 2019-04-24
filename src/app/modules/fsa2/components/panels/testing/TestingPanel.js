@@ -6,15 +6,14 @@ import PanelSwitch from 'experimental/panels/PanelSwitch.js';
 
 import TestListView from './TestListView.js';
 
-import Notifications from 'deprecated/system/notification/Notifications.js';
-import {ERROR_MESSAGE_TAG} from 'modules/fsa2/FSAErrorChecker.js';
+import {MACHINE_ERROR_NOTIFICATION_TAG} from 'modules/fsa2/components/notifications/FSANotifications.js';
 
 class TestingPanel extends React.Component
 {
   constructor(props)
   {
     super(props);
-    
+
     this.state = {
       stepMode: false
     };
@@ -59,7 +58,7 @@ class TestingPanel extends React.Component
     if (errorCheck)
     {
       //Turning it off
-      Notifications.clearMessages(ERROR_MESSAGE_TAG);
+      this.props.session.getApp().getNotificationManager().clearNotifications(MACHINE_ERROR_NOTIFICATION_TAG);
     }
   }
 

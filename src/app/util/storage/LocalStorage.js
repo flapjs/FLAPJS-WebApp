@@ -1,12 +1,12 @@
 const LocalStorage = {
   clear()
   {
-    if (!this.isSupprted()) return;
+    if (!this.isSupported()) return;
     localStorage.clear();
   },
   setData(key, value)
   {
-    if (!this.isSupprted()) return;
+    if (!this.isSupported()) return;
 
     // Opera 12.10 and Firefox 18 and later support
     let hidden, visibilityChange;
@@ -40,7 +40,7 @@ const LocalStorage = {
   },
   getData(key, defaultValue=null)
   {
-    if (!this.isSupprted()) return defaultValue;
+    if (!this.isSupported()) return defaultValue;
     return localStorage.getItem(key) || defaultValue;
   },
   setDataAsObject(key, objectValue)
@@ -81,7 +81,7 @@ const LocalStorage = {
       return defaultValue;
     }
   },
-  isSupprted()
+  isSupported()
   {
     return typeof localStorage !== 'undefined';
   }

@@ -6,7 +6,9 @@ import ViewportInputHandler from 'modules/nodalgraph/controller/ViewportInputHan
 
 import LabelEditorManager from 'session/manager/labeleditor/LabelEditorManager.js';
 
-import Notifications from 'deprecated/system/notification/Notifications.js';
+import {WARNING_LAYOUT_ID} from 'session/manager/notification/NotificationManager.js';
+
+export const TRASH_EDITING_NOTIFICATION_TAG = "tryCreateWhileTrash";
 
 class NodalGraphInputManager
 {
@@ -48,6 +50,7 @@ class NodalGraphInputManager
   //DuckType(SessionListener)
   onSessionStart(session)
   {
+    const app = session.getApp();
     const currentModule = session.getCurrentModule();
 
     currentModule.getApp().getInputAdapter()
@@ -66,7 +69,9 @@ class NodalGraphInputManager
     const tryCreateWhileTrash = () => {
       if (this._inputController.isTrashMode())
       {
-        Notifications.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
+        app.getNotificationManager().pushNotification(
+          I18N.toString("message.warning.cannotmodify"),
+          WARNING_LAYOUT_ID, TRASH_EDITING_NOTIFICATION_TAG, null, true);
       }
     };
     this._graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);

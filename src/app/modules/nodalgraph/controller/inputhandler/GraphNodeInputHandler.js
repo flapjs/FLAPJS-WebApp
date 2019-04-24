@@ -36,13 +36,7 @@ class GraphNodeInputHandler extends GraphElementInputHandler
       }
       return true;
     }
-    //Edit click to toggle node
-    else if (!inputController.isMoveMode())
-    {
-      graphController.toggleNode(target);
-      return true;
-    }
-    else
+    else if (inputController.isMoveMode())
     {
       //Edit label for selected node
       graphController.openLabelEditor(target, target.getNodeLabel());

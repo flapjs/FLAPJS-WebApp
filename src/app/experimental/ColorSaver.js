@@ -1,9 +1,10 @@
-import AbstractLocalSaver from 'deprecated/system/localsave/AbstractLocalSaver.js';
-import LocalSave from 'deprecated/system/localsave/LocalSave.js';
+import AbstractAutoSaveHandler from 'util/storage/AbstractAutoSaveHandler.js';
 import * as ColorHelper from 'util/ColorHelper.js';
 import TransformStyleEntry from 'util//theme/style/TransformStyleEntry';
 
-class ColorSaver extends AbstractLocalSaver
+export const COLOR_STORAGE_ID = "prefs-color";
+
+class ColorSaver extends AbstractAutoSaveHandler
 {
   constructor(themeManager)
   {
@@ -51,7 +52,7 @@ class ColorSaver extends AbstractLocalSaver
     themeManager.register("--color-graph-node", "graph");
     themeManager.register("--color-graph-text", "graph");
     themeManager.register("--color-graph-select", "graph");
-    
+
     themeManager.register("--color-accent", "general");
     themeManager.register("--color-primary", "general");
     themeManager.register("--color-primary-text", "general");
@@ -59,7 +60,7 @@ class ColorSaver extends AbstractLocalSaver
       themeManager.getStyleByName("--color-primary"), liteColor));
     themeManager.register("--color-primary-dark", "hidden", new TransformStyleEntry("--color-primary-dark",
       themeManager.getStyleByName("--color-primary"), darkColor));
-    
+
     themeManager.register("--color-background", "general");
     themeManager.register("--color-background-active", "hidden", new TransformStyleEntry("--color-background-active",
       themeManager.getStyleByName("--color-background"), activeColor));
@@ -68,7 +69,7 @@ class ColorSaver extends AbstractLocalSaver
 
     themeManager.register("--color-success", "general");
     themeManager.register("--color-warning", "general");
-    
+
     themeManager.register("--color-surface", "surface");
     themeManager.register("--color-surface-text", "surface");
     themeManager.register("--color-surface-active", "hidden", new TransformStyleEntry("--color-surface-active",
@@ -77,11 +78,11 @@ class ColorSaver extends AbstractLocalSaver
       themeManager.getStyleByName("--color-surface"), liteColor));
     themeManager.register("--color-surface-dark", "hidden", new TransformStyleEntry("--color-surface-dark",
       themeManager.getStyleByName("--color-surface"), darkColor));
-    
+
     themeManager.register("--color-surface-error", "surface");
     themeManager.register("--color-surface-error-dark", "hidden", new TransformStyleEntry("--color-surface-error-dark",
       themeManager.getStyleByName("--color-surface-error"), darkColor));
-    
+
     themeManager.register("--color-surface-success", "surface");
     themeManager.register("--color-surface-success-dark", "hidden",  new TransformStyleEntry("--color-surface-success-dark",
       themeManager.getStyleByName("--color-surface-success"), darkColor));
@@ -111,10 +112,11 @@ class ColorSaver extends AbstractLocalSaver
   }
 
   //Override
-  onLoadSave()
+  onAutoSaveLoad(dataStorage)
   {
     const themeManager = this._themeManager;
-    const data = LocalSave.loadFromStorage("prefs-color");
+    const data = dataStorage.getDataAsObject(COLOR_STORAGE_ID);
+
     for(let prop in data)
     {
       const opt = themeManager.getStyleByName(prop);
@@ -126,13 +128,13 @@ class ColorSaver extends AbstractLocalSaver
   }
 
   //Override
-  onUnloadSave()
+  onAutoSaveUnload(dataStorage)
   {
     //Don't do anything...
   }
 
   //Override
-  onAutoSave()
+  onAutoSaveUpdate(dataStorage)
   {
     const themeManager = this._themeManager;
     const data = {};
@@ -144,7 +146,7 @@ class ColorSaver extends AbstractLocalSaver
         data[opt.prop] = opt.getValue();
       }
     }
-    LocalSave.saveToStorage("prefs-color", data);
+    dataStorage.setDataAsObject(COLOR_STORAGE_ID, data);
   }
 
   getThemeManager()

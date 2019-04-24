@@ -7,7 +7,6 @@ import Changelog from 'changelog.js';
 //Router: imports
 import Router from 'router.js';
 import App from 'deprecated/content/App.js';
-import ModuleLoader from 'modules/ModuleLoader.js';
 import LandingPage from 'deprecated/landing/components/LandingPage.js';
 
 //Config: imports

@@ -28,6 +28,20 @@ import PDAGraphExporter from './exporter/PDAGraphExporter.js';
 import {DEFAULT_IMAGE_EXPORTERS} from 'modules/nodalgraph/NodalGraphImageExporter.js';
 import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
 
+import {registerNotifications} from './components/notifications/PDANotifications.js';
+
+import GraphNodeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeInputHandler.js';
+import GraphInitialInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphInitialInputHandler.js';
+import GraphEdgeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphEdgeInputHandler.js';
+import GraphEndpointInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphEndpointInputHandler.js';
+import GraphNodeCreateInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeCreateInputHandler.js';
+import GraphNodeAcceptInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeAcceptInputHandler.js';
+
+import GraphNodePickHandler from 'modules/nodalgraph/controller/pickhandler/GraphNodePickHandler.js';
+import GraphEdgePickHandler from 'modules/nodalgraph/controller/pickhandler/GraphEdgePickHandler.js';
+import GraphEndpointPickHandler from 'modules/nodalgraph/controller/pickhandler/GraphEndpointPickHandler.js';
+import GraphInitialPickHandler from 'modules/nodalgraph/controller/pickhandler/GraphInitialPickHandler.js';
+
 import * as UserUtil from 'experimental/UserUtil.js';
 
 const MODULE_NAME = "pda";
@@ -45,12 +59,30 @@ class PDAModule
       new PDAGraphLabeler(),
       PDAGraphParser,
       PDALabelEditorRenderer);
+    this._inputManager.getInputController().getPicker()
+      .addPickHandler(this._initialPickHandler = new GraphInitialPickHandler())
+      .addPickHandler(this._endpointPickHandler = new GraphEndpointPickHandler())
+      .addPickHandler(this._nodePickHandler = new GraphNodePickHandler())
+      .addPickHandler(this._edgePickHandler = new GraphEdgePickHandler());
+    this._inputManager.getInputController()
+      .addInputHandler(this._nodeInputHandler = new GraphNodeInputHandler())
+      .addInputHandler(this._edgeInputHandler = new GraphEdgeInputHandler())
+      .addInputHandler(this._endpointInputHandler = new GraphEndpointInputHandler())
+      .addInputHandler(this._initialInputHandler = new GraphInitialInputHandler())
+      .addInputHandler(this._createInputHandler = new GraphNodeCreateInputHandler())
+      .addInputHandler(this._acceptInputHandler = new GraphNodeAcceptInputHandler());
     this._machineController = new MachineController(this);
 
-    this._errorChecker = new PDAErrorChecker(
+    this._errorChecker = new PDAErrorChecker(app,
       this._inputManager.getGraphController(),
       this._machineController);
     this._tester = new StringTester();
+  }
+
+  //Override
+  initialize(app)
+  {
+    registerNotifications(app.getNotificationManager());
 
     //TODO: These should have a pre/post handlers...
     app.getExportManager()
@@ -76,11 +108,11 @@ class PDAModule
       .addPanelClass(AnalysisPanel);
 
     app.getHotKeyManager()
-      .registerHotKey("Export to PNG", [CTRL_KEY, 'KeyP'], () => {console.log("Export!")})
-      .registerHotKey("Save as JSON", [CTRL_KEY, 'KeyS'], () => {console.log("Save!")})
-      .registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {console.log("New!")})
-      .registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {console.log("Undo!")})
-      .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {console.log("Redo!")});
+      .registerHotKey("Export to PNG", [CTRL_KEY, 'KeyP'], () => {app.getExportManager().tryExportToFile(DEFAULT_IMAGE_EXPORTERS[0])})
+      .registerHotKey("Save as JSON", [CTRL_KEY, 'KeyS'], () => {app.getExportManager().tryExportToFile(app.getExportManager().getDefaultExporter())})
+      .registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {this.clear(app)})
+      .registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {app.getUndoManager().undo()})
+      .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {app.getUndoManager().redo()});
 
     app.getRenderManager()
       .addRenderer(RENDER_LAYER_WORKSPACE, props => (
@@ -97,11 +129,7 @@ class PDAModule
       .setEventHandlerFactory((...args) => {
         return new SafeGraphEventHandler(this._inputManager.getGraphController(), this._inputManager.getGraphParser());
       });
-  }
 
-  //Override
-  initialize(app)
-  {
     const machineController = this.getMachineController();
     machineController.initialize(this);
 
