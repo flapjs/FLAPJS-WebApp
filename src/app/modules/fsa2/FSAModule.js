@@ -48,6 +48,8 @@ import * as UserUtil from 'experimental/UserUtil.js';
 import StepTracer from './steptracer/StepTracer.js';
 import StepTracerView from './steptracer/StepTracerView.js';
 
+import FSABroadcastHandler from './FSABroadcastHandler.js';
+
 const MODULE_NAME = "fsa2";
 const MODULE_VERSION = "0.0.1";
 
@@ -81,6 +83,8 @@ class FSAModule
       this._machineController);
     this._tester = new StringTester();
     this._stepTracer = new StepTracer(this.getGraphController(), this.getMachineController());
+
+    this._broadcastHandler = new FSABroadcastHandler();
   }
 
   //Override
@@ -146,6 +150,9 @@ class FSAModule
       .addTooltip("I need my job.")
       .addTooltip(I18N.toString("message.workspace.empty"));
 
+    app.getBroadcastManager()
+      .addMessageHandler(this._broadcastHandler);
+
     const machineController = this.getMachineController();
     machineController.initialize(this);
 
@@ -185,6 +192,8 @@ class FSAModule
   getErrorChecker() { return this._errorChecker; }
   getStringTester() { return this._tester; }
   getStepTracer() { return this._stepTracer; }
+
+  getBroadcastHandler() { return this._broadcastHandler; }
 
   //Override
   getModuleVersion() { return MODULE_VERSION; }
