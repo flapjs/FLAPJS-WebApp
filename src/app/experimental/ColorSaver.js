@@ -32,7 +32,7 @@ class ColorSaver extends AbstractAutoSaveHandler
     //Override
     onAutoSaveUnload(dataStorage)
     {
-        // Don't do anything...
+        //Don't do anything...
     }
 
     //Override
@@ -51,11 +51,11 @@ class ColorSaver extends AbstractAutoSaveHandler
             /*
             if (theme)
             {
-              const themeStyle = theme.getStyleByName(styleName);
-              if (themeStyle && themeStyle.getValue() === styleValue)
-              {
+                const themeStyle = theme.getStyleByName(styleName);
+                if (themeStyle && themeStyle.getValue() === styleValue)
+                {
                 continue;
-              }
+                }
             }
             */
 

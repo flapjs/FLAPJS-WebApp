@@ -32,6 +32,7 @@ import EditPencilIcon from 'components/iconset/EditPencilIcon.js';
 
 import AppSaver from 'experimental/AppSaver.js';
 import ColorSaver from 'experimental/ColorSaver.js';
+import * as ColorTransform from 'util/ColorTransform.js';
 
 import AutoSave from 'util/storage/AutoSave.js';
 import LocalStorage from 'util/storage/LocalStorage.js';
@@ -82,7 +83,6 @@ class App extends React.Component
         this._themeManager = new ThemeManager();
 
         this._colorSaver = new ColorSaver(this._themeManager);
-
         this._saver = new AppSaver(this);
 
         this._undoManager = new UndoManager();
@@ -106,8 +106,6 @@ class App extends React.Component
             .addListener(this._tooltipManager)
             .addListener(this._notificationManager)
             .addListener(this);
-
-        this._broadcast = null;
 
         // TODO: This is only used to control transitions (do we really need it?)
         this._init = false;
@@ -163,7 +161,7 @@ class App extends React.Component
             App.INSTANCE.componentWillUnmount();
         }
     }
-
+    
     //DuckType
     onSessionStart(session)
     {
@@ -176,7 +174,8 @@ class App extends React.Component
         this._hotKeyManager
             .registerAltHotKey('Show Hints', () => { IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL; });
 
-        this._colorSaver.initialize();
+        this._themeManager.setElement(document.getElementById('root'));
+        registerAppStyles(this._themeManager);
 
         AutoSave.registerHandler(this._saver);
         AutoSave.registerHandler(this._colorSaver);
@@ -194,7 +193,7 @@ class App extends React.Component
         AutoSave.unregisterHandler(this._saver);
         AutoSave.unregisterHandler(this._colorSaver);
 
-        this._colorSaver.destroy();
+        this._themeManager.clear();
     }
 
     onModuleTitleClick(e)
@@ -234,11 +233,11 @@ class App extends React.Component
     getRenderManager() { return this._renderManager; }
     getTooltipManager() { return this._tooltipManager; }
     getNotificationManager() { return this._notificationManager; }
+    getThemeManager() { return this._themeManager; }
 
     getSession() { return this._session; }
     getCurrentModule() { return this._session.getCurrentModule(); }
     getInputAdapter() { return this.getWorkspaceComponent().getInputAdapter(); }
-    getThemeManager() { return this._themeManager; }
 
     isExperimental() { return true; }
 
@@ -396,6 +395,41 @@ class App extends React.Component
     }
 }
 App.INSTANCE = null;
+
+function registerAppStyles(themeManager)
+{
+    themeManager.register('--color-graph-node', 'graph');
+    themeManager.register('--color-graph-text', 'graph');
+    themeManager.register('--color-graph-select', 'graph');
+
+    themeManager.register('--color-accent', 'general');
+    const colorPrimary = themeManager.register('--color-primary', 'general');
+    themeManager.register('--color-primary-text', 'general');
+    themeManager.register('--color-primary-lite', 'hidden', colorPrimary, ColorTransform.lite);
+    themeManager.register('--color-primary-dark', 'hidden', colorPrimary, ColorTransform.dark);
+
+    const colorBackground = themeManager.register('--color-background', 'general');
+    themeManager.register('--color-background-active', 'hidden', colorBackground, ColorTransform.invert);
+    themeManager.register('--color-background-lite', 'hidden', colorBackground, ColorTransform.lite);
+
+    themeManager.register('--color-success', 'general');
+    themeManager.register('--color-warning', 'general');
+
+    const colorSurface = themeManager.register('--color-surface', 'surface');
+    themeManager.register('--color-surface-text', 'surface');
+    themeManager.register('--color-surface-active', 'hidden', colorSurface, ColorTransform.invert);
+    themeManager.register('--color-surface-lite', 'hidden', colorSurface, ColorTransform.lite);
+    themeManager.register('--color-surface-dark', 'hidden', colorSurface, ColorTransform.dark);
+
+    const colorSurfaceError = themeManager.register('--color-surface-error', 'surface');
+    themeManager.register('--color-surface-error-dark', 'hidden', colorSurfaceError, ColorTransform.dark);
+
+    const colorSurfaceSuccess = themeManager.register('--color-surface-success', 'surface');
+    themeManager.register('--color-surface-success-dark', 'hidden', colorSurfaceSuccess, ColorTransform.dark);
+
+    const colorSurfaceWarning = themeManager.register('--color-surface-warning', 'surface');
+    themeManager.register('--color-surface-warning-dark', 'hidden', colorSurfaceWarning, ColorTransform.dark);
+}
 
 //For hotloading this class
 export default hot(App);

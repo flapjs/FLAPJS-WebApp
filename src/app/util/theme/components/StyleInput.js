@@ -13,10 +13,7 @@ class StyleInput extends React.Component
   {
     const newValue = e.target.value;
     const value = this.props.value;
-    const onChange = this.props.onChange;
-
     value.setValue(newValue);
-    if (onChange) onChange(value);
   }
 
   //Override
@@ -24,18 +21,21 @@ class StyleInput extends React.Component
   {
     const title = this.props.title;
     const value = this.props.value;
-    const propName = value.getName();
-    const inputType = "color";
-    const inputID = "styleopt-" + propName;
+    const variableName = value.getName();
+    const variableValue = value.getValue();
+    const inputID = "styleopt-" + variableName;
 
     return (
       <span id={this.props.id}
         className={this.props.className}
         style={this.props.style}>
-        <input id={inputID} type="color" value={value.getValue()}
+        <input id={inputID} type="color"
+          value={variableValue}
           onChange={this.onChange}
           disabled={this.props.disabled}/>
-        <label htmlFor={inputID}>{title}</label>
+        <label htmlFor={inputID}>
+          {title}
+        </label>
       </span>
     );
   }
