@@ -1,12 +1,12 @@
 const SessionStorage = {
   clear()
   {
-    if (!this.isSupprted()) return;
+    if (!this.isSupported()) return;
     sessionStorage.clear();
   },
   setData(key, value)
   {
-    if (!this.isSupprted()) return;
+    if (!this.isSupported()) return;
 
     // Opera 12.10 and Firefox 18 and later support
     let hidden, visibilityChange;
@@ -40,7 +40,7 @@ const SessionStorage = {
   },
   getData(key, defaultValue=null)
   {
-    if (!this.isSupprted()) return defaultValue;
+    if (!this.isSupported()) return defaultValue;
     return sessionStorage.getItem(key) || defaultValue;
   },
   setDataAsObject(key, objectValue)
@@ -81,7 +81,7 @@ const SessionStorage = {
       return defaultValue;
     }
   },
-  isSupprted()
+  isSupported()
   {
     return typeof sessionStorage !== 'undefined';
   }

@@ -1,8 +1,9 @@
-import AbstractLocalSaver from 'deprecated/system/localsave/AbstractLocalSaver.js';
-import LocalSave from 'deprecated/system/localsave/LocalSave.js';
+import AbstractAutoSaveHandler from 'util/storage/AbstractAutoSaveHandler.js';
 import * as ColorHelper from 'util/ColorHelper.js';
 
-class ColorSaver extends AbstractLocalSaver
+export const COLOR_STORAGE_ID = "prefs-color";
+
+class ColorSaver extends AbstractAutoSaveHandler
 {
   constructor(styleOpts)
   {
@@ -99,10 +100,12 @@ class ColorSaver extends AbstractLocalSaver
   }
 
   //Override
-  onLoadSave()
+  onAutoSaveLoad(dataStorage)
   {
     const opts = this._styleOpts;
-    const data = LocalSave.loadFromStorage("prefs-color");
+    const data = dataStorage.getDataAsObject(COLOR_STORAGE_ID);
+    if (!data) return;
+
     for(let prop in data)
     {
       const opt = opts.getOptionByProp(prop);
@@ -114,13 +117,13 @@ class ColorSaver extends AbstractLocalSaver
   }
 
   //Override
-  onUnloadSave()
+  onAutoSaveUnload(dataStorage)
   {
     //Don't do anything...
   }
 
   //Override
-  onAutoSave()
+  onAutoSaveUpdate(dataStorage)
   {
     const opts = this._styleOpts;
     const data = {};
@@ -131,7 +134,7 @@ class ColorSaver extends AbstractLocalSaver
         data[opt.prop] = opt.getStyle();
       }
     }
-    LocalSave.saveToStorage("prefs-color", data);
+    dataStorage.setDataAsObject(COLOR_STORAGE_ID, data);
   }
 
   getStyleOpts()

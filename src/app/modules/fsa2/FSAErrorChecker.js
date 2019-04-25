@@ -1,22 +1,26 @@
-import Notifications from 'deprecated/system/notification/Notifications.js';
-import TransitionErrorMessage from './notifications/TransitionErrorMessage.js';
-import StateUnreachableWarningMessage from './notifications/StateUnreachableWarningMessage.js';
-import StateMissingTransitionErrorMessage from './notifications/StateMissingTransitionErrorMessage.js';
-import StateErrorMessage from './notifications/StateErrorMessage.js';
+import {SUCCESS_LAYOUT_ID} from 'session/manager/notification/NotificationManager.js';
+import {
+  MACHINE_ERROR_NOTIFICATION_TAG,
+  STATE_LAYOUT_ID,
+  TRANSITION_LAYOUT_ID,
+  STATE_UNREACHABLE_LAYOUT_ID,
+  STATE_MISSING_LAYOUT_ID
+} from './components/notifications/FSANotifications.js';
 
-import { ERROR_UNREACHABLE_STATE,
+import {
+  ERROR_UNREACHABLE_STATE,
   ERROR_DUPLICATE_STATE,
   ERROR_INCOMPLETE_TRANSITION,
   ERROR_DUPLICATE_TRANSITION,
   ERROR_MISSING_TRANSITION,
-  ERROR_EMPTY_TRANSITION } from './machine/FSABuilder.js';
-
-export const ERROR_MESSAGE_TAG = "fsa_build_error";
+  ERROR_EMPTY_TRANSITION
+} from './machine/FSABuilder.js';
 
 class FSAErrorChecker
 {
-  constructor(graphController, machineController)
+  constructor(app, graphController, machineController)
   {
+    this._app = app;
     this._graphController = graphController;
     this._machineController = machineController;
     this._showErrorOnChange = false;
@@ -50,11 +54,16 @@ class FSAErrorChecker
     const machineBuilder = this._machineController.getMachineBuilder();
     const errors = machineBuilder.getMachineErrors();
     const warnings = machineBuilder.getMachineWarnings();
+    const app = this._app;
+    const notificationManager = app.getNotificationManager();
+    console.log(notificationManager);
 
-    Notifications.clearMessages(ERROR_MESSAGE_TAG);
+    notificationManager.clearNotifications(MACHINE_ERROR_NOTIFICATION_TAG);
     if (errors.length <= 0 && warnings.length <= 0)
     {
-      Notifications.addMessage(I18N.toString("message.error.none"), "success", ERROR_MESSAGE_TAG, null, null, false);
+      notificationManager.pushNotification(
+        I18N.toString("message.error.none"),
+        SUCCESS_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, null, false);
     }
     else
     {
@@ -63,8 +72,8 @@ class FSAErrorChecker
         switch(warning.name)
         {
           case ERROR_UNREACHABLE_STATE:
-            Notifications.addMessage(warning.nodes,
-              "warning", ERROR_MESSAGE_TAG, StateUnreachableWarningMessage, props, false);
+            notificationManager.pushNotification(warning.nodes,
+              STATE_UNREACHABLE_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, props, false);
           break;
         }
       }
@@ -74,34 +83,34 @@ class FSAErrorChecker
         switch(error.name)
         {
           case ERROR_DUPLICATE_STATE:
-            Notifications.addMessage({
+            notificationManager.pushNotification({
               text: "Found duplicate nodes of similar names",
-              targets: error.nodes},
-              "error", ERROR_MESSAGE_TAG, StateErrorMessage, props, false);
+              targets: error.nodes
+            }, STATE_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, props, false);
           break;
           case ERROR_INCOMPLETE_TRANSITION:
-            Notifications.addMessage({
+            notificationManager.pushNotification({
               text: I18N.toString("message.error.incomplete"),
               targets: error.edges
-            }, "error", ERROR_MESSAGE_TAG, TransitionErrorMessage, props, false);
+            }, TRANSITION_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, props, false);
           break;
           case ERROR_DUPLICATE_TRANSITION:
-            Notifications.addMessage({
+            notificationManager.pushNotification({
               text: I18N.toString("message.error.dupe"),
-              targets: error.edges},
-              "error", ERROR_MESSAGE_TAG, TransitionErrorMessage, props, false);
+              targets: error.edges
+            }, TRANSITION_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, props, false);
           break;
           case ERROR_MISSING_TRANSITION:
-            Notifications.addMessage({
+            notificationManager.pushNotification({
               targets: [error.node],
               symbol: error.symbols
-            }, "error", ERROR_MESSAGE_TAG, StateMissingTransitionErrorMessage, props, false);
+            }, STATE_MISSING_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, props, false);
           break;
           case ERROR_EMPTY_TRANSITION:
-            Notifications.addMessage({
+            notificationManager.pushNotification({
               text: I18N.toString("message.error.empty"),
-              targets: error.edges},
-              "error", ERROR_MESSAGE_TAG, TransitionErrorMessage, props, false);
+              targets: error.edges
+            }, TRANSITION_LAYOUT_ID, MACHINE_ERROR_NOTIFICATION_TAG, props, false);
           break;
         }
       }

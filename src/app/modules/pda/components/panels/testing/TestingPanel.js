@@ -6,8 +6,7 @@ import PanelSwitch from 'experimental/panels/PanelSwitch.js';
 
 import TestListView from './TestListView.js';
 
-import Notifications from 'deprecated/system/notification/Notifications.js';
-import {ERROR_MESSAGE_TAG} from 'modules/pda/PDAErrorChecker.js';
+import {MACHINE_ERROR_NOTIFICATION_TAG} from 'modules/pda/components/notifications/PDANotifications.js';
 
 class TestingPanel extends React.Component
 {
@@ -59,7 +58,7 @@ class TestingPanel extends React.Component
     if (errorCheck)
     {
       //Turning it off
-      Notifications.clearMessages(ERROR_MESSAGE_TAG);
+      this.props.session.getApp().getNotificationManager().clearNotifications(MACHINE_ERROR_NOTIFICATION_TAG);
     }
   }
 

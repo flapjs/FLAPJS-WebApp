@@ -8,6 +8,8 @@ import ViewportView from 'experimental/viewport/ViewportView.js';
 import TooltipView, { ONESHOT_MODE } from 'experimental/tooltip/TooltipView.js';
 import UploadDropZone from 'experimental/components/UploadDropZone.js';
 import ViewportComponent from 'util/input/components/ViewportComponent.js';
+import NotificationView from 'session/manager/notification/components/NotificationView.js';
+import IconButton from 'experimental/components/IconButton.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
@@ -31,12 +33,9 @@ import EditPencilIcon from 'experimental/iconset/EditPencilIcon.js';
 import AppSaver from 'experimental/AppSaver.js';
 import ColorSaver from 'experimental/ColorSaver.js';
 
-import IconButton from 'experimental/components/IconButton.js';
+import AutoSave from 'util/storage/AutoSave.js';
+import LocalStorage from 'util/storage/LocalStorage.js';
 
-import NotificationView from 'experimental/notification/NotificationView.js';
-import Notifications from 'deprecated/system/notification/Notifications.js';
-
-import LocalSave from 'deprecated/system/localsave/LocalSave.js';
 import StyleOptionRegistry from 'deprecated/system/styleopt/StyleOptionRegistry.js';
 
 import Session from 'session/Session.js';
@@ -51,6 +50,7 @@ import UndoManager from 'session/manager/undo/UndoManager.js';
 import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
   RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'session/manager/RenderManager.js';
 import TooltipManager from 'session/manager/TooltipManager.js';
+import NotificationManager, {ERROR_LAYOUT_ID} from 'session/manager/notification/NotificationManager.js';
 
 const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
@@ -65,6 +65,8 @@ const MENU_INDEX_EXPORT = 0;
 const MENU_INDEX_OPTION = 1;
 const MENU_INDEX_LANGUAGE = 2;
 const MENU_INDEX_MODULE = 3;
+
+const ERROR_UPLOAD_NOTIFICATION_TAG = "error_upload";
 
 class App extends React.Component
 {
@@ -91,6 +93,7 @@ class App extends React.Component
     this._viewportManager = new ViewportManager();
     this._renderManager = new RenderManager();
     this._tooltipManager = new TooltipManager();
+    this._notificationManager = new NotificationManager();
 
     this._session = new Session()
       .addListener(this._undoManager)
@@ -101,6 +104,7 @@ class App extends React.Component
       .addListener(this._viewportManager)
       .addListener(this._renderManager)
       .addListener(this._tooltipManager)
+      .addListener(this._notificationManager)
       .addListener(this);
 
     this._broadcast = null;
@@ -115,7 +119,7 @@ class App extends React.Component
     this._mediaQuerySmallWidthList = window.matchMedia("only screen and (max-width: 400px)");
     this._mediaQuerySmallHeightList = window.matchMedia("only screen and (min-height: 400px)");
 
-    //Notifications.addMessage("Welcome to Flap.js");
+    //this._notificationManager.pushNotification("Welcome to Flap.js");
     this.onModuleTitleClick = this.onModuleTitleClick.bind(this);
     this.onToolbarClearButton = this.onToolbarClearButton.bind(this);
   }
@@ -123,6 +127,7 @@ class App extends React.Component
   //Override
   componentDidMount()
   {
+    AutoSave.initialize(LocalStorage);
     //Start session
     this._session.startSession(this);
   }
@@ -130,10 +135,12 @@ class App extends React.Component
   //Override
   componentWillUnmount()
   {
+    //Stop session
     this._session.stopSession(this);
+    AutoSave.destroy();
   }
 
-  //TODO: onWindowStart
+  //DuckType
   onSessionStart(session)
   {
     //Default values
@@ -147,22 +154,21 @@ class App extends React.Component
 
     this._colorSaver.initialize();
 
-    LocalSave.registerHandler(this._saver);
-    LocalSave.registerHandler(this._colorSaver);
+    AutoSave.registerHandler(this._saver);
+    AutoSave.registerHandler(this._colorSaver);
 
     this._init = true;
 
     this._broadcast = Broadcast.initBroadcast();
   }
 
+  //DuckType
   onSessionStop(session)
   {
     this._init = false;
 
-    Notifications.clearMessages();
-
-    LocalSave.unregisterHandler(this._saver);
-    LocalSave.unregisterHandler(this._colorSaver);
+    AutoSave.unregisterHandler(this._saver);
+    AutoSave.unregisterHandler(this._colorSaver);
 
     this._colorSaver.destroy();
   }
@@ -203,6 +209,7 @@ class App extends React.Component
   getViewportManager() { return this._viewportManager; }
   getRenderManager() { return this._renderManager; }
   getTooltipManager() { return this._tooltipManager; }
+  getNotificationManager() { return this._notificationManager; }
 
   getSession() { return this._session; }
   getCurrentModule() { return this._session.getCurrentModule(); }
@@ -257,6 +264,7 @@ class App extends React.Component
     const viewportManager = this._viewportManager;
     const renderManager = this._renderManager;
     const tooltipManager = this._tooltipManager;
+    const notificationManager = this._notificationManager;
 
     const drawerPanelClasses = drawerManager.getPanelClasses();
     const drawerPanelProps = drawerManager.getPanelProps() || {session: session};
@@ -287,7 +295,7 @@ class App extends React.Component
             onUpload={fileBlob => {
               exportManager.tryImportFromFile(fileBlob)
                 .catch((e) => {
-                  Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
+                  notificationManager.pushNotification("ERROR: Unable to load invalid JSON file.", ERROR_LAYOUT_ID, ERROR_UPLOAD_NOTIFICATION_TAG);
                   console.error(e);
                 })
                 .finally(() => {
@@ -340,8 +348,7 @@ class App extends React.Component
               {/* RENDER_LAYER_WORKSPACE_OVERLAY */}
               {this.renderRenderers(workspaceOverlayRenderers, {workspace: this.getWorkspaceComponent()})}
 
-              <NotificationView notificationManager={Notifications}>
-              </NotificationView>
+              <NotificationView notificationManager={notificationManager}/>
 
               {this._hotKeyManager.isEnabled() &&
                 <HotKeyView hotKeyManager={this._hotKeyManager}/>}
