@@ -137,6 +137,7 @@ class MachineController extends AbstractMachineController
     return null;
   }
 
+  //TODO: REMOTE GHISNAFADSFIGER
   setGraphToMachine(graph, machine)
   {
     graph.clear();

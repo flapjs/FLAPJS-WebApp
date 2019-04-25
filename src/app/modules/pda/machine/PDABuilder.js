@@ -16,8 +16,45 @@ class PDABuilder extends AbstractMachineBuilder
     this._machine = new PDA();
   }
 
+  //Override
+  attemptBuildGraph(machine, dst)
+  {
+    dst.clear();
+
+    //Add all states
+    let node;
+    for(const state of machine.getStates())
+    {
+      node = dst.createNode(0, 0);
+      node.setNodeLabel(state.getStateLabel());
+      if (machine.isFinalState(state))
+      {
+        node.setNodeAccept(true);
+      }
+    }
+
+    //Add all transitions
+    let edge, from, to, read, labels, flag;
+    for(let transition of machine.getTransitions())
+    {
+      from = this.getFirstGraphNodeByLabel(dst, transition[0]);
+      read = transition[1];
+      to = this.getFirstGraphNodeByLabel(dst, transition[2]);
+      edge = dst.createEdge(from, to);
+      edge.setEdgeLabel(read);
+      const formattedEdge = dst.formatEdge(edge);
+      if (edge != formattedEdge) dst.deleteEdge(edge);
+    }
+
+    //Set start state
+    const startState = machine.getStartState();
+    dst.setStartNode(this.getFirstGraphNodeByLabel(dst, startState));
+
+    return dst;
+  }
+
 	//Override
-	attemptBuild(graph, dst, errors=[], warnings=[])
+	attemptBuildMachine(graph, dst, errors=[], warnings=[])
 	{
 		errors.length = 0;
 		warnings.length = 0;
