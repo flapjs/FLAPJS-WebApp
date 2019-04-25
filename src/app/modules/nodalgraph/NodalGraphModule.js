@@ -74,11 +74,9 @@ class NodalGraphModule
       .addViewClass(EditPane);
 
     app.getRenderManager()
+      //Graph objects
       .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-        <>
-          {/* Graph objects */
-            <NodalGraphRenderer currentModule={this} parent={props.workspace}/>}
-        </>
+        <NodalGraphRenderer currentModule={this} parent={props.workspace}/>
       ))
       .addRenderer(RENDER_LAYER_WORKSPACE, props => (
         <GraphInputRenderer currentModule={this}/>

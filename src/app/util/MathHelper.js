@@ -21,3 +21,21 @@ export function stringHash(value="")
   }
   return hash;
 };
+
+
+export function getDirectionalVector(x1, y1, x2, y2, dist=1, angleOffset=0, dst={x: 0, y: 0})
+{
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const angle = Math.atan2(dy, dx) + angleOffset;
+  dst.x = Math.cos(angle) * dist;
+  dst.y = Math.sin(angle) * dist;
+  return dst;
+};
+
+export function getMidPoint(x1, y1, x2, y2, dst={x: 0, y: 0})
+{
+  dst.x = x1 + (x2 - x1) / 2;
+  dst.y = y1 + (y2 - y1) / 2;
+  return dst;
+};
