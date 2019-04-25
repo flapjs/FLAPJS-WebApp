@@ -2,31 +2,66 @@ import StyleEntry from './StyleEntry.js';
 
 class SourceStyleEntry extends StyleEntry
 {
-  constructor(styleManager, variableName)
+  constructor(styleManager, variableName, sourceStyle=null, sourceTransform=null)
   {
-    super(variableName, "#FFFFFF");
+    super(variableName, styleManager.getComputedValue(variableName));
     this._styleManager = styleManager;
-    this._name = variableName;
+    this._children = [];
 
-    this._value = "#FFFFFF";
+    //Since children are ONLY updated in the constructor, they are never removed
+    if (sourceStyle)
+    {
+      this._source = sourceStyle;
+      sourceStyle._children.push(this);
+    }
+
+    //This is useless without sourceStyle, but hey, you do you.
+    this._sourceTransform = sourceTransform;
   }
 
-  updateValue()
+  updateValue(propagateChange=true)
   {
-    this._value = this._styleManager.getComputedValue(this._name);
+    if (this._source)
+    {
+      const sourceValue = this._source.getValue();
+      if (this._sourceTransform)
+      {
+        const newValue = this._sourceTransform.call(this, sourceValue);
+        this._value = newValue;
+      }
+      else
+      {
+        this._value = sourceValue;
+      }
+
+      if (propagateChange)
+      {
+        this._styleManager.setComputedValue(this._name, this._value);
+        for(const child of this._children)
+        {
+          child.updateValue(true);
+        }
+      }
+    }
   }
 
-  resetValue()
-  {
-    this.setValue(this._styleManager.getDefaultValue(this._name));
-  }
-
-  setValue(value)
+  setValue(value, propagateChange=true)
   {
     this._value = value;
-    this._styleManager.setComputedValue(this._name, value);
+
+    if (propagateChange)
+    {
+      this._styleManager.setComputedValue(this._name, value);
+      for(const child of this._children)
+      {
+        child.updateValue(true);
+      }
+    }
   }
 
+  getSourceStyle() { return this._source; }
+  getSourceTransform() { return this._sourceTransform; }
+  getDerivedStyles() { return this._children; }
   getStyleManager() { return this._styleManager; }
 }
 

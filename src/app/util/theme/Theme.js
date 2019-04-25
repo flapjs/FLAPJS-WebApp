@@ -1,19 +1,22 @@
+import Logger from 'util/logger/Logger.js';
+const LOGGER_TAG = "Theme";
+
 import StyleEntry from './style/StyleEntry.js';
 
-const BASE_URL = "color/";
+//TODO: this should be only lang/ when have server
+const BASE_URL = "dist/theme/";
 
 class Theme
 {
   constructor(themeName, styleMapping=new Map())
   {
     this._name = themeName;
-
     this._styles = styleMapping;
   }
 
   static fetchThemeFile(themeName, callback)
   {
-    console.log("[Theme] Fetching theme file \'" + themeName + "\'...");
+    Logger.out(LOGGER_TAG, `Fetching theme file '${themeName}'...`);
     const request = new XMLHttpRequest();
     request.onreadystatechange = function() {
       if (request.readyState === 4/* READY */ &&
@@ -24,7 +27,7 @@ class Theme
       }
     };
     request.onerror = function() {
-      console.log("[Theme] Unable to find theme file for \'" + themeName + "\'.");
+      Logger.out(LOGGER_TAG, `Unable to find theme file for '${themeName}'.`);
     };
     request.open("GET", BASE_URL + themeName + ".theme", true);
     request.setRequestHeader("Content-Type", "text/strings");
@@ -33,7 +36,7 @@ class Theme
 
   static loadThemeFile(themeName, themeData, callback)
   {
-    console.log("[Theme] Loading theme file \'" + themeName + "\'...");
+    Logger.out(LOGGER_TAG, `Loading theme file '${themeName}'...`);
 
     const result = new Theme(themeName);
 
@@ -46,7 +49,7 @@ class Theme
       if (line.startsWith("//")) continue;
       if (line.startsWith("//TODO:"))
       {
-        console.log("[Theme] Warning - found incomplete theme file: " + line.substring("//".length).trim());
+        Logger.out(LOGGER_TAG, `Warning - found incomplete theme file: theme file '${line.substring("//".length).trim()}'.`);
       }
 
       separator = line.indexOf('=');
@@ -59,13 +62,25 @@ class Theme
       result._styles.set(key, new StyleEntry(key, value));
     }
 
-    console.log("[Theme] Theme file \'" + themeName + "\' loaded.");
+    Logger.out(LOGGER_TAG, `Theme file '${themeName}' loaded.`);
 
     callback(result);
   }
 
+  addStyle(variableName, value)
+  {
+    this._styles.set(variableName, new StyleEntry(variableName, value));
+    return this;
+  }
+
+  removeStyle(variableName)
+  {
+    this._styles.delete(variableName);
+    return this;
+  }
+
   getStyles() { return this._styles.values(); }
-  getStyle(variableName) { return this._styles.get(variableName); }
+  getStyleByName(variableName) { return this._styles.get(variableName); }
   getName() { return this._name; }
 }
 
