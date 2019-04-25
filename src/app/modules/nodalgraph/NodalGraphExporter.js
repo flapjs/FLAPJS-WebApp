@@ -3,7 +3,7 @@ import AbstractGraphExporter from 'session/manager/export/AbstractGraphExporter.
 import { JSON as JSONGraphParser } from 'graph/parser/NodalGraphParser.js';
 import { downloadText } from 'util/Downloader.js';
 
-import JSONFileIcon from 'experimental/iconset/flat/JSONFileIcon.js';
+import JSONFileIcon from 'components/iconset/flat/JSONFileIcon.js';
 
 class NodalGraphExporter extends AbstractGraphExporter
 {

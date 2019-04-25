@@ -1,6 +1,6 @@
 import AbstractGraphExporter from 'session/manager/export/AbstractGraphExporter.js';
 
-import XMLFileIcon from 'experimental/iconset/flat/XMLFileIcon.js';
+import XMLFileIcon from 'components/iconset/flat/XMLFileIcon.js';
 import { XML as XMLGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import { downloadText } from 'util/Downloader.js';
 

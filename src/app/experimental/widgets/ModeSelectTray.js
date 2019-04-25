@@ -2,8 +2,8 @@ import React from 'react';
 import Style from './ModeSelectTray.css';
 
 import IconButton from 'experimental/components/IconButton.js';
-import EditPencilIcon from 'experimental/iconset/EditPencilIcon.js';
-import MoveIcon from 'experimental/iconset/MoveIcon.js';
+import EditPencilIcon from 'components/iconset/EditPencilIcon.js';
+import MoveIcon from 'components/iconset/MoveIcon.js';
 
 class ModeSelectTray extends React.Component
 {

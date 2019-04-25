@@ -45,6 +45,9 @@ import GraphInitialPickHandler from 'modules/nodalgraph/controller/pickhandler/G
 
 import * as UserUtil from 'experimental/UserUtil.js';
 
+import StepTracer from './steptracer/StepTracer.js';
+import StepTracerView from './steptracer/StepTracerView.js';
+
 const MODULE_NAME = "fsa2";
 const MODULE_VERSION = "0.0.1";
 
@@ -77,6 +80,7 @@ class FSAModule
       this._inputManager.getGraphController(),
       this._machineController);
     this._tester = new StringTester();
+    this._stepTracer = new StepTracer(this.getGraphController(), this.getMachineController());
   }
 
   //Override
@@ -92,7 +96,8 @@ class FSAModule
 
     app.getViewportManager()
       .addViewClass(EditPane)
-      .addViewClass(TapePane);
+      .addViewClass(TapePane)
+      .addViewClass(StepTracerView);
 
     app.getDrawerManager()
       .addPanelClass(props => (
@@ -116,11 +121,9 @@ class FSAModule
       .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {app.getUndoManager().redo()});
 
     app.getRenderManager()
+      //Graph objects
       .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-        <>
-          {/* Graph objects */
-            <FSAGraphRenderer currentModule={this} parent={props.workspace}/>}
-        </>
+        <FSAGraphRenderer currentModule={this} parent={props.workspace}/>
       ))
       .addRenderer(RENDER_LAYER_WORKSPACE, props => (
         <GraphInputRenderer currentModule={this}/>
@@ -181,6 +184,7 @@ class FSAModule
 
   getErrorChecker() { return this._errorChecker; }
   getStringTester() { return this._tester; }
+  getStepTracer() { return this._stepTracer; }
 
   //Override
   getModuleVersion() { return MODULE_VERSION; }

@@ -1,12 +1,12 @@
 import React from 'react';
 
 export const DefaultNodeShapeRenderer = props => (
-  <>
+  <React.Fragment>
     <circle cx={props.position.x} cy={props.position.y}
       r={props.radius}
       fill={props.color}
       stroke={props.outline}/>
-  </>
+  </React.Fragment>
 );
 
 export const DefaultLabelRenderer = props => (
