@@ -82,7 +82,7 @@ class Session
 
                 this._app = app;
                 this._moduleClass = ModuleClass;
-                this._sessionID = guid();
+                this._sessionID = '#' + guid();
                 try
                 {
                     this._module = new ModuleClass(app);
