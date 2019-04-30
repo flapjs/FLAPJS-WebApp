@@ -10,15 +10,15 @@ class FSAGraphExporter extends AbstractGraphExporter
   constructor() { super(); }
 
   /**
-   * setMachine - sets all of the details pertaining to the machine
+   * sets all of the details pertaining to the machine
    *
-   * @param  {graphController} graphController   the Controller object for the graph to be constructed
-   * @param  {machineController} machineController the Controller object for the machine to be constructed
-   * @param  {machineData} machineData       the machine Data to be parsed
-   * @param  {module} module            the module data to be modified
-   * @return {None}                   description
+   * @param  {GraphController} graphController     the Controller object for the graph to be constructed
+   * @param  {MachineController} machineController the Controller object for the machine to be constructed
+   * @param  {Object} machineData             the machine Data to be parsed
+   * @param  {FSAModule} module                       the module data to be modified
    */
-  setMachine(graphController, machineController, machineData, module){
+  setMachine(graphController, machineController, machineData, module)
+  {
     const machineData = data.machineData;
     const machineName = machineData.name;
     if (machineName) module.getApp().getSession().setProjectName(machineName);
@@ -41,10 +41,11 @@ class FSAGraphExporter extends AbstractGraphExporter
   }
 
   /**
-   * fromJSON - creates graph and machien from jsonData
+   * creates graph and machien from jsonData
+   * @override
+   * @param {Object} jsonData - the jsonData contains all the information for the machine/graph
+   * @param {FSAModule}  module -the module is used to construct the machien and constructor
    *
-   * @param {jsonObject} jsonData - the jsonDAta contains all the information for the machine/graph
-   * @param {module}  module -the module is used to construct the machien and constructor
    */
   fromJSON(jsonData, module)
   {
@@ -63,9 +64,12 @@ class FSAGraphExporter extends AbstractGraphExporter
   }
 
   /**
-   * toJSON - converts graph into a "dst" -what is a dst (should be made clear)
+   * converts graph into a "dst" -what is a dst (should be made clear)
+   *
+   * @override
    * @param{graphData} graphData - the graphData intended to go into dst
    * @param{module} module - contains module data such as graphController, machineController, projectName, version, etc.
+   *
    */
   toJSON(graphData, module)
   {
@@ -88,13 +92,13 @@ class FSAGraphExporter extends AbstractGraphExporter
     return dst;
   }
 
-  //Override
+  /** @override */
   importFromData(data, module)
   {
     this.fromJSON(data, module);
   }
 
-  //Override
+  /** @override */
   exportToData(module)
   {
     const graph = module.getGraphController().getGraph();
@@ -103,25 +107,24 @@ class FSAGraphExporter extends AbstractGraphExporter
     return result;
   }
 
-  //Override
+  /** @override */
   doesSupportData()
   {
     return true;
   }
 
-  //Override
 
   /**
-   * importFromFile - creates a graph from an input fileObject
+   * importFromFile - creates a graph from an input file Object
    *
-   * @param{fileObject} fileObject - file with data for constructing graph
+   * @override
+   * @param{fileBlob} fileBlob - file with data for constructing graph
    * @param{module} module  - module used in construction of graphData
-   *
    */
-  importFromFile(fileObject, module)
+  importFromFile(fileBlob, module)
   {
     return new Promise((resolve, reject) => {
-      const filename = fileObject.name;
+      const filename = fileBlob.name;
       if (!filename.endsWith(this.getFileType()))
       {
         // TODO: log errors instead of just printing them to standard error
@@ -139,7 +142,6 @@ class FSAGraphExporter extends AbstractGraphExporter
         const prevGraphHash = graph.getHashCode(true);
 
         //TODO: this should not be here, this should exist somewhere in graphController
-        // ^^ Where is somewhere?
         if (!graph.isEmpty())
         {
           module.getApp().getUndoManager().captureEvent();
@@ -155,6 +157,7 @@ class FSAGraphExporter extends AbstractGraphExporter
 
           resolve();
         }
+        // e is an error
         catch (e)
         {
           reader.abort();
@@ -162,29 +165,31 @@ class FSAGraphExporter extends AbstractGraphExporter
         }
         finally
         {
-          //this section of code is unclear in what it does
+          // compares GraphHash before and after import, captures event if they are not equal
           const nextGraphHash = graph.getHashCode(true);
           if (prevGraphHash !== nextGraphHash)
           {
+            // TODO: this should not be here
             module.getApp().getUndoManager().captureEvent();
           }
         }
       };
-
+      // e here is an event
       reader.onerror = e => {
         reject(new Error("Unable to import file: " + e.target.error.code));
       }
 
-      reader.readAsText(fileObject);
+      reader.readAsText(fileBlob);
     });
   }
 
   /**
    * exportToFile - creates a file that encodes graph details
+   * @override
    * @param{string} filename - name of the file to contain the encoded graphData
    * @param{module} module - module containing the graph to be encoded
+   *
    */
-  //Override
   exportToFile(filename, module)
   {
     const graph = module.getGraphController().getGraph();
@@ -194,43 +199,42 @@ class FSAGraphExporter extends AbstractGraphExporter
     downloadText(filename + '.' + this.getFileType(), jsonString);
   }
 
-  //Override
+  /** @override */
   doesSupportFile()
   {
     return true;
   }
-
-  //Override
+  /** @override */
   canImport(module)
   {
     return true;
   }
 
-  //Override
+  /** @override */
   canExport(module)
   {
     return !module.getGraphController().getGraph().isEmpty();
   }
 
-  //Override
+  /** @override */
   getTitle()
   {
     return I18N.toString("file.export.machine.hint");
   }
 
-  //Override
+  /** @override */
   getLabel()
   {
     return I18N.toString("file.export.machine");
   }
 
-  //Override
+  /** @override */
   getFileType()
   {
     return "json";
   }
 
-  //Override
+  /** @override */
   getIconClass()
   {
     return JSONFileIcon;
