@@ -5,7 +5,7 @@ import { XML as XMLGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import { downloadText } from 'util/Downloader.js';
 
 /**
- * @class JFLAPGraphExporter
+ * @class
  * class responsible for exporting/importing to/from JFLAP
  */
 class JFLAPGraphExporter extends AbstractGraphExporter
@@ -19,19 +19,18 @@ class JFLAPGraphExporter extends AbstractGraphExporter
 
   /**
    *   function imports jff into a module
-   * @param {file} fileObj - the file that is being read from
+   * @override
+   * @param {Blob} Blob - the file that is being read from
    * @param {module} module - the associated module
    *
    */
-  //override
-  importFromFile(fileObj, module)
+  importFromFile(fileBlob, module)
   {
     return new Promise((resolve, reject) => {
       const filename = fileObj.name;
       if (!filename.endsWith(this.getFileType()))
       {
         throw new Error("Trying to import invalid file type for \'" + this.getFileType() + "\': " + filename);
-        //TODO Add logging for errors rather than simply printing to standard error
       }
 
       const reader = new FileReader();
@@ -85,8 +84,8 @@ class JFLAPGraphExporter extends AbstractGraphExporter
    * exports graph belonging to module to a .jff file
    * @param {string} filename - name of file to exportToFile
    * @param {module} modules  - name of module
+   * @override
    */
-  //Override
   exportToFile(filename, module)
   {
     const graph = module.getGraphController().getGraph();
@@ -94,7 +93,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
     const xmlString = new XMLSerializer().serializeToString(graphData);
     downloadText(filename + '.' + this.getFileType(), xmlString);
   }
-
+  
   /** @override */
   doesSupportFile()
   {
