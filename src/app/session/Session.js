@@ -1,5 +1,5 @@
 import Modules from 'modules/Modules.js';
-import LocalSave from 'deprecated/system/localsave/LocalSave.js';
+import LocalStorage from 'util/storage/LocalStorage.js';
 import * as URLHelper from 'util/URLHelper.js';
 import {guid} from 'util/MathHelper.js';
 
@@ -41,7 +41,7 @@ class Session
       if ('module' in urlParams) moduleName = urlParams['module'];
       if (!moduleName || moduleName.length <= 0)
       {
-        moduleName = LocalSave.getStringFromStorage(CURRENT_MODULE_STORAGE_ID);
+        moduleName = LocalStorage.getData(CURRENT_MODULE_STORAGE_ID);
         if (!moduleName || moduleName.length <= 0)
         {
           moduleName = DEFAULT_MODULE_ID;
@@ -88,7 +88,7 @@ class Session
             listener.onSessionStart(this);
           }
 
-          LocalSave.setStringToStorage(CURRENT_MODULE_STORAGE_ID, moduleName);
+          LocalStorage.setData(CURRENT_MODULE_STORAGE_ID, moduleName);
         }
         catch (e)
         {

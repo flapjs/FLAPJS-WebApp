@@ -4,13 +4,6 @@ import AbstractInputController from 'modules/abstract/AbstractInputController.js
 import GraphNodeSelectionBox from 'graph/GraphNodeSelectionBox.js';
 import GraphPicker from './GraphPicker.js';
 
-import GraphNodeInputHandler from './inputhandler/GraphNodeInputHandler.js';
-import GraphInitialInputHandler from './inputhandler/GraphInitialInputHandler.js';
-
-import GraphEdgeInputHandler from './inputhandler/GraphEdgeInputHandler.js';
-import GraphEndpointInputHandler from './inputhandler/GraphEndpointInputHandler.js';
-import GraphNodeCreateInputHandler from './inputhandler/GraphNodeCreateInputHandler.js';
-
 const DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE = true;
 
 class InputController extends AbstractInputController
@@ -18,16 +11,13 @@ class InputController extends AbstractInputController
   constructor(module, inputAdapter)
   {
     super(module, inputAdapter);
-
-    this._picker = null;
+    
+    this._picker = new GraphPicker();
     this._selectionBox = new GraphNodeSelectionBox();
     this._graphController = null;
 
     //Make sure this is always false when moving endpoints
     this.isNewEdge = false;
-
-    //Used to change render to follow pointer when moving initial marker
-    this.ghostInitialMarker = null;
 
     //Whether to destroy pointless edges
     this.shouldDestroyPointlessEdges = DEFAULT_SHOULD_DESTROY_POINTLESS_EDGE;
@@ -44,13 +34,19 @@ class InputController extends AbstractInputController
     this._snapToGrid = false;
     this._snapSize = 48;
 
-    this._inputHandlers = [
-      new GraphNodeInputHandler(),
-      new GraphEdgeInputHandler(),
-      new GraphEndpointInputHandler(),
-      new GraphInitialInputHandler(),
-      new GraphNodeCreateInputHandler()
-    ];
+    this._inputHandlers = [];
+  }
+
+  addInputHandler(inputHandler)
+  {
+    this._inputHandlers.push(inputHandler);
+    return this;
+  }
+
+  removeInputHandler(inputHandler)
+  {
+    this._inputHandlers.splice(this._inputHandlers.indexOf(inputHandler), 1);
+    return this;
   }
 
   //Override
@@ -60,8 +56,6 @@ class InputController extends AbstractInputController
 
     this._module = module;
     this._graphController = module.getGraphController();
-    //this._picker = new NodalGraphPicker(this._graphController);
-    this._picker = new GraphPicker(this._graphController);
   }
 
   //Override
@@ -333,6 +327,11 @@ class InputController extends AbstractInputController
   getSelectionBox()
   {
     return this._selectionBox;
+  }
+
+  getInputHandlers()
+  {
+    return this._inputHandlers;
   }
 }
 

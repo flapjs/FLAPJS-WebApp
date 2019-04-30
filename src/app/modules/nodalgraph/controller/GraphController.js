@@ -307,7 +307,7 @@ class GraphController extends AbstractGraphController
   {
     //Get ONLY node at x and y (cannot use hover target, since it is not ONLY nodes)
     const picker = this.inputController.getPicker();
-    const dst = picker.getNodeAt(this.getGraph(), x, y) || pointer;
+    const dst = picker.getPickHandler("node").getTargetAt(this.getGraph(), x, y) || pointer;
 
     edge.changeDestinationNode(dst);
 

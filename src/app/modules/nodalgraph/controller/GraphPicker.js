@@ -5,7 +5,7 @@ const ENDPOINT_RADIUS_SQU = ENDPOINT_RADIUS * ENDPOINT_RADIUS;
 
 class GraphPicker
 {
-  constructor(graphController)
+  constructor()
   {
     this.target = null;
     this.targetType = "";
@@ -15,6 +15,25 @@ class GraphPicker
 
     this._prevX = 0;
     this._prevY = 0;
+
+    this._pickHandlers = new Map();
+  }
+
+  addPickHandler(pickHandler)
+  {
+    this._pickHandlers.set(pickHandler.getTargetType(), pickHandler);
+    return this;
+  }
+
+  removePickHandler(pickHandler)
+  {
+    this._pickHandlers.delete(pickHandler.getTargetType());
+    return this;
+  }
+
+  getPickHandler(targetType)
+  {
+    return this._pickHandlers.get(targetType);
   }
 
   setInitialTarget(target, type)
@@ -53,32 +72,17 @@ class GraphPicker
 
   updateTarget(graph, x, y)
   {
-    if (this.target = this.getNodeByInitialMarkerAt(graph, x, y))
+    for(const pickHandler of this._pickHandlers.values())
     {
-      //Clicked on initial marker
-      this.targetType = "initial";
+      if (this.target = pickHandler.getTargetAt(graph, x, y))
+      {
+        this.targetType = pickHandler.getTargetType();
+        return;
+      }
     }
-    else if (this.target = this.getEdgeByEndPointAt(graph, x, y))
-    {
-      //Clicked on endpoint
-      this.targetType = "endpoint";
-    }
-    else if (this.target = this.getNodeAt(graph, x, y))
-    {
-      //Clicked on node
-      this.targetType = "node";
-    }
-    else if (this.target = this.getEdgeAt(graph, x, y))
-    {
-      //Clicked on edge
-      this.targetType = "edge";
-    }
-    else
-    {
-      //Clicked on graph
-      this.target = null;
-      this.targetType = "none";
-    }
+
+    this.target = null;
+    this.targetType = "none";
 
     return this.target;
   }
@@ -94,78 +98,14 @@ class GraphPicker
     return this.target != null;
   }
 
-  getNodeAt(graph, x, y)
-  {
-    //Search graph
-    for(const node of graph.getNodes())
-    {
-      const nodeSize = node.getNodeSize();
-      const dx = x - node.x;
-      const dy = y - node.y;
-      if (dx * dx + dy * dy < nodeSize * nodeSize)
-      {
-        return node;
-      }
-    }
-    return null;
-  }
-
-  getNodeByInitialMarkerAt(graph, x, y)
-  {
-    const startNode = graph.getStartNode();
-    if (!startNode) return null;
-
-    const nodeSize = startNode.getNodeSize();
-    const offset = -(nodeSize + (nodeSize / 2));
-    const dx = x - (startNode.x + offset);
-    const dy = y - startNode.y;
-    if (dx * dx + dy * dy < EDGE_RADIUS_SQU)
-    {
-      return startNode;
-    }
-
-    return null;
-  }
-
-  getEdgeAt(graph, x, y)
-  {
-    const center = {x: 0, y: 0};
-
-    //Search graph
-    for(const edge of graph.getEdges())
-    {
-      edge.getCenterPoint(center);
-      const dx = x - center.x;
-      const dy = y - center.y;
-      if (dx * dx + dy * dy < EDGE_RADIUS_SQU)
-      {
-        return edge;
-      }
-    }
-    return null;
-  }
-
-  getEdgeByEndPointAt(graph, x, y)
-  {
-    const end = {x: 0, y: 0};
-    //Search graph
-    for(const edge of graph.getEdges())
-    {
-      edge.getEndPoint(end);
-      const dx = x - end.x;
-      const dy = y - end.y;
-      if (dx * dx + dy * dy < ENDPOINT_RADIUS_SQU)
-      {
-        return edge;
-      }
-    }
-    return null;
-  }
-
-
   isTarget(target)
   {
     return this.target == target;
+  }
+
+  getPickHandlers()
+  {
+    return this._pickHandlers.values();
   }
 }
 

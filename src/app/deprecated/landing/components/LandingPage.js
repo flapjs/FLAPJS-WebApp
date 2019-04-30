@@ -7,7 +7,7 @@ import Router from 'router.js';
 import Logo from './Logo.js';
 import Quote from './Quote.js';
 
-import ModuleLoader from 'modules/ModuleLoader.js';
+import ModuleLoader from 'deprecated/modules/ModuleLoader.js';
 import LocalSave from 'deprecated/system/localsave/LocalSave.js';
 import App from 'deprecated/content/App.js';
 

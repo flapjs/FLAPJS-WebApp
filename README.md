@@ -40,17 +40,45 @@ To make a program that is more accessible and intuitive to use, so we can all be
   - [x] Safari
   - [ ] Opera
 
-(Although it may work on other unchecked platforms, it is not completely tested)
+(It may work on other unchecked platforms, though it is completely tested)
 
 ## Features
+
+### 1.0.0 (Future)
+- [ ] Set construction scripting language
+- [ ] Turing Machine
+- [ ] Formal Definition summary
+  - [ ] Tape Symbols
+  - [ ] q_acc
+  - [ ] q_rej
+- [ ] Tape testing
+  - [ ] TM
+
+### 0.4.0
+- [ ] Context-Free Grammars
+- [ ] StepTracer design
+- [ ] Cross-window operations
+- [ ] Theme presets
+
+### 0.3.4
+- [x] Pushdown Automata
+- [x] Regular Expressions
+- [x] Hotkey system
+- [x] New UI design
+
+### 0.2.0
+- [x] Module system
+- [x] Graph optimizations
+- [x] Bug reporting
+- [x] Generic nodal graphing mode
+
 ### 0.1.0
-- [x] Deterministic Finite Automaton
-- [x] Nondeterministic Finite Automaton
-- [x] Nodal Graphing
+- [x] Deterministic Finite Automata
+- [x] Nondeterministic Finite Automata
+- [x] Nodal graphing
   - [x] Basic layout
-  - [x] Component creation
-  - [x] Component deletion
-  - [x] Edge redirection
+  - [x] Node editing
+  - [x] Edge editing
   - [x] Label editing
   - [x] Formal Definition summary
     - [x] States
@@ -63,27 +91,11 @@ To make a program that is more accessible and intuitive to use, so we can all be
     - [x] NFA
   - [x] Export to image
   - [x] Circular auto-layout
-  - [x] Step-By-Step Mode
-
-### 0.2.0
-- [x] Module Systems
-- [x] Graph Optimizations
-- [x] Bug Reporting
-
-### 0.3.0 (Coming Soon)
-- [ ] Pushdown Automaton
-- [ ] Regular Expressions
-
-### 1.0.0 (Future)
-- [ ] Pushdown Automaton
-- [ ] Turing Machine
-- [ ] Formal Definition summary
-  - [ ] Tape Symbols
-  - [ ] q_acc
-  - [ ] q_rej
-- [ ] Tape/Stack testing
-  - [ ] PDA
-  - [ ] TM
+  - [x] Step-By-Step mode
+- [x] User-defined themes
+- [x] Autosave system
+- [x] Custom language
+- [x] Offline capabilities
 
 ---
 
