@@ -1,13 +1,15 @@
+/* eslint-disable no-console */
+
 class Logger
 {
-  static out(tag, message)
-  {
-    const result = "[" + tag + "] " + message;
-    if (console && typeof console['log'] === 'function')
+    static out(tag, message)
     {
-      console['log'].call(result);
+        const result = '[' + tag + '] ' + message;
+        if (console && typeof console['log'] === 'function')
+        {
+            console['log'].call(result);
+        }
     }
-  }
 }
 
 export default Logger;
