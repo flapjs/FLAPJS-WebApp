@@ -114,8 +114,8 @@ class FSABuilder extends AbstractMachineBuilder
 
 		for (const edge of graphEdges)
 		{
-			const srcNode = edge.getSourceNode();
-			const dstNode = edge.getDestinationNode();
+			const srcNode = edge.getEdgeFrom();
+			const dstNode = edge.getEdgeTo();
 			if (!edge.isPlaceholder() && srcNode instanceof FSANode && dstNode instanceof FSANode)
 			{
 				const srcState = dst.getStateByID(srcNode.getGraphElementID());
@@ -290,9 +290,9 @@ class FSABuilder extends AbstractMachineBuilder
       const node = nextNodes.pop();
       for(const edge of edges)
       {
-        if (edge.getSourceNode() === node)
+        if (edge.getEdgeFrom() === node)
         {
-          const i = nodes.indexOf(edge.getDestinationNode());
+          const i = nodes.indexOf(edge.getEdgeTo());
           if (i >= 0)
           {
 						const nextNode = nodes[i];

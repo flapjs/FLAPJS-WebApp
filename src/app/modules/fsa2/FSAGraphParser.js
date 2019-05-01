@@ -72,7 +72,8 @@ class FSAGraphParser extends Parser
       const edge = dst.createEdge(sourceNode, destinationNode, edgeData['id']);
       const quadData = edgeData['quad'] || {};
       edge.setEdgeLabel(edgeData['label'] || "");
-      edge.setQuadratic(quadData['radians'] || 0, quadData['length'] || 0);
+      edge.setQuadraticRadians(quadData['radians'] || 0)
+      edge.setQuadraticLength(quadData['length'] || 0);
     }
 
     return dst;
@@ -132,8 +133,8 @@ class FSAGraphParser extends Parser
         const elementID = edge.getGraphElementID();
 
         const quad = edge.getQuadratic() || {};
-        const edgeSource = edge.getSourceNode();
-        const edgeDestination = edge.getDestinationNode();
+        const edgeSource = edge.getEdgeFrom();
+        const edgeDestination = edge.getEdgeTo();
         const sourceIndex = nodeIndices.has(edgeSource) ? nodeIndices.get(edgeSource) : -1;
         const destinationIndex = nodeIndices.has(edgeDestination) ? nodeIndices.get(edgeDestination) : -1;
         edgeDatas[i] = {

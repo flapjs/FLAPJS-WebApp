@@ -1,7 +1,21 @@
-import GraphEdge from 'graph/GraphEdge.js';
+import GraphEdge from './GraphEdge.js';
+import {getDirectionalVector, getMidPoint} from 'util/MathHelper.js';
 
+/**
+ * A class that represents the curved edge elements of a graph.
+ * 
+ * @see {@link NodeGraph}
+ * @extends GraphEdge
+ */
 class QuadraticEdge extends GraphEdge
 {
+  /**
+   * Creates a quadratic edge with the unique id.
+   * @constructor
+   * @param {String} id           The element id for this node.
+   * @param {GraphNode} from      The from node of the edge.
+   * @param {GraphNode} [to=null] The to node of the edge.
+   */
   constructor(id, from, to=null)
   {
     super(id, from, null);
@@ -11,33 +25,42 @@ class QuadraticEdge extends GraphEdge
     this._quad = {
       radians: 0,
       length: 0,
-      _coords: {x: 0, y: 0}
+      coords: {x: 0, y: 0}
     };
 
-    //Make sure to format it correctly when creating...
+    // Make sure to format it correctly when creating...
     this.changeDestinationNode(to);
   }
 
-  setQuadratic(radians, length=undefined)
+  /**
+   * Set the angle of the curve in radians
+   * @param {Number} radians the radians the quadratic should be curved
+   * @returns {this}
+   */
+  setQuadraticRadians(radians)
   {
     this._quad.radians = radians;
-    if (typeof length === 'number')
-    {
-      this._quad.length = length;
-    }
     return this;
   }
 
-  getQuadratic()
+  /**
+   * Set the distance of the curve from the midpoint
+   * @param {Number} length the "height" of the curve
+   * @returns {this}
+   */
+  setQuadraticLength(length)
   {
-    return this._quad;
+    this._quad.length = length;
+    return this;
   }
 
-  isQuadratic()
-  {
-    return !this.isPlaceholder() && this._quad.length != 0;
-  }
-
+  /**
+   * Calculates and sets the quadratic vertex to pass through the position.
+   * This will update the radians and length of the curve.
+   * @param {Number} x the x coordinate
+   * @param {Number} y the y coordinate
+   * @returns {this}
+   */
   setQuadraticByCoords(x, y)
   {
     const from = this._from;
@@ -52,8 +75,8 @@ class QuadraticEdge extends GraphEdge
     const midpointx = fromx + dx / 2;
     const midpointy = fromy + dy / 2;
 
-    //Remember: y-axis is flipped because canvas coord-space is -y => +y
-    //Therefore, dy needs to be flipped
+    // Remember: y-axis is flipped because canvas coord-space is -y => +y
+    // Therefore, dy needs to be flipped
     const angleOffset = Math.atan2(-dy, dx);
     dx = x - midpointx;
     dy = y - midpointy;
@@ -61,17 +84,19 @@ class QuadraticEdge extends GraphEdge
     const PI = Math.PI;
     const PI2 = PI * 2;
     const HALFPI = PI / 2;
-    //0 rad = to the right
-    //Also: angleOffset is the offset from midpoint angle, the orthogonal base vector
-    //This is because the from and to could be flipped, and
-    //therefore give a negative, or at least a reversed angle.
+    // 0 rad = to the right
+    // Also: angleOffset is the offset from midpoint angle, the orthogonal base vector
+    // This is because the from and to could be flipped, and
+    // therefore give a negative, or at least a reversed angle.
     let radians = Math.atan2(dy, dx) + angleOffset;
     let length = Math.sqrt(dx * dx + dy * dy);
     if (length < 0) length = 0;
 
-    const outrad = radians - (-HALFPI);//-PI / 2 is outward
-    const inrad = radians - (HALFPI);//PI / 2 is inward
-    //TODO: Should be dependent on length
+    // -PI / 2 is outward
+    const outrad = radians - (-HALFPI);
+    // PI / 2 is inward
+    const inrad = radians - (HALFPI);
+    // TODO: Should be dependent on length, instead of a constant.
     const maxdr = PI / 20;
 
     if (Math.abs(length) < 8)
@@ -81,16 +106,24 @@ class QuadraticEdge extends GraphEdge
     }
     else if (outrad < maxdr && outrad > -maxdr)
     {
-      radians = -HALFPI;//-PI / 2 is outward
+      // -PI / 2 is outward
+      radians = -HALFPI;
     }
     else if (-inrad < maxdr && -inrad > -maxdr)
     {
-      radians = HALFPI;//PI / 2 is inward
+      // PI / 2 is inward
+      radians = HALFPI;
     }
 
     this._quad.radians = radians;
     this._quad.length = length;
+    return this;
   }
+
+  getQuadraticLength() { return this._quad.length; }
+  getQuadraticRadians() { return this._quad.radians; }
+  getQuadratic() { return this._quad; }
+  isQuadratic() { return !this.isPlaceholder() && this._quad.length !== 0; }
 
   getQuadraticAsCoords()
   {
@@ -117,57 +150,7 @@ class QuadraticEdge extends GraphEdge
     return dst;
   }
 
-  getSelfLoopHeight()
-  {
-    return this._from.getNodeSize();
-  }
-
-  formatAsSelfLoop()
-  {
-    this.setQuadratic(-Math.PI / 2, this._from.getNodeSize() + this.getSelfLoopHeight());
-  }
-
-  formatAsPlaceholder(prevDest)
-  {
-    //Quad is re-used to determine edge angle for placeholder
-    //This can be used specifically for quad since regular quad is
-    //dependent on this._to != null, which placeholder assumes this._to == null.
-    //Also, quad.length is ignored, because the length should always be
-    //getPlaceholderLength(). This is resolved by getStartPoint(), etc.
-    if (prevDest)
-    {
-      const dx = this._from.x - prevDest.x;
-      const dy = this._from.y - prevDest.y;
-      const angle = -Math.atan2(dx, dy) - (Math.PI / 2);
-      this._quad.radians = angle;
-    }
-    else
-    {
-      this._quad.radians = 0;
-    }
-  }
-
-  //Override
-  changeDestinationNode(node)
-  {
-    const prevDest = this._to;
-
-    //Just to optimize this a little :)
-    if (prevDest === node) return;
-
-    super.changeDestinationNode(node);
-
-    if (this.isPlaceholder())
-    {
-      this.formatAsPlaceholder(prevDest);
-    }
-    else if (this.isSelfLoop())
-    {
-      this.formatAsSelfLoop();
-    }
-  }
-
-  //Override
+  /** @override */
   getEdgeDirection()
   {
     let result = 0;
@@ -184,7 +167,7 @@ class QuadraticEdge extends GraphEdge
     return result;
   }
 
-  //Override
+  /** @override */
   getStartPoint(dst={x: 0, y: 0})
   {
     const from = this._from;
@@ -223,7 +206,37 @@ class QuadraticEdge extends GraphEdge
     }
   }
 
-  //Override
+  /** @override */
+  getCenterPoint(dst={x: 0, y: 0})
+  {
+    const from = this._from;
+    const to = this._to;
+
+    if (!from) throw new Error("Source of edge cannot be null.");
+    if (!to)
+    {
+      //Make sure to use quad for placeholder direction (not magnitude)
+      const px = Math.cos(this._quad.radians);
+      const py = Math.sin(this._quad.radians);
+      const placeholderLength = from.getNodeSize() + this.getPlaceholderLength() / 2;
+      dst.x = from.x + px * placeholderLength;
+      dst.y = from.y + py * placeholderLength;
+      return dst;
+    }
+
+    getMidPoint(from.x, from.y, to.x, to.y, dst);
+
+    if (this.isQuadratic())
+    {
+      const qcoords = this.getQuadraticAsCoords();
+      dst.x += qcoords.x;
+      dst.y += qcoords.y;
+    }
+
+    return dst;
+  }
+
+  /** @override */
   getEndPoint(dst={x: 0, y: 0})
   {
     const from = this._from;
@@ -268,37 +281,7 @@ class QuadraticEdge extends GraphEdge
     }
   }
 
-  //Override
-  getCenterPoint(dst={x: 0, y: 0})
-  {
-    const from = this._from;
-    const to = this._to;
-
-    if (!from) throw new Error("Source of edge cannot be null.");
-    if (!to)
-    {
-      //Make sure to use quad for placeholder direction (not magnitude)
-      const px = Math.cos(this._quad.radians);
-      const py = Math.sin(this._quad.radians);
-      const placeholderLength = from.getNodeSize() + this.getPlaceholderLength() / 2;
-      dst.x = from.x + px * placeholderLength;
-      dst.y = from.y + py * placeholderLength;
-      return dst;
-    }
-
-    getMidPoint(from.x, from.y, to.x, to.y, dst);
-
-    if (this.isQuadratic())
-    {
-      const qcoords = this.getQuadraticAsCoords();
-      dst.x += qcoords.x;
-      dst.y += qcoords.y;
-    }
-
-    return dst;
-  }
-
-  //Override
+  /** @override */
   getHashString(usePosition=true)
   {
     if (usePosition)
@@ -310,23 +293,59 @@ class QuadraticEdge extends GraphEdge
       return super.getHashString(usePosition);
     }
   }
-}
 
-function getDirectionalVector(x1, y1, x2, y2, dist, angleOffset=0, dst={x: 0, y: 0})
-{
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const angle = Math.atan2(dy, dx) + angleOffset;
-  dst.x = Math.cos(angle) * dist;
-  dst.y = Math.sin(angle) * dist;
-  return dst;
-}
+  // DEPRECATED STUFF BELOW!!!
 
-function getMidPoint(x1, y1, x2, y2, dst={x: 0, y: 0})
-{
-  dst.x = x1 + (x2 - x1) / 2;
-  dst.y = y1 + (y2 - y1) / 2;
-  return dst;
+  getSelfLoopHeight()
+  {
+    return this._from.getNodeSize();
+  }
+
+  formatAsSelfLoop()
+  {
+    this.setQuadraticRadians(-Math.PI / 2);
+    this.setQuadraticLength(this._from.getNodeSize() + this.getSelfLoopHeight());
+  }
+
+  formatAsPlaceholder(prevDest)
+  {
+    //Quad is re-used to determine edge angle for placeholder
+    //This can be used specifically for quad since regular quad is
+    //dependent on this._to != null, which placeholder assumes this._to == null.
+    //Also, quad.length is ignored, because the length should always be
+    //getPlaceholderLength(). This is resolved by getStartPoint(), etc.
+    if (prevDest)
+    {
+      const dx = this._from.x - prevDest.x;
+      const dy = this._from.y - prevDest.y;
+      const angle = -Math.atan2(dx, dy) - (Math.PI / 2);
+      this._quad.radians = angle;
+    }
+    else
+    {
+      this._quad.radians = 0;
+    }
+  }
+
+  //Override
+  changeDestinationNode(node)
+  {
+    const prevDest = this._to;
+
+    //Just to optimize this a little :)
+    if (prevDest === node) return;
+
+    super.changeDestinationNode(node);
+
+    if (this.isPlaceholder())
+    {
+      this.formatAsPlaceholder(prevDest);
+    }
+    else if (this.isSelfLoop())
+    {
+      this.formatAsSelfLoop();
+    }
+  }
 }
 
 export default QuadraticEdge;

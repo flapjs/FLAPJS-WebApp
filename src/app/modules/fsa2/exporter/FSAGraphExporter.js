@@ -17,7 +17,7 @@ class FSAGraphExporter extends AbstractGraphExporter
    * @param  {Object} machineData             the machine Data to be parsed
    * @param  {FSAModule} module                       the module data to be modified
    */
-  setMachine(graphController, machineController, machineData, module)
+  setMachine(graphController, machineController, data, module)
   {
     const machineData = data.machineData;
     const machineName = machineData.name;

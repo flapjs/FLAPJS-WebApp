@@ -128,9 +128,9 @@ class MachineController extends AbstractMachineController
       const node = nextNodes.pop();
       for(const edge of edges)
       {
-        if (edge.getSourceNode() === node)
+        if (edge.getEdgeFrom() === node)
         {
-          const i = nodes.indexOf(edge.getDestinationNode());
+          const i = nodes.indexOf(edge.getEdgeTo());
           if (i >= 0)
           {
             const nextNode = nodes.splice(i, 1)[0];

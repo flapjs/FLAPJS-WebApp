@@ -118,9 +118,13 @@ class InputAdapter
     //Let others handle this event...
     for(const handler of this._handlers)
     {
-      if (handler[eventName](...eventArgs))
+      const handlerEventCallback = handler[eventName];
+      if (typeof handlerEventCallback === 'function')
       {
-        return handler;
+        if (handlerEventCallback.apply(handler, eventArgs))
+        {
+          return handler;
+        }
       }
     }
 

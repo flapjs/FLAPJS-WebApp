@@ -1,4 +1,4 @@
-import NodalGraph from '../NodalGraph.js';
+import NodeGraph from '../NodeGraph.js';
 
 import GraphNode from '../GraphNode.js';
 import GraphEdge from '../GraphEdge.js';
@@ -15,7 +15,7 @@ export const JSON = {
     const edgeCount = Math.min(edgeDatas.length || 0, data['edgeCount'] || 0);
     const hasQuad = data['quad'] || false;
 
-    if (!dst) dst = new NodalGraph(GraphNode, hasQuad ? QuadraticEdge : GraphEdge);
+    if (!dst) dst = new NodeGraph(GraphNode, hasQuad ? QuadraticEdge : GraphEdge);
     else dst.clear();
 
     const nodeIndices = new Map();
@@ -46,7 +46,8 @@ export const JSON = {
       if (edge instanceof QuadraticEdge)
       {
         const quadData = edgeData['quad'] || {};
-        edge.setQuadratic(quadData['radians'] || 0, quadData['length'] || 0);
+        edge.setQuadraticRadians(quadData['radians'] || 0);
+        edge.setQuadraticLength(quadData['length'] || 0);
       }
     }
 
@@ -89,8 +90,8 @@ export const JSON = {
         const elementID = edge.getGraphElementID();
 
         const quad = edge.getQuadratic() || {};
-        const edgeSource = edge.getSourceNode();
-        const edgeDestination = edge.getDestinationNode();
+        const edgeSource = edge.getEdgeFrom();
+        const edgeDestination = edge.getEdgeTo();
         const sourceIndex = nodeIndices.has(edgeSource) ? nodeIndices.get(edgeSource) : -1;
         const destinationIndex = nodeIndices.has(edgeDestination) ? nodeIndices.get(edgeDestination) : -1;
         edgeDatas[i] = {

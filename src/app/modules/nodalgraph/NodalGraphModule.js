@@ -6,7 +6,7 @@ import NodalGraphInputManager from 'modules/nodalgraph/manager/NodalGraphInputMa
 import NodalGraphRenderer from 'graph/renderer/NodalGraphRenderer.js';
 import GraphInputRenderer from 'modules/nodalgraph/controller/renderer/GraphInputRenderer.js';
 
-import NodalGraph from 'graph/NodalGraph.js';
+import NodeGraph from 'graph/NodeGraph.js';
 import GraphNode from 'graph/GraphNode.js';
 import QuadraticEdge from 'graph/QuadraticEdge.js';
 import EmptyGraphLabeler from './EmptyGraphLabeler.js';
@@ -30,9 +30,9 @@ import GraphEndpointPickHandler from 'modules/nodalgraph/controller/pickhandler/
 
 import * as UserUtil from 'experimental/UserUtil.js';
 
-const MODULE_NAME = "nodalgraph";
+const MODULE_NAME = "nodegraph";
 const MODULE_VERSION = "0.0.1";
-const MODULE_LOCALIZED_NAME = "NodalGraph";
+const MODULE_LOCALIZED_NAME = "NodeGraph";
 
 class NodalGraphModule
 {
@@ -41,7 +41,7 @@ class NodalGraphModule
     this._app = app;
 
     this._inputManager = new NodalGraphInputManager(this,
-      new NodalGraph(GraphNode, QuadraticEdge),
+      new NodeGraph(GraphNode, QuadraticEdge),
       new EmptyGraphLabeler(),
       NodalGraphParser,
       null);

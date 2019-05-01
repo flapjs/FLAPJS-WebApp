@@ -26,7 +26,7 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
     const targetQuad = target.getQuadratic();
     graphController.prevQuad.radians = targetQuad.radians;
     graphController.prevQuad.length = targetQuad.length;
-    graphController.prevEdgeTo = target.getDestinationNode();
+    graphController.prevEdgeTo = target.getEdgeTo();
 
     inputController.isNewEdge = false;
 
@@ -55,7 +55,7 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
       return true;
     }
     //If hovering over a node...
-    else if (target.getDestinationNode() instanceof GraphNode)
+    else if (target.getEdgeTo() instanceof GraphNode)
     {
       const result = graph.formatEdge(target);
 
@@ -93,7 +93,7 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
       else if (graphController.prevEdgeTo !== null)
       {
         //Emit event
-        graphController.onGraphIntentChangeDestination(target, target.getDestinationNode(), graphController.prevEdgeTo, graphController.prevQuad);
+        graphController.onGraphIntentChangeDestination(target, target.getEdgeTo(), graphController.prevEdgeTo, graphController.prevQuad);
       }
 
       return true;
