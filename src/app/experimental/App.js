@@ -33,6 +33,7 @@ import EditPencilIcon from 'components/iconset/EditPencilIcon.js';
 import AppSaver from 'experimental/AppSaver.js';
 import ColorSaver from 'experimental/ColorSaver.js';
 import * as ColorTransform from 'util/ColorTransform.js';
+import LanguageSaver from 'experimental/LanguageSaver.js';
 
 import AutoSave from 'util/storage/AutoSave.js';
 import LocalStorage from 'util/storage/LocalStorage.js';
@@ -53,6 +54,7 @@ import TooltipManager from 'session/manager/TooltipManager.js';
 import NotificationManager, { ERROR_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
 import ThemeManager from '../util/theme/ThemeManager';
 import BroadcastManager from 'session/manager/broadcast/BroadcastManager.js';
+import Broadcast from 'util/broadcast/Broadcast.js';
 
 const BUGREPORT_URL = 'https://goo.gl/forms/XSil43Xl5xLHsa0E2';
 const HELP_URL = 'https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md';
@@ -66,7 +68,7 @@ const MENU_INDEX_MODULE = 3;
 
 const ERROR_UPLOAD_NOTIFICATION_TAG = 'error_upload';
 
-const BROADCAST_CHANNEL_ID = "flapjs";
+const BROADCAST_CHANNEL_ID = 'flapjs';
 
 class App extends React.Component
 {
@@ -84,6 +86,7 @@ class App extends React.Component
 
         this._themeManager = new ThemeManager();
 
+        this._langSaver = new LanguageSaver();
         this._colorSaver = new ColorSaver(this._themeManager);
         this._saver = new AppSaver(this);
 
@@ -184,10 +187,9 @@ class App extends React.Component
 
         AutoSave.registerHandler(this._saver);
         AutoSave.registerHandler(this._colorSaver);
+        AutoSave.registerHandler(this._langSaver);
 
         this._init = true;
-
-        this._broadcast = Broadcast.initBroadcast();
     }
 
     //DuckType
@@ -197,6 +199,7 @@ class App extends React.Component
 
         AutoSave.unregisterHandler(this._saver);
         AutoSave.unregisterHandler(this._colorSaver);
+        AutoSave.unregisterHandler(this._langSaver);
 
         this._themeManager.clear();
     }
