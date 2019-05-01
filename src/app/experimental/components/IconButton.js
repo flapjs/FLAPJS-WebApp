@@ -17,8 +17,8 @@ class IconButton extends React.Component
         return (
             <button id={this.props.id}
                 className={Style.icon_button +
-          (showButtonLabel ? ' hint ' : '') +
-          ' ' + this.props.className}
+                    (showButtonLabel ? ' hint ' : '') +
+                    ' ' + this.props.className}
                 style={this.props.style}
                 title={title}
                 disabled={this.props.disabled}

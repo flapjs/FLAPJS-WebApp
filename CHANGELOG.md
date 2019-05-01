@@ -6,11 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Regular expression scope highlighting
-- Cross-window communication through BroadcastChannel
-- Color theme preset loading
-- MIT and Duke theme presets
-- Linting tests
+- Language is saved across sessions.
+- Regular expression scope highlighting.
+- Cross-window communication through BroadcastChannel.
+- Color theme preset loading.
+- MIT and Duke theme presets.
+- Linting tests.
 
 ### Changed
 - Have actual changelog that is not code :P
