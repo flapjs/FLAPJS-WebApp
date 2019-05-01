@@ -1,8 +1,8 @@
 import NodeGraph from '../NodeGraph.js';
 
-import GraphNode from '../GraphNode.js';
-import GraphEdge from '../GraphEdge.js';
-import QuadraticEdge from '../QuadraticEdge.js';
+import GraphNode from '../elements/GraphNode.js';
+import GraphEdge from '../elements/GraphEdge.js';
+import QuadraticEdge from '../elements/QuadraticEdge.js';
 
 const GRAPH_PARSER_VERSION = "1.0.0";
 

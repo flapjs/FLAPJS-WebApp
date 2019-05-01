@@ -7,8 +7,8 @@ import NodalGraphRenderer from 'graph/renderer/NodalGraphRenderer.js';
 import GraphInputRenderer from 'modules/nodalgraph/controller/renderer/GraphInputRenderer.js';
 
 import NodeGraph from 'graph/NodeGraph.js';
-import GraphNode from 'graph/GraphNode.js';
-import QuadraticEdge from 'graph/QuadraticEdge.js';
+import GraphNode from 'graph/elements/GraphNode.js';
+import QuadraticEdge from 'graph/elements/QuadraticEdge.js';
 import EmptyGraphLabeler from './EmptyGraphLabeler.js';
 import * as NodalGraphParser from 'graph/parser/NodalGraphParser.js';
 

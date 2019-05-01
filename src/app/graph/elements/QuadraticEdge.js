@@ -1,5 +1,5 @@
 import GraphEdge from './GraphEdge.js';
-import {getDirectionalVector, getMidPoint} from 'util/MathHelper.js';
+import { getDirectionalVector, getMidPoint } from 'util/MathHelper.js';
 
 /**
  * A class that represents the curved edge elements of a graph.
@@ -16,7 +16,7 @@ class QuadraticEdge extends GraphEdge
    * @param {GraphNode} from      The from node of the edge.
    * @param {GraphNode} [to=null] The to node of the edge.
    */
-  constructor(id, from, to=null)
+  constructor(id, from, to = null)
   {
     super(id, from, null);
 
@@ -25,7 +25,7 @@ class QuadraticEdge extends GraphEdge
     this._quad = {
       radians: 0,
       length: 0,
-      coords: {x: 0, y: 0}
+      coords: { x: 0, y: 0 }
     };
 
     // Make sure to format it correctly when creating...
@@ -129,7 +129,7 @@ class QuadraticEdge extends GraphEdge
   {
     const from = this._from;
     const to = this._to;
-    const dst = this._quad._coords;
+    const dst = this._quad.coords;
     if (from == null || to == null)
     {
       dst.x = 0;
@@ -168,7 +168,7 @@ class QuadraticEdge extends GraphEdge
   }
 
   /** @override */
-  getStartPoint(dst={x: 0, y: 0})
+  getStartPoint(dst = { x: 0, y: 0 })
   {
     const from = this._from;
     const to = this._to;
@@ -207,7 +207,7 @@ class QuadraticEdge extends GraphEdge
   }
 
   /** @override */
-  getCenterPoint(dst={x: 0, y: 0})
+  getCenterPoint(dst = { x: 0, y: 0 })
   {
     const from = this._from;
     const to = this._to;
@@ -237,7 +237,7 @@ class QuadraticEdge extends GraphEdge
   }
 
   /** @override */
-  getEndPoint(dst={x: 0, y: 0})
+  getEndPoint(dst = { x: 0, y: 0 })
   {
     const from = this._from;
     const to = this._to;
@@ -282,7 +282,7 @@ class QuadraticEdge extends GraphEdge
   }
 
   /** @override */
-  getHashString(usePosition=true)
+  getHashString(usePosition = true)
   {
     if (usePosition)
     {

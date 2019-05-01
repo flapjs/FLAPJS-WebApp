@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './LabelEditorView.css';
 
-import GraphElement from 'graph/GraphElement.js';
+import GraphElement from 'graph/elements/GraphElement.js';
 
 import PatternInput from 'deprecated/system/patterninput/PatternInput.js';
 
