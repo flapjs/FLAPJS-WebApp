@@ -9,39 +9,39 @@ import RunningManIcon from 'deprecated/icons/RunningManIcon.js';
 
 class StatusButton extends React.Component
 {
-    constructor(props)
-    {
-        super(props);
-    }
+  constructor(props)
+  {
+    super(props);
+  }
 
-    render()
+  render()
+  {
+    const active = this.props.active;
+    if (this.props.mode === true)
     {
-        const active = this.props.active;
-        if (this.props.mode === true)
-        {
-            //Success icon
-            return <IconButton className={'status-icon success' + (active ? ' active' : '')}
-                onClick={this.props.onClick}>
-                <SuccessIcon/>
-            </IconButton>;
-        }
-        else if (this.props.mode === false)
-        {
-            //Failure icon
-            return <IconButton className={'status-icon failure' + (active ? ' active' : '')}
-                onClick={this.props.onClick}>
-                <FailureIcon/>
-            </IconButton>;
-        }
-        else
-        {
-            //Pending icon
-            return <IconButton className={'status-icon' + (active ? ' active' : '')}
-                onClick={this.props.onClick}>
-                <RunningManIcon/>
-            </IconButton>;
-        }
+      //Success icon
+      return <IconButton className={"status-icon success" + (active ? " active" : "")}
+        onClick={this.props.onClick}>
+        <SuccessIcon/>
+      </IconButton>;
     }
+    else if (this.props.mode === false)
+    {
+      //Failure icon
+      return <IconButton className={"status-icon failure" + (active ? " active" : "")}
+        onClick={this.props.onClick}>
+        <FailureIcon/>
+      </IconButton>;
+    }
+    else
+    {
+      //Pending icon
+      return <IconButton className={"status-icon" + (active ? " active" : "")}
+        onClick={this.props.onClick}>
+        <RunningManIcon/>
+      </IconButton>;
+    }
+  }
 }
 
 export default StatusButton;

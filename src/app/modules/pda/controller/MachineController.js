@@ -6,295 +6,295 @@ import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 
 class MachineController extends AbstractMachineController
 {
-    constructor(module)
-    {
-        super(module, new PDABuilder());
+  constructor(module)
+  {
+    super(module, new PDABuilder());
 
-        this.graphController = null;
+    this.graphController = null;
+  }
+
+  //Override
+  initialize(module)
+  {
+    super.initialize(module);
+
+    this.graphController = module.getGraphController();
+  }
+
+  //Override
+  destroy(module)
+  {
+    super.destroy(module);
+  }
+
+  //Override
+  update(module)
+  {
+    super.update(module);
+  }
+
+  getFirstGraphNodeByLabel(graph, label)
+  {
+    for(const node of graph.getNodes())
+    {
+      if (node.getNodeLabel() == label)
+      {
+        return node;
+      }
     }
 
-    /** @override */
-    initialize(module)
-    {
-        super.initialize(module);
+    return null;
+  }
 
-        this.graphController = module.getGraphController();
-    }
-
-    /** @override */
-    destroy(module)
-    {
-        super.destroy(module);
-    }
-
-    /** @override */
-    update(module)
-    {
-        super.update(module);
-    }
-
-    getFirstGraphNodeByLabel(graph, label)
-    {
-        for(const node of graph.getNodes())
-        {
-            if (node.getNodeLabel() == label)
-            {
-                return node;
-            }
-        }
-
-        return null;
-    }
-
-    setGraphToMachine(graph, machine)
-    {
-        this._machineBuilder.attemptBuildGraph(machine, graph);
+  setGraphToMachine(graph, machine)
+  {
+    this._machineBuilder.attemptBuildGraph(machine, graph);
     
-        //Auto layout graph
-        GraphLayout.applyLayout(graph);
-    }
+    //Auto layout graph
+    GraphLayout.applyLayout(graph);
+  }
 
-    getUnreachableNodes()
+  getUnreachableNodes()
+  {
+    const graphController = this.graphController;
+    const graph = graphController.getGraph();
+    if (graph.getNodeCount() <= 1) return [];
+
+    const edges = graph.getEdges();
+    const nodes = graph.getNodes().slice();
+    const startNode = nodes.shift();
+    let nextNodes = [];
+    nextNodes.push(startNode);
+
+    while(nextNodes.length > 0)
     {
-        const graphController = this.graphController;
-        const graph = graphController.getGraph();
-        if (graph.getNodeCount() <= 1) return [];
-
-        const edges = graph.getEdges();
-        const nodes = graph.getNodes().slice();
-        const startNode = nodes.shift();
-        let nextNodes = [];
-        nextNodes.push(startNode);
-
-        while(nextNodes.length > 0)
+      const node = nextNodes.pop();
+      for(const edge of edges)
+      {
+        if (edge.getSourceNode() === node)
         {
-            const node = nextNodes.pop();
-            for(const edge of edges)
-            {
-                if (edge.getSourceNode() === node)
-                {
-                    const i = nodes.indexOf(edge.getDestinationNode());
-                    if (i >= 0)
-                    {
-                        const nextNode = nodes.splice(i, 1)[0];
-                        nextNodes.push(nextNode);
-                    }
-                }
-            }
+          const i = nodes.indexOf(edge.getDestinationNode());
+          if (i >= 0)
+          {
+            const nextNode = nodes.splice(i, 1)[0];
+            nextNodes.push(nextNode);
+          }
         }
-
-        return nodes;
+      }
     }
 
-    getStates()
-    {
-        return this._machineBuilder.getMachine().getStates();
-    }
+    return nodes;
+  }
 
-    countStates()
-    {
-        return this.getStates().length;
-    }
+  getStates()
+  {
+    return this._machineBuilder.getMachine().getStates();
+  }
 
-    getFinalStates()
-    {
-        return this._machineBuilder.getMachine().getFinalStates();
-    }
+  countStates()
+  {
+    return this.getStates().length;
+  }
 
-    getTransitions()
-    {
-        return this._machineBuilder.getMachine().getTransitions();
-    }
+  getFinalStates()
+  {
+    return this._machineBuilder.getMachine().getFinalStates();
+  }
 
-    getAlphabet()
-    {
-        const machine = this._machineBuilder.getMachine();
-        return Array.from(machine.getAlphabet());
-    }
+  getTransitions()
+  {
+    return this._machineBuilder.getMachine().getTransitions();
+  }
 
-    isUsedSymbol(symbol)
-    {
-        return !this.isCustomSymbol(symbol);
-    }
+  getAlphabet()
+  {
+    const machine = this._machineBuilder.getMachine();
+    return Array.from(machine.getAlphabet());
+  }
 
-    createSymbol(symbol)
-    {
-        this.addCustomSymbol(symbol);
-    }
+  isUsedSymbol(symbol)
+  {
+    return !this.isCustomSymbol(symbol);
+  }
 
-    deleteSymbol(symbol)
-    {
-        let edge = null;
-        let index = null;
-        let result = null;
-        const targets = [];
+  createSymbol(symbol)
+  {
+    this.addCustomSymbol(symbol);
+  }
 
-        const graph = this.graphController.getGraph();
-        for(let i = graph.getEdges().length - 1; i >= 0; --i)
+  deleteSymbol(symbol)
+  {
+    let edge = null;
+    let index = null;
+    let result = null;
+    const targets = [];
+
+    const graph = this.graphController.getGraph();
+    for(let i = graph.getEdges().length - 1; i >= 0; --i)
+    {
+      edge = graph.getEdges()[i];
+      index = edge.getEdgeLabel().indexOf(symbol);
+      if (index >= 0)
+      {
+        result = edge.getEdgeLabel().substring(0, index) + edge.getEdgeLabel().substring(index + 1);
+        if (result.length > 0)
         {
-            edge = graph.getEdges()[i];
-            index = edge.getEdgeLabel().indexOf(symbol);
-            if (index >= 0)
-            {
-                result = edge.getEdgeLabel().substring(0, index) + edge.getEdgeLabel().substring(index + 1);
-                if (result.length > 0)
-                {
-                    edge.setEdgeLabel(result);
-                }
-                else
-                {
-                    edge.setEdgeLabel('');
-                    graph.deleteEdge(edge);
-                }
-                targets.push(edge);
-            }
+          edge.setEdgeLabel(result);
         }
-
-        if (targets.length <= 0)
+        else
         {
-            this.getMachineBuilder().removeCustomSymbol(symbol);
+          edge.setEdgeLabel("");
+          graph.deleteEdge(edge);
         }
+        targets.push(edge);
+      }
     }
 
-    renameSymbol(prevSymbol, nextSymbol)
+    if (targets.length <= 0)
     {
-        let edge = null;
-        let result = null;
-        const targets = [];
+      this.getMachineBuilder().removeCustomSymbol(symbol);
+    }
+  }
 
-        const graph = this.graphController.getGraph();
-        const length = graph.getEdges().length;
-        for(let i = 0; i < length; ++i)
+  renameSymbol(prevSymbol, nextSymbol)
+  {
+    let edge = null;
+    let result = null;
+    const targets = [];
+
+    const graph = this.graphController.getGraph();
+    const length = graph.getEdges().length;
+    for(let i = 0; i < length; ++i)
+    {
+      edge = graph.getEdges()[i];
+      let result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
+      if (result != edge.getEdgeLabel())
+      {
+        targets.push(edge);
+      }
+      edge.setEdgeLabel(result);
+    }
+
+    if (targets.length <= 0)
+    {
+      this.getMachineBuilder().renameCustomSymbol(prevSymbol, nextSymbol);
+    }
+  }
+
+  getCustomSymbols()
+  {
+    return Array.from(this._machineBuilder.getMachine().getCustomSymbols());
+  }
+
+  isCustomSymbol(symbol)
+  {
+    return this._machineBuilder.isCustomSymbol(symbol);
+  }
+
+  addCustomSymbol(symbol)
+  {
+    this._machineBuilder.getMachine().setCustomSymbol(symbol);
+  }
+
+  clearCustomSymbols()
+  {
+    this._machineBuilder.getMachine().clearCustomSymbols();
+  }
+
+  getStackAlphabet()
+  {
+    const machine = this._machineBuilder.getMachine();
+    return Array.from(machine.getStackAlphabet());
+  }
+
+  isUsedStackSymbol(symbol)
+  {
+    return !this.isCustomStackSymbol(symbol);
+  }
+
+  createStackSymbol(symbol)
+  {
+    this.addCustomStackSymbol(symbol);
+  }
+
+  deleteStackSymbol(symbol)
+  {
+    let edge = null;
+    let index = null;
+    let result = null;
+    const targets = [];
+
+    const graph = this.graphController.getGraph();
+    for(let i = graph.getEdges().length - 1; i >= 0; --i)
+    {
+      edge = graph.getEdges()[i];
+      index = edge.getEdgeLabel().indexOf(symbol);
+      if (index >= 0)
+      {
+        result = edge.getEdgeLabel().substring(0, index) + edge.getEdgeLabel().substring(index + 1);
+        if (result.length > 0)
         {
-            edge = graph.getEdges()[i];
-            let result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
-            if (result != edge.getEdgeLabel())
-            {
-                targets.push(edge);
-            }
-            edge.setEdgeLabel(result);
+          edge.setEdgeLabel(result);
         }
-
-        if (targets.length <= 0)
+        else
         {
-            this.getMachineBuilder().renameCustomSymbol(prevSymbol, nextSymbol);
+          edge.setEdgeLabel("");
+          graph.deleteEdge(edge);
         }
+        targets.push(edge);
+      }
     }
 
-    getCustomSymbols()
+    if (targets.length <= 0)
     {
-        return Array.from(this._machineBuilder.getMachine().getCustomSymbols());
+      this.getMachineBuilder().removeCustomStackSymbol(symbol);
     }
+  }
 
-    isCustomSymbol(symbol)
+  renameStackSymbol(prevSymbol, nextSymbol)
+  {
+    let edge = null;
+    let result = null;
+    const targets = [];
+
+    const graph = this.graphController.getGraph();
+    const length = graph.getEdges().length;
+    for(let i = 0; i < length; ++i)
     {
-        return this._machineBuilder.isCustomSymbol(symbol);
+      edge = graph.getEdges()[i];
+      let result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
+      if (result != edge.getEdgeLabel())
+      {
+        targets.push(edge);
+      }
+      edge.setEdgeLabel(result);
     }
 
-    addCustomSymbol(symbol)
+    if (targets.length <= 0)
     {
-        this._machineBuilder.getMachine().setCustomSymbol(symbol);
+      this.getMachineBuilder().renameCustomStackSymbol(prevSymbol, nextSymbol);
     }
+  }
 
-    clearCustomSymbols()
-    {
-        this._machineBuilder.getMachine().clearCustomSymbols();
-    }
+  getCustomStackSymbols()
+  {
+    return Array.from(this._machineBuilder.getMachine().getCustomStackSymbols());
+  }
 
-    getStackAlphabet()
-    {
-        const machine = this._machineBuilder.getMachine();
-        return Array.from(machine.getStackAlphabet());
-    }
+  isCustomStackSymbol(symbol)
+  {
+    return this._machineBuilder.isCustomStackSymbol(symbol);
+  }
 
-    isUsedStackSymbol(symbol)
-    {
-        return !this.isCustomStackSymbol(symbol);
-    }
+  addCustomStackSymbol(symbol)
+  {
+    this._machineBuilder.getMachine().setCustomStackSymbol(symbol);
+  }
 
-    createStackSymbol(symbol)
-    {
-        this.addCustomStackSymbol(symbol);
-    }
-
-    deleteStackSymbol(symbol)
-    {
-        let edge = null;
-        let index = null;
-        let result = null;
-        const targets = [];
-
-        const graph = this.graphController.getGraph();
-        for(let i = graph.getEdges().length - 1; i >= 0; --i)
-        {
-            edge = graph.getEdges()[i];
-            index = edge.getEdgeLabel().indexOf(symbol);
-            if (index >= 0)
-            {
-                result = edge.getEdgeLabel().substring(0, index) + edge.getEdgeLabel().substring(index + 1);
-                if (result.length > 0)
-                {
-                    edge.setEdgeLabel(result);
-                }
-                else
-                {
-                    edge.setEdgeLabel('');
-                    graph.deleteEdge(edge);
-                }
-                targets.push(edge);
-            }
-        }
-
-        if (targets.length <= 0)
-        {
-            this.getMachineBuilder().removeCustomStackSymbol(symbol);
-        }
-    }
-
-    renameStackSymbol(prevSymbol, nextSymbol)
-    {
-        let edge = null;
-        let result = null;
-        const targets = [];
-
-        const graph = this.graphController.getGraph();
-        const length = graph.getEdges().length;
-        for(let i = 0; i < length; ++i)
-        {
-            edge = graph.getEdges()[i];
-            let result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
-            if (result != edge.getEdgeLabel())
-            {
-                targets.push(edge);
-            }
-            edge.setEdgeLabel(result);
-        }
-
-        if (targets.length <= 0)
-        {
-            this.getMachineBuilder().renameCustomStackSymbol(prevSymbol, nextSymbol);
-        }
-    }
-
-    getCustomStackSymbols()
-    {
-        return Array.from(this._machineBuilder.getMachine().getCustomStackSymbols());
-    }
-
-    isCustomStackSymbol(symbol)
-    {
-        return this._machineBuilder.isCustomStackSymbol(symbol);
-    }
-
-    addCustomStackSymbol(symbol)
-    {
-        this._machineBuilder.getMachine().setCustomStackSymbol(symbol);
-    }
-
-    clearCustomStackSymbols()
-    {
-        this._machineBuilder.getMachine().clearCustomStackSymbols();
-    }
+  clearCustomStackSymbols()
+  {
+    this._machineBuilder.getMachine().clearCustomStackSymbols();
+  }
 }
 
 export default MachineController;

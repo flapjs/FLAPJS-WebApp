@@ -3,51 +3,51 @@ import LocalSave from 'deprecated/system/localsave/LocalSave.js';
 
 class AppSaver extends AbstractLocalSaver
 {
-    constructor(app)
-    {
-        super();
+  constructor(app)
+  {
+    super();
 
-        this._app = app;
+    this._app = app;
+  }
+
+  //Override
+  onLoadSave()
+  {
+    const module = this._app.getCurrentModule();
+    const moduleName = module.getModuleName();
+
+    const data = LocalSave.loadFromStorage("graph-" + moduleName);
+    if (data)
+    {
+      const exporter = module.getGraphController().getDefaultGraphExporter();
+      exporter.importFromData(data, module);
     }
 
-    /** @override */
-    onLoadSave()
-    {
-        const module = this._app.getCurrentModule();
-        const moduleName = module.getModuleName();
+    //HACK: not all modules have this
+    if (module.captureGraphEvent) module.captureGraphEvent();
+  }
 
-        const data = LocalSave.loadFromStorage('graph-' + moduleName);
-        if (data)
-        {
-            const exporter = module.getGraphController().getDefaultGraphExporter();
-            exporter.importFromData(data, module);
-        }
-
-        //HACK: not all modules have this
-        if (module.captureGraphEvent) module.captureGraphEvent();
-    }
-
-    /** @override */
-    onUnloadSave()
-    {
+  //Override
+  onUnloadSave()
+  {
     //Don't do anything...
-    }
+  }
 
-    /** @override */
-    onAutoSave()
-    {
-        const module = this._app.getCurrentModule();
-        const moduleName = module.getModuleName();
+  //Override
+  onAutoSave()
+  {
+    const module = this._app.getCurrentModule();
+    const moduleName = module.getModuleName();
 
-        const exporter = module.getGraphController().getDefaultGraphExporter();
-        const data = exporter.exportToData(module);
-        LocalSave.saveToStorage('graph-' + moduleName, data);
-    }
+    const exporter = module.getGraphController().getDefaultGraphExporter();
+    const data = exporter.exportToData(module);
+    LocalSave.saveToStorage("graph-" + moduleName, data);
+  }
 
-    getApp()
-    {
-        return this._app;
-    }
+  getApp()
+  {
+    return this._app;
+  }
 }
 
 export default AppSaver;

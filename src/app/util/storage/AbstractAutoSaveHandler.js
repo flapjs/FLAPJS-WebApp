@@ -1,8 +1,8 @@
 class AbstractAutoSaveHandler
 {
-    onAutoSaveLoad(dataStorage) {}
-    onAutoSaveUpdate(dataStorage) {}
-    onAutoSaveUnload(dataStorage) {}
+  onAutoSaveLoad(dataStorage) {}
+  onAutoSaveUpdate(dataStorage) {}
+  onAutoSaveUnload(dataStorage) {}
 }
 
 export default AbstractAutoSaveHandler;

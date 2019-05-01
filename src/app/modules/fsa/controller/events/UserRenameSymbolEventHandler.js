@@ -4,55 +4,55 @@ import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
 
 class UserRenameSymbolEventHandler extends EventHandler
 {
-    constructor(eventLogger, machineController, graphController)
-    {
-        super(eventLogger, machineController, 'userPreRenameSymbol', 'userPostRenameSymbol');
+  constructor(eventLogger, machineController, graphController)
+  {
+    super(eventLogger, machineController, "userPreRenameSymbol", "userPostRenameSymbol");
 
-        this.graphController = graphController;
+    this.graphController = graphController;
+  }
+
+  //Override
+  captureEvent(machineBuilder, symbol, prevSymbol)
+  {
+    const graph = this.graphController.getGraph();
+    return {
+      graphData: FSAGraphParser.JSON.objectify(graph),
+      symbol: symbol,
+      prevSymbol: prevSymbol
+    };
+  }
+
+  //Override
+  capturePostEvent(machineBuilder, symbol, prevSymbol, targets)
+  {
+    const graph = this.graphController.getGraph();
+    const targetIDs = [];
+
+    for(const target of targets)
+    {
+      targetIDs.push(target.getGraphElementID());
     }
 
-    /** @override */
-    captureEvent(machineBuilder, symbol, prevSymbol)
-    {
-        const graph = this.graphController.getGraph();
-        return {
-            graphData: FSAGraphParser.JSON.objectify(graph),
-            symbol: symbol,
-            prevSymbol: prevSymbol
-        };
-    }
+    return {
+      graphData: FSAGraphParser.JSON.objectify(graph),
+      symbol: symbol,
+      prevSymbol: prevSymbol,
+      targets: targetIDs
+    };
+  }
 
-    /** @override */
-    capturePostEvent(machineBuilder, symbol, prevSymbol, targets)
-    {
-        const graph = this.graphController.getGraph();
-        const targetIDs = [];
-
-        for(const target of targets)
-        {
-            targetIDs.push(target.getGraphElementID());
-        }
-
-        return {
-            graphData: FSAGraphParser.JSON.objectify(graph),
-            symbol: symbol,
-            prevSymbol: prevSymbol,
-            targets: targetIDs
-        };
-    }
-
-    /** @override */ - this = event
-    applyUndo(e)
-    {
+  //Override - this = event
+  applyUndo(e)
+  {
     //TODO: restore machine custom alphabet
-        FSAGraphParser.JSON.parse(e.eventData.graphData, this.graphController.getGraph());
-    }
+    FSAGraphParser.JSON.parse(e.eventData.graphData, this.graphController.getGraph());
+  }
 
-    /** @override */ - this = event
-    applyRedo(e)
-    {
+  //Override - this = event
+  applyRedo(e)
+  {
     //TODO: restore machine custom alphabet
-        FSAGraphParser.JSON.parse(e.postData.graphData, this.graphController.getGraph());
-    }
+    FSAGraphParser.JSON.parse(e.postData.graphData, this.graphController.getGraph());
+  }
 }
 export default UserRenameSymbolEventHandler;

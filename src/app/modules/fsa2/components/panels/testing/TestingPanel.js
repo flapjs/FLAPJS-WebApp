@@ -10,92 +10,89 @@ import {MACHINE_ERROR_NOTIFICATION_TAG} from 'modules/fsa2/components/notificati
 
 class TestingPanel extends React.Component
 {
-    constructor(props)
-    {
-        super(props);
+  constructor(props)
+  {
+    super(props);
 
-        this.state = {
-            stepMode: false
-        };
+    this.state = {
+      stepMode: false
+    };
 
-        this.onStepTestChange = this.onStepTestChange.bind(this);
-        this.onAutoErrorCheckChange = this.onAutoErrorCheckChange.bind(this);
-    }
+    this.onStepTestChange = this.onStepTestChange.bind(this);
+    this.onAutoErrorCheckChange = this.onAutoErrorCheckChange.bind(this);
+  }
 
-    /** @override */
-    componentDidMount()
-    {
+  //Override
+  componentDidMount()
+  {
     //TODO: This should be in modules...
-        const session = this.props.session;
-        const app = session.getApp();
-        const currentModule = session.getCurrentModule();
-        const tester = currentModule._tester;
-        tester.on('startTest', (tester) => 
-        {
-            app._viewport.setCurrentView(1);
-            app._drawer.setDrawerSoloClass(TestingPanel);
-            app._drawer.closeDrawer();
-        });
-        tester.on('stopTest', (tester) => 
-        {
-            app._viewport.setCurrentView(0);
-            app._drawer.setDrawerSoloClass(null);
-            app._drawer.openDrawer();
-        });
-    }
+    const session = this.props.session;
+    const app = session.getApp();
+    const currentModule = session.getCurrentModule();
+    const tester = currentModule._tester;
+    tester.on("startTest", (tester) => {
+      app._viewport.setCurrentView(1);
+      app._drawer.setDrawerSoloClass(TestingPanel);
+      app._drawer.closeDrawer();
+    });
+    tester.on("stopTest", (tester) => {
+      app._viewport.setCurrentView(0);
+      app._drawer.setDrawerSoloClass(null);
+      app._drawer.openDrawer();
+    });
+  }
 
-    onStepTestChange(e)
+  onStepTestChange(e)
+  {
+    this.setState((prev, props) => {
+      return {stepMode: !prev.stepMode};
+    });
+  }
+
+  onAutoErrorCheckChange(e)
+  {
+    const currentModule = this.props.session.getCurrentModule();
+    const errorChecker = currentModule.getErrorChecker();
+    const errorCheck = errorChecker.isErrorChecking();
+    errorChecker.setErrorChecking(!errorCheck);
+    if (errorCheck)
     {
-        this.setState((prev, props) => 
-        {
-            return {stepMode: !prev.stepMode};
-        });
+      //Turning it off
+      this.props.session.getApp().getNotificationManager().clearNotifications(MACHINE_ERROR_NOTIFICATION_TAG);
     }
+  }
 
-    onAutoErrorCheckChange(e)
-    {
-        const currentModule = this.props.session.getCurrentModule();
-        const errorChecker = currentModule.getErrorChecker();
-        const errorCheck = errorChecker.isErrorChecking();
-        errorChecker.setErrorChecking(!errorCheck);
-        if (errorCheck)
-        {
-            //Turning it off
-            this.props.session.getApp().getNotificationManager().clearNotifications(MACHINE_ERROR_NOTIFICATION_TAG);
-        }
-    }
+  //Override
+  render()
+  {
+    const session = this.props.session;
+    const app = session.getApp();
+    const currentModule = session.getCurrentModule();
+    const graphController = currentModule.getGraphController();
+    const machineController = currentModule.getMachineController();
+    const tester = currentModule.getStringTester();
+    const errorChecker = currentModule.getErrorChecker();
 
-    /** @override */
-    render()
-    {
-        const session = this.props.session;
-        const app = session.getApp();
-        const currentModule = session.getCurrentModule();
-        const graphController = currentModule.getGraphController();
-        const machineController = currentModule.getMachineController();
-        const tester = currentModule.getStringTester();
-        const errorChecker = currentModule.getErrorChecker();
+    const stepMode = this.state.stepMode;
+    const errorCheck = errorChecker.isErrorChecking();
 
-        const stepMode = this.state.stepMode;
-        const errorCheck = errorChecker.isErrorChecking();
+    return (
+      <PanelContainer id={this.props.id}
+        className={Style.panel_container +
+          " " + this.props.className}
+        style={this.props.style}
+        title={TestingPanel.TITLE}>
 
-        return (
-            <PanelContainer id={this.props.id}
-                className={Style.panel_container +
-          ' ' + this.props.className}
-                style={this.props.style}
-                title={TestingPanel.TITLE}>
+        <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode}/>
+        <PanelSwitch id={"testing-step-test"} checked={stepMode} onChange={this.onStepTestChange} title={"Step testing"}/>
+        <PanelSwitch id={"testing-error-check"} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={"Auto error checking"}/>
 
-                <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode}/>
-                <PanelSwitch id={'testing-step-test'} checked={stepMode} onChange={this.onStepTestChange} title={'Step testing'}/>
-                <PanelSwitch id={'testing-error-check'} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={'Auto error checking'}/>
-
-            </PanelContainer>
-        );
-    }
+      </PanelContainer>
+    );
+  }
 }
 Object.defineProperty(TestingPanel, 'TITLE', {
-    get: function() { return I18N.toString('component.testing.title'); }
+  get: function() { return I18N.toString("component.testing.title"); }
 });
 
 export default TestingPanel;

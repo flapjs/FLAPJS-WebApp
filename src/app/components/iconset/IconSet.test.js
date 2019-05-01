@@ -107,13 +107,12 @@ testIconClass(ZoomOutIcon);
 
 function testIconClass(IconClass)
 {
-    //Test props
-    testComponentProps(IconClass);
+  //Test props
+  testComponentProps(IconClass);
   
-    test('check container component type', () => 
-    {
-        const wrapper = shallow(<IconClass/>);
+  test("check container component type", () => {
+    const wrapper = shallow(<IconClass/>);
 
-        expect(wrapper.type()).toBe('svg');
-    });
+    expect(wrapper.type()).toBe('svg');
+  });
 }

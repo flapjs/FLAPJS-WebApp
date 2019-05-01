@@ -15,128 +15,127 @@ import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
 import FSAGraphOverlayRenderer from './renderer/FSAGraphOverlayRenderer.js';
 import ViewportRenderer from './renderer/ViewportRenderer.js';
 
+import GraphLayout from './graph/GraphLayout.js';
 import LabelEditor from './editor/LabelEditor.js';
 import TestingManager from './testing/TestingManager.js';
 
 import SafeGraphEventHandler from 'deprecated/system/undomanager/SafeGraphEventHandler.js';
 
-const VERSION = '0.0.1';
+const VERSION = "0.0.1";
 const PANELS = [AboutPanel, TestingPanel, OverviewPanel, AnalysisPanel];
 
 class FSAModule extends AbstractModule
 {
-    constructor(app)
+  constructor(app)
+  {
+    super(app);
+
+    this._workspace = null;
+
+    this._undoManager = app.getUndoManager();
+
+    this._inputController = new InputController(this, app.getInputAdapter());
+    this._graphController = new GraphController(this);
+    this._machineController = new MachineController(this);
+
+    //Deprecated (should be anyways)
+    //this._eventManager = new EventManager(app.getUndoManager());
+    //Deprecated
+    this._testingManager = new TestingManager();
+  }
+
+  //Override
+  initialize(app)
+  {
+    const viewport = app.viewport;
+    const workspace = app.workspace;
+
+    this._workspace = workspace;
+
+    super.initialize(app);
+
+    app.getUndoManager()
+      .setEventHandlerFactory((...args) => {
+        return new SafeGraphEventHandler(this._graphController);
+      });
+
+    //this._eventManager.initialize(this);
+
+    this._testingManager.initialize(this, viewport);
+
+    //Notify on create in delete mode
+    const tryCreateWhileTrash = () => {
+      if (this._inputController.isTrashMode())
+      {
+        Notifications.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
+      }
+    };
+    this._graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
+  }
+
+  //Override
+  destroy(app)
+  {
+    this._testingManager.destroy();
+
+    //this._eventManager.destroy();
+
+    super.destroy(app);
+  }
+
+  //Override
+  update(app)
+  {
+    super.update(app);
+  }
+
+  captureGraphEvent()
+  {
+    this._undoManager.captureEvent(new SafeGraphEventHandler(this._graphController));
+  }
+
+  getGraph()
+  {
+    return this._graphController.getGraph();
+  }
+
+  getTestingManager()
+  {
+    return this._testingManager;
+  }
+
+  getLabelEditor()
+  {
+    return LabelEditor;
+  }
+
+  //Override
+  getRenderer(renderLayer)
+  {
+    switch(renderLayer)
     {
-        super(app);
-
-        this._workspace = null;
-
-        this._undoManager = app.getUndoManager();
-
-        this._inputController = new InputController(this, app.getInputAdapter());
-        this._graphController = new GraphController(this);
-        this._machineController = new MachineController(this);
-
-        //Deprecated (should be anyways)
-        //this._eventManager = new EventManager(app.getUndoManager());
-        //Deprecated
-        this._testingManager = new TestingManager();
+      case "graph":
+        return FSAGraphRenderer;
+      case "graphoverlay":
+        return FSAGraphOverlayRenderer;
+      case "viewport":
+        return ViewportRenderer;
     }
-
-    /** @override */
-    initialize(app)
-    {
-        const viewport = app.viewport;
-        const workspace = app.workspace;
-
-        this._workspace = workspace;
-
-        super.initialize(app);
-
-        app.getUndoManager()
-            .setEventHandlerFactory((...args) => 
-            {
-                return new SafeGraphEventHandler(this._graphController);
-            });
-
-        //this._eventManager.initialize(this);
-
-        this._testingManager.initialize(this, viewport);
-
-        //Notify on create in delete mode
-        const tryCreateWhileTrash = () => 
-        {
-            if (this._inputController.isTrashMode())
-            {
-                Notifications.addMessage(I18N.toString('message.warning.cannotmodify'), 'warning', 'tryCreateWhileTrash');
-            }
-        };
-        this._graphController.on('tryCreateWhileTrash', tryCreateWhileTrash);
-    }
-
-    /** @override */
-    destroy(app)
-    {
-        this._testingManager.destroy();
-
-        //this._eventManager.destroy();
-
-        super.destroy(app);
-    }
-
-    /** @override */
-    update(app)
-    {
-        super.update(app);
-    }
-
-    captureGraphEvent()
-    {
-        this._undoManager.captureEvent(new SafeGraphEventHandler(this._graphController));
-    }
-
-    getGraph()
-    {
-        return this._graphController.getGraph();
-    }
-
-    getTestingManager()
-    {
-        return this._testingManager;
-    }
-
-    getLabelEditor()
-    {
-        return LabelEditor;
-    }
-
-    /** @override */
-    getRenderer(renderLayer)
-    {
-        switch(renderLayer)
-        {
-        case 'graph':
-            return FSAGraphRenderer;
-        case 'graphoverlay':
-            return FSAGraphOverlayRenderer;
-        case 'viewport':
-            return ViewportRenderer;
-        }
-        return null;
-    }
-    /** @override */
-    getInputController() { return this._inputController; }
-    /** @override */
-    getGraphController() { return this._graphController; }
-    /** @override */
-    getMachineController() { return this._machineController; }
-    /** @override */
-    getModuleVersion() { return VERSION; }
-    /** @override */
-    getModulePanels() { return PANELS; }
-    /** @override */
-    getModuleName() { return 'fsa'; }
-    /** @override */
-    getLocalizedModuleName() { return this._machineController.getMachineType(); }
+    return null;
+  }
+  //Override
+  getInputController() { return this._inputController; }
+  //Override
+  getGraphController() { return this._graphController; }
+  //Override
+  getMachineController() { return this._machineController; }
+  //Override
+  getModuleVersion() { return VERSION; }
+  //Override
+  getModulePanels() { return PANELS; }
+  //Override
+  getModuleName() { return "fsa"; }
+  //Override
+  getLocalizedModuleName() { return this._machineController.getMachineType(); }
 }
 export default FSAModule;

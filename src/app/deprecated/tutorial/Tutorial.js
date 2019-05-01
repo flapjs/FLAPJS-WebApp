@@ -4,19 +4,19 @@ import Config from 'deprecated/config.js';
 
 class Tutorial
 {
-    constructor()
-    {
-        this.app = null;
-    }
+  constructor()
+  {
+    this.app = null;
+  }
 
-    start(app)
+  start(app)
+  {
+    if (LocalSave.getStringFromStorage("skipWelcome") !== "true")
     {
-        if (LocalSave.getStringFromStorage('skipWelcome') !== 'true')
-        {
-            Notifications.addMessage(I18N.toString('message.tutorial.1'));
-            Notifications.addMessage(I18N.toString('message.intro.2'));
-        }
+      Notifications.addMessage(I18N.toString("message.tutorial.1"));
+      Notifications.addMessage(I18N.toString("message.intro.2"));
     }
+  }
 }
 
 export default Tutorial;

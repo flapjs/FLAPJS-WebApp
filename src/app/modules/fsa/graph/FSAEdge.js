@@ -5,28 +5,28 @@ export const EMPTY_CHAR = '\u03B5';
 
 class FSAEdge extends QuadraticEdge
 {
-    constructor(id, from, to=null)
-    {
-        super(id, from, to);
-    }
+  constructor(id, from, to=null)
+  {
+    super(id, from, to);
+  }
 
-    /** @override */
-    setEdgeLabel(label)
+  //Override
+  setEdgeLabel(label)
+  {
+    if (typeof label === 'string')
     {
-        if (typeof label === 'string')
-        {
-            super.setEdgeLabel(label);
-        }
-        else
-        {
-            super.setEdgeLabel(EMPTY_CHAR);
-        }
+      super.setEdgeLabel(label);
     }
+    else
+    {
+      super.setEdgeLabel(EMPTY_CHAR);
+    }
+  }
 
-    getEdgeSymbolsFromLabel()
-    {
-        return this.getEdgeLabel().split(SYMBOL_SEPARATOR);
-    }
+  getEdgeSymbolsFromLabel()
+  {
+    return this.getEdgeLabel().split(SYMBOL_SEPARATOR);
+  }
 }
 
 export default FSAEdge;

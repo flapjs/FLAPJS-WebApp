@@ -2,177 +2,177 @@ import React from 'react';
 import Notification from './Notification.js';
 
 import DefaultNotificationLayout, {
-    STYLE_TYPE_DEFAULT,
-    STYLE_TYPE_WARNING,
-    STYLE_TYPE_ERROR,
-    STYLE_TYPE_SUCCESS
+  STYLE_TYPE_DEFAULT,
+  STYLE_TYPE_WARNING,
+  STYLE_TYPE_ERROR,
+  STYLE_TYPE_SUCCESS
 } from './components/DefaultNotificationLayout.js';
 
-export const DEFAULT_LAYOUT_ID = 'default';
-export const WARNING_LAYOUT_ID = 'warning';
-export const ERROR_LAYOUT_ID = 'error';
-export const SUCCESS_LAYOUT_ID = 'success';
+export const DEFAULT_LAYOUT_ID = "default";
+export const WARNING_LAYOUT_ID = "warning";
+export const ERROR_LAYOUT_ID = "error";
+export const SUCCESS_LAYOUT_ID = "success";
 
 class NotificationManager
 {
-    constructor()
+  constructor()
+  {
+    this._layouts = new Map();
+    this._notifications = [];
+  }
+
+  registerNotificationLayout(layoutID, notificationLayout)
+  {
+    this._layouts.set(layoutID, notificationLayout);
+    return this;
+  }
+
+  unregisterNotificationLayout(layoutID)
+  {
+    this._layouts.delete(layoutID);
+    return this;
+  }
+
+  pushNotification(message, layoutID=null, tags=[], props={}, replace=true)
+  {
+    if (replace)
     {
-        this._layouts = new Map();
-        this._notifications = [];
+      this.clearNotifications(tags);
     }
 
-    registerNotificationLayout(layoutID, notificationLayout)
+    const notification = new Notification(this, message, layoutID, tags, props);
+    this._notifications.push(notification);
+    return notification;
+  }
+
+  popNotification(tags=null)
+  {
+    if (this._notifications.length <= 0) return null;
+
+    if (Array.isArray(tags))
     {
-        this._layouts.set(layoutID, notificationLayout);
-        return this;
+      for(let i = this._notifications.length - 1; i >= 0; --i)
+      {
+        const notification = this._notifications[i];
+        let flag = true;
+        for(const tag of tags)
+        {
+          if (!notification.hasTag(tag))
+          {
+            flag = false;
+            break;
+          }
+        }
+        if (flag)
+        {
+          this._notifications.splice(i, 1);
+          return notification;
+        }
+      }
     }
-
-    unregisterNotificationLayout(layoutID)
+    else if (typeof tags === 'string')
     {
-        this._layouts.delete(layoutID);
-        return this;
+      for(let i = 0, length = this._notifications.length; i < length; ++i)
+      {
+        const notification = this._notifications[i];
+        if (notification.hasTag(tags))
+        {
+          this._notifications.splice(i, 1);
+          return notification;
+        }
+      }
     }
-
-    pushNotification(message, layoutID=null, tags=[], props={}, replace=true)
+    else
     {
-        if (replace)
-        {
-            this.clearNotifications(tags);
-        }
-
-        const notification = new Notification(this, message, layoutID, tags, props);
-        this._notifications.push(notification);
-        return notification;
+      return this._notifications.pop();
     }
+  }
 
-    popNotification(tags=null)
+  removeNotification(notification)
+  {
+    const i = this._notifications.indexOf(notification);
+    if (i >= 0)
     {
-        if (this._notifications.length <= 0) return null;
-
-        if (Array.isArray(tags))
-        {
-            for(let i = this._notifications.length - 1; i >= 0; --i)
-            {
-                const notification = this._notifications[i];
-                let flag = true;
-                for(const tag of tags)
-                {
-                    if (!notification.hasTag(tag))
-                    {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (flag)
-                {
-                    this._notifications.splice(i, 1);
-                    return notification;
-                }
-            }
-        }
-        else if (typeof tags === 'string')
-        {
-            for(let i = 0, length = this._notifications.length; i < length; ++i)
-            {
-                const notification = this._notifications[i];
-                if (notification.hasTag(tags))
-                {
-                    this._notifications.splice(i, 1);
-                    return notification;
-                }
-            }
-        }
-        else
-        {
-            return this._notifications.pop();
-        }
+      this._notifications.splice(i, 1);
     }
+  }
 
-    removeNotification(notification)
+  clearNotifications(tags=null)
+  {
+    if (this._notifications.length <= 0) return;
+
+    if (Array.isArray(tags))
     {
-        const i = this._notifications.indexOf(notification);
-        if (i >= 0)
+      for(let i = this._notifications.length - 1; i >= 0; --i)
+      {
+        const notification = this._notifications[i];
+        let flag = true;
+        for(const tag of tags)
         {
-            this._notifications.splice(i, 1);
+          if (!notification.hasTag(tag))
+          {
+            flag = false;
+            break;
+          }
         }
+        if (flag)
+        {
+          this._notifications.splice(i, 1);
+        }
+      }
     }
-
-    clearNotifications(tags=null)
+    else if (typeof tags === 'string')
     {
-        if (this._notifications.length <= 0) return;
-
-        if (Array.isArray(tags))
+      for(let i = this._notifications.length - 1; i >= 0; --i)
+      {
+        const notification = this._notifications[i];
+        if (notification.hasTag(tags))
         {
-            for(let i = this._notifications.length - 1; i >= 0; --i)
-            {
-                const notification = this._notifications[i];
-                let flag = true;
-                for(const tag of tags)
-                {
-                    if (!notification.hasTag(tag))
-                    {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (flag)
-                {
-                    this._notifications.splice(i, 1);
-                }
-            }
+          this._notifications.splice(i, 1);
         }
-        else if (typeof tags === 'string')
-        {
-            for(let i = this._notifications.length - 1; i >= 0; --i)
-            {
-                const notification = this._notifications[i];
-                if (notification.hasTag(tags))
-                {
-                    this._notifications.splice(i, 1);
-                }
-            }
-        }
-        else
-        {
-            this._notifications.length = 0;
-        }
+      }
     }
-
-    //DuckType(SessionListener)
-    onSessionStart(session)
+    else
     {
+      this._notifications.length = 0;
+    }
+  }
+
+  //DuckType(SessionListener)
+  onSessionStart(session)
+  {
     //Overwrite any changes to default notifications...
-        this.registerNotificationLayout(DEFAULT_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_DEFAULT} {...props}/>);
-        this.registerNotificationLayout(WARNING_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_WARNING} {...props}/>);
-        this.registerNotificationLayout(ERROR_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_ERROR} {...props}/>);
-        this.registerNotificationLayout(SUCCESS_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_SUCCESS} {...props}/>);
-    }
+    this.registerNotificationLayout(DEFAULT_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_DEFAULT} {...props}/>);
+    this.registerNotificationLayout(WARNING_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_WARNING} {...props}/>);
+    this.registerNotificationLayout(ERROR_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_ERROR} {...props}/>);
+    this.registerNotificationLayout(SUCCESS_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_SUCCESS} {...props}/>);
+  }
 
-    //DuckType(SessionListener)
-    onSessionStop(session)
-    {
-        this.clearNotifications();
-    }
+  //DuckType(SessionListener)
+  onSessionStop(session)
+  {
+    this.clearNotifications();
+  }
 
-    hasNotificationLayout(layoutID)
-    {
-        return this._layouts.has(layoutID);
-    }
+  hasNotificationLayout(layoutID)
+  {
+    return this._layouts.has(layoutID);
+  }
 
-    getNotificationLayout(layoutID)
-    {
-        return this._layouts.get(layoutID);
-    }
+  getNotificationLayout(layoutID)
+  {
+    return this._layouts.get(layoutID);
+  }
 
-    getNotifications()
-    {
-        return this._notifications;
-    }
+  getNotifications()
+  {
+    return this._notifications;
+  }
 
-    isEmpty()
-    {
-        return this._notifications.length <= 0;
-    }
+  isEmpty()
+  {
+    return this._notifications.length <= 0;
+  }
 }
 
 export default NotificationManager;

@@ -4,57 +4,57 @@ import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
 
 class UserDeleteNodesEventHandler extends EventHandler
 {
-    constructor(eventLogger, graphController)
+  constructor(eventLogger, graphController)
+  {
+    super(eventLogger, graphController, "userPreDeleteNodes", "userPostDeleteNodes");
+  }
+
+  //Override
+  captureEvent(graph, node, targetNodes, prevX, prevY)
+  {
+    const targets = [];
+    for(const target of targetNodes)
     {
-        super(eventLogger, graphController, 'userPreDeleteNodes', 'userPostDeleteNodes');
+      targets.push(target.getGraphElementID());
     }
+    const dx = node.x - prevX;
+    const dy = node.y - prevY;
 
-    /** @override */
-    captureEvent(graph, node, targetNodes, prevX, prevY)
+    return {
+      graphData: FSAGraphParser.JSON.objectify(graph),
+      targets: targets,
+      dx: dx,
+      dy: dy
+    };
+  }
+
+  //Override
+  capturePostEvent(graph, node, targetNodes, prevX, prevY)
+  {
+    return {
+      graphData: FSAGraphParser.JSON.objectify(graph)
+    };
+  }
+
+  //Override - this = event
+  applyUndo(e)
+  {
+    const graph = this.controller.getGraph();
+    FSAGraphParser.JSON.parse(e.eventData.graphData, this.controller.getGraph());
+    for(const targetID of e.eventData.targets)
     {
-        const targets = [];
-        for(const target of targetNodes)
-        {
-            targets.push(target.getGraphElementID());
-        }
-        const dx = node.x - prevX;
-        const dy = node.y - prevY;
+      const node = graph.getNodeByElementID(targetID);
+      if (!node) throw new Error("Unable to find target in graph");
 
-        return {
-            graphData: FSAGraphParser.JSON.objectify(graph),
-            targets: targets,
-            dx: dx,
-            dy: dy
-        };
+      node.x -= e.eventData.dx;
+      node.y -= e.eventData.dy;
     }
+  }
 
-    /** @override */
-    capturePostEvent(graph, node, targetNodes, prevX, prevY)
-    {
-        return {
-            graphData: FSAGraphParser.JSON.objectify(graph)
-        };
-    }
-
-    /** @override */ - this = event
-    applyUndo(e)
-    {
-        const graph = this.controller.getGraph();
-        FSAGraphParser.JSON.parse(e.eventData.graphData, this.controller.getGraph());
-        for(const targetID of e.eventData.targets)
-        {
-            const node = graph.getNodeByElementID(targetID);
-            if (!node) throw new Error('Unable to find target in graph');
-
-            node.x -= e.eventData.dx;
-            node.y -= e.eventData.dy;
-        }
-    }
-
-    /** @override */ - this = event
-    applyRedo(e)
-    {
-        FSAGraphParser.JSON.parse(e.postData.graphData, this.controller.getGraph());
-    }
+  //Override - this = event
+  applyRedo(e)
+  {
+    FSAGraphParser.JSON.parse(e.postData.graphData, this.controller.getGraph());
+  }
 }
 export default UserDeleteNodesEventHandler;

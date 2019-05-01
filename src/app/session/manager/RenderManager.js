@@ -1,44 +1,44 @@
-export const RENDER_LAYER_WORKSPACE = 'workspace';
-export const RENDER_LAYER_WORKSPACE_OVERLAY = 'workspace-overlay';
-export const RENDER_LAYER_VIEWPORT = 'viewport';
-export const RENDER_LAYER_VIEWPORT_OVERLAY = 'viewport-overlay';
+export const RENDER_LAYER_WORKSPACE = "workspace";
+export const RENDER_LAYER_WORKSPACE_OVERLAY = "workspace-overlay";
+export const RENDER_LAYER_VIEWPORT = "viewport";
+export const RENDER_LAYER_VIEWPORT_OVERLAY = "viewport-overlay";
 
 class RenderManager
 {
-    constructor()
-    {
-        this._renderMapping = new Map();
-    }
+  constructor()
+  {
+    this._renderMapping = new Map();
+  }
 
-    addRenderer(layerID, rendererClass)
+  addRenderer(layerID, rendererClass)
+  {
+    if (this._renderMapping.has(layerID))
     {
-        if (this._renderMapping.has(layerID))
-        {
-            this._renderMapping.get(layerID).push(rendererClass);
-        }
-        else
-        {
-            this._renderMapping.set(layerID, [rendererClass]);
-        }
-        return this;
+      this._renderMapping.get(layerID).push(rendererClass);
     }
-
-    //DuckType(SessionListener)
-    onSessionStart(session)
+    else
     {
-
+      this._renderMapping.set(layerID, [rendererClass]);
     }
+    return this;
+  }
 
-    //DuckType(SessionListener)
-    onSessionStop(session)
-    {
-        this._renderMapping.clear();
-    }
+  //DuckType(SessionListener)
+  onSessionStart(session)
+  {
 
-    getRenderersByLayer(layerID)
-    {
-        return this._renderMapping.get(layerID);
-    }
+  }
+
+  //DuckType(SessionListener)
+  onSessionStop(session)
+  {
+    this._renderMapping.clear();
+  }
+
+  getRenderersByLayer(layerID)
+  {
+    return this._renderMapping.get(layerID);
+  }
 }
 
 export default RenderManager;

@@ -2,68 +2,70 @@ import GraphElementInputHandler from './GraphElementInputHandler.js';
 
 class GraphEdgeInputHandler extends GraphElementInputHandler
 {
-    constructor()
-    {
-        super('edge');
-    }
+  constructor()
+  {
+    super("edge");
+  }
 
-    /** @override */
-    onAction(inputController, graphController, pointer, target)
+  //Override
+  onAction(inputController, graphController, pointer, target)
+  {
+    if (inputController.isTrashMode())
     {
-        if (inputController.isTrashMode())
-        {
-            //Delete a single edge
-            graphController.deleteTargetEdge(target);
-        }
-        else
-        {
-            //Edit label for selected edge
-            graphController.openLabelEditor(target, pointer.x, pointer.y);
-        }
-        return true;
+      //Delete a single edge
+      graphController.deleteTargetEdge(target);
     }
-
-    /** @override */
-    onDragStart(inputController, graphController, pointer, target)
+    else
     {
+      //Edit label for selected edge
+      graphController.openLabelEditor(target, pointer.x, pointer.y);
+    }
+    return true;
+  }
+
+  //Override
+  onDragStart(inputController, graphController, pointer, target)
+  {
     //Makes sure that placeholders are not quadratics!
-        if (target.isPlaceholder())
-        {
-            return false;
-        }
-
-        //Save previous quadratics
-        const targetQuad = target.getQuadratic();
-        graphController.prevQuad.radians = targetQuad.radians;
-        graphController.prevQuad.length = targetQuad.length;
-
-        //Ready to move the edge vertex to pointer...
-        return true;
-    }
-
-    /** @override */
-    onDragMove(inputController, graphController, pointer, target)
+    if (target.isPlaceholder())
     {
-        graphController.moveEdgeTo(pointer, target, pointer.x, pointer.y);
-        return true;
+      return false;
     }
 
-    /** @override */
-    onDragStop(inputController, graphController, pointer, target)
+    //Save previous quadratics
+    const targetQuad = target.getQuadratic();
+    graphController.prevQuad.radians = targetQuad.radians;
+    graphController.prevQuad.length = targetQuad.length;
+
+    //Ready to move the edge vertex to pointer...
+    return true;
+  }
+
+  //Override
+  onDragMove(inputController, graphController, pointer, target)
+  {
+    graphController.moveEdgeTo(pointer, target, pointer.x, pointer.y);
+    return true;
+  }
+
+  //Override
+  onDragStop(inputController, graphController, pointer, target)
+  {
+    const graph = graphController.getGraph();
+
+    //Delete it if withing trash area...
+    if (inputController.isTrashMode())
     {
-        //Delete it if withing trash area...
-        if (inputController.isTrashMode())
-        {
-            graphController.deleteTargetEdge(target);
-        }
-        else
-        {
-            //Do nothing, since should have moved to position
-            graphController.onGraphIntentMoveEdge(target, target.getQuadratic(), graphController.prevQuad);
-            //graphController.emit("edgeMove", graph, target, target.getQuadratic(), graphController.prevQuad);
-        }
-        return true;
+      graphController.deleteTargetEdge(target);
     }
+    else
+    {
+      //Do nothing, since should have moved to position
+      graphController.onGraphIntentMoveEdge(target, target.getQuadratic(), graphController.prevQuad);
+      //graphController.emit("edgeMove", graph, target, target.getQuadratic(), graphController.prevQuad);
+    }
+    return true;
+  }
 }
 
 export default GraphEdgeInputHandler;

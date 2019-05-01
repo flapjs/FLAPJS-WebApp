@@ -9,254 +9,254 @@ import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 
 class MachineController extends AbstractMachineController
 {
-    constructor(module)
-    {
-        super(module, new FSABuilder());
+  constructor(module)
+  {
+    super(module, new FSABuilder());
 
-        this.graphController = null;
+    this.graphController = null;
+  }
+
+  //Override
+  initialize(module)
+  {
+    super.initialize(module);
+
+    this.graphController = module.getGraphController();
+  }
+
+  //Override
+  destroy(module)
+  {
+    super.destroy(module);
+  }
+
+  //Override
+  update(module)
+  {
+    super.update(module);
+  }
+
+  getMachineType()
+  {
+    return this._machineBuilder.getMachine().isDeterministic() ? "DFA" : "NFA";
+  }
+
+  setMachineType(machineType)
+  {
+    this._machineBuilder.getMachine().setDeterministic(machineType === 'DFA');
+  }
+
+  changeMachineTo(machineType)
+  {
+    const prev = this.getMachineType();
+    if (prev != machineType)
+    {
+      this.setMachineType(machineType);
+    }
+  }
+
+  getFirstGraphNodeByLabel(graph, label)
+  {
+    for(const node of graph.getNodes())
+    {
+      if (node.getNodeLabel() == label)
+      {
+        return node;
+      }
     }
 
-    /** @override */
-    initialize(module)
-    {
-        super.initialize(module);
+    return null;
+  }
 
-        this.graphController = module.getGraphController();
+  setGraphToMachine(graph, machine)
+  {
+    this._machineBuilder.attemptBuildGraph(machine, graph);
+    //Auto layout graph
+    GraphLayout.applyLayout(graph);
+  }
+
+  convertMachineTo(machineType)
+  {
+    const currentMachineType = this.getMachineType();
+
+    //Already converted machine...
+    if (currentMachineType === machineType) return;
+
+    if (machineType == "DFA" && currentMachineType == "NFA")
+    {
+      const result = convertToDFA(this.getMachineBuilder().getMachine());
+      this.setGraphToMachine(this.graphController.getGraph(), result);
+      this.setMachineType(machineType);
     }
-
-    /** @override */
-    destroy(module)
+    else if (machineType == "NFA" && currentMachineType == "DFA")
     {
-        super.destroy(module);
+      this.changeMachineTo(machineType);
     }
-
-    /** @override */
-    update(module)
+    else
     {
-        super.update(module);
+      throw new Error("Conversion scheme between \'" + currentMachineType + "\' to \'" + machineType + "\' is not supported");
     }
+  }
 
-    getMachineType()
+  invertMachine()
+  {
+    const machine = this.getMachineBuilder().getMachine();
+    const result = invertDFA(machine, machine);
+
+    //Update final states
+    for(const state of result.getStates())
     {
-        return this._machineBuilder.getMachine().isDeterministic() ? 'DFA' : 'NFA';
+      const src = state.getSource();
+      src.setNodeAccept(machine.isFinalState(state));
     }
+  }
 
-    setMachineType(machineType)
-    {
-        this._machineBuilder.getMachine().setDeterministic(machineType === 'DFA');
-    }
+  getUnreachableNodes()
+  {
+    const graphController = this.graphController;
+    const graph = graphController.getGraph();
+    if (graph.getNodeCount() <= 1) return [];
 
-    changeMachineTo(machineType)
+    const edges = graph.getEdges();
+    const nodes = graph.getNodes().slice();
+    const startNode = nodes.shift();
+    let nextNodes = [];
+    nextNodes.push(startNode);
+
+    while(nextNodes.length > 0)
     {
-        const prev = this.getMachineType();
-        if (prev != machineType)
+      const node = nextNodes.pop();
+      for(const edge of edges)
+      {
+        if (edge.getSourceNode() === node)
         {
-            this.setMachineType(machineType);
+          const i = nodes.indexOf(edge.getDestinationNode());
+          if (i >= 0)
+          {
+            const nextNode = nodes.splice(i, 1)[0];
+            nextNodes.push(nextNode);
+          }
         }
+      }
     }
 
-    getFirstGraphNodeByLabel(graph, label)
+    return nodes;
+  }
+
+  getStates()
+  {
+    return this._machineBuilder.getMachine().getStates();
+  }
+
+  countStates()
+  {
+    return this._machineBuilder.getMachine().getStateCount();
+  }
+
+  getFinalStates()
+  {
+    return this._machineBuilder.getMachine().getFinalStates();
+  }
+
+  getTransitions()
+  {
+    return this._machineBuilder.getMachine().getTransitions();
+  }
+
+  getAlphabet()
+  {
+    const machine = this._machineBuilder.getMachine();
+    return Array.from(machine.getAlphabet());
+  }
+
+  isUsedSymbol(symbol)
+  {
+    return !this.isCustomSymbol(symbol);
+  }
+
+  createSymbol(symbol)
+  {
+    this.addCustomSymbol(symbol);
+  }
+
+  deleteSymbol(symbol)
+  {
+    let edge = null;
+    let index = null;
+    let result = null;
+    const targets = [];
+
+    const graph = this.graphController.getGraph();
+    for(let i = graph.getEdges().length - 1; i >= 0; --i)
     {
-        for(const node of graph.getNodes())
+      edge = graph.getEdges()[i];
+      index = edge.getEdgeLabel().indexOf(symbol);
+      if (index >= 0)
+      {
+        result = edge.getEdgeLabel().substring(0, index) + edge.getEdgeLabel().substring(index + 1);
+        if (result.length > 0)
         {
-            if (node.getNodeLabel() == label)
-            {
-                return node;
-            }
-        }
-
-        return null;
-    }
-
-    setGraphToMachine(graph, machine)
-    {
-        this._machineBuilder.attemptBuildGraph(machine, graph);
-        //Auto layout graph
-        GraphLayout.applyLayout(graph);
-    }
-
-    convertMachineTo(machineType)
-    {
-        const currentMachineType = this.getMachineType();
-
-        //Already converted machine...
-        if (currentMachineType === machineType) return;
-
-        if (machineType == 'DFA' && currentMachineType == 'NFA')
-        {
-            const result = convertToDFA(this.getMachineBuilder().getMachine());
-            this.setGraphToMachine(this.graphController.getGraph(), result);
-            this.setMachineType(machineType);
-        }
-        else if (machineType == 'NFA' && currentMachineType == 'DFA')
-        {
-            this.changeMachineTo(machineType);
+          edge.setEdgeLabel(result);
         }
         else
         {
-            throw new Error('Conversion scheme between \'' + currentMachineType + '\' to \'' + machineType + '\' is not supported');
+          edge.setEdgeLabel("");
+          graph.deleteEdge(edge);
         }
+        targets.push(edge);
+      }
     }
 
-    invertMachine()
+    if (targets.length <= 0)
     {
-        const machine = this.getMachineBuilder().getMachine();
-        const result = invertDFA(machine, machine);
-
-        //Update final states
-        for(const state of result.getStates())
-        {
-            const src = state.getSource();
-            src.setNodeAccept(machine.isFinalState(state));
-        }
+      this.getMachineBuilder().removeCustomSymbol(symbol);
     }
+  }
 
-    getUnreachableNodes()
+  renameSymbol(prevSymbol, nextSymbol)
+  {
+    let edge = null;
+    let result = null;
+    const targets = [];
+
+    const graph = this.graphController.getGraph();
+    const length = graph.getEdges().length;
+    for(let i = 0; i < length; ++i)
     {
-        const graphController = this.graphController;
-        const graph = graphController.getGraph();
-        if (graph.getNodeCount() <= 1) return [];
-
-        const edges = graph.getEdges();
-        const nodes = graph.getNodes().slice();
-        const startNode = nodes.shift();
-        let nextNodes = [];
-        nextNodes.push(startNode);
-
-        while(nextNodes.length > 0)
-        {
-            const node = nextNodes.pop();
-            for(const edge of edges)
-            {
-                if (edge.getSourceNode() === node)
-                {
-                    const i = nodes.indexOf(edge.getDestinationNode());
-                    if (i >= 0)
-                    {
-                        const nextNode = nodes.splice(i, 1)[0];
-                        nextNodes.push(nextNode);
-                    }
-                }
-            }
-        }
-
-        return nodes;
+      edge = graph.getEdges()[i];
+      let result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
+      if (result != edge.getEdgeLabel())
+      {
+        targets.push(edge);
+      }
+      edge.setEdgeLabel(result);
     }
 
-    getStates()
+    if (targets.length <= 0)
     {
-        return this._machineBuilder.getMachine().getStates();
+      this.getMachineBuilder().renameCustomSymbol(prevSymbol, nextSymbol);
     }
+  }
 
-    countStates()
-    {
-        return this._machineBuilder.getMachine().getStateCount();
-    }
+  getCustomSymbols()
+  {
+    return Array.from(this._machineBuilder.getMachine().getCustomSymbols());
+  }
 
-    getFinalStates()
-    {
-        return this._machineBuilder.getMachine().getFinalStates();
-    }
+  isCustomSymbol(symbol)
+  {
+    return this._machineBuilder.isCustomSymbol(symbol);
+  }
 
-    getTransitions()
-    {
-        return this._machineBuilder.getMachine().getTransitions();
-    }
+  addCustomSymbol(symbol)
+  {
+    this._machineBuilder.getMachine().setCustomSymbol(symbol);
+  }
 
-    getAlphabet()
-    {
-        const machine = this._machineBuilder.getMachine();
-        return Array.from(machine.getAlphabet());
-    }
-
-    isUsedSymbol(symbol)
-    {
-        return !this.isCustomSymbol(symbol);
-    }
-
-    createSymbol(symbol)
-    {
-        this.addCustomSymbol(symbol);
-    }
-
-    deleteSymbol(symbol)
-    {
-        let edge = null;
-        let index = null;
-        let result = null;
-        const targets = [];
-
-        const graph = this.graphController.getGraph();
-        for(let i = graph.getEdges().length - 1; i >= 0; --i)
-        {
-            edge = graph.getEdges()[i];
-            index = edge.getEdgeLabel().indexOf(symbol);
-            if (index >= 0)
-            {
-                result = edge.getEdgeLabel().substring(0, index) + edge.getEdgeLabel().substring(index + 1);
-                if (result.length > 0)
-                {
-                    edge.setEdgeLabel(result);
-                }
-                else
-                {
-                    edge.setEdgeLabel('');
-                    graph.deleteEdge(edge);
-                }
-                targets.push(edge);
-            }
-        }
-
-        if (targets.length <= 0)
-        {
-            this.getMachineBuilder().removeCustomSymbol(symbol);
-        }
-    }
-
-    renameSymbol(prevSymbol, nextSymbol)
-    {
-        let edge = null;
-        let result = null;
-        const targets = [];
-
-        const graph = this.graphController.getGraph();
-        const length = graph.getEdges().length;
-        for(let i = 0; i < length; ++i)
-        {
-            edge = graph.getEdges()[i];
-            let result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
-            if (result != edge.getEdgeLabel())
-            {
-                targets.push(edge);
-            }
-            edge.setEdgeLabel(result);
-        }
-
-        if (targets.length <= 0)
-        {
-            this.getMachineBuilder().renameCustomSymbol(prevSymbol, nextSymbol);
-        }
-    }
-
-    getCustomSymbols()
-    {
-        return Array.from(this._machineBuilder.getMachine().getCustomSymbols());
-    }
-
-    isCustomSymbol(symbol)
-    {
-        return this._machineBuilder.isCustomSymbol(symbol);
-    }
-
-    addCustomSymbol(symbol)
-    {
-        this._machineBuilder.getMachine().setCustomSymbol(symbol);
-    }
-
-    clearCustomSymbols()
-    {
-        this._machineBuilder.getMachine().clearCustomSymbols();
-    }
+  clearCustomSymbols()
+  {
+    this._machineBuilder.getMachine().clearCustomSymbols();
+  }
 }
 
 export default MachineController;

@@ -1,26 +1,26 @@
 class NodalGraphInputController
 {
-    constructor(currentModule)
-    {
-        this._module = currentModule;
-        this._disabled = false;
-    }
+  constructor(currentModule)
+  {
+    this._module = currentModule;
+    this._disabled = false;
+  }
 
-    initialize(currentModule)
-    {
-    }
+  initialize(currentModule)
+  {
+  }
 
-    update(currentModule)
-    {
-    }
+  update(currentModule)
+  {
+  }
 
-    destroy(currentModule)
-    {
-    }
+  destroy(currentModule)
+  {
+  }
 
-    setDisabled(disabled) { this._disabled = disabled; }
-    isDisabled() { return this._disabled; }
-    getModule() { return this._module; }
+  setDisabled(disabled) { this._disabled = disabled; }
+  isDisabled() { return this._disabled; }
+  getModule() { return this._module; }
 }
 
 export default NodalGraphInputController;

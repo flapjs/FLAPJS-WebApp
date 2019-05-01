@@ -4,37 +4,37 @@ import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
 
 class SafeGraphEventHandler extends EventHandler
 {
-    constructor(eventLogger, graphController, eventName, postEventName)
-    {
-        super(eventLogger, graphController, eventName, postEventName);
-    }
+  constructor(eventLogger, graphController, eventName, postEventName)
+  {
+    super(eventLogger, graphController, eventName, postEventName);
+  }
 
-    /** @override */
-    captureEvent(graph)
-    {
-        return {
-            graphData: FSAGraphParser.JSON.objectify(graph)
-        };
-    }
+  //Override
+  captureEvent(graph)
+  {
+    return {
+      graphData: FSAGraphParser.JSON.objectify(graph)
+    };
+  }
 
-    /** @override */
-    capturePostEvent(graph)
-    {
-        return {
-            graphData: FSAGraphParser.JSON.objectify(graph)
-        };
-    }
+  //Override
+  capturePostEvent(graph)
+  {
+    return {
+      graphData: FSAGraphParser.JSON.objectify(graph)
+    };
+  }
 
-    /** @override */ - this = event
-    applyUndo(e)
-    {
-        FSAGraphParser.JSON.parse(e.eventData.graphData, this.controller.getGraph());
-    }
+  //Override - this = event
+  applyUndo(e)
+  {
+    FSAGraphParser.JSON.parse(e.eventData.graphData, this.controller.getGraph());
+  }
 
-    /** @override */ - this = event
-    applyRedo(e)
-    {
-        FSAGraphParser.JSON.parse(e.postData.graphData, this.controller.getGraph());
-    }
+  //Override - this = event
+  applyRedo(e)
+  {
+    FSAGraphParser.JSON.parse(e.postData.graphData, this.controller.getGraph());
+  }
 }
 export default SafeGraphEventHandler;

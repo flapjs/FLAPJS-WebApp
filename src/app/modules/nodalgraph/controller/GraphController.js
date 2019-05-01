@@ -13,386 +13,384 @@ const DELETE_ON_EMPTY = true;
 
 class GraphController extends AbstractGraphController
 {
-    constructor(module, graph, labeler, parser)
+  constructor(module, graph, labeler, parser)
+  {
+    super(module, graph, labeler, parser);
+
+    this.inputController = null;
+    this._graphChangeHandler = new GraphChangeHandler(GRAPH_REFRESH_RATE);
+
+    this.getGraphLabeler().setGraphController(this);
+
+    this.prevQuad = {
+      radians: 0, length: 0,
+      x: 0, y: 0
+    };
+    this.prevEdgeTo = null;
+    this.prevX = 0;
+    this.prevY = 0;
+
+    this.shouldAutoLabel = DEFAULT_AUTO_RENAME;
+
+    //The difference between controller events vs graph events is: controller has user-intent
+
+    //tryCreateWhileTrash()
+    this.registerEvent("tryCreateWhileTrash");
+  }
+
+  //Override
+  initialize(module)
+  {
+    super.initialize(module);
+
+    this._module = module;
+    this.inputController = module.getInputController();
+  }
+
+  //Override
+  destroy(module)
+  {
+    super.destroy(module);
+  }
+
+  //Override
+  update(module)
+  {
+    super.update(module);
+
+    this._graphChangeHandler.update(this._graph);
+  }
+
+  getGraphChangeHandler()
+  {
+    return this._graphChangeHandler;
+  }
+
+  applyAutoLayout()
+  {
+    GraphLayout.applyLayout(this.getGraph());
+
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  applyAutoRename()
+  {
+    const graphLabeler = this._labeler;
+    const graph = this._graph;
+
+    if (graph.isEmpty()) return;
+
+    //Reset all default labels...
+    for(const node of graph.getNodes())
     {
-        super(module, graph, labeler, parser);
-
-        this.inputController = null;
-        this._graphChangeHandler = new GraphChangeHandler(GRAPH_REFRESH_RATE);
-
-        this.getGraphLabeler().setGraphController(this);
-
-        this.prevQuad = {
-            radians: 0, length: 0,
-            x: 0, y: 0
-        };
-        this.prevEdgeTo = null;
-        this.prevX = 0;
-        this.prevY = 0;
-
-        this.shouldAutoLabel = DEFAULT_AUTO_RENAME;
-
-        //The difference between controller events vs graph events is: controller has user-intent
-
-        //tryCreateWhileTrash()
-        this.registerEvent('tryCreateWhileTrash');
+      if (!node.getNodeCustom()) node.setNodeLabel("");
     }
 
-    /** @override */
-    initialize(module)
+    //Rename all default labels appropriately...
+    for(const node of graph.getNodes())
     {
-        super.initialize(module);
+      if (!node.getNodeCustom())
+      {
+        node.setNodeLabel(graphLabeler.getDefaultNodeLabel());
+      }
+    }
+  }
 
-        this._module = module;
-        this.inputController = module.getInputController();
+  onGraphIntentImport()
+  {
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  onGraphIntentCreateEdge(edge)
+  {
+  }
+
+  onGraphIntentFinishEdge(edge)
+  {
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  onGraphIntentMoveEdge(edge, nextQuad, prevQuad)
+  {
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  onGraphIntentChangeDestination(edge, destinationNode, prevDestination, prevQuad)
+  {
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  onGraphIntentChangeInitial(nextInitial, prevInitial)
+  {
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  onGraphIntentMoveNode(node, nextX, nextY, prevX, prevY)
+  {
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  onGraphIntentMoveAllNodes(nodes, dx, dy)
+  {
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  onGraphIntentDeleteNodes(node, targetNodes, prevX, prevY)
+  {
+    if (this.shouldAutoLabel)
+    {
+      this.applyAutoRename();
+    }
+  }
+
+  setAutoRenameNodes(enable)
+  {
+    const prev = this.shouldAutoLabel;
+    this.shouldAutoLabel = enable;
+    if (enable && !prev)
+    {
+      this.applyAutoRename();
+    }
+  }
+
+  shouldAutoRenameNodes()
+  {
+    return this.shouldAutoLabel;
+  }
+
+  renameNode(node, name)
+  {
+    const prev = node.getNodeLabel();
+    const isPrevCustom = node.getNodeCustom();
+
+    node.setNodeLabel(name);
+    node.setNodeCustom(true);
+
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  createNode(x, y)
+  {
+    if (typeof x === 'undefined') x = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
+    if (typeof y === 'undefined') y = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
+
+    const node = this.getGraph().createNode(x, y);
+
+    const newNodeLabel = this.getGraphLabeler().getDefaultNodeLabel();
+    node.setNodeLabel(newNodeLabel);
+
+    this.getModule().getApp().getUndoManager().captureEvent();
+    return node;
+  }
+
+  toggleNode(node)
+  {
+    const prev = node.getNodeAccept();
+    const result = !prev;
+    //Toggle accept for selected node
+    node.setNodeAccept(result);
+
+    //Emit event
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  deleteSelectedNodes(selectedNode)
+  {
+    const selectionBox = this.inputController.getSelectionBox();
+    const selection = selectionBox.getSelection(this.getGraph()).slice();
+
+    //Remove from graph
+    for(const node of selection)
+    {
+      this.getGraph().deleteNode(node);
     }
 
-    /** @override */
-    destroy(module)
+    //Remove from selection
+    selectionBox.clearSelection();
+
+    //Emit event
+    this.onGraphIntentDeleteNodes(selectedNode, selection, this.prevX, this.prevY);
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  deleteTargetNode(target)
+  {
+    this.getGraph().deleteNode(target);
+
+    //Emit event
+    this.onGraphIntentDeleteNodes(target, [target], this.prevX, this.prevY);
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  deleteTargetNodes(targets)
+  {
+    if (!targets || targets.length <= 0) return;
+
+    const graph = this.getGraph();
+    for(const node of targets)
     {
-        super.destroy(module);
+      graph.deleteNode(node);
     }
 
-    /** @override */
-    update(module)
-    {
-        super.update(module);
+    //Emit event
+    this.onGraphIntentDeleteNodes(targets[0], targets, this.prevX, this.prevY);
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
 
-        this._graphChangeHandler.update(this._graph);
+  deleteTargetEdge(target)
+  {
+    this.getGraph().deleteEdge(target);
+
+    //Emit event
+    this.getModule().getApp().getUndoManager().captureEvent();
+  }
+
+  deleteTargetEdges(targets)
+  {
+    if (!targets || targets.length <= 0) return;
+
+    for(const target of targets)
+    {
+      this.deleteTargetEdge(target);
+    }
+  }
+
+  moveNodeTo(pointer, node, x, y)
+  {
+    const nodeSize = node.getNodeSize();
+    for(const other of this.getGraph().getNodes())
+    {
+      //Update node collision
+      if (node === other) continue;
+
+      const dx = x - other.x;
+      const dy = y - other.y;
+      const angle = Math.atan2(dy, dx);
+
+      const diameter = (nodeSize * 2);
+      const nextDX = other.x + (Math.cos(angle) * diameter) - x;
+      const nextDY = other.y + (Math.sin(angle) * diameter) - y;
+
+      if (dx * dx + dy * dy < nodeSize * nodeSize * 4)
+      {
+        x += nextDX;
+        y += nextDY;
+      }
     }
 
-    getGraphChangeHandler()
-    {
-        return this._graphChangeHandler;
-    }
+    node.x = x;
+    node.y = y;
+  }
 
-    applyAutoLayout()
-    {
-        GraphLayout.applyLayout(this.getGraph());
-
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    applyAutoRename()
-    {
-        const graphLabeler = this._labeler;
-        const graph = this._graph;
-
-        if (graph.isEmpty()) return;
-
-        //Reset all default labels...
-        for(const node of graph.getNodes())
-        {
-            if (!node.getNodeCustom()) node.setNodeLabel('');
-        }
-
-        //Rename all default labels appropriately...
-        for(const node of graph.getNodes())
-        {
-            if (!node.getNodeCustom())
-            {
-                node.setNodeLabel(graphLabeler.getDefaultNodeLabel());
-            }
-        }
-    }
-
-    onGraphIntentImport()
-    {
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    onGraphIntentCreateEdge(edge)
-    {
-    }
-
-    onGraphIntentFinishEdge(edge)
-    {
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    onGraphIntentMoveEdge(edge, nextQuad, prevQuad)
-    {
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    onGraphIntentChangeDestination(edge, destinationNode, prevDestination, prevQuad)
-    {
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    onGraphIntentChangeInitial(nextInitial, prevInitial)
-    {
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    onGraphIntentMoveNode(node, nextX, nextY, prevX, prevY)
-    {
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    onGraphIntentMoveAllNodes(nodes, dx, dy)
-    {
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    onGraphIntentDeleteNodes(node, targetNodes, prevX, prevY)
-    {
-        if (this.shouldAutoLabel)
-        {
-            this.applyAutoRename();
-        }
-    }
-
-    setAutoRenameNodes(enable)
-    {
-        const prev = this.shouldAutoLabel;
-        this.shouldAutoLabel = enable;
-        if (enable && !prev)
-        {
-            this.applyAutoRename();
-        }
-    }
-
-    shouldAutoRenameNodes()
-    {
-        return this.shouldAutoLabel;
-    }
-
-    renameNode(node, name)
-    {
-        const prev = node.getNodeLabel();
-        const isPrevCustom = node.getNodeCustom();
-
-        node.setNodeLabel(name);
-        node.setNodeCustom(true);
-
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    createNode(x, y)
-    {
-        if (typeof x === 'undefined') x = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
-        if (typeof y === 'undefined') y = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
-
-        const node = this.getGraph().createNode(x, y);
-
-        const newNodeLabel = this.getGraphLabeler().getDefaultNodeLabel();
-        node.setNodeLabel(newNodeLabel);
-
-        this.getModule().getApp().getUndoManager().captureEvent();
-        return node;
-    }
-
-    toggleNode(node)
-    {
-        const prev = node.getNodeAccept();
-        const result = !prev;
-        //Toggle accept for selected node
-        node.setNodeAccept(result);
-
-        //Emit event
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    deleteSelectedNodes(selectedNode)
-    {
-        const selectionBox = this.inputController.getSelectionBox();
-        const selection = selectionBox.getSelection(this.getGraph()).slice();
-
-        //Remove from graph
-        for(const node of selection)
-        {
-            this.getGraph().deleteNode(node);
-        }
-
-        //Remove from selection
-        selectionBox.clearSelection();
-
-        //Emit event
-        this.onGraphIntentDeleteNodes(selectedNode, selection, this.prevX, this.prevY);
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    deleteTargetNode(target)
-    {
-        this.getGraph().deleteNode(target);
-
-        //Emit event
-        this.onGraphIntentDeleteNodes(target, [target], this.prevX, this.prevY);
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    deleteTargetNodes(targets)
-    {
-        if (!targets || targets.length <= 0) return;
-
-        const graph = this.getGraph();
-        for(const node of targets)
-        {
-            graph.deleteNode(node);
-        }
-
-        //Emit event
-        this.onGraphIntentDeleteNodes(targets[0], targets, this.prevX, this.prevY);
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    deleteTargetEdge(target)
-    {
-        this.getGraph().deleteEdge(target);
-
-        //Emit event
-        this.getModule().getApp().getUndoManager().captureEvent();
-    }
-
-    deleteTargetEdges(targets)
-    {
-        if (!targets || targets.length <= 0) return;
-
-        for(const target of targets)
-        {
-            this.deleteTargetEdge(target);
-        }
-    }
-
-    moveNodeTo(pointer, node, x, y)
-    {
-        const nodeSize = node.getNodeSize();
-        for(const other of this.getGraph().getNodes())
-        {
-            //Update node collision
-            if (node === other) continue;
-
-            const dx = x - other.x;
-            const dy = y - other.y;
-            const angle = Math.atan2(dy, dx);
-
-            const diameter = (nodeSize * 2);
-            const nextDX = other.x + (Math.cos(angle) * diameter) - x;
-            const nextDY = other.y + (Math.sin(angle) * diameter) - y;
-
-            if (dx * dx + dy * dy < nodeSize * nodeSize * 4)
-            {
-                x += nextDX;
-                y += nextDY;
-            }
-        }
-
-        node.x = x;
-        node.y = y;
-    }
-
-    moveMultipleNodesTo(pointer, nodes, x, y)
-    {
+  moveMultipleNodesTo(pointer, nodes, x, y)
+  {
     //Moves all nodes by difference between initial position with passed-in x and y
-        const pos = pointer.getInputEventPosition();
-        const dx = x - pos.x;
-        const dy = y - pos.y;
-        for(const node of nodes)
-        {
-            node.x += dx;
-            node.y += dy;
-        }
-
-        //Updates initial position to passed-in x and y to maintain relative position
-        pointer.changeInputEventPosition(x, y);
+    const pos = pointer.getInputEventPosition();
+    const dx = x - pos.x;
+    const dy = y - pos.y;
+    for(const node of nodes)
+    {
+      node.x += dx;
+      node.y += dy;
     }
 
-    moveEdgeTo(pointer, edge, x, y)
-    {
-        edge.setQuadraticByCoords(x, y);
-    }
+    //Updates initial position to passed-in x and y to maintain relative position
+    pointer.changeInputEventPosition(x, y);
+  }
 
-    moveEndpointTo(pointer, edge, x, y)
-    {
+  moveEdgeTo(pointer, edge, x, y)
+  {
+    edge.setQuadraticByCoords(x, y);
+  }
+
+  moveEndpointTo(pointer, edge, x, y)
+  {
     //Get ONLY node at x and y (cannot use hover target, since it is not ONLY nodes)
-        const picker = this.inputController.getPicker();
-        const dst = picker.getPickHandler('node').getTargetAt(this.getGraph(), x, y) || pointer;
+    const picker = this.inputController.getPicker();
+    const dst = picker.getPickHandler("node").getTargetAt(this.getGraph(), x, y) || pointer;
 
-        edge.changeDestinationNode(dst);
+    edge.changeDestinationNode(dst);
 
-        //If the cursor returns to the state after leaving it...
-        if (edge.isSelfLoop())
+    //If the cursor returns to the state after leaving it...
+    if (edge.isSelfLoop())
+    {
+      //Make it a self loop
+      const sourceNode = edge.getSourceNode();
+      const dx = sourceNode.x - x;
+      const dy = sourceNode.y - y;
+      const radians = Math.atan2(dy, dx) + Math.PI;
+      edge.setQuadratic(radians);
+    }
+    //Otherwise, maintain original curve
+    else
+    {
+      //TODO: This also causes self-loops to act weird when no longer a self loop
+      edge.setQuadratic(this.prevQuad.radians, this.prevQuad.length);
+    }
+  }
+
+  openLabelEditor(target, defaultValue=null, callback=null)
+  {
+    const labelEditor = this.getModule().getInputManager().getLabelEditorManager().getLabelEditorComponent();
+    const prevLabel = defaultValue;
+    labelEditor.openEditor(target, defaultValue, (target, value) => {
+      if (DELETE_ON_EMPTY && (!value || value.length <= 0) && target instanceof GraphEdge)
+      {
+        //Assumes target is GraphEdge
+        this._graph.deleteEdge(target);
+      }
+      else
+      {
+        if (target instanceof GraphEdge)
         {
-            //Make it a self loop
-            const sourceNode = edge.getSourceNode();
-            const dx = sourceNode.x - x;
-            const dy = sourceNode.y - y;
-            const radians = Math.atan2(dy, dx) + Math.PI;
-            edge.setQuadratic(radians);
+          target.setEdgeLabel(value);
         }
-        //Otherwise, maintain original curve
         else
         {
-            //TODO: This also causes self-loops to act weird when no longer a self loop
-            edge.setQuadratic(this.prevQuad.radians, this.prevQuad.length);
+          target.setNodeLabel(value);
         }
-    }
 
-    openLabelEditor(target, defaultValue=null, callback=null)
-    {
-        const labelEditor = this.getModule().getInputManager().getLabelEditorManager().getLabelEditorComponent();
-        const prevLabel = defaultValue;
-        labelEditor.openEditor(target, defaultValue, (target, value) => 
+        if (!prevLabel || (prevLabel.length > 0 && value !== prevLabel))
         {
-            if (DELETE_ON_EMPTY && (!value || value.length <= 0) && target instanceof GraphEdge)
-            {
-                //Assumes target is GraphEdge
-                this._graph.deleteEdge(target);
-            }
-            else
-            {
-                if (target instanceof GraphEdge)
-                {
-                    target.setEdgeLabel(value);
-                }
-                else
-                {
-                    target.setNodeLabel(value);
-                }
+          this.getModule().getApp().getUndoManager().captureEvent();
+        }
+        if (callback) callback(target, value);
+      }
+    }, (target) => {
+      if (DELETE_ON_EMPTY && (!prevLabel || prevLabel.length <= 0) && target instanceof GraphEdge)
+      {
+        //Assumes target is GraphEdge
+        this._graph.deleteEdge(target);
+      }
+    });
+  }
 
-                if (!prevLabel || (prevLabel.length > 0 && value !== prevLabel))
-                {
-                    this.getModule().getApp().getUndoManager().captureEvent();
-                }
-                if (callback) callback(target, value);
-            }
-        }, (target) => 
-        {
-            if (DELETE_ON_EMPTY && (!prevLabel || prevLabel.length <= 0) && target instanceof GraphEdge)
-            {
-                //Assumes target is GraphEdge
-                this._graph.deleteEdge(target);
-            }
-        });
-    }
-
-    focusOnNode(node)
-    {
+  focusOnNode(node)
+  {
     //Center workspace at focused node; inverted due to graph-to-screen space
-        this.inputController.getInputAdapter().getViewport().setOffset(-node.x, -node.y);
-    }
+    this.inputController.getInputAdapter().getViewport().setOffset(-node.x, -node.y);
+  }
 
-    focusOnEdge(edge)
-    {
+  focusOnEdge(edge)
+  {
     //Center workspace at focused edge; inverted due to graph-to-screen space
-        const center = edge.getCenterPoint();
-        this.inputController.getInputAdapter().getViewport().setOffset(-center.x, -center.y);
-    }
+    const center = edge.getCenterPoint();
+    this.inputController.getInputAdapter().getViewport().setOffset(-center.x, -center.y);
+  }
 
-    focusOnNodes(nodes)
-    {
+  focusOnNodes(nodes)
+  {
     //Center workspace at the average of focused nodes; inverted due to graph-to-screen space
-        const length = nodes.length;
-        let ax = 0;
-        let ay = 0;
-        for(const node of nodes)
-        {
-            ax += node.x;
-            ay += node.y;
-        }
-        this.inputController.getInputAdapter().getViewport().setOffset(-ax / length, -ay / length);
+    const length = nodes.length;
+    let ax = 0;
+    let ay = 0;
+    for(const node of nodes)
+    {
+      ax += node.x;
+      ay += node.y;
     }
+    this.inputController.getInputAdapter().getViewport().setOffset(-ax / length, -ay / length);
+  }
 }
 //Mixin Eventable
 Eventable.mixin(GraphController);
