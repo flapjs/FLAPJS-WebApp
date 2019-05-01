@@ -15,15 +15,15 @@ class NFAToDFAConversionWarningMessage extends React.Component
 
         switch(buttonValue)
         {
-            case "convert":
-                {//FIXME: FSABUILDER: convertMachineTo needs to change?
-                    const machineController = this.props.machineController;
-                    machineController.convertMachineTo("DFA");
-                    message.close();
-                }
+        case 'convert':
+            {//FIXME: FSABUILDER: convertMachineTo needs to change?
+                const machineController = this.props.machineController;
+                machineController.convertMachineTo('DFA');
+                message.close();
+            }
             break;
-            default:
-              throw new Error("Unknown button value for message");
+        default:
+            throw new Error('Unknown button value for message');
         }
     }
 
@@ -33,9 +33,9 @@ class NFAToDFAConversionWarningMessage extends React.Component
         const stateCount = machineController.countStates();
 
         return <div>
-          <p>{I18N.toString("message.warning.convertNFAToDFA")}</p>
-          <p>{`${stateCount} states -> ${Math.pow(2, stateCount)} states`}</p>
-          <button value="convert" onClick={this.onClick}>{I18N.toString("message.action.convert")}</button>
+            <p>{I18N.toString('message.warning.convertNFAToDFA')}</p>
+            <p>{`${stateCount} states -> ${Math.pow(2, stateCount)} states`}</p>
+            <button value="convert" onClick={this.onClick}>{I18N.toString('message.action.convert')}</button>
         </div>;
     }
 }

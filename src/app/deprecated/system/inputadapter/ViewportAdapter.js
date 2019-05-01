@@ -4,142 +4,142 @@
  */
 class ViewportAdapter
 {
-  constructor()
-  {
-    this._element = null;
-    this._offsetX = 0;
-    this._offsetY = 0;
-    this._nextOffsetX = 0;
-    this._nextOffsetY = 0;
-    this._offsetDamping = 0.1;
-
-    this._scaleFactor = 1;
-    this._minScale = 1;
-    this._maxScale = 1;
-  }
-
-  setElement(element)
-  {
-    this._element = element;
-    return this;
-  }
-
-  setMinScale(scale)
-  {
-    this._minScale = scale;
-    if (this._scaleFactor < this._minScale) this._scaleFactor = this._minScale;
-    return this;
-  }
-
-  setMaxScale(scale)
-  {
-    this._maxScale = scale;
-    if (this._scaleFactor > this._maxScale) this._scaleFactor = this._maxScale;
-    return this;
-  }
-
-  setOffsetDamping(damping)
-  {
-    this._offsetDamping = damping;
-    return this;
-  }
-
-  update()
-  {
-    const dx = this._nextOffsetX - this._offsetX;
-    this._offsetX += dx * this._offsetDamping;
-    const dy = this._nextOffsetY - this._offsetY;
-    this._offsetY += dy * this._offsetDamping;
-  }
-
-  transformScreenToView(clientX, clientY)
-  {
-    if (!this._element) return {x: clientX - this._offsetX, y: clientY - this._offsetY};
-
-    const ctm = this._element.getScreenCTM();
-    return {
-      x: (clientX - ctm.e) / ctm.a - this._offsetX,
-      y: (clientY - ctm.f) / ctm.d - this._offsetY
-    };
-  }
-
-  setOffset(x, y, immediate=false)
-  {
-    if (immediate)
+    constructor()
     {
-      this._nextOffsetX = this._offsetX = x;
-      this._nextOffsetY = this._offsetY = y;
+        this._element = null;
+        this._offsetX = 0;
+        this._offsetY = 0;
+        this._nextOffsetX = 0;
+        this._nextOffsetY = 0;
+        this._offsetDamping = 0.1;
+
+        this._scaleFactor = 1;
+        this._minScale = 1;
+        this._maxScale = 1;
     }
-    else
+
+    setElement(element)
     {
-      this._nextOffsetX = x;
-      this._nextOffsetY = y;
+        this._element = element;
+        return this;
     }
-  }
 
-  addOffset(dx, dy, immediate=false)
-  {
-    if (immediate)
+    setMinScale(scale)
     {
-      this._offsetX += dx;
-      this._offsetY += dy;
-      this._nextOffsetX = this._offsetX;
-      this._nextOffsetY = this._offsetY;
+        this._minScale = scale;
+        if (this._scaleFactor < this._minScale) this._scaleFactor = this._minScale;
+        return this;
     }
-    else
+
+    setMaxScale(scale)
     {
-      this._nextOffsetX += dx;
-      this._nextOffsetY += dy;
+        this._maxScale = scale;
+        if (this._scaleFactor > this._maxScale) this._scaleFactor = this._maxScale;
+        return this;
     }
-  }
 
-  setScale(scale)
-  {
-    this._scaleFactor = Math.min(this._maxScale, Math.max(this._minScale, scale));
-  }
+    setOffsetDamping(damping)
+    {
+        this._offsetDamping = damping;
+        return this;
+    }
 
-  addScale(dscale)
-  {
-    this._scaleFactor += dscale;
+    update()
+    {
+        const dx = this._nextOffsetX - this._offsetX;
+        this._offsetX += dx * this._offsetDamping;
+        const dy = this._nextOffsetY - this._offsetY;
+        this._offsetY += dy * this._offsetDamping;
+    }
 
-    if (this._scaleFactor > this._maxScale) this._scaleFactor = this._maxScale;
-    else if (this._scaleFactor < this._minScale) this._scaleFactor = this._minScale;
-  }
+    transformScreenToView(clientX, clientY)
+    {
+        if (!this._element) return {x: clientX - this._offsetX, y: clientY - this._offsetY};
 
-  getOffsetX()
-  {
-    return this._offsetX;
-  }
+        const ctm = this._element.getScreenCTM();
+        return {
+            x: (clientX - ctm.e) / ctm.a - this._offsetX,
+            y: (clientY - ctm.f) / ctm.d - this._offsetY
+        };
+    }
 
-  getOffsetY()
-  {
-    return this._offsetY;
-  }
+    setOffset(x, y, immediate=false)
+    {
+        if (immediate)
+        {
+            this._nextOffsetX = this._offsetX = x;
+            this._nextOffsetY = this._offsetY = y;
+        }
+        else
+        {
+            this._nextOffsetX = x;
+            this._nextOffsetY = y;
+        }
+    }
 
-  getOffsetDamping()
-  {
-    return this._offsetDamping;
-  }
+    addOffset(dx, dy, immediate=false)
+    {
+        if (immediate)
+        {
+            this._offsetX += dx;
+            this._offsetY += dy;
+            this._nextOffsetX = this._offsetX;
+            this._nextOffsetY = this._offsetY;
+        }
+        else
+        {
+            this._nextOffsetX += dx;
+            this._nextOffsetY += dy;
+        }
+    }
 
-  getScale()
-  {
-    return this._scaleFactor;
-  }
+    setScale(scale)
+    {
+        this._scaleFactor = Math.min(this._maxScale, Math.max(this._minScale, scale));
+    }
 
-  getMinScale()
-  {
-    return this._minScale;
-  }
+    addScale(dscale)
+    {
+        this._scaleFactor += dscale;
 
-  getMaxScale()
-  {
-    return this._maxScale;
-  }
+        if (this._scaleFactor > this._maxScale) this._scaleFactor = this._maxScale;
+        else if (this._scaleFactor < this._minScale) this._scaleFactor = this._minScale;
+    }
 
-  getElement()
-  {
-    return this._element;
-  }
+    getOffsetX()
+    {
+        return this._offsetX;
+    }
+
+    getOffsetY()
+    {
+        return this._offsetY;
+    }
+
+    getOffsetDamping()
+    {
+        return this._offsetDamping;
+    }
+
+    getScale()
+    {
+        return this._scaleFactor;
+    }
+
+    getMinScale()
+    {
+        return this._minScale;
+    }
+
+    getMaxScale()
+    {
+        return this._maxScale;
+    }
+
+    getElement()
+    {
+        return this._element;
+    }
 }
 
 export default ViewportAdapter;

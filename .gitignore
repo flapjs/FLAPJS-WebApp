@@ -1,5 +1,6 @@
 /node_modules/
 .DS_Store
+lintErrors.txt
 
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 # User-specific stuff

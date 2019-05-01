@@ -2,15 +2,15 @@ import React from 'react';
 
 class SVGIcon extends React.Component
 {
-  constructor(props)
-  {
-    super(props);
-  }
+    constructor(props)
+    {
+        super(props);
+    }
 
-  //Override
-  render()
-  {
-    return <svg className="svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56">
+    /** @override */
+    render()
+    {
+        return <svg className="svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56">
     	<g>
     		<path fill="#E9E9E0" d="M36.985,0H7.963C7.155,0,6.5,0.655,6.5,1.926V55c0,0.345,0.655,1,1.463,1h40.074
     		c0.808,0,1.463-0.655,1.463-1V12.978c0-0.696-0.093-0.92-0.257-1.085L37.607,0.257C37.442,0.093,37.218,0,36.985,0z"/>
@@ -46,8 +46,8 @@ class SVGIcon extends React.Component
     		s1-0.448,1-1c0-5.412-2.982-10.364-7.548-13H39.5v2H45.5z M15.5,20h-2v-2h2V20z M31.5,22h-6v-3.754V16h6v2.246V22z M41.5,18h2v2h-2
     		V18z"/>
     	</g>
-    </svg>;
-  }
+        </svg>;
+    }
 }
 
 export default SVGIcon;

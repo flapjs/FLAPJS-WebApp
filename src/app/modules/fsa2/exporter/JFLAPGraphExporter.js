@@ -6,103 +6,106 @@ import { downloadText } from 'util/Downloader.js';
 
 class JFLAPGraphExporter extends AbstractGraphExporter
 {
-  constructor() { super(); }
+    constructor() { super(); }
 
-  //Override
-  importFromFile(fileBlob, module)
-  {
-    return new Promise((resolve, reject) => {
-      const filename = fileBlob.name;
-      if (!filename.endsWith(this.getFileType()))
-      {
-        throw new Error("Trying to import invalid file type for \'" + this.getFileType() + "\': " + filename);
-      }
-
-      const reader = new FileReader();
-      reader.onload = e => {
-        const graphController = module.getGraphController();
-        const machineController = module.getMachineController();
-        const data = e.target.result;
-        const name = filename.substring(0, filename.length - this.getFileType().length - 1);
-        const graph = graphController.getGraph();
-
-        //TODO: this should not be here, this should exist somewhere in graphController
-        module.getApp().getUndoManager().captureEvent();
-
-        try
+    /** @override */
+    importFromFile(fileBlob, module)
+    {
+        return new Promise((resolve, reject) => 
         {
-          const xmlData = new DOMParser().parseFromString(data, "text/xml");
-          XMLGraphParser.parse(xmlData, graph);
+            const filename = fileBlob.name;
+            if (!filename.endsWith(this.getFileType()))
+            {
+                throw new Error('Trying to import invalid file type for \'' + this.getFileType() + '\': ' + filename);
+            }
 
-          //graphController.emit("userImportGraph", graph);
+            const reader = new FileReader();
+            reader.onload = e => 
+            {
+                const graphController = module.getGraphController();
+                const machineController = module.getMachineController();
+                const data = e.target.result;
+                const name = filename.substring(0, filename.length - this.getFileType().length - 1);
+                const graph = graphController.getGraph();
 
-          module.getApp().getSession().setProjectName(name);
+                //TODO: this should not be here, this should exist somewhere in graphController
+                module.getApp().getUndoManager().captureEvent();
 
-          resolve();
-        }
-        catch (e)
-        {
-          reader.abort();
-          reject(e);
-        }
-        finally
-        {
-          module.getApp().getUndoManager().captureEvent();
-        }
-      };
+                try
+                {
+                    const xmlData = new DOMParser().parseFromString(data, 'text/xml');
+                    XMLGraphParser.parse(xmlData, graph);
 
-      reader.onerror = e => {
-        reject(new Error("Unable to import file: " + e.target.error.code));
-      }
+                    //graphController.emit("userImportGraph", graph);
 
-      reader.readAsText(fileBlob);
-    });
-  }
+                    module.getApp().getSession().setProjectName(name);
 
-  //Override
-  exportToFile(filename, module)
-  {
-    const graph = module.getGraphController().getGraph();
-    const graphData = XMLGraphParser.objectify(graph);
-    const xmlString = new XMLSerializer().serializeToString(graphData);
-    downloadText(filename + '.' + this.getFileType(), xmlString);
-  }
+                    resolve();
+                }
+                catch (e)
+                {
+                    reader.abort();
+                    reject(e);
+                }
+                finally
+                {
+                    module.getApp().getUndoManager().captureEvent();
+                }
+            };
 
-  //Override
-  doesSupportFile()
-  {
-    return true;
-  }
+            reader.onerror = e => 
+            {
+                reject(new Error('Unable to import file: ' + e.target.error.code));
+            };
 
-  //Override
-  canImport(module)
-  {
-    return true;
-  }
+            reader.readAsText(fileBlob);
+        });
+    }
 
-  //Override
-  getTitle()
-  {
-    return I18N.toString("file.export.jff.hint");
-  }
+    /** @override */
+    exportToFile(filename, module)
+    {
+        const graph = module.getGraphController().getGraph();
+        const graphData = XMLGraphParser.objectify(graph);
+        const xmlString = new XMLSerializer().serializeToString(graphData);
+        downloadText(filename + '.' + this.getFileType(), xmlString);
+    }
 
-  //Override
-  getLabel()
-  {
-    return I18N.toString("file.export.jff");
-  }
+    /** @override */
+    doesSupportFile()
+    {
+        return true;
+    }
 
-  //Override
-  getFileType()
-  {
-    return "jff";
-  }
+    /** @override */
+    canImport(module)
+    {
+        return true;
+    }
 
-  //Override
-  getIconClass()
-  {
-    return XMLFileIcon;
-  }
+    /** @override */
+    getTitle()
+    {
+        return I18N.toString('file.export.jff.hint');
+    }
+
+    /** @override */
+    getLabel()
+    {
+        return I18N.toString('file.export.jff');
+    }
+
+    /** @override */
+    getFileType()
+    {
+        return 'jff';
+    }
+
+    /** @override */
+    getIconClass()
+    {
+        return XMLFileIcon;
+    }
 }
 
 export default JFLAPGraphExporter;

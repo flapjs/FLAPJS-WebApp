@@ -2,125 +2,125 @@ const MAX_HISTORY_LENGTH = 1000;
 
 class UndoManager
 {
-  constructor()
-  {
-    this.history = [];
-    this.offsetIndex = 0;
-
-    this._handlerFactory = null;
-  }
-
-  setEventHandlerFactory(factory)
-  {
-    this._handlerFactory = factory;
-    return this;
-  }
-
-  //DuckType(SessionListener)
-  onSessionStart(session)
-  {
-
-  }
-
-  //DuckType(SessionListener)
-  onSessionStop(session)
-  {
-    this.clear();
-  }
-
-  captureEvent(...args)
-  {
-    if (typeof this._handlerFactory === 'function')
+    constructor()
     {
-      const handler = this._handlerFactory(args);
-      if (handler)
-      {
-        this.captureEventAsHandler(handler);
-      }
-      else
-      {
-        throw new Error("Cannot create valid undo event handler for capture");
-      }
-    }
-    else
-    {
-      console.error("Missing default undo event handler for capture");
-    }
-  }
+        this.history = [];
+        this.offsetIndex = 0;
 
-  captureEventAsHandler(eventHandler)
-  {
+        this._handlerFactory = null;
+    }
+
+    setEventHandlerFactory(factory)
+    {
+        this._handlerFactory = factory;
+        return this;
+    }
+
+    //DuckType(SessionListener)
+    onSessionStart(session)
+    {
+
+    }
+
+    //DuckType(SessionListener)
+    onSessionStop(session)
+    {
+        this.clear();
+    }
+
+    captureEvent(...args)
+    {
+        if (typeof this._handlerFactory === 'function')
+        {
+            const handler = this._handlerFactory(args);
+            if (handler)
+            {
+                this.captureEventAsHandler(handler);
+            }
+            else
+            {
+                throw new Error('Cannot create valid undo event handler for capture');
+            }
+        }
+        else
+        {
+            console.error('Missing default undo event handler for capture');
+        }
+    }
+
+    captureEventAsHandler(eventHandler)
+    {
     //Pop it all until current event
-    while(this.offsetIndex > 0)
-    {
-      this.history.pop();
-      --this.offsetIndex;
+        while(this.offsetIndex > 0)
+        {
+            this.history.pop();
+            --this.offsetIndex;
+        }
+
+        //Push the current event to the stack
+        this.history.push(eventHandler);
+
+        while(this.history.length > MAX_HISTORY_LENGTH)
+        {
+            this.history.unshift();
+        }
     }
 
-    //Push the current event to the stack
-    this.history.push(eventHandler);
-
-    while(this.history.length > MAX_HISTORY_LENGTH)
+    getPreviousEvent()
     {
-      this.history.unshift();
-    }
-  }
-
-  getPreviousEvent()
-  {
-    if (!this.canUndo()) return null;
-    return this.history[this.history.length - this.offsetIndex - 1];
-  }
-
-  getNextEvent()
-  {
-    if (!this.canRedo()) return null;
-    return this.history[this.history.length - this.offsetIndex + 1];
-  }
-
-  undo()
-  {
-    if (!this.canUndo())
-    {
-      //Already the oldest recorded event!
-      return;
+        if (!this.canUndo()) return null;
+        return this.history[this.history.length - this.offsetIndex - 1];
     }
 
-    const event = this.history[this.history.length - this.offsetIndex - 1];
-    ++this.offsetIndex;
-
-    event.applyUndo(this);
-  }
-
-  canUndo()
-  {
-    return this.offsetIndex < this.history.length;
-  }
-
-  redo()
-  {
-    if (!this.canRedo())
+    getNextEvent()
     {
-      //Already the most recent event!
-      return;
+        if (!this.canRedo()) return null;
+        return this.history[this.history.length - this.offsetIndex + 1];
     }
 
-    --this.offsetIndex;
-    const event = this.history[this.history.length - this.offsetIndex - 1];
+    undo()
+    {
+        if (!this.canUndo())
+        {
+            //Already the oldest recorded event!
+            return;
+        }
 
-    event.applyRedo(this);
-  }
+        const event = this.history[this.history.length - this.offsetIndex - 1];
+        ++this.offsetIndex;
 
-  canRedo()
-  {
-    return this.offsetIndex > 0;
-  }
+        event.applyUndo(this);
+    }
 
-  clear()
-  {
-    this.history.length = 0;
-    this.offsetIndex = 0;
-  }
+    canUndo()
+    {
+        return this.offsetIndex < this.history.length;
+    }
+
+    redo()
+    {
+        if (!this.canRedo())
+        {
+            //Already the most recent event!
+            return;
+        }
+
+        --this.offsetIndex;
+        const event = this.history[this.history.length - this.offsetIndex - 1];
+
+        event.applyRedo(this);
+    }
+
+    canRedo()
+    {
+        return this.offsetIndex > 0;
+    }
+
+    clear()
+    {
+        this.history.length = 0;
+        this.offsetIndex = 0;
+    }
 }
 
 export default UndoManager;

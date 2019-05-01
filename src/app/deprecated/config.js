@@ -1,28 +1,29 @@
-const LOCAL_STORAGE_ID = "config";
+const LOCAL_STORAGE_ID = 'config';
 
 const cfg = {};
 cfg._resetOnLoad = false;
 cfg._userDefined = false;
 cfg._dirty = false;
-cfg.setValue = function(key, value) {
-  if (this.hasOwnProperty(key))
-  {
-    this._userDefined = true;
-    this._dirty = true;
-    this[key] = value;
-  }
-  else
-  {
-    throw new Error("Trying to assign value to non-existant key in config");
-  }
+cfg.setValue = function(key, value) 
+{
+    if (this.hasOwnProperty(key))
+    {
+        this._userDefined = true;
+        this._dirty = true;
+        this[key] = value;
+    }
+    else
+    {
+        throw new Error('Trying to assign value to non-existant key in config');
+    }
 }.bind(cfg);
 export default cfg;
 
 //Preferences
 
 //General
-cfg.MACHINE_ERRORS_MESSAGE_TAG = "machineError";
-cfg.MACHINE_CONVERSION_MESSAGE_TAG = "machineConversion";
+cfg.MACHINE_ERRORS_MESSAGE_TAG = 'machineError';
+cfg.MACHINE_CONVERSION_MESSAGE_TAG = 'machineConversion';
 
 cfg.ERROR_CHECK_INTERVAL = 2000;
 cfg.GRAPH_IMMEDIATE_INTERVAL = 50;
@@ -37,8 +38,8 @@ cfg.MAX_SCALE = 10;
 cfg.INIT_WAITTIME = 1500;
 
 //NodalGraph
-cfg.STR_TRANSITION_DEFAULT_LABEL = "";
-cfg.STR_STATE_LABEL = "q";
+cfg.STR_TRANSITION_DEFAULT_LABEL = '';
+cfg.STR_STATE_LABEL = 'q';
 cfg.PARALLEL_EDGE_HEIGHT = 10;
 cfg.SELF_LOOP_HEIGHT = 40;
 
@@ -93,67 +94,67 @@ cfg.PADDING_RADIUS_SQU = 2304;
 //check if browser support local storage
 export function doesSupportLocalStorage()
 {
-  return typeof(Storage) !== 'undefined';
+    return typeof(Storage) !== 'undefined';
 }
 
 export function loadConfig()
 {
-  const jsonString = localStorage.getItem(LOCAL_STORAGE_ID);
-  //If cannot find a config...
-  if (!jsonString)
-  {
+    const jsonString = localStorage.getItem(LOCAL_STORAGE_ID);
+    //If cannot find a config...
+    if (!jsonString)
+    {
     //Just use the default one and don't save anything...
-    console.log("Using default config...");
-    return;
-  }
-
-  try
-  {
-    console.log("Loading config...");
-    const jsonData = JSON.parse(jsonString);
-    if (jsonData['_resetOnLoad'] == true)
-    {
-      //Reset the config
-      clearConfig();
-
-      //Save a new config
-      saveConfig();
+        console.log('Using default config...');
+        return;
     }
-    else
-    {
-      Object.assign(cfg, jsonData);
-    }
-  }
-  catch (e)
-  {
-    //Reset the config
-    clearConfig();
-  }
-};
 
-export function saveConfig(forceSave=false)
-{
-  if (forceSave || (cfg._userDefined && cfg._dirty))
-  {
     try
     {
-      console.log("Saving config...");
-      const jsonString = JSON.stringify(cfg);
-      localStorage.setItem(LOCAL_STORAGE_ID, jsonString);
+        console.log('Loading config...');
+        const jsonData = JSON.parse(jsonString);
+        if (jsonData['_resetOnLoad'] == true)
+        {
+            //Reset the config
+            clearConfig();
 
-      cfg._dirty = false;
+            //Save a new config
+            saveConfig();
+        }
+        else
+        {
+            Object.assign(cfg, jsonData);
+        }
     }
     catch (e)
     {
-      //Reset the config
-      clearConfig();
+    //Reset the config
+        clearConfig();
     }
-  }
-};
+}
+
+export function saveConfig(forceSave=false)
+{
+    if (forceSave || (cfg._userDefined && cfg._dirty))
+    {
+        try
+        {
+            console.log('Saving config...');
+            const jsonString = JSON.stringify(cfg);
+            localStorage.setItem(LOCAL_STORAGE_ID, jsonString);
+
+            cfg._dirty = false;
+        }
+        catch (e)
+        {
+            //Reset the config
+            clearConfig();
+        }
+    }
+}
 
 export function clearConfig()
 {
-  localStorage.removeItem(LOCAL_STORAGE_ID);
+    localStorage.removeItem(LOCAL_STORAGE_ID);
 
-  cfg._dirty = true;
-};
+    cfg._dirty = true;
+}

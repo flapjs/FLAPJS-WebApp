@@ -1,8 +1,8 @@
 class AbstractLocalSaver
 {
-  onLoadSave() {}
-  onUnloadSave() {}
-  onAutoSave() {}
+    onLoadSave() {}
+    onUnloadSave() {}
+    onAutoSave() {}
 }
 
 export default AbstractLocalSaver;
