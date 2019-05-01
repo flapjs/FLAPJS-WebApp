@@ -66,8 +66,8 @@ class FSAErrorChecker
       //Ignore dupe/empty edges for nondeterministic
       else if (deterministic)
       {
-        const from = edge.getSourceNode();
-        const to = edge.getDestinationNode();
+        const from = edge.getEdgeFrom();
+        const to = edge.getEdgeTo();
         const labels = edge.getEdgeSymbolsFromLabel();
 
         for(const label of labels)

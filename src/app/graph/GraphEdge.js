@@ -1,12 +1,23 @@
-import GraphElement from 'graph/GraphElement.js';
+import GraphElement from './GraphElement.js';
 
+/**
+ * A class that represents the edge elements of a graph.
+ * 
+ * @see {@link NodeGraph}
+ * @extends GraphElement
+ */
 class GraphEdge extends GraphElement
 {
+    /**
+     * Creates a edge with the unique id.
+     * 
+     * @param {String} id           The element id for this node.
+     * @param {GraphNode} from      The from node of the edge.
+     * @param {GraphNode} [to=null] The to node of the edge.
+     */
     constructor(id, from, to = null)
     {
         super(id);
-
-        if (!from) throw new Error('Source of edge cannot be null.');
 
         this._from = from;
         this._to = to;
@@ -14,43 +25,37 @@ class GraphEdge extends GraphElement
         this._label = '';
     }
 
-    setSourceNode(node)
-    {
-        if (!node) throw new Error('Source of edge cannot be null.');
-
-        this._from = node;
-        return this;
-    }
-
-    getSourceNode()
-    {
-        return this._from;
-    }
-
-    setDestinationNode(node)
-    {
-        this._to = node;
-        return this;
-    }
-
+    // DEPRECATED!
     changeDestinationNode(node)
     {
         this._to = node;
     }
 
-    getDestinationNode()
+    setEdgeFrom(node)
     {
-        return this._to;
+        if (!node) throw new Error('Source of edge cannot be null');
+
+        this._from = node;
+        return this;
     }
 
+    setEdgeTo(node)
+    {
+        this._to = node;
+        return this;
+    }
+
+    /**
+     * Sets the edge label to the passed-in string.
+     *
+     * Assumes the label is NOT null.
+     * @param {String} label  The new edge label.
+     * @returns {this}
+     */
     setEdgeLabel(label)
     {
         this._label = label;
-    }
-
-    getEdgeLabel()
-    {
-        return this._label;
+        return this;
     }
 
     getEdgeDirection()
@@ -124,26 +129,25 @@ class GraphEdge extends GraphElement
         return dst;
     }
 
-    getPlaceholderLength()
-    {
-        return this._from.getNodeSize();
-    }
+    getPlaceholderLength() { return this._from.getNodeSize(); }
+    isPlaceholder() { return this._to === null; }
+    isSelfLoop() { return this._from === this._to; }
 
-    isPlaceholder()
-    {
-        return !this._to;
-    }
+    /**
+     * Gets the label of the edge. If the edge has no label, it will return an
+     * empty string.
+     * @returns {String} The edge's label.
+     */
+    getEdgeLabel() { return this._label; }
 
-    isSelfLoop()
-    {
-        return this._from === this._to;
-    }
+    getEdgeFrom() { return this._from; }
+    getEdgeTo() { return this._to; }
 
     /** @override */
     getHashString(usePosition = true)
     {
         const src = this._from ? this._from.getHashString(usePosition) : '';
-        //HACK: to may be a pointer, which is not a node, so getHashString does not exist.
+        // HACK: to may be a pointer, which is not a node, so getHashString does not exist.
         const dst = this._to ? this._to.getHashString ? this._to.getHashString(usePosition) : '0' : '';
         return super.getHashString(usePosition) + ':' + src + ',' + dst + '.' + this._label;
     }

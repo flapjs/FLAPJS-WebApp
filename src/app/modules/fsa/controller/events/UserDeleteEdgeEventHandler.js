@@ -13,7 +13,7 @@ class UserDeleteEdgeEventHandler extends EventHandler
     return {
       edge: edge,
       edgeID: edge.getGraphElementID(),
-      fromID: edge.getSourceNode().getGraphElementID(),
+      fromID: edge.getEdgeFrom().getGraphElementID(),
       toID: prevTo ? prevTo.getGraphElementID() : null,
       label: edge.getEdgeLabel(),
       quad: Object.assign({}, prevQuad)
@@ -36,12 +36,13 @@ class UserDeleteEdgeEventHandler extends EventHandler
     }
     else
     {
-      edge.setSourceNode(from);
+      edge.setEdgeFrom(from);
       edge.changeDestinationNode(to);
     }
 
     edge.setEdgeLabel(e.eventData.label);
-    edge.setQuadratic(e.eventData.quad.radians, e.eventData.quad.length);
+    edge.setQuadraticRadians(e.eventData.quad.radians);
+    edge.setQuadraticLength(e.eventData.quad.length);
   }
 
   //Override - this = event

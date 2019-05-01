@@ -25,7 +25,8 @@ class GraphEdgeMoveEventHandler extends EventHandler
     const edge = graph.getEdgeByElementID(e.eventData.edgeID);
     if (!edge) throw new Error("Unable to find target in graph");
 
-    edge.setQuadratic(e.eventData.prevQuad.radians, e.eventData.prevQuad.length);
+    edge.setQuadraticRadians(e.eventData.prevQuad.radians);
+    edge.setQuadraticLength(e.eventData.prevQuad.length);
   }
 
   //Override - this = event
@@ -35,7 +36,8 @@ class GraphEdgeMoveEventHandler extends EventHandler
     const edge = graph.getEdgeByElementID(e.eventData.edgeID);
     if (!edge) throw new Error("Unable to find target in graph");
 
-    edge.setQuadratic(e.eventData.nextQuad.radians, e.eventData.nextQuad.length);
+    edge.setQuadraticRadians(e.eventData.nextQuad.radians);
+    edge.setQuadraticLength(e.eventData.nextQuad.length);
   }
 }
 export default GraphEdgeMoveEventHandler;

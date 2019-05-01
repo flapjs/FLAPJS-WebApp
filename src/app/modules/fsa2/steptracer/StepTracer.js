@@ -25,7 +25,7 @@ class StepTracer
     this._nextEdges.length = 0;
     for(const edge of graph.getEdges())
     {
-      if (edge.getSourceNode() === node)
+      if (edge.getEdgeFrom() === node)
       {
         this._nextEdges.push(edge);
       }
@@ -41,7 +41,7 @@ class StepTracer
     const symbols = edge.getEdgeSymbolsFromLabel();
     //FIXME: there needs to be a way to select which symbols you want to use
     this._currentSymbols.push(symbols[0]);
-    this._currentNode = edge.getDestinationNode();
+    this._currentNode = edge.getEdgeTo();
     this.updateNextEdges();
   }
 
@@ -50,7 +50,7 @@ class StepTracer
     if (this._prevEdges.length <= 0) return;
 
     const edge = this._prevEdges.pop();
-    this._currentNode = edge.getSourceNode();
+    this._currentNode = edge.getEdgeFrom();
     this.updateNextEdges();
   }
 

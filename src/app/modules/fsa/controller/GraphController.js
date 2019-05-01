@@ -440,7 +440,7 @@ class GraphController extends AbstractGraphController
 
     moveEndpointTo(pointer, edge, x, y)
     {
-    //Get ONLY node at x and y (cannot use hover target, since it is not ONLY nodes)
+        //Get ONLY node at x and y (cannot use hover target, since it is not ONLY nodes)
         const picker = this.inputController.getPicker();
         const dst = picker.getNodeAt(this.getGraph(), x, y) || pointer;
 
@@ -520,7 +520,6 @@ Eventable.mixin(GraphController);
 
 function moveNodesOutOfEdges(target, graph)
 {
-
     const x1 = target.getSourceNode().x;
     const y1 = target.getSourceNode().y;
     const x2 = target.getDestinationNode().x;

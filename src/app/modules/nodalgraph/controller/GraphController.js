@@ -315,17 +315,17 @@ class GraphController extends AbstractGraphController
     if (edge.isSelfLoop())
     {
       //Make it a self loop
-      const sourceNode = edge.getSourceNode();
+      const sourceNode = edge.getEdgeFrom();
       const dx = sourceNode.x - x;
       const dy = sourceNode.y - y;
       const radians = Math.atan2(dy, dx) + Math.PI;
-      edge.setQuadratic(radians);
+      edge.setQuadraticRadians(radians);
     }
     //Otherwise, maintain original curve
     else
     {
       //TODO: This also causes self-loops to act weird when no longer a self loop
-      edge.setQuadratic(this.prevQuad.radians, this.prevQuad.length);
+      edge.setQuadraticRadians(this.prevQuad.radians).setQuadraticLength(this.prevQuad.length);
     }
   }
 

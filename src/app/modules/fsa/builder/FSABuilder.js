@@ -160,8 +160,8 @@ function fillFSA(graph, fsa)
   {
     //Ignore any incomplete edges
     if (edge.isPlaceholder()) continue;
-    const from = edge.getSourceNode();
-    const to = edge.getDestinationNode();
+    const from = edge.getEdgeFrom();
+    const to = edge.getEdgeTo();
     if (from instanceof Node && to instanceof Node)
     {
       const labels = edge.getEdgeSymbolsFromLabel();

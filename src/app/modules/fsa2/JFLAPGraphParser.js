@@ -320,12 +320,12 @@ class JFLAPGraphParser extends Parser
 
         //from tag
         const from = dst.createElement("from");
-        from.innerHTML = "" + (nodeIndices.get(edge.getSourceNode()) || 0);
+        from.innerHTML = "" + (nodeIndices.get(edge.getEdgeFrom()) || 0);
         transition.appendChild(from);
 
         //to tag
         const to = dst.createElement("to");
-        to.innerHTML = "" + (nodeIndices.get(edge.getDestinationNode()) || 0);
+        to.innerHTML = "" + (nodeIndices.get(edge.getEdgeTo()) || 0);
         transition.appendChild(to);
 
         //read tag
