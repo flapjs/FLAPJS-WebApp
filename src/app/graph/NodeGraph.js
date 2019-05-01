@@ -1,5 +1,5 @@
-import GraphNode from './GraphNode.js';
-import GraphEdge from './GraphEdge.js';
+import GraphNode from './elements/GraphNode.js';
+import GraphEdge from './elements/GraphEdge.js';
 import { guid, stringHash } from 'util/MathHelper.js';
 
 /**

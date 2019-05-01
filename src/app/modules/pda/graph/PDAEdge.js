@@ -1,4 +1,4 @@
-import QuadraticEdge from 'graph/QuadraticEdge.js';
+import QuadraticEdge from 'graph/elements/QuadraticEdge.js';
 
 export const LINE_SEPARATOR = '\n';
 export const SYMBOL_SEPARATOR = ' ';

@@ -1,5 +1,5 @@
 import React from 'react';
-import GraphNode from 'graph/GraphNode.js';
+import GraphNode from 'graph/elements/GraphNode.js';
 
 import { ARROW } from 'modules/fsa/machine/Symbols.js';
 

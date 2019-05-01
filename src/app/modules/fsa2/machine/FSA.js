@@ -1,4 +1,4 @@
-import GraphElement from 'graph/GraphElement.js';
+import GraphElement from 'graph/elements/GraphElement.js';
 import { guid, stringHash } from 'util/MathHelper.js';
 
 const FROM_STATE_INDEX = 0;

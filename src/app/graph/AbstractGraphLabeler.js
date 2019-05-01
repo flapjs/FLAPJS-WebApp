@@ -1,4 +1,4 @@
-import GraphEdge from 'graph/GraphEdge.js';
+import GraphEdge from 'graph/elements/GraphEdge.js';
 
 class AbstractGraphLabeler
 {
