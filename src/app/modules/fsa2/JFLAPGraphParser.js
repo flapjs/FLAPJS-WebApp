@@ -4,8 +4,14 @@ import { SYMBOL_SEPARATOR } from 'modules/fsa/graph/FSAEdge.js';
 
 export const VERSION = "1.0.0";
 
-class JFLAPExporter extends Parser
+/**
+ * A class that parses and composes an FSAGraph into JFLAP-supported XML data. This is usually used with
+ * an exporter to save to a .jff file to actually import into JFLAP.
+ * @class
+ */
+class JFLAPGraphParser extends Parser
 {
+  /** @constructor */
   constructor() { super(); }
 
   /**
@@ -333,4 +339,4 @@ class JFLAPExporter extends Parser
   }
 }
 
-export default JFLAPParser;
+export default JFLAPGraphParser;
