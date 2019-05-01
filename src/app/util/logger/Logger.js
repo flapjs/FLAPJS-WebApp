@@ -10,6 +10,11 @@ class Logger
             console['log'].call(result);
         }
     }
+
+    static error(tag, message, err = null)
+    {
+        Logger.out(tag, (err ? err.message + ' : ' : '') + message);
+    }
 }
 
 export default Logger;

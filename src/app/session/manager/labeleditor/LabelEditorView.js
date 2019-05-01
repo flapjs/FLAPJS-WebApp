@@ -25,9 +25,9 @@ class LabelEditorView extends React.Component
         this.onInputBlur = this.onInputBlur.bind(this);
     }
 
-    openEditor(graphElement, defaultValue=null, onSubmit=null, onCancel=null)
+    openEditor(graphElement, defaultValue = null, onSubmit = null, onCancel = null)
     {
-        if (!(graphElement instanceof GraphElement)) throw new Error("Can only open editor for GraphElements");
+        if (!(graphElement instanceof GraphElement)) throw new Error('Can only open editor for GraphElements');
 
         this._target = graphElement;
         this._targetOnSubmit = onSubmit;
@@ -36,7 +36,8 @@ class LabelEditorView extends React.Component
         const formatter = this.props.labeler.getLabelFormatter(this._target);
         this.inputComponent.setFormatter(formatter);
 
-        this.setState({open: true}, () => {
+        this.setState({ open: true }, () => 
+        {
             if (defaultValue !== null)
             {
                 this.inputComponent.resetValue(defaultValue);
@@ -53,7 +54,7 @@ class LabelEditorView extends React.Component
 
         this.inputComponent.setFormatter(null);
 
-        this.setState({open: false});
+        this.setState({ open: false });
     }
 
     isEditorOpen()
@@ -95,7 +96,7 @@ class LabelEditorView extends React.Component
         const target = this._target;
         const targetStyle = this.props.style || {};
         const viewport = this.props.viewport;
-        const labeler = this.props.labeler;
+        //const labeler = this.props.labeler;
 
         if (target)
         {
@@ -112,21 +113,21 @@ class LabelEditorView extends React.Component
             const offsetX = -(this.ref.offsetWidth / 2) - parentClientRect.left;
             const offsetY = -(this.ref.offsetHeight / 2) - parentClientRect.top;
 
-            targetStyle['top'] = (y + offsetY) + "px";
-            targetStyle['left'] = (x + offsetX) + "px";
+            targetStyle['top'] = (y + offsetY) + 'px';
+            targetStyle['left'] = (x + offsetX) + 'px';
         }
 
         return (
-            <div ref={ref=>this.ref=ref}
+            <div ref={ref => this.ref = ref}
                 id={this.props.id}
                 className={Style.editor_container +
-          (isEditorOpen ? " open " : "") +
-          " " + this.props.className}
+                    (isEditorOpen ? ' open ' : '') +
+                    ' ' + this.props.className}
                 style={targetStyle}>
-                <PatternInput ref={ref=>this.inputComponent=ref}
+                <PatternInput ref={ref => this.inputComponent = ref}
                     submitOnBlur={this.props.saveOnExit}
                     onSubmit={this.onInputSubmit}
-                    onBlur={this.onInputBlur}/>
+                    onBlur={this.onInputBlur} />
                 <div className={Style.tray_container}>
                     {this.props.children}
                 </div>
