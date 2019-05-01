@@ -11,7 +11,7 @@ class GraphInitialInputHandler extends GraphElementInputHandler
     this.ghostInitialMarker = null;
   }
 
-  //Override
+  /** @override */
   onDragStart(inputController, graphController, pointer, target)
   {
     //Ready to move the initial marker to another state...
@@ -19,7 +19,7 @@ class GraphInitialInputHandler extends GraphElementInputHandler
     return true;
   }
 
-  //Override
+  /** @override */
   onDragMove(inputController, graphController, pointer, target)
   {
     const picker = inputController.getPicker();
@@ -32,7 +32,7 @@ class GraphInitialInputHandler extends GraphElementInputHandler
     return true;
   }
 
-  //Override
+  /** @override */
   onDragStop(inputController, graphController, pointer, target)
   {
     const graph = graphController.getGraph();

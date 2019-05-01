@@ -7,7 +7,7 @@ class GraphEdgeLabelEventHandler extends EventHandler
     super(eventLogger, graphController, "edgeLabel");
   }
 
-  //Override
+  /** @override */
   captureEvent(graph, targetEdge, nextLabel, prevLabel)
   {
     return {

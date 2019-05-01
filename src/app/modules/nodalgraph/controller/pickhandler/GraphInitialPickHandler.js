@@ -10,7 +10,7 @@ class GraphInitialPickHandler extends PickHandler
     super();
   }
 
-  //Override
+  /** @override */
   getTargetAt(graph, x, y)
   {
     const startNode = graph.getStartNode();
@@ -28,7 +28,7 @@ class GraphInitialPickHandler extends PickHandler
     return null;
   }
 
-  //Override
+  /** @override */
   getTargetType() { return "initial"; }
 }
 

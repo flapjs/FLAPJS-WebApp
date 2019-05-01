@@ -25,7 +25,7 @@ class PanelSection extends React.Component
     })
   }
 
-  //Override
+  /** @override */
   componentDidUpdate()
   {
     if (this.state.open && this.props.disabled)
@@ -34,7 +34,7 @@ class PanelSection extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const isOpen = this.state.open;

@@ -10,7 +10,7 @@ class ToolbarUploadButton extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const IconClass = this.props.icon;

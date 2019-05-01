@@ -80,7 +80,7 @@ class AnalysisPanel extends React.Component
             (this.optimizeUnreachOption && this.optimizeUnreachOption.isChecked());
     }
 
-    //Override
+    /** @override */
     render()
     {
         const session = this.props.session;

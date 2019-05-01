@@ -9,7 +9,7 @@ class AppSaver extends AbstractAutoSaveHandler
     this._app = app;
   }
 
-  //Override
+  /** @override */
   onAutoSaveLoad(dataStorage)
   {
     const app = this._app;
@@ -30,7 +30,7 @@ class AppSaver extends AbstractAutoSaveHandler
     }
   }
 
-  //Override
+  /** @override */
   onAutoSaveUpdate(dataStorage)
   {
     const app = this._app;
@@ -46,7 +46,7 @@ class AppSaver extends AbstractAutoSaveHandler
     }
   }
 
-  //Override
+  /** @override */
   onAutoSaveUnload(dataStorage)
   {
     //Don't do anything...

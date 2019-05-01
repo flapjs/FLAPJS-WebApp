@@ -8,7 +8,7 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
     super("endpoint");
   }
 
-  //Override
+  /** @override */
   onAction(inputController, graphController, pointer, target)
   {
     if (inputController.isTrashMode())
@@ -20,7 +20,7 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
     return false;
   }
 
-  //Override
+  /** @override */
   onDragStart(inputController, graphController, pointer, target)
   {
     const targetQuad = target.getQuadratic();
@@ -34,14 +34,14 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
     return true;
   }
 
-  //Override
+  /** @override */
   onDragMove(inputController, graphController, pointer, target)
   {
     graphController.moveEndpointTo(pointer, target, pointer.x, pointer.y);
     return true;
   }
 
-  //Override
+  /** @override */
   onDragStop(inputController, graphController, pointer, target)
   {
     const graph = graphController.getGraph();

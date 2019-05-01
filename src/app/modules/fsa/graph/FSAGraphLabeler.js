@@ -31,7 +31,7 @@ class FSAGraphLabeler extends AbstractGraphLabeler
     return this._prefix;
   }
 
-  //Override
+  /** @override */
   getDefaultNodeLabel()
   {
     if (!this._graphController.shouldAutoRenameNodes())
@@ -59,19 +59,19 @@ class FSAGraphLabeler extends AbstractGraphLabeler
     }
   }
 
-  //Override
+  /** @override */
   getDefaultEdgeLabel()
   {
     return "";
   }
 
-  //Override
+  /** @override */
   getNodeLabelFormatter()
   {
     return (string) => string || "";
   }
 
-  //Override
+  /** @override */
   getEdgeLabelFormatter()
   {
     return edgeLabelFormatter;

@@ -7,7 +7,7 @@ class UserToggleNodeEventHandler extends EventHandler
     super(eventLogger, graphController, "userToggleNode");
   }
 
-  //Override
+  /** @override */
   captureEvent(graph, node, prevAccept)
   {
     return {

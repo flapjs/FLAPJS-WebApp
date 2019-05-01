@@ -11,7 +11,7 @@ class UserConvertMachineEventHandler extends EventHandler
     this.graphController = graphController;
   }
 
-  //Override
+  /** @override */
   captureEvent(machineBuilder, nextMachineType, prevMachineType)
   {
     const graph = this.graphController.getGraph();
@@ -22,7 +22,7 @@ class UserConvertMachineEventHandler extends EventHandler
     };
   }
 
-  //Override
+  /** @override */
   capturePostEvent(machineBuilder, nextMachineType, prevMachineType)
   {
     const graph = this.graphController.getGraph();

@@ -7,7 +7,7 @@ class UserCreateNodeEventHandler extends EventHandler
     super(eventLogger, graphController, "userPostCreateNode");
   }
 
-  //Override
+  /** @override */
   captureEvent(graph, node)
   {
     return {

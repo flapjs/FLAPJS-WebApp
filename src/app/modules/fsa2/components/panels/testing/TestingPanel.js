@@ -22,7 +22,7 @@ class TestingPanel extends React.Component
     this.onAutoErrorCheckChange = this.onAutoErrorCheckChange.bind(this);
   }
 
-  //Override
+  /** @override */
   componentDidMount()
   {
     //TODO: This should be in modules...
@@ -62,7 +62,7 @@ class TestingPanel extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const session = this.props.session;

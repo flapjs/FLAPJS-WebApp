@@ -99,7 +99,7 @@ class ColorSaver extends AbstractAutoSaveHandler
     opts.terminate();
   }
 
-  //Override
+  /** @override */
   onAutoSaveLoad(dataStorage)
   {
     const opts = this._styleOpts;
@@ -116,13 +116,13 @@ class ColorSaver extends AbstractAutoSaveHandler
     }
   }
 
-  //Override
+  /** @override */
   onAutoSaveUnload(dataStorage)
   {
     //Don't do anything...
   }
 
-  //Override
+  /** @override */
   onAutoSaveUpdate(dataStorage)
   {
     const opts = this._styleOpts;

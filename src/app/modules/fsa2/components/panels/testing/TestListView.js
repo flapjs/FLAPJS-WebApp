@@ -43,13 +43,13 @@ class TestListView extends React.Component
     this.onGraphChange = this.onGraphChange.bind(this);
   }
 
-  //Override
+  /** @override */
   componentDidMount()
   {
     this.props.graphController.getGraphChangeHandler().addListener(this.onGraphChange);
   }
 
-  //Override
+  /** @override */
   componentWillUnmount()
   {
     this.props.graphController.getGraphChangeHandler().removeListener(this.onGraphChange);
@@ -200,7 +200,7 @@ class TestListView extends React.Component
     return this._testList.length <= 0;
   }
   
-  //Override
+  /** @override */
   render()
   {
     const immediate = this.props.immediate;

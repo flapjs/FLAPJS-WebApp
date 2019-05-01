@@ -10,7 +10,7 @@ class GraphEndpointPickHandler extends PickHandler
     super();
   }
 
-  //Override
+  /** @override */
   getTargetAt(graph, x, y)
   {
     const end = {x: 0, y: 0};
@@ -28,7 +28,7 @@ class GraphEndpointPickHandler extends PickHandler
     return null;
   }
 
-  //Override
+  /** @override */
   getTargetType() { return "endpoint"; }
 }
 

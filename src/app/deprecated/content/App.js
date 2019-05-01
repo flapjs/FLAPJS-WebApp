@@ -73,7 +73,7 @@ class App extends React.Component
     this.onFileDrop = this.onFileDrop.bind(this);
   }
 
-  //Override
+  /** @override */
   componentDidMount()
   {
     //Initialize input adapter
@@ -98,7 +98,7 @@ class App extends React.Component
     LocalSave.registerHandler(this._saver);
   }
 
-  //Override
+  /** @override */
   componentWillUnmount()
   {
     LocalSave.unregisterHandler(this._saver);
@@ -274,14 +274,14 @@ class App extends React.Component
 
   isExperimental() { return false; }
 
-  //Override
+  /** @override */
   componentDidUpdate()
   {
     this.inputAdapter.update();
     this._module.update(this);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const currentModule = this._module;

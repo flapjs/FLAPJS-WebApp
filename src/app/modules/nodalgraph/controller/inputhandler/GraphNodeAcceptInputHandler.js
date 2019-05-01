@@ -7,7 +7,7 @@ class GraphNodeAcceptInputHandler extends GraphElementInputHandler
     super("node");
   }
 
-  //Override
+  /** @override */
   onAction(inputController, graphController, pointer, target)
   {
     //Edit click to toggle node

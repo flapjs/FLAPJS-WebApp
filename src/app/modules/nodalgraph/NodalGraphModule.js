@@ -88,25 +88,25 @@ class NodalGraphModule
       });
   }
 
-  //Override
+  /** @override */
   initialize(app)
   {
     this._inputManager.onSessionStart(app.getSession());
   }
 
-  //Override
+  /** @override */
   update(app)
   {
     this._inputManager.update(this);
   }
 
-  //Override
+  /** @override */
   destroy(app)
   {
     this._inputManager.onSessionStop(app.getSession());
   }
 
-  //Override
+  /** @override */
   clear(app, graphOnly=false)
   {
     UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
@@ -116,11 +116,11 @@ class NodalGraphModule
   getInputController() { return this._inputManager.getInputController(); }
   getGraphController() { return this._inputManager.getGraphController(); }
 
-  //Override
+  /** @override */
   getModuleVersion() { return MODULE_VERSION; }
-  //Override
+  /** @override */
   getModuleName() { return MODULE_NAME; }
-  //Override
+  /** @override */
   getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
 
   getApp() { return this._app; }

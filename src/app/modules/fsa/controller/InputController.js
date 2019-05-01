@@ -60,7 +60,7 @@ class InputController extends AbstractInputController
     ];
   }
 
-  //Override
+  /** @override */
   initialize(module)
   {
     super.initialize(module);
@@ -68,13 +68,13 @@ class InputController extends AbstractInputController
     this._graphController = module.getGraphController();
   }
 
-  //Override
+  /** @override */
   destroy(module)
   {
     super.destroy(module);
   }
 
-  //Override
+  /** @override */
   update(module)
   {
     super.update(module);
@@ -114,7 +114,7 @@ class InputController extends AbstractInputController
     return this._disabled;
   }
 
-  //Override
+  /** @override */
   onPreInputEvent(pointer)
   {
     if (this._disabled) return super.onPreInputEvent(pointer);
@@ -146,11 +146,11 @@ class InputController extends AbstractInputController
       return true;
     }
 
-    //Override
+    /** @override */
     return super.onPreInputEvent(pointer);
   }
 
-  //Override
+  /** @override */
   onInputEvent(pointer)
   {
     if (this._disabled) return super.onInputEvent(pointer);
@@ -171,11 +171,11 @@ class InputController extends AbstractInputController
       }
     }
 
-    //Override
+    /** @override */
     return super.onInputEvent(pointer);
   }
 
-  //Override
+  /** @override */
   onDblInputEvent(pointer)
   {
     if (this._disabled) return super.onDblInputEvent(pointer);
@@ -202,11 +202,11 @@ class InputController extends AbstractInputController
       }
     }
 
-    //Override
+    /** @override */
     return super.onDblInputEvent(pointer);
   }
 
-  //Override
+  /** @override */
   onDragStart(pointer)
   {
     if (this._disabled) return super.onDragStart(pointer);
@@ -236,11 +236,11 @@ class InputController extends AbstractInputController
       }
     }
 
-    //Override
+    /** @override */
     return super.onDragStart(pointer);
   }
 
-  //Override
+  /** @override */
   onDragMove(pointer)
   {
     if (this._disabled) return super.onDragMove(pointer);
@@ -260,11 +260,11 @@ class InputController extends AbstractInputController
       }
     }
 
-    //Override
+    /** @override */
     return super.onDragMove(pointer);
   }
 
-  //Override
+  /** @override */
   onDragStop(pointer)
   {
     if (this._disabled) return super.onDragStop(pointer);
@@ -285,11 +285,11 @@ class InputController extends AbstractInputController
       }
     }
 
-    //Override
+    /** @override */
     return super.onDragStop(pointer);
   }
 
-  //Override
+  /** @override */
   onPostInputEvent(pointer)
   {
     if (this._disabled) return super.onPostInputEvent(pointer);
@@ -302,7 +302,7 @@ class InputController extends AbstractInputController
     picker.clearTarget();
     picker.updateTarget(graph, pointer.x, pointer.y);
 
-    //Override
+    /** @override */
     super.onPostInputEvent(pointer);
   }
 

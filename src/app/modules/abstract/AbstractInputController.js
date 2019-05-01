@@ -17,23 +17,23 @@ class AbstractInputController extends AbstractInputHandler
   destroy(module) {}
   update(module) {}
 
-  //Override
+  /** @override */
   onPreInputEvent(pointer) { return false; }
-  //Override
+  /** @override */
   onInputEvent(pointer) { return false; }
-  //Override
+  /** @override */
   onAltInputEvent(pointer) { return this.onInputEvent(pointer); }
-  //Override
+  /** @override */
   onDblInputEvent(pointer) { return false; }
-  //Override
+  /** @override */
   onDragStart(pointer) { return false; }
-  //Override
+  /** @override */
   onDragMove(pointer) { return false; }
-  //Override
+  /** @override */
   onDragStop(pointer) { return false; }
-  //Override
+  /** @override */
   onPostInputEvent(pointer) {}
-  //Override
+  /** @override */
   onZoomChange(pointer, zoomValue, prevValue) { return false; }
 
   getInputAdapter()

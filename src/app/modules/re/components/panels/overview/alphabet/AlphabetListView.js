@@ -110,7 +110,7 @@ class TerminalListView extends React.Component
     return result;
   }
 
-  //Override
+  /** @override */
   render()
   {
     const machineController = this.props.machineController;

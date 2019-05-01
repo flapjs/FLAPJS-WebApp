@@ -7,7 +7,7 @@ class UserRenameMachineEventHandler extends EventHandler
     super(eventLogger, machineController, "userRenameMachine");
   }
 
-  //Override
+  /** @override */
   captureEvent(machineBuilder, nextMachineName, prevMachineName)
   {
     return {

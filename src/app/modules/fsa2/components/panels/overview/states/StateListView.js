@@ -95,7 +95,7 @@ class StateListView extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const graphController = this.props.graphController;

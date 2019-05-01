@@ -15,7 +15,7 @@ class TransitionChartView extends React.Component
     this._cachedMachineComponents = [];
   }
 
-  //Override
+  /** @override */
   componentWillUnmount()
   {
     //Reset cached components for re-rendering
@@ -121,7 +121,7 @@ class TransitionChartView extends React.Component
     return result;
   }
 
-  //Override
+  /** @override */
   render()
   {
     const machineController = this.props.machineController;

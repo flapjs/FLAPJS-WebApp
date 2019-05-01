@@ -79,7 +79,7 @@ class PDAModule
     this._tester = new StringTester();
   }
 
-  //Override
+  /** @override */
   initialize(app)
   {
     registerNotifications(app.getNotificationManager());
@@ -134,7 +134,7 @@ class PDAModule
     this._inputManager.onSessionStart(app.getSession());
   }
 
-  //Override
+  /** @override */
   update(app)
   {
     this._inputManager.update(this);
@@ -143,7 +143,7 @@ class PDAModule
     machineController.update(this);
   }
 
-  //Override
+  /** @override */
   destroy(app)
   {
     this._inputManager.onSessionStop(app.getSession());
@@ -152,7 +152,7 @@ class PDAModule
     machineController.destroy(this);
   }
 
-  //Override
+  /** @override */
   clear(app, graphOnly=false)
   {
     UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
@@ -167,11 +167,11 @@ class PDAModule
   getErrorChecker() { return this._errorChecker; }
   getStringTester() { return this._tester; }
 
-  //Override
+  /** @override */
   getModuleVersion() { return MODULE_VERSION; }
-  //Override
+  /** @override */
   getModuleName() { return MODULE_NAME; }
-  //Override
+  /** @override */
   getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
   getApp() { return this._app; }
 }

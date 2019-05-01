@@ -33,7 +33,7 @@ class PanelCheckbox extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     return (

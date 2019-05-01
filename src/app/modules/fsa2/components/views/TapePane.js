@@ -11,7 +11,7 @@ class TapePane extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   componentDidMount()
   {
     const session = this.props.session;
@@ -21,7 +21,7 @@ class TapePane extends React.Component
     inputController.setDisabled(true);
   }
 
-  //Override
+  /** @override */
   componentWillUnmount()
   {
     const session = this.props.session;
@@ -31,7 +31,7 @@ class TapePane extends React.Component
     inputController.setDisabled(false);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const session = this.props.session;

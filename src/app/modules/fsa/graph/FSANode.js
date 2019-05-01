@@ -33,13 +33,13 @@ class FSANode extends GraphNode
     return this._custom;
   }
 
-  //Override
+  /** @override */
   getNodeSize()
   {
     return Config.NODE_RADIUS;
   }
 
-  //Override
+  /** @override */
   getHashString(usePosition=true)
   {
     return super.getHashString(usePosition) + ":" + (this._accept ? "1" : "0");

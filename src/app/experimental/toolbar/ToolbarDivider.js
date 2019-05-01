@@ -8,7 +8,7 @@ class ToolbarDivider extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     return (

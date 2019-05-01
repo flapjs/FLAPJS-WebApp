@@ -9,33 +9,33 @@ class EmptyModule
     this._app = app;
   }
 
-  //Override
+  /** @override */
   initialize(app)
   {
   }
 
-  //Override
+  /** @override */
   update(app)
   {
   }
 
-  //Override
+  /** @override */
   destroy(app)
   {
   }
 
-  //Override
+  /** @override */
   clear(app)
   {
   }
 
-  //Override
+  /** @override */
   getModuleVersion() { return MODULE_VERSION; }
-  //Override
+  /** @override */
   getModuleName() { return MODULE_NAME; }
-  //Override
+  /** @override */
   getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
-  //Override
+  /** @override */
   getApp() { return this._app; }
 }
 

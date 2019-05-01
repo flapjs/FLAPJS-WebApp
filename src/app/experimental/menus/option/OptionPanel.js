@@ -53,7 +53,7 @@ class OptionPanel extends React.Component
     this.setState({theme: theme});
   }
 
-  //Override
+  /** @override */
   render()
   {
     const session = this.props.session;

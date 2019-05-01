@@ -7,7 +7,7 @@ class UserCreateEdgeEventHandler extends EventHandler
     super(eventLogger, graphController, "userPostCreateEdge");
   }
 
-  //Override
+  /** @override */
   captureEvent(graph, edge)
   {
     const edgeQuad = edge.getQuadratic();

@@ -11,7 +11,7 @@ class SafeGraphEventHandler extends AbstractEventHandler
     this._graphData = graphParser.objectify(graphController.getGraph());
   }
 
-  //Override
+  /** @override */
   applyUndo(undoManager)
   {
     const prevEvent = undoManager.getPreviousEvent();
@@ -25,7 +25,7 @@ class SafeGraphEventHandler extends AbstractEventHandler
     }
   }
 
-  //Override
+  /** @override */
   applyRedo(undoManager)
   {
     this._graphParser.parse(this._graphData, this._graphController.getGraph());

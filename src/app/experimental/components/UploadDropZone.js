@@ -18,7 +18,7 @@ class UploadDropZone extends React.Component
     this.onFileDrop = this.onFileDrop.bind(this);
   }
 
-  //Override
+  /** @override */
   componentDidMount()
   {
     //Upload drop zone
@@ -29,7 +29,7 @@ class UploadDropZone extends React.Component
     this.ref.addEventListener("dragend", this.onDragLeave);
   }
 
-  //Override
+  /** @override */
   componentWillUnmount()
   {
     this.ref.removeEventListener("drop", this.onFileDrop);
@@ -112,7 +112,7 @@ class UploadDropZone extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const isWaitingForFile = this._waiting;

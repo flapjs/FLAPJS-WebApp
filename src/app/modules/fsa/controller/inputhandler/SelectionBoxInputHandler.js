@@ -9,13 +9,13 @@ class SelectionBoxInputHandler extends InputHandler
     this._picker = picker;
   }
 
-  //Override
+  /** @override */
   isTargetable(inputController, pointer, target, targetType)
   {
     return targetType === 'none';
   }
 
-  //Override
+  /** @override */
   onDragStart(inputController, graphController, pointer, target)
   {
     if (!inputController.isMoveMode())
@@ -41,7 +41,7 @@ class SelectionBoxInputHandler extends InputHandler
     return false;
   }
 
-  //Override
+  /** @override */
   onDragStop(inputController, graphController, pointer, target)
   {
     //If was trying to select...

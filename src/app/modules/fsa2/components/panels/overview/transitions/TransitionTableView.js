@@ -166,7 +166,7 @@ class TransitionTableView extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const rowAxis = this.state.rowAxis;

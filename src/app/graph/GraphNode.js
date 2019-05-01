@@ -12,7 +12,7 @@ class GraphNode extends GraphElement
     this._label = "";
   }
 
-  //Override
+  /** @override */
   getCenterPoint(dst={x: 0, y: 0})
   {
     dst.x = this.x;
@@ -36,7 +36,7 @@ class GraphNode extends GraphElement
     return 16;
   }
 
-  //Override
+  /** @override */
   getHashString(usePosition=true)
   {
     if (usePosition)

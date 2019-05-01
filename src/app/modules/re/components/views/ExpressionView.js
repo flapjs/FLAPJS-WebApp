@@ -37,7 +37,7 @@ class ExpressionView extends React.Component
     session.getApp().getUndoManager().captureEvent();
   }
 
-  //Override
+  /** @override */
   render()
   {
     const session = this.props.session;

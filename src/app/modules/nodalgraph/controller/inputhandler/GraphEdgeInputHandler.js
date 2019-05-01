@@ -7,7 +7,7 @@ class GraphEdgeInputHandler extends GraphElementInputHandler
     super("edge");
   }
 
-  //Override
+  /** @override */
   onAction(inputController, graphController, pointer, target)
   {
     if (inputController.isTrashMode())
@@ -23,7 +23,7 @@ class GraphEdgeInputHandler extends GraphElementInputHandler
     return true;
   }
 
-  //Override
+  /** @override */
   onDragStart(inputController, graphController, pointer, target)
   {
     //Makes sure that placeholders are not quadratics!
@@ -41,14 +41,14 @@ class GraphEdgeInputHandler extends GraphElementInputHandler
     return true;
   }
 
-  //Override
+  /** @override */
   onDragMove(inputController, graphController, pointer, target)
   {
     graphController.moveEdgeTo(pointer, target, pointer.x, pointer.y);
     return true;
   }
 
-  //Override
+  /** @override */
   onDragStop(inputController, graphController, pointer, target)
   {
     const graph = graphController.getGraph();

@@ -11,7 +11,7 @@ class SelectionBoxInputHandler extends AbstractInputHandler
     this._selectionBox = selectionBox;
   }
 
-  //Override
+  /** @override */
   onDragStart(pointer)
   {
     if (!this._inputController.isMoveMode())
@@ -24,7 +24,7 @@ class SelectionBoxInputHandler extends AbstractInputHandler
     return false;
   }
 
-  //Override
+  /** @override */
   onDragMove(pointer)
   {
     //If the selection box is active...
@@ -38,7 +38,7 @@ class SelectionBoxInputHandler extends AbstractInputHandler
     return false;
   }
 
-  //Override
+  /** @override */
   onDragStop(pointer)
   {
     //If was trying to select...

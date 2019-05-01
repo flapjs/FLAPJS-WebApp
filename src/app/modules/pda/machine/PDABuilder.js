@@ -18,7 +18,7 @@ class PDABuilder extends AbstractMachineBuilder
         this._machine = new PDA();
     }
 
-    //Override
+    /** @override */
     attemptBuildGraph(machine, dst)
     {
         dst.clear();
@@ -55,7 +55,7 @@ class PDABuilder extends AbstractMachineBuilder
         return dst;
     }
 
-    //Override
+    /** @override */
     attemptBuildMachine(graph, dst, errors = [], warnings = [])
     {
         errors.length = 0;
@@ -193,7 +193,7 @@ class PDABuilder extends AbstractMachineBuilder
         }
     }
 
-    //Override
+    /** @override */
     getMachine() { return this._machine; }
 }
 

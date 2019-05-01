@@ -24,7 +24,7 @@ class IconUploadButton extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const accept = this.props.accept;

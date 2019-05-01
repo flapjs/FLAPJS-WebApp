@@ -13,7 +13,7 @@ class HotKeyView extends React.Component
     this._cacheTimeout = null;
   }
 
-  //Override
+  /** @override */
   render()
   {
     const hotKeyManager = this.props.hotKeyManager;

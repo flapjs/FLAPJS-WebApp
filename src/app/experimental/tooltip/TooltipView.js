@@ -20,7 +20,7 @@ class TooltipView extends React.Component
     };
   }
 
-  //Override
+  /** @override */
   componentWillUnmount()
   {
     clearTimeout(this._tooltipTimeout);
@@ -81,7 +81,7 @@ class TooltipView extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const mode = this.props.mode;

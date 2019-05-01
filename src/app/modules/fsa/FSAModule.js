@@ -44,7 +44,7 @@ class FSAModule extends AbstractModule
     this._testingManager = new TestingManager();
   }
 
-  //Override
+  /** @override */
   initialize(app)
   {
     const viewport = app.viewport;
@@ -73,7 +73,7 @@ class FSAModule extends AbstractModule
     this._graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
   }
 
-  //Override
+  /** @override */
   destroy(app)
   {
     this._testingManager.destroy();
@@ -83,7 +83,7 @@ class FSAModule extends AbstractModule
     super.destroy(app);
   }
 
-  //Override
+  /** @override */
   update(app)
   {
     super.update(app);
@@ -109,7 +109,7 @@ class FSAModule extends AbstractModule
     return LabelEditor;
   }
 
-  //Override
+  /** @override */
   getRenderer(renderLayer)
   {
     switch(renderLayer)
@@ -123,19 +123,19 @@ class FSAModule extends AbstractModule
     }
     return null;
   }
-  //Override
+  /** @override */
   getInputController() { return this._inputController; }
-  //Override
+  /** @override */
   getGraphController() { return this._graphController; }
-  //Override
+  /** @override */
   getMachineController() { return this._machineController; }
-  //Override
+  /** @override */
   getModuleVersion() { return VERSION; }
-  //Override
+  /** @override */
   getModulePanels() { return PANELS; }
-  //Override
+  /** @override */
   getModuleName() { return "fsa"; }
-  //Override
+  /** @override */
   getLocalizedModuleName() { return this._machineController.getMachineType(); }
 }
 export default FSAModule;

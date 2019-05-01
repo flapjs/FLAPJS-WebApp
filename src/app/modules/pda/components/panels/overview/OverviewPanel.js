@@ -49,7 +49,7 @@ class OverviewPanel extends React.Component
     //TODO: Not yet implemented...
   }
 
-  //Override
+  /** @override */
   render()
   {
     const drawer = this.props.drawer;

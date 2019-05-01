@@ -10,7 +10,7 @@ class SelectionBoxRenderer extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const currentModule = this.props.currentModule;

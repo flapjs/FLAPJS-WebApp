@@ -11,7 +11,7 @@ class UserDeleteSymbolEventHandler extends EventHandler
     this.graphController = graphController;
   }
 
-  //Override
+  /** @override */
   captureEvent(machineBuilder, symbol)
   {
     const graph = this.graphController.getGraph();
@@ -21,7 +21,7 @@ class UserDeleteSymbolEventHandler extends EventHandler
     };
   }
 
-  //Override
+  /** @override */
   capturePostEvent(machineBuilder, symbol, targets)
   {
     const graph = this.graphController.getGraph();

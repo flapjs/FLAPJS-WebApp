@@ -7,7 +7,7 @@ class UserDeleteEdgeEventHandler extends EventHandler
     super(eventLogger, graphController, "userPreDeleteEdge");
   }
 
-  //Override
+  /** @override */
   captureEvent(graph, edge, prevTo, prevQuad)
   {
     return {

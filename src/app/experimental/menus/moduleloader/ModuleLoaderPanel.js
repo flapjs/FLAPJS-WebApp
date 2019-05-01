@@ -33,7 +33,7 @@ class ModuleLoaderPanel extends React.Component
     );
   }
 
-  //Override
+  /** @override */
   render()
   {
     const session = this.props.session;

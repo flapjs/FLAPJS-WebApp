@@ -7,7 +7,7 @@ class GraphNodePickHandler extends PickHandler
     super();
   }
 
-  //Override
+  /** @override */
   getTargetAt(graph, x, y)
   {
     //Search graph
@@ -24,7 +24,7 @@ class GraphNodePickHandler extends PickHandler
     return null;
   }
 
-  //Override
+  /** @override */
   getTargetType() { return "node"; }
 }
 

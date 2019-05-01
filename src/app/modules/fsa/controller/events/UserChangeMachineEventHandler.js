@@ -7,7 +7,7 @@ class UserChangeMachineEventHandler extends EventHandler
     super(eventLogger, machineController, "userChangeMachine");
   }
 
-  //Override
+  /** @override */
   captureEvent(machineBuilder, nextMachineType, prevMachineType)
   {
     return {

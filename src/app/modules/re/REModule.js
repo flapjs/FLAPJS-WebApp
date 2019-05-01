@@ -31,7 +31,7 @@ class REModule
       this._machineController);
   }
 
-  //Override
+  /** @override */
   initialize(app)
   {
     registerNotifications(app.getNotificationManager());
@@ -69,18 +69,18 @@ class REModule
       .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {app.getUndoManager().redo()});
   }
 
-  //Override
+  /** @override */
   update(app)
   {
     this._machineController.update();
   }
 
-  //Override
+  /** @override */
   destroy(app)
   {
   }
 
-  //Override
+  /** @override */
   clear(app)
   {
     if (window.confirm(I18N.toString("alert.graph.clear")))
@@ -96,13 +96,13 @@ class REModule
   getMachineController() { return this._machineController; }
   getErrorChecker() { return this._errorChecker; }
 
-  //Override
+  /** @override */
   getModuleVersion() { return MODULE_VERSION; }
-  //Override
+  /** @override */
   getModuleName() { return MODULE_NAME; }
-  //Override
+  /** @override */
   getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
-  //Override
+  /** @override */
   getApp() { return this._app; }
 }
 

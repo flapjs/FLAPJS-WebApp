@@ -147,7 +147,7 @@ class QuadraticEdge extends GraphEdge
     }
   }
 
-  //Override
+  /** @override */
   changeDestinationNode(node)
   {
     const prevDest = this._to;
@@ -167,7 +167,7 @@ class QuadraticEdge extends GraphEdge
     }
   }
 
-  //Override
+  /** @override */
   getEdgeDirection()
   {
     let result = 0;
@@ -184,7 +184,7 @@ class QuadraticEdge extends GraphEdge
     return result;
   }
 
-  //Override
+  /** @override */
   getStartPoint(dst={x: 0, y: 0})
   {
     const from = this._from;
@@ -223,7 +223,7 @@ class QuadraticEdge extends GraphEdge
     }
   }
 
-  //Override
+  /** @override */
   getEndPoint(dst={x: 0, y: 0})
   {
     const from = this._from;
@@ -268,7 +268,7 @@ class QuadraticEdge extends GraphEdge
     }
   }
 
-  //Override
+  /** @override */
   getCenterPoint(dst={x: 0, y: 0})
   {
     const from = this._from;
@@ -298,7 +298,7 @@ class QuadraticEdge extends GraphEdge
     return dst;
   }
 
-  //Override
+  /** @override */
   getHashString(usePosition=true)
   {
     if (usePosition)

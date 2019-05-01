@@ -10,7 +10,7 @@ class NotificationView extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const notificationManager = this.props.notificationManager;

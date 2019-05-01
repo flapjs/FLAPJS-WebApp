@@ -13,7 +13,7 @@ class DefaultNotificationLayout extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const message = this.props.message;

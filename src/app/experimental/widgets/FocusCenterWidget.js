@@ -21,7 +21,7 @@ class FocusCenterWidget extends React.Component
     viewport.setOffset(0, 0);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const viewport = this.props.viewport;

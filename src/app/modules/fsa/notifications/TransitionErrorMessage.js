@@ -64,7 +64,7 @@ class TransitionErrorMessage extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     return <div>

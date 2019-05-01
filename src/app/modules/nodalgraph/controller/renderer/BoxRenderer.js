@@ -7,7 +7,7 @@ class BoxRenderer extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const visible = this.props.visible;

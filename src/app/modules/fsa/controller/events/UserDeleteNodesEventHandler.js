@@ -9,7 +9,7 @@ class UserDeleteNodesEventHandler extends EventHandler
     super(eventLogger, graphController, "userPreDeleteNodes", "userPostDeleteNodes");
   }
 
-  //Override
+  /** @override */
   captureEvent(graph, node, targetNodes, prevX, prevY)
   {
     const targets = [];
@@ -28,7 +28,7 @@ class UserDeleteNodesEventHandler extends EventHandler
     };
   }
 
-  //Override
+  /** @override */
   capturePostEvent(graph, node, targetNodes, prevX, prevY)
   {
     return {

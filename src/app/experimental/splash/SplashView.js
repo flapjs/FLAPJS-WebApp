@@ -22,7 +22,7 @@ class SplashView extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const hideOnClick = this.props.hideOnClick;

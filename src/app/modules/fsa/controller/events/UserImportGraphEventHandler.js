@@ -11,7 +11,7 @@ class UserImportGraphEventHandler extends EventHandler
     this.machineController = machineController;
   }
 
-  //Override
+  /** @override */
   captureEvent(graph)
   {
     return {
@@ -20,7 +20,7 @@ class UserImportGraphEventHandler extends EventHandler
     };
   }
 
-  //Override
+  /** @override */
   capturePostEvent(graph)
   {
     return {

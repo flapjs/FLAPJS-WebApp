@@ -87,7 +87,7 @@ class GraphEdge extends GraphElement
     return dst;
   }
 
-  //Override
+  /** @override */
   getCenterPoint(dst={x: 0, y: 0})
   {
     const from = this._from;
@@ -139,7 +139,7 @@ class GraphEdge extends GraphElement
     return this._from === this._to;
   }
 
-  //Override
+  /** @override */
   getHashString(usePosition=true)
   {
     const src = this._from ? this._from.getHashString(usePosition) : "";

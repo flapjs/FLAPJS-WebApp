@@ -59,7 +59,7 @@ class TapeWidget extends React.Component
     tapeContext.stop();
   }
 
-  //Override
+  /** @override */
   render()
   {
     const showTransitionStates = true;

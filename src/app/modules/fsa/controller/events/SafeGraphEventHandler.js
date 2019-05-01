@@ -9,7 +9,7 @@ class SafeGraphEventHandler extends EventHandler
     super(eventLogger, graphController, eventName, postEventName);
   }
 
-  //Override
+  /** @override */
   captureEvent(graph)
   {
     return {
@@ -17,7 +17,7 @@ class SafeGraphEventHandler extends EventHandler
     };
   }
 
-  //Override
+  /** @override */
   capturePostEvent(graph)
   {
     return {

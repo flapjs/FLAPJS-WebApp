@@ -93,7 +93,7 @@ class TestItem extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const onDelete = this.props.onDelete;

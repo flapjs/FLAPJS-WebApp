@@ -20,7 +20,7 @@ class FSABuilder extends AbstractMachineBuilder
         this._machine = new FSA();
     }
 
-    //Override
+    /** @override */
     attemptBuildGraph(machine, dst)
     {
         dst.clear();
@@ -70,7 +70,7 @@ class FSABuilder extends AbstractMachineBuilder
         return dst;
     }
 
-    //Override
+    /** @override */
     attemptBuildMachine(graph, dst, errors = [], warnings = [])
     {
         errors.length = 0;
@@ -259,7 +259,7 @@ class FSABuilder extends AbstractMachineBuilder
         }
     }
 
-    //Override
+    /** @override */
     getMachine()
     {
         return this._machine;

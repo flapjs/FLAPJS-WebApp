@@ -32,7 +32,7 @@ class AutoStateLabelView extends React.Component
       this.props.graphController.getGraphLabeler().getDefaultNodeLabelPrefix();
   }
 
-  //Override
+  /** @override */
   render()
   {
     const graphController = this.props.graphController;

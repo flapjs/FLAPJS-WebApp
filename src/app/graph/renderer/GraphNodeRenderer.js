@@ -11,7 +11,7 @@ class GraphNodeRenderer extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const node = this.props.node;

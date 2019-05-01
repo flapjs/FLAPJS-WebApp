@@ -7,7 +7,7 @@ class GraphNodeMoveAllEventHandler extends EventHandler
     super(eventLogger, graphController, "nodeMoveAll");
   }
 
-  //Override
+  /** @override */
   captureEvent(graph, nodes, dx, dy)
   {
     return {

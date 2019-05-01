@@ -34,7 +34,7 @@ class ToolbarTitle extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const title = this.props.title;

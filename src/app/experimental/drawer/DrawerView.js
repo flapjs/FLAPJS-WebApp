@@ -61,13 +61,13 @@ class DrawerView extends React.Component
     this.onWindowResize = this.onWindowResize.bind(this);
   }
 
-  //Override
+  /** @override */
   componentDidMount()
   {
     window.addEventListener('resize', this.onWindowResize, false);
   }
 
-  //Override
+  /** @override */
   componentWillUnmount()
   {
     window.removeEventListener('resize', this.onWindowResize);
@@ -319,7 +319,7 @@ class DrawerView extends React.Component
     this.setDrawerWidth(result);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const drawerPanels = this.props.panels;

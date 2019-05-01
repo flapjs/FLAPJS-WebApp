@@ -11,7 +11,7 @@ class FSAEdgeRenderer extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const edge = this.props.edge;

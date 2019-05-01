@@ -13,7 +13,7 @@ class PDAEdge extends QuadraticEdge
     super(id, from, to);
   }
 
-  //Override
+  /** @override */
   setEdgeLabel(label)
   {
     if (typeof label === 'string')

@@ -10,7 +10,7 @@ class GraphInputRenderer extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     //Inherits props from parent

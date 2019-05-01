@@ -10,7 +10,7 @@ class ViewportInputHandler extends AbstractInputHandler
     this._prevY = 0;
   }
 
-  //Override
+  /** @override */
   onDragStart(pointer)
   {
     this._prevX = pointer.x;
@@ -18,7 +18,7 @@ class ViewportInputHandler extends AbstractInputHandler
     return true;
   }
 
-  //Override
+  /** @override */
   onDragMove(pointer)
   {
     const dx = pointer.x - this._prevX;
@@ -29,7 +29,7 @@ class ViewportInputHandler extends AbstractInputHandler
     return true;
   }
 
-  //Override
+  /** @override */
   onDragStop(pointer)
   {
     //Do nothing. It should already be moved.

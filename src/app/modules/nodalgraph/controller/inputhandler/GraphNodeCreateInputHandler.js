@@ -7,13 +7,13 @@ class GraphNodeCreateInputHandler extends InputHandler
     super();
   }
 
-  //Override
+  /** @override */
   isTargetable(inputController, pointer, target, targetType)
   {
     return targetType === 'none';
   }
 
-  //Override
+  /** @override */
   onDblAction(inputController, graphController, pointer, target)
   {
     let x = pointer.x;

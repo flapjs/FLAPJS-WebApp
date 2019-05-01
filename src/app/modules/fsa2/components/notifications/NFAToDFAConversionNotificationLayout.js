@@ -26,7 +26,7 @@ class NFAToDFAConversionNotificationLayout extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const machineController = this.props.machineController;

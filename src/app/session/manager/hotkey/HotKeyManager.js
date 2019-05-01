@@ -80,7 +80,7 @@ class HotKeyManager
     return this;
   }
 
-  //Override
+  /** @override */
   onSessionStart(session)
   {
     window.addEventListener('keydown', this.onKeyDown);
@@ -89,7 +89,7 @@ class HotKeyManager
     this._enabled = true;
   }
 
-  //Override
+  /** @override */
   onSessionStop(session)
   {
     this._enabled = false;

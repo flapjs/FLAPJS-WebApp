@@ -29,7 +29,7 @@ class NodeRenderer extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const position = this.props.position;

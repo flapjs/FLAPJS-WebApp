@@ -83,7 +83,7 @@ class FSAModule
     this._stepTracer = new StepTracer(this.getGraphController(), this.getMachineController());
   }
 
-  //Override
+  /** @override */
   initialize(app)
   {
     registerNotifications(app.getNotificationManager());
@@ -152,7 +152,7 @@ class FSAModule
     this._inputManager.onSessionStart(app.getSession());
   }
 
-  //Override
+  /** @override */
   update(app)
   {
     this._inputManager.update(this);
@@ -161,7 +161,7 @@ class FSAModule
     machineController.update(this);
   }
 
-  //Override
+  /** @override */
   destroy(app)
   {
     this._inputManager.onSessionStop(app.getSession());
@@ -170,7 +170,7 @@ class FSAModule
     machineController.destroy(this);
   }
 
-  //Override
+  /** @override */
   clear(app, graphOnly=false)
   {
     UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
@@ -186,11 +186,11 @@ class FSAModule
   getStringTester() { return this._tester; }
   getStepTracer() { return this._stepTracer; }
 
-  //Override
+  /** @override */
   getModuleVersion() { return MODULE_VERSION; }
-  //Override
+  /** @override */
   getModuleName() { return MODULE_NAME; }
-  //Override
+  /** @override */
   getLocalizedModuleName() { return this._machineController.getMachineType(); }
   getApp() { return this._app; }
 }

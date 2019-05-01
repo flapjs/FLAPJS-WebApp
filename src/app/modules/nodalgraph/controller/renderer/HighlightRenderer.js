@@ -17,7 +17,7 @@ class HighlightRenderer extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const target = this.props.target;

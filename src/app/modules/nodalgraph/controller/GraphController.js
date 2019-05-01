@@ -38,7 +38,7 @@ class GraphController extends AbstractGraphController
     this.registerEvent("tryCreateWhileTrash");
   }
 
-  //Override
+  /** @override */
   initialize(module)
   {
     super.initialize(module);
@@ -47,13 +47,13 @@ class GraphController extends AbstractGraphController
     this.inputController = module.getInputController();
   }
 
-  //Override
+  /** @override */
   destroy(module)
   {
     super.destroy(module);
   }
 
-  //Override
+  /** @override */
   update(module)
   {
     super.update(module);

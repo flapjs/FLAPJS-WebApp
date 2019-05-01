@@ -99,7 +99,7 @@ class StateListElement extends React.Component
     });
   }
 
-  //Override
+  /** @override */
   render()
   {
     const node = this.props.node;

@@ -76,7 +76,7 @@ class ModuleLoader extends React.Component
     return MODULE_TIMEOUT !== null;
   }
 
-  //Override
+  /** @override */
   componentDidMount()
   {
     MODULE_TIMEOUT = setTimeout(() => {
@@ -86,7 +86,7 @@ class ModuleLoader extends React.Component
     }, MODULE_LOAD_DELAY);
   }
 
-  //Override
+  /** @override */
   render()
   {
     return (<div></div>);

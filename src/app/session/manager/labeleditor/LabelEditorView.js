@@ -87,7 +87,7 @@ class LabelEditorView extends React.Component
     this.closeEditor();
   }
 
-  //Override
+  /** @override */
   render()
   {
     const isEditorOpen = this.state.open;

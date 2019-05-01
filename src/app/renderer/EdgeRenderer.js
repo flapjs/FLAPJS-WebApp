@@ -61,7 +61,7 @@ class EdgeRenderer extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const directed = this.props.directed || DIRECTED_NONE;

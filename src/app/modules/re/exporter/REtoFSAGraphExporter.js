@@ -12,7 +12,7 @@ class REtoFSAGraphExporter extends FSAGraphExporter
 {
   constructor() { super(); }
 
-  //Override
+  /** @override */
   toJSON(graphData, module)
   {
     const dst = {};
@@ -30,13 +30,13 @@ class REtoFSAGraphExporter extends FSAGraphExporter
     return dst;
   }
 
-  //Override
+  /** @override */
   doesSupportData()
   {
     return false;
   }
 
-  //Override
+  /** @override */
   exportToFile(filename, module)
   {
     const machine = module.getMachineController().getEquivalentFSA();
@@ -48,25 +48,25 @@ class REtoFSAGraphExporter extends FSAGraphExporter
     downloadText(filename + '.' + this.getFileType(), jsonString);
   }
 
-  //Override
+  /** @override */
   doesSupportFile()
   {
     return true;
   }
 
-  //Override
+  /** @override */
   canImport(module)
   {
     return false;
   }
 
-  //Override
+  /** @override */
   canExport(module)
   {
     return module.getMachineController().getMachineExpression().length > 0;
   }
 
-  //Override
+  /** @override */
   getLabel()
   {
     return I18N.toString("file.export.convertfsa");

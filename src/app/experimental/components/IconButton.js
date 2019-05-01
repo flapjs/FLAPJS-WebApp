@@ -8,7 +8,7 @@ class IconButton extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const title = this.props.title;

@@ -9,7 +9,7 @@ class AboutPanel extends React.Component
     this.container = null;
   }
 
-  //Override
+  /** @override */
   render()
   {
     return <div className={"panel-container " + this.props.className} id="about" ref={ref=>this.container=ref} style={this.props.style}>

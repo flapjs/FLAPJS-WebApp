@@ -60,7 +60,7 @@ class StateUnreachableWarningMessage extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     return <div>

@@ -43,13 +43,13 @@ class TestListView extends React.Component
     this.onExpressionChange = this.onExpressionChange.bind(this);
   }
 
-  //Override
+  /** @override */
   componentDidMount()
   {
     this.props.machineController.getExpressionChangeHandler().addListener(this.onExpressionChange);
   }
 
-  //Override
+  /** @override */
   componentWillUnmount()
   {
     this.props.machineController.getExpressionChangeHandler().removeListener(this.onExpressionChange);
@@ -183,7 +183,7 @@ class TestListView extends React.Component
     return this._testList.length <= 0;
   }
 
-  //Override
+  /** @override */
   render()
   {
     const machineController = this.props.machineController;

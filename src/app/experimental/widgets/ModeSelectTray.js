@@ -22,7 +22,7 @@ class ModeSelectTray extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const mode = this.props.mode || 0;

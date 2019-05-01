@@ -14,7 +14,7 @@ class GraphElementInputHandler extends InputHandler
     this._targetType = targetType;
   }
 
-  //Override
+  /** @override */
   isTargetable(inputController, pointer, target, targetType)
   {
     if (targetType === this._targetType)

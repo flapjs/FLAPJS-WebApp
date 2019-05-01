@@ -123,14 +123,14 @@ class App extends React.Component
     this.onToolbarClearButton = this.onToolbarClearButton.bind(this);
   }
 
-  //Override
+  /** @override */
   componentDidMount()
   {
     //Start session
     this._session.startSession(this);
   }
 
-  //Override
+  /** @override */
   componentWillUnmount()
   {
     //Stop session
@@ -239,7 +239,7 @@ class App extends React.Component
 
   isExperimental() { return true; }
 
-  //Override
+  /** @override */
   componentDidUpdate()
   {
     this._session.updateSession(this);
@@ -266,7 +266,7 @@ class App extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const session = this._session;

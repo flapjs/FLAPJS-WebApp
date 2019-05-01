@@ -10,7 +10,7 @@ class SafeExpressionEventHandler extends AbstractEventHandler
     this._expression = machineController.getMachineExpression();
   }
 
-  //Override
+  /** @override */
   applyUndo(undoManager)
   {
     const prevEvent = undoManager.getPreviousEvent();
@@ -24,7 +24,7 @@ class SafeExpressionEventHandler extends AbstractEventHandler
     }
   }
 
-  //Override
+  /** @override */
   applyRedo(undoManager)
   {
     this._machineController.setMachineExpression(this._expression);

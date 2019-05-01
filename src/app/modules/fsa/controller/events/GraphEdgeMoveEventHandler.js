@@ -7,7 +7,7 @@ class GraphEdgeMoveEventHandler extends EventHandler
     super(eventLogger, graphController, "edgeMove");
   }
 
-  //Override
+  /** @override */
   captureEvent(graph, targetEdge, nextQuad, prevQuad)
   {
     return {

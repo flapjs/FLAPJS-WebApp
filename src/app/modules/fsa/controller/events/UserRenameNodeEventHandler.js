@@ -7,7 +7,7 @@ class UserRenameNodeEventHandler extends EventHandler
     super(eventLogger, graphController, "userRenameNode");
   }
 
-  //Override
+  /** @override */
   captureEvent(graph, node, nextLabel, prevLabel, isPrevCustom)
   {
     return {

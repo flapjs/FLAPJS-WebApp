@@ -10,7 +10,7 @@ class GraphNodeInputHandler extends GraphElementInputHandler
     super("node");
   }
 
-  //Override
+  /** @override */
   onAction(inputController, graphController, pointer, target)
   {
     const picker = inputController.getPicker();
@@ -45,7 +45,7 @@ class GraphNodeInputHandler extends GraphElementInputHandler
     return false;
   }
 
-  //Override
+  /** @override */
   onDragStart(inputController, graphController, pointer, target)
   {
     if (inputController.isMoveMode())
@@ -76,7 +76,7 @@ class GraphNodeInputHandler extends GraphElementInputHandler
     return true;
   }
 
-  //Override
+  /** @override */
   onDragMove(inputController, graphController, pointer, target)
   {
     const picker = inputController.getPicker();
@@ -102,7 +102,7 @@ class GraphNodeInputHandler extends GraphElementInputHandler
     return true;
   }
 
-  //Override
+  /** @override */
   onDragStop(inputController, graphController, pointer, target)
   {
     const picker = inputController.getPicker();

@@ -92,7 +92,7 @@ class TrashCanWidget extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const inputController = this.props.inputController;

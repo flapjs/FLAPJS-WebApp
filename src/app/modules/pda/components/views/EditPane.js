@@ -12,7 +12,7 @@ class EditPane extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const session = this.props.session;

@@ -35,7 +35,7 @@ class ViewportView extends React.Component
     return this.state.viewIndex === viewIndex;
   }
 
-  //Override
+  /** @override */
   render()
   {
     const viewportViews = this.props.views;

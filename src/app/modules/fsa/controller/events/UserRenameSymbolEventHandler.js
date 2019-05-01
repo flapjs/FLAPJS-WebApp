@@ -11,7 +11,7 @@ class UserRenameSymbolEventHandler extends EventHandler
     this.graphController = graphController;
   }
 
-  //Override
+  /** @override */
   captureEvent(machineBuilder, symbol, prevSymbol)
   {
     const graph = this.graphController.getGraph();
@@ -22,7 +22,7 @@ class UserRenameSymbolEventHandler extends EventHandler
     };
   }
 
-  //Override
+  /** @override */
   capturePostEvent(machineBuilder, symbol, prevSymbol, targets)
   {
     const graph = this.graphController.getGraph();

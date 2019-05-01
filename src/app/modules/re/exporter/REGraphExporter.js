@@ -41,13 +41,13 @@ class REGraphExporter extends AbstractGraphExporter
     return dst;
   }
 
-  //Override
+  /** @override */
   importFromData(data, module)
   {
     this.fromJSON(data, module);
   }
 
-  //Override
+  /** @override */
   exportToData(module)
   {
     const expression = module.getMachineController().getMachineExpression();
@@ -55,13 +55,13 @@ class REGraphExporter extends AbstractGraphExporter
     return result;
   }
 
-  //Override
+  /** @override */
   doesSupportData()
   {
     return true;
   }
 
-  //Override
+  /** @override */
   importFromFile(fileBlob, module)
   {
     return new Promise((resolve, reject) => {
@@ -117,7 +117,7 @@ class REGraphExporter extends AbstractGraphExporter
     });
   }
 
-  //Override
+  /** @override */
   exportToFile(filename, module)
   {
     const expression = module.getMachineController().getMachineExpression();
@@ -126,43 +126,43 @@ class REGraphExporter extends AbstractGraphExporter
     downloadText(filename + '.' + this.getFileType(), jsonString);
   }
 
-  //Override
+  /** @override */
   doesSupportFile()
   {
     return true;
   }
 
-  //Override
+  /** @override */
   canImport(module)
   {
     return true;
   }
 
-  //Override
+  /** @override */
   canExport(module)
   {
     return module.getMachineController().getMachineExpression().length > 0;
   }
 
-  //Override
+  /** @override */
   getTitle()
   {
     return I18N.toString("file.export.machine.hint");
   }
 
-  //Override
+  /** @override */
   getLabel()
   {
     return I18N.toString("file.export.machine");
   }
 
-  //Override
+  /** @override */
   getFileType()
   {
     return "json";
   }
 
-  //Override
+  /** @override */
   getIconClass()
   {
     return JSONFileIcon;

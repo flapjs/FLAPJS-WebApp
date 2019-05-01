@@ -22,7 +22,7 @@ class FSABuilder extends AbstractMachineBuilder
     this.machineController = null;
   }
 
-  //Override
+  /** @override */
   initialize(module)
   {
     super.initialize(module);
@@ -31,7 +31,7 @@ class FSABuilder extends AbstractMachineBuilder
     this.machineController = module.getMachineController();
   }
 
-  //Override
+  /** @override */
   onGraphChange(graph)
   {
     if (!this.tester) return;
@@ -125,7 +125,7 @@ class FSABuilder extends AbstractMachineBuilder
     return result;
   }
 
-  //Override
+  /** @override */
   getMachine()
   {
     return this._machine;

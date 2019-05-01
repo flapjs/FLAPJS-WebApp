@@ -70,7 +70,7 @@ class GraphImageExporter extends AbstractGraphExporter
     return clone;
   }
 
-  //Override
+  /** @override */
   exportToFile(filename, module)
   {
     const workspace = module.getApp().workspace;
@@ -82,19 +82,19 @@ class GraphImageExporter extends AbstractGraphExporter
     downloadImageFromSVG(filename, this._imageType, svg, width, height);
   }
 
-  //Override
+  /** @override */
   doesSupportFile()
   {
     return true;
   }
 
-  //Override
+  /** @override */
   canImport(module)
   {
     return false;
   }
 
-  //Override
+  /** @override */
   getTitle()
   {
     switch(this._imageType)
@@ -106,7 +106,7 @@ class GraphImageExporter extends AbstractGraphExporter
     }
   }
 
-  //Override
+  /** @override */
   getLabel()
   {
     switch(this._imageType)
@@ -118,13 +118,13 @@ class GraphImageExporter extends AbstractGraphExporter
     }
   }
 
-  //Override
+  /** @override */
   getFileType()
   {
     return this._imageType;
   }
 
-  //Override
+  /** @override */
   getIconClass()
   {
     switch(this._imageType)

@@ -10,7 +10,7 @@ class PanelSwitch extends React.Component
     if (!props.id) throw new Error("Must specify id");
   }
 
-  //Override
+  /** @override */
   render()
   {
     const id = this.props.id;

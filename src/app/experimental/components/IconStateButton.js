@@ -43,7 +43,7 @@ class IconStateButton extends React.Component
     return this.state.index;
   }
 
-  //Override
+  /** @override */
   render()
   {
     const child = React.Children.map(this.props.children, (child, i) => {

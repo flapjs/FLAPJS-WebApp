@@ -59,7 +59,7 @@ class StateUnreachableNotificationLayout extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     return (

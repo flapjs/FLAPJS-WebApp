@@ -49,7 +49,7 @@ class StateMissingTransitionNotificationLayout extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     return (

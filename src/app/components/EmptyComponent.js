@@ -4,7 +4,7 @@ class EmptyComponent extends React.Component
 {
   constructor(props) { super(props); }
 
-  //Override
+  /** @override */
   render()
   {
     return (

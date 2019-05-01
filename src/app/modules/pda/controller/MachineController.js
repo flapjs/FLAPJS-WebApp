@@ -13,7 +13,7 @@ class MachineController extends AbstractMachineController
         this.graphController = null;
     }
 
-    //Override
+    /** @override */
     initialize(module)
     {
         super.initialize(module);
@@ -21,13 +21,13 @@ class MachineController extends AbstractMachineController
         this.graphController = module.getGraphController();
     }
 
-    //Override
+    /** @override */
     destroy(module)
     {
         super.destroy(module);
     }
 
-    //Override
+    /** @override */
     update(module)
     {
         super.update(module);

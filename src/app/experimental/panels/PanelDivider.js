@@ -8,7 +8,7 @@ class PanelDivider extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     return (

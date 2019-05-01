@@ -12,7 +12,7 @@ class NFA extends FSA
     super();
   }
 
-  //Override
+  /** @override */
   getUsedAlphabet(dst=[])
   {
     const result = dst;
@@ -27,7 +27,7 @@ class NFA extends FSA
     return result;
   }
 
-  //Override
+  /** @override */
   doTransition(state, symbol, dst=[])
   {
     const result = dst;

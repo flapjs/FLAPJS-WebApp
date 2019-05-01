@@ -10,7 +10,7 @@ class GraphEdgePickHandler extends PickHandler
     super();
   }
 
-  //Override
+  /** @override */
   getTargetAt(graph, x, y)
   {
     const center = {x: 0, y: 0};
@@ -29,7 +29,7 @@ class GraphEdgePickHandler extends PickHandler
     return null;
   }
 
-  //Override
+  /** @override */
   getTargetType() { return "edge"; }
 }
 

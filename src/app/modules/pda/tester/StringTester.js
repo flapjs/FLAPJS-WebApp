@@ -15,7 +15,7 @@ class TestTapeContext extends TapeContext
     this._machineController = machineController;
   }
 
-  //Override
+  /** @override */
   stepForward()
   {
     const graphController = this._graphController;
@@ -23,7 +23,7 @@ class TestTapeContext extends TapeContext
     this._tester.stepForward(graphController, machineController);
   }
 
-  //Override
+  /** @override */
   stepBackward()
   {
     const graphController = this._graphController;
@@ -31,13 +31,13 @@ class TestTapeContext extends TapeContext
     this._tester.stepBackward(graphController, machineController);
   }
 
-  //Override
+  /** @override */
   reset()
   {
     this._tester.resetPosition();
   }
 
-  //Override
+  /** @override */
   finish()
   {
     const graphController = this._graphController;
@@ -45,39 +45,39 @@ class TestTapeContext extends TapeContext
     this._tester.runTest(graphController, machineController, false);
   }
 
-  //Override
+  /** @override */
   stop()
   {
     this._tester.stopTest();
   }
 
-  //Override
+  /** @override */
   changeTapeSymbol(index, symbol="")
   {
     throw new Error("Operation not yet supported");
   }
 
-  //Override
+  /** @override */
   getTapeSourceStatesByIndex(index)
   {
     if (index < 0 || index >= this._tapeInput.length) return null;
     return this._tester.getNodesAtPosition(index);
   }
 
-  //Override
+  /** @override */
   getTapeSymbolByIndex(index)
   {
     if (index < 0 || index >= this._tapeInput.length) return [];
     return this._tapeInput[index] || "";
   }
 
-  //Override
+  /** @override */
   setCurrentTapeIndex(index)
   {
     this._tester.changePosition(index);
   }
 
-  //Override
+  /** @override */
   getCurrentTapeIndex()
   {
     return this._tester.getPosition();

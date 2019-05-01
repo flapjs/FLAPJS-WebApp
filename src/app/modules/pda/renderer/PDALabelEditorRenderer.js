@@ -26,7 +26,7 @@ class PDALabelEditorRenderer extends React.Component
     );
   }
 
-  //Override
+  /** @override */
   render()
   {
     const labelEditor = this.props.parent;

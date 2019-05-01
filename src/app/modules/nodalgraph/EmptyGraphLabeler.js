@@ -10,16 +10,16 @@ class EmptyGraphLabeler extends AbstractGraphLabeler
   //TODO: this is from GraphController (refactor this out of here pls)
   setGraphController(getGraphController) {}
 
-  //Override
+  /** @override */
   getDefaultNodeLabel() { return ""; }
 
-  //Override
+  /** @override */
   getDefaultEdgeLabel() { return ""; }
 
-  //Override
+  /** @override */
   getNodeLabelFormatter() { return labelFormatter; }
 
-  //Override
+  /** @override */
   getEdgeLabelFormatter() { return labelFormatter; }
 }
 

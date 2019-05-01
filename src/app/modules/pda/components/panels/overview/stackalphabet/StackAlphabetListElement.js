@@ -105,7 +105,7 @@ class StackAlphabetListElement extends React.Component
     this._inputElement.focus();
   }
 
-  //Override
+  /** @override */
   render()
   {
     const inputSymbol = this.state.value;

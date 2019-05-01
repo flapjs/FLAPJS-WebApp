@@ -8,7 +8,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
 {
   constructor() { super(); }
 
-  //Override
+  /** @override */
   importFromFile(fileBlob, module)
   {
     return new Promise((resolve, reject) => {
@@ -59,7 +59,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
     });
   }
 
-  //Override
+  /** @override */
   exportToFile(filename, module)
   {
     const graph = module.getGraphController().getGraph();
@@ -68,37 +68,37 @@ class JFLAPGraphExporter extends AbstractGraphExporter
     downloadText(filename + '.' + this.getFileType(), xmlString);
   }
 
-  //Override
+  /** @override */
   doesSupportFile()
   {
     return true;
   }
 
-  //Override
+  /** @override */
   canImport(module)
   {
     return true;
   }
 
-  //Override
+  /** @override */
   getTitle()
   {
     return I18N.toString("file.export.jff.hint");
   }
 
-  //Override
+  /** @override */
   getLabel()
   {
     return I18N.toString("file.export.jff");
   }
 
-  //Override
+  /** @override */
   getFileType()
   {
     return "jff";
   }
 
-  //Override
+  /** @override */
   getIconClass()
   {
     return XMLFileIcon;

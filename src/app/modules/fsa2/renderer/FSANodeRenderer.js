@@ -7,7 +7,7 @@ class FSANodeRenderer extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     //TODO: Refer to app.css for comparable colors

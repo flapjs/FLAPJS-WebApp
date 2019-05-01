@@ -16,7 +16,7 @@ class OverviewPanel extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const drawer = this.props.drawer;

@@ -20,7 +20,7 @@ class AnalysisPanel extends React.Component
     exportManager.tryExportToFile(exportManager.getExporters()[1]);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const session = this.props.session;
