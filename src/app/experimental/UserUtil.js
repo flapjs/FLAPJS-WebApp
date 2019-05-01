@@ -1,18 +1,18 @@
 export function userClearGraph(app, graphOnly=false, callback=null)
 {
-  if (window.confirm(I18N.toString("alert.graph.clear")))
-  {
-    const module = app.getCurrentModule();
-    module.getGraphController().getGraph().clear();
-    if (!graphOnly)
+    if (window.confirm(I18N.toString('alert.graph.clear')))
     {
-      app.getUndoManager().clear();
-      app.getSession().setProjectName(null);
+        const module = app.getCurrentModule();
+        module.getGraphController().getGraph().clear();
+        if (!graphOnly)
+        {
+            app.getUndoManager().clear();
+            app.getSession().setProjectName(null);
+        }
+        else
+        {
+            app.getUndoManager().captureEvent();
+        }
+        if (callback) callback();
     }
-    else
-    {
-      app.getUndoManager().captureEvent();
-    }
-    if (callback) callback();
-  }
 }

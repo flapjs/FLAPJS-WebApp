@@ -25,13 +25,13 @@ class SplashView extends React.Component
     /** @override */
     render()
     {
-        const hideOnClick = this.props.hideOnClick;
+        //const hideOnClick = this.props.hideOnClick;
         const hide = this.state.hide;
         return (
             <div id={this.props.id}
                 className={Style.splash_container +
-          (hide ? " hide " : "") +
-          " " + this.props.className}
+          (hide ? ' hide ' : '') +
+          ' ' + this.props.className}
                 style={this.props.style}
                 onClick={this.onClick}>
                 <div className={Style.splash_child}>

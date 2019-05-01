@@ -7,46 +7,46 @@ import MoveIcon from 'components/iconset/MoveIcon.js';
 
 class ModeSelectTray extends React.Component
 {
-  constructor(props)
-  {
-    super(props);
-
-    this.onChange = this.onChange.bind(this);
-  }
-
-  onChange(newValue)
-  {
-    if (this.props.onChange)
+    constructor(props)
     {
-      this.props.onChange(newValue);
+        super(props);
+
+        this.onChange = this.onChange.bind(this);
     }
-  }
 
-  /** @override */
-  render()
-  {
-    const mode = this.props.mode || 0;
-    const onChange = this.props.onChange;
+    onChange(newValue)
+    {
+        if (this.props.onChange)
+        {
+            this.props.onChange(newValue);
+        }
+    }
 
-    return (
-      <div id={this.props.id}
-        className={Style.tray_container +
-          " " + this.props.className}
-        style={this.props.style}>
-        <IconButton className={Style.tray_button +
-          (mode === 0 ? " active " : "")}
-          onClick={() => this.onChange(0)}
-          title={I18N.toString("cursor.actionmode")}>
-          <EditPencilIcon/>
-        </IconButton>
-        <IconButton className={Style.tray_button +
-          (mode === 1 ? " active " : "")}
-          onClick={() => this.onChange(1)}
-          title={I18N.toString("cursor.movemode")}>
-          <MoveIcon/>
-        </IconButton>
-      </div>
-    );
-  }
+    /** @override */
+    render()
+    {
+        const mode = this.props.mode || 0;
+        //const onChange = this.props.onChange;
+
+        return (
+            <div id={this.props.id}
+                className={Style.tray_container +
+          ' ' + this.props.className}
+                style={this.props.style}>
+                <IconButton className={Style.tray_button +
+          (mode === 0 ? ' active ' : '')}
+                onClick={() => this.onChange(0)}
+                title={I18N.toString('cursor.actionmode')}>
+                    <EditPencilIcon/>
+                </IconButton>
+                <IconButton className={Style.tray_button +
+          (mode === 1 ? ' active ' : '')}
+                onClick={() => this.onChange(1)}
+                title={I18N.toString('cursor.movemode')}>
+                    <MoveIcon/>
+                </IconButton>
+            </div>
+        );
+    }
 }
 export default ModeSelectTray;

@@ -4,7 +4,7 @@ import Style from './DrawerView.css';
 import IconButton from 'experimental/components/IconButton.js';
 import ExpandDownIcon from 'components/iconset/ExpandDownIcon.js';
 
-const DRAWER_WIDTH_CSSVAR = "--drawer-width";
+const DRAWER_WIDTH_CSSVAR = '--drawer-width';
 const DRAWER_HANDLE_DRAG_OFFSET = 6;
 const DRAWER_HANDLE_MIN_SIZE_BUFFER = 32;
 const DRAWER_HANDLE_MAX_SIZE_BUFFER = 128;
@@ -14,14 +14,13 @@ const DRAWER_HANDLE_CUSTOM_SNAP_WIDTH = 300;
 
 const DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE = true;
 const DRAWER_SHOULD_HIDE_TAB_LIST = false;
-const DRAWER_SHOULD_HIDE_FIRST_PANEL = true;
 
-export const DRAWER_WIDTH_TYPE_FULL = "full";
-export const DRAWER_WIDTH_TYPE_MIN = "min";
-export const DRAWER_SIDE_BOTTOM = "bottom";
-export const DRAWER_SIDE_RIGHT = "right";
-export const DRAWER_BAR_DIRECTION_VERTICAL = "vertical";
-export const DRAWER_BAR_DIRECTION_HORIZONTAL = "horizontal";
+export const DRAWER_WIDTH_TYPE_FULL = 'full';
+export const DRAWER_WIDTH_TYPE_MIN = 'min';
+export const DRAWER_SIDE_BOTTOM = 'bottom';
+export const DRAWER_SIDE_RIGHT = 'right';
+export const DRAWER_BAR_DIRECTION_VERTICAL = 'vertical';
+export const DRAWER_BAR_DIRECTION_HORIZONTAL = 'horizontal';
 
 class DrawerView extends React.Component
 {
@@ -96,7 +95,8 @@ class DrawerView extends React.Component
 
     toggleDrawer(callback=null)
     {
-        this.setState((prev, props) => {
+        this.setState((prev, props) => 
+        {
             return { open: !prev.open };
         }, callback);
     }
@@ -146,7 +146,7 @@ class DrawerView extends React.Component
 
     setViewportColor(color)
     {
-        this.state.viewportColor = color;
+        this.setState({viewportColor: color});
     }
 
     getViewportColor()
@@ -183,10 +183,10 @@ class DrawerView extends React.Component
                 break;
             case DRAWER_WIDTH_TYPE_MIN:
                 this._isfull = false;
-                this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, minSize + "px");
+                this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, minSize + 'px');
                 break;
             default:
-                throw new Error("Trying to set drawer width to invalid string");
+                throw new Error('Trying to set drawer width to invalid string');
             }
         }
         else if (typeof value === 'number')
@@ -201,11 +201,11 @@ class DrawerView extends React.Component
             {
                 this._isfull = false;
             }
-            this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, value + "px");
+            this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, value + 'px');
         }
         else
         {
-            throw new Error("Trying to set drawer width to unknown value");
+            throw new Error('Trying to set drawer width to unknown value');
         }
     }
 
@@ -233,13 +233,15 @@ class DrawerView extends React.Component
     {
         if (!this._resizeTimeout)
         {
-            this._resizeTimeout = setTimeout(() => {
+            this._resizeTimeout = setTimeout(() => 
+            {
                 this._resizeTimeout = null;
 
                 //Handle resize ends (more like debouncing)
                 if (this._resizeEndTimeout) clearTimeout(this._resizeEndTimeout);
                 else this._handlingResize = true;
-                this._resizeEndTimeout = setTimeout(() => {
+                this._resizeEndTimeout = setTimeout(() => 
+                {
                     this._resizeEndTimeout = null;
                     this._handlingResize = false;
                 }, 500);
@@ -259,7 +261,7 @@ class DrawerView extends React.Component
                     if (this._prevWidth + DRAWER_HANDLE_MAX_SIZE_BUFFER < documentSize)
                     {
                         this._isfull = false;
-                        this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, this._prevWidth + "px");
+                        this.drawerElement.style.setProperty(DRAWER_WIDTH_CSSVAR, this._prevWidth + 'px');
                     }
                 }
                 else
@@ -281,8 +283,8 @@ class DrawerView extends React.Component
         {
             this._handlingGrab = true;
             this._prevWidth = getCSSDrawerWidth(this.drawerElement);
-            document.addEventListener("mouseup", this.onDrawerHandleRelease);
-            document.addEventListener("mousemove", this.onDrawerHandleMove);
+            document.addEventListener('mouseup', this.onDrawerHandleRelease);
+            document.addEventListener('mousemove', this.onDrawerHandleMove);
         }
         else
         {
@@ -294,8 +296,8 @@ class DrawerView extends React.Component
     {
         if (this._handlingGrab)
         {
-            document.removeEventListener("mouseup", this.onDrawerHandleRelease);
-            document.removeEventListener("mousemove", this.onDrawerHandleMove);
+            document.removeEventListener('mouseup', this.onDrawerHandleRelease);
+            document.removeEventListener('mousemove', this.onDrawerHandleMove);
             this._handlingGrab = false;
             this._prevWidth = getCSSDrawerWidth(this.drawerElement);
         }
@@ -335,7 +337,6 @@ class DrawerView extends React.Component
         const showDrawerHandle = isDrawerOpen || this._handlingGrab;
         const shouldDrawerOpenFull = this._isfull;
         const shouldHideDrawerContent = (DRAWER_SHOULD_HIDE_CONTENT_ON_RESIZE && (this._handlingGrab || this._handlingResize)) || !isDrawerOpen;
-        const shouldHideFirstDrawerPanel = DRAWER_SHOULD_HIDE_FIRST_PANEL;
         const showDrawerTabs = isDrawerOpen || !DRAWER_SHOULD_HIDE_TAB_LIST;
 
         //Used to handle sideways logic
@@ -351,8 +352,8 @@ class DrawerView extends React.Component
             <div ref={ref=>this.ref=ref}
                 id={this.props.id}
                 className={Style.app_content +
-        (isDrawerSideBottom ? " column " : "") +
-        (" " + this.props.className)}
+        (isDrawerSideBottom ? ' column ' : '') +
+        (' ' + this.props.className)}
                 style={this.props.style}>
                 <div className={Style.app_viewport} style={viewportStyle}>
                     {this.props.children}
@@ -360,32 +361,33 @@ class DrawerView extends React.Component
                 <div ref={ref=>this.drawerElement=ref}
                     className={
                         Style.app_drawer +
-          (isDrawerOpen ? " open " : "") +
-          (shouldDrawerBarSideways ? " drawer-bar-sideways " : "") +
-          (isDrawerSideBottom ? " drawer-side-bottom " : "") +
-          (shouldDrawerOpenFull ? " full " : "") +
-          (shouldHideDrawerContent ? " hide-content " : "") +
-          (this._handlingResize ? " no-animation " : "") +
-          (shouldDrawerHide ? " hide " : "")}>
-                    <div className={Style.drawer_handle + (showDrawerHandle ? " show " : "")} onMouseDown={this.onDrawerHandleGrab}>
-                        <span>{"||"}</span>
+          (isDrawerOpen ? ' open ' : '') +
+          (shouldDrawerBarSideways ? ' drawer-bar-sideways ' : '') +
+          (isDrawerSideBottom ? ' drawer-side-bottom ' : '') +
+          (shouldDrawerOpenFull ? ' full ' : '') +
+          (shouldHideDrawerContent ? ' hide-content ' : '') +
+          (this._handlingResize ? ' no-animation ' : '') +
+          (shouldDrawerHide ? ' hide ' : '')}>
+                    <div className={Style.drawer_handle + (showDrawerHandle ? ' show ' : '')} onMouseDown={this.onDrawerHandleGrab}>
+                        <span>{'||'}</span>
                     </div>
                     <div className={Style.drawer_content}>
                         <nav className={Style.drawer_content_bar}>
                             <IconButton className={Style.drawer_tab_expander} onClick={this.onDrawerExpand}>
                                 <ExpandDownIcon/>
                             </IconButton>
-                            {showDrawerTabs && drawerPanels && drawerPanels.map((e, i) => {
+                            {showDrawerTabs && drawerPanels && drawerPanels.map((e, i) => 
+                            {
                                 if (!e) return null;
                                 if (!e['TITLE']) return null;
                                 const title = e['TITLE'];
                                 const current = this.isCurrentTab(i);
                                 const disabled = drawerSoloClass && drawerSoloClass !== e;
                                 return (
-                                    <a key={title + ":" + i}
+                                    <a key={title + ':' + i}
                                         className={Style.drawer_tab +
-                      (current ? " active " : "") +
-                      (disabled ? " disabled " : "")}
+                      (current ? ' active ' : '') +
+                      (disabled ? ' disabled ' : '')}
                                         onClick={() => this.setCurrentTab(i)}>
                                         <label>{title}</label>
                                     </a>
@@ -394,17 +396,18 @@ class DrawerView extends React.Component
                         </nav>
                         <div className={Style.drawer_content_panel_container}>
                             <div className={Style.drawer_content_panel}>
-                                {drawerPanels && drawerPanels.map((e, i) => {
+                                {drawerPanels && drawerPanels.map((e, i) => 
+                                {
                                     if (!e) return null;
                                     const ComponentClass = e;
-                                    const title = e['TITLE'] || "";
+                                    const title = e['TITLE'] || '';
                                     const current = this.isCurrentTab(i);
                                     const disabled = drawerSoloClass && drawerSoloClass !== e;
                                     return (
-                                        <div key={title + ":" + i}
+                                        <div key={title + ':' + i}
                                             className={Style.drawer_panel_container +
-                        (!current ? " hide " : "") +
-                        (disabled ? " disabled " : "")}>
+                        (!current ? ' hide ' : '') +
+                        (disabled ? ' disabled ' : '')}>
                                             <ComponentClass className={Style.drawer_panel}
                                                 {...this.props.panelProps}
                                                 drawer={this}/>

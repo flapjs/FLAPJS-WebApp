@@ -71,7 +71,7 @@ class TapeWidget extends React.Component
         return (
             <div id={this.props.id}
                 className={Style.tape_container +
-        " " + this.props.className}
+        ' ' + this.props.className}
                 style={this.props.style}>
 
                 <div className={Style.tape_control_tray}>
@@ -87,19 +87,20 @@ class TapeWidget extends React.Component
                     <button onClick={this.onTapeStop}>STOP</button>
                 </div>
 
-                <div className={"tape-row"}>
+                <div className={'tape-row'}>
 
                     {TAPE_INFINITE_LEFT && tapeContext.isTapeLeftInfinite() &&
             <div className="tape-row-entry infinite">
                 <span className="tape-row-states"></span>
-                <label className="tape-row-symbol">{"..."}</label>
+                <label className="tape-row-symbol">{'...'}</label>
             </div>}
 
                     <DownArrowIcon
                         className="tape-pointer"
-                        style={{opacity: tapeIndex < 0 ? 0 : 1, left: tapeIndex + "em"}}/>
+                        style={{opacity: tapeIndex < 0 ? 0 : 1, left: tapeIndex + 'em'}}/>
 
-                    {tapeContext.getTapeInput().map((e, i) => {
+                    {tapeContext.getTapeInput().map((e, i) => 
+                    {
                         let active = false;
                         let activeRead = false;
                         active = tapeIndex === i;
@@ -122,15 +123,16 @@ class TapeWidget extends React.Component
                         const sourceStates = tapeContext.getTapeSourceStatesByIndex(i);
                         const disabled = sourceStates === null;
                         return (
-                            <div key={e + ":" + i} className={"tape-row-entry" +
-                (active ? " active " : "") +
-                (activeRead ? " active-read " : "") +
-                (disabled ? " disabled " : "")}
+                            <div key={e + ':' + i} className={'tape-row-entry' +
+                (active ? ' active ' : '') +
+                (activeRead ? ' active-read ' : '') +
+                (disabled ? ' disabled ' : '')}
                             onClick={(e) => (!disabled ? tapeContext.setCurrentTapeIndex(i) : null)}>
                                 {showTransitionStates &&
                   sourceStates &&
                   <span className="tape-row-states">
-                      {sourceStates.map(sourceState => {
+                      {sourceStates.map(sourceState => 
+                      {
                           return (
                               <label key={sourceState.getGraphElementID()}>
                                   {sourceState.getNodeLabel()}
@@ -148,7 +150,7 @@ class TapeWidget extends React.Component
                     {TAPE_INFINITE_RIGHT && tapeContext.isTapeRightInfinite() &&
             <div className="tape-row-entry infinite">
                 <span className="tape-row-states"></span>
-                <label className="tape-row-symbol">{"..."}</label>
+                <label className="tape-row-symbol">{'...'}</label>
             </div>}
                 </div>
             </div>

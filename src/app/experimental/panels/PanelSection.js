@@ -20,9 +20,10 @@ class PanelSection extends React.Component
 
     onClick(e)
     {
-        this.setState((prev, props) => {
+        this.setState((prev, props) => 
+        {
             return {open: !prev.open};
-        })
+        });
     }
 
     /** @override */
@@ -44,7 +45,7 @@ class PanelSection extends React.Component
         return (
             <section id={this.props.id}
                 className={Style.section_container +
-          " " + this.props.className}
+          ' ' + this.props.className}
                 style={this.props.style}>
                 <IconButton className={Style.section_header}
                     title={title}
@@ -53,8 +54,8 @@ class PanelSection extends React.Component
                     {!isOpen ? <TinyDownIcon/> : <TinyUpIcon/>}
                 </IconButton>
                 <div className={Style.section_content_container +
-          (isOpen ? " open " : "") +
-          (isFull ? " full " : "")}>
+          (isOpen ? ' open ' : '') +
+          (isFull ? ' full ' : '')}>
                     <div className={Style.section_content}>
                         {this.props.children}
                     </div>

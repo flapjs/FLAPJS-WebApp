@@ -7,7 +7,6 @@ import ToolbarTitle from './ToolbarTitle.js';
 import IconButton from 'experimental/components/IconButton.js';
 import MenuIcon from 'components/iconset/MenuIcon.js';
 
-const TOOLBAR_BUTTON_BUFFER = 150;
 const TOOLBAR_ALLOW_MENU_BAR = true;
 const TOOLBAR_DEFAULT_MENU_INDEX = -1;
 
@@ -50,7 +49,8 @@ class ToolbarView extends React.Component
     toggleBar(callback=null)
     {
     //Toggle it, but also reset menu...
-        this.setState((prev, props) => {
+        this.setState((prev, props) => 
+        {
             return { open: !prev.open, menuIndex: TOOLBAR_DEFAULT_MENU_INDEX };
         }, callback);
     }
@@ -98,14 +98,16 @@ class ToolbarView extends React.Component
 
     renderMenuButtons(children)
     {
-        return React.Children.map(children, child => {
+        return React.Children.map(children, child => 
+        {
             if (child.props.containerOnly !== TOOLBAR_CONTAINER_TOOLBAR) return child;
         });
     }
 
     renderToolbarButtons(children)
     {
-        return React.Children.map(children, child => {
+        return React.Children.map(children, child => 
+        {
             if (child.props.containerOnly !== TOOLBAR_CONTAINER_MENU) return child;
         });
     }
@@ -131,9 +133,9 @@ class ToolbarView extends React.Component
             <div ref={ref=>this.ref=ref}
                 id={this.props.id}
                 className={Style.app_bar +
-        (isBarOpen ? " open " : "") +
-        (shouldBarHide ? " hide " : "") +
-        " " + this.props.className}
+        (isBarOpen ? ' open ' : '') +
+        (shouldBarHide ? ' hide ' : '') +
+        ' ' + this.props.className}
                 style={this.props.style}>
                 <div className={Style.bar_menu}>
                     {showCustomToolbarMenu ?

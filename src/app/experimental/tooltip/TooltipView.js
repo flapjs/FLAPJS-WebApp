@@ -3,9 +3,9 @@ import Style from './TooltipView.css';
 
 const TOOLTIP_WAIT_TIME = 30000;
 
-export const RANDOM_MODE = "random";
-export const SEQUENTIAL_MODE = "sequential";
-export const ONESHOT_MODE = "oneshot";
+export const RANDOM_MODE = 'random';
+export const SEQUENTIAL_MODE = 'sequential';
+export const ONESHOT_MODE = 'oneshot';
 
 class TooltipView extends React.Component
 {
@@ -84,13 +84,14 @@ class TooltipView extends React.Component
     /** @override */
     render()
     {
-        const mode = this.props.mode;
+        //const mode = this.props.mode;
         const visible = this.props.visible;
         const tooltipIndex = this.state.index;
 
         if (visible && !this._tooltipTimeout)
         {
-            this._tooltipTimeout = setTimeout(() => {
+            this._tooltipTimeout = setTimeout(() => 
+            {
                 this.updateTooltip();
             }, TOOLTIP_WAIT_TIME);
         }
@@ -98,10 +99,11 @@ class TooltipView extends React.Component
         return (
             <div id={this.props.id}
                 className={Style.tooltip_container +
-          (visible ? " visible " : "") +
-          " " + this.props.className}
+          (visible ? ' visible ' : '') +
+          ' ' + this.props.className}
                 style={this.props.style}>
-                {React.Children.map(this.props.children, (child, i) => {
+                {React.Children.map(this.props.children, (child, i) => 
+                {
                     return (
                         <label style={{opacity: tooltipIndex === i ? 1 : 0}}>
                             {child}

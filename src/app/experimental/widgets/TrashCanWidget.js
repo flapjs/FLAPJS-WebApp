@@ -59,10 +59,12 @@ class TrashCanWidget extends React.Component
         else
         {
             //This is a single tap!
-            this.setState((prev, props) => {
+            this.setState((prev, props) => 
+            {
                 const result = !prev.forceActive;
                 props.inputController.setTrashMode(result);
-                this._doubleTapTimeout = setTimeout(() => {
+                this._doubleTapTimeout = setTimeout(() => 
+                {
                     this._doubleTapTimeout = null;
                 }, DOUBLE_TAP_TIME);
 
@@ -105,9 +107,9 @@ class TrashCanWidget extends React.Component
         return (
             <div ref={ref=>this.ref=ref} id={this.props.id}
                 className={Style.trash_container +
-          (active ? " active " : "") +
-          (hide ? " hide " : "") +
-          " " + this.props.className}
+          (active ? ' active ' : '') +
+          (hide ? ' hide ' : '') +
+          ' ' + this.props.className}
                 style={this.props.style}
                 onMouseEnter={this.onMouseEnter}
                 onMouseLeave={this.onMouseLeave}
