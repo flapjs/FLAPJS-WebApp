@@ -32,6 +32,7 @@ import EditPencilIcon from 'components/iconset/EditPencilIcon.js';
 
 import AppSaver from 'experimental/AppSaver.js';
 import ColorSaver from 'experimental/ColorSaver.js';
+import LanguageSaver from 'experimental/LanguageSaver.js';
 
 import AutoSave from 'util/storage/AutoSave.js';
 import LocalStorage from 'util/storage/LocalStorage.js';
@@ -80,6 +81,8 @@ class App extends React.Component
     this._drawer = null;
     this._viewport = null;
     this._labeleditor = null;
+
+    this._langSaver = new LanguageSaver();
 
     this._styleOpts = new StyleOptionRegistry();
     this._colorSaver = new ColorSaver(this._styleOpts);
@@ -179,6 +182,7 @@ class App extends React.Component
 
     AutoSave.registerHandler(this._saver);
     AutoSave.registerHandler(this._colorSaver);
+    AutoSave.registerHandler(this._langSaver);
 
     this._init = true;
   }
@@ -190,6 +194,7 @@ class App extends React.Component
 
     AutoSave.unregisterHandler(this._saver);
     AutoSave.unregisterHandler(this._colorSaver);
+    AutoSave.unregisterHandler(this._langSaver);
 
     this._colorSaver.destroy();
   }
