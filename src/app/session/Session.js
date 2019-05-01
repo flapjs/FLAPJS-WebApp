@@ -35,7 +35,7 @@ class Session
     {
         if (this._module !== null) return;
 
-        Logger.log(LOGGER_TAG, `Starting session for module '${moduleName}'...`);
+        Logger.out(LOGGER_TAG, `Starting session for module '${moduleName}'...`);
 
         //Load from storage, url, or default, if not specified...
         if (!moduleName || moduleName.length <= 0)
