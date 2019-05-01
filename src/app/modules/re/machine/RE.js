@@ -2,7 +2,7 @@ import GraphElement from 'graph/GraphElement.js';
 import { guid, stringHash } from 'util/MathHelper.js';
 
 export const EMPTY = "\u03B5";
-export const CONCAT = ".";
+export const CONCAT = "\u25E6";
 export const UNION = "U";
 export const KLEENE = "*";
 export const SIGMA = "\u03A3";

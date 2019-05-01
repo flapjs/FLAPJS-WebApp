@@ -15,6 +15,7 @@ class ExpressionView extends React.Component
     this._inputElement = null;
 
     this.onInputChange = this.onInputChange.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   onInputChange(e)
@@ -30,11 +31,26 @@ class ExpressionView extends React.Component
     session.getApp().getUndoManager().captureEvent();
   }
 
+  onClick(e)
+  {
+      const session = this.props.session;
+      const currentModule = session.getCurrentModule();
+      const machineController = currentModule.getMachineController();
+      const cursorPos = this._inputElement.selectionStart;
+
+      const scope = machineController._parser.scopeFromSpaceIndexing(machineController.getMachine(), cursorPos);
+      this._inputElement.setSelectionRange(scope[0][0], scope[1][1]);
+  }
+
   _appendSymbol(machineController, symbol)
   {
     const session = this.props.session;
-    machineController.setMachineExpression(machineController.getMachineExpression() + symbol);
+    const currentExpression = machineController.getMachineExpression();
+    const cursorPos = this._inputElement.selectionStart;
+    const newExpression = currentExpression.slice(0, cursorPos) + symbol + currentExpression.slice(cursorPos);
+    machineController.setMachineExpression(newExpression);
     session.getApp().getUndoManager().captureEvent();
+    this._inputElement.focus();
   }
 
   //Override
@@ -56,7 +72,7 @@ class ExpressionView extends React.Component
         <div className={Style.view_widget + " " +
           ExpressionViewStyle.expression + " " +
           (error ? "error" : "")}>
-          <input ref={ref=>this._inputElement=ref} value={readableValue} onChange={this.onInputChange}/>
+          <input ref={ref=>this._inputElement=ref} value={readableValue} onChange={this.onInputChange} onClick={this.onClick}/>
         </div>
         <div className={Style.view_widget + " " + ExpressionViewStyle.expression_tray + " " + ExpressionViewStyle.tray_important}>
           <button title="Epsilon"       onClick={() => {this._appendSymbol(machineController, EMPTY)}}>{EMPTY}</button>
