@@ -2,8 +2,8 @@ import React from 'react';
 import Style from './PanelSection.css';
 
 import IconButton from 'experimental/components/IconButton.js';
-import TinyDownIcon from 'experimental/iconset/TinyDownIcon.js';
-import TinyUpIcon from 'experimental/iconset/TinyUpIcon.js';
+import TinyDownIcon from 'components/iconset/TinyDownIcon.js';
+import TinyUpIcon from 'components/iconset/TinyUpIcon.js';
 
 class PanelSection extends React.Component
 {

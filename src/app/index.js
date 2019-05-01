@@ -1,48 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-//Changelog: imports
+import Logger from 'util/logger/Logger.js';
+const LOGGER_TAG = "App";
+
+import App from 'experimental/App.js';
 import Changelog from 'changelog.js';
 
-//Router: imports
-import Router from 'router.js';
-import App from 'deprecated/content/App.js';
-import LandingPage from 'deprecated/landing/components/LandingPage.js';
-
-//Config: imports
-import Config from 'deprecated/config.js';
-import { loadConfig, saveConfig } from 'deprecated/config.js';
-const AUTOSAVE_CONFIG = true;
-//LocalSave: imports
-import LocalSave from 'deprecated/system/localsave/LocalSave.js';
+import LocalStorage from 'util/storage/LocalStorage.js';
 
 const SHOULD_WARN_USERS_ON_EXIT = true;
 
-//Setup viewport
+//Setup app
 window.addEventListener('load', (event) => {
-  console.log("Preparing for \'" + process.env.NODE_ENV + "\' environment...");
-  console.log("Loading web app version \'" + process.env.VERSION + "\'...");
-  loadApplication();
-  window.requestAnimationFrame(updateApplication);
-});
+  Logger.out(LOGGER_TAG, `Preparing for '${process.env.NODE_ENV}' environment...'`);
+  Logger.out(LOGGER_TAG, `Loading app version '${process.env.VERSION}'...`);
 
-//Warn user before exit
-window.addEventListener('beforeunload', (event) => {
-  //Config: Only save if changes were made
-  if (AUTOSAVE_CONFIG) saveConfig();
-
-  if (SHOULD_WARN_USERS_ON_EXIT && LocalSave.getStringFromStorage("disableExitWarning") !== "true")
+  try
   {
-    const message = I18N.toString("alert.window.exit");
-    event = event || window.event;
-    // For IE and Firefox
-    if (event) event.returnValue = message;
-
-    //For Safari
-    return message;
+    loadApplication();
+  }
+  catch(e)
+  {
+    throw e;
   }
 
-  unloadApplication();
+  //Warn user before exit
+  window.addEventListener('beforeunload', (event) => {
+    if (SHOULD_WARN_USERS_ON_EXIT && LocalStorage.getData("disableExitWarning") !== "true")
+    {
+      const message = I18N.toString("alert.window.exit");
+      event = event || window.event;
+      // For IE and Firefox
+      if (event) event.returnValue = message;
+      //For Safari
+      return message;
+    }
+  });
+
+  //Cleanup app
+  window.addEventListener('unload', (event) => {
+    Logger.out(LOGGER_TAG, "Unloading app...");
+    unloadApplication();
+  });
+
+  //Start app
+  window.requestAnimationFrame(updateApplication);
 });
 
 //Tell the client that an update is available
@@ -55,7 +58,7 @@ window.isUpdateAvailable.then(hasUpdate => {
       message += Changelog['log'];
     }
 
-    console.log("[App] Found update for version " + process.env.VERSION + "...");
+    Logger.out(LOGGER_TAG, `Found update for version ${process.env.VERSION}...`);
     window.alert("*** New update available! *** \n Please restart the browser." +
       (message ? "\n" + message : ""));
   }
@@ -70,27 +73,11 @@ var dt;
 //Load application
 function loadApplication()
 {
-  LocalSave.initialize();
-
-  loadConfig();
   root = document.getElementById("root");
 
-  //This should be the same as the one referred to by OptionsPanel
-  if (LocalSave.getStringFromStorage("skipWelcome") === "true")
+  if (App['onWindowLoad'])
   {
-    if (LocalSave.getStringFromStorage("enableExperimental") === "true")
-    {
-      import(/* webpackChunkName: "experimental" */ 'experimental/App.js')
-        .then(({ default: _ }) => Router.routeTo( _ ));
-    }
-    else
-    {
-      Router.routeTo(App);
-    }
-  }
-  else
-  {
-    Router.routeTo(LandingPage);
+    App.onWindowLoad.call(App);
   }
 }
 
@@ -98,14 +85,7 @@ function loadApplication()
 function updateApplication(time)
 {
   dt = (time - prevtime) / FRAMES_PER_SECOND;
-  {
-    const page = Router.getCurrentPage();
-    const pageProps = Router.getCurrentPageProps();
-    if (page)
-    {
-      ReactDOM.render(React.createElement(page, pageProps), root);
-    }
-  }
+  ReactDOM.render(React.createElement(App), root);
   prevtime = time;
   window.requestAnimationFrame(updateApplication);
 }
@@ -113,5 +93,8 @@ function updateApplication(time)
 //Unload application
 function unloadApplication()
 {
-  LocalSave.terminate();
+  if (App['onWindowUnload'])
+  {
+    App.onWindowUnload.call(App);
+  }
 }

@@ -5,7 +5,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --config webpack.config.js",
     "build": "cross-env NODE_ENV=production webpack --mode production --config webpack.config.js",
-    "test": "jest"
+    "test": "jest",
+    "build-docs": "jsdoc --readme ./README.md --recurse ./src/*"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
     "html-webpack-plugin": "^3.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.6.0",
+    "jsdoc": "^3.5.5",
     "serviceworker-webpack-plugin": "^1.0.1",
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.2.1",

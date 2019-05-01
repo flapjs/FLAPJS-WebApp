@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './UploadDropZone.css';
 
-import UploadIcon from 'experimental/iconset/UploadIcon.js';
+import UploadIcon from 'components/iconset/UploadIcon.js';
 
 class UploadDropZone extends React.Component
 {

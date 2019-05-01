@@ -7,13 +7,13 @@ import { downloadText } from 'util/Downloader.js';
 import IconButton from 'experimental/components/IconButton.js';
 import IconUploadButton from 'experimental/components/IconUploadButton.js';
 
-import PageContentIcon from 'experimental/iconset/PageContentIcon.js';
-import UploadIcon from 'experimental/iconset/UploadIcon.js';
-import DownloadIcon from 'experimental/iconset/DownloadIcon.js';
-import CrossIcon from 'experimental/iconset/CrossIcon.js';
-import AddIcon from 'experimental/iconset/AddIcon.js';
-import RunningManIcon from 'experimental/iconset/RunningManIcon.js';
-import WalkingManIcon from 'experimental/iconset/WalkingManIcon.js';
+import PageContentIcon from 'components/iconset/PageContentIcon.js';
+import UploadIcon from 'components/iconset/UploadIcon.js';
+import DownloadIcon from 'components/iconset/DownloadIcon.js';
+import CrossIcon from 'components/iconset/CrossIcon.js';
+import AddIcon from 'components/iconset/AddIcon.js';
+import RunningManIcon from 'components/iconset/RunningManIcon.js';
+import WalkingManIcon from 'components/iconset/WalkingManIcon.js';
 
 import TestItem, {SUCCESS_MODE, FAILURE_MODE, WORKING_MODE, DEFAULT_MODE} from './TestItem.js';
 

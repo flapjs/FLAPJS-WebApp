@@ -3,6 +3,7 @@ import Style from './TestingPanel.css';
 
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSwitch from 'experimental/panels/PanelSwitch.js';
+import PanelButton from 'experimental/panels/PanelButton.js';
 
 import TestListView from './TestListView.js';
 
@@ -15,11 +16,13 @@ class TestingPanel extends React.Component
     super(props);
 
     this.state = {
-      stepMode: false
+      stepMode: false,
+      equalTarget: ""
     };
 
     this.onStepTestChange = this.onStepTestChange.bind(this);
     this.onAutoErrorCheckChange = this.onAutoErrorCheckChange.bind(this);
+    this.onEqualTargetChange = this.onEqualTargetChange.bind(this);
   }
 
   //Override
@@ -62,6 +65,27 @@ class TestingPanel extends React.Component
     }
   }
 
+  onEqualTargetChange(e)
+  {
+    this.setState({equalTarget: e.target.value});
+  }
+
+  renderRemoteSessionOptions()
+  {
+    const broadcastManager = this.props.session.getApp().getBroadcastManager();
+    const result = [];
+    for(const remoteSession of broadcastManager.getRemoteSessions())
+    {
+      const sessionID = remoteSession.getSessionID();
+      result.push(
+        <option key={sessionID} value={sessionID}>
+          {remoteSession.getSessionName()}
+        </option>
+      );
+    }
+    return result;
+  }
+
   //Override
   render()
   {
@@ -72,6 +96,7 @@ class TestingPanel extends React.Component
     const machineController = currentModule.getMachineController();
     const tester = currentModule.getStringTester();
     const errorChecker = currentModule.getErrorChecker();
+    const broadcastManager = app.getBroadcastManager();
 
     const stepMode = this.state.stepMode;
     const errorCheck = errorChecker.isErrorChecking();
@@ -86,6 +111,11 @@ class TestingPanel extends React.Component
         <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode}/>
         <PanelSwitch id={"testing-step-test"} checked={stepMode} onChange={this.onStepTestChange} title={"Step testing"}/>
         <PanelSwitch id={"testing-error-check"} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={"Auto error checking"}/>
+
+        <select value={this.state.equalTarget} onChange={this.onEqualTargetChange}>
+          {this.renderRemoteSessionOptions()}
+        </select>
+        <PanelButton onClick={e=>currentModule.getBroadcastHandler().testEquivalence(this.state.equalTarget)}>Test Equivalence</PanelButton>
 
       </PanelContainer>
     );

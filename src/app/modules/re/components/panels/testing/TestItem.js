@@ -2,12 +2,12 @@ import React from 'react';
 import Style from './TestItem.css';
 
 import IconButton from 'experimental/components/IconButton.js';
-import SubtractIcon from 'experimental/iconset/SubtractIcon.js';
-import CheckCircleIcon from 'experimental/iconset/CheckCircleIcon.js';
-import CrossCircleIcon from 'experimental/iconset/CrossCircleIcon.js';
-import PendingIcon from 'experimental/iconset/PendingIcon.js';
-import RunningManIcon from 'experimental/iconset/RunningManIcon.js';
-import WalkingManIcon from 'experimental/iconset/WalkingManIcon.js';
+import SubtractIcon from 'components/iconset/SubtractIcon.js';
+import CheckCircleIcon from 'components/iconset/CheckCircleIcon.js';
+import CrossCircleIcon from 'components/iconset/CrossCircleIcon.js';
+import PendingIcon from 'components/iconset/PendingIcon.js';
+import RunningManIcon from 'components/iconset/RunningManIcon.js';
+import WalkingManIcon from 'components/iconset/WalkingManIcon.js';
 
 export const DEFAULT_MODE = "default";
 export const SUCCESS_MODE = "success";
