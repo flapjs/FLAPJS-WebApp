@@ -37,6 +37,8 @@ import * as ColorTransform from 'util/ColorTransform.js';
 import AutoSave from 'util/storage/AutoSave.js';
 import LocalStorage from 'util/storage/LocalStorage.js';
 
+import Broadcast from 'util/broadcast/Broadcast.js';
+
 import StyleOptionRegistry from 'deprecated/system/styleopt/StyleOptionRegistry.js';
 
 import Session from 'session/Session.js';
@@ -51,6 +53,7 @@ import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
   RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'session/manager/RenderManager.js';
 import TooltipManager from 'session/manager/TooltipManager.js';
 import NotificationManager, {ERROR_LAYOUT_ID} from 'session/manager/notification/NotificationManager.js';
+import BroadcastManager from 'session/manager/broadcast/BroadcastManager.js';
 
 import ThemeManager from 'util/theme/ThemeManager';
 
@@ -69,6 +72,8 @@ const MENU_INDEX_LANGUAGE = 2;
 const MENU_INDEX_MODULE = 3;
 
 const ERROR_UPLOAD_NOTIFICATION_TAG = "error_upload";
+
+const BROADCAST_CHANNEL_ID = "flapjs";
 
 class App extends React.Component
 {
@@ -98,6 +103,7 @@ class App extends React.Component
     this._renderManager = new RenderManager();
     this._tooltipManager = new TooltipManager();
     this._notificationManager = new NotificationManager();
+    this._broadcastManager = new BroadcastManager(this);
 
     this._session = new Session()
       .addListener(this._undoManager)
@@ -109,6 +115,7 @@ class App extends React.Component
       .addListener(this._renderManager)
       .addListener(this._tooltipManager)
       .addListener(this._notificationManager)
+      .addListener(this._broadcastManager)
       .addListener(this);
 
     //TODO: This is only used to control transitions (do we really need it?)
@@ -148,6 +155,7 @@ class App extends React.Component
   static onWindowLoad()
   {
     AutoSave.initialize(LocalStorage);
+    Broadcast.initialize(BROADCAST_CHANNEL_ID);
   }
 
   /**
@@ -158,12 +166,13 @@ class App extends React.Component
    */
   static onWindowUnload()
   {
-    AutoSave.destroy();
-
     if (App.INSTANCE)
     {
       App.INSTANCE.componentWillUnmount();
     }
+
+    Broadcast.destroy();
+    AutoSave.destroy();
   }
 
   //DuckType
@@ -236,6 +245,7 @@ class App extends React.Component
   getTooltipManager() { return this._tooltipManager; }
   getNotificationManager() { return this._notificationManager; }
   getThemeManager() { return this._themeManager; }
+  getBroadcastManager() { return this._broadcastManager; }
 
   getSession() { return this._session; }
   getCurrentModule() { return this._session.getCurrentModule(); }
