@@ -9,16 +9,16 @@ class FSAGraphExporter extends AbstractGraphExporter
 {
   constructor() { super(); }
 
-  fromJSON(data, module)
+  /**
+   * sets all of the details pertaining to the machine
+   *
+   * @param  {GraphController} graphController     the Controller object for the graph to be constructed
+   * @param  {MachineController} machineController the Controller object for the machine to be constructed
+   * @param  {Object} machineData             the machine Data to be parsed
+   * @param  {FSAModule} module                       the module data to be modified
+   */
+  setMachine(graphController, machineController, machineData, module)
   {
-    const graphController = module.getGraphController();
-    const machineController = module.getMachineController();
-    const graph = graphController.getGraph();
-
-    const metadata = '_metadata' in data ? data['_metadata'] : {};
-    const newGraph = JSONGraphParser.parse(data.graphData, graph);
-
-    //HACK: this should be calculated elsewhere
     const machineData = data.machineData;
     const machineName = machineData.name;
     if (machineName) module.getApp().getSession().setProjectName(machineName);
@@ -38,10 +38,39 @@ class FSAGraphExporter extends AbstractGraphExporter
     {
       graphController.getGraphLabeler().setDefaultNodeLabelPrefix(statePrefix);
     }
+  }
+
+  /**
+   * creates graph and machien from jsonData
+   * @override
+   * @param {Object} jsonData - the jsonData contains all the information for the machine/graph
+   * @param {FSAModule}  module -the module is used to construct the machien and constructor
+   *
+   */
+  fromJSON(jsonData, module)
+  {
+    const graphController = module.getGraphController();
+    const machineController = module.getMachineController();
+    const graph = graphController.getGraph();
+
+    const metadata = '_metadata' in jsonData ? jsonData['_metadata'] : {};
+    const newGraph = JSONGraphParser.parse(jsonData.graphData, graph);
+
+    //machien details are set
+    setMachine(graphController, machineController, jsonData.machineData, module)
+
 
     return newGraph;
   }
 
+  /**
+   * converts graph into a "dst" -what is a dst (should be made clear)
+   *
+   * @override
+   * @param{graphData} graphData - the graphData intended to go into dst
+   * @param{module} module - contains module data such as graphController, machineController, projectName, version, etc.
+   *
+   */
   toJSON(graphData, module)
   {
     const graphController = module.getGraphController();
@@ -63,13 +92,13 @@ class FSAGraphExporter extends AbstractGraphExporter
     return dst;
   }
 
-  //Override
+  /** @override */
   importFromData(data, module)
   {
     this.fromJSON(data, module);
   }
 
-  //Override
+  /** @override */
   exportToData(module)
   {
     const graph = module.getGraphController().getGraph();
@@ -78,23 +107,32 @@ class FSAGraphExporter extends AbstractGraphExporter
     return result;
   }
 
-  //Override
+  /** @override */
   doesSupportData()
   {
     return true;
   }
 
-  //Override
+
+  /**
+   * importFromFile - creates a graph from an input file Object
+   *
+   * @override
+   * @param{fileBlob} fileBlob - file with data for constructing graph
+   * @param{module} module  - module used in construction of graphData
+   */
   importFromFile(fileBlob, module)
   {
     return new Promise((resolve, reject) => {
       const filename = fileBlob.name;
       if (!filename.endsWith(this.getFileType()))
       {
+        // TODO: log errors instead of just printing them to standard error
         throw new Error("Trying to import invalid file type for \'" + this.getFileType() + "\': " + filename);
       }
 
       const reader = new FileReader();
+      // TODO: rename e to something more meaningful
       reader.onload = e => {
         const graphController = module.getGraphController();
         const machineController = module.getMachineController();
@@ -119,6 +157,7 @@ class FSAGraphExporter extends AbstractGraphExporter
 
           resolve();
         }
+        // e is an error
         catch (e)
         {
           reader.abort();
@@ -126,14 +165,16 @@ class FSAGraphExporter extends AbstractGraphExporter
         }
         finally
         {
+          // compares GraphHash before and after import, captures event if they are not equal
           const nextGraphHash = graph.getHashCode(true);
           if (prevGraphHash !== nextGraphHash)
           {
+            // TODO: this should not be here
             module.getApp().getUndoManager().captureEvent();
           }
         }
       };
-
+      // e here is an event
       reader.onerror = e => {
         reject(new Error("Unable to import file: " + e.target.error.code));
       }
@@ -142,7 +183,13 @@ class FSAGraphExporter extends AbstractGraphExporter
     });
   }
 
-  //Override
+  /**
+   * exportToFile - creates a file that encodes graph details
+   * @override
+   * @param{string} filename - name of the file to contain the encoded graphData
+   * @param{module} module - module containing the graph to be encoded
+   *
+   */
   exportToFile(filename, module)
   {
     const graph = module.getGraphController().getGraph();
@@ -152,43 +199,42 @@ class FSAGraphExporter extends AbstractGraphExporter
     downloadText(filename + '.' + this.getFileType(), jsonString);
   }
 
-  //Override
+  /** @override */
   doesSupportFile()
   {
     return true;
   }
-
-  //Override
+  /** @override */
   canImport(module)
   {
     return true;
   }
 
-  //Override
+  /** @override */
   canExport(module)
   {
     return !module.getGraphController().getGraph().isEmpty();
   }
 
-  //Override
+  /** @override */
   getTitle()
   {
     return I18N.toString("file.export.machine.hint");
   }
 
-  //Override
+  /** @override */
   getLabel()
   {
     return I18N.toString("file.export.machine");
   }
 
-  //Override
+  /** @override */
   getFileType()
   {
     return "json";
   }
 
-  //Override
+  /** @override */
   getIconClass()
   {
     return JSONFileIcon;
