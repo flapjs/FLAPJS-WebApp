@@ -2,55 +2,55 @@ import GraphEdge from 'graph/GraphEdge.js';
 
 class AbstractGraphLabeler
 {
-  constructor() {}
+    constructor() { }
 
-  getDefaultLabel(target)
-  {
-    if (target instanceof GraphEdge)
+    getDefaultLabel(target)
     {
-      return this.getDefaultEdgeLabel();
+        if (target instanceof GraphEdge)
+        {
+            return this.getDefaultEdgeLabel();
+        }
+        else
+        {
+            return this.getDefaultNodeLabel();
+        }
     }
-    else
+
+    getLabelFormatter(target)
     {
-      return this.getDefaultNodeLabel();
+        if (target instanceof GraphEdge)
+        {
+            return this.getEdgeLabelFormatter();
+        }
+        else
+        {
+            return this.getNodeLabelFormatter();
+        }
     }
-  }
 
-  getLabelFormatter(target)
-  {
-    if (target instanceof GraphEdge)
+    //Deprecated - use getDefaultLabel()
+    getDefaultNodeLabel()
     {
-      return this.getEdgeLabelFormatter();
+        return '';
     }
-    else
+
+    //Deprecated - use getDefaultLabel()
+    getDefaultEdgeLabel()
     {
-      return this.getNodeLabelFormatter();
+        return '';
     }
-  }
 
-  //Deprecated - use getDefaultLabel()
-  getDefaultNodeLabel()
-  {
-    return "";
-  }
+    //Deprecated - use getDefaultLabel()
+    getNodeLabelFormatter()
+    {
+        throw new Error('Node label formatting is not supported');
+    }
 
-  //Deprecated - use getDefaultLabel()
-  getDefaultEdgeLabel()
-  {
-    return "";
-  }
-
-  //Deprecated - use getDefaultLabel()
-  getNodeLabelFormatter()
-  {
-    throw new Error("Node label formatting is not supported");
-  }
-
-  //Deprecated - use getDefaultLabel()
-  getEdgeLabelFormatter()
-  {
-    throw new Error("Edge label formatting is not supported");
-  }
+    //Deprecated - use getDefaultLabel()
+    getEdgeLabelFormatter()
+    {
+        throw new Error('Edge label formatting is not supported');
+    }
 }
 
 export default AbstractGraphLabeler;

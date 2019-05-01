@@ -2,7 +2,7 @@ import GraphEdge from 'graph/GraphEdge.js';
 
 class QuadraticEdge extends GraphEdge
 {
-    constructor(id, from, to=null)
+    constructor(id, from, to = null)
     {
         super(id, from, null);
 
@@ -11,14 +11,14 @@ class QuadraticEdge extends GraphEdge
         this._quad = {
             radians: 0,
             length: 0,
-            _coords: {x: 0, y: 0}
+            _coords: { x: 0, y: 0 }
         };
 
         //Make sure to format it correctly when creating...
         this.changeDestinationNode(to);
     }
 
-    setQuadratic(radians, length=undefined)
+    setQuadratic(radians, length = undefined)
     {
         this._quad.radians = radians;
         if (typeof length === 'number')
@@ -59,7 +59,6 @@ class QuadraticEdge extends GraphEdge
         dy = y - midpointy;
 
         const PI = Math.PI;
-        const PI2 = PI * 2;
         const HALFPI = PI / 2;
         //0 rad = to the right
         //Also: angleOffset is the offset from midpoint angle, the orthogonal base vector
@@ -129,11 +128,11 @@ class QuadraticEdge extends GraphEdge
 
     formatAsPlaceholder(prevDest)
     {
-    //Quad is re-used to determine edge angle for placeholder
-    //This can be used specifically for quad since regular quad is
-    //dependent on this._to != null, which placeholder assumes this._to == null.
-    //Also, quad.length is ignored, because the length should always be
-    //getPlaceholderLength(). This is resolved by getStartPoint(), etc.
+        //Quad is re-used to determine edge angle for placeholder
+        //This can be used specifically for quad since regular quad is
+        //dependent on this._to != null, which placeholder assumes this._to == null.
+        //Also, quad.length is ignored, because the length should always be
+        //getPlaceholderLength(). This is resolved by getStartPoint(), etc.
         if (prevDest)
         {
             const dx = this._from.x - prevDest.x;
@@ -185,12 +184,12 @@ class QuadraticEdge extends GraphEdge
     }
 
     /** @override */
-    getStartPoint(dst={x: 0, y: 0})
+    getStartPoint(dst = { x: 0, y: 0 })
     {
         const from = this._from;
         const to = this._to;
 
-        if (!from) throw new Error("Source of edge cannot be null.");
+        if (!from) throw new Error('Source of edge cannot be null.');
         if (!to)
         {
             //Make sure to use quad for placeholder direction (not magnitude)
@@ -224,12 +223,12 @@ class QuadraticEdge extends GraphEdge
     }
 
     /** @override */
-    getEndPoint(dst={x: 0, y: 0})
+    getEndPoint(dst = { x: 0, y: 0 })
     {
         const from = this._from;
         const to = this._to;
 
-        if (!from) throw new Error("Source of edge cannot be null.");
+        if (!from) throw new Error('Source of edge cannot be null.');
         if (!to)
         {
             //Make sure to use quadCoords for placeholder direction (not magnitude)
@@ -269,12 +268,12 @@ class QuadraticEdge extends GraphEdge
     }
 
     /** @override */
-    getCenterPoint(dst={x: 0, y: 0})
+    getCenterPoint(dst = { x: 0, y: 0 })
     {
         const from = this._from;
         const to = this._to;
 
-        if (!from) throw new Error("Source of edge cannot be null.");
+        if (!from) throw new Error('Source of edge cannot be null.');
         if (!to)
         {
             //Make sure to use quad for placeholder direction (not magnitude)
@@ -299,11 +298,11 @@ class QuadraticEdge extends GraphEdge
     }
 
     /** @override */
-    getHashString(usePosition=true)
+    getHashString(usePosition = true)
     {
         if (usePosition)
         {
-            return super.getHashString(usePosition) + ":" + this._quad.radians + "," + this._quad.length;
+            return super.getHashString(usePosition) + ':' + this._quad.radians + ',' + this._quad.length;
         }
         else
         {
@@ -312,7 +311,7 @@ class QuadraticEdge extends GraphEdge
     }
 }
 
-function getDirectionalVector(x1, y1, x2, y2, dist, angleOffset=0, dst={x: 0, y: 0})
+function getDirectionalVector(x1, y1, x2, y2, dist, angleOffset = 0, dst = { x: 0, y: 0 })
 {
     const dx = x2 - x1;
     const dy = y2 - y1;
@@ -322,7 +321,7 @@ function getDirectionalVector(x1, y1, x2, y2, dist, angleOffset=0, dst={x: 0, y:
     return dst;
 }
 
-function getMidPoint(x1, y1, x2, y2, dst={x: 0, y: 0})
+function getMidPoint(x1, y1, x2, y2, dst = { x: 0, y: 0 })
 {
     dst.x = x1 + (x2 - x1) / 2;
     dst.y = y1 + (y2 - y1) / 2;

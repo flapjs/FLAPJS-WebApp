@@ -1,10 +1,8 @@
 import React from 'react';
 
-import EdgeRenderer, {DIRECTED_NONE} from 'renderer/EdgeRenderer.js';
+import EdgeRenderer, { DIRECTED_NONE } from 'renderer/EdgeRenderer.js';
 
-const GRAPH_EDGE_CONTAINER_STYLE_NAME = "graph-edge-container";
-const GRAPH_EDGE_BODY_STYLE_NAME = "graph-edge";
-const GRAPH_EDGE_LABEL_STYLE_NAME = "graph-edge-label";
+const GRAPH_EDGE_CONTAINER_STYLE_NAME = 'graph-edge-container';
 
 class GraphEdgeRenderer extends React.Component
 {
@@ -17,7 +15,7 @@ class GraphEdgeRenderer extends React.Component
     render()
     {
         const edge = this.props.edge;
-        const stroke = this.props.stroke || "#000000";
+        const stroke = this.props.stroke || '#000000';
         const start = edge.getStartPoint();
         const end = edge.getEndPoint();
         const center = edge.getCenterPoint();
@@ -32,7 +30,7 @@ class GraphEdgeRenderer extends React.Component
                 center={center}
                 label={label}
                 direction={edgeDir}
-                color={stroke}/>
+                color={stroke} />
         </g>;
     }
 }
