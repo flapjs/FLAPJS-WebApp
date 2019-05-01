@@ -15,13 +15,12 @@ import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
 import FSAGraphOverlayRenderer from './renderer/FSAGraphOverlayRenderer.js';
 import ViewportRenderer from './renderer/ViewportRenderer.js';
 
-import GraphLayout from './graph/GraphLayout.js';
 import LabelEditor from './editor/LabelEditor.js';
 import TestingManager from './testing/TestingManager.js';
 
 import SafeGraphEventHandler from 'deprecated/system/undomanager/SafeGraphEventHandler.js';
 
-const VERSION = "0.0.1";
+const VERSION = '0.0.1';
 const PANELS = [AboutPanel, TestingPanel, OverviewPanel, AnalysisPanel];
 
 class FSAModule extends AbstractModule
@@ -55,7 +54,8 @@ class FSAModule extends AbstractModule
         super.initialize(app);
 
         app.getUndoManager()
-            .setEventHandlerFactory((...args) => {
+            .setEventHandlerFactory((...args) => 
+            {
                 return new SafeGraphEventHandler(this._graphController);
             });
 
@@ -64,13 +64,14 @@ class FSAModule extends AbstractModule
         this._testingManager.initialize(this, viewport);
 
         //Notify on create in delete mode
-        const tryCreateWhileTrash = () => {
+        const tryCreateWhileTrash = () => 
+        {
             if (this._inputController.isTrashMode())
             {
-                Notifications.addMessage(I18N.toString("message.warning.cannotmodify"), "warning", "tryCreateWhileTrash");
+                Notifications.addMessage(I18N.toString('message.warning.cannotmodify'), 'warning', 'tryCreateWhileTrash');
             }
         };
-        this._graphController.on("tryCreateWhileTrash", tryCreateWhileTrash);
+        this._graphController.on('tryCreateWhileTrash', tryCreateWhileTrash);
     }
 
     /** @override */
@@ -112,13 +113,13 @@ class FSAModule extends AbstractModule
     /** @override */
     getRenderer(renderLayer)
     {
-        switch(renderLayer)
+        switch (renderLayer)
         {
-        case "graph":
+        case 'graph':
             return FSAGraphRenderer;
-        case "graphoverlay":
+        case 'graphoverlay':
             return FSAGraphOverlayRenderer;
-        case "viewport":
+        case 'viewport':
             return ViewportRenderer;
         }
         return null;
@@ -134,7 +135,7 @@ class FSAModule extends AbstractModule
     /** @override */
     getModulePanels() { return PANELS; }
     /** @override */
-    getModuleName() { return "fsa"; }
+    getModuleName() { return 'fsa'; }
     /** @override */
     getLocalizedModuleName() { return this._machineController.getMachineType(); }
 }
