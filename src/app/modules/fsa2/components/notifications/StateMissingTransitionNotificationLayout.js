@@ -1,14 +1,17 @@
 import React from 'react';
 import DefaultNotificationLayout, {STYLE_TYPE_ERROR} from 'session/manager/notification/components/DefaultNotificationLayout.js';
 
+// TODO: add @see for usage
 class StateMissingTransitionNotificationLayout extends React.Component
 {
   constructor(props)
   {
     super(props);
 
+    // TODO: check to see if these variables are used elsewhere; otherwise make it private
     this.targetIndex = 0;
     this.targetLabel = "";
+    // TODO: clarify what target is, specify type
     const targets = props.message.targets;
     for(const target of targets)
     {
@@ -18,6 +21,7 @@ class StateMissingTransitionNotificationLayout extends React.Component
       }
       this.targetLabel += target.getNodeLabel();
     }
+    // TODO: fix "for" - not language compatible
     this.targetLabel += " for " + props.message.symbol;
 
     this.onClick = this.onClick.bind(this);
@@ -52,6 +56,7 @@ class StateMissingTransitionNotificationLayout extends React.Component
   /** @override */
   render()
   {
+    // TODO: I18N - look out for localization
     return (
       <DefaultNotificationLayout id={this.props.id}
         className={this.props.className}
