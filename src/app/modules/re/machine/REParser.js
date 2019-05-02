@@ -10,15 +10,20 @@ import RE,
 }
 from './RE.js';
 
+/**
+* An Abstract Syntax Tree is used for parsing languages, in this case we use them
+* for parsing regular expressions.
+*/
 class ASTNode
 {
 	constructor(symbol, isTerminal, parentNode, index)
 	{
-		this._symbol = symbol;
-		this._isTerminal = isTerminal;
+		this._symbol = symbol;				// Character/String to represent symbol from language
+		this._isTerminal = isTerminal;		// Boolean, true if it is a terminal
 		this._parent = parentNode;
 		this._children = [];
-		this._index = index;
+		this._childrenLimit = 2;			// By default, ASTNodes can have up to 2 children(binary operators)
+		this._index = index;				// Index of the symbol in the original String we are parsing
 	}
 
 	addChild(childNode)
@@ -49,7 +54,17 @@ class ASTNode
 
 	hasRoomForChildren()
 	{
-		return this._children.length < 2;
+		return this._children.length < this._childrenLimit;
+	}
+
+	getChildrenLimit()
+	{
+		return this._childrenLimit;
+	}
+
+	setChildrenLimit(newChildrenLimit)
+	{
+		this._childrenLimit = newChildrenLimit;
 	}
 
 	isTerminal()
@@ -131,118 +146,38 @@ class REParser
 				index++;
 				switch (char)
 				{
-				case '(':
-					if (!currNode)
-					{
-						currNode = new ASTNode('(', false, null, index);
-						this.indexToNode.set(index, currNode);
-						this.rootNode = currNode;
-					}
-					else
-					{
-						let newNode = new ASTNode('(', false, currNode, index);
-						this.indexToNode.set(index, newNode);
-						currNode.addChild(newNode);
-						currNode = newNode;
-					}
-					openParenStack.push(currNode);
-					break;
-				case ')':
-					currNode = openParenStack.pop();
-					this.closedParensIndicies.push(index);
-					break;
-				case KLEENE:
-					let kleeneNode = new ASTNode(KLEENE, false, currNode.getParent(), index);
-					this.indexToNode.set(index, kleeneNode);
-					this.makeParentOf(kleeneNode, currNode);
-					currNode = kleeneNode;
-					break;
-				case PLUS:
-					let plusNode = new ASTNode(PLUS, false, currNode.getParent(), index);
-					this.indexToNode.set(index, plusNode);
-					this.makeParentOf(plusNode, currNode);
-					currNode = plusNode;
-					break;
-				case CONCAT:
-					if (!currNode.getParent())
-					{
-						let concatNode = new ASTNode(CONCAT, false, null, index);
-						this.indexToNode.set(index, concatNode);
-						this.makeParentOf(concatNode, currNode);
-						currNode = concatNode;
-					}
-					else
-					{
-						let originalParent = currNode.getParent();
-						let parentSym = originalParent.getSymbol();
-						if (parentSym == CONCAT)
-						{
-							let grandparent = originalParent.getParent();
-							let concatNode = new ASTNode(CONCAT, false, grandparent, index);
-							this.indexToNode.set(index, concatNode);
-							this.makeParentOf(concatNode, originalParent);
-							currNode = concatNode;
-						}
-						else
-						{
-							let concatNode = new ASTNode(CONCAT, false, originalParent, index);
-							this.indexToNode.set(index, concatNode);
-							this.makeParentOf(concatNode, currNode);
-							currNode = concatNode;
-						}
-					}
-					break;
-
-				case UNION:
-					if (!currNode.getParent())
-					{
-						let unionNode = new ASTNode(UNION, false, null, index);
-						this.indexToNode.set(index, unionNode);
-						this.makeParentOf(unionNode, currNode);
-						currNode = unionNode;
-					}
-					else
-					{
-						let originalParent = currNode.getParent();
-						let sym = originalParent.getSymbol();
-						if (sym == '(')
-						{
-							let unionNode = new ASTNode(UNION, false, originalParent, index);
-							this.indexToNode.set(index, unionNode);
-							this.makeParentOf(unionNode, currNode);
-							currNode = unionNode;
-						}
-						else
-						{
-							let grandparent = originalParent.getParent();
-							let unionNode = new ASTNode(UNION, false, grandparent, index);
-							this.indexToNode.set(index, unionNode);
-							this.makeParentOf(unionNode, originalParent);
-							currNode = unionNode;
-						}
-					}
-					break;
-				case ' ':
-					break;
+					case '(':
+						currNode = this.createOpenParenNode(currNode, index);
+						openParenStack.push(currNode);
+						break;
+					case ')':
+						currNode = openParenStack.pop();
+						this.closedParensIndicies.push(index);
+						break;
+					case KLEENE:
+						currNode = this.createUnaryOperNode(currNode, index, KLEENE);
+						break;
+					case PLUS:
+						currNode = this.createUnaryOperNode(currNode, index, PLUS);
+						break;
+					case CONCAT:
+						currNode = this.createBinaryOperNode(currNode, index, CONCAT);
+						break;
+					case UNION:
+						currNode = this.createBinaryOperNode(currNode, index, UNION);
+						break;
+					//Ignore spaces
+					case ' ':
+						break;
 					//For symbols
-				default:
-					if (!currNode)
+					default:
 					{
-						currNode = new ASTNode(char, true, null, index);
-						this.indexToNode.set(index, currNode);
-						this.rootNode = currNode;
-					}
-					else
-					{
-						let symbolNode = new ASTNode(char, true, currNode, index);
-						this.indexToNode.set(index, symbolNode);
-						currNode.addChild(symbolNode);
-						currNode = symbolNode;
-					}
-					// Add terminals to the regex's terminal set
-					if (char != SIGMA && char != EMPTY_SET && char != EMPTY)
-					{
-						regex.addTerminal(char);
+						currNode = this.createTerminalNode(currNode, index, char);
+						// Add TERMINALS ONLY to the regex's terminal set
+						if (char != SIGMA && char != EMPTY_SET && char != EMPTY)
+						{
+							regex.addTerminal(char);
+						}
 					}
 				}
 			}
@@ -266,14 +201,108 @@ class REParser
 		}
 	}
 
+	createOpenParenNode(currNode, index)
+	{
+		if (!currNode)
+		{
+			currNode = new ASTNode('(', false, null, index);
+			this.indexToNode.set(index, currNode);
+			this.rootNode = currNode;
+		}
+		else
+		{
+			let newNode = new ASTNode('(', false, currNode, index);
+			this.indexToNode.set(index, newNode);
+			currNode.addChild(newNode);
+			currNode = newNode;
+		}
+		return currNode;
+	}
 
-	// spaceIndex is the index of the space between the characters in the regex
-	// E.g.   A U B
-	//       0 1 2 3
-	// Returns [start_space_index, end_space_index] of the scope
-	scopeFromSpaceIndexing(regex, spaceIndex) {
+	createUnaryOperNode(currNode, index, symbol)
+	{
+		let newNode = new ASTNode(symbol, false, currNode.getParent(), index);
+		this.indexToNode.set(index, newNode);
+		this.makeParentOf(newNode, currNode);
+		currNode = newNode;
+		return currNode;
+	}
+
+	createBinaryOperNode(currNode, index, symbol)
+	{
+		if(!currNode.getParent())
+		{
+			let newNode = new ASTNode(symbol, false, null, index);
+			this.indexToNode.set(index, newNode);
+			this.makeParentOf(newNode, currNode);
+			currNode = newNode;
+		}
+		else
+		{
+			//Special cases where the newly created node should be the parent of
+			//the PARENT of the currNode are based off of symbol, so whenever
+			//we add a new binary operator, this is something you should MODIFY
+			let makeParentOfParent = 0;
+			const originalParent = currNode.getParent();
+			const parentSym = originalParent.getSymbol();
+			switch(symbol)
+			{
+				case CONCAT:
+					if(parentSym == CONCAT) makeParentOfParent = 1;
+					break;
+				case UNION:
+					if(parentSym != '(') makeParentOfParent = 1;
+					break;
+			}
+			if(makeParentOfParent)
+			{
+				let grandparent = originalParent.getParent();
+				let newNode = new ASTNode(symbol, false, grandparent, index);
+				this.indexToNode.set(index, newNode);
+				this.makeParentOf(newNode, originalParent);
+				currNode = newNode;
+			}
+			else
+			{
+				let newNode = new ASTNode(symbol, false, originalParent, index);
+				this.indexToNode.set(index, newNode);
+				this.makeParentOf(newNode, currNode);
+				currNode = newNode;
+			}
+		}
+		return currNode;
+	}
+
+	createTerminalNode(currNode, index, symbol)
+	{
+		if (!currNode)
+		{
+			currNode = new ASTNode(symbol, true, null, index);
+			this.indexToNode.set(index, currNode);
+			this.rootNode = currNode;
+		}
+		else
+		{
+			let symbolNode = new ASTNode(symbol, true, currNode, index);
+			this.indexToNode.set(index, symbolNode);
+			currNode.addChild(symbolNode);
+			currNode = symbolNode;
+		}
+		return currNode;
+	}
+
+	/**
+	 * @param {Regex}  regex 	The regular expression to parse and do scope highlighting on
+	 * @param {Number} spaceIndex is the index of the space between the characters in the regex
+	 * E.g.   A U B
+	 *       0 1 2 3
+	 * A cursor can only be clicked on a spaceIndex, hence its use
+	 * @return {Array} [[start1_spaceIndex, end1_spaceIndex], [start2_spaceIndex, end2_spaceIndex]] of the scope
+	 */
+	scopeFromSpaceIndexing(regex, spaceIndex)
+	{
 		if(spaceIndex == 0) {
-			return [0, 0];
+			return [[0, 0], [0, 0]];
 		}
 		else if(spaceIndex > 0 && spaceIndex <= this.size + 1) {
 			const index = spaceIndex - 1;
@@ -293,22 +322,40 @@ class REParser
 		}
 	}
 
-	//Returns [start_index, end_index] of the scope
+	/**
+	 * @param {Regex}  regex 	The regular expression to parse and do scope highlighting on
+	 * @param {Number} index  	is the index of the characters in the regex
+	 *  Scope in this context is considered as the operands for a selected operator
+	 *	For an operand 	-> there is no scope, return null
+	 *  For a unary operator -> return [[start_index, start_index], [end_index, end_index]]
+	 *							start_index is index of beginning index of the sole operand and
+	 *							end_index is the index of the end
+	 * For a binary operator -> return [[start1_index, end1_index], [start2_index, end2_index]]
+	 *							start1_index and end1_index correspond to the first operand
+	 *							start2_index and end2_index correspond to the second operand
+	 * Finding the start and end indicies relies on the parse tree made, where operands of an
+	 * operator are descendants in the subtree where the operator is the root node, so earliest
+	 * and latest parts of the operands will be the terminal nodes with the least and highest index
+	 * @return {Array} [[start1_spaceIndex, end1_spaceIndex], [start2_spaceIndex, end2_spaceIndex]] of the scope
+	 */
 	scopeFromCharAtIndex(regex, index)
 	{
 		this.parseRegex(regex);
 		let currentNode = this.indexToNode.get(index);
 		let symbol = currentNode.getSymbol();
+		//Unary operators
 		if(symbol == KLEENE || symbol == PLUS) {
 			let smallest = this.smallestIndexOfChildren(currentNode);
 			let largest = this.largestIndexOfChildren(currentNode);
 			return [ [smallest, smallest], [largest, largest] ];
 		}
+		//Binary operators
 		else if(symbol == UNION || symbol == CONCAT) {
 			let smallest = this.smallestIndexOfChildren(currentNode);
 			let largest = this.largestIndexOfChildren(currentNode);
 			return [ [smallest, index - 1], [index + 1, largest] ];
 		}
+		//Operands
 		else {
 			return null;
 		}
