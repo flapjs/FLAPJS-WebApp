@@ -103,11 +103,15 @@ class REParser
 	constructor()
 	{
 		this.rootNode = null;
+		this.size = 0;
+		this.indexToNode = new Map();	// Map of indicies of the regex characters to their ASTNode
+		this.closedParensIndicies = [];			// Indicies of the closed parenthesis in the regex
 	}
 
 	parseRegex(regex)
 	{
 		this.rootNode = null;
+		this.size = 0;
 		regex.clearTerminals();
 		if (regex.getExpression().length == 0)
 		{
@@ -123,6 +127,7 @@ class REParser
 
 			for (const char of expression)
 			{
+				this.size = this.size + 1;
 				index++;
 				switch (char)
 				{
@@ -130,11 +135,13 @@ class REParser
 					if (!currNode)
 					{
 						currNode = new ASTNode('(', false, null, index);
+						this.indexToNode.set(index, currNode);
 						this.rootNode = currNode;
 					}
 					else
 					{
 						let newNode = new ASTNode('(', false, currNode, index);
+						this.indexToNode.set(index, newNode);
 						currNode.addChild(newNode);
 						currNode = newNode;
 					}
@@ -142,14 +149,17 @@ class REParser
 					break;
 				case ')':
 					currNode = openParenStack.pop();
+					this.closedParensIndicies.push(index);
 					break;
 				case KLEENE:
 					let kleeneNode = new ASTNode(KLEENE, false, currNode.getParent(), index);
+					this.indexToNode.set(index, kleeneNode);
 					this.makeParentOf(kleeneNode, currNode);
 					currNode = kleeneNode;
 					break;
 				case PLUS:
 					let plusNode = new ASTNode(PLUS, false, currNode.getParent(), index);
+					this.indexToNode.set(index, plusNode);
 					this.makeParentOf(plusNode, currNode);
 					currNode = plusNode;
 					break;
@@ -157,6 +167,7 @@ class REParser
 					if (!currNode.getParent())
 					{
 						let concatNode = new ASTNode(CONCAT, false, null, index);
+						this.indexToNode.set(index, concatNode);
 						this.makeParentOf(concatNode, currNode);
 						currNode = concatNode;
 					}
@@ -168,12 +179,14 @@ class REParser
 						{
 							let grandparent = originalParent.getParent();
 							let concatNode = new ASTNode(CONCAT, false, grandparent, index);
+							this.indexToNode.set(index, concatNode);
 							this.makeParentOf(concatNode, originalParent);
 							currNode = concatNode;
 						}
 						else
 						{
 							let concatNode = new ASTNode(CONCAT, false, originalParent, index);
+							this.indexToNode.set(index, concatNode);
 							this.makeParentOf(concatNode, currNode);
 							currNode = concatNode;
 						}
@@ -184,6 +197,7 @@ class REParser
 					if (!currNode.getParent())
 					{
 						let unionNode = new ASTNode(UNION, false, null, index);
+						this.indexToNode.set(index, unionNode);
 						this.makeParentOf(unionNode, currNode);
 						currNode = unionNode;
 					}
@@ -194,6 +208,7 @@ class REParser
 						if (sym == '(')
 						{
 							let unionNode = new ASTNode(UNION, false, originalParent, index);
+							this.indexToNode.set(index, unionNode);
 							this.makeParentOf(unionNode, currNode);
 							currNode = unionNode;
 						}
@@ -201,6 +216,7 @@ class REParser
 						{
 							let grandparent = originalParent.getParent();
 							let unionNode = new ASTNode(UNION, false, grandparent, index);
+							this.indexToNode.set(index, unionNode);
 							this.makeParentOf(unionNode, originalParent);
 							currNode = unionNode;
 						}
@@ -213,11 +229,13 @@ class REParser
 					if (!currNode)
 					{
 						currNode = new ASTNode(char, true, null, index);
+						this.indexToNode.set(index, currNode);
 						this.rootNode = currNode;
 					}
 					else
 					{
 						let symbolNode = new ASTNode(char, true, currNode, index);
+						this.indexToNode.set(index, symbolNode);
 						currNode.addChild(symbolNode);
 						currNode = symbolNode;
 					}
@@ -247,6 +265,75 @@ class REParser
 			this.rootNode = newParentNode;
 		}
 	}
+
+
+	// spaceIndex is the index of the space between the characters in the regex
+	// E.g.   A U B
+	//       0 1 2 3
+	// Returns [start_space_index, end_space_index] of the scope
+	scopeFromSpaceIndexing(regex, spaceIndex) {
+		if(spaceIndex == 0) {
+			return [0, 0];
+		}
+		else if(spaceIndex > 0 && spaceIndex <= this.size + 1) {
+			const index = spaceIndex - 1;
+			const scope = this.scopeFromCharAtIndex(regex, index);
+			// scope will be null if the character selected is just an operand,
+			// so nothing should be highlighted
+			if (!scope) {
+				return [ [spaceIndex, spaceIndex],  [spaceIndex, spaceIndex] ];
+			}
+			else {
+				scope[1][1] += 1	//Increment last index to account for space indexing in highlighting
+				return scope
+			}
+		}
+		else {
+			throw new Error("Invalid index");
+		}
+	}
+
+	//Returns [start_index, end_index] of the scope
+	scopeFromCharAtIndex(regex, index)
+	{
+		this.parseRegex(regex);
+		let currentNode = this.indexToNode.get(index);
+		let symbol = currentNode.getSymbol();
+		if(symbol == KLEENE || symbol == PLUS) {
+			let smallest = this.smallestIndexOfChildren(currentNode);
+			let largest = this.largestIndexOfChildren(currentNode);
+			return [ [smallest, smallest], [largest, largest] ];
+		}
+		else if(symbol == UNION || symbol == CONCAT) {
+			let smallest = this.smallestIndexOfChildren(currentNode);
+			let largest = this.largestIndexOfChildren(currentNode);
+			return [ [smallest, index - 1], [index + 1, largest] ];
+		}
+		else {
+			return null;
+		}
+	}
+
+	// Return child with the largest index
+	largestIndexOfChildren(node)
+	{
+		let max = node.getIndex();
+		for (let child of node.getChildren()) {
+			max = Math.max(max, this.largestIndexOfChildren(child));
+		}
+		return max;
+	}
+
+	// Return child with the smallest index
+	smallestIndexOfChildren(node)
+	{
+		let min = node.getIndex();
+		for (let child of node.getChildren()) {
+			min = Math.min(min, this.smallestIndexOfChildren(child));
+		}
+		return min;
+	}
+
 }
 
 export default REParser;

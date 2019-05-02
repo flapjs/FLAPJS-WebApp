@@ -56,7 +56,6 @@ class FSAErrorChecker
     const warnings = machineBuilder.getMachineWarnings();
     const app = this._app;
     const notificationManager = app.getNotificationManager();
-    console.log(notificationManager);
 
     notificationManager.clearNotifications(MACHINE_ERROR_NOTIFICATION_TAG);
     if (errors.length <= 0 && warnings.length <= 0)
