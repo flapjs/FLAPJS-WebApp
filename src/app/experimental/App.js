@@ -32,6 +32,7 @@ import EditPencilIcon from 'components/iconset/EditPencilIcon.js';
 
 import AppSaver from 'experimental/AppSaver.js';
 import ColorSaver from 'experimental/ColorSaver.js';
+import * as ColorTransform from 'util/ColorTransform.js';
 
 import AutoSave from 'util/storage/AutoSave.js';
 import LocalStorage from 'util/storage/LocalStorage.js';
@@ -53,6 +54,8 @@ import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
 import TooltipManager from 'session/manager/TooltipManager.js';
 import NotificationManager, {ERROR_LAYOUT_ID} from 'session/manager/notification/NotificationManager.js';
 import BroadcastManager from 'session/manager/broadcast/BroadcastManager.js';
+
+import ThemeManager from 'util/theme/ThemeManager';
 
 const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
@@ -86,9 +89,9 @@ class App extends React.Component
     this._viewport = null;
     this._labeleditor = null;
 
-    this._styleOpts = new StyleOptionRegistry();
-    this._colorSaver = new ColorSaver(this._styleOpts);
+    this._themeManager = new ThemeManager();
 
+    this._colorSaver = new ColorSaver(this._themeManager);
     this._saver = new AppSaver(this);
 
     this._undoManager = new UndoManager();
@@ -184,7 +187,8 @@ class App extends React.Component
     this._hotKeyManager
       .registerAltHotKey("Show Hints", () => {IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL});
 
-    this._colorSaver.initialize();
+    this._themeManager.setElement(document.getElementById('root'));
+    registerAppStyles(this._themeManager);
 
     AutoSave.registerHandler(this._saver);
     AutoSave.registerHandler(this._colorSaver);
@@ -200,7 +204,7 @@ class App extends React.Component
     AutoSave.unregisterHandler(this._saver);
     AutoSave.unregisterHandler(this._colorSaver);
 
-    this._colorSaver.destroy();
+    this._themeManager.clear();
   }
 
   onModuleTitleClick(e)
@@ -240,12 +244,12 @@ class App extends React.Component
   getRenderManager() { return this._renderManager; }
   getTooltipManager() { return this._tooltipManager; }
   getNotificationManager() { return this._notificationManager; }
+  getThemeManager() { return this._themeManager; }
   getBroadcastManager() { return this._broadcastManager; }
 
   getSession() { return this._session; }
   getCurrentModule() { return this._session.getCurrentModule(); }
   getInputAdapter() { return this.getWorkspaceComponent().getInputAdapter(); }
-  getStyleOpts() { return this._styleOpts; }
 
   isExperimental() { return true; }
 
@@ -259,7 +263,7 @@ class App extends React.Component
       !(this._toolbar && this._toolbar.isBarOpen()) &&
       !(this._drawer && this._drawer.isDrawerOpen() &&
         this._drawer.isDrawerFullscreen())
-      );
+    );
   }
 
   renderRenderers(renderers, props)
@@ -402,6 +406,41 @@ class App extends React.Component
   }
 }
 App.INSTANCE = null;
+
+function registerAppStyles(themeManager)
+{
+  themeManager.register("--color-graph-node", "graph");
+  themeManager.register("--color-graph-text", "graph");
+  themeManager.register("--color-graph-select", "graph");
+
+  themeManager.register("--color-accent", "general");
+  const colorPrimary = themeManager.register("--color-primary", "general");
+  themeManager.register("--color-primary-text", "general");
+  themeManager.register("--color-primary-lite", "hidden", colorPrimary, ColorTransform.lite);
+  themeManager.register("--color-primary-dark", "hidden", colorPrimary, ColorTransform.dark);
+
+  const colorBackground = themeManager.register("--color-background", "general");
+  themeManager.register("--color-background-active", "hidden", colorBackground, ColorTransform.invert);
+  themeManager.register("--color-background-lite", "hidden", colorBackground, ColorTransform.lite);
+
+  themeManager.register("--color-success", "general");
+  themeManager.register("--color-warning", "general");
+
+  const colorSurface = themeManager.register("--color-surface", "surface");
+  themeManager.register("--color-surface-text", "surface");
+  themeManager.register("--color-surface-active", "hidden", colorSurface, ColorTransform.invert);
+  themeManager.register("--color-surface-lite", "hidden", colorSurface, ColorTransform.lite);
+  themeManager.register("--color-surface-dark", "hidden", colorSurface, ColorTransform.dark);
+
+  const colorSurfaceError = themeManager.register("--color-surface-error", "surface");
+  themeManager.register("--color-surface-error-dark", "hidden", colorSurfaceError, ColorTransform.dark);
+
+  const colorSurfaceSuccess = themeManager.register("--color-surface-success", "surface");
+  themeManager.register("--color-surface-success-dark", "hidden", colorSurfaceSuccess, ColorTransform.dark);
+
+  const colorSurfaceWarning = themeManager.register("--color-surface-warning", "surface");
+  themeManager.register("--color-surface-warning-dark", "hidden", colorSurfaceWarning, ColorTransform.dark);
+}
 
 //For hotloading this class
 export default hot(App);
