@@ -24,11 +24,16 @@ class AbstractMachineBuilder
 
   onGraphChange(graph)
   {
-    this.attemptBuild(graph, this.getMachine(), this._errors, this._warnings);
+    this.attemptBuildMachine(graph, this.getMachine(), this._errors, this._warnings);
     this._machineChangeHandler.update(this);
   }
 
-  attemptBuild(graph, dst, errors, warnings)
+  attemptBuildGraph(machine, dst)
+  {
+    throw new Error("Missing graph build operation");
+  }
+
+  attemptBuildMachine(graph, dst, errors, warnings)
   {
     throw new Error("Missing machine build operation");
   }

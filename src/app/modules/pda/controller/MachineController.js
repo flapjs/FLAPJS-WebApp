@@ -48,37 +48,8 @@ class MachineController extends AbstractMachineController
 
   setGraphToMachine(graph, machine)
   {
-    graph.clear();
-
-    //Add all states
-    let node;
-    for(const state of machine.getStates())
-    {
-      node = graph.createNode(0, 0);
-      node.setNodeLabel(state);
-      if (machine.isFinalState(state))
-      {
-        node.setNodeAccept(true);
-      }
-    }
-
-    //Add all transitions
-    let edge, from, to, read, labels, flag;
-    for(let transition of machine.getTransitions())
-    {
-      from = this.getFirstGraphNodeByLabel(graph, transition[0]);
-      read = transition[1];
-      to = this.getFirstGraphNodeByLabel(graph, transition[2]);
-      edge = graph.createEdge(from, to);
-      edge.setEdgeLabel(read);
-      const formattedEdge = graph.formatEdge(edge);
-      if (edge != formattedEdge) graph.deleteEdge(edge);
-    }
-
-    //Set start state
-    const startState = machine.getStartState();
-    graph.setStartNode(this.getFirstGraphNodeByLabel(graph, startState));
-
+    this._machineBuilder.attemptBuildGraph(machine, graph);
+    
     //Auto layout graph
     GraphLayout.applyLayout(graph);
   }

@@ -32,6 +32,7 @@ import EditPencilIcon from 'components/iconset/EditPencilIcon.js';
 
 import AppSaver from 'experimental/AppSaver.js';
 import ColorSaver from 'experimental/ColorSaver.js';
+import LanguageSaver from 'experimental/LanguageSaver.js';
 import * as ColorTransform from 'util/ColorTransform.js';
 
 import AutoSave from 'util/storage/AutoSave.js';
@@ -75,6 +76,41 @@ const ERROR_UPLOAD_NOTIFICATION_TAG = "error_upload";
 
 const BROADCAST_CHANNEL_ID = "flapjs";
 
+function registerAppStyles(themeManager)
+{
+  themeManager.register("--color-graph-node", "graph");
+  themeManager.register("--color-graph-text", "graph");
+  themeManager.register("--color-graph-select", "graph");
+
+  themeManager.register("--color-accent", "general");
+  const colorPrimary = themeManager.register("--color-primary", "general");
+  themeManager.register("--color-primary-text", "general");
+  themeManager.register("--color-primary-lite", "hidden", colorPrimary, ColorTransform.lite);
+  themeManager.register("--color-primary-dark", "hidden", colorPrimary, ColorTransform.dark);
+
+  const colorBackground = themeManager.register("--color-background", "general");
+  themeManager.register("--color-background-active", "hidden", colorBackground, ColorTransform.invert);
+  themeManager.register("--color-background-lite", "hidden", colorBackground, ColorTransform.lite);
+
+  themeManager.register("--color-success", "general");
+  themeManager.register("--color-warning", "general");
+
+  const colorSurface = themeManager.register("--color-surface", "surface");
+  themeManager.register("--color-surface-text", "surface");
+  themeManager.register("--color-surface-active", "hidden", colorSurface, ColorTransform.invert);
+  themeManager.register("--color-surface-lite", "hidden", colorSurface, ColorTransform.lite);
+  themeManager.register("--color-surface-dark", "hidden", colorSurface, ColorTransform.dark);
+
+  const colorSurfaceError = themeManager.register("--color-surface-error", "surface");
+  themeManager.register("--color-surface-error-dark", "hidden", colorSurfaceError, ColorTransform.dark);
+
+  const colorSurfaceSuccess = themeManager.register("--color-surface-success", "surface");
+  themeManager.register("--color-surface-success-dark", "hidden", colorSurfaceSuccess, ColorTransform.dark);
+
+  const colorSurfaceWarning = themeManager.register("--color-surface-warning", "surface");
+  themeManager.register("--color-surface-warning-dark", "hidden", colorSurfaceWarning, ColorTransform.dark);
+}
+
 class App extends React.Component
 {
   constructor(props)
@@ -89,6 +125,10 @@ class App extends React.Component
     this._viewport = null;
     this._labeleditor = null;
 
+    this._langSaver = new LanguageSaver();
+
+    this._styleOpts = new StyleOptionRegistry();
+    this._colorSaver = new ColorSaver(this._styleOpts);
     this._themeManager = new ThemeManager();
 
     this._colorSaver = new ColorSaver(this._themeManager);
@@ -192,6 +232,7 @@ class App extends React.Component
 
     AutoSave.registerHandler(this._saver);
     AutoSave.registerHandler(this._colorSaver);
+    AutoSave.registerHandler(this._langSaver);
 
     this._init = true;
   }
@@ -203,6 +244,7 @@ class App extends React.Component
 
     AutoSave.unregisterHandler(this._saver);
     AutoSave.unregisterHandler(this._colorSaver);
+    AutoSave.unregisterHandler(this._langSaver);
 
     this._themeManager.clear();
   }
@@ -406,41 +448,6 @@ class App extends React.Component
   }
 }
 App.INSTANCE = null;
-
-function registerAppStyles(themeManager)
-{
-  themeManager.register("--color-graph-node", "graph");
-  themeManager.register("--color-graph-text", "graph");
-  themeManager.register("--color-graph-select", "graph");
-
-  themeManager.register("--color-accent", "general");
-  const colorPrimary = themeManager.register("--color-primary", "general");
-  themeManager.register("--color-primary-text", "general");
-  themeManager.register("--color-primary-lite", "hidden", colorPrimary, ColorTransform.lite);
-  themeManager.register("--color-primary-dark", "hidden", colorPrimary, ColorTransform.dark);
-
-  const colorBackground = themeManager.register("--color-background", "general");
-  themeManager.register("--color-background-active", "hidden", colorBackground, ColorTransform.invert);
-  themeManager.register("--color-background-lite", "hidden", colorBackground, ColorTransform.lite);
-
-  themeManager.register("--color-success", "general");
-  themeManager.register("--color-warning", "general");
-
-  const colorSurface = themeManager.register("--color-surface", "surface");
-  themeManager.register("--color-surface-text", "surface");
-  themeManager.register("--color-surface-active", "hidden", colorSurface, ColorTransform.invert);
-  themeManager.register("--color-surface-lite", "hidden", colorSurface, ColorTransform.lite);
-  themeManager.register("--color-surface-dark", "hidden", colorSurface, ColorTransform.dark);
-
-  const colorSurfaceError = themeManager.register("--color-surface-error", "surface");
-  themeManager.register("--color-surface-error-dark", "hidden", colorSurfaceError, ColorTransform.dark);
-
-  const colorSurfaceSuccess = themeManager.register("--color-surface-success", "surface");
-  themeManager.register("--color-surface-success-dark", "hidden", colorSurfaceSuccess, ColorTransform.dark);
-
-  const colorSurfaceWarning = themeManager.register("--color-surface-warning", "surface");
-  themeManager.register("--color-surface-warning-dark", "hidden", colorSurfaceWarning, ColorTransform.dark);
-}
 
 //For hotloading this class
 export default hot(App);

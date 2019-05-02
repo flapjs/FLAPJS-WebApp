@@ -20,7 +20,57 @@ class FSABuilder extends AbstractMachineBuilder
 	}
 
 	//Override
-	attemptBuild(graph, dst, errors=[], warnings=[])
+	attemptBuildGraph(machine, dst)
+	{
+    dst.clear();
+
+    //Add all states
+    let node;
+    for(const state of machine.getStates())
+    {
+      node = dst.createNode(0, 0);
+      node.setNodeLabel(state.getStateLabel());
+      if (machine.isFinalState(state))
+      {
+        node.setNodeAccept(true);
+      }
+    }
+
+    //Add all transitions
+    let edge, from, to, read, labels, flag;
+    for(let transition of machine.getTransitions())
+    {
+			let fromNodes = dst.getNodesByLabel(transition[0]);
+			if (!fromNodes || fromNodes.length <= 0) continue;
+      from = fromNodes[0];
+
+      read = transition[1];
+
+			let toNodes = dst.getNodesByLabel(transition[2]);
+			if (!toNodes || toNodes.length <= 0) continue;
+      from = toNodes[0];
+
+      edge = dst.createEdge(from, to);
+      edge.setEdgeLabel(read);
+      const formattedEdge = dst.formatEdge(edge);
+      if (edge != formattedEdge) dst.deleteEdge(edge);
+    }
+
+    //Set start state
+    const startState = machine.getStartState();
+
+
+		let startNodes = dst.getNodesByLabel(startState);
+		if (startNodes && startNodes.length > 0)
+		{
+	    dst.setStartNode(startNodes[0]);
+		}
+
+    return dst;
+	}
+
+	//Override
+	attemptBuildMachine(graph, dst, errors=[], warnings=[])
 	{
 		errors.length = 0;
 		warnings.length = 0;

@@ -4,9 +4,8 @@
   "description": "Repository for flap.js web app project",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --config webpack.config.js",
-    "build": "cross-env NODE_ENV=production webpack --mode production --config webpack.config.js",
-    "test": "jest",
-    "build-docs": "jsdoc --readme ./README.md --recurse ./src/*"
+    "build": "cross-env NODE_ENV=production webpack --mode production --config webpack.config.js && jsdoc --readme ./README.md --recurse ./src/*",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
