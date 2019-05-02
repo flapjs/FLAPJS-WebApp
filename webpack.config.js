@@ -96,6 +96,7 @@ const config = {
       {from: './res/lang', to: 'lang'},
       {from: './res/script', to: 'script'},
       {from: './res/style', to: 'style'},
+      {from: './res/theme', to: 'theme'},
       //Copy remaining resources...
       //NOTE: any files added here should also be added to CleanWebpackPlugin
       {from: './res/404.html', to: '../404.html'}

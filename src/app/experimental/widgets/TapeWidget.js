@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './TapeWidget.css';
 
-import DownArrowIcon from 'experimental/iconset/DownArrowIcon.js';
+import DownArrowIcon from 'components/iconset/DownArrowIcon.js';
 
 const TAPE_INFINITE_LEFT = true;
 const TAPE_INFINITE_RIGHT = true;

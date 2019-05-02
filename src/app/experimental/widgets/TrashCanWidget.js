@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './TrashCanWidget.css';
 
-import TrashCanDetailedIcon from 'experimental/iconset/TrashCanDetailedIcon.js';
+import TrashCanDetailedIcon from 'components/iconset/TrashCanDetailedIcon.js';
 
 const DOUBLE_TAP_TIME = 250;
 

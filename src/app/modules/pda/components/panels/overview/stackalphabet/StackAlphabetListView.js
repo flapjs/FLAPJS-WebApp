@@ -2,7 +2,7 @@ import React from 'react';
 import Style from './StackAlphabetListView.css';
 
 import IconButton from 'experimental/components/IconButton.js';
-import BoxAddIcon from 'experimental/iconset/BoxAddIcon.js';
+import BoxAddIcon from 'components/iconset/BoxAddIcon.js';
 
 import StackAlphabetListElement from './StackAlphabetListElement.js';
 
