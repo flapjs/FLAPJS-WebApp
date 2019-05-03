@@ -40,7 +40,7 @@ class ViewportComponent extends React.Component
   //Override
   componentWillUnmount()
   {
-    this._inputAdapter.terminate();
+    this._inputAdapter.destroy();
   }
 
   //Override
