@@ -16,7 +16,7 @@ class AbstractInputHandler
    * Called by InputAdapter when an InputEvent resolves and is not an Alt input.
    * To handle events for Alt inputs, refer to onAltInputEvent().
    * Returns true if the event should be consumed. If consumed, the event will
-   * not propagate to other trigger other events.
+   * not propagate to trigger other events.
    */
   onInputEvent(pointer) { return false; }
 
@@ -24,7 +24,7 @@ class AbstractInputHandler
    * Called by InputAdapter when an InputEvent resolves and is an Alt input.
    * To handle events for non-Alt inputs, refer to onInputEvent().
    * Returns true if the event should be consumed. If consumed, the event will
-   * not propagate to other trigger other events.
+   * not propagate to trigger other events.
    */
   onAltInputEvent(pointer) { return false; }
 
@@ -33,15 +33,15 @@ class AbstractInputHandler
    * assumed by a non-Alt input, since only non-Alt inputs can trigger this
    * event.
    * Returns true if the event should be consumed. If consumed, the event will
-   * not propagate to other trigger other events.
+   * not propagate to trigger other events.
    */
   onDblInputEvent(pointer) { return false; }
 
   /**
-   * Called by InputAdapter when input movess. The input is called before drag
+   * Called by InputAdapter when input moves. The input is called before drag
    * logic.
    * Returns true if the event should be consumed. If consumed, the event will
-   * not propagate to other trigger other events (i.e. dragging events).
+   * not propagate to trigger other events (i.e. dragging events).
    */
   onMoveInputEvent(pointer) { return false; }
 
@@ -49,7 +49,13 @@ class AbstractInputHandler
    * Called by InputAdapter before a drag begins. The input could be either
    * an Alt or non-Alt input.
    * Returns true if the event should be consumed. If consumed, the event will
-   * not propagate to other trigger other events, nor continue the drag input.
+   * not propagate to trigger other events, and then it will continue the drag
+   * input events for the current handler only.
+   * 
+   * NOTE: A drag does not start immediately on move. There is a radius to
+   * compensate for mobile users. Therefore pointer.x and pointer.y refer to
+   * the offset position. To get the starting pointer position, use
+   * pointer.getInputEventPosition().
    */
   onDragStart(pointer) { return false; }
 

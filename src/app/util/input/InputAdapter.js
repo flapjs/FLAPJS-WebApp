@@ -1,3 +1,4 @@
+import InputContext from './InputContext.js';
 import InputPointer from './InputPointer.js';
 import ViewportAdapter from './ViewportAdapter.js';
 
@@ -13,11 +14,12 @@ const DRAGGING_BUFFER_SQU = DRAGGING_BUFFER * DRAGGING_BUFFER;
  * Provides an interface for input handlers to interact with a HTMLElement.
  * Each listenable element should correspond to only a single InputAdapter.
  */
-class InputAdapter
+class InputAdapter extends InputContext
 {
   constructor()
   {
-    this._handlers = [];
+    super();
+    this._contexts = [];
     this._activeDragHandler = null;
 
     this._element = null;
@@ -62,17 +64,40 @@ class InputAdapter
     this.onDelayedInputDown = this.onDelayedInputDown.bind(this);
   }
 
-  addInputHandler(handler)
+  bindContext(context)
   {
-    this._handlers.push(handler);
+    if (!(context instanceof InputContext)) 
+      throw new Error("Cannot bind invalid context - must be an instance of InputContext");
+      
+    this._contexts.push(context);
     return this;
   }
 
-  removeInputHandler(handler)
+  unbindContext()
   {
-    const index = this._handlers.indexOf(handler);
-    if (index >= 0) this._handlers.splice(index, 1);
-    return this;
+    return this._contexts.pop();
+  }
+
+  clearContexts()
+  {
+    this._contexts.length = 0;
+  }
+
+  hasContexts()
+  {
+    return this._contexts.length > 0;
+  }
+
+  getCurrentContext()
+  {
+    if (this._contexts.length > 0)
+    {
+      return this._contexts[this._contexts.length - 1];
+    }
+    else
+    {
+      return this;
+    }
   }
 
   initialize(element)
@@ -113,28 +138,26 @@ class InputAdapter
     }
   }
 
+  /** @override */
   handleEvent(eventName, ...eventArgs)
   {
-    //Let others handle this event...
-    for(const handler of this._handlers)
+    if (this._contexts.length > 0)
     {
-      const handlerEventCallback = handler[eventName];
-      if (typeof handlerEventCallback === 'function')
+      for(const context of this._contexts)
       {
-        if (handlerEventCallback.apply(handler, eventArgs))
+        const result = context.handleEvent(eventName, ...eventArgs);
+        if (result)
         {
-          return handler;
+          return result;
         }
       }
     }
-
-    return null;
+    
+    return super.handleEvent(eventName, ...eventArgs);
   }
 
   onMouseDown(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -176,8 +199,6 @@ class InputAdapter
 
   onMouseMove(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     const mouse = this._viewport.transformScreenToView(e.clientX, e.clientY);
     const pointer = this._pointer;
     pointer.setPosition(mouse.x, mouse.y);
@@ -193,8 +214,6 @@ class InputAdapter
 
   onMouseDownThenMove(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -205,8 +224,6 @@ class InputAdapter
 
   onMouseDownThenUp(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -232,8 +249,6 @@ class InputAdapter
 
   onTouchStart(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     if (e.changedTouches.length == 1)
     {
       e.stopPropagation();
@@ -276,8 +291,6 @@ class InputAdapter
 
   onTouchStartThenEnd(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -304,8 +317,6 @@ class InputAdapter
 
   onTouchStartThenMove(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -317,8 +328,6 @@ class InputAdapter
 
   onContextMenu(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -327,8 +336,6 @@ class InputAdapter
 
   onWheel(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -348,8 +355,6 @@ class InputAdapter
 
   onInputDown(x, y, button)
   {
-    if (!this.hasInputHandlers()) throw new Error("Missing handlers for input adapter");
-
     //Setup for hold timer...
     const cursor = this._cursor;
     const pointer = this._pointer;
@@ -372,8 +377,6 @@ class InputAdapter
 
   onDelayedInputDown()
   {
-    if (!this.hasInputHandlers()) throw new Error("Missing handlers for input adapter");
-
     //That means the input is remaining still (like a hold)...
     if (!this._dragging)
     {
@@ -383,8 +386,6 @@ class InputAdapter
 
   onInputMove(x, y)
   {
-    if (!this.hasInputHandlers()) throw new Error("Missing handlers for input adapter");
-
     const pointer = this._pointer;
     const mouse = this._viewport.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
@@ -396,7 +397,8 @@ class InputAdapter
         this._dragging = true;
 
         //Let others handle this event...
-        const result = this.handleEvent('onDragStart', pointer);
+        const inputEventPosition = pointer.getInputEventPosition();
+        const result = this.handleEvent('onDragStart', pointer, inputEventPosition.x, inputEventPosition.y);
         if (!result)
         {
           this._dragging = false;
@@ -429,8 +431,6 @@ class InputAdapter
 
   onInputUp(x, y)
   {
-    if (!this.hasInputHandlers()) throw new Error("Missing handlers for input adapter");
-
     const cursor = this._cursor;
     const timer = cursor._timer;
     if (timer)
@@ -523,8 +523,7 @@ class InputAdapter
     this.handleEvent('onPostInputEvent', pointer);
   }
 
-  clearInputHandlers() { this._handlers.clear(); }
-  hasInputHandlers() { return this._handlers.length > 0; }
+  getContexts() { return this._contexts; }
   getActiveElement() { return this._element; }
   getViewport() { return this._viewport; }
   getPointerX() { return this._pointer ? this._pointer.x : 0; }
