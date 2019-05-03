@@ -9,6 +9,8 @@ class PDAGraph extends NodeGraph
   constructor()
   {
     super(PDANode, PDAEdge);
+
+    this._nodes = [];
   }
 
   setStartNode(node)
@@ -37,6 +39,28 @@ class PDAGraph extends NodeGraph
     return this._nodes.length > 0 ? this._nodes[0] : null;
   }
 
+  /** @override */
+  addNode(node)
+  {
+    this._nodes.push(node);
+    return super.addNode(node);
+  }
+
+  /** @override */
+  deleteNode(node)
+  {
+    super.deleteNode(node);
+    const i = this._nodes.indexOf(node);
+    if (i >= 0) this._nodes.splice(i, 1);
+  }
+
+  /** @override */
+  clearNodes()
+  {
+    super.clearNodes();
+    this._nodes.length = 0;
+  }
+
   //This is more like addEdge() without adding it to the graph and just returns the result
   //This should only be called once when completing an edge
   /** @override */
@@ -47,7 +71,7 @@ class PDAGraph extends NodeGraph
     const edgeLabel = edge.getEdgeLinesFromLabel();
 
     //Look for an existing edge with similar from and to
-    for(const otherEdge of this._edges)
+    for(const otherEdge of this.getEdges())
     {
       if (otherEdge === edge) continue;
       if (otherEdge.getEdgeFrom() === edgeSource && otherEdge.getEdgeTo() === edgeDestination)
@@ -73,7 +97,7 @@ class PDAGraph extends NodeGraph
       //Bend away if there is another edge not bent with the same src/dst
       const parallelEdgeHeight = PARALLEL_EDGE_HEIGHT;
       const HALFPI = Math.PI / 2;
-      for(const otherEdge of this._edges)
+      for(const otherEdge of this.getEdges())
       {
         if (otherEdge.isQuadratic() && Math.abs(otherEdge.getQuadratic().length) >= parallelEdgeHeight * 2) continue;
         if ((otherEdge.getEdgeTo() === edgeSource && otherEdge.getEdgeFrom() === edgeDestination))
