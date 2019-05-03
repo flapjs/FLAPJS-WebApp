@@ -188,7 +188,7 @@ class NodeGraph
 
       const nullSourceEdges = [];
       //Find connected edges without sources...
-      for (const edge of this._edgeMapping)
+      for (const edge of this.getEdges())
       {
         if (edge.getEdgeFrom() === node)
         {
