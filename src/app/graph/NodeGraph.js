@@ -151,16 +151,14 @@ class NodeGraph
 
   /**
    * Create node for graph.
-   * @param  {Number} [x=0]     the initial x position
-   * @param  {Number} [y=0]     the initial y position
-   * @param  {String} [id=null] the new node id (will be generated if null)
-   * @returns {GraphNdoe}             the new node
+   * @param  {Number} [x=0]       the initial x position
+   * @param  {Number} [y=0]       the initial y position
+   * @param  {String} [id=null]   the new node id (will be generated if null)
+   * @returns {GraphNdoe}         the new node
    */
   createNode(x = 0, y = 0, id = null)
   {
-    const result = new (this._nodeClass)(id || guid(), x, y);
-    this._nodeMapping.set(result.getGraphElementID(), result);
-    return result;
+    return this.addNode(new (this._nodeClass)(id || guid(), x, y));
   }
 
   /**
@@ -171,7 +169,7 @@ class NodeGraph
    */
   addNode(node)
   {
-    if (!node.getGraphElementID()) node.setElementID(guid());
+    if (!node.getGraphElementID()) node.setGraphElementID(guid());
     this._nodeMapping.set(node.getGraphElementID(), node);
     return node;
   }
@@ -236,7 +234,7 @@ class NodeGraph
   }
 
   getNodes() { return Array.from(this._nodeMapping.values()); }
-  getNodeCount() { return this._nodeMapping.size(); }
+  getNodeCount() { return this._nodeMapping.size; }
   getNodeClass() { return this._nodeClass; }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= EDGES
@@ -253,16 +251,14 @@ class NodeGraph
   /**
    * Create edge for graph. The id argument can be used to set the id to a
    * pre-defined value instead of generating a new one.
-   * @param  {GraphNode} from       the source graph node for the edge
-   * @param  {GraphNode} [to=null]  the destination graph node for the edge
-   * @param  {String} [id=null]     the new edge id (will be generated if null)
-   * @returns {GraphEdge}           the new edge
+   * @param  {GraphNode} from                     the source graph node for the edge
+   * @param  {GraphNode|InputPointer} [to=null]   the destination graph node for the edge
+   * @param  {String} [id=null]                   the new edge id (will be generated if null)
+   * @returns {GraphEdge}                         the new edge
    */
   createEdge(from, to = null, id = null)
   {
-    const result = new (this._edgeClass)(id || guid(), from, to);
-    this._edgeMapping.set(result.getGraphElementID(), result);
-    return result;
+    return this.addEdge(new (this._edgeClass)(id || guid(), from, to));
   }
 
   /**
@@ -274,9 +270,8 @@ class NodeGraph
    */
   addEdge(edge)
   {
-    if (!edge.getGraphElementID()) edge.setElementID(guid());
-    if (this._edgeMapping.has(edge.getGraphElementID()))
-      this._edgeMapping.set(edge.getGraphElementID(), edge);
+    if (!edge.getGraphElementID()) edge.setGraphElementID(guid());
+    this._edgeMapping.set(edge.getGraphElementID(), edge);
     return edge;
   }
 
@@ -321,7 +316,7 @@ class NodeGraph
   }
 
   getEdges() { return Array.from(this._edgeMapping.values()); }
-  getEdgeCount() { return this._edgeMapping.size(); }
+  getEdgeCount() { return this._edgeMapping.size; }
   getEdgeClass() { return this._edgeClass; }
 }
 
