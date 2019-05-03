@@ -17,9 +17,8 @@ class FSAGraphExporter extends AbstractGraphExporter
    * @param  {Object} machineData             the machine Data to be parsed
    * @param  {FSAModule} module                       the module data to be modified
    */
-  setMachine(graphController, machineController, data, module)
+  setMachine(graphController, machineController, machineData, module)
   {
-    const machineData = data.machineData;
     const machineName = machineData.name;
     if (machineName) module.getApp().getSession().setProjectName(machineName);
     const machineType = machineData.type;
@@ -57,7 +56,7 @@ class FSAGraphExporter extends AbstractGraphExporter
     const newGraph = JSONGraphParser.parse(jsonData.graphData, graph);
 
     //machien details are set
-    setMachine(graphController, machineController, jsonData.machineData, module)
+    this.setMachine(graphController, machineController, jsonData.machineData, module)
 
 
     return newGraph;
