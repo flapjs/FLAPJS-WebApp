@@ -110,7 +110,7 @@ class InputController
 	onPreInputEvent(pointer)
 	{
 		this._handlingInput = true;
-		this._moveMode = !pointer.getAdapter().isAltInput();
+		this._moveMode = !pointer.getInputAdapter().isAltInput();
 
 		this.updateCurrentTarget(this._immediateTarget.source, this._immediateTarget.type);
 		return false;

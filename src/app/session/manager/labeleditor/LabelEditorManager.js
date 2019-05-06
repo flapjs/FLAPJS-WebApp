@@ -30,7 +30,7 @@ class LabelEditorManager
     onSessionStart(session)
     {
         const currentModule = session.getCurrentModule();
-        const viewport = session.getApp().getInputAdapter().getViewport();
+        const viewport = session.getApp().getInputAdapter().getViewportAdapter();
 
         const LabelEditorRenderer = this._labelEditorRenderer;
         const labeler = this._labeler;

@@ -23,7 +23,7 @@ class FSAGraphOverlayRenderer extends React.Component
     const tester = currentModule.getTestingManager();
 
     const graph = graphController.getGraph();
-    const viewport = inputController.getInputAdapter().getViewport();
+    const viewport = inputController.getInputAdapter().getViewportAdapter();
     const machineBuilder = machineController.getMachineBuilder();
     const machineErrors = machineBuilder.getMachineErrors();
     const machineWarnings = machineBuilder.getMachineWarnings();

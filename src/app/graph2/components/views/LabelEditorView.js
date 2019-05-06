@@ -110,7 +110,7 @@ class LabelEditorView extends React.Component
 
     if (viewport)
     {
-      const viewportAdapter = this.props.viewport.getInputAdapter().getViewport();
+      const viewportAdapter = this.props.viewport.getInputAdapter().getViewportAdapter();
 
       if (target)
       {

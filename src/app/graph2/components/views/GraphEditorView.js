@@ -116,7 +116,7 @@ class GraphEditorView extends React.Component
                             viewport={viewport}>
                             <ViewportNavigationLayer
                                 style={{ right: 0 }}
-                                viewportAdapter={viewport.getInputAdapter().getViewport()} />
+                                viewportAdapter={viewport.getInputAdapter().getViewportAdapter()} />
                             {this.props.overlay}
                         </ViewportLayer>
                         <LabelEditorView ref={ref =>

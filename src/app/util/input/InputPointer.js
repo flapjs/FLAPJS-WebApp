@@ -3,17 +3,17 @@
  */
 class InputPointer
 {
-    constructor(adapter, element, viewport)
+    constructor(inputAdapter, element, viewportAdapter)
     {
-        this._adapter = adapter;
+        this._inputAdapter = inputAdapter;
         this._element = element;
-        this._viewport = viewport;
+        this._viewportAdapter = viewportAdapter;
 
         this._active = false;
         this._x = 0;
         this._y = 0;
 
-        this._inputpos = {x: 0, y: 0};
+        this._inputpos = { x: 0, y: 0 };
     }
 
     get x() { return this._x; }
@@ -65,12 +65,12 @@ class InputPointer
      * The viewport for this pointer operates within; this should be the same
      * viewport as in the input adapter.
      */
-    getViewport() { return this._viewport; }
+    getViewportAdapter() { return this._viewportAdapter; }
 
     /**
      * The input adapter that controls this pointer's properties
      */
-    getAdapter() { return this._adapter; }
+    getInputAdapter() { return this._inputAdapter; }
 }
 
 export default InputPointer;

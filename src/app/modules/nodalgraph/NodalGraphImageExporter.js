@@ -9,7 +9,7 @@ import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG, downloadImageFromSVG } fro
 const EXPORT_PADDING_X = 30;
 const EXPORT_PADDING_Y = 0;
 
-class GraphImageExporter extends AbstractGraphExporter
+class NodalGraphImageExporter extends AbstractGraphExporter
 {
   constructor(imageType=FILE_TYPE_PNG)
   {
@@ -21,7 +21,7 @@ class GraphImageExporter extends AbstractGraphExporter
   {
     const graphController = currentModule.getGraphController();
 
-    const viewport = currentModule.getApp().getInputAdapter().getViewport();
+    const viewport = currentModule.getApp().getInputAdapter().getViewportAdapter();
     const offsetX = viewport.getOffsetX();
     const offsetY = viewport.getOffsetY();
     const bounds = graphController.getGraph().getBoundingRect();
@@ -72,7 +72,7 @@ class GraphImageExporter extends AbstractGraphExporter
   /** @override */
   exportToFile(filename, module)
   {
-    const workspace = module.getApp().workspace;
+    const workspace = module.getApp().getWorkspaceComponent();
     const svgElement = workspace.getSVGElement();
     const workspaceDim = svgElement.viewBox.baseVal;
     const width = workspaceDim.width;
@@ -138,9 +138,9 @@ class GraphImageExporter extends AbstractGraphExporter
 }
 
 export const DEFAULT_IMAGE_EXPORTERS = [
-  new GraphImageExporter(FILE_TYPE_PNG),
-  new GraphImageExporter(FILE_TYPE_JPG),
-  new GraphImageExporter(FILE_TYPE_SVG)
+  new NodalGraphImageExporter(FILE_TYPE_PNG),
+  new NodalGraphImageExporter(FILE_TYPE_JPG),
+  new NodalGraphImageExporter(FILE_TYPE_SVG)
 ];
 
-export default GraphImageExporter;
+export default NodalGraphImageExporter;
