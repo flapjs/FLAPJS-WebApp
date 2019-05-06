@@ -16,7 +16,7 @@ import { DEFAULT_IMAGE_EXPORTERS } from './exporter/NodalGraphImageExporter.js';
 
 const MODULE_NAME = "nodegraph";
 const MODULE_VERSION = "0.0.1";
-const MODULE_LOCALIZED_NAME = "NodeGraph";
+const MODULE_LOCALIZED_NAME = "Node Graph";
 
 class NodalGraphModule
 {

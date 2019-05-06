@@ -166,9 +166,8 @@ class InputAdapter extends InputContext
   /** @override */
   handleEvent(eventName, ...eventArgs)
   {
-    for(let i = this._contexts.length - 1; i >= 0; --i)
+    for(const context of this._contexts)
     {
-      const context = this._contexts[i];
       const result = context.handleEvent(eventName, ...eventArgs);
       if (result)
       {
