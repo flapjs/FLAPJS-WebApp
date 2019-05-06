@@ -50,7 +50,7 @@ class TapePane extends React.Component
           " " + this.props.className}
         style={this.props.style}>
         <NavbarWidget className={Style.view_widget} style={{right: 0}}
-          app={app}/>
+          viewportAdapter={app.getInputAdapter().getViewport()}/>
         <div className={Style.view_widget} style={{bottom: 0}}>
           <TapeWidget value={tester ? tester.getTapeContext() : null}/>
         </div>

@@ -57,10 +57,6 @@ import NotificationManager, {ERROR_LAYOUT_ID} from 'session/manager/notification
 const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
 
-const SMOOTH_OFFSET_DAMPING = 0.4;
-const MIN_SCALE = 0.1;
-const MAX_SCALE = 10;
-
 const DRAWER_INDEX_ABOUT = 0;
 
 const MENU_INDEX_EXPORT = 0;
@@ -222,7 +218,6 @@ class App extends React.Component
     }
   }
 
-  getWorkspaceComponent() { return this._workspace.current; }
   getToolbarComponent() { return this._toolbar; }
 
   getUndoManager() { return this._undoManager; }
@@ -237,7 +232,7 @@ class App extends React.Component
 
   getSession() { return this._session; }
   getCurrentModule() { return this._session.getCurrentModule(); }
-  getInputAdapter() { return this.getWorkspaceComponent().getInputAdapter(); }
+  getInputAdapter() { return this._workspace.current.getInputAdapter(); }
   getStyleOpts() { return this._styleOpts; }
 
   isExperimental() { return true; }
@@ -368,11 +363,8 @@ class App extends React.Component
               {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_OVERLAY)}
 
               <FullscreenWidget className={Style.fullscreen_widget} app={this}/>
-
               <NotificationView notificationManager={notificationManager}/>
-
-              {this._hotKeyManager.isEnabled() &&
-                <HotKeyView hotKeyManager={this._hotKeyManager}/>}
+              {this._hotKeyManager.isEnabled() && <HotKeyView hotKeyManager={this._hotKeyManager}/>}
 
               <ViewportView ref={ref=>this._viewport=ref}
                 views={viewportViewClasses}

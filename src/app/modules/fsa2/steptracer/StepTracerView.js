@@ -49,7 +49,7 @@ class StepTracerView extends React.Component
           " " + this.props.className}
         style={this.props.style}>
         <NavbarWidget className={Style.view_widget} style={{right: 0}}
-          app={app}/>
+          viewportAdapter={app.getInputAdapter().getViewport()}/>
         <div className={Style.view_widget} style={{bottom: 0}}>
           {stepTracer.getCurrentSymbols().join('')}
           <button>Next</button>
