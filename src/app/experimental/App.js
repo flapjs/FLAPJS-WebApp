@@ -7,10 +7,10 @@ import ToolbarView from 'experimental/toolbar/ToolbarView.js';
 import ViewportView from 'experimental/viewport/ViewportView.js';
 import TooltipView, { ONESHOT_MODE } from 'experimental/tooltip/TooltipView.js';
 import UploadDropZone from 'experimental/components/UploadDropZone.js';
-import ViewportComponent from 'util/input/components/ViewportComponent.js';
 import NotificationView from 'session/manager/notification/components/NotificationView.js';
 import IconButton from 'experimental/components/IconButton.js';
 import FullscreenWidget from 'experimental/components/FullscreenWidget.js';
+import ViewportComponent from 'util/input/components/ViewportComponent.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
@@ -47,8 +47,10 @@ import ViewportManager from 'session/manager/ViewportManager.js';
 import HotKeyManager from 'session/manager/hotkey/HotKeyManager.js';
 import HotKeyView from 'session/manager/hotkey/HotKeyView.js';
 import UndoManager from 'session/manager/undo/UndoManager.js';
-import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
-  RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'session/manager/RenderManager.js';
+import RenderManager, {
+  RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
+  RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY}
+  from 'session/manager/RenderManager.js';
 import TooltipManager from 'session/manager/TooltipManager.js';
 import NotificationManager, {ERROR_LAYOUT_ID} from 'session/manager/notification/NotificationManager.js';
 
@@ -253,13 +255,13 @@ class App extends React.Component
       );
   }
 
-  renderRenderers(renderers, props)
+  renderRenderLayer(renderLayerName, props)
   {
-    const session = this._session;
-    const sessionID = session.getSessionID();
+    const sessionID = this._session.getSessionID();
+    const renderers = this._renderManager.getRenderersByLayer(renderLayerName);
     if (renderers && renderers.length > 0)
     {
-      return renderers.map((R, i) => <R key={sessionID + "." + R.constructor.name + "." + i} {...props}/>);
+      return renderers.map((R, i) => <R key={sessionID + '.' + R.constructor.name + '.' + i} {...props}/>);
     }
     else
     {
@@ -295,11 +297,6 @@ class App extends React.Component
     const viewportViewClasses = viewportManager.getViewClasses();
     const viewportViewProps = viewportManager.getViewProps() || {session: session};
     const defaultExporter = exportManager.getDefaultExporter();
-
-    const workspaceRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_WORKSPACE);
-    const workspaceOverlayRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_WORKSPACE_OVERLAY);
-    const viewportRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_VIEWPORT);
-    const viewportOverlayRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_VIEWPORT_OVERLAY);
 
     return (
       <div className={Style.app_container + (currentModule ? " active " : "")}>
@@ -364,11 +361,11 @@ class App extends React.Component
 
               <ViewportComponent ref={this._workspace}>
                 {/* RENDER_LAYER_WORKSPACE */}
-                {this.renderRenderers(workspaceRenderers, {workspace: this.getWorkspaceComponent()})}
+                {this.renderRenderLayer(RENDER_LAYER_WORKSPACE)}
               </ViewportComponent>
 
               {/* RENDER_LAYER_WORKSPACE_OVERLAY */}
-              {this.renderRenderers(workspaceOverlayRenderers, {workspace: this.getWorkspaceComponent()})}
+              {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_OVERLAY)}
 
               <FullscreenWidget className={Style.fullscreen_widget} app={this}/>
 
@@ -381,11 +378,11 @@ class App extends React.Component
                 views={viewportViewClasses}
                 viewProps={viewportViewProps}>
                 {/* RENDER_LAYER_VIEWPORT */}
-                {this.renderRenderers(viewportRenderers, {viewport: this._viewport})}
+                {this.renderRenderLayer(RENDER_LAYER_VIEWPORT, {viewport: this._viewport})}
               </ViewportView>
 
               {/* RENDER_LAYER_VIEWPORT_OVERLAY */}
-              {this.renderRenderers(viewportOverlayRenderers, {viewport: this._viewport})}
+              {this.renderRenderLayer(RENDER_LAYER_VIEWPORT_OVERLAY, {viewport: this._viewport})}
 
             </div>
           </UploadDropZone>
