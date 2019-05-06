@@ -18,7 +18,7 @@ class ViewportComponent extends React.Component
     this._ref = React.createRef();
 
     this._inputAdapter = new InputAdapter();
-    this._inputAdapter.getViewport()
+    this._inputAdapter.getViewportAdapter()
       .setMinScale(MIN_SCALE)
       .setMaxScale(MAX_SCALE)
       .setOffsetDamping(SMOOTH_OFFSET_DAMPING);
@@ -51,13 +51,13 @@ class ViewportComponent extends React.Component
 
   getSVGTransformString()
   {
-    const viewport = this._inputAdapter.getViewport();
+    const viewport = this._inputAdapter.getViewportAdapter();
     return "translate(" + viewport.getOffsetX() + " " + viewport.getOffsetY() + ")";
   }
 
   getSVGViewBoxString(baseViewSize)
   {
-    const viewport = this._inputAdapter.getViewport();
+    const viewport = this._inputAdapter.getViewportAdapter();
     const viewSize = baseViewSize * Math.max(Number.MIN_VALUE, viewport.getScale());
     const halfViewSize = viewSize / 2;
     return (-halfViewSize) + " " + (-halfViewSize) + " " + viewSize + " " + viewSize;

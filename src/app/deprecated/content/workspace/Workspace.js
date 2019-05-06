@@ -31,7 +31,7 @@ class Workspace extends React.Component
     const inputController = currentModule.getInputController();
     const graphController = currentModule.getGraphController();
 
-    const viewport = inputController.getInputAdapter().getViewport();
+    const viewport = inputController.getInputAdapter().getViewportAdapter();
     const offsetX = viewport.getOffsetX();
     const offsetY = viewport.getOffsetY();
     const bounds = graphController.getGraph().getBoundingRect();
@@ -78,7 +78,7 @@ class Workspace extends React.Component
     const GraphOverlayRenderer = currentModule.getRenderer(GRAPH_OVERLAY_RENDER_LAYER);
 
     const graph = graphController.getGraph();
-    const viewport = inputController.getInputAdapter().getViewport();
+    const viewport = inputController.getInputAdapter().getViewportAdapter();
 
     let size = Config.DEFAULT_GRAPH_SIZE * Math.max(Number.MIN_VALUE, viewport.getScale());
     const halfSize = size / 2;

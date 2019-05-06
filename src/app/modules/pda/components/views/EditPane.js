@@ -30,7 +30,7 @@ class EditPane extends React.Component
           " " + this.props.className}
         style={this.props.style}>
         <NavbarWidget className={Style.view_widget} style={{right: 0}}
-          viewportAdapter={app.getInputAdapter().getViewport()}/>
+          viewportAdapter={app.getInputAdapter().getViewportAdapter()}/>
         <div className={Style.view_widget} style={{bottom: 0, left: 0}}>
           <ModeSelectTray mode={inputActionMode ? 0 : 1} onChange={modeIndex => inputController.setInputScheme(modeIndex === 0)}/>
         </div>

@@ -22,7 +22,7 @@ class GraphImageExporter extends AbstractGraphExporter
     const inputController = currentModule.getInputController();
     const graphController = currentModule.getGraphController();
 
-    const viewport = inputController.getInputAdapter().getViewport();
+    const viewport = inputController.getInputAdapter().getViewportAdapter();
     const offsetX = viewport.getOffsetX();
     const offsetY = viewport.getOffsetY();
     const bounds = graphController.getGraph().getBoundingRect();
@@ -73,7 +73,7 @@ class GraphImageExporter extends AbstractGraphExporter
   //Override
   exportToFile(filename, module)
   {
-    const workspace = module.getApp().workspace;
+    const workspace = module.getApp().getWorkspaceComponent();
     const workspaceDim = workspace.ref.viewBox.baseVal;
     const width = workspaceDim.width;
     const height = workspaceDim.height;

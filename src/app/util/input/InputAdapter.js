@@ -32,7 +32,7 @@ class InputAdapter extends InputContext
     };
     this._pointer = null;
 
-    this._viewport = new ViewportAdapter();
+    this._viewportAdapter = new ViewportAdapter();
 
     //Although dragging could be in pointer, it should be here to allow
     //the adapter to be independent of pointer.
@@ -130,8 +130,8 @@ class InputAdapter extends InputContext
     if (!(element instanceof SVGElement)) throw new Error("Missing SVG element for input adapter's viewport");
     if (this._element) throw new Error("Trying to initialize an InputAdapter already initialized");
 
-    this._viewport.setElement(this._element = element);
-    this._pointer = new InputPointer(this, this._element, this._viewport);
+    this._viewportAdapter.setElement(this._element = element);
+    this._pointer = new InputPointer(this, this._element, this._viewportAdapter);
 
     this._element.addEventListener('mousedown', this.onMouseDown);
     this._element.addEventListener('mousemove', this.onMouseMove);
@@ -159,7 +159,7 @@ class InputAdapter extends InputContext
     if (this._element)
     {
       //Smooth transition offset
-      this._viewport.update();
+      this._viewportAdapter.update();
     }
   }
 
@@ -221,7 +221,7 @@ class InputAdapter extends InputContext
 
   onMouseMove(e)
   {
-    const mouse = this._viewport.transformScreenToView(e.clientX, e.clientY);
+    const mouse = this._viewportAdapter.transformScreenToView(e.clientX, e.clientY);
     const pointer = this._pointer;
     pointer.setPosition(mouse.x, mouse.y);
 
@@ -363,13 +363,13 @@ class InputAdapter extends InputContext
 
     const pointer = this._pointer;
     const dy = e.deltaY * this._scrollSensitivity;
-    const prev = this._viewport.getScale();
+    const prev = this._viewportAdapter.getScale();
     const next = prev + dy;
 
     //Let others handle this event...
     if (!this.handleEvent('onZoomChange', pointer, next, prev))
     {
-      this._viewport.setScale(next);
+      this._viewportAdapter.setScale(next);
     }
 
     return false;
@@ -380,7 +380,7 @@ class InputAdapter extends InputContext
     //Setup for hold timer...
     const cursor = this._cursor;
     const pointer = this._pointer;
-    const mouse = this._viewport.transformScreenToView(x, y);
+    const mouse = this._viewportAdapter.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
     this._dragging = false;
@@ -409,7 +409,7 @@ class InputAdapter extends InputContext
   onInputMove(x, y)
   {
     const pointer = this._pointer;
-    const mouse = this._viewport.transformScreenToView(x, y);
+    const mouse = this._viewportAdapter.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
     if (!this._dragging)
@@ -463,7 +463,7 @@ class InputAdapter extends InputContext
 
     //Update pointer target to final position
     const pointer = this._pointer;
-    const mouse = this._viewport.transformScreenToView(x, y);
+    const mouse = this._viewportAdapter.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
     if (this._dragging)
@@ -547,7 +547,7 @@ class InputAdapter extends InputContext
 
   getContexts() { return this._contexts; }
   getActiveElement() { return this._element; }
-  getViewport() { return this._viewport; }
+  getViewportAdapter() { return this._viewportAdapter; }
   getPointerX() { return this._pointer ? this._pointer.x : 0; }
   getPointerY() { return this._pointer ? this._pointer.y : 0; }
   isPointerActive() { return this._pointer ? this._pointer.isActive() : false; }

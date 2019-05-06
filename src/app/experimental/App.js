@@ -219,6 +219,7 @@ class App extends React.Component
   }
 
   getToolbarComponent() { return this._toolbar; }
+  getWorkspaceComponent() { return this._workspace.current; }
 
   getUndoManager() { return this._undoManager; }
   getHotKeyManager() { return this._hotKeyManager; }

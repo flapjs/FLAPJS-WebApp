@@ -26,7 +26,7 @@ class GraphEditorView extends React.Component
 
     }
 
-    getViewport() { return this._ref.current; }
+    getViewportAdapter() { return this._ref.current; }
 
     /** @override */
     render()

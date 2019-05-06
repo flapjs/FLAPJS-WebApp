@@ -23,8 +23,8 @@ class ViewportInputHandler extends AbstractInputHandler
   {
     const dx = pointer.x - this._prevX;
     const dy = pointer.y - this._prevY;
-    const adapter = pointer.getAdapter();
-    const viewport = adapter.getViewport();
+    const adapter = pointer.getInputAdapter();
+    const viewport = adapter.getViewportAdapter();
     viewport.addOffset(dx, dy, true);
     return true;
   }
