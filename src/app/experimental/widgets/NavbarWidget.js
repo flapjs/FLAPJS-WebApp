@@ -11,19 +11,18 @@ class NavbarWidget extends React.Component
         super(props);
     }
 
-    /** @override */
+    //Override
     render()
     {
-        const app = this.props.app;
-        const viewport = app.getInputAdapter().getViewport();
+        const viewportAdapter = this.props.viewportAdapter;
 
         return (
             <div id={this.props.id}
                 className={Style.navbar_container +
           ' ' + this.props.className}
                 style={this.props.style}>
-                <ZoomWidget className={Style.navbar_widget_container} viewport={viewport}/>
-                <FocusCenterWidget className={Style.navbar_widget} viewport={viewport}/>
+                <ZoomWidget className={Style.navbar_widget_container} viewport={viewportAdapter}/>
+                <FocusCenterWidget className={Style.navbar_widget} viewport={viewportAdapter}/>
             </div>
         );
     }
