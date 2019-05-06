@@ -69,13 +69,38 @@ class InputAdapter extends InputContext
     if (!(context instanceof InputContext)) 
       throw new Error("Cannot bind invalid context - must be an instance of InputContext");
       
+    this._contexts.unshift(context);
+    return this;
+  }
+
+  bindContextAsLast(context)
+  {
+    if (!(context instanceof InputContext)) 
+      throw new Error("Cannot bind invalid context - must be an instance of InputContext");
+      
     this._contexts.push(context);
     return this;
   }
 
-  unbindContext()
+  unbindContext(context=null)
   {
-    return this._contexts.pop();
+    if (context)
+    {
+      const index = this._contexts.indexOf(context);
+      if (index >= 0)
+      {
+        this._contexts.splice(index, 1);
+        return context;
+      }
+      else
+      {
+        return null;
+      }
+    }
+    else
+    {
+      return this._contexts.shift();
+    }
   }
 
   clearContexts()
@@ -141,9 +166,8 @@ class InputAdapter extends InputContext
   /** @override */
   handleEvent(eventName, ...eventArgs)
   {
-    for(let i = this._contexts.length - 1; i >= 0; --i)
+    for(const context of this._contexts)
     {
-      const context = this._contexts[i];
       const result = context.handleEvent(eventName, ...eventArgs);
       if (result)
       {
