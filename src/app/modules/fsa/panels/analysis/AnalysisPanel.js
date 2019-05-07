@@ -4,6 +4,8 @@ import Config from 'deprecated/config.js';
 import Notifications from 'deprecated/system/notification/Notifications.js';
 import NFAToDFAConversionWarningMessage from 'modules/fsa/notifications/NFAToDFAConversionWarningMessage.js';
 
+import {getUnreachableNodes} from 'modules/fsa2/graph/UnreachableNodes.js';
+
 class AnalysisPanel extends React.Component
 {
     constructor(props)
@@ -25,7 +27,7 @@ class AnalysisPanel extends React.Component
         const currentModule = this.props.currentModule;
         const graphController = currentModule.getGraphController();
         const machineController = currentModule.getMachineController();
-        const unreachableArray = machineController.getUnreachableNodes();
+        const unreachableArray = getUnreachableNodes(graphController.getGraph());
         graphController.deleteTargetNodes(unreachableArray);
     }
 

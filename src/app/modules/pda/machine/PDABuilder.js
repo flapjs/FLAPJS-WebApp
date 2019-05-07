@@ -2,6 +2,7 @@ import AbstractMachineBuilder from 'modules/abstract/AbstractMachineBuilder.js';
 import PDA, { EMPTY_SYMBOL, State } from './PDA.js';
 import PDANode from 'modules/pda/graph/PDANode.js';
 import { EMPTY_CHAR } from 'modules/pda/graph/PDAEdge.js';
+import { getUnreachableNodes } from 'modules/fsa2/graph/FSAGraphUtil.js';
 
 export const ERROR_UNREACHABLE_STATE = 'unreachable_state';
 export const ERROR_DUPLICATE_STATE = 'duplicate_state';
@@ -170,7 +171,7 @@ class PDABuilder extends AbstractMachineBuilder
         }
 
         //Check for unreachable nodes
-        const unreachables = this.getUnreachableNodes(graph);
+        const unreachables = getUnreachableNodes(graph);
         if (unreachables && unreachables.length > 0)
         {
             warnings.push({
@@ -189,54 +190,6 @@ class PDABuilder extends AbstractMachineBuilder
             //Reasons are stored in errors
             return null;
         }
-    }
-
-    getUnreachableNodes(graph)
-    {
-        const openList = graph.getNodes().slice();
-        const index = openList.indexOf(startNode);
-        openList.splice(index, 1);
-
-        const queue = [];
-        queue.push(startNode);
-
-        while (queue.length > 0)
-        {
-            // const nextNode = queue.pop();
-
-        }
-
-        if (graph.getNodeCount() <= 1) return [];
-
-        const edges = graph.getEdges();
-        const nodes = graph.getNodes().slice();
-        const startNode = graph.getStartNode();
-        const startIndex = nodes.indexOf(startNode);
-        if (startIndex < 0) return [];
-        nodes.splice(startIndex, 1);
-
-        let nextNodes = [];
-        nextNodes.push(startNode);
-
-        while (nextNodes.length > 0)
-        {
-            const node = nextNodes.pop();
-            for (const edge of edges)
-            {
-                if (edge.getEdgeFrom() === node)
-                {
-                    const i = nodes.indexOf(edge.getEdgeTo());
-                    if (i >= 0)
-                    {
-                        const nextNode = nodes[i];
-                        nodes.splice(i, 1);
-                        nextNodes.push(nextNode);
-                    }
-                }
-            }
-        }
-
-        return nodes;
     }
 
     //Override

@@ -7,6 +7,8 @@ import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMes
 
 import StateMissingTransitionErrorMessage from 'modules/fsa/notifications/StateMissingTransitionErrorMessage.js';
 
+import {getUnreachableNodes} from 'modules/fsa2/graph/UnreachableNodes.js';
+
 class FSAErrorChecker
 {
     constructor()
@@ -42,7 +44,7 @@ class FSAErrorChecker
         let nodeTransitionMap = new Map();
 
         //Get Unreachable nodes...
-        const unreachNodes = machineController.getUnreachableNodes();
+        const unreachNodes = getUnreachableNodes(graphController.getGraph());
         for(const node of unreachNodes)
         {
             warnNodes.push(node);
