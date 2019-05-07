@@ -14,8 +14,8 @@ class UserCreateEdgeEventHandler extends EventHandler
     return {
       edge: edge,
       edgeID: edge.getGraphElementID(),
-      fromID: edge.getSourceNode().getGraphElementID(),
-      toID: edge.getDestinationNode() ? edge.getDestinationNode().getGraphElementID() : null,
+      fromID: edge.getEdgeFrom().getGraphElementID(),
+      toID: edge.getEdgeTo() ? edge.getEdgeTo().getGraphElementID() : null,
       label: edge.getEdgeLabel(),
       quad: { radians: edgeQuad.radians, length: edgeQuad.length }
     };
@@ -48,12 +48,13 @@ class UserCreateEdgeEventHandler extends EventHandler
     }
     else
     {
-      edge.setSourceNode(from);
+      edge.setEdgeFrom(from);
       edge.changeDestinationNode(to);
     }
 
     edge.setEdgeLabel(e.postData.label);
-    edge.setQuadratic(e.postData.quad.radians, e.postData.quad.length);
+    edge.setQuadraticRadians(e.postData.quad.radians);
+    edge.setQuadraticLength(e.postData.quad.length);
   }
 }
 export default UserCreateEdgeEventHandler;

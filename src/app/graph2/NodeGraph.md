@@ -1,0 +1,2 @@
+# GraphNode
+GraphNode does not initial with a label because of how GraphController creates them. The createNode() method takes in position and optionally an id. If we were to include another optional argument for label, it would be confusing whether it is a label or an id. For ambiguity's sake, just use setNodeLabel().

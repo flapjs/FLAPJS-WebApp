@@ -5,18 +5,18 @@ import Style from './App.css';
 import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION_VERTICAL, DRAWER_BAR_DIRECTION_HORIZONTAL } from 'experimental/drawer/DrawerView.js';
 import ToolbarView from 'experimental/toolbar/ToolbarView.js';
 import ViewportView from 'experimental/viewport/ViewportView.js';
-import TooltipView, { ONESHOT_MODE } from 'experimental/tooltip/TooltipView.js';
+import TooltipView from 'experimental/tooltip/TooltipView.js';
 import UploadDropZone from 'experimental/components/UploadDropZone.js';
-import ViewportComponent from 'util/input/components/ViewportComponent.js';
 import NotificationView from 'session/manager/notification/components/NotificationView.js';
 import IconButton from 'experimental/components/IconButton.js';
+import FullscreenWidget from 'experimental/components/FullscreenWidget.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
 import LanguagePanel from 'experimental/menus/language/LanguagePanel.js';
 import ModuleLoaderPanel from 'experimental/menus/moduleloader/ModuleLoaderPanel.js';
 
-import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU} from 'experimental/toolbar/ToolbarButton.js';
+import ToolbarButton, { TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU } from 'experimental/toolbar/ToolbarButton.js';
 import ToolbarDivider from 'experimental/toolbar/ToolbarDivider.js';
 import ToolbarUploadButton from 'experimental/toolbar/ToolbarUploadButton.js';
 import PageEmptyIcon from 'components/iconset/PageEmptyIcon.js';
@@ -50,8 +50,11 @@ import ViewportManager from 'session/manager/ViewportManager.js';
 import HotKeyManager from 'session/manager/hotkey/HotKeyManager.js';
 import HotKeyView from 'session/manager/hotkey/HotKeyView.js';
 import UndoManager from 'session/manager/undo/UndoManager.js';
-import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
-  RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'session/manager/RenderManager.js';
+import RenderManager, {
+  RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
+  RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY
+}
+  from 'session/manager/RenderManager.js';
 import TooltipManager from 'session/manager/TooltipManager.js';
 import NotificationManager, {ERROR_LAYOUT_ID} from 'session/manager/notification/NotificationManager.js';
 import BroadcastManager from 'session/manager/broadcast/BroadcastManager.js';
@@ -60,10 +63,6 @@ import ThemeManager from 'util/theme/ThemeManager';
 
 const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
 const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
-
-const SMOOTH_OFFSET_DAMPING = 0.4;
-const MIN_SCALE = 0.1;
-const MAX_SCALE = 10;
 
 const DRAWER_INDEX_ABOUT = 0;
 
@@ -225,7 +224,7 @@ class App extends React.Component
       .addPanelClass(LanguagePanel)//MENU_INDEX_LANGUAGE
       .addPanelClass(ModuleLoaderPanel);//MENU_INDEX_MODULE
     this._hotKeyManager
-      .registerAltHotKey("Show Hints", () => {IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL});
+      .registerAltHotKey("Show Hints", () => { IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL });
 
     this._themeManager.setElement(document.getElementById('root'));
     registerAppStyles(this._themeManager);
@@ -274,8 +273,8 @@ class App extends React.Component
     }
   }
 
-  getWorkspaceComponent() { return this._workspace.current; }
   getToolbarComponent() { return this._toolbar; }
+  getWorkspaceComponent() { return this._workspace.current; }
 
   getUndoManager() { return this._undoManager; }
   getHotKeyManager() { return this._hotKeyManager; }
@@ -291,7 +290,8 @@ class App extends React.Component
 
   getSession() { return this._session; }
   getCurrentModule() { return this._session.getCurrentModule(); }
-  getInputAdapter() { return this.getWorkspaceComponent().getInputAdapter(); }
+  getInputAdapter() { return this._workspace.current.getInputAdapter(); }
+  getStyleOpts() { return this._styleOpts; }
 
   isExperimental() { return true; }
 
@@ -308,13 +308,13 @@ class App extends React.Component
     );
   }
 
-  renderRenderers(renderers, props)
+  renderRenderLayer(renderLayerName, props)
   {
-    const session = this._session;
-    const sessionID = session.getSessionID();
+    const sessionID = this._session.getSessionID();
+    const renderers = this._renderManager.getRenderersByLayer(renderLayerName);
     if (renderers && renderers.length > 0)
     {
-      return renderers.map((R, i) => <R key={sessionID + "." + R.constructor.name + "." + i} {...props}/>);
+      return renderers.map((R, i) => <R key={sessionID + '.' + R.constructor.name + '.' + i} {...props} />);
     }
     else
     {
@@ -344,21 +344,16 @@ class App extends React.Component
     const notificationManager = this._notificationManager;
 
     const drawerPanelClasses = drawerManager.getPanelClasses();
-    const drawerPanelProps = drawerManager.getPanelProps() || {session: session};
+    const drawerPanelProps = drawerManager.getPanelProps() || { session: session };
     const menuPanelClasses = menuManager.getPanelClasses();
-    const menuPanelProps = menuManager.getPanelProps() || {session: session};
+    const menuPanelProps = menuManager.getPanelProps() || { session: session };
     const viewportViewClasses = viewportManager.getViewClasses();
-    const viewportViewProps = viewportManager.getViewProps() || {session: session};
+    const viewportViewProps = viewportManager.getViewProps() || { session: session };
     const defaultExporter = exportManager.getDefaultExporter();
-
-    const workspaceRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_WORKSPACE);
-    const workspaceOverlayRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_WORKSPACE_OVERLAY);
-    const viewportRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_VIEWPORT);
-    const viewportOverlayRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_VIEWPORT_OVERLAY);
 
     return (
       <div className={Style.app_container + (currentModule ? " active " : "")}>
-        <ToolbarView ref={ref=>this._toolbar=ref} className={Style.app_bar}
+        <ToolbarView ref={ref => this._toolbar = ref} className={Style.app_bar}
           menus={menuPanelClasses}
           menuProps={menuPanelProps}
           hide={isFullscreen}
@@ -367,42 +362,45 @@ class App extends React.Component
           onTitleClick={this.onModuleTitleClick}>
           <ToolbarButton title={I18N.toString("action.toolbar.newmachine")} icon={PageEmptyIcon}
             onClick={this.onToolbarClearButton}
-            disabled={!currentModule}/>
+            disabled={!currentModule} />
           <ToolbarUploadButton title={I18N.toString("action.toolbar.uploadmachine")} icon={UploadIcon} accept={exportManager.getImportFileTypes().join(",")}
-            onUpload={fileBlob => {
+            onUpload={fileBlob =>
+            {
               exportManager.tryImportFromFile(fileBlob)
-                .catch((e) => {
+                .catch((e) =>
+                {
                   notificationManager.pushNotification("ERROR: Unable to load invalid JSON file.", ERROR_LAYOUT_ID, ERROR_UPLOAD_NOTIFICATION_TAG);
                   console.error(e);
                 })
-                .finally(() => {
+                .finally(() =>
+                {
                   this._toolbar.closeBar();
                 });
             }}
-            disabled={!defaultExporter || !defaultExporter.canImport(currentModule)}/>
+            disabled={!defaultExporter || !defaultExporter.canImport(currentModule)} />
           <ToolbarButton title={I18N.toString("action.toolbar.undo")} icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
             disabled={!undoManager.canUndo()}
-            onClick={()=>undoManager.undo()}/>
+            onClick={() => undoManager.undo()} />
           <ToolbarButton title={I18N.toString("action.toolbar.redo")} icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
             disabled={!undoManager.canRedo()}
-            onClick={()=>undoManager.redo()}/>
+            onClick={() => undoManager.redo()} />
           <ToolbarButton title={I18N.toString("component.exporting.title")} icon={DownloadIcon}
-            onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_EXPORT)}
-            disabled={!defaultExporter || !defaultExporter.canExport(currentModule)}/>
-          <ToolbarDivider/>
+            onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_EXPORT)}
+            disabled={!defaultExporter || !defaultExporter.canExport(currentModule)} />
+          <ToolbarDivider />
           <ToolbarButton title={I18N.toString("action.toolbar.bug")} icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-            onClick={()=>window.open(BUGREPORT_URL, '_blank')}/>
+            onClick={() => window.open(BUGREPORT_URL, '_blank')} />
           <ToolbarButton title={I18N.toString("action.toolbar.lang")} icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-            onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_LANGUAGE)}/>
+            onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_LANGUAGE)} />
           <ToolbarButton title={I18N.toString("action.toolbar.help")} icon={HelpIcon}
-            onClick={()=>window.open(HELP_URL, '_blank')}/>
+            onClick={() => window.open(HELP_URL, '_blank')} />
           <ToolbarButton title={I18N.toString("component.options.title")} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-            onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_OPTION)}/>
+            onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_OPTION)} />
           <ToolbarButton title={"Change Module"} icon={EditPencilIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-            onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_MODULE)}/>
+            onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_MODULE)} />
         </ToolbarView>
 
-        <DrawerView ref={ref=>this._drawer=ref} className={Style.app_content}
+        <DrawerView ref={ref => this._drawer = ref} className={Style.app_content}
           panels={drawerPanelClasses}
           panelProps={drawerPanelProps}
           side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
@@ -417,28 +415,28 @@ class App extends React.Component
                 {tooltipManager.getTooltips().map((e, i) => <label key={e + ":" + i}>{e}</label>)}
               </TooltipView>
 
-              <ViewportComponent ref={this._workspace}>
+
+              
                 {/* RENDER_LAYER_WORKSPACE */}
-                {this.renderRenderers(workspaceRenderers, {workspace: this.getWorkspaceComponent()})}
-              </ViewportComponent>
+                {this.renderRenderLayer(RENDER_LAYER_WORKSPACE)}
+              
 
               {/* RENDER_LAYER_WORKSPACE_OVERLAY */}
-              {this.renderRenderers(workspaceOverlayRenderers, {workspace: this.getWorkspaceComponent()})}
+              {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_OVERLAY)}
 
-              <NotificationView notificationManager={notificationManager}/>
+              <FullscreenWidget className={Style.fullscreen_widget} app={this} />
+              <NotificationView notificationManager={notificationManager} />
+              {this._hotKeyManager.isEnabled() && <HotKeyView hotKeyManager={this._hotKeyManager} />}
 
-              {this._hotKeyManager.isEnabled() &&
-                <HotKeyView hotKeyManager={this._hotKeyManager}/>}
-
-              <ViewportView ref={ref=>this._viewport=ref}
+              <ViewportView ref={ref => this._viewport = ref}
                 views={viewportViewClasses}
                 viewProps={viewportViewProps}>
                 {/* RENDER_LAYER_VIEWPORT */}
-                {this.renderRenderers(viewportRenderers, {viewport: this._viewport})}
+                {this.renderRenderLayer(RENDER_LAYER_VIEWPORT, { viewport: this._viewport })}
               </ViewportView>
 
               {/* RENDER_LAYER_VIEWPORT_OVERLAY */}
-              {this.renderRenderers(viewportOverlayRenderers, {viewport: this._viewport})}
+              {this.renderRenderLayer(RENDER_LAYER_VIEWPORT_OVERLAY, { viewport: this._viewport })}
 
             </div>
           </UploadDropZone>

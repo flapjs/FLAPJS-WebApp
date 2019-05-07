@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  margin-top: 2em;
 }
 :local(.navbar_widget), :local(.navbar_widget_container) {
   width: 100%;

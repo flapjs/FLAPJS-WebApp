@@ -1,5 +1,5 @@
 import GraphElementInputHandler from './GraphElementInputHandler.js';
-import GraphNode from 'graph/GraphNode.js';
+import GraphNode from 'graph/elements/GraphNode.js';
 
 class GraphInitialInputHandler extends GraphElementInputHandler
 {

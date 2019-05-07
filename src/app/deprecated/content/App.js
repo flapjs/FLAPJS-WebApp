@@ -43,7 +43,7 @@ class App extends React.Component
 
     //These need to be initialized before module
     this.inputAdapter = new InputAdapter();
-    this.inputAdapter.getViewport()
+    this.inputAdapter.getViewportAdapter()
       .setMinScale(MIN_SCALE)
       .setMaxScale(MAX_SCALE)
       .setOffsetDamping(SMOOTH_OFFSET_DAMPING);

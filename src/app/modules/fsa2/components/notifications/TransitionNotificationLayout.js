@@ -1,6 +1,6 @@
 import React from 'react';
 import DefaultNotificationLayout, {STYLE_TYPE_ERROR} from 'session/manager/notification/components/DefaultNotificationLayout.js';
-import GraphNode from 'graph/GraphNode.js';
+import GraphNode from 'graph/elements/GraphNode.js';
 
 const ARROW = '\u2192';
 
@@ -19,9 +19,9 @@ class TransitionNotificationLayout extends React.Component
       {
         this.targetLabel += ", ";
       }
-      this.targetLabel += "(" + target.getSourceNode().getNodeLabel() + ", " +
+      this.targetLabel += "(" + target.getEdgeFrom().getNodeLabel() + ", " +
         target.getEdgeLabel() + ") " +
-        ARROW + " " + (target.getDestinationNode() instanceof GraphNode ? target.getDestinationNode().getNodeLabel() : "null");
+        ARROW + " " + (target.getEdgeTo() instanceof GraphNode ? target.getEdgeTo().getNodeLabel() : "null");
     }
 
     this.onClick = this.onClick.bind(this);

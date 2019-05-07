@@ -1,3 +1,4 @@
+import InputContext from './InputContext.js';
 import InputPointer from './InputPointer.js';
 import ViewportAdapter from './ViewportAdapter.js';
 
@@ -13,11 +14,12 @@ const DRAGGING_BUFFER_SQU = DRAGGING_BUFFER * DRAGGING_BUFFER;
  * Provides an interface for input handlers to interact with a HTMLElement.
  * Each listenable element should correspond to only a single InputAdapter.
  */
-class InputAdapter
+class InputAdapter extends InputContext
 {
   constructor()
   {
-    this._handlers = [];
+    super();
+    this._contexts = [];
     this._activeDragHandler = null;
 
     this._element = null;
@@ -30,7 +32,7 @@ class InputAdapter
     };
     this._pointer = null;
 
-    this._viewport = new ViewportAdapter();
+    this._viewportAdapter = new ViewportAdapter();
 
     //Although dragging could be in pointer, it should be here to allow
     //the adapter to be independent of pointer.
@@ -62,17 +64,65 @@ class InputAdapter
     this.onDelayedInputDown = this.onDelayedInputDown.bind(this);
   }
 
-  addInputHandler(handler)
+  bindContext(context)
   {
-    this._handlers.push(handler);
+    if (!(context instanceof InputContext)) 
+      throw new Error("Cannot bind invalid context - must be an instance of InputContext");
+      
+    this._contexts.unshift(context);
     return this;
   }
 
-  removeInputHandler(handler)
+  bindContextAsLast(context)
   {
-    const index = this._handlers.indexOf(handler);
-    if (index >= 0) this._handlers.splice(index, 1);
+    if (!(context instanceof InputContext)) 
+      throw new Error("Cannot bind invalid context - must be an instance of InputContext");
+      
+    this._contexts.push(context);
     return this;
+  }
+
+  unbindContext(context=null)
+  {
+    if (context)
+    {
+      const index = this._contexts.indexOf(context);
+      if (index >= 0)
+      {
+        this._contexts.splice(index, 1);
+        return context;
+      }
+      else
+      {
+        return null;
+      }
+    }
+    else
+    {
+      return this._contexts.shift();
+    }
+  }
+
+  clearContexts()
+  {
+    this._contexts.length = 0;
+  }
+
+  hasContexts()
+  {
+    return this._contexts.length > 0;
+  }
+
+  getCurrentContext()
+  {
+    if (this._contexts.length > 0)
+    {
+      return this._contexts[this._contexts.length - 1];
+    }
+    else
+    {
+      return this;
+    }
   }
 
   initialize(element)
@@ -80,8 +130,8 @@ class InputAdapter
     if (!(element instanceof SVGElement)) throw new Error("Missing SVG element for input adapter's viewport");
     if (this._element) throw new Error("Trying to initialize an InputAdapter already initialized");
 
-    this._viewport.setElement(this._element = element);
-    this._pointer = new InputPointer(this, this._element, this._viewport);
+    this._viewportAdapter.setElement(this._element = element);
+    this._pointer = new InputPointer(this, this._element, this._viewportAdapter);
 
     this._element.addEventListener('mousedown', this.onMouseDown);
     this._element.addEventListener('mousemove', this.onMouseMove);
@@ -109,28 +159,27 @@ class InputAdapter
     if (this._element)
     {
       //Smooth transition offset
-      this._viewport.update();
+      this._viewportAdapter.update();
     }
   }
 
+  /** @override */
   handleEvent(eventName, ...eventArgs)
   {
-    //Let others handle this event...
-    for(const handler of this._handlers)
+    for(const context of this._contexts)
     {
-      if (handler[eventName](...eventArgs))
+      const result = context.handleEvent(eventName, ...eventArgs);
+      if (result)
       {
-        return handler;
+        return result;
       }
     }
-
-    return null;
+    
+    return super.handleEvent(eventName, ...eventArgs);
   }
 
   onMouseDown(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -172,9 +221,7 @@ class InputAdapter
 
   onMouseMove(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
-    const mouse = this._viewport.transformScreenToView(e.clientX, e.clientY);
+    const mouse = this._viewportAdapter.transformScreenToView(e.clientX, e.clientY);
     const pointer = this._pointer;
     pointer.setPosition(mouse.x, mouse.y);
 
@@ -189,8 +236,6 @@ class InputAdapter
 
   onMouseDownThenMove(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -201,8 +246,6 @@ class InputAdapter
 
   onMouseDownThenUp(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -228,8 +271,6 @@ class InputAdapter
 
   onTouchStart(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     if (e.changedTouches.length == 1)
     {
       e.stopPropagation();
@@ -272,8 +313,6 @@ class InputAdapter
 
   onTouchStartThenEnd(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -300,8 +339,6 @@ class InputAdapter
 
   onTouchStartThenMove(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -313,8 +350,6 @@ class InputAdapter
 
   onContextMenu(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
@@ -323,20 +358,18 @@ class InputAdapter
 
   onWheel(e)
   {
-    if (!this.hasInputHandlers()) return false;
-
     e.stopPropagation();
     e.preventDefault();
 
     const pointer = this._pointer;
     const dy = e.deltaY * this._scrollSensitivity;
-    const prev = this._viewport.getScale();
+    const prev = this._viewportAdapter.getScale();
     const next = prev + dy;
 
     //Let others handle this event...
     if (!this.handleEvent('onZoomChange', pointer, next, prev))
     {
-      this._viewport.setScale(next);
+      this._viewportAdapter.setScale(next);
     }
 
     return false;
@@ -344,12 +377,10 @@ class InputAdapter
 
   onInputDown(x, y, button)
   {
-    if (!this.hasInputHandlers()) throw new Error("Missing handlers for input adapter");
-
     //Setup for hold timer...
     const cursor = this._cursor;
     const pointer = this._pointer;
-    const mouse = this._viewport.transformScreenToView(x, y);
+    const mouse = this._viewportAdapter.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
     this._dragging = false;
@@ -368,8 +399,6 @@ class InputAdapter
 
   onDelayedInputDown()
   {
-    if (!this.hasInputHandlers()) throw new Error("Missing handlers for input adapter");
-
     //That means the input is remaining still (like a hold)...
     if (!this._dragging)
     {
@@ -379,10 +408,8 @@ class InputAdapter
 
   onInputMove(x, y)
   {
-    if (!this.hasInputHandlers()) throw new Error("Missing handlers for input adapter");
-
     const pointer = this._pointer;
-    const mouse = this._viewport.transformScreenToView(x, y);
+    const mouse = this._viewportAdapter.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
     if (!this._dragging)
@@ -392,7 +419,8 @@ class InputAdapter
         this._dragging = true;
 
         //Let others handle this event...
-        const result = this.handleEvent('onDragStart', pointer);
+        const inputEventPosition = pointer.getInputEventPosition();
+        const result = this.handleEvent('onDragStart', pointer, inputEventPosition.x, inputEventPosition.y);
         if (!result)
         {
           this._dragging = false;
@@ -425,8 +453,6 @@ class InputAdapter
 
   onInputUp(x, y)
   {
-    if (!this.hasInputHandlers()) throw new Error("Missing handlers for input adapter");
-
     const cursor = this._cursor;
     const timer = cursor._timer;
     if (timer)
@@ -437,7 +463,7 @@ class InputAdapter
 
     //Update pointer target to final position
     const pointer = this._pointer;
-    const mouse = this._viewport.transformScreenToView(x, y);
+    const mouse = this._viewportAdapter.transformScreenToView(x, y);
     pointer.setPosition(mouse.x, mouse.y);
 
     if (this._dragging)
@@ -519,10 +545,9 @@ class InputAdapter
     this.handleEvent('onPostInputEvent', pointer);
   }
 
-  clearInputHandlers() { this._handlers.clear(); }
-  hasInputHandlers() { return this._handlers.length > 0; }
+  getContexts() { return this._contexts; }
   getActiveElement() { return this._element; }
-  getViewport() { return this._viewport; }
+  getViewportAdapter() { return this._viewportAdapter; }
   getPointerX() { return this._pointer ? this._pointer.x : 0; }
   getPointerY() { return this._pointer ? this._pointer.y : 0; }
   isPointerActive() { return this._pointer ? this._pointer.isActive() : false; }

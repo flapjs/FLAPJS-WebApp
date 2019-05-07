@@ -1,14 +1,16 @@
 import React from 'react';
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 
+import ViewportComponent from 'util/input/components/ViewportComponent.js';
+
 import NodalGraphInputManager from 'modules/nodalgraph/manager/NodalGraphInputManager.js';
 
 import NodalGraphRenderer from 'graph/renderer/NodalGraphRenderer.js';
 import GraphInputRenderer from 'modules/nodalgraph/controller/renderer/GraphInputRenderer.js';
 
-import NodalGraph from 'graph/NodalGraph.js';
-import GraphNode from 'graph/GraphNode.js';
-import QuadraticEdge from 'graph/QuadraticEdge.js';
+import NodeGraph from 'graph/NodeGraph.js';
+import GraphNode from 'graph/elements/GraphNode.js';
+import QuadraticEdge from 'graph/elements/QuadraticEdge.js';
 import EmptyGraphLabeler from './EmptyGraphLabeler.js';
 import * as NodalGraphParser from 'graph/parser/NodalGraphParser.js';
 
@@ -30,21 +32,41 @@ import GraphEndpointPickHandler from 'modules/nodalgraph/controller/pickhandler/
 
 import * as UserUtil from 'experimental/UserUtil.js';
 
-const MODULE_NAME = "nodalgraph";
+const MODULE_NAME = "nodegraph";
 const MODULE_VERSION = "0.0.1";
-const MODULE_LOCALIZED_NAME = "NodalGraph";
+const MODULE_LOCALIZED_NAME = "NodeGraph";
 
 class NodalGraphModule
 {
   constructor(app)
   {
     this._app = app;
-
+    this._workspace = React.createRef();
+    
     this._inputManager = new NodalGraphInputManager(this,
-      new NodalGraph(GraphNode, QuadraticEdge),
+      new NodeGraph(GraphNode, QuadraticEdge),
       new EmptyGraphLabeler(),
       NodalGraphParser,
       null);
+
+    app.getRenderManager()
+      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+        <ViewportComponent ref={ref => {
+          this._workspace.current = ref;
+          app._workspace.current = ref;
+          }}>
+          <NodalGraphRenderer currentModule={this} parent={this._workspace.current}/>
+          {this._inputManager.getInputController() &&
+            <GraphInputRenderer currentModule={this}/>}
+        </ViewportComponent>
+      ));
+  }
+
+  //Override
+  initialize(app)
+  {
+    this._inputManager.onSessionStart(app.getSession());
+
     this._inputManager.getInputController().getPicker()
       .addPickHandler(this._endpointPickHandler = new GraphEndpointPickHandler())
       .addPickHandler(this._nodePickHandler = new GraphNodePickHandler())
@@ -73,25 +95,10 @@ class NodalGraphModule
     app.getViewportManager()
       .addViewClass(EditPane);
 
-    app.getRenderManager()
-      //Graph objects
-      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-        <NodalGraphRenderer currentModule={this} parent={props.workspace}/>
-      ))
-      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-        <GraphInputRenderer currentModule={this}/>
-      ));
-
     app.getUndoManager()
       .setEventHandlerFactory((...args) => {
         return new SafeGraphEventHandler(this._inputManager.getGraphController(), this._inputManager.getGraphParser());
       });
-  }
-
-  //Override
-  initialize(app)
-  {
-    this._inputManager.onSessionStart(app.getSession());
   }
 
   //Override

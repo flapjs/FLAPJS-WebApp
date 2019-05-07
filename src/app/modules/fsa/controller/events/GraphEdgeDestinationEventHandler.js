@@ -33,7 +33,8 @@ class GraphEdgeDestinationEventHandler extends EventHandler
     edge.changeDestinationNode(e.eventData.prevDestination);
     //Flip them, since self loops are upside down
     if (edge.isSelfLoop()) radians = -radians;
-    edge.setQuadratic(radians, length);
+    edge.setQuadraticRadians(radians);
+    edge.setQuadraticLength(length);
   }
 
   //Override - this = event
@@ -47,7 +48,8 @@ class GraphEdgeDestinationEventHandler extends EventHandler
     const length = e.eventData.nextQuad.length;
 
     edge.changeDestinationNode(e.eventData.nextDestination);
-    edge.setQuadratic(radians, length);
+    edge.setQuadraticRadians(radians);
+    edge.setQuadraticLength(length);
   }
 }
 export default GraphEdgeDestinationEventHandler;

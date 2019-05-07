@@ -15,6 +15,7 @@ class Session
     this._name = I18N.toString("file.untitled");
     this._module = null;
     this._moduleClass = null;
+    this._moduleStarted = false;
     this._app = null;
 
     this._sessionID = null;
@@ -81,6 +82,10 @@ class Session
         try
         {
           this._module = new ModuleClass(app);
+
+          // Allows renderers to be created...
+          app.forceUpdate();
+
           this._module.initialize(app);
 
           for(const listener of this._listeners)
@@ -89,6 +94,8 @@ class Session
           }
 
           LocalStorage.setData(CURRENT_MODULE_STORAGE_ID, moduleName);
+
+          this._moduleStarted = true;
         }
         catch (e)
         {
@@ -109,7 +116,7 @@ class Session
 
   updateSession(app)
   {
-    if (this._module)
+    if (this._module && this._moduleStarted)
     {
       this._module.update(app);
     }
@@ -131,6 +138,8 @@ class Session
     this._module = null;
     this._sessionID = null;
     this._app = null;
+
+    this._moduleStarted = false;
   }
 
   setProjectName(name)

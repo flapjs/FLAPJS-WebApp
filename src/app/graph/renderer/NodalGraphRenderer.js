@@ -3,9 +3,6 @@ import React from 'react';
 import GraphNodeRenderer from './GraphNodeRenderer.js';
 import GraphEdgeRenderer from './GraphEdgeRenderer.js';
 
-import GraphEdge from '../GraphEdge.js';
-import QuadraticEdge from '../QuadraticEdge.js';
-
 class NodalGraphRenderer extends React.Component
 {
   constructor(props)

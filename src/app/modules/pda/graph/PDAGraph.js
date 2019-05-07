@@ -1,14 +1,16 @@
-import NodalGraph from 'graph/NodalGraph.js';
+import NodeGraph from 'graph/NodeGraph.js';
 import PDANode from './PDANode.js';
 import PDAEdge, { LINE_SEPARATOR } from './PDAEdge.js';
 
 const PARALLEL_EDGE_HEIGHT = 10;
 
-class PDAGraph extends NodalGraph
+class PDAGraph extends NodeGraph
 {
   constructor()
   {
     super(PDANode, PDAEdge);
+
+    this._nodes = [];
   }
 
   setStartNode(node)
@@ -37,20 +39,42 @@ class PDAGraph extends NodalGraph
     return this._nodes.length > 0 ? this._nodes[0] : null;
   }
 
+  /** @override */
+  addNode(node)
+  {
+    this._nodes.push(node);
+    return super.addNode(node);
+  }
+
+  /** @override */
+  deleteNode(node)
+  {
+    super.deleteNode(node);
+    const i = this._nodes.indexOf(node);
+    if (i >= 0) this._nodes.splice(i, 1);
+  }
+
+  /** @override */
+  clearNodes()
+  {
+    super.clearNodes();
+    this._nodes.length = 0;
+  }
+
   //This is more like addEdge() without adding it to the graph and just returns the result
   //This should only be called once when completing an edge
   //Override
   formatEdge(edge)
   {
-    const edgeSource = edge.getSourceNode();
-    const edgeDestination = edge.getDestinationNode();
+    const edgeSource = edge.getEdgeFrom();
+    const edgeDestination = edge.getEdgeTo();
     const edgeLabel = edge.getEdgeLinesFromLabel();
 
     //Look for an existing edge with similar from and to
-    for(const otherEdge of this._edges)
+    for(const otherEdge of this.getEdges())
     {
       if (otherEdge === edge) continue;
-      if (otherEdge.getSourceNode() === edgeSource && otherEdge.getDestinationNode() === edgeDestination)
+      if (otherEdge.getEdgeFrom() === edgeSource && otherEdge.getEdgeTo() === edgeDestination)
       {
         const otherLines = otherEdge.getEdgeLinesFromLabel();
         if (edgeLabel.length > 0)
@@ -73,13 +97,13 @@ class PDAGraph extends NodalGraph
       //Bend away if there is another edge not bent with the same src/dst
       const parallelEdgeHeight = PARALLEL_EDGE_HEIGHT;
       const HALFPI = Math.PI / 2;
-      for(const otherEdge of this._edges)
+      for(const otherEdge of this.getEdges())
       {
         if (otherEdge.isQuadratic() && Math.abs(otherEdge.getQuadratic().length) >= parallelEdgeHeight * 2) continue;
-        if ((otherEdge.getDestinationNode() === edgeSource && otherEdge.getSourceNode() === edgeDestination))
+        if ((otherEdge.getEdgeTo() === edgeSource && otherEdge.getEdgeFrom() === edgeDestination))
         {
-          edge.setQuadratic(HALFPI, parallelEdgeHeight);
-          otherEdge.setQuadratic(HALFPI, parallelEdgeHeight);
+          edge.setQuadraticRadians(HALFPI).setQuadraticLength(parallelEdgeHeight);
+          otherEdge.setQuadraticRadians(HALFPI).setQuadraticLength(parallelEdgeHeight);
           flag = true;
 
           //ASSUMES that there will only ever be 2 edges that are parallel...
@@ -142,7 +166,8 @@ class PDAGraph extends NodalGraph
 
         if (flag)
         {
-          edge.setQuadratic(-Math.PI / 2, maxNodeSize + 10);
+          edge.setQuadraticRadians(-Math.PI / 2);
+          edge.setQuadraticLength(maxNodeSize + 10);
         }
       }
     }

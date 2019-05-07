@@ -450,17 +450,18 @@ class GraphController extends AbstractGraphController
     if (edge.isSelfLoop())
     {
       //Make it a self loop
-      const sourceNode = edge.getSourceNode();
+      const sourceNode = edge.getEdgeFrom();
       const dx = sourceNode.x - x;
       const dy = sourceNode.y - y;
       const radians = Math.atan2(dy, dx) + Math.PI;
-      edge.setQuadratic(radians);
+      edge.setQuadraticRadians(radians);
     }
     //Otherwise, maintain original curve
     else
     {
       //TODO: This also causes self-loops to act weird when no longer a self loop
-      edge.setQuadratic(this.prevQuad.radians, this.prevQuad.length);
+      edge.setQuadraticRadians(this.prevQuad.radians);
+      edge.setQuadraticLength(this.prevQuad.length);
     }
   }
 
@@ -491,14 +492,14 @@ class GraphController extends AbstractGraphController
   focusOnNode(node)
   {
     //Center workspace at focused node; inverted due to graph-to-screen space
-    this.inputController.getInputAdapter().getViewport().setOffset(-node.x, -node.y);
+    this.inputController.getInputAdapter().getViewportAdapter().setOffset(-node.x, -node.y);
   }
 
   focusOnEdge(edge)
   {
     //Center workspace at focused edge; inverted due to graph-to-screen space
     const center = edge.getCenterPoint();
-    this.inputController.getInputAdapter().getViewport().setOffset(-center.x, -center.y);
+    this.inputController.getInputAdapter().getViewportAdapter().setOffset(-center.x, -center.y);
   }
 
   focusOnNodes(nodes)
@@ -512,7 +513,7 @@ class GraphController extends AbstractGraphController
       ax += node.x;
       ay += node.y;
     }
-    this.inputController.getInputAdapter().getViewport().setOffset(-ax / length, -ay / length);
+    this.inputController.getInputAdapter().getViewportAdapter().setOffset(-ax / length, -ay / length);
   }
 }
 //Mixin Eventable
@@ -521,10 +522,10 @@ Eventable.mixin(GraphController);
 function moveNodesOutOfEdges(target, graph)
 {
 
-  const x1 = target.getSourceNode().x;
-  const y1 = target.getSourceNode().y;
-  const x2 = target.getDestinationNode().x;
-  const y2 = target.getDestinationNode().y;
+  const x1 = target.getEdgeFrom().x;
+  const y1 = target.getEdgeFrom().y;
+  const x2 = target.getEdgeTo().x;
+  const y2 = target.getEdgeTo().y;
   const dist12sq = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
   let vertical = false;
   let m = 0;
@@ -541,7 +542,7 @@ function moveNodesOutOfEdges(target, graph)
 
   for(const node of graph.getNodes())
   {
-    if(node === target.getSourceNode() || node === target.getDestinationNode()) continue;
+    if(node === target.getEdgeFrom() || node === target.getEdgeTo()) continue;
 
     const nodeSize = node.getNodeSize();
     const x0 = node.x;
