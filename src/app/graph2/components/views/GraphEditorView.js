@@ -124,9 +124,9 @@ class GraphEditorView extends React.Component
                             this._labelEditorComponent.current = ref;
                             graphController.setLabelEditor(ref);
                         }}
-                            labelFormatter={labelFormatter}
-                            viewport={viewport}
-                            saveOnExit={true}>
+                        labelFormatter={labelFormatter}
+                        viewport={viewport}
+                        saveOnExit={true}>
                             {this.props.labelEditor}
                         </LabelEditorView>
                     </React.Fragment>}

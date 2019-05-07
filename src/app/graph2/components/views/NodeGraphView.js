@@ -12,82 +12,82 @@ import ViewportInputHandler from 'graph2/inputs/ViewportInputHandler.js';
 
 class NodeGraphView extends React.Component
 {
-	constructor(props)
-	{
-		super(props);
+    constructor(props)
+    {
+        super(props);
 
-		this._inputContext = new InputContext();
-	}
+        this._inputContext = new InputContext();
+    }
 
-	/** @override */
-	componentDidMount()
-	{
-		const viewport = this.props.viewport;
-		const inputController = this.props.inputController;
-		const graphController = this.props.graphController;
-		const selectionBox = this.props.selectionBox;
-		const inputAdapter = viewport.getInputAdapter();
+    /** @override */
+    componentDidMount()
+    {
+        const viewport = this.props.viewport;
+        const inputController = this.props.inputController;
+        const graphController = this.props.graphController;
+        const selectionBox = this.props.selectionBox;
+        const inputAdapter = viewport.getInputAdapter();
 
-		const context = this._inputContext;
-		if (selectionBox)
-		{
-			context.addInputHandler(new SelectionBoxInputHandler(inputController, graphController, selectionBox));
-		}
-		if (inputController)
-		{
-			context.addInputHandler(new ViewportInputHandler(inputController));
-		}
-		inputAdapter.bindContextAsLast(context);
-	}
+        const context = this._inputContext;
+        if (selectionBox)
+        {
+            context.addInputHandler(new SelectionBoxInputHandler(inputController, graphController, selectionBox));
+        }
+        if (inputController)
+        {
+            context.addInputHandler(new ViewportInputHandler(inputController));
+        }
+        inputAdapter.bindContextAsLast(context);
+    }
 
-	/** @override */
-	componentWillUnmount()
-	{
-		const viewport = this.props.viewport;
-		const inputAdapter = viewport.getInputAdapter();
-		const context = this._inputContext;
-		context.clearInputHandlers();
-		inputAdapter.unbindContext(context);
-	}
+    /** @override */
+    componentWillUnmount()
+    {
+        const viewport = this.props.viewport;
+        const inputAdapter = viewport.getInputAdapter();
+        const context = this._inputContext;
+        context.clearInputHandlers();
+        inputAdapter.unbindContext(context);
+    }
 
-	getInputContext() { return this._inputContext; }
+    getInputContext() { return this._inputContext; }
 
-	/** @override */
-	render()
-	{
-		const inputController = this.props.inputController;
-		const graphController = this.props.graphController;
-		const selectionBox = this.props.selectionBox;
-		const onMouseOver = this.props.onMouseOver;
-		const onMouseOut = this.props.onMouseOut;
-		
-		const graph = graphController.getGraph();
-		const selectionBoundingBox = selectionBox ? selectionBox.getBoundingBox() : null;
+    /** @override */
+    render()
+    {
+        const inputController = this.props.inputController;
+        const graphController = this.props.graphController;
+        const selectionBox = this.props.selectionBox;
+        const onMouseOver = this.props.onMouseOver;
+        const onMouseOut = this.props.onMouseOut;
 
-		// Order matters here, it determines the z-index!
-		return (
-			<React.Fragment>
-				<GraphNodeLayer nodes={graph.getNodes()}
-					inputController={inputController}
-					onMouseOver={onMouseOver}
-					onMouseOut={onMouseOut} />
-				<GraphEdgeLayer edges={graph.getEdges()}
-					inputController={inputController}
-					onMouseOver={onMouseOver}
-					onMouseOut={onMouseOut} />
-				{selectionBox &&
-					<React.Fragment>
-						<GraphHighlightLayer
-							nodes={selectionBox.getSelection()} />
-						<BoxRenderer visible={selectionBox.isVisible()}
-							fromX={selectionBoundingBox.fromX}
-							fromY={selectionBoundingBox.fromY}
-							toX={selectionBoundingBox.toX}
-							toY={selectionBoundingBox.toY} />
-					</React.Fragment>}
-			</React.Fragment>
-		);
-	}
+        const graph = graphController.getGraph();
+        const selectionBoundingBox = selectionBox ? selectionBox.getBoundingBox() : null;
+
+        // Order matters here, it determines the z-index!
+        return (
+            <React.Fragment>
+                <GraphNodeLayer nodes={graph.getNodes()}
+                    inputController={inputController}
+                    onMouseOver={onMouseOver}
+                    onMouseOut={onMouseOut} />
+                <GraphEdgeLayer edges={graph.getEdges()}
+                    inputController={inputController}
+                    onMouseOver={onMouseOver}
+                    onMouseOut={onMouseOut} />
+                {selectionBox &&
+                    <React.Fragment>
+                        <GraphHighlightLayer
+                            nodes={selectionBox.getSelection()} />
+                        <BoxRenderer visible={selectionBox.isVisible()}
+                            fromX={selectionBoundingBox.fromX}
+                            fromY={selectionBoundingBox.fromY}
+                            toX={selectionBoundingBox.toX}
+                            toY={selectionBoundingBox.toY} />
+                    </React.Fragment>}
+            </React.Fragment>
+        );
+    }
 }
 
 export default NodeGraphView;

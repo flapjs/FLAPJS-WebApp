@@ -7,35 +7,35 @@ export const GRAPH_EVENT_CLEAR = 'graph-clear';
 
 class GraphController
 {
-	constructor(graph)
-	{
-		this._graph = graph;
+    constructor(graph)
+    {
+        this._graph = graph;
         this._graphChangeHandler = null;
 
-		this._inputController = null;
-		this._labelEditor = null;
-		this._labelFormatter = null;
+        this._inputController = null;
+        this._labelEditor = null;
+        this._labelFormatter = null;
 
-		this._listeners = [];
-	}
+        this._listeners = [];
+    }
 
-	setInputController(inputController)
-	{
-		this._inputController = inputController;
-		return this;
-	}
+    setInputController(inputController)
+    {
+        this._inputController = inputController;
+        return this;
+    }
 
-	setLabelEditor(labelEditor)
-	{
-		this._labelEditor = labelEditor;
-		return this;
-	}
+    setLabelEditor(labelEditor)
+    {
+        this._labelEditor = labelEditor;
+        return this;
+    }
 
-	setLabelFormatter(labelFormatter)
-	{
-		this._labelFormatter = labelFormatter;
-		return this;
-	}
+    setLabelFormatter(labelFormatter)
+    {
+        this._labelFormatter = labelFormatter;
+        return this;
+    }
 
     setGraphChangeHandler(graphChangeHandler)
     {
@@ -43,93 +43,93 @@ class GraphController
         return this;
     }
 	
-	addListener(listener)
-	{
-		this._listeners.push(listener);
-		return this;
-	}
+    addListener(listener)
+    {
+        this._listeners.push(listener);
+        return this;
+    }
 
-	removeListener(listener)
-	{
-		const index = this._listeners.indexOf(listener);
-		if (index >= 0) this._listeners.splice(index, 1);
-	}
+    removeListener(listener)
+    {
+        const index = this._listeners.indexOf(listener);
+        if (index >= 0) this._listeners.splice(index, 1);
+    }
 
-	clearListeners() { this._listeners.length = 0; }
+    clearListeners() { this._listeners.length = 0; }
 
-	initialize()
-	{
-		const inputController = this._inputController;
+    initialize()
+    {
+        const inputController = this._inputController;
 
-		if (!inputController) throw new Error("Must set input controller before init");
-	}
+        if (!inputController) throw new Error('Must set input controller before init');
+    }
 
-	update()
-	{
+    update()
+    {
         if (this._graphChangeHandler)
         {
             this._graphChangeHandler.update(this._graph);
         }
-	}
+    }
 
-	destroy()
-	{
+    destroy()
+    {
 		
-	}
+    }
 	
-	clearGraph()
-	{
-		this._graph.clear();
-		this.emitGraphEvent(GRAPH_EVENT_CLEAR);
-	}
+    clearGraph()
+    {
+        this._graph.clear();
+        this.emitGraphEvent(GRAPH_EVENT_CLEAR);
+    }
 
-	onGraphEvent(eventName, eventData)
-	{
-		// Do nothing... for now...
-	}
+    onGraphEvent(eventName, eventData)
+    {
+        // Do nothing... for now...
+    }
 
-	emitGraphEvent(eventName, eventData = {})
-	{
-		this.onGraphEvent(eventName, eventData);
+    emitGraphEvent(eventName, eventData = {})
+    {
+        this.onGraphEvent(eventName, eventData);
 
-		for(const listener of this._listeners)
-		{
-			listener.onGraphEvent(this, eventName, eventData);
-		}
-	}
+        for(const listener of this._listeners)
+        {
+            listener.onGraphEvent(this, eventName, eventData);
+        }
+    }
 
-	openLabelEditor(target, defaultLabel = null, callback = null)
-	{
-		if (!this._labelEditor)
-		{
-			if (callback) callback(target, defaultLabel, false);
-			return;
-		}
+    openLabelEditor(target, defaultLabel = null, callback = null)
+    {
+        if (!this._labelEditor)
+        {
+            if (callback) callback(target, defaultLabel, false);
+            return;
+        }
 
-		const labelEditor = this._labelEditor;
-		const prevLabel = defaultLabel || "";
-		labelEditor.openEditor(target, defaultLabel, (target, value) =>
-		{
-			const hasChanged = !prevLabel || (prevLabel.length > 0 && value !== prevLabel);
-			if (target instanceof GraphEdge)
-			{
-				target.setEdgeLabel(value);
-			}
-			else if (target instanceof GraphNode)
-			{
-				target.setNodeLabel(value);
-			}
+        const labelEditor = this._labelEditor;
+        const prevLabel = defaultLabel || '';
+        labelEditor.openEditor(target, defaultLabel, (target, value) =>
+        {
+            const hasChanged = !prevLabel || (prevLabel.length > 0 && value !== prevLabel);
+            if (target instanceof GraphEdge)
+            {
+                target.setEdgeLabel(value);
+            }
+            else if (target instanceof GraphNode)
+            {
+                target.setNodeLabel(value);
+            }
 
-			if (callback) callback(target, value, hasChanged);
-		}, (target) =>
-		{
-			if (callback) callback(target, null, false);
-		});
-	}
+            if (callback) callback(target, value, hasChanged);
+        }, (target) =>
+        {
+            if (callback) callback(target, null, false);
+        });
+    }
 
-	getLabelFormatter() { return this._labelFormatter || DEFAULT_LABEL_FORMATTER; }
-	getGraph() { return this._graph; }
-	getGraphChangeHandler() { return this._graphChangeHandler; }
+    getLabelFormatter() { return this._labelFormatter || DEFAULT_LABEL_FORMATTER; }
+    getGraph() { return this._graph; }
+    getGraphChangeHandler() { return this._graphChangeHandler; }
 }
 
 export default GraphController;

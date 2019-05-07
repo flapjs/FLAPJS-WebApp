@@ -6,71 +6,71 @@ import ModeTrayWidget, { MODE_ACTION, MODE_MOVE } from '../widgets/ModeTrayWidge
 
 class ViewportLayer extends React.Component
 {
-	constructor(props)
-	{
-		super(props);
+    constructor(props)
+    {
+        super(props);
 
-		this.onTrashChange = this.onTrashChange.bind(this);
-		this.onTrashClear = this.onTrashClear.bind(this);
-		this.onModeChange = this.onModeChange.bind(this);
-	}
+        this.onTrashChange = this.onTrashChange.bind(this);
+        this.onTrashClear = this.onTrashClear.bind(this);
+        this.onModeChange = this.onModeChange.bind(this);
+    }
 
-	onTrashChange(flag)
-	{
-		this.props.inputController.setTrashMode(flag);
-	}
+    onTrashChange(flag)
+    {
+        this.props.inputController.setTrashMode(flag);
+    }
 
-	onTrashClear()
-	{
-		this.props.graphController.clearGraph();
-	}
+    onTrashClear()
+    {
+        this.props.graphController.clearGraph();
+    }
 
-	onModeChange(value)
-	{
-		this.props.inputController.setMoveModeFirst(value === MODE_MOVE);
-	}
+    onModeChange(value)
+    {
+        this.props.inputController.setMoveModeFirst(value === MODE_MOVE);
+    }
 
-	/** @override */
-	render()
-	{
-		const inputController = this.props.inputController;
-		const graphController = this.props.graphController;
-		const viewport = this.props.viewport;
-		const graph = graphController.getGraph();
+    /** @override */
+    render()
+    {
+        const inputController = this.props.inputController;
+        const graphController = this.props.graphController;
+        const viewport = this.props.viewport;
+        const graph = graphController.getGraph();
 
-		let moveMode = null;
-		if (inputController)
-		{
-			if (inputController.isHandlingInput())
-			{
-				moveMode = inputController.isMoveMode() ? MODE_MOVE : MODE_ACTION;
-			}
-			else
-			{
-				moveMode = inputController.isMoveModeFirst() ? MODE_MOVE : MODE_ACTION;
-			}
-		}
+        let moveMode = null;
+        if (inputController)
+        {
+            if (inputController.isHandlingInput())
+            {
+                moveMode = inputController.isMoveMode() ? MODE_MOVE : MODE_ACTION;
+            }
+            else
+            {
+                moveMode = inputController.isMoveModeFirst() ? MODE_MOVE : MODE_ACTION;
+            }
+        }
 
-		return (
-			<div id={this.props.id}
-				className={Style.view_container +
-					" " + this.props.className}
-				style={this.props.style}>
-				<TrashCanWidget className={Style.view_widget}
-					style={{ bottom: 0, right: 0 }}
-					visible={!graph.isEmpty() && viewport &&
+        return (
+            <div id={this.props.id}
+                className={Style.view_container +
+					' ' + this.props.className}
+                style={this.props.style}>
+                <TrashCanWidget className={Style.view_widget}
+                    style={{ bottom: 0, right: 0 }}
+                    visible={!graph.isEmpty() && viewport &&
 						(!viewport.getInputAdapter().isUsingTouch() || !viewport.getInputAdapter().isDragging())}
-					onChange={this.onTrashChange}
-					onClear={this.onTrashClear} />
-				<ModeTrayWidget className={Style.view_widget}
-					style={{ bottom: 0, left: 0 }}
-					visible={inputController}
-					mode={moveMode}
-					onChange={this.onModeChange} />
-				{this.props.children}
-			</div>
-		);
-	}
+                    onChange={this.onTrashChange}
+                    onClear={this.onTrashClear} />
+                <ModeTrayWidget className={Style.view_widget}
+                    style={{ bottom: 0, left: 0 }}
+                    visible={inputController}
+                    mode={moveMode}
+                    onChange={this.onModeChange} />
+                {this.props.children}
+            </div>
+        );
+    }
 }
 
 export default ViewportLayer;
