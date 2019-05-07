@@ -3,6 +3,7 @@ import Style from './TestingPanel.css';
 
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSwitch from 'experimental/panels/PanelSwitch.js';
+import PanelButton from 'experimental/panels/PanelButton.js';
 
 import TestListView from './TestListView.js';
 

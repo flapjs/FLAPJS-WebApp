@@ -12,7 +12,7 @@ class FullscreenWidget extends React.Component
         super(props);
     }
 
-    /** @override */
+    //Override
     render()
     {
         const app = this.props.app;
