@@ -10,7 +10,6 @@ import UploadDropZone from 'experimental/components/UploadDropZone.js';
 import NotificationView from 'session/manager/notification/components/NotificationView.js';
 import IconButton from 'experimental/components/IconButton.js';
 import FullscreenWidget from 'experimental/components/FullscreenWidget.js';
-import ViewportComponent from 'util/input/components/ViewportComponent.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
@@ -369,20 +368,15 @@ class App extends React.Component
                                 {tooltipManager.getTooltips().map((e, i) => <label key={e + ':' + i}>{e}</label>)}
                             </TooltipView>
 
-                            <ViewportComponent ref={this._workspace}>
-                                {/* RENDER_LAYER_WORKSPACE */}
-                                {this.renderRenderLayer(RENDER_LAYER_WORKSPACE)}
-                            </ViewportComponent>
-
+                            {/* RENDER_LAYER_WORKSPACE */}
+                            {this.renderRenderLayer(RENDER_LAYER_WORKSPACE)}
+                          
                             {/* RENDER_LAYER_WORKSPACE_OVERLAY */}
                             {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_OVERLAY)}
 
                             <FullscreenWidget className={Style.fullscreen_widget} app={this}/>
-
                             <NotificationView notificationManager={notificationManager}/>
-
-                            {this._hotKeyManager.isEnabled() &&
-                            <HotKeyView hotKeyManager={this._hotKeyManager}/>}
+                            {this._hotKeyManager.isEnabled() && <HotKeyView hotKeyManager={this._hotKeyManager}/>}
 
                             <ViewportView ref={ref=>this._viewport=ref}
                                 views={viewportViewClasses}

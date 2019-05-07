@@ -2,6 +2,7 @@ import React from 'react';
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 
 import NodalGraphInputManager from 'modules/nodalgraph/manager/NodalGraphInputManager.js';
+import ViewportComponent from 'util/input/components/ViewportComponent.js';
 import MachineController from './controller/MachineController.js';
 
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
@@ -64,6 +65,31 @@ class FSAModule
             new FSAGraphLabeler(),
             FSAGraphParser,
             FSALabelEditorRenderer);
+
+        app.getRenderManager()
+            .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+                <ViewportComponent ref={ref => app._workspace.current = ref}>
+                    <FSAGraphRenderer currentModule={this} parent={props.workspace} />
+                    {this._inputManager.getInputController() && <GraphInputRenderer currentModule={this} />}
+                </ViewportComponent>
+            ));
+
+        this._machineController = new MachineController(this);
+
+        this._errorChecker = new FSAErrorChecker(app,
+            this._inputManager.getGraphController(),
+            this._machineController);
+        this._tester = new StringTester();
+        this._stepTracer = new StepTracer(this.getGraphController(), this.getMachineController());
+
+        this._broadcastHandler = new FSABroadcastHandler();
+    }
+
+    //Override
+    initialize(app)
+    {
+        this._inputManager.onSessionStart(app.getSession());
+
         this._inputManager.getInputController().getPicker()
             .addPickHandler(this._initialPickHandler = new GraphInitialPickHandler())
             .addPickHandler(this._endpointPickHandler = new GraphEndpointPickHandler())
@@ -76,20 +102,7 @@ class FSAModule
             .addInputHandler(this._initialInputHandler = new GraphInitialInputHandler())
             .addInputHandler(this._createInputHandler = new GraphNodeCreateInputHandler())
             .addInputHandler(this._acceptInputHandler = new GraphNodeAcceptInputHandler());
-        this._machineController = new MachineController(this);
 
-        this._errorChecker = new FSAErrorChecker(app,
-            this._inputManager.getGraphController(),
-            this._machineController);
-        this._tester = new StringTester();
-        this._stepTracer = new StepTracer(this.getGraphController(), this.getMachineController());
-
-        this._broadcastHandler = new FSABroadcastHandler();
-    }
-
-    /** @override */
-    initialize(app)
-    {
         registerNotifications(app.getNotificationManager());
 
         //TODO: These should have a pre/post handlers...
@@ -124,16 +137,8 @@ class FSAModule
             .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => { app.getUndoManager().undo(); })
             .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => { app.getUndoManager().redo(); });
 
-        app.getRenderManager()
-            .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-                <React.Fragment>
-                    <FSAGraphRenderer currentModule={this} parent={props.workspace} />
-                    <GraphInputRenderer currentModule={this} />
-                </React.Fragment>
-            ));
-
         app.getUndoManager()
-            .setEventHandlerFactory((...args) => 
+            .setEventHandlerFactory((...args) =>
             {
                 return new SafeGraphEventHandler(this._inputManager.getGraphController(), this._inputManager.getGraphParser());
             });
@@ -155,11 +160,9 @@ class FSAModule
 
         const machineController = this.getMachineController();
         machineController.initialize(this);
-
-        this._inputManager.onSessionStart(app.getSession());
     }
 
-    /** @override */
+    //Override
     update(app)
     {
         this._inputManager.update(this);
@@ -168,7 +171,7 @@ class FSAModule
         machineController.update(this);
     }
 
-    /** @override */
+    //Override
     destroy(app)
     {
         this._inputManager.onSessionStop(app.getSession());
@@ -177,7 +180,7 @@ class FSAModule
         machineController.destroy(this);
     }
 
-    /** @override */
+    //Override
     clear(app, graphOnly = false)
     {
         UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());

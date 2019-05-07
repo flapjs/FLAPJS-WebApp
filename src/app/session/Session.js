@@ -18,6 +18,7 @@ class Session
         this._name = I18N.toString('file.untitled');
         this._module = null;
         this._moduleClass = null;
+        this._moduleStarted = false;
         this._app = null;
 
         this._sessionID = null;
@@ -86,6 +87,10 @@ class Session
                 try
                 {
                     this._module = new ModuleClass(app);
+
+                    // Allows renderers to be created...
+                    app.forceUpdate();
+
                     this._module.initialize(app);
 
                     for (const listener of this._listeners)
