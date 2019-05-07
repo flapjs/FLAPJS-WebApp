@@ -1,9 +1,12 @@
 import FSA, {EMPTY_SYMBOL} from '../FSA.js';
+// TODO: add function headers-
 
+// TODO:explain intersected FSA
 export function intersectFSA(fsa1, fsa2, dst=new FSA(true))
 {
   throw new Error("Unsupported operation - not yet implemented");
 };
+
 
 export function intersectDFA(dfa1, dfa2, dst=new FSA(true))
 {

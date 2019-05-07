@@ -10,43 +10,48 @@ export function isEquivalentFSA(fsa1, fsa2)
   return isEquivalentDFA(dfa1, dfa2);
 };
 
-export function isEquivalentDFA(dfa1, dfa2) {
-    // L(M3) = L(M1) && !L(M2)
-    let m3 = intersectionOfComplement(dfa1, dfa2);
-    if (!m3) {
+export function isEquivalentDFA(dfa1, dfa2)
+{
+    // L(dfa3) = L(dfa1) && !L(dfa2)
+    let dfa3 = intersectionOfComplement(dfa1, dfa2);
+    if (!dfa3) {
         //console.log("dfa1 and dfa2 use different alphabets");
         return false;
     }
-    let m3acceptssomething = isLanguageNotEmpty(m3)
-    if(m3acceptssomething) {
-        //console.log(`dfa1 accepts ${m3acceptssomething} while dfa2 doesn't`)
+    let dfa3acceptssomething = isLanguageNotEmpty(dfa3)
+    if(dfa3acceptssomething) {
+        //console.log(`dfa1 accepts ${dfa3acceptssomething} while dfa2 doesn't`)
         return false
     }
-    let m4 = intersectionOfComplement(dfa2, dfa1);
-    if (!m4) {
+    let dfa4 = intersectionOfComplement(dfa2, dfa1);
+    if (!dfa4) {
         //console.log("dfa1 and dfa2 use different alphabets");
         return false;
     }
-    let m4acceptssometing = isLanguageNotEmpty(m4)
-    if(m4acceptssometing) {
-        //console.log(`dfa2 accepts ${m4acceptssomething} while dfa1 doesn't`);
+    let dfa4acceptssometing = isLanguageNotEmpty(dfa4)
+    if(dfa4acceptssometing) {
+        //console.log(`dfa2 accepts ${dfa4acceptssomething} while dfa1 doesn't`);
         return false;
     }
     return true;
-    // L(M4) = L(M2) && !L(M1)
+    // L(dfa4) = L(dfa2) && !L(dfa1)
 }
 
-function intersectionOfComplement(m1, m2) {
+// TODO: move helper functions to seperate file
+// intersection is closed for DFA
+function intersectionOfComplement(dfa1, dfa2)
+{
     // Returns false if used alphabet is different, else returns the common alphabet
-    const commonAlphabet = haveTheSameUsedAlphabet(m1, m2);
+    const commonAlphabet = haveTheSameUsedAlphabet(dfa1, dfa2);
     if (!commonAlphabet)
         return null;
 
-    const inverted = invertDFA(m2);
-    return intersectDFA(m1, inverted);
+    const inverted = invertDFA(dfa2);
+    return intersectDFA(dfa1, inverted);
 }
 
-function isLanguageNotEmpty(dfa) {
+function isLanguageNotEmpty(dfa)
+{
     //Perform BFS from start state. If a final state can be reached, then the language
     //is not empty, and the path is a witness. Else if no final states are ever reached,
     //the language is empty
@@ -75,7 +80,9 @@ function isLanguageNotEmpty(dfa) {
     return false;
 }
 
-function haveTheSameUsedAlphabet(m1, m2) {
+// TODO: same function in intersectFSA
+function haveTheSameUsedAlphabet(m1, m2)
+{
     let alphabet1 = new Set();
     let alphabet2 = new Set();
     for (const symbol of m1.getAlphabet()) {
