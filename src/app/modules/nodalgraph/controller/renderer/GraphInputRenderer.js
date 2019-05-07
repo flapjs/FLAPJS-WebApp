@@ -18,7 +18,6 @@ class GraphInputRenderer extends React.Component
 
     const inputController = currentModule.getInputController();
 
-    const viewport = inputController.getInputAdapter().getViewportAdapter();
     const picker = inputController.getPicker();
     const selectionBox = inputController.getSelectionBox();
 

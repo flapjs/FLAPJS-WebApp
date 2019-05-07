@@ -14,15 +14,15 @@ class NodalGraphInputManager
 {
   constructor(currentModule, nodalGraph, graphLabeler, graphParser, labelEditorRenderer)
   {
-    this._inputController = new InputController(currentModule, currentModule.getApp().getInputAdapter());
     this._graphController = new GraphController(currentModule, nodalGraph, graphLabeler, graphParser);
 
     this._labelEditorManager = new LabelEditorManager(currentModule.getApp())
       .setLabelEditorRenderer(labelEditorRenderer)
       .setLabeler(graphLabeler);
 
-    this._selectionBoxInputHandler = new SelectionBoxInputHandler(this._inputController, this._graphController, this._inputController.getSelectionBox());
-    this._viewportInputHandler = new ViewportInputHandler();
+    this._inputController = null;
+    this._selectionBoxInputHandler = null;
+    this._viewportInputHandler = null;
   }
 
   //Not yet implemented
@@ -52,6 +52,10 @@ class NodalGraphInputManager
   {
     const app = session.getApp();
     const currentModule = session.getCurrentModule();
+
+    this._inputController = new InputController(currentModule, currentModule.getApp().getInputAdapter());
+    this._selectionBoxInputHandler = new SelectionBoxInputHandler(this._inputController, this._graphController, this._inputController.getSelectionBox());
+    this._viewportInputHandler = new ViewportInputHandler();
 
     currentModule.getApp().getInputAdapter()
       .addInputHandler(this._inputController)

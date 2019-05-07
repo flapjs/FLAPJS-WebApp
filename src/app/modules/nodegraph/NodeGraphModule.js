@@ -26,7 +26,11 @@ class NodalGraphModule
 
     this._graph = new NodeGraph(GraphNode, QuadraticEdge);
     this._graphController = new NodeGraphController(app, this._graph, new NodeGraphParser());
+  }
 
+  //Override
+  initialize(app)
+  {
     app.getDrawerManager()
       .addPanelClass(props => (
         <PanelContainer id={props.id}
@@ -46,11 +50,6 @@ class NodalGraphModule
       .addRenderer(RENDER_LAYER_WORKSPACE, props => (
         <GraphEditorView graphController={this._graphController} />
       ));
-  }
-
-  //Override
-  initialize(app)
-  {
   }
 
   //Override

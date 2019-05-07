@@ -1,6 +1,8 @@
 import React from 'react';
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 
+import ViewportComponent from 'util/input/components/ViewportComponent.js';
+
 import NodalGraphInputManager from 'modules/nodalgraph/manager/NodalGraphInputManager.js';
 
 import NodalGraphRenderer from 'graph/renderer/NodalGraphRenderer.js';
@@ -39,12 +41,32 @@ class NodalGraphModule
   constructor(app)
   {
     this._app = app;
-
+    this._workspace = React.createRef();
+    
     this._inputManager = new NodalGraphInputManager(this,
       new NodeGraph(GraphNode, QuadraticEdge),
       new EmptyGraphLabeler(),
       NodalGraphParser,
       null);
+
+    app.getRenderManager()
+      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+        <ViewportComponent ref={ref => {
+          this._workspace.current = ref;
+          app._workspace.current = ref;
+          }}>
+          <NodalGraphRenderer currentModule={this} parent={this._workspace.current}/>
+          {this._inputManager.getInputController() &&
+            <GraphInputRenderer currentModule={this}/>}
+        </ViewportComponent>
+      ));
+  }
+
+  //Override
+  initialize(app)
+  {
+    this._inputManager.onSessionStart(app.getSession());
+
     this._inputManager.getInputController().getPicker()
       .addPickHandler(this._endpointPickHandler = new GraphEndpointPickHandler())
       .addPickHandler(this._nodePickHandler = new GraphNodePickHandler())
@@ -73,24 +95,10 @@ class NodalGraphModule
     app.getViewportManager()
       .addViewClass(EditPane);
 
-    app.getRenderManager()
-      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-        <React.Fragment>
-          <NodalGraphRenderer currentModule={this} parent={props.workspace}/>
-          <GraphInputRenderer currentModule={this}/>
-        </React.Fragment>
-      ));
-
     app.getUndoManager()
       .setEventHandlerFactory((...args) => {
         return new SafeGraphEventHandler(this._inputManager.getGraphController(), this._inputManager.getGraphParser());
       });
-  }
-
-  //Override
-  initialize(app)
-  {
-    this._inputManager.onSessionStart(app.getSession());
   }
 
   //Override

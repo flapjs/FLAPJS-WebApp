@@ -3,6 +3,7 @@ import PanelContainer from 'experimental/panels/PanelContainer.js';
 
 import NodalGraphInputManager from 'modules/nodalgraph/manager/NodalGraphInputManager.js';
 import MachineController from './controller/MachineController.js';
+import ViewportComponent from 'util/input/components/ViewportComponent.js';
 
 import PDAGraph from './graph/PDAGraph.js';
 import PDAGraphLabeler from './graph/PDAGraphLabeler.js';
@@ -59,6 +60,28 @@ class PDAModule
       new PDAGraphLabeler(),
       PDAGraphParser,
       PDALabelEditorRenderer);
+
+    app.getRenderManager()
+      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+        <ViewportComponent ref={ref => app._workspace.current = ref}>
+          <PDAGraphRenderer currentModule={this} parent={props.workspace}/>
+          {this._inputManager.getInputController() && <GraphInputRenderer currentModule={this}/>}
+        </ViewportComponent>
+      ));
+
+    this._machineController = new MachineController(this);
+
+    this._errorChecker = new PDAErrorChecker(app,
+      this._inputManager.getGraphController(),
+      this._machineController);
+    this._tester = new StringTester();
+  }
+
+  //Override
+  initialize(app)
+  {
+    this._inputManager.onSessionStart(app.getSession());
+
     this._inputManager.getInputController().getPicker()
       .addPickHandler(this._initialPickHandler = new GraphInitialPickHandler())
       .addPickHandler(this._endpointPickHandler = new GraphEndpointPickHandler())
@@ -71,17 +94,7 @@ class PDAModule
       .addInputHandler(this._initialInputHandler = new GraphInitialInputHandler())
       .addInputHandler(this._createInputHandler = new GraphNodeCreateInputHandler())
       .addInputHandler(this._acceptInputHandler = new GraphNodeAcceptInputHandler());
-    this._machineController = new MachineController(this);
 
-    this._errorChecker = new PDAErrorChecker(app,
-      this._inputManager.getGraphController(),
-      this._machineController);
-    this._tester = new StringTester();
-  }
-
-  //Override
-  initialize(app)
-  {
     registerNotifications(app.getNotificationManager());
 
     //TODO: These should have a pre/post handlers...
@@ -114,14 +127,6 @@ class PDAModule
       .registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {app.getUndoManager().undo()})
       .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {app.getUndoManager().redo()});
 
-    app.getRenderManager()
-      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-        <React.Fragment>
-          <PDAGraphRenderer currentModule={this} parent={props.workspace}/>
-          <GraphInputRenderer currentModule={this}/>
-        </React.Fragment>
-      ));
-
     app.getUndoManager()
       .setEventHandlerFactory((...args) => {
         return new SafeGraphEventHandler(this._inputManager.getGraphController(), this._inputManager.getGraphParser());
@@ -129,8 +134,6 @@ class PDAModule
 
     const machineController = this.getMachineController();
     machineController.initialize(this);
-
-    this._inputManager.onSessionStart(app.getSession());
   }
 
   //Override
