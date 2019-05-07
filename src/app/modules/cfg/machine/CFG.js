@@ -140,7 +140,7 @@ class CFG
     isRuleValid(rule)
     {
         //LHS is size 1 and is a variable
-        let LHSvalid = rule.getLHS().length == 1 && this.hasTerminal(rule.getLHS())
+        let LHSvalid = rule.getLHS().length == 1 && this.hasVariable(rule.getLHS())
         //RHS contains terminals and variables within the CFG
         let RHSvalid = true;
         for(let char of rule.getRHS())
@@ -149,11 +149,11 @@ class CFG
             {
                 if(char == char.toUpperCase())
                 {
-                    RHSvalid = RHSvalid && this.hasTerminal(char);
+                    RHSvalid = RHSvalid && this.hasVariable(char);
                 }
                 else
                 {
-                    RHSvalid = RHSvalid && this.hasVariable(char);
+                    RHSvalid = RHSvalid && this.hasTerminal(char);
                 }
             }
         }
@@ -183,18 +183,18 @@ class CFG
      */
     addRule(rule)
     {
-        this.addTerminal(rule.getLHS());
+        this.addVariable(rule.getLHS());
         for(let char of rule.getRHS())
         {
             if(char != PIPE && char != EMPTY)
             {
                 if(char == char.toUpperCase())
                 {
-                    this.addTerminal(char);
+                    this.addVariable(char);
                 }
                 else
                 {
-                    this.addVariable(char);
+                    this.addTerminal(char);
                 }
             }
         }
