@@ -16,7 +16,7 @@ class Rule
 
     setLHS(x)
     {
-        this._lhs = x;
+        this._lhs = x.replace(/\s/g,'');;
     }
     getLHS()
     {
@@ -25,7 +25,7 @@ class Rule
 
     setRHS(x)
     {
-        this._rhs = x;
+        this._rhs = x.replace(/\s/g,'');;
     }
     getRHS(x)
     {
@@ -164,12 +164,16 @@ class CFG
      * Replace all rules with multiple substitutions, like S -> a | b,
      * into multiple rules with each substitution it's own rule: S -> a and S -> b
      */
-    separateRulesBySubstitutions()
+    separateRulesBySubstitutions(changeCFG=false)
     {
         const splitRules = [];
         for(const rule of this.getRules())
         {
             splitRules.push(rule.splitRHSByPipe());
+        }
+        if(changeCFG)
+        {
+            this.rules = splitRules;
         }
         return splitRules;
     }
@@ -251,7 +255,7 @@ class CFG
     {
         this._startVariable = x;
     }
-    getStartVariable(x)
+    getStartVariable()
     {
         return this._startVariable;
     }
