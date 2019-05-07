@@ -8,41 +8,41 @@ import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE } from 'graph2/inputs/GraphEdgeInput
 
 import { WARNING_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
 
-export const TRASH_EDITING_NOTIFICATION_TAG = "tryCreateWhileTrash";
+export const TRASH_EDITING_NOTIFICATION_TAG = 'tryCreateWhileTrash';
 
 class NodeGraphController extends GraphController
 {
-	constructor(app, graph, graphParser)
-	{
-		super(graph);
+    constructor(app, graph, graphParser)
+    {
+        super(graph);
 
-		this._app = app;
+        this._app = app;
 
-		this.setGraphChangeHandler(new NodeGraphChangeHandler());
+        this.setGraphChangeHandler(new NodeGraphChangeHandler());
 
-		app.getUndoManager().setEventHandlerFactory(
-			(...args) => new SafeUndoNodeGraphEventHandler(graph, graphParser));
-	}
+        app.getUndoManager().setEventHandlerFactory(
+            (...args) => new SafeUndoNodeGraphEventHandler(graph, graphParser));
+    }
 
-	/** @override */
-	onGraphEvent(eventName, eventData)
-	{
-		super.onGraphEvent(eventName, eventData);
+    /** @override */
+    onGraphEvent(eventName, eventData)
+    {
+        super.onGraphEvent(eventName, eventData);
 
-		switch (eventName)
-		{
-			case GRAPH_EVENT_NODE_EDIT_WHILE_DELETE:
-			case GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE:
-				this._app.getNotificationManager().pushNotification(
-					I18N.toString("message.warning.cannotmodify"),
-					WARNING_LAYOUT_ID, TRASH_EDITING_NOTIFICATION_TAG, null, true);
-				break;
-			default:
-				this._app.getUndoManager().captureEvent();
-		}
-	}
+        switch (eventName)
+        {
+        case GRAPH_EVENT_NODE_EDIT_WHILE_DELETE:
+        case GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE:
+            this._app.getNotificationManager().pushNotification(
+                I18N.toString('message.warning.cannotmodify'),
+                WARNING_LAYOUT_ID, TRASH_EDITING_NOTIFICATION_TAG, null, true);
+            break;
+        default:
+            this._app.getUndoManager().captureEvent();
+        }
+    }
 	
-	getApp() { return this._app; }
+    getApp() { return this._app; }
 }
 
 export default NodeGraphController;

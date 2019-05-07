@@ -5,27 +5,27 @@ export const GRAPH_EVENT_NODE_ACCEPT_CHANGE = 'node-accept-change';
 
 class FSANodeInputHandler extends AbstractInputHandler
 {
-	constructor(inputController, graphController)
-	{
-		super();
+    constructor(inputController, graphController)
+    {
+        super();
 
-		this._inputController = inputController;
-		this._graphController = graphController;
-	}
+        this._inputController = inputController;
+        this._graphController = graphController;
+    }
 
-	/** @override */
-	onInputEvent(pointer)
-	{
-		const inputController = this._inputController;
-		const currentTargetType = inputController.getCurrentTargetType();
-		if (currentTargetType === EVENT_SOURCE_NODE)
-		{
-			const currentTargetSource = inputController.getCurrentTargetSource();
-			currentTargetSource.setNodeAccept(!currentTargetSource.getNodeAccept());
+    /** @override */
+    onInputEvent(pointer)
+    {
+        const inputController = this._inputController;
+        const currentTargetType = inputController.getCurrentTargetType();
+        if (currentTargetType === EVENT_SOURCE_NODE)
+        {
+            const currentTargetSource = inputController.getCurrentTargetSource();
+            currentTargetSource.setNodeAccept(!currentTargetSource.getNodeAccept());
 
-			graphController.emitGraphEvent(GRAPH_EVENT_NODE_ACCEPT_CHANGE, {target: currentTargetSource});
-		}
-	}
+            graphController.emitGraphEvent(GRAPH_EVENT_NODE_ACCEPT_CHANGE, {target: currentTargetSource});
+        }
+    }
 }
 
 export default FSANodeInputHandler;

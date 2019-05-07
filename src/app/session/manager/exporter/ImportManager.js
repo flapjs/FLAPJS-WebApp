@@ -1,71 +1,71 @@
-export const JSON_FILE_TYPE = "json";
+export const JSON_FILE_TYPE = 'json';
 
 class ImportManager
 {
-  constructor()
-  {
-    this._importers = new Map();
-  }
-
-  clear()
-  {
-    this._importers.clear();
-  }
-
-  addImporter(fileType, importer)
-  {
-    if (this._importers.has(fileType))
+    constructor()
     {
-      const importers = this._importers.get(fileType);
-      importers.push(importer);
+        this._importers = new Map();
     }
-    else
+
+    clear()
     {
-      this._importers.set(fileType, [importer]);
+        this._importers.clear();
     }
-    return this;
-  }
 
-  removeImporter(fileType, importer)
-  {
-    if (this._importers.has(fileType))
+    addImporter(fileType, importer)
     {
-      const importers = this._importers.get(fileType);
-      importers.splice(importers.indexOf(importer), 1);
+        if (this._importers.has(fileType))
+        {
+            const importers = this._importers.get(fileType);
+            importers.push(importer);
+        }
+        else
+        {
+            this._importers.set(fileType, [importer]);
+        }
+        return this;
     }
-    return this;
-  }
 
-  clearImportersByFileType(fileType)
-  {
-    this._importers.delete(fileType);
-  }
-
-  getImportersByFileType(fileType)
-  {
-    return this._importers.getFileType(fileType);
-  }
-
-  getImportersByFile(filename, fileData)
-  {
-    const dst = [];
-    const dotIndex = filename.lastIndexOf('.');
-    if (dotIndex < 0) return dst;
-    const ext = filename.substring(dotIndex + 1);
-    const importers = this.getImportersByFileType(fileType);
-    for(const importer of this._importers)
+    removeImporter(fileType, importer)
     {
-      if (importer.isValidFile(filename, fileData))
-      {
-        dst.push(importer);
-      }
+        if (this._importers.has(fileType))
+        {
+            const importers = this._importers.get(fileType);
+            importers.splice(importers.indexOf(importer), 1);
+        }
+        return this;
     }
-    return dst;
-  }
 
-  getFileTypes() { return this._importers.keys(); }
+    clearImportersByFileType(fileType)
+    {
+        this._importers.delete(fileType);
+    }
 
-  isEmpty() { return this._importers.size <= 0; }
+    getImportersByFileType(fileType)
+    {
+        return this._importers.getFileType(fileType);
+    }
+
+    getImportersByFile(filename, fileData)
+    {
+        const dst = [];
+        const dotIndex = filename.lastIndexOf('.');
+        if (dotIndex < 0) return dst;
+        const fileType = filename.substring(dotIndex + 1);
+        const importers = this.getImportersByFileType(fileType);
+        for (const importer of importers)
+        {
+            if (importer.isValidFile(filename, fileData))
+            {
+                dst.push(importer);
+            }
+        }
+        return dst;
+    }
+
+    getFileTypes() { return this._importers.keys(); }
+
+    isEmpty() { return this._importers.size <= 0; }
 }
 
 export default ImportManager;

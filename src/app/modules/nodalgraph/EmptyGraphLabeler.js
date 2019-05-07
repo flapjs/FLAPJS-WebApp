@@ -11,10 +11,10 @@ class EmptyGraphLabeler extends AbstractGraphLabeler
     setGraphController(getGraphController) {}
 
     /** @override */
-    getDefaultNodeLabel() { return ""; }
+    getDefaultNodeLabel() { return ''; }
 
     /** @override */
-    getDefaultEdgeLabel() { return ""; }
+    getDefaultEdgeLabel() { return ''; }
 
     /** @override */
     getNodeLabelFormatter() { return labelFormatter; }
@@ -25,7 +25,7 @@ class EmptyGraphLabeler extends AbstractGraphLabeler
 
 function labelFormatter(string)
 {
-    return string || "";
+    return string || '';
 }
 
 export default EmptyGraphLabeler;

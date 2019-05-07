@@ -4,12 +4,12 @@ import FSAGraphLabelFormatter from './FSAGraphLabelFormatter.js';
 
 class FSAGraphController extends NodeGraphController
 {
-	constructor(app, graph)
-	{
-		super(app, graph, new FSAGraphParser());
+    constructor(app, graph)
+    {
+        super(app, graph, new FSAGraphParser());
 
-		this.setLabelFormatter(new FSAGraphLabelFormatter(graph));
-	}
+        this.setLabelFormatter(new FSAGraphLabelFormatter(graph));
+    }
 }
 
 export default FSAGraphController;

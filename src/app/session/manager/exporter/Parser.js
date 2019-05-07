@@ -1,16 +1,16 @@
 class Parser
 {
-  constructor() {}
+    constructor() {}
 
-  parse(data)
-  {
-    return data;
-  }
+    parse(data)
+    {
+        return data;
+    }
 
-  compose(target)
-  {
-    return target;
-  }
+    compose(target)
+    {
+        return target;
+    }
 }
 
 export default Parser;

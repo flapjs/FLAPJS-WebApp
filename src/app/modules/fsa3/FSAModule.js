@@ -34,55 +34,55 @@ import FSAGraphController from './graph/controller/FSAGraphController.js';
 
 
 
-const MODULE_NAME = "fsa3";
-const MODULE_VERSION = "0.0.1";
+const MODULE_NAME = 'fsa3';
+const MODULE_VERSION = '0.0.1';
 
 class FSAModule
 {
-  constructor(app)
-  {
-    this._app = app;
+    constructor(app)
+    {
+        this._app = app;
 
-    this._graph = new FSAGraph();
-    this._graphController = new FSAGraphController(app, this._graph);
+        this._graph = new FSAGraph();
+        this._graphController = new FSAGraphController(app, this._graph);
 
-    this._machineController = new MachineController(this);
+        this._machineController = new MachineController(this);
 
-    this._errorChecker = new FSAErrorChecker(app,
-      this._graphController,
-      this._machineController);
-    this._tester = new StringTester();
-  }
+        this._errorChecker = new FSAErrorChecker(app,
+            this._graphController,
+            this._machineController);
+        this._tester = new StringTester();
+    }
 
-  //Override
-  initialize(app)
-  {
-    registerNotifications(app.getNotificationManager());
+    //Override
+    initialize(app)
+    {
+        registerNotifications(app.getNotificationManager());
 
-    app.getExportManager()
-      .addExporter(new FSAGraphExporter())
-      .addExporter(new JFLAPGraphExporter())
-      .addExporters(DEFAULT_IMAGE_EXPORTERS);
+        app.getExportManager()
+            .addExporter(new FSAGraphExporter())
+            .addExporter(new JFLAPGraphExporter())
+            .addExporters(DEFAULT_IMAGE_EXPORTERS);
 
-    app.getRenderManager()
-      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-        <GraphEditorView graphController={this._graphController} />
-      ));
+        app.getRenderManager()
+            .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+                <GraphEditorView graphController={this._graphController} />
+            ));
 
-    app.getDrawerManager()
-    .addPanelClass(props => (
-      <PanelContainer id={props.id}
-        className={props.className}
-        style={props.style}
-        title={"Finite State Automata"}>
-        <p>{"Brought to you with \u2764 by the Flap.js team."}</p>
-        <p>{"<- Tap on a tab to begin!"}</p>
-      </PanelContainer>
-    ))
-    .addPanelClass(OverviewPanel)
-    .addPanelClass(TestingPanel)
-    .addPanelClass(AnalysisPanel);
-    /*
+        app.getDrawerManager()
+            .addPanelClass(props => (
+                <PanelContainer id={props.id}
+                    className={props.className}
+                    style={props.style}
+                    title={'Finite State Automata'}>
+                    <p>{'Brought to you with \u2764 by the Flap.js team.'}</p>
+                    <p>{'<- Tap on a tab to begin!'}</p>
+                </PanelContainer>
+            ))
+            .addPanelClass(OverviewPanel)
+            .addPanelClass(TestingPanel)
+            .addPanelClass(AnalysisPanel);
+        /*
       /*
     app.getViewportManager()
       .addViewClass(EditPane)
@@ -90,7 +90,7 @@ class FSAModule
       .addViewClass(StepTracerView);
       */
 
-      /*
+        /*
 
     app.getHotKeyManager()
       .registerHotKey("Export to PNG", [CTRL_KEY, 'KeyP'], () => { app.getExportManager().tryExportToFile(DEFAULT_IMAGE_EXPORTERS[0]) })
@@ -114,44 +114,44 @@ class FSAModule
     const machineController = this.getMachineController();
     machineController.initialize(this);
     */
-  }
+    }
 
-  //Override
-  update(app)
-  {
-    const machineController = this.getMachineController();
-    machineController.update(this);
-  }
+    //Override
+    update(app)
+    {
+        const machineController = this.getMachineController();
+        machineController.update(this);
+    }
 
-  //Override
-  destroy(app)
-  {
-    const machineController = this.getMachineController();
-    machineController.destroy(this);
-  }
+    //Override
+    destroy(app)
+    {
+        const machineController = this.getMachineController();
+        machineController.destroy(this);
+    }
 
-  //Override
-  clear(app, graphOnly = false)
-  {
-    UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
-  }
+    //Override
+    clear(app, graphOnly = false)
+    {
+        UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
+    }
 
-  getGraphController() { return this._graphController; }
-  getLabelFormatter() { return this._labelFormatter; }
-  getGraph() { return this._graph; }
+    getGraphController() { return this._graphController; }
+    getLabelFormatter() { return this._labelFormatter; }
+    getGraph() { return this._graph; }
 
-  getMachineController() { return this._machineController; }
+    getMachineController() { return this._machineController; }
 
-  getErrorChecker() { return this._errorChecker; }
-  getStringTester() { return this._tester; }
+    getErrorChecker() { return this._errorChecker; }
+    getStringTester() { return this._tester; }
 
-  //Override
-  getModuleVersion() { return MODULE_VERSION; }
-  //Override
-  getModuleName() { return MODULE_NAME; }
-  //Override
-  getLocalizedModuleName() { return this._machineController.getMachineType(); }
-  getApp() { return this._app; }
+    //Override
+    getModuleVersion() { return MODULE_VERSION; }
+    //Override
+    getModuleName() { return MODULE_NAME; }
+    //Override
+    getLocalizedModuleName() { return this._machineController.getMachineType(); }
+    getApp() { return this._app; }
 }
 
 export default FSAModule;

@@ -7,7 +7,7 @@ import PDAEdge, {EMPTY_CHAR,
     READ_SEPARATOR,
     POP_SEPARATOR} from './PDAEdge.js';
 
-const DEFAULT_NODE_LABEL_PREFIX = "q";
+const DEFAULT_NODE_LABEL_PREFIX = 'q';
 
 class PDAGraphLabeler extends AbstractGraphLabeler
 {
@@ -66,13 +66,13 @@ class PDAGraphLabeler extends AbstractGraphLabeler
     /** @override */
     getDefaultEdgeLabel()
     {
-        return "";
+        return '';
     }
 
     /** @override */
     getNodeLabelFormatter()
     {
-        return (string) => string || "";
+        return (string) => string || '';
     }
 
     /** @override */
@@ -101,12 +101,12 @@ function edgeLabelFormatter(string, allowNull=false)
     let symbolLength = 0;
     for(let i = 0; i < length; ++i)
     {
-        symbols = lines[i].trim().split("");
+        symbols = lines[i].trim().split('');
         symbolLength = symbols.length;
 
         if (symbolLength <= 0)
         {
-            result.add("");
+            result.add('');
             continue;
         }
 
@@ -154,7 +154,7 @@ function edgeLabelFormatter(string, allowNull=false)
 
         if (readSymbol === null)
         {
-            result.add("");
+            result.add('');
         }
         else if (popSymbol === null)
         {

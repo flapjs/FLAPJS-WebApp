@@ -50,19 +50,19 @@ class TestingPanel extends React.Component
         return (
             <PanelContainer id={this.props.id}
                 className={Style.panel_container +
-          " " + this.props.className}
+          ' ' + this.props.className}
                 style={this.props.style}
                 title={TestingPanel.TITLE}>
 
                 <TestListView machineController={machineController}/>
-                <PanelSwitch id={"testing-error-check"} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={"Auto error checking"}/>
+                <PanelSwitch id={'testing-error-check'} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={'Auto error checking'}/>
 
             </PanelContainer>
         );
     }
 }
 Object.defineProperty(TestingPanel, 'TITLE', {
-    get: function() { return I18N.toString("component.testing.title"); }
+    get: function() { return I18N.toString('component.testing.title'); }
 });
 
 export default TestingPanel;

@@ -7,189 +7,192 @@ import JSONFileIcon from 'components/iconset/flat/JSONFileIcon.js';
 
 class PDAGraphExporter extends AbstractGraphExporter
 {
-  constructor() { super(); }
+    constructor() { super(); }
 
-  fromJSON(data, module)
-  {
-    const graphController = module.getGraphController();
-    const machineController = module.getMachineController();
-    const graph = graphController.getGraph();
-
-    const metadata = '_metadata' in data ? data['_metadata'] : {};
-    const newGraph = JSONGraphParser.parse(data.graphData, graph);
-
-    //HACK: this should be calculated elsewhere
-    const machineData = data.machineData;
-    const machineName = machineData.name;
-    if (machineName) module.getApp().getSession().setProjectName(machineName);
-    const customSymbols = machineData.symbols;
-    if (customSymbols && Array.isArray(customSymbols))
+    fromJSON(data, module)
     {
-      machineController.clearCustomSymbols();
-      for(const symbol of customSymbols)
-      {
-        machineController.addCustomSymbol(symbol);
-      }
-    }
-    const statePrefix = machineData.statePrefix;
-    if (statePrefix)
-    {
-      graphController.getGraphLabeler().setDefaultNodeLabelPrefix(statePrefix);
-    }
-
-    return newGraph;
-  }
-
-  toJSON(graphData, module)
-  {
-    const graphController = module.getGraphController();
-    const machineController = module.getMachineController();
-
-    const dst = {};
-    dst["_metadata"] = {
-      module: module.getModuleName(),
-      version: process.env.VERSION + ":" + module.getModuleVersion(),
-      timestamp: new Date().toString()
-    };
-    dst["graphData"] = graphData;
-    dst["machineData"] = {
-      name: module.getApp().getSession().getProjectName(),
-      symbols: machineController.getCustomSymbols(),
-      statePrefix: graphController.getGraphLabeler().getDefaultNodeLabelPrefix()
-    };
-    return dst;
-  }
-
-  /** @override */
-  importFromData(data, module)
-  {
-    this.fromJSON(data, module);
-  }
-
-  /** @override */
-  exportToData(module)
-  {
-    const graph = module.getGraphController().getGraph();
-    const graphData = JSONGraphParser.objectify(graph);
-    const result = this.toJSON(graphData, module);
-    return result;
-  }
-
-  /** @override */
-  doesSupportData()
-  {
-    return true;
-  }
-
-  /** @override */
-  importFromFile(fileBlob, module)
-  {
-    return new Promise((resolve, reject) => {
-      const filename = fileBlob.name;
-      if (!filename.endsWith(this.getFileType()))
-      {
-        throw new Error("Trying to import invalid file type for \'" + this.getFileType() + "\': " + filename);
-      }
-
-      const reader = new FileReader();
-      reader.onload = e => {
         const graphController = module.getGraphController();
         const machineController = module.getMachineController();
-        const data = e.target.result;
-        const name = filename.substring(0, filename.length - this.getFileType().length - 1);
         const graph = graphController.getGraph();
-        const prevGraphHash = graph.getHashCode(true);
 
-        //TODO: this should not be here, this should exist somewhere in graphController
-        if (!graph.isEmpty())
+        const metadata = '_metadata' in data ? data['_metadata'] : {};
+        const newGraph = JSONGraphParser.parse(data.graphData, graph);
+
+        //HACK: this should be calculated elsewhere
+        const machineData = data.machineData;
+        const machineName = machineData.name;
+        if (machineName) module.getApp().getSession().setProjectName(machineName);
+        const customSymbols = machineData.symbols;
+        if (customSymbols && Array.isArray(customSymbols))
         {
-          module.getApp().getUndoManager().captureEvent();
+            machineController.clearCustomSymbols();
+            for(const symbol of customSymbols)
+            {
+                machineController.addCustomSymbol(symbol);
+            }
+        }
+        const statePrefix = machineData.statePrefix;
+        if (statePrefix)
+        {
+            graphController.getGraphLabeler().setDefaultNodeLabelPrefix(statePrefix);
         }
 
-        try
+        return newGraph;
+    }
+
+    toJSON(graphData, module)
+    {
+        const graphController = module.getGraphController();
+        const machineController = module.getMachineController();
+
+        const dst = {};
+        dst['_metadata'] = {
+            module: module.getModuleName(),
+            version: process.env.VERSION + ':' + module.getModuleVersion(),
+            timestamp: new Date().toString()
+        };
+        dst['graphData'] = graphData;
+        dst['machineData'] = {
+            name: module.getApp().getSession().getProjectName(),
+            symbols: machineController.getCustomSymbols(),
+            statePrefix: graphController.getGraphLabeler().getDefaultNodeLabelPrefix()
+        };
+        return dst;
+    }
+
+    /** @override */
+    importFromData(data, module)
+    {
+        this.fromJSON(data, module);
+    }
+
+    /** @override */
+    exportToData(module)
+    {
+        const graph = module.getGraphController().getGraph();
+        const graphData = JSONGraphParser.objectify(graph);
+        const result = this.toJSON(graphData, module);
+        return result;
+    }
+
+    /** @override */
+    doesSupportData()
+    {
+        return true;
+    }
+
+    /** @override */
+    importFromFile(fileBlob, module)
+    {
+        return new Promise((resolve, reject) => 
         {
-          const jsonData = JSON.parse(data);
+            const filename = fileBlob.name;
+            if (!filename.endsWith(this.getFileType()))
+            {
+                throw new Error('Trying to import invalid file type for \'' + this.getFileType() + '\': ' + filename);
+            }
 
-          this.fromJSON(jsonData, module);
+            const reader = new FileReader();
+            reader.onload = e => 
+            {
+                const graphController = module.getGraphController();
+                const machineController = module.getMachineController();
+                const data = e.target.result;
+                const name = filename.substring(0, filename.length - this.getFileType().length - 1);
+                const graph = graphController.getGraph();
+                const prevGraphHash = graph.getHashCode(true);
 
-          module.getApp().getSession().setProjectName(name);
+                //TODO: this should not be here, this should exist somewhere in graphController
+                if (!graph.isEmpty())
+                {
+                    module.getApp().getUndoManager().captureEvent();
+                }
 
-          resolve();
-        }
-        catch (e)
-        {
-          reader.abort();
-          reject(e);
-        }
-        finally
-        {
-          const nextGraphHash = graph.getHashCode(true);
-          if (prevGraphHash !== nextGraphHash)
-          {
-            module.getApp().getUndoManager().captureEvent();
-          }
-        }
-      };
+                try
+                {
+                    const jsonData = JSON.parse(data);
 
-      reader.onerror = e => {
-        reject(new Error("Unable to import file: " + e.target.error.code));
-      }
+                    this.fromJSON(jsonData, module);
 
-      reader.readAsText(fileBlob);
-    });
-  }
+                    module.getApp().getSession().setProjectName(name);
 
-  /** @override */
-  exportToFile(filename, module)
-  {
-    const graph = module.getGraphController().getGraph();
-    const graphData = JSONGraphParser.objectify(graph);
-    const dst = this.toJSON(graphData, module);
-    const jsonString = JSON.stringify(dst);
-    downloadText(filename + '.' + this.getFileType(), jsonString);
-  }
+                    resolve();
+                }
+                catch (e)
+                {
+                    reader.abort();
+                    reject(e);
+                }
+                finally
+                {
+                    const nextGraphHash = graph.getHashCode(true);
+                    if (prevGraphHash !== nextGraphHash)
+                    {
+                        module.getApp().getUndoManager().captureEvent();
+                    }
+                }
+            };
 
-  /** @override */
-  doesSupportFile()
-  {
-    return true;
-  }
+            reader.onerror = e => 
+            {
+                reject(new Error('Unable to import file: ' + e.target.error.code));
+            };
 
-  /** @override */
-  canImport(module)
-  {
-    return true;
-  }
+            reader.readAsText(fileBlob);
+        });
+    }
 
-  /** @override */
-  canExport(module)
-  {
-    return !module.getGraphController().getGraph().isEmpty();
-  }
+    /** @override */
+    exportToFile(filename, module)
+    {
+        const graph = module.getGraphController().getGraph();
+        const graphData = JSONGraphParser.objectify(graph);
+        const dst = this.toJSON(graphData, module);
+        const jsonString = JSON.stringify(dst);
+        downloadText(filename + '.' + this.getFileType(), jsonString);
+    }
 
-  /** @override */
-  getTitle()
-  {
-    return I18N.toString("file.export.machine.hint");
-  }
+    /** @override */
+    doesSupportFile()
+    {
+        return true;
+    }
 
-  /** @override */
-  getLabel()
-  {
-    return I18N.toString("file.export.machine");
-  }
+    /** @override */
+    canImport(module)
+    {
+        return true;
+    }
 
-  /** @override */
-  getFileType()
-  {
-    return "json";
-  }
+    /** @override */
+    canExport(module)
+    {
+        return !module.getGraphController().getGraph().isEmpty();
+    }
 
-  /** @override */
-  getIconClass()
-  {
-    return JSONFileIcon;
-  }
+    /** @override */
+    getTitle()
+    {
+        return I18N.toString('file.export.machine.hint');
+    }
+
+    /** @override */
+    getLabel()
+    {
+        return I18N.toString('file.export.machine');
+    }
+
+    /** @override */
+    getFileType()
+    {
+        return 'json';
+    }
+
+    /** @override */
+    getIconClass()
+    {
+        return JSONFileIcon;
+    }
 }
 
 export default PDAGraphExporter;
