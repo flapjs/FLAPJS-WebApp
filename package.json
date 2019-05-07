@@ -7,7 +7,7 @@
     "build": "cross-env NODE_ENV=production webpack --mode production --config webpack.config.js",
     "lint": "eslint -o ./lintErrors.txt --no-color ./src",
     "docs": "jsdoc --readme ./README.md --recurse ./src",
-    "test": "jest"
+    "test": "eslint ./src && jest"
   },
   "repository": {
     "type": "git",
