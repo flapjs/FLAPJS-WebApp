@@ -2,7 +2,7 @@ import AbstractGraphExporter from 'session/manager/export/AbstractGraphExporter.
 
 import PNGIcon from 'deprecated/icons/flat/PNGIcon.js';
 import JPGIcon from 'deprecated/icons/flat/JPGIcon.js';
-import XMLIcon from 'deprecated/icons/flat/XMLIcon.js';
+// import XMLIcon from 'deprecated/icons/flat/XMLIcon.js';
 import SVGIcon from 'deprecated/icons/flat/SVGIcon.js';
 import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG, downloadImageFromSVG } from 'util/Downloader.js';
 

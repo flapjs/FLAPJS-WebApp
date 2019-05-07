@@ -45,8 +45,6 @@ class GraphEndpointInputHandler extends GraphElementInputHandler
     onDragStop(inputController, graphController, pointer, target)
     {
         const graph = graphController.getGraph();
-        const x = pointer.x;
-        const y = pointer.y;
 
         //Delete it if withing trash area...
         if (inputController.isTrashMode())

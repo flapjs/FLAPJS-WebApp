@@ -34,7 +34,7 @@ class StepTracer
 
     nextEdge(edge)
     {
-        if (!this._nextEdges.includes(edge)) throw new Edge('Must use edge from this._nextEdges');
+        if (!this._nextEdges.includes(edge)) throw new Error('Must use edge from this._nextEdges');
         if (this._nextEdges.length <= 0) return;
 
         this._prevEdges.push(edge);

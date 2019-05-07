@@ -160,9 +160,6 @@ class GraphController extends AbstractGraphController
 
     renameNode(node, name)
     {
-        const prev = node.getNodeLabel();
-        const isPrevCustom = node.getNodeCustom();
-
         node.setNodeLabel(name);
         node.setNodeCustom(true);
 

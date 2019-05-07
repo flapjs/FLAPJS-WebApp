@@ -52,7 +52,7 @@ class FSAGraphExporter extends AbstractGraphExporter
         const machineController = module.getMachineController();
         const graph = graphController.getGraph();
 
-        const metadata = '_metadata' in jsonData ? jsonData['_metadata'] : {};
+        // const metadata = '_metadata' in jsonData ? jsonData['_metadata'] : {};
         const newGraph = JSONGraphParser.parse(jsonData.graphData, graph);
 
         //machien details are set
@@ -136,7 +136,7 @@ class FSAGraphExporter extends AbstractGraphExporter
             reader.onload = e => 
             {
                 const graphController = module.getGraphController();
-                const machineController = module.getMachineController();
+                // const machineController = module.getMachineController();
                 const data = e.target.result;
                 const name = filename.substring(0, filename.length - this.getFileType().length - 1);
                 const graph = graphController.getGraph();

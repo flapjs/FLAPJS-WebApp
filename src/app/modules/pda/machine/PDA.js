@@ -1,7 +1,7 @@
 import GraphElement from 'graph/elements/GraphElement.js';
 import { guid, stringHash } from 'util/MathHelper.js';
 
-const FROM_STATE_INDEX = 0;
+// const FROM_STATE_INDEX = 0;
 const READ_SYMBOL_INDEX = 1;
 const TO_STATE_INDEX = 2;
 const POP_SYMBOL_INDEX = 3;
@@ -55,9 +55,11 @@ export class Transition
         result._to = this._to;
 
         throw new Error('Not yet implemented');
+        /*
         result._symbols = this._symbols.slice();
 
         return result;
+        */
     }
 
     getSourceState() { return this._from; }
@@ -321,8 +323,8 @@ class PDA
 
     addTransition(from, to, readSymbol, popSymbol, pushSymbol)
     {
-        if (!this.hasState(from)) throw new Error('Trying to add a transition to unknown state with label \'' + state.getStateLabel() + '\'');
-        if (!this.hasState(to)) throw new Error('Trying to add a transition to unknown state with label \'' + state.getStateLabel() + '\'');
+        if (!this.hasState(from)) throw new Error('Trying to add a transition to unknown state with label \'' + from.getStateLabel() + '\'');
+        if (!this.hasState(to)) throw new Error('Trying to add a transition to unknown state with label \'' + to.getStateLabel() + '\'');
         if (!readSymbol) throw new Error('Cannot add transition for null read symbol - use the empty symbol instead');
         if (!popSymbol) throw new Error('Cannot add transition for null pop symbol - use the empty symbol instead');
         if (!pushSymbol) throw new Error('Cannot add transition for null push symbol - use the empty symbol instead');

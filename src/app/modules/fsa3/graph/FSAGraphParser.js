@@ -34,7 +34,7 @@ class FSAGraphParser extends Parser
             dst.clear();
         }
 
-        const version = data['_version'] || '0.0.0';
+        // const version = data['_version'] || '0.0.0';
         const nodeDatas = data['nodes'] || [];
         const nodeCount = Math.min(nodeDatas.length || 0, data['nodeCount'] || 0);
         const edgeDatas = data['edges'] || [];

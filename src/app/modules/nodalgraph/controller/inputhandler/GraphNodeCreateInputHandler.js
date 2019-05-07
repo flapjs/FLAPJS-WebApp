@@ -27,7 +27,7 @@ class GraphNodeCreateInputHandler extends InputHandler
         }
 
         //Create node at position
-        const node = graphController.createNode(x, y);
+        graphController.createNode(x, y);
         //TODO: this allows nodes to move away from other nodes
         //But undoManager does not recognize it.
         //graphController.moveNodeTo(pointer, node, x, y);

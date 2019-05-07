@@ -19,7 +19,7 @@ class EditPane extends React.Component
         const currentModule = session.getCurrentModule();
         const app = session.getApp();
 
-        const viewport = this.props.viewport;
+        // const viewport = this.props.viewport;
         const inputController = currentModule.getInputController();
         const graphController = currentModule.getGraphController();
         const inputActionMode = inputController.isActionMode();

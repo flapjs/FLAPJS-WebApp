@@ -35,7 +35,7 @@ class FSANodeRenderer extends React.Component
 
               stroke="#000000"/>}
 
-        //Label
+                {/*Label*/}
                 <text className="graph-node-label"
                     x={node.x} y={node.y + 4}
                     pointerEvents="none"

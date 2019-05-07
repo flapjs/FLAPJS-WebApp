@@ -10,9 +10,9 @@ import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 
-import EditPane from './components/views/EditPane.js';
-import TapePane from './components/views/TapePane.js';
-import { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
+// import EditPane from './components/views/EditPane.js';
+// import TapePane from './components/views/TapePane.js';
+// import { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
 
 import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';

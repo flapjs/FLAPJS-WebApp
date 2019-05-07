@@ -1,4 +1,4 @@
-import FSA, {EMPTY_SYMBOL} from '../FSA.js';
+import FSA from '../FSA.js';
 // TODO: add function headers-
 
 // TODO:explain intersected FSA

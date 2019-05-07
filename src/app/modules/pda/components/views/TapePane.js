@@ -38,11 +38,8 @@ class TapePane extends React.Component
         const currentModule = session.getCurrentModule();
         const app = session.getApp();
 
-        const viewport = this.props.viewport;
+        // const viewport = this.props.viewport;
         const tester = currentModule._tester;
-        const inputController = currentModule.getInputController();
-        const graphController = currentModule.getGraphController();
-        const machineController = currentModule.getMachineController();
 
         return (
             <div id={this.props.id}

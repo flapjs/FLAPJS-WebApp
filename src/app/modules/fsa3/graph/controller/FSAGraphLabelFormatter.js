@@ -1,7 +1,7 @@
 import LabelFormatter from 'graph/controller/LabelFormatter';
 
-import { SYMBOL_SEPARATOR } from 'modules/fsa/graph/FSAEdge.js';
-import { EMPTY } from 'modules/fsa/machine/Symbols.js';
+// import { SYMBOL_SEPARATOR } from 'modules/fsa/graph/FSAEdge.js';
+// import { EMPTY } from 'modules/fsa/machine/Symbols.js';
 
 const DEFAULT_NODE_LABEL_PREFIX = 'q';
 

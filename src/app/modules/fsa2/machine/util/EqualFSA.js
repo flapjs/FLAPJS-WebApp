@@ -1,7 +1,7 @@
 import { convertToDFA } from './ConvertFSA.js';
 import { intersectDFA } from './IntersectFSA.js';
 import { invertDFA } from './InvertDFA.js';
-import FSA from '../FSA.js';
+// import FSA from '../FSA.js';
 
 export function isEquivalentFSA(fsa1, fsa2)
 {

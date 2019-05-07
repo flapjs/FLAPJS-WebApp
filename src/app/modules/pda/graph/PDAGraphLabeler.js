@@ -1,7 +1,6 @@
 import AbstractGraphLabeler from 'graph/AbstractGraphLabeler.js';
 
-import PDANode from './PDANode.js';
-import PDAEdge, {EMPTY_CHAR,
+import {EMPTY_CHAR,
     LINE_SEPARATOR,
     SYMBOL_SEPARATOR,
     READ_SEPARATOR,

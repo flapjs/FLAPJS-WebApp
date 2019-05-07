@@ -31,18 +31,17 @@ class InitialMarkerRenderer extends React.Component
         return (
             <g>
                 {visible &&
-					<path className="graph-initial" d={
-					    'M' + x + ' ' + y +
-						' L' + (x + diameterX) + ' ' + (y + radiusY) +
-						' L' + (x + diameterX) + ' ' + (y - radiusY) +
-						' Z'}
-
-					fill="transparent"
-					stroke={color}
-					cursor="pointer"
-					onMouseOver={this.props.onMouseOver}
-					onMouseOut={this.props.onMouseOut}
-					pointerEvents={this.props.pointerEvents} />}
+                    <path className="graph-initial" d={
+                        'M' + x + ' ' + y +
+                        ' L' + (x + diameterX) + ' ' + (y + radiusY) +
+                        ' L' + (x + diameterX) + ' ' + (y - radiusY) +
+                        ' Z'}
+                    fill="transparent"
+                    stroke={color}
+                    cursor="pointer"
+                    onMouseOver={this.props.onMouseOver}
+                    onMouseOut={this.props.onMouseOut}
+                    pointerEvents={this.props.pointerEvents} />}
             </g>
         );
     }

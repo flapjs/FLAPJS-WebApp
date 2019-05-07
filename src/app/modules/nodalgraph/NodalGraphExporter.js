@@ -14,7 +14,7 @@ class NodalGraphExporter extends AbstractGraphExporter
         const graphController = module.getGraphController();
         const graph = graphController.getGraph();
 
-        const metadata = '_metadata' in data ? data['_metadata'] : {};
+        // const metadata = '_metadata' in data ? data['_metadata'] : {};
         const newGraph = JSONGraphParser.parse(data.graphData, graph);
 
         //HACK: this should be calculated elsewhere

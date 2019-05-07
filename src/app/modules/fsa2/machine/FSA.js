@@ -1,7 +1,7 @@
 import GraphElement from 'graph/elements/GraphElement.js';
 import { guid, stringHash } from 'util/MathHelper.js';
 
-const FROM_STATE_INDEX = 0;
+// const FROM_STATE_INDEX = 0;
 const SYMBOL_INDEX = 1;
 const TO_STATE_INDEX = 2;
 

@@ -1,5 +1,5 @@
 import AbstractInputHandler from 'util/input/AbstractInputHandler.js';
-
+import { lerp } from 'util/MathHelper.js';
 import {EVENT_SOURCE_INITIAL_MARKER} from '../renderer/InitialMarkerRenderer.js';
 import {EVENT_SOURCE_NODE} from 'graph/renderer/GraphNodeInputHandler.js';
 

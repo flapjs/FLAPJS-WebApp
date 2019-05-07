@@ -1,7 +1,5 @@
 import AbstractMachineController from 'modules/abstract/AbstractMachineController.js';
 
-import {EMPTY_SYMBOL} from 'modules/fsa2/machine/FSA.js';
-import {EMPTY_CHAR, SYMBOL_SEPARATOR} from 'modules/fsa/graph/FSAEdge.js';
 import FSABuilder from 'modules/fsa2/machine/FSABuilder.js';
 import { convertToDFA, invertDFA } from 'modules/fsa2/machine/FSAUtils.js';
 

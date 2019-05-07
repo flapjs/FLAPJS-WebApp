@@ -15,7 +15,7 @@ class PDAGraphExporter extends AbstractGraphExporter
         const machineController = module.getMachineController();
         const graph = graphController.getGraph();
 
-        const metadata = '_metadata' in data ? data['_metadata'] : {};
+        // const metadata = '_metadata' in data ? data['_metadata'] : {};
         const newGraph = JSONGraphParser.parse(data.graphData, graph);
 
         //HACK: this should be calculated elsewhere
@@ -96,7 +96,7 @@ class PDAGraphExporter extends AbstractGraphExporter
             reader.onload = e => 
             {
                 const graphController = module.getGraphController();
-                const machineController = module.getMachineController();
+                // const machineController = module.getMachineController();
                 const data = e.target.result;
                 const name = filename.substring(0, filename.length - this.getFileType().length - 1);
                 const graph = graphController.getGraph();

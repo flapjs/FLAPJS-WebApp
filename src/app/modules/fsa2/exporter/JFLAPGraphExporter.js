@@ -28,7 +28,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
     {
         return new Promise((resolve, reject) => 
         {
-            const filename = fileObj.name;
+            const filename = fileBlob.name;
             if (!filename.endsWith(this.getFileType()))
             {
                 throw new Error('Trying to import invalid file type for \'' + this.getFileType() + '\': ' + filename);
@@ -39,7 +39,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
             reader.onload = e => 
             {
                 const graphController = module.getGraphController();
-                const machineController = module.getMachineController();
+                // const machineController = module.getMachineController();
                 const data = e.target.result;
                 const name = filename.substring(0, filename.length - this.getFileType().length - 1);
                 const graph = graphController.getGraph();
@@ -79,7 +79,7 @@ class JFLAPGraphExporter extends AbstractGraphExporter
                 reject(new Error('Unable to import file: ' + e.target.error.code));
             };
 
-            reader.readAsText(fileObj);
+            reader.readAsText(fileBlob);
         });
     }
 

@@ -69,7 +69,6 @@ class TestingPanel extends React.Component
     render()
     {
         const session = this.props.session;
-        const app = session.getApp();
         const currentModule = session.getCurrentModule();
         const graphController = currentModule.getGraphController();
         const machineController = currentModule.getMachineController();
