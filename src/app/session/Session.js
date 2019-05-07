@@ -99,6 +99,8 @@ class Session
                     }
 
                     LocalStorage.setData(CURRENT_MODULE_STORAGE_ID, moduleName);
+
+                    this._moduleStarted = true;
                 }
                 catch (e)
                 {
@@ -118,7 +120,7 @@ class Session
 
     updateSession(app)
     {
-        if (this._module)
+        if (this._module && this._moduleStarted)
         {
             this._module.update(app);
         }
@@ -128,7 +130,7 @@ class Session
     {
         if (this._module === null) return;
 
-        Logger.log(LOGGER_TAG, 'Stopping session...');
+        Logger.out(LOGGER_TAG, 'Stopping session...');
 
         for (const listener of this._listeners)
         {
@@ -136,6 +138,7 @@ class Session
         }
 
         this._module.destroy(this._app);
+        this._moduleStarted = false;
         this._moduleClass = null;
         this._module = null;
         this._sessionID = null;
