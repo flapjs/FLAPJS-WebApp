@@ -1,7 +1,7 @@
 import GraphElementInputHandler from './GraphElementInputHandler.js';
 
-const SNAP_TO_GRID = true;
-const SNAP_SIZE = 48;
+// const SNAP_TO_GRID = true;
+// const SNAP_SIZE = 48;
 
 class GraphNodeInputHandler extends GraphElementInputHandler
 {
@@ -13,7 +13,6 @@ class GraphNodeInputHandler extends GraphElementInputHandler
     /** @override */
     onAction(inputController, graphController, pointer, target)
     {
-        const picker = inputController.getPicker();
         const selectionBox = inputController.getSelectionBox();
 
         //Click to delete node
@@ -79,7 +78,6 @@ class GraphNodeInputHandler extends GraphElementInputHandler
     /** @override */
     onDragMove(inputController, graphController, pointer, target)
     {
-        const picker = inputController.getPicker();
         const selectionBox = inputController.getSelectionBox();
         const graph = graphController.getGraph();
         let x = pointer.x;
@@ -106,7 +104,6 @@ class GraphNodeInputHandler extends GraphElementInputHandler
     /** @override */
     onDragStop(inputController, graphController, pointer, target)
     {
-        const picker = inputController.getPicker();
         const selectionBox = inputController.getSelectionBox();
         const graph = graphController.getGraph();
         const x = pointer.x;
@@ -146,8 +143,6 @@ class GraphNodeInputHandler extends GraphElementInputHandler
             }
             return true;
         }
-
-        return false;
     }
 }
 

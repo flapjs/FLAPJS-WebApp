@@ -2,7 +2,7 @@ import AbstractGraphExporter from './AbstractGraphExporter.js';
 
 import PNGIcon from 'deprecated/icons/flat/PNGIcon.js';
 import JPGIcon from 'deprecated/icons/flat/JPGIcon.js';
-import XMLIcon from 'deprecated/icons/flat/XMLIcon.js';
+// import XMLIcon from 'deprecated/icons/flat/XMLIcon.js';
 import SVGIcon from 'deprecated/icons/flat/SVGIcon.js';
 import { FILE_TYPE_PNG, FILE_TYPE_JPG, FILE_TYPE_SVG, downloadImageFromSVG } from 'util/Downloader.js';
 
@@ -11,7 +11,7 @@ const EXPORT_PADDING_Y = 0;
 
 class GraphImageExporter extends AbstractGraphExporter
 {
-    constructor(imageType=FILE_TYPE_PNG)
+    constructor(imageType = FILE_TYPE_PNG)
     {
         super();
         this._imageType = imageType;
@@ -42,26 +42,26 @@ class GraphImageExporter extends AbstractGraphExporter
 
         /*
 
-    const nodeColor = styleOpts.getOptionByProp("--color-graph-node").getStyle();
-    const textColor = styleOpts.getOptionByProp("--color-graph-text").getStyle();
-    console.log(nodeColor);
-    const styleString = "* {"
-      + "--color-graph-node: blue;"
-      + "--color-graph-text: " + textColor + ";"
-      + "}";
+        const nodeColor = styleOpts.getOptionByProp("--color-graph-node").getStyle();
+        const textColor = styleOpts.getOptionByProp("--color-graph-text").getStyle();
+        console.log(nodeColor);
+        const styleString = "* {"
+        + "--color-graph-node: blue;"
+        + "--color-graph-text: " + textColor + ";"
+        + "}";
 
-    */
+        */
 
         /*
-    //TODO: Link the font family to svg
-    const link = document.createElement("link");
-    link.setAttribute("rel", "stylesheet");
-    clone.appendChild(link);
-    */
+        //TODO: Link the font family to svg
+        const link = document.createElement("link");
+        link.setAttribute("rel", "stylesheet");
+        clone.appendChild(link);
+        */
 
         //Remove unwanted ui elements from image
         const uiElements = clone.getElementsByClassName('graph-ui');
-        while(uiElements.length > 0)
+        while (uiElements.length > 0)
         {
             const e = uiElements[0];
             e.remove();//This will propagate changes to uiElements, so be careful
@@ -97,24 +97,24 @@ class GraphImageExporter extends AbstractGraphExporter
     /** @override */
     getTitle()
     {
-        switch(this._imageType)
+        switch (this._imageType)
         {
-        case FILE_TYPE_PNG: return I18N.toString('file.export.png.hint');
-        case FILE_TYPE_JPG: return I18N.toString('file.export.jpg.hint');
-        case FILE_TYPE_SVG: return I18N.toString('file.export.svg.hint');
-        default: return super.getTitle();
+            case FILE_TYPE_PNG: return I18N.toString('file.export.png.hint');
+            case FILE_TYPE_JPG: return I18N.toString('file.export.jpg.hint');
+            case FILE_TYPE_SVG: return I18N.toString('file.export.svg.hint');
+            default: return super.getTitle();
         }
     }
 
     /** @override */
     getLabel()
     {
-        switch(this._imageType)
+        switch (this._imageType)
         {
-        case FILE_TYPE_PNG: return I18N.toString('file.export.png');
-        case FILE_TYPE_JPG: return I18N.toString('file.export.jpg');
-        case FILE_TYPE_SVG: return I18N.toString('file.export.svg');
-        default: return super.getLabel();
+            case FILE_TYPE_PNG: return I18N.toString('file.export.png');
+            case FILE_TYPE_JPG: return I18N.toString('file.export.jpg');
+            case FILE_TYPE_SVG: return I18N.toString('file.export.svg');
+            default: return super.getLabel();
         }
     }
 
@@ -127,12 +127,12 @@ class GraphImageExporter extends AbstractGraphExporter
     /** @override */
     getIconClass()
     {
-        switch(this._imageType)
+        switch (this._imageType)
         {
-        case FILE_TYPE_PNG: return PNGIcon;
-        case FILE_TYPE_JPG: return JPGIcon;
-        case FILE_TYPE_SVG: return SVGIcon;
-        default: return null;
+            case FILE_TYPE_PNG: return PNGIcon;
+            case FILE_TYPE_JPG: return JPGIcon;
+            case FILE_TYPE_SVG: return SVGIcon;
+            default: return null;
         }
     }
 }

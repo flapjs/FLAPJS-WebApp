@@ -19,7 +19,7 @@ class PDAEdgeRenderer extends React.Component
         const start = edge.getStartPoint();
         const end = edge.getEndPoint();
         const center = edge.getCenterPoint();
-        const label = edge.getEdgeLabel();
+        // const label = edge.getEdgeLabel();
         const labels = edge.getEdgeLinesFromLabel();
         const edgeDir = edge.getEdgeDirection();
 

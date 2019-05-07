@@ -1,5 +1,4 @@
 import DFA from 'modules/fsa/machine/DFA.js';
-import { EMPTY } from 'modules/fsa/machine/Symbols.js';
 
 export function convertToDFA(nfa, dst=null)
 {
@@ -9,25 +8,23 @@ export function convertToDFA(nfa, dst=null)
 
     const result = dst || new DFA();
 
-    const alphabet = nfa.getAlphabet();
     const startState = nfa.getStartState();
 
     //Make new DFA start state
     let nextStates = nfa.doClosureTransition(startState);
-    const newStartState = newDFAStateFromNFA(result, nfa, nextStates);
+    newDFAStateFromNFA(result, nfa, nextStates);
 
     //For every state from the NFA's powerset, add it to DFA with correct transitions
     const powerSetStates = nfa.getPowerSet();
     for(const powerSetState of powerSetStates) 
     {
-        console.log('Adding to DFA: ' + getStateFromSet(powerSetState));
+        // console.log('Adding to DFA: ' + getStateFromSet(powerSetState));
         if(powerSetState.length != 0)
             expandPowersetStateToDFA(powerSetState, nfa, result);
     }
 
     //Create trap state
     const trapState = result.newState('{}');
-    let flag = false;
 
     //Check for the new alphabet...
     const newAlphabet = result.getAlphabet();
@@ -40,8 +37,6 @@ export function convertToDFA(nfa, dst=null)
             {
                 //Create it
                 result.newTransition(state, trapState, symbol);
-
-                if (state !== trapState) flag = true;
             }
         }
     }
@@ -98,6 +93,7 @@ function expandPowersetStateToDFA(powerSetState, nfa, dfa)
     return result;
 }
 
+/*
 function expandNFAStateToDFA(state, nfa, dfa)
 {
     const result = [];
@@ -138,6 +134,7 @@ function expandNFAStateToDFA(state, nfa, dfa)
 
     return result;
 }
+*/
 
 function newDFAStateFromNFA(dfa, nfa, nfaStates)
 {
@@ -162,7 +159,9 @@ function getStateFromSet(nfaStates)
     return '{' + nfaStates.join(',') + '}';
 }
 
+/*
 function getSetFromState(dfaState)
 {
     return dfaState.substring(1, dfaState.length - 1).split(',');
 }
+*/

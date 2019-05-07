@@ -1,5 +1,4 @@
-import RE,
-{
+import {
     EMPTY,
     CONCAT,
     UNION,
@@ -7,8 +6,7 @@ import RE,
     SIGMA,
     EMPTY_SET,
     PLUS
-}
-    from './RE.js';
+} from './RE.js';
 
 /**
 * An Abstract Syntax Tree is used for parsing languages, in this case we use them

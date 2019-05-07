@@ -3,7 +3,6 @@ import Style from './AnalysisPanel.css';
 
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';
-import PanelCheckbox from 'experimental/panels/PanelCheckbox.js';
 
 class AnalysisPanel extends React.Component
 {
@@ -23,7 +22,7 @@ class AnalysisPanel extends React.Component
     /** @override */
     render()
     {
-        const session = this.props.session;
+        // const session = this.props.session;
 
         return (
             <PanelContainer id={this.props.id}

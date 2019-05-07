@@ -1,6 +1,3 @@
-import { EMPTY } from 'modules/fsa/machine/Symbols.js';
-import NFA from 'modules/fsa/machine/NFA.js';
-
 //This ASSUMES that the passed-in machine is an NFA! (and not a DFA)
 export function solveNFA(nfa, input)
 {

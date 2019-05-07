@@ -2,3 +2,4 @@ test/
 debug/
 **/deprecated/
 *.test.js
+src/app/modules/fsa

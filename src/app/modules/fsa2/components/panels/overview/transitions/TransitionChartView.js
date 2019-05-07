@@ -101,7 +101,7 @@ class TransitionChartView extends React.Component
         }
 
         const result = this._cachedMachineComponents = [];
-        const deterministic = machine.isDeterministic();
+        // const deterministic = machine.isDeterministic();
 
         for(const state of machine.getStates())
         {

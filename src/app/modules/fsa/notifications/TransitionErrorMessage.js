@@ -29,7 +29,7 @@ class TransitionErrorMessage extends React.Component
     onClick(e)
     {
         const graphController = this.props.graphController;
-        const machineController = this.props.machineController;
+        // const machineController = this.props.machineController;
         const buttonValue = e.target.value;
         const message = this.props.message;
         switch(buttonValue)

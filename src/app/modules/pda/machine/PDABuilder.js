@@ -1,7 +1,7 @@
 import AbstractMachineBuilder from 'modules/abstract/AbstractMachineBuilder.js';
 import PDA, { EMPTY_SYMBOL, State } from './PDA.js';
 import PDANode from 'modules/pda/graph/PDANode.js';
-import PDAEdge, { EMPTY_CHAR } from 'modules/pda/graph/PDAEdge.js';
+import { EMPTY_CHAR } from 'modules/pda/graph/PDAEdge.js';
 
 export const ERROR_UNREACHABLE_STATE = 'unreachable_state';
 export const ERROR_DUPLICATE_STATE = 'duplicate_state';
@@ -73,9 +73,9 @@ class PDABuilder extends AbstractMachineBuilder
 
         const nodeLabels = new Map();
         const nodeOutgoings = new Map();
-        const edgeSymbols = new Set();
+        // const edgeSymbols = new Set();
         const edgePlaceholders = [];
-        const edgeEmpties = [];
+        // const edgeEmpties = [];
 
         const graphNodes = graph.getNodes();
         const graphEdges = graph.getEdges();
@@ -202,7 +202,7 @@ class PDABuilder extends AbstractMachineBuilder
 
         while (queue.length > 0)
         {
-            const nextNode = queue.pop();
+            // const nextNode = queue.pop();
 
         }
 

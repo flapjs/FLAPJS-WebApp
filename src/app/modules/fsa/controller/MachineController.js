@@ -61,15 +61,15 @@ class MachineController extends AbstractMachineController
 
     getMachineType()
     {
-    //return this._machineBuilder.getMachine().isDeterministic() ? "DFA" : "NFA";
-    //HACK: this is only to support the old FSABuilder (remove this once finished)
+        //return this._machineBuilder.getMachine().isDeterministic() ? "DFA" : "NFA";
+        //HACK: this is only to support the old FSABuilder (remove this once finished)
         return this._machineBuilder.isDeterministic() ? 'DFA' : 'NFA';
     }
 
     setMachineType(machineType)
     {
-    //this._machineBuilder.getMachine().setDeterministic(machineType === 'DFA');
-    //HACK: this is only to support the old FSABuilder (remove this once finished)
+        //this._machineBuilder.getMachine().setDeterministic(machineType === 'DFA');
+        //HACK: this is only to support the old FSABuilder (remove this once finished)
         this._machineBuilder.setDeterministic(machineType === 'DFA');
     }
 
@@ -126,7 +126,7 @@ class MachineController extends AbstractMachineController
 
     getFirstGraphNodeByLabel(graph, label)
     {
-        for(const node of graph.getNodes())
+        for (const node of graph.getNodes())
         {
             if (node.getNodeLabel() == label)
             {
@@ -144,7 +144,7 @@ class MachineController extends AbstractMachineController
 
         //Add all states
         let node;
-        for(const state of machine.getStates())
+        for (const state of machine.getStates())
         {
             node = graph.createNode(0, 0);
             node.setNodeLabel(state);
@@ -155,8 +155,8 @@ class MachineController extends AbstractMachineController
         }
 
         //Add all transitions
-        let edge, from, to, read, labels, flag;
-        for(let transition of machine.getTransitions())
+        let edge, from, to, read;
+        for (let transition of machine.getTransitions())
         {
             from = this.getFirstGraphNodeByLabel(graph, transition[0]);
             read = transition[1];
@@ -215,10 +215,10 @@ class MachineController extends AbstractMachineController
         let nextNodes = [];
         nextNodes.push(startNode);
 
-        while(nextNodes.length > 0)
+        while (nextNodes.length > 0)
         {
             const node = nextNodes.pop();
-            for(const edge of edges)
+            for (const edge of edges)
             {
                 if (edge.getEdgeFrom() === node)
                 {
@@ -285,7 +285,7 @@ class MachineController extends AbstractMachineController
         this.emit('userPreDeleteSymbol', this.getMachineBuilder(), symbol);
 
         const graph = this.graphController.getGraph();
-        for(let i = graph.getEdges().length - 1; i >= 0; --i)
+        for (let i = graph.getEdges().length - 1; i >= 0; --i)
         {
             edge = graph.getEdges()[i];
             index = edge.getEdgeLabel().indexOf(symbol);
@@ -324,10 +324,10 @@ class MachineController extends AbstractMachineController
 
         const graph = this.graphController.getGraph();
         const length = graph.getEdges().length;
-        for(let i = 0; i < length; ++i)
+        for (let i = 0; i < length; ++i)
         {
             edge = graph.getEdges()[i];
-            let result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
+            result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
             if (result != edge.getEdgeLabel())
             {
                 targets.push(edge);
@@ -346,8 +346,8 @@ class MachineController extends AbstractMachineController
 
     getCustomSymbols()
     {
-    //return Array.from(this._machineBuilder.getMachine().getCustomSymbols());
-    //HACK: this is only to support the old FSABuilder (remove this once finished)
+        //return Array.from(this._machineBuilder.getMachine().getCustomSymbols());
+        //HACK: this is only to support the old FSABuilder (remove this once finished)
         return this.getMachineBuilder()._symbols;
     }
 
@@ -358,15 +358,15 @@ class MachineController extends AbstractMachineController
 
     addCustomSymbol(symbol)
     {
-    //this._machineBuilder.getMachine().setCustomSymbol(symbol);
-    //HACK: this is only to support the old FSABuilder (remove this once finished)
+        //this._machineBuilder.getMachine().setCustomSymbol(symbol);
+        //HACK: this is only to support the old FSABuilder (remove this once finished)
         this._machineBuilder.addCustomSymbol(symbol);
     }
 
     clearCustomSymbols()
     {
-    //this._machineBuilder.getMachine().clearCustomSymbols();
-    //HACK: this is only to support the old FSABuilder (remove this once finished)
+        //this._machineBuilder.getMachine().clearCustomSymbols();
+        //HACK: this is only to support the old FSABuilder (remove this once finished)
         this.getMachineBuilder()._symbols.length = 0;
     }
 }

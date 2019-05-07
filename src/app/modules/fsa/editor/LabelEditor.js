@@ -1,7 +1,6 @@
 import React from 'react';
 import './LabelEditor.css';
 
-import Config from 'deprecated/config.js';
 import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
 
 import FormattedInput from 'deprecated/system/formattedinput/FormattedInput.js';
@@ -9,8 +8,6 @@ import FormattedInput from 'deprecated/system/formattedinput/FormattedInput.js';
 //TODO: This is equivalent to 4em for toolbar height
 const LABEL_OFFSET_Y = -64;
 const EDITOR_OFFSET_Y = -36;
-const DELETE_KEY = 8;
-const DELETE_FORWARD_KEY = 46;
 
 const RECOMMENDED_SYMBOLS = ['0', '1'];
 const DEFAULT_SYMBOLS = [EMPTY_CHAR];
@@ -38,9 +35,9 @@ class LabelEditor extends React.Component
         this.onSubmit = this.onSubmit.bind(this);
     }
 
-    openEditor(targetEdge, defaultText=null, replace=true, callback=null)
+    openEditor(targetEdge, defaultText = null, replace = true, callback = null)
     {
-    //If not yet initilized, ignore any editor access
+        //If not yet initilized, ignore any editor access
         if (!this.inputElement || !this.parentElement)
         {
             throw new Error('Trying to open editor that has not yet mounted');
@@ -64,9 +61,9 @@ class LabelEditor extends React.Component
         });
     }
 
-    closeEditor(saveOnExit=false)
+    closeEditor(saveOnExit = false)
     {
-    //If not yet initilized, ignore any editor access
+        //If not yet initilized, ignore any editor access
         if (!this.inputElement || !this.parentElement)
         {
             throw new Error('Trying to open editor that has not yet mounted');
@@ -95,7 +92,7 @@ class LabelEditor extends React.Component
                 }
             }
 
-            this.setState({target: null});
+            this.setState({ target: null });
 
             if (this.state.callback) this.state.callback();
         }
@@ -128,7 +125,7 @@ class LabelEditor extends React.Component
 
     onSubmit(newValue, prevValue)
     {
-    //If the value has changed or the value remained empty...
+        //If the value has changed or the value remained empty...
         if (newValue !== prevValue)
         {
             //this.closeEditor(true);
@@ -150,7 +147,7 @@ class LabelEditor extends React.Component
     {
         const inputController = this.props.inputController;
         const viewport = inputController.getInputAdapter().getViewportAdapter();
-        const graphController = this.props.graphController;//This is used in closeEditor()
+        //const graphController = this.props.graphController;//This is used in closeEditor()
         const machineController = this.props.machineController;//This is also used in callbacks
         const screen = this.props.screen;
 
@@ -180,52 +177,52 @@ class LabelEditor extends React.Component
 
         const usedAlphabet = machineController.getAlphabet();
 
-        return <div className="bubble" id="label-editor" ref={ref=>this.parentElement=ref}
+        return <div className="bubble" id="label-editor" ref={ref => this.parentElement = ref}
             tabIndex={'0'/*This is to allow div's to focus/blur*/}
             style={targetStyle}
             onContextMenu={this.onContextMenu}
-            onFocus={(e)=>
+            onFocus={(e) =>
             {
                 //HACK: delete the timer that will exit labelEditor
                 clearTimeout(this._timer);
             }}
-            onBlur={(e)=>
+            onBlur={(e) =>
             {
                 //HACK: start the timer that will exit labelEditor if not return focus
                 this._timer = setTimeout(() => this.closeEditor(true), 10);
             }}>
-            <FormattedInput className="label-editor-input" ref={ref=>this.inputElement=ref}
+            <FormattedInput className="label-editor-input" ref={ref => this.inputElement = ref}
                 formatter={this.onFormat}
                 onSubmit={this.onSubmit}
-                captureOnExit={'none'}/>
+                captureOnExit={'none'} />
             <div className="label-editor-tray">
                 {
                     usedAlphabet &&
-          <span className="label-editor-tray-used">
-              {
-                  usedAlphabet.map((e, i) => 
-                  {
-                      if (e.length < 1) return null;
-                      return <button key={i} onClick={ev=>this.appendSymbol(e)}>{e}</button>;
-                  })
-              }
-          </span>
+                    <span className="label-editor-tray-used">
+                        {
+                            usedAlphabet.map((e, i) => 
+                            {
+                                if (e.length < 1) return null;
+                                return <button key={i} onClick={ev => this.appendSymbol(e)}>{e}</button>;
+                            })
+                        }
+                    </span>
                 }
                 <span className="label-editor-tray-default">
                     {
                         usedAlphabet &&
-            usedAlphabet.length <= 1 &&
-            RECOMMENDED_SYMBOLS.map((e, i) => 
-            {
-                return <button key={i} onClick={ev=>this.appendSymbol(e)}>
-                    {e}
-                </button>;
-            })
+                        usedAlphabet.length <= 1 &&
+                        RECOMMENDED_SYMBOLS.map((e, i) => 
+                        {
+                            return <button key={i} onClick={ev => this.appendSymbol(e)}>
+                                {e}
+                            </button>;
+                        })
                     }
                     {
                         DEFAULT_SYMBOLS.map((e, i) => 
                         {
-                            return <button key={i} onClick={ev=>this.appendSymbol(e)}>
+                            return <button key={i} onClick={ev => this.appendSymbol(e)}>
                                 {e}
                             </button>;
                         })

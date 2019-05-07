@@ -37,7 +37,7 @@ class FSABuilder extends AbstractMachineBuilder
         if (!this.tester) return;
 
         this._machine.clear();
-        const result = this.toNFA(this._machine);
+        this.toNFA(this._machine);
         for(const s of this._symbols)
         {
             this._machine.newSymbol(s);

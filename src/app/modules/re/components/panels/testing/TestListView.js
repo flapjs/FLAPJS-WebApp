@@ -13,15 +13,14 @@ import DownloadIcon from 'components/iconset/DownloadIcon.js';
 import CrossIcon from 'components/iconset/CrossIcon.js';
 import AddIcon from 'components/iconset/AddIcon.js';
 import RunningManIcon from 'components/iconset/RunningManIcon.js';
-import WalkingManIcon from 'components/iconset/WalkingManIcon.js';
 
-import TestItem, {SUCCESS_MODE, FAILURE_MODE, WORKING_MODE, DEFAULT_MODE} from './TestItem.js';
+import TestItem, {SUCCESS_MODE, FAILURE_MODE, WORKING_MODE} from './TestItem.js';
 
 import {solveFSA} from 'modules/fsa2/machine/FSAUtils.js';
 
 const ACCEPT_FILE_TYPES = ['.txt'];
 const TEST_FILENAME = 'test.txt';
-const TEST_REFRESH_TICKS = 30;
+// const TEST_REFRESH_TICKS = 30;
 
 class TestListView extends React.Component
 {

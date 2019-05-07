@@ -13,8 +13,8 @@ class DFA extends FSA
 
     validate()
     {
-    //TODO: Deprecate this
-        console.error('This is deprecated, please use FSA.isValidDFA()');
+        //TODO: Deprecate this
+        // console.error('This is deprecated, please use FSA.isValidDFA()');
         return this.isValidDFA();
     }
 

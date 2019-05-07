@@ -51,7 +51,7 @@ class TransitionTableView extends React.Component
         {
             if (deterministic) error = true;
             let string = '';
-            for(const other of destinations)
+            for (const other of destinations)
             {
                 if (string.length > 0) string += ',';
                 string += other.getStateLabel();
@@ -64,8 +64,8 @@ class TransitionTableView extends React.Component
         return (
             <td key={state.getStateID() + ':' + symbol}
                 className={Style.table_entry +
-          (error ? ' error ' : '') +
-          (disabled ? ' disabled ' : '')}>
+                    (error ? ' error ' : '') +
+                    (disabled ? ' disabled ' : '')}>
                 {transitionString}
             </td>
         );
@@ -73,29 +73,29 @@ class TransitionTableView extends React.Component
 
     renderTableEntries(machine, rowAxis)
     {
-        const deterministic = machine.isDeterministic();
+        // const deterministic = machine.isDeterministic();
 
         const result = [];
-        for(const state of machine.getStates())
+        for (const state of machine.getStates())
         {
             const rowComponents = [];
-            switch(rowAxis)
+            switch (rowAxis)
             {
             case SYMBOL_AXIS:
-                for(const symbol of machine.getAlphabet())
+                for (const symbol of machine.getAlphabet())
                 {
                     rowComponents.push(this.renderTableEntryForSymbolAxis(machine, state, symbol));
                 }
                 rowComponents.push(this.renderTableEntryForSymbolAxis(machine, state, EMPTY_SYMBOL));
                 break;
             case STATE_AXIS:
-                for(const other of machine.getStates())
+                for (const other of machine.getStates())
                 {
                     const symbols = machine.getTransitionSymbols(state, other);
                     let string = '';
                     if (symbols)
                     {
-                        for(const symbol of symbols)
+                        for (const symbol of symbols)
                         {
                             if (string.length > 0) string += '\n';
                             if (symbol === EMPTY_SYMBOL) string += EMPTY_CHAR;
@@ -131,10 +131,11 @@ class TransitionTableView extends React.Component
     renderTableAxis(machine, rowAxis)
     {
         let result = [];
-        switch(rowAxis)
+        const disabled = machine.isDeterministic();
+        switch (rowAxis)
         {
         case SYMBOL_AXIS:
-            for(const symbol of machine.getAlphabet())
+            for (const symbol of machine.getAlphabet())
             {
                 result.push(
                     <th key={symbol} scope="col" className={Style.table_axis_header + ' col'}>
@@ -142,18 +143,17 @@ class TransitionTableView extends React.Component
                     </th>
                 );
             }
-            const disabled = machine.isDeterministic();
             result.push(
                 <th key={EMPTY_SYMBOL} scope="col"
                     className={Style.table_axis_header +
-              (disabled ? ' disabled ' : '') +
-              ' col'}>
+                            (disabled ? ' disabled ' : '') +
+                            ' col'}>
                     {EMPTY_CHAR}
                 </th>
             );
             return result;
         case STATE_AXIS:
-            for(const state of machine.getStates())
+            for (const state of machine.getStates())
             {
                 result.push(
                     <th key={state.getStateID()} scope="col" className={Style.table_axis_header + ' col'}>
@@ -177,7 +177,7 @@ class TransitionTableView extends React.Component
         return (
             <div id={this.props.id}
                 className={Style.table_container +
-          ' ' + this.props.className}
+                    ' ' + this.props.className}
                 style={this.props.style}>
                 <table>
                     <tbody>

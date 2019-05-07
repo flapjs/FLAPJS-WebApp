@@ -12,7 +12,7 @@ class REGraphExporter extends AbstractGraphExporter
     {
         const machineController = module.getMachineController();
 
-        const metadata = '_metadata' in data ? data['_metadata'] : {};
+        // const metadata = '_metadata' in data ? data['_metadata'] : {};
 
         //HACK: this should be calculated elsewhere
         const machineData = data.machineData;

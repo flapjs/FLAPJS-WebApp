@@ -1,9 +1,6 @@
 import {SUCCESS_LAYOUT_ID, ERROR_LAYOUT_ID} from 'session/manager/notification/NotificationManager.js';
 import {
-    MACHINE_ERROR_NOTIFICATION_TAG,
-    STATE_LAYOUT_ID,
-    TRANSITION_LAYOUT_ID,
-    STATE_UNREACHABLE_LAYOUT_ID
+    MACHINE_ERROR_NOTIFICATION_TAG
 } from './components/notifications/RENotifications.js';
 
 class REErrorChecker

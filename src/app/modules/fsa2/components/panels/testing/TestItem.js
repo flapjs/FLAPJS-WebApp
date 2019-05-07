@@ -7,7 +7,6 @@ import CheckCircleIcon from 'components/iconset/CheckCircleIcon.js';
 import CrossCircleIcon from 'components/iconset/CrossCircleIcon.js';
 import PendingIcon from 'components/iconset/PendingIcon.js';
 import RunningManIcon from 'components/iconset/RunningManIcon.js';
-import WalkingManIcon from 'components/iconset/WalkingManIcon.js';
 
 export const DEFAULT_MODE = 'default';
 export const SUCCESS_MODE = 'success';
@@ -103,7 +102,7 @@ class TestItem extends React.Component
         const showTest = true;
 
         const active = this.props.active;
-        const subtitle = this.props.subtitle;
+        // const subtitle = this.props.subtitle;
         const placeholder = this.props.placeholder;
         const status = this.state.status;
 

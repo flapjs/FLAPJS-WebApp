@@ -1,5 +1,4 @@
 import FSAGraphExporter from 'modules/fsa2/exporter/FSAGraphExporter.js';
-import MachineController from 'modules/fsa2/controller/MachineController.js';
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
@@ -91,7 +90,7 @@ function setGraphToFSA(graph, machine)
     }
 
     //Add all transitions
-    let edge, from, to, read, labels, flag;
+    let edge, from, to, read;
     for(let transition of machine.getTransitions())
     {
         from = stateMap.get(transition.getSourceState());

@@ -1,9 +1,6 @@
 import React from 'react';
 import Style from './AlphabetListView.css';
 
-import IconButton from 'experimental/components/IconButton.js';
-import BoxAddIcon from 'components/iconset/BoxAddIcon.js';
-
 import AlphabetListElement from './AlphabetListElement.js';
 
 class TerminalListView extends React.Component

@@ -1,9 +1,8 @@
 import React from 'react';
-import Style from './OverviewPanel.css';
+// import Style from './OverviewPanel.css';
 
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';
-import PanelDivider from 'experimental/panels/PanelDivider.js';
 
 import AlphabetListView from './alphabet/AlphabetListView.js';
 

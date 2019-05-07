@@ -26,6 +26,7 @@ class HighlightRenderer extends React.Component
         let x = 0;
         let y = 0;
         let r = CURSOR_RADIUS;
+        let point;
         switch(type)
         {
         case 'node':
@@ -34,15 +35,15 @@ class HighlightRenderer extends React.Component
             r = NODE_RADIUS;
             break;
         case 'edge':
-            const center = target.getCenterPoint();
-            x = center.x || 0;
-            y = center.y || 0;
+            point = target.getCenterPoint();
+            x = point.x || 0;
+            y = point.y || 0;
             r = EDGE_RADIUS;
             break;
         case 'endpoint':
-            const endpoint = target.getEndPoint();
-            x = endpoint.x || 0;
-            y = endpoint.y || 0;
+            point = target.getEndPoint();
+            x = point.x || 0;
+            y = point.y || 0;
             r = ENDPOINT_RADIUS;
             break;
         case 'initial':

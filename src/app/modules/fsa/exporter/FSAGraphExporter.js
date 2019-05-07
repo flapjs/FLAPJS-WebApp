@@ -14,7 +14,7 @@ class FSAGraphExporter extends AbstractGraphExporter
         const machineController = module.getMachineController();
         const graph = graphController.getGraph();
 
-        const metadata = '_metadata' in data ? data['_metadata'] : {};
+        // const metadata = '_metadata' in data ? data['_metadata'] : {};
         const newGraph = JSONGraphParser.parse(data.graphData, graph);
 
         //HACK: this should be calculated elsewhere
@@ -27,7 +27,7 @@ class FSAGraphExporter extends AbstractGraphExporter
         if (customSymbols && Array.isArray(customSymbols))
         {
             machineController.clearCustomSymbols();
-            for(const symbol of customSymbols)
+            for (const symbol of customSymbols)
             {
                 machineController.addCustomSymbol(symbol);
             }
@@ -97,11 +97,11 @@ class FSAGraphExporter extends AbstractGraphExporter
             const reader = new FileReader();
             reader.onload = e => 
             {
-                const graphController = module.getGraphController();
+                // const graphController = module.getGraphController();
                 const machineController = module.getMachineController();
                 const data = e.target.result;
                 const name = filename.substring(0, filename.length - this.getFileType().length - 1);
-                const graph = graphController.getGraph();
+                // const graph = graphController.getGraph();
 
                 //TODO: this should not be here, this should exist somewhere in graphController
                 //graphController.emit("userPreImportGraph", graph);

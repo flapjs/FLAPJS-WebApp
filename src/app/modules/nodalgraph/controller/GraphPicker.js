@@ -1,8 +1,3 @@
-const EDGE_RADIUS = 12;
-const EDGE_RADIUS_SQU = EDGE_RADIUS * EDGE_RADIUS;
-const ENDPOINT_RADIUS = 6;
-const ENDPOINT_RADIUS_SQU = ENDPOINT_RADIUS * ENDPOINT_RADIUS;
-
 class GraphPicker
 {
     constructor()
@@ -72,9 +67,10 @@ class GraphPicker
 
     updateTarget(graph, x, y)
     {
-        for(const pickHandler of this._pickHandlers.values())
+        for (const pickHandler of this._pickHandlers.values())
         {
-            if (this.target = pickHandler.getTargetAt(graph, x, y))
+            this.target = pickHandler.getTargetAt(graph, x, y);
+            if (this.target)
             {
                 this.targetType = pickHandler.getTargetType();
                 return;

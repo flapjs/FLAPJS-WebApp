@@ -26,7 +26,7 @@ class GraphEdgeInputHandler extends GraphElementInputHandler
     /** @override */
     onDragStart(inputController, graphController, pointer, target)
     {
-    //Makes sure that placeholders are not quadratics!
+        //Makes sure that placeholders are not quadratics!
         if (target.isPlaceholder())
         {
             return false;
@@ -51,8 +51,6 @@ class GraphEdgeInputHandler extends GraphElementInputHandler
     /** @override */
     onDragStop(inputController, graphController, pointer, target)
     {
-        const graph = graphController.getGraph();
-
         //Delete it if withing trash area...
         if (inputController.isTrashMode())
         {

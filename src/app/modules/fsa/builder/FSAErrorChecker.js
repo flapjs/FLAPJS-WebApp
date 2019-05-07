@@ -6,7 +6,6 @@ import StateUnreachableWarningMessage from 'modules/fsa/notifications/StateUnrea
 import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMessage.js';
 
 import StateMissingTransitionErrorMessage from 'modules/fsa/notifications/StateMissingTransitionErrorMessage.js';
-import StateErrorMessage from 'modules/fsa/notifications/StateErrorMessage.js';
 
 class FSAErrorChecker
 {
@@ -41,7 +40,6 @@ class FSAErrorChecker
         this.clear();
 
         let nodeTransitionMap = new Map();
-        let startNode = graph.getStartNode();
 
         //Get Unreachable nodes...
         const unreachNodes = machineController.getUnreachableNodes();
@@ -67,7 +65,6 @@ class FSAErrorChecker
             else if (deterministic)
             {
                 const from = edge.getEdgeFrom();
-                const to = edge.getEdgeTo();
                 const labels = edge.getEdgeSymbolsFromLabel();
 
                 for(const label of labels)

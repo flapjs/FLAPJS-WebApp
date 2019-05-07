@@ -10,7 +10,7 @@ class PDANodeRenderer extends React.Component
     /** @override */
     render()
     {
-    //TODO: Refer to app.css for comparable colors
+        //TODO: Refer to app.css for comparable colors
         const node = this.props.node;
         const nodeLabel = node.getNodeLabel();
 
@@ -23,19 +23,19 @@ class PDANodeRenderer extends React.Component
                     r={node.getNodeSize()}
 
                     fill="#FEE781"
-                    stroke="#000000"/>
+                    stroke="#000000" />
 
                 {/*Inner circle*/}
                 {node.getNodeAccept() &&
-          <circle className="graph-node-inner"
-              cx={node.x}
-              cy={node.y}
-              r={node.getNodeSize() * 0.8}
-              fill="none"
+                    <circle className="graph-node-inner"
+                        cx={node.x}
+                        cy={node.y}
+                        r={node.getNodeSize() * 0.8}
+                        fill="none"
 
-              stroke="#000000"/>}
+                        stroke="#000000" />}
 
-        //Label
+                {/*Label*/}
                 <text className="graph-node-label"
                     x={node.x} y={node.y + 4}
                     pointerEvents="none"

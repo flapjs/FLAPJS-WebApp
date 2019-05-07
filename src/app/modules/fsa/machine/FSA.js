@@ -1,3 +1,6 @@
+import DFA from './DFA.js';
+import NFA from './NFA.js';
+
 const SRC = 0;
 const SYMBOL = 1;
 const DST = 2;

@@ -1,11 +1,14 @@
-import FSA, {EMPTY_SYMBOL} from 'modules/fsa2/machine/FSA.js';
-import {EMPTY,
+import FSA, { EMPTY_SYMBOL } from 'modules/fsa2/machine/FSA.js';
+import
+{
+    EMPTY,
     CONCAT,
     UNION,
     KLEENE,
     SIGMA,
     EMPTY_SET,
-    PLUS} from '../RE.js';
+    PLUS
+} from '../RE.js';
 
 import REParser from '../REParser.js';
 
@@ -14,7 +17,7 @@ import REParser from '../REParser.js';
 export function convertToNFA(re)
 {
     const prevExpression = re.getExpression();
-    re.setExpression(prevExpression.replace(/\s/g,''));
+    re.setExpression(prevExpression.replace(/\s/g, ''));
     re.insertConcatSymbols();
     const parser = new REParser();
     parser.parseRegex(re);         //Create parse tree and add terminals to re's terminal set
@@ -42,15 +45,15 @@ function ASTtoNFA(astNode, re)
     switch (astNode.getSymbol())
     {
     case KLEENE:
-        return kleene(ASTtoNFA(astNode._children[0] , re));
+        return kleene(ASTtoNFA(astNode._children[0], re));
     case PLUS:
         return plus(ASTtoNFA(astNode._children[0], re));
     case CONCAT:
-        return concat(ASTtoNFA(astNode._children[0] , re), ASTtoNFA(astNode._children[1] , re));
+        return concat(ASTtoNFA(astNode._children[0], re), ASTtoNFA(astNode._children[1], re));
     case UNION:
-        return or(ASTtoNFA(astNode._children[0] , re), ASTtoNFA(astNode._children[1] , re));
+        return or(ASTtoNFA(astNode._children[0], re), ASTtoNFA(astNode._children[1], re));
     case '(':
-        return ASTtoNFA(astNode._children[0] , re);
+        return ASTtoNFA(astNode._children[0], re);
     default:
         throw new Error('You\'ve got a weird node in the AST tree with symbol ' + astNode.getSymbol());
     }
@@ -77,12 +80,12 @@ function sigma(re)
         return emptySet();
     }
     // Build NFAs for each terminal in the terminal set
-    for(const terminal of terminals) 
+    for (const terminal of terminals) 
     {
         charNFAs.push(character(terminal));
     }
     // Unionize them into one big union NFA to return
-    while( charNFAs.length > 1 )
+    while (charNFAs.length > 1)
     {
         charNFAs[0] = or(charNFAs[0], charNFAs[1]);     // Accumulate in the 0th index
         charNFAs.splice(1, 1);                          // Shift down from 1st index
@@ -115,19 +118,19 @@ function concat(a, b)
 
     let aStateMap = new Map();
     let firstAState = null;
-    let lastAState = null;
-    for(const state of a.getStates())
+    // let lastAState = null;
+    for (const state of a.getStates())
     {
         let newState = result.createState('q' + (stateIndex++));
         aStateMap.set(state, newState);
         if (firstAState === null) firstAState = newState;
-        lastAState = newState;
+        // lastAState = newState;
     }
 
     let bStateMap = new Map();
     let firstBState = null;
     let lastBState = null;
-    for(const state of b.getStates())
+    for (const state of b.getStates())
     {
         let newState = result.createState('q' + (stateIndex++));
         bStateMap.set(state, newState);
@@ -145,13 +148,13 @@ function concat(a, b)
         const newFromState = aStateMap.get(transition.getSourceState());
         const newToState = aStateMap.get(transition.getDestinationState());
         if (newFromState === null || newToState === null) throw new Error('Unable to find state endpoints for transition');
-        for(const symbol of transition.getSymbols())
+        for (const symbol of transition.getSymbols())
         {
-  		result.addTransition(newFromState, newToState, symbol);
+            result.addTransition(newFromState, newToState, symbol);
         }
     }
 
-    for(const finalState of a.getFinalStates())
+    for (const finalState of a.getFinalStates())
     {
         const newFinalState = aStateMap.get(finalState);
         result.addTransition(newFinalState, firstBState, EMPTY_SYMBOL);
@@ -163,14 +166,14 @@ function concat(a, b)
         const newFromState = bStateMap.get(transition.getSourceState());
         const newToState = bStateMap.get(transition.getDestinationState());
         if (newFromState === null || newToState === null) throw new Error('Unable to find state endpoints for transition');
-        for(const symbol of transition.getSymbols())
+        for (const symbol of transition.getSymbols())
         {
-  		result.addTransition(newFromState, newToState, symbol);
+            result.addTransition(newFromState, newToState, symbol);
         }
     }
 
     result.setStartState(firstAState);
-    if(lastBState != null) result.setFinalState(lastBState);
+    if (lastBState != null) result.setFinalState(lastBState);
     return result;
 }
 
@@ -184,7 +187,7 @@ function kleene(a)
     const firstState = result.createState('q' + (stateIndex++));
     let firstAState = null;
     let lastAState = null;
-    for(const state of a.getStates())
+    for (const state of a.getStates())
     {
         let newState = result.createState('q' + (stateIndex++));
         stateMap.set(state, newState);
@@ -202,9 +205,9 @@ function kleene(a)
         const newFromState = stateMap.get(transition.getSourceState());
         const newToState = stateMap.get(transition.getDestinationState());
         if (newFromState === null || newToState === null) throw new Error('Unable to find state endpoints for transition');
-        for(const symbol of transition.getSymbols())
+        for (const symbol of transition.getSymbols())
         {
-  		result.addTransition(newFromState, newToState, symbol);
+            result.addTransition(newFromState, newToState, symbol);
         }
     }
 
@@ -232,7 +235,7 @@ function or(a, b)
     let aStateMap = new Map();
     let firstAState = null;
     let lastAState = null;
-    for(const state of a.getStates())
+    for (const state of a.getStates())
     {
         let newState = result.createState('q' + (stateIndex++));
         aStateMap.set(state, newState);
@@ -247,7 +250,7 @@ function or(a, b)
     let bStateMap = new Map();
     let firstBState = null;
     let lastBState = null;
-    for(const state of b.getStates())
+    for (const state of b.getStates())
     {
         let newState = result.createState('q' + (stateIndex++));
         bStateMap.set(state, newState);
@@ -269,14 +272,14 @@ function or(a, b)
         const newFromState = aStateMap.get(transition.getSourceState());
         const newToState = aStateMap.get(transition.getDestinationState());
         if (newFromState === null || newToState === null) throw new Error('Unable to find state endpoints for transition');
-        for(const symbol of transition.getSymbols())
+        for (const symbol of transition.getSymbols())
         {
-  		result.addTransition(newFromState, newToState, symbol);
+            result.addTransition(newFromState, newToState, symbol);
         }
     }
-    if(lastAState != null) 
+    if (lastAState != null) 
     {
-	       result.addTransition(lastAState, lastState, EMPTY_SYMBOL);
+        result.addTransition(lastAState, lastState, EMPTY_SYMBOL);
     }
 
     //B machine
@@ -287,14 +290,14 @@ function or(a, b)
         const newFromState = bStateMap.get(transition.getSourceState());
         const newToState = bStateMap.get(transition.getDestinationState());
         if (newFromState === null || newToState === null) throw new Error('Unable to find state endpoints for transition');
-        for(const symbol of transition.getSymbols())
+        for (const symbol of transition.getSymbols())
         {
-  		result.addTransition(newFromState, newToState, symbol);
+            result.addTransition(newFromState, newToState, symbol);
         }
     }
-    if(lastBState != null) 
+    if (lastBState != null) 
     {
-	       result.addTransition(lastBState, lastState, EMPTY_SYMBOL);
+        result.addTransition(lastBState, lastState, EMPTY_SYMBOL);
     }
 
     result.setStartState(firstState);

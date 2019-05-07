@@ -1,5 +1,4 @@
-import GraphElement from 'graph/elements/GraphElement.js';
-import { guid, stringHash } from 'util/MathHelper.js';
+import { stringHash } from 'util/MathHelper.js';
 
 export const EMPTY = '\u03B5';
 export const CONCAT = '\u25E6';
@@ -143,6 +142,7 @@ class RE
                 // UNION and CONCAT can't be the last character
                 if (i == expression.length - 1)
                     throw new Error('Operators are poorly formatted.');
+            // eslint-disable-next-line no-fallthrough
             case ')':
             case KLEENE:
             case PLUS:

@@ -121,7 +121,7 @@ export const JSON = {
 };
 
 export const XML = {
-    parse(data, dst=NULL)
+    parse(data, dst = null)
     {
         if (!dst) dst = new FSAGraph();
         else dst.clear();
@@ -331,7 +331,7 @@ export const XML = {
         const graphNodes = graph.getNodes() || [];
         const nodeCount = graphNodes.length || 0;
         const graphEdges = graph.getEdges() || [];
-        const edgeCount = graphEdges.length || 0;
+        // const edgeCount = graphEdges.length || 0;
         const graphInitial = graph.getStartNode();
 
         const header = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' +

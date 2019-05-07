@@ -7,7 +7,7 @@ import {convertToNFA} from './machine/REUtils.js';
 import ExpressionChangeHandler from './ExpressionChangeHandler.js';
 
 const EXPRESSION_REFRESH_RATE = 30;
-const ERROR_MESSAGE_TAG = 're_parse_error';
+// const ERROR_MESSAGE_TAG = 're_parse_error';
 
 class MachineController
 {

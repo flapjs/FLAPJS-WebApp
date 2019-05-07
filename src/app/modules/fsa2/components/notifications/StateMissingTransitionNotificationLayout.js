@@ -29,7 +29,7 @@ class StateMissingTransitionNotificationLayout extends React.Component
 
     onClick(e)
     {
-        const notification = this.props.notification;
+        // const notification = this.props.notification;
         const message = this.props.message;
         const graphController = this.props.graphController;
 

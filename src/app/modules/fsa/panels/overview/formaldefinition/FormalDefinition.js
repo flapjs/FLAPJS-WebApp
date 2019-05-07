@@ -2,7 +2,7 @@ import React from 'react';
 import './FormalDefinition.css';
 import { EMPTY } from 'modules/fsa/machine/Symbols.js';
 
-import { EMPTY_SET, ARROW } from 'modules/fsa/machine/Symbols.js';
+import { EMPTY_SET } from 'modules/fsa/machine/Symbols.js';
 
 const EQUAL = '=';
 const DELTA = '\u03b4';

@@ -263,7 +263,6 @@ class GraphController extends AbstractGraphController
 
     setAutoRenameNodes(enable)
     {
-        const prev = this.shouldAutoLabel;
         this.shouldAutoLabel = enable;
     }
 
@@ -274,9 +273,6 @@ class GraphController extends AbstractGraphController
 
     renameNode(node, name)
     {
-        const prev = node.getNodeLabel();
-        const isPrevCustom = node.getNodeCustom();
-
         node.setNodeLabel(name);
         node.setNodeCustom(true);
 
@@ -519,6 +515,7 @@ class GraphController extends AbstractGraphController
 //Mixin Eventable
 Eventable.mixin(GraphController);
 
+/*
 function moveNodesOutOfEdges(target, graph)
 {
     const x1 = target.getSourceNode().x;
@@ -608,5 +605,6 @@ function moveNodesOutOfEdges(target, graph)
         }
     }
 }
+*/
 
 export default GraphController;

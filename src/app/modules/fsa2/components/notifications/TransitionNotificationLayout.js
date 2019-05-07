@@ -67,7 +67,7 @@ class TransitionNotificationLayout extends React.Component
     /** @override */
     render()
     {
-        const message = this.props.message;
+        // const message = this.props.message;
 
         return (
             <DefaultNotificationLayout id={this.props.id}

@@ -32,6 +32,7 @@ export function importFSA(filepath, callback=null)
 function parseJSONToFSA(data)
 {
     //TODO: convert json to DFA or NFA;
+    /*
     if (data.type == 'DFA')
     {
 
@@ -48,6 +49,7 @@ function parseJSONToFSA(data)
     {
         throw new Error('Found unknown machine type \'' + data.type + '\'.');
     }
+    */
 }
 
 //Change to return async promise

@@ -2,7 +2,6 @@ import React from 'react';
 import './TransitionTable.css';
 
 import InfoBlock from '../infoblock/InfoBlock.js';
-import NFA from 'modules/fsa/machine/NFA.js';
 import { EMPTY } from 'modules/fsa/machine/Symbols.js';
 
 const SRC = 0;
@@ -29,7 +28,7 @@ class TransitionTable extends React.Component
         const machine = machineController.getMachineBuilder().getMachine();
         const states = machineController.getStates();
         const alphabet = machineController.getAlphabet();
-        const transitions = machineController.getTransitions();
+        // const transitions = machineController.getTransitions();
         const rowAxisType = this.state.rowAxis;
         const isNFAMachine = machineController.getMachineType() == 'NFA';
         const hasEmptyColumn = rowAxisType === SYMBOL_AXIS && isNFAMachine;
