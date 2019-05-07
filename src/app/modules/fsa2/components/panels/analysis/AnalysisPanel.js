@@ -6,6 +6,7 @@ import { getUnreachableNodes } from 'modules/fsa2/graph/FSAGraphUtil.js';
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';
 import PanelCheckbox from 'experimental/panels/PanelCheckbox.js';
+import FSACompTreeView from './FSACompTreeView.js';
 
 import { MACHINE_CONVERSION_LAYOUT_ID, MACHINE_CONVERSION_NOTIFICATION_TAG }
     from 'modules/fsa2/components/notifications/FSANotifications.js';
@@ -115,6 +116,9 @@ class AnalysisPanel extends React.Component
                         <button className={Style.analysis_button} onClick={this.onInvertDFA}>
                             {'Flip all accept states'}
                         </button>}
+                </PanelSection>
+                <PanelSection title={"FA Computation Tree"}>
+                    <FSACompTreeView graphController={graphController} machineController={machineController}/>
                 </PanelSection>
             </PanelContainer>
         );
