@@ -1,4 +1,3 @@
-import Broadcast from 'util/broadcast/Broadcast.js';
 import BroadcastHandler from 'session/manager/broadcast/BroadcastHandler.js';
 
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';

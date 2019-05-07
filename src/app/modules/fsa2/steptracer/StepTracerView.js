@@ -39,9 +39,6 @@ class StepTracerView extends React.Component
 
         const viewport = this.props.viewport;
         const stepTracer = currentModule._stepTracer;
-        const inputController = currentModule.getInputController();
-        const graphController = currentModule.getGraphController();
-        const machineController = currentModule.getMachineController();
 
         return (
             <div id={this.props.id}

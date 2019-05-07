@@ -36,7 +36,7 @@ class JFLAPGraphParser extends Parser
             throw new Error('Unable to parse data of non-object type');
         }
 
-        const version = data['_version'] || '0.0.0';
+        // const version = data['_version'] || '0.0.0';
         const nodeElements = data.getElementsByTagName('state') || [];
         const nodeCount = nodeElements.length;
         const edgeElements = data.getElementsByTagName('transition') || [];
@@ -264,7 +264,7 @@ class JFLAPGraphParser extends Parser
         const graphNodes = target.getNodes() || [];
         const nodeCount = graphNodes.length || 0;
         const graphEdges = target.getEdges() || [];
-        const edgeCount = graphEdges.length || 0;
+        // const edgeCount = graphEdges.length || 0;
         const graphInitial = target.getStartNode();
 
         const type = dst.createElement('type');

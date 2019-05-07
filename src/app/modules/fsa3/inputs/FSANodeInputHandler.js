@@ -17,6 +17,7 @@ class FSANodeInputHandler extends AbstractInputHandler
     onInputEvent(pointer)
     {
         const inputController = this._inputController;
+        const graphController = this._graphController;
         const currentTargetType = inputController.getCurrentTargetType();
         if (currentTargetType === EVENT_SOURCE_NODE)
         {

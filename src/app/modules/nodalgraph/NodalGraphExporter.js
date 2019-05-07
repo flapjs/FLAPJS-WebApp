@@ -27,7 +27,7 @@ class NodalGraphExporter extends AbstractGraphExporter
 
     toJSON(graphData, module)
     {
-        const graphController = module.getGraphController();
+        // const graphController = module.getGraphController();
 
         const dst = {};
         dst['_metadata'] = {
