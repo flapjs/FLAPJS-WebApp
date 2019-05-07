@@ -4,6 +4,7 @@ Modules['empty'] = {
   name: "Empty",
   version: "1.0.0",
   experimental: true,
+  disabled: true,
   fetch: function (callback) { import(/* webpackChunkName: "module_empty" */ 'modules/empty/EmptyModule.js').then(({ default: _ }) => callback(_)); }
 };
 
@@ -11,6 +12,7 @@ Modules['nodalgraph'] = {
   name: 'Nodal Graph',
   version: '1.0.0',
   experimental: true,
+  disabled: true,
   fetch: function (callback) { import(/* webpackChunkName: "module_nodalgraph" */ 'modules/nodalgraph/NodalGraphModule.js').then(({ default: _ }) => callback(_)); }
 };
 
@@ -18,6 +20,7 @@ Modules['nodegraph'] = {
   name: 'Node Graph',
   version: '1.0.0',
   experimental: true,
+  disabled: true,
   fetch: function (callback) { import(/* webpackChunkName: "module_nodegraph" */ 'modules/nodegraph/NodeGraphModule.js').then(({ default: _ }) => callback(_)); }
 };
 
