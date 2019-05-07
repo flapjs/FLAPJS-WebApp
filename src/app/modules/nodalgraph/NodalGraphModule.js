@@ -63,7 +63,7 @@ class NodalGraphModule
             ));
     }
 
-    //Override
+    /** @override */
     initialize(app)
     {
         this._inputManager.onSessionStart(app.getSession());
@@ -103,7 +103,7 @@ class NodalGraphModule
             });
     }
 
-    //Override
+    /** @override */
     update(app)
     {
         this._inputManager.update(this);

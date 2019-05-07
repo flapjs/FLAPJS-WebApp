@@ -29,7 +29,7 @@ class ZoomWidget extends React.Component
         viewportAdapter.addScale(viewScale);
     }
 
-    //Override
+    /** @override */
     render()
     {
         const viewportAdapter = this.props.viewportAdapter;

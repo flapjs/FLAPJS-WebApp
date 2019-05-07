@@ -77,7 +77,7 @@ class PDAModule
         this._tester = new StringTester();
     }
 
-    //Override
+    /** @override */
     initialize(app)
     {
         this._inputManager.onSessionStart(app.getSession());

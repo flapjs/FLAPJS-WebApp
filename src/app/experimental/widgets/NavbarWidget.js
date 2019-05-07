@@ -11,7 +11,7 @@ class NavbarWidget extends React.Component
         super(props);
     }
 
-    //Override
+    /** @override */
     render()
     {
         const viewportAdapter = this.props.viewportAdapter;

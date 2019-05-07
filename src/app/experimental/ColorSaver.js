@@ -12,7 +12,7 @@ class ColorSaver extends AbstractAutoSaveHandler
         this._themeManager = themeManager;
     }
 
-    //Override
+    /** @override */
     onAutoSaveLoad(dataStorage)
     {
         const themeManager = this._themeManager;
@@ -29,13 +29,13 @@ class ColorSaver extends AbstractAutoSaveHandler
         }
     }
 
-    //Override
+    /** @override */
     onAutoSaveUnload(dataStorage)
     {
         //Don't do anything...
     }
 
-    //Override
+    /** @override */
     onAutoSaveUpdate(dataStorage)
     {
         const themeManager = this._themeManager;

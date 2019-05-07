@@ -85,7 +85,7 @@ class FSAModule
         this._broadcastHandler = new FSABroadcastHandler();
     }
 
-    //Override
+    /** @override */
     initialize(app)
     {
         this._inputManager.onSessionStart(app.getSession());
@@ -162,7 +162,7 @@ class FSAModule
         machineController.initialize(this);
     }
 
-    //Override
+    /** @override */
     update(app)
     {
         this._inputManager.update(this);
@@ -171,7 +171,7 @@ class FSAModule
         machineController.update(this);
     }
 
-    //Override
+    /** @override */
     destroy(app)
     {
         this._inputManager.onSessionStop(app.getSession());
@@ -180,7 +180,7 @@ class FSAModule
         machineController.destroy(this);
     }
 
-    //Override
+    /** @override */
     clear(app, graphOnly = false)
     {
         UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());

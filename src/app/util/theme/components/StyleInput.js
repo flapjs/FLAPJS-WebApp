@@ -16,7 +16,7 @@ class StyleInput extends React.Component
         value.setValue(newValue);
     }
 
-    //Override
+    /** @override */
     render()
     {
         const title = this.props.title;

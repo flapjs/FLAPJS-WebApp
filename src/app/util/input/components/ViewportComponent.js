@@ -31,19 +31,19 @@ class ViewportComponent extends React.Component
         return this;
     }
 
-    //Override
+    /** @override */
     componentDidMount()
     {
         this._inputAdapter.initialize(this._ref.current);
     }
 
-    //Override
+    /** @override */
     componentWillUnmount()
     {
         this._inputAdapter.destroy();
     }
 
-    //Override
+    /** @override */
     componentDidUpdate()
     {
         this._inputAdapter.update();
@@ -73,7 +73,7 @@ class ViewportComponent extends React.Component
         return this._inputAdapter;
     }
 
-    //Override
+    /** @override */
     render()
     {
         const viewBox = this.getSVGViewBoxString(this.props.viewSize || DEFAULT_VIEW_SIZE);

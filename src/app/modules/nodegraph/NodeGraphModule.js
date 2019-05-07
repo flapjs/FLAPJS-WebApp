@@ -28,7 +28,7 @@ class NodalGraphModule
         this._graphController = new NodeGraphController(app, this._graph, new NodeGraphParser());
     }
 
-    //Override
+    /** @override */
     initialize(app)
     {
         app.getDrawerManager()
@@ -52,17 +52,17 @@ class NodalGraphModule
             ));
     }
 
-    //Override
+    /** @override */
     update(app)
     {
     }
 
-    //Override
+    /** @override */
     destroy(app)
     {
     }
 
-    //Override
+    /** @override */
     clear(app, graphOnly = false)
     {
         UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
@@ -70,11 +70,11 @@ class NodalGraphModule
 
     getGraphController() { return this._graphController; }
 
-    //Override
+    /** @override */
     getModuleVersion() { return MODULE_VERSION; }
-    //Override
+    /** @override */
     getModuleName() { return MODULE_NAME; }
-    //Override
+    /** @override */
     getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
 
     getApp() { return this._app; }

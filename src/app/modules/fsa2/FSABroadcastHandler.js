@@ -19,7 +19,7 @@ class FSABroadcastHandler extends BroadcastHandler
         this._broadcastManager.sendMessageTo(targetSessionID, MACHINE_REQUEST_MESSAGE_TYPE);
     }
 
-    //Override
+    /** @override */
     onBroadcastMessage(type, src, dst, message)
     {
         if (type === MACHINE_REQUEST_MESSAGE_TYPE)

@@ -326,7 +326,7 @@ class QuadraticEdge extends GraphEdge
         }
     }
 
-    //Override
+    /** @override */
     changeDestinationNode(node)
     {
         const prevDest = this._to;

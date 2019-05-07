@@ -35,7 +35,7 @@ class MachineChangeHandler
 
     update(machineBuilder)
     {
-        for(const listener of this._listeners)
+        for (const listener of this._listeners)
         {
             listener(machineBuilder);
         }

@@ -54,7 +54,7 @@ class FSAModule
         this._tester = new StringTester();
     }
 
-    //Override
+    /** @override */
     initialize(app)
     {
         registerNotifications(app.getNotificationManager());
@@ -116,21 +116,21 @@ class FSAModule
     */
     }
 
-    //Override
+    /** @override */
     update(app)
     {
         const machineController = this.getMachineController();
         machineController.update(this);
     }
 
-    //Override
+    /** @override */
     destroy(app)
     {
         const machineController = this.getMachineController();
         machineController.destroy(this);
     }
 
-    //Override
+    /** @override */
     clear(app, graphOnly = false)
     {
         UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
@@ -145,11 +145,11 @@ class FSAModule
     getErrorChecker() { return this._errorChecker; }
     getStringTester() { return this._tester; }
 
-    //Override
+    /** @override */
     getModuleVersion() { return MODULE_VERSION; }
-    //Override
+    /** @override */
     getModuleName() { return MODULE_NAME; }
-    //Override
+    /** @override */
     getLocalizedModuleName() { return this._machineController.getMachineType(); }
     getApp() { return this._app; }
 }

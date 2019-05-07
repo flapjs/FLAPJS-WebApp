@@ -53,7 +53,7 @@ class PatternInputButton extends React.Component
         }, RETURN_FOCUS_DELAY);
     }
 
-    //Override
+    /** @override */
     render()
     {
         return (
