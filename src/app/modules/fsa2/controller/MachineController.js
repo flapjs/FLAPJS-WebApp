@@ -190,7 +190,7 @@ class MachineController extends AbstractMachineController
         for(let i = 0; i < length; ++i)
         {
             edge = graph.getEdges()[i];
-            let result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
+            result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
             if (result != edge.getEdgeLabel())
             {
                 targets.push(edge);

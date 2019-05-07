@@ -302,8 +302,8 @@ class FSA
 
     addTransition(from, to, symbol)
     {
-        if (!this.hasState(from)) throw new Error('Trying to add a transition to unknown state with label \'' + state.getStateLabel() + '\'');
-        if (!this.hasState(to)) throw new Error('Trying to add a transition to unknown state with label \'' + state.getStateLabel() + '\'');
+        if (!this.hasState(from)) throw new Error('Trying to add a transition to unknown state with label \'' + from.getStateLabel() + '\'');
+        if (!this.hasState(to)) throw new Error('Trying to add a transition to unknown state with label \'' + to.getStateLabel() + '\'');
         if (!symbol) throw new Error('Cannot add transition for null symbol - use the empty symbol instead');
 
         const transitionKey = from.getStateID() + '->' + to.getStateID();
