@@ -47,6 +47,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.6.0",
     "jsdoc": "^3.6.1",
+    "lint-diff": "^1.2.1",
     "serviceworker-webpack-plugin": "^1.0.1",
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.2.1",
@@ -56,7 +57,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint",
+      "pre-commit": "lint-diff HEAD",
       "pre-push": "npm test"
     }
   }
