@@ -1,5 +1,13 @@
-test/
-debug/
-**/deprecated/
-*.test.js
-src/app/modules/fsa
+# A whitelist approach...
+/*
+!/src
+
+# Ignore deprecated directories
+**/deprecated
+# Ignore test files
+**/*.test.js
+# Ignore test directory
+/src/test
+
+# Ignore old depcrated fsa module (should remove this once dealt with)
+/src/app/modules/fsa
