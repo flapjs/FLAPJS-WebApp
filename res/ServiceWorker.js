@@ -18,7 +18,7 @@ class ServiceCache
     //console.log("[ServiceWorker] Getting cache strategy for \'" + url.pathname + "\'...");
     let result;
     //Gettin cache strategies...
-    for(const handler of this._handlers) if (result = handler(request, url)) return result;
+    for (const handler of this._handlers) if (result = handler(request, url)) return result;
     //Could not find valid strategy for request...
     return null;
   }
@@ -88,13 +88,14 @@ const APP_CACHE = new ServiceCache(process.env.TITLE + '-' + process.env.VERSION
   .register('./dist/styles.bundle.js')
   */
   //Any other output files
-  .addCacheStrategyHandler((request, url) => {
+  .addCacheStrategyHandler((request, url) =>
+  {
     //Should accept 'index.html'...
     if (/\/$/.test(url.pathname)) return cacheStrategyNetworkFirst;
 
     //Check if is fetch for general destination type of file asset...
     const dest = request.destination;
-    switch(dest)
+    switch (dest)
     {
       case 'style':
       case 'script':
@@ -117,7 +118,7 @@ function onServiceWorkerInstall(event)
 {
   //Create all active caches...
   const results = [];
-  for(const cache of ACTIVE_CACHES)
+  for (const cache of ACTIVE_CACHES)
   {
     const cacheName = cache.getName();
     const cacheAssets = cache.getAssets();
@@ -138,7 +139,8 @@ function onServiceWorkerActivate(event)
 
   //Remove any cache not in the whitelist...
   const result = caches.keys().then(cacheNames => Promise.all(
-    cacheNames.map(cacheName => {
+    cacheNames.map(cacheName =>
+    {
       //If the whitelist is missing the cache name, delete it...
       if (!whitelist || !whitelist.includes(cacheName))
       {
@@ -166,7 +168,7 @@ function onServiceWorkerFetch(event)
     requestURL.origin === self.location.origin)
   {
     //Check for each cache, whether it accepts the request...
-    for(const cache of ACTIVE_CACHES)
+    for (const cache of ACTIVE_CACHES)
     {
       const cacheStrategy = cache.getCacheStrategy(request, requestURL);
       if (cacheStrategy)
@@ -229,7 +231,7 @@ function cacheStrategyFastest(request, activeCache)
 /********** HELPER FUNCTIONS **********/
 /* * * * * * * * * * * * * * * * * * * * * * */
 
-function createCache(cacheName, assets=[])
+function createCache(cacheName, assets = [])
 {
   if (typeof cacheName !== 'string') throw new Error("Unable to create cache with unknown name");
 
@@ -263,7 +265,8 @@ function fetchFromCache(request)
 {
   if (!request) throw new Error("Unable to resolve fetch from cache for null request");
 
-  return caches.match(request).then(response => {
+  return caches.match(request).then(response =>
+  {
 
     //DEBUG: should only be logged when missing cached assets...
     console.log("[ServiceWorker] Resolving fetch from cache for \'" + request.url + "\'...");
@@ -272,7 +275,7 @@ function fetchFromCache(request)
   });
 }
 
-function fetchFromNetwork(request, ownedCacheName=null)
+function fetchFromNetwork(request, ownedCacheName = null)
 {
   if (!request) throw new Error("Unable to resolve fetch from network for null request");
 
@@ -282,7 +285,8 @@ function fetchFromNetwork(request, ownedCacheName=null)
   //DEBUG: should only be logged when missing cached assets...
   console.log("[ServiceWorker] Resolving fetch from network for \'" + request.url + "\'...");
 
-  return fetch(fetchRequest).then(response => {
+  return fetch(fetchRequest).then(response =>
+  {
     //If not caching, just return the response...
     if (!ownedCacheName) return response;
 
