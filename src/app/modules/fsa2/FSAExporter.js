@@ -12,11 +12,11 @@ class FSAExporter extends Exporter
     }
 
     /**
-   * @override
-   * @param  {String} filename    the name of the exported file
-   * @param  {FSAModule} target   the module to export
-   * @return {Promise}            the async export call
-   */
+     * @override
+     * @param  {String} filename    the name of the exported file
+     * @param  {FSAModule} target   the module to export
+     * @return {Promise}            the async export call
+     */
     exportToFile(filename, target)
     {
         return new Promise((resolve, reject) => 
@@ -54,10 +54,10 @@ class FSAExporter extends Exporter
     }
 
     /**
-   * @overrde
-   * @param  {FSAModule} target the module to export
-   * @return {Boolean} whether the module can be exported in its current state
-   */
+     * @overrde
+     * @param  {FSAModule} target the module to export
+     * @return {Boolean} whether the module can be exported in its current state
+     */
     isValidTarget(target)
     {
         return target && !target.getGraphController().getGraph().isEmpty();

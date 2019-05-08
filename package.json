@@ -1,12 +1,12 @@
 {
   "name": "flap.js",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Repository for flap.js web app project",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --config webpack.config.js",
     "build": "cross-env NODE_ENV=production webpack --mode production --config webpack.config.js",
-    "lint": "eslint -o ./lintErrors.txt --no-color ./src",
-    "docs": "jsdoc --readme ./README.md --recurse ./src",
+    "lint": "eslint -o ./lintErrors.txt --no-color ./src || echo \"Linted Failed - Please check lintErrors.txt for more information.\"",
+    "docs": "jsdoc --readme ./README.md --recurse --destination ./docs/api ./src",
     "test": "eslint ./src && jest"
   },
   "repository": {
@@ -43,14 +43,21 @@
     "eslint-plugin-react": "^7.12.4",
     "html-webpack-harddisk-plugin": "^1.0.1",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^2.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.6.0",
-    "jsdoc": "^3.5.5",
+    "jsdoc": "^3.6.1",
     "serviceworker-webpack-plugin": "^1.0.1",
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.2.1",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm test"
+    }
   }
 }

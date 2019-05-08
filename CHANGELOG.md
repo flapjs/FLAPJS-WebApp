@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cross-window communication through BroadcastChannel.
 - Color theme preset loading.
 - MIT and Duke theme presets.
-- Linting tests.
+- Added linting tests.
+- Added Travic CI build pipeline
 
 ### Changed
 - Have actual changelog that is not code :P
