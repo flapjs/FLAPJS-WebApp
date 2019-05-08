@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Color theme preset loading.
 - MIT and Duke theme presets.
 - Added linting tests.
-- Added Travic CI build pipeline
+- Added Travic CI build pipeline.
 
 ### Changed
 - Have actual changelog that is not code :P
