@@ -5,9 +5,9 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --config webpack.config.js",
     "build": "cross-env NODE_ENV=production webpack --mode production --config webpack.config.js",
-    "lint": "eslint -o ./lintErrors.txt --no-color ./src || echo \"Linted Failed - Please check lintErrors.txt for more information.\"",
+    "lint": "eslint ./src",
     "docs": "jsdoc --readme ./README.md --recurse --destination ./docs/api ./src",
-    "test": "eslint ./src && jest"
+    "test": "npm run lint && jest"
   },
   "repository": {
     "type": "git",
