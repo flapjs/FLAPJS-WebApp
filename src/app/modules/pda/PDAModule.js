@@ -29,6 +29,10 @@ import PDAGraphExporter from './exporter/PDAGraphExporter.js';
 import { DEFAULT_IMAGE_EXPORTERS } from 'modules/nodalgraph/NodalGraphImageExporter.js';
 import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
 
+import {FILE_TYPE_JSON} from 'session/manager/exporter/JSONImporter.js';
+import PDAImporter from './PDAImporter.js';
+// import PDAExporter from './PDAExporter.js';
+
 import { registerNotifications } from './components/notifications/PDANotifications.js';
 
 import GraphNodeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeInputHandler.js';
@@ -101,6 +105,9 @@ class PDAModule
         app.getExportManager()
             .addExporter(new PDAGraphExporter())
             .addExporters(DEFAULT_IMAGE_EXPORTERS);
+        
+        app.getImportManager()
+            .addImporter(FILE_TYPE_JSON, new PDAImporter(this, PDAGraphParser.JSON));
 
         app.getViewportManager()
             .addViewClass(EditPane)

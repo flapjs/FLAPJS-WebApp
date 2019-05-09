@@ -34,6 +34,7 @@ class ExportManager
         this._exporters.length = 0;
     }
 
+    //DEPRECATED
     tryImportFromFile(fileBlob)
     {
         if (!fileBlob) throw new Error('Unable to import null file');
@@ -67,6 +68,7 @@ class ExportManager
         exporter.exportToFile(fileName, currentModule);
     }
 
+    //DEPRECATED
     getImportFileTypes()
     {
         const session = this._app.getSession();

@@ -1,30 +1,23 @@
-import * as Downloader from 'util/Downloader.js';
+import { downloadText } from 'util/Downloader.js';
 
 class Exporter
 {
-    constructor(parser=null)
-    {
-        this._parser = parser;
-    }
+    constructor() {}
 
-    exportToFile(filename, target)
+    /**
+     * 
+     * @param {String} fileName the name of exported file for target
+     * @param {String} target the content to export
+     * @returns {Promise} a Promise that resolves if exported without errors
+     */
+    exportToFile(fileName, target)
     {
         return new Promise((resolve, reject) => 
         {
-            let fileData;
             try
             {
-                if (this._parser)
-                {
-                    fileData = this._parser.compose(target);
-                }
-                else
-                {
-                    fileData = target;
-                }
-
-                Downloader.downloadText(filename, fileData);
-                resolve();
+                downloadText(fileName, target);
+                resolve(target);
             }
             catch (e)
             {
@@ -34,6 +27,10 @@ class Exporter
     }
 
     isValidTarget(target) { return target; }
-    getParser() { return this._parser; }
+
+    getIconClass() { return null; }
+    getLabel() { return 'Export to file'; }
+    getTitle() { return 'Export'; }
 }
+
 export default Exporter;

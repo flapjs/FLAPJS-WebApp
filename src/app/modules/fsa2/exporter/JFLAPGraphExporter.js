@@ -4,16 +4,8 @@ import XMLFileIcon from 'components/iconset/flat/XMLFileIcon.js';
 import { XML as XMLGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 import { downloadText } from 'util/Downloader.js';
 
-/**
- * @class
- * class responsible for exporting/importing to/from JFLAP
- */
 class JFLAPGraphExporter extends AbstractGraphExporter
 {
-    /**
-   * @constructor
-   *  Invokes the superconstructor for the AbstractGraphExporter
-   */
     constructor() { super(); }
 
 

@@ -1,11 +1,11 @@
 import Exporter from 'session/manager/exporter/Exporter.js';
 import { downloadText } from 'util/Downloader.js';
-import { FILE_META_EXT } from './FSAImporter.js';
-import FSAModule from './FSAModule.js';
+import { FILE_META_EXT } from './PDAImporter.js';
+import PDAModule from './PDAModule.js';
 
 import JSONFileIcon from 'components/iconset/flat/JSONFileIcon.js';
 
-class FSAExporter extends Exporter
+class PDAExporter extends Exporter
 {
     constructor(jsonGraphParser)
     {
@@ -35,7 +35,6 @@ class FSAExporter extends Exporter
                 };
                 dst['graphData'] = graphData;
                 dst['machineData'] = {
-                    type: machineController.getMachineType(),
                     symbols: machineController.getCustomSymbols(),
                     statePrefix: graphController.getGraphLabeler().getDefaultNodeLabelPrefix()
                 };
@@ -53,7 +52,7 @@ class FSAExporter extends Exporter
     }
 
     /** @override */
-    isValidTarget(target) { return target instanceof FSAModule; }
+    isValidTarget(target) { return target instanceof PDAModule; }
 
     /** @override */
     getIconClass() { return JSONFileIcon; }
@@ -65,4 +64,4 @@ class FSAExporter extends Exporter
     getGraphParser() { return this._graphParser; }
 }
 
-export default FSAExporter;
+export default PDAExporter;

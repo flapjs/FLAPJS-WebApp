@@ -1,35 +1,19 @@
 class Importer
 {
-    constructor(parser=null)
+    constructor() {}
+
+    /**
+     * Try to import the target file. Assumes that isValidFile() returns true.
+     * 
+     * @param {String} fileName the name of the target file
+     * @param {String} fileData the file content to import
+     * @returns {Promise} a Promise that resolves if imported without errors
+     */
+    importFromFile(fileName, fileData)
     {
-        this._parser = parser;
+        return Promise.resolve(fileData);
     }
 
-    importFromFile(filename, fileData)
-    {
-        return new Promise((resolve, reject) => 
-        {
-            let target;
-            try
-            {
-                if (this._parser)
-                {
-                    target = this._parser.parse(fileData);
-                }
-                else
-                {
-                    target = fileData;
-                }
-                resolve(target);
-            }
-            catch (e)
-            {
-                reject(e);
-            }
-        });
-    }
-  
-    isValidFile(filename, fileData) { return fileData; }
-    getParser() { return this._parser; }
+    isValidFile(fileName, fileData) { return fileData; }
 }
 export default Importer;
