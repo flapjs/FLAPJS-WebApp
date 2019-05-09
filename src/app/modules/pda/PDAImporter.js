@@ -1,19 +1,17 @@
 import JSONImporter, { FILE_TYPE_JSON } from 'session/manager/exporter/JSONImporter.js';
 
-export const FILE_META_EXT = '.fsa' + FILE_TYPE_JSON;
+export const FILE_META_EXT = '.pda' + FILE_TYPE_JSON;
 
 /**
  * Sets all of the details pertaining to the module (and the machine)
  *
- * @param  {FSAModule} currentModule                the current module to be modified
+ * @param  {PDAModule} currentModule                the current module to be modified
  * @param  {GraphController} graphController        the controller for the graph to be constructed
  * @param  {MachineController} machineController    the controller for the machine to be constructed
  * @param  {Object} machineData                     the machine data to be parsed
  */
 function loadMachineFromData(currentModule, graphController, machineController, machineData)
 {
-    const machineType = machineData.type;
-    if (machineType) machineController.setMachineType(machineType);
     const customSymbols = machineData.symbols;
     if (customSymbols && Array.isArray(customSymbols))
     {
@@ -30,13 +28,13 @@ function loadMachineFromData(currentModule, graphController, machineController, 
     }
 }
 
-class FSAImporter extends JSONImporter
+class PDAImporter extends JSONImporter
 {
-    constructor(fsaModule, jsonGraphParser)
+    constructor(pdaModule, jsonGraphParser)
     {
         super();
 
-        this._module = fsaModule;
+        this._module = pdaModule;
         this._graphParser = jsonGraphParser;
     }
 
@@ -87,4 +85,4 @@ class FSAImporter extends JSONImporter
     getGraphParser() { return this._graphParser; }
 }
 
-export default FSAImporter;
+export default PDAImporter;

@@ -7,6 +7,10 @@ import REtoFSAGraphExporter from './exporter/REtoFSAGraphExporter.js';
 import REErrorChecker from './REErrorChecker.js';
 import SafeExpressionEventHandler from './SafeExpressionEventHandler.js';
 
+import {FILE_TYPE_JSON} from 'session/manager/exporter/JSONImporter.js';
+import REImporter from './REImporter.js';
+// import REExporter from './REExporter.js';
+
 import {registerNotifications} from './components/notifications/RENotifications.js';
 
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
@@ -62,6 +66,9 @@ class REModule
         app.getExportManager()
             .addExporter(new REGraphExporter())
             .addExporter(new REtoFSAGraphExporter());
+        
+        app.getImportManager()
+            .addImporter(FILE_TYPE_JSON, new REImporter(this));
 
         app.getHotKeyManager()
             .registerHotKey('Save as JSON', [CTRL_KEY, 'KeyS'], () => {app.getExportManager().tryExportToFile(app.getExportManager().getDefaultExporter());})

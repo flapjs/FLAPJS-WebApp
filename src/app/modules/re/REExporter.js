@@ -1,16 +1,15 @@
 import Exporter from 'session/manager/exporter/Exporter.js';
 import { downloadText } from 'util/Downloader.js';
-import { FILE_META_EXT } from './FSAImporter.js';
-import FSAModule from './FSAModule.js';
+import { FILE_META_EXT } from './REImporter.js';
+import REModule from './REModule.js';
 
 import JSONFileIcon from 'components/iconset/flat/JSONFileIcon.js';
 
-class FSAExporter extends Exporter
+class REExporter extends Exporter
 {
-    constructor(jsonGraphParser)
+    constructor()
     {
         super();
-        this._graphParser = jsonGraphParser;
     }
 
     /** @override */
@@ -19,25 +18,18 @@ class FSAExporter extends Exporter
         return new Promise((resolve, reject) => 
         {
             const currentModule = target;
-            const graphController = currentModule.getGraphController();
             const machineController = currentModule.getMachineController();
-            const graph = graphController.getGraph();
 
             try
             {
-                const graphData = this._graphParser.objectify(graph);
-
                 const dst = {};
                 dst['_metadata'] = {
                     module: currentModule.getModuleName(),
                     version: process.env.VERSION + ':' + currentModule.getModuleVersion(),
                     timestamp: new Date().toString()
                 };
-                dst['graphData'] = graphData;
                 dst['machineData'] = {
-                    type: machineController.getMachineType(),
-                    symbols: machineController.getCustomSymbols(),
-                    statePrefix: graphController.getGraphLabeler().getDefaultNodeLabelPrefix()
+                    expression: machineController.getMachineExpression()
                 };
                 const jsonString = JSON.stringify(dst);
                 
@@ -53,7 +45,7 @@ class FSAExporter extends Exporter
     }
 
     /** @override */
-    isValidTarget(target) { return target instanceof FSAModule; }
+    isValidTarget(target) { return target instanceof REModule; }
 
     /** @override */
     getIconClass() { return JSONFileIcon; }
@@ -61,8 +53,6 @@ class FSAExporter extends Exporter
     getLabel() { return I18N.toString('file.export.machine'); }
     /** @override */
     getTitle() { return I18N.toString('file.export.machine.hint'); }
-
-    getGraphParser() { return this._graphParser; }
 }
 
-export default FSAExporter;
+export default REExporter;

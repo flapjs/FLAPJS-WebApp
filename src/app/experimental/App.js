@@ -40,6 +40,7 @@ import LocalStorage from 'util/storage/LocalStorage.js';
 
 import Session from 'session/Session.js';
 import ExportManager from 'session/manager/export/ExportManager.js';
+import ImportManager from 'session/manager/exporter/ImportManager.js';
 import DrawerManager from 'session/manager/DrawerManager.js';
 import MenuManager from 'session/manager/MenuManager.js';
 import ViewportManager from 'session/manager/ViewportManager.js';
@@ -128,6 +129,7 @@ class App extends React.Component
         this._undoManager = new UndoManager();
         this._hotKeyManager = new HotKeyManager();
         this._exportManager = new ExportManager(this);
+        this._importManager = new ImportManager();
         this._drawerManager = new DrawerManager();
         this._menuManager = new MenuManager();
         this._viewportManager = new ViewportManager();
@@ -204,7 +206,7 @@ class App extends React.Component
             App.INSTANCE.componentWillUnmount();
         }
     }
-    
+
     //DuckType
     onSessionStart(session)
     {
@@ -267,9 +269,11 @@ class App extends React.Component
     getWorkspaceComponent() { return this._workspace.current; }
     getToolbarComponent() { return this._toolbar; }
 
+    getExportManager() { return this._exportManager; }
+    getImportManager() { return this._importManager; }
+
     getUndoManager() { return this._undoManager; }
     getHotKeyManager() { return this._hotKeyManager; }
-    getExportManager() { return this._exportManager; }
     getDrawerManager() { return this._drawerManager; }
     getMenuManager() { return this._menuManager; }
     getViewportManager() { return this._viewportManager; }
@@ -304,7 +308,7 @@ class App extends React.Component
         const renderers = this._renderManager.getRenderersByLayer(renderLayerName);
         if (renderers && renderers.length > 0)
         {
-            return renderers.map((R, i) => <R key={sessionID + '.' + R.constructor.name + '.' + i} {...props}/>);
+            return renderers.map((R, i) => <R key={sessionID + '.' + R.constructor.name + '.' + i} {...props} />);
         }
         else
         {
@@ -325,6 +329,7 @@ class App extends React.Component
 
         const undoManager = this._undoManager;
         const exportManager = this._exportManager;
+        const importManager = this._importManager;
         const drawerManager = this._drawerManager;
         const menuManager = this._menuManager;
         const viewportManager = this._viewportManager;
@@ -352,18 +357,20 @@ class App extends React.Component
                     <ToolbarButton title={I18N.toString('action.toolbar.newmachine')} icon={PageEmptyIcon}
                         onClick={this.onToolbarClearButton}
                         disabled={!currentModule} />
-                    <ToolbarUploadButton title={I18N.toString('action.toolbar.uploadmachine')} icon={UploadIcon} accept={exportManager.getImportFileTypes().join(',')}
+                    <ToolbarUploadButton
+                        title={I18N.toString('action.toolbar.uploadmachine')}
+                        icon={UploadIcon}
+                        accept={importManager.getFileTypesAsAcceptString()}
                         onUpload={fileBlob => 
                         {
-                            exportManager.tryImportFromFile(fileBlob)
-                                .catch((e) => 
-                                {
-                                    notificationManager.pushNotification('ERROR: Unable to load invalid JSON file.', ERROR_LAYOUT_ID, ERROR_UPLOAD_NOTIFICATION_TAG);
-                                })
-                                .finally(() => 
-                                {
-                                    this._toolbar.closeBar();
-                                });
+                            importManager.tryImportFile(fileBlob)
+                                .catch(e =>
+                                    notificationManager.pushNotification(
+                                        'ERROR: Unable to import invalid file.',
+                                        ERROR_LAYOUT_ID,
+                                        ERROR_UPLOAD_NOTIFICATION_TAG))
+                                .finally(() =>
+                                    this._toolbar.closeBar());
                         }}
                         disabled={!defaultExporter || !defaultExporter.canImport(currentModule)} />
                     <ToolbarButton title={I18N.toString('action.toolbar.undo')} icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
@@ -405,23 +412,23 @@ class App extends React.Component
 
                             {/* RENDER_LAYER_WORKSPACE */}
                             {this.renderRenderLayer(RENDER_LAYER_WORKSPACE)}
-                          
+
                             {/* RENDER_LAYER_WORKSPACE_OVERLAY */}
                             {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_OVERLAY)}
 
-                            <FullscreenWidget className={Style.fullscreen_widget} app={this}/>
-                            <NotificationView notificationManager={notificationManager}/>
-                            {this._hotKeyManager.isEnabled() && <HotKeyView hotKeyManager={this._hotKeyManager}/>}
+                            <FullscreenWidget className={Style.fullscreen_widget} app={this} />
+                            <NotificationView notificationManager={notificationManager} />
+                            {this._hotKeyManager.isEnabled() && <HotKeyView hotKeyManager={this._hotKeyManager} />}
 
-                            <ViewportView ref={ref=>this._viewport=ref}
+                            <ViewportView ref={ref => this._viewport = ref}
                                 views={viewportViewClasses}
                                 viewProps={viewportViewProps}>
                                 {/* RENDER_LAYER_VIEWPORT */}
-                                {this.renderRenderLayer(RENDER_LAYER_VIEWPORT, {viewport: this._viewport})}
+                                {this.renderRenderLayer(RENDER_LAYER_VIEWPORT, { viewport: this._viewport })}
                             </ViewportView>
 
                             {/* RENDER_LAYER_VIEWPORT_OVERLAY */}
-                            {this.renderRenderLayer(RENDER_LAYER_VIEWPORT_OVERLAY, {viewport: this._viewport})}
+                            {this.renderRenderLayer(RENDER_LAYER_VIEWPORT_OVERLAY, { viewport: this._viewport })}
 
                         </div>
                     </UploadDropZone>
