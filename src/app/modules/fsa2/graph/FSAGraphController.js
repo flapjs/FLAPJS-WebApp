@@ -1,7 +1,7 @@
 import GraphController from 'graph2/controller/GraphController.js';
 
 import NodeGraphChangeHandler from 'graph2/NodeGraphChangeHandler.js';
-import SafeUndoNodeGraphEventHandler from 'graph2/SafeUndoNodeGraphEventHandler.js';
+// import SafeUndoNodeGraphEventHandler from 'graph2/SafeUndoNodeGraphEventHandler.js';
 
 import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE } from 'graph2/inputs/GraphNodeInputHandler.js';
 import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE } from 'graph2/inputs/GraphEdgeInputHandler.js';
@@ -20,8 +20,10 @@ class NodeGraphController extends GraphController
 
         this.setGraphChangeHandler(new NodeGraphChangeHandler());
 
+        /*
         app.getUndoManager().setEventHandlerFactory(
             (...args) => new SafeUndoNodeGraphEventHandler(graph, graphParser));
+        */
     }
 
     /** @override */

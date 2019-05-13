@@ -12,14 +12,16 @@ class GraphEdgeLayer extends React.Component
         const inputController = this.props.inputController;
         const onMouseOver = this.props.onMouseOver;
         const onMouseOut = this.props.onMouseOut;
+        const EdgeRenderer = this.props.edgeRenderer || GraphEdgeRenderer;
 		
         const edges = [];
         for(const edge of this.props.edges)
         {
             edges.push(
-                <GraphEdgeRenderer
+                <EdgeRenderer
                     key={edge.getGraphElementID()}
                     edge={edge}
+                    stroke={'var(--color-graph-text)'}
                     onMouseOver={onMouseOver}
                     onMouseOut={onMouseOut}
                     pointerEvents={inputController.hasPointerEvents(edge) ? 'all' : 'none'} />

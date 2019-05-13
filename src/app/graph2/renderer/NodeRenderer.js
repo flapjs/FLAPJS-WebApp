@@ -10,13 +10,14 @@ export const DefaultNodeShapeRenderer = props => (
             r={props.radius}
             fill={props.color}
             stroke={props.outline} />
-        <circle cx={props.position.x} cy={props.position.y}
-            r={props.radius + INPUT_MASK_NODE_RADIUS_OFFSET}
-            fill="transparent"
-            cursor="pointer"
-            onMouseOver={props.onMouseOver}
-            onMouseOut={props.onMouseOut}
-            pointerEvents={props.pointerEvents} />
+        {(props.onMouseOver || props.onMouseOut) &&
+            <circle cx={props.position.x} cy={props.position.y}
+                r={props.radius + INPUT_MASK_NODE_RADIUS_OFFSET}
+                fill="transparent"
+                cursor="pointer"
+                onMouseOver={props.onMouseOver}
+                onMouseOut={props.onMouseOut}
+                pointerEvents={props.pointerEvents} />}
     </React.Fragment>
 );
 
@@ -55,29 +56,29 @@ class NodeRenderer extends React.Component
         return (
             <g>
                 {NodeShapeRenderer &&
-          <NodeShapeRenderer
-              position={position}
-              radius={radius}
-              color={color}
-              outline={outline}
-              onMouseOver={onMouseOver ? e =>
-              {
-                  const value = e.target['value'] || (e.target['value'] = {});
-                  value.type = EVENT_SOURCE_NODE;
-                  onMouseOver(e);
-              } : null}
-              onMouseOut={onMouseOut ? e =>
-              {
-                  const value = e.target['value'] || (e.target['value'] = {});
-                  value.type = EVENT_SOURCE_NODE;
-                  onMouseOut(e);
-              } : null}
-              pointerEvents={pointerEvents} />}
+                    <NodeShapeRenderer
+                        position={position}
+                        radius={radius}
+                        color={color}
+                        outline={outline}
+                        onMouseOver={onMouseOver ? e =>
+                        {
+                            const value = e.target['value'] || (e.target['value'] = {});
+                            value.type = EVENT_SOURCE_NODE;
+                            onMouseOver(e);
+                        } : null}
+                        onMouseOut={onMouseOut ? e =>
+                        {
+                            const value = e.target['value'] || (e.target['value'] = {});
+                            value.type = EVENT_SOURCE_NODE;
+                            onMouseOut(e);
+                        } : null}
+                        pointerEvents={pointerEvents} />}
                 {NodeLabelRenderer &&
-          <NodeLabelRenderer
-              position={position}
-              label={label}
-              color={outline} />}
+                    <NodeLabelRenderer
+                        position={position}
+                        label={label}
+                        color={outline} />}
             </g>
         );
     }

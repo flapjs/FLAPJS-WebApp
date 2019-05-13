@@ -1,7 +1,7 @@
 import AbstractInputHandler from 'util/input/AbstractInputHandler.js';
 import { lerp } from 'util/MathHelper.js';
-import {EVENT_SOURCE_INITIAL_MARKER} from '../renderer/InitialMarkerRenderer.js';
-import {EVENT_SOURCE_NODE} from 'graph/renderer/GraphNodeInputHandler.js';
+import { EVENT_SOURCE_INITIAL_MARKER } from '../renderer/InitialMarkerRenderer.js';
+import { EVENT_SOURCE_NODE } from 'graph2/renderer/GraphNodeRenderer.js';
 
 export const GRAPH_EVENT_INITIAL_MARKER_CHANGE = 'initial-marker-change';
 
@@ -18,7 +18,7 @@ class InitialMarkerInputHandler extends AbstractInputHandler
 
         this._ghostMarker = null;
         this._cachedMarkerTarget = null;
-        this._cachedPointer = {x: 0, y: 0};
+        this._cachedPointer = { x: 0, y: 0 };
     }
 
     /** @override */
@@ -73,7 +73,7 @@ class InitialMarkerInputHandler extends AbstractInputHandler
             }
         }
     }
-  
+
     /** @override */
     onDragStop(pointer)
     {
@@ -90,7 +90,7 @@ class InitialMarkerInputHandler extends AbstractInputHandler
             }
             else
             {
-                this._graphController.emitGraphEvent(GRAPH_EVENT_INITIAL_MARKER_CHANGE, {target: initialMarkerTarget});
+                this._graphController.emitGraphEvent(GRAPH_EVENT_INITIAL_MARKER_CHANGE, { target: initialMarkerTarget });
             }
         }
     }

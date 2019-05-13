@@ -90,6 +90,8 @@ class GraphEditorView extends React.Component
         const graphController = this.props.graphController;
         const labelFormatter = graphController.getLabelFormatter();
 
+        const GraphViewComponent = this.props.graphView || NodeGraphView;
+
         return (
             <React.Fragment>
                 <ViewportComponent ref={this._viewportComponent}
@@ -98,7 +100,7 @@ class GraphEditorView extends React.Component
                     style={this.props.style}>
                     {viewport &&
                         <React.Fragment>
-                            <NodeGraphView ref={this._graphViewComponent}
+                            <GraphViewComponent ref={this._graphViewComponent}
                                 graphController={graphController}
                                 inputController={inputController}
                                 selectionBox={selectionBox}

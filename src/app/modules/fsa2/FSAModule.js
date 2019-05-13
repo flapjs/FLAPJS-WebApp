@@ -1,4 +1,6 @@
 import React from 'react';
+
+/*
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 
 import NodalGraphInputManager from 'modules/nodalgraph/manager/NodalGraphInputManager.js';
@@ -54,6 +56,18 @@ import FSAExporter from './filehandlers/FSAExporter.js';
 import FSAJFFExporter from './filehandlers/FSAJFFExporter.js';
 import { registerImageExporters } from 'modules/nodalgraph/filehandlers/NodalGraphImageExporter.js';
 
+*/
+
+import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
+
+import FSAGraph from './graph/FSAGraph.js';
+import FSAGraphController from './graph/FSAGraphController.js';
+import GraphEditorView from 'graph2/components/views/GraphEditorView.js';
+import FSAGraphView from './graph/components/FSAGraphView.js';
+
+import InputContext from 'util/input/InputContext.js';
+import FSANodeInputHandler from './graph/inputs/FSANodeInputHandler.js';
+
 const MODULE_NAME = 'fsa2';
 const MODULE_VERSION = '0.0.1';
 
@@ -63,6 +77,16 @@ class FSAModule
     {
         this._app = app;
 
+        this._graph = new FSAGraph();
+        this._graphController = new FSAGraphController(app, this._graph, null);
+        this._graphEditor = React.createRef();
+
+        app.getRenderManager()
+            .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+                <GraphEditorView ref={this._graphEditor} graphController={this._graphController} graphView={FSAGraphView} {...props}/>
+            ));
+
+        /*
         this._inputManager = new NodalGraphInputManager(this,
             new FSAGraph(),
             new FSAGraphLabeler(),
@@ -86,11 +110,22 @@ class FSAModule
         this._stepTracer = new StepTracer(this.getGraphController(), this.getMachineController());
 
         this._broadcastHandler = new FSABroadcastHandler();
+        */
     }
 
     /** @override */
     initialize(app)
     {
+        const graphEditor = this._graphEditor.current;
+        const viewportComponent = graphEditor.getViewportComponent();
+        const inputAdapter = viewportComponent.getInputAdapter();
+        const inputController = graphEditor.getInputController();
+
+        const context = new InputContext();
+        context.addInputHandler(new FSANodeInputHandler(inputController, this._graphController));
+        inputAdapter.bindContext(context);
+        
+        /*
         this._inputManager.onSessionStart(app.getSession());
 
         this._inputManager.getInputController().getPicker()
@@ -168,30 +203,37 @@ class FSAModule
 
         const machineController = this.getMachineController();
         machineController.initialize(this);
+        */
     }
 
     /** @override */
     update(app)
     {
+        /*
         this._inputManager.update(this);
 
         const machineController = this.getMachineController();
         machineController.update(this);
+        */
     }
 
     /** @override */
     destroy(app)
     {
+        /*
         this._inputManager.onSessionStop(app.getSession());
 
         const machineController = this.getMachineController();
         machineController.destroy(this);
+        */
     }
 
     /** @override */
     clear(app, graphOnly = false)
     {
+        /*
         UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
+        */
     }
 
     getInputManager() { return this._inputManager; }
@@ -210,7 +252,7 @@ class FSAModule
     /** @override */
     getModuleName() { return MODULE_NAME; }
     /** @override */
-    getLocalizedModuleName() { return this._machineController.getMachineType(); }
+    getLocalizedModuleName() { return 'Hi :D';/* this._machineController.getMachineType(); */ }
     getApp() { return this._app; }
 }
 

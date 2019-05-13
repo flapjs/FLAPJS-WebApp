@@ -1,5 +1,5 @@
 import AbstractInputHandler from 'util/input/AbstractInputHandler.js';
-import {EVENT_SOURCE_NODE} from 'graph/inputs/GraphNodeInputHandler.js';
+import { EVENT_SOURCE_NODE } from 'graph2/renderer/NodeRenderer.js';
 
 export const GRAPH_EVENT_NODE_ACCEPT_CHANGE = 'node-accept-change';
 
@@ -24,7 +24,7 @@ class FSANodeInputHandler extends AbstractInputHandler
             const currentTargetSource = inputController.getCurrentTargetSource();
             currentTargetSource.setNodeAccept(!currentTargetSource.getNodeAccept());
 
-            graphController.emitGraphEvent(GRAPH_EVENT_NODE_ACCEPT_CHANGE, {target: currentTargetSource});
+            graphController.emitGraphEvent(GRAPH_EVENT_NODE_ACCEPT_CHANGE, { target: currentTargetSource });
         }
     }
 }
