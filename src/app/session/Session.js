@@ -104,7 +104,7 @@ class Session
                 }
                 catch (e)
                 {
-                    window.alert('Could not load module with id \'' + moduleName + '\'');
+                    window.alert('Could not load module with id \'' + moduleName + '\':\n' + e.message);
                 }
             });
         }, MODULE_LOAD_DELAY);

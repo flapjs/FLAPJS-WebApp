@@ -59,11 +59,11 @@ class FSAGraph extends NodeGraph
     }
 
     /**
-   * This is more like addEdge() without adding it to the graph and just returns the result
-   * This should only be called once when completing an edge
-   * @deprecated
-   * @override
-   */
+     * This is more like addEdge() without adding it to the graph and just returns the result
+     * This should only be called once when completing an edge
+     * @deprecated
+     * @override
+     */
     formatEdge(edge)
     {
         const edgeSource = edge.getEdgeFrom();

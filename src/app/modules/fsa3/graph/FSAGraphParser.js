@@ -13,11 +13,11 @@ class FSAGraphParser extends Parser
     }
 
     /**
-   * @override
-   * @param  {Object} data          the graph data to parse
-   * @param  {FSAGraph} [dst=null]  the target to set parsed graph data
-   * @return {FSAGraph}             the result in the passed-in dst
-   */
+     * @override
+     * @param  {Object} data          the graph data to parse
+     * @param  {FSAGraph} [dst=null]  the target to set parsed graph data
+     * @return {FSAGraph}             the result in the passed-in dst
+     */
     parse(data, dst=null)
     {
         if (typeof data !== 'object')
@@ -82,11 +82,11 @@ class FSAGraphParser extends Parser
     }
 
     /**
-   * @override
-   * @param  {FSAGraph} target      the graph to compose into data
-   * @param  {Object} [dst=null]    the object to append graph data
-   * @return {Object}               the result in the passed-in dst
-   */
+     * @override
+     * @param  {FSAGraph} target      the graph to compose into data
+     * @param  {Object} [dst=null]    the object to append graph data
+     * @return {Object}               the result in the passed-in dst
+     */
     compose(target, dst=null)
     {
         if (!(target instanceof FSAGraph))

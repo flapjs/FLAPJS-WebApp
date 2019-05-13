@@ -16,19 +16,12 @@ import FSAErrorChecker from './FSAErrorChecker.js';
 
 import { registerNotifications } from './components/notifications/FSANotifications.js';
 
-
-
-
-
 import * as UserUtil from 'experimental/UserUtil.js';
 import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
 import GraphEditorView from 'graph/components/views/GraphEditorView.js';
 
 import FSAGraph from './graph/FSAGraph.js';
 import FSAGraphController from './graph/controller/FSAGraphController.js';
-
-
-
 
 const MODULE_NAME = 'fsa3';
 const MODULE_VERSION = '0.0.1';
