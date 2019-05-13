@@ -41,8 +41,16 @@ class SessionImporter extends Importer
 
         this.onImportSession(session, result);
 
-        // const metadata = '_metadata' in result ? result['_metadata'] : {};
-        const projectName = fileName.substring(0, fileName.length - fileType.length);
+        let projectName;
+        if (fileName)
+        {
+            projectName = fileName.substring(0, fileName.length - fileType.length);
+        }
+        else
+        {
+            projectName = result['_metadata']['name'];
+        }
+        
         app.getSession().setProjectName(projectName);
 
         this.onPostImportSession(session);

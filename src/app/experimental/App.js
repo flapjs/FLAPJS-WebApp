@@ -38,10 +38,10 @@ import LanguageSaver from 'experimental/LanguageSaver.js';
 import AutoSave from 'util/storage/AutoSave.js';
 import LocalStorage from 'util/storage/LocalStorage.js';
 
+import ExportManager from 'util/file/export/ExportManager.js';
 import ImportManager from 'util/file/import/ImportManager.js';
 
 import Session from 'session/Session.js';
-import ExportManager from 'session/manager/export/ExportManager.js';
 import DrawerManager from 'session/manager/DrawerManager.js';
 import MenuManager from 'session/manager/MenuManager.js';
 import ViewportManager from 'session/manager/ViewportManager.js';
@@ -127,12 +127,11 @@ class App extends React.Component
         this._colorSaver = new ColorSaver(this._themeManager);
         this._saver = new AppSaver(this);
 
+        this._exportManager = new ExportManager();
         this._importManager = new ImportManager();
 
         this._undoManager = new UndoManager();
         this._hotKeyManager = new HotKeyManager();
-        this._exportManager = new ExportManager(this);
-        this._importManager = new ImportManager();
         this._drawerManager = new DrawerManager();
         this._menuManager = new MenuManager();
         this._viewportManager = new ViewportManager();
@@ -144,7 +143,6 @@ class App extends React.Component
         this._session = new Session()
             .addListener(this._undoManager)
             .addListener(this._hotKeyManager)
-            .addListener(this._exportManager)
             .addListener(this._drawerManager)
             .addListener(this._menuManager)
             .addListener(this._viewportManager)
@@ -223,6 +221,7 @@ class App extends React.Component
             .registerAltHotKey('Show Hints', () => { IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL; });
 
         this._themeManager.setElement(document.getElementById('root'));
+
         registerAppStyles(this._themeManager);
 
         AutoSave.registerHandler(this._saver);
@@ -243,6 +242,7 @@ class App extends React.Component
 
         this._themeManager.clear();
         this._importManager.clear();
+        this._exportManager.clear();
     }
 
     onModuleTitleClick(e)
@@ -273,9 +273,9 @@ class App extends React.Component
     getWorkspaceComponent() { return this._workspace.current; }
     getToolbarComponent() { return this._toolbar; }
 
+    getExportManager() { return this._exportManager; }
     getImportManager() { return this._importManager; }
 
-    getExportManager() { return this._exportManager; }
     getUndoManager() { return this._undoManager; }
     getHotKeyManager() { return this._hotKeyManager; }
     getDrawerManager() { return this._drawerManager; }
@@ -331,9 +331,10 @@ class App extends React.Component
         const hasSmallHeight = this._mediaQuerySmallHeightList.matches;
         const isFullscreen = this.state.hide;
 
-        const undoManager = this._undoManager;
         const exportManager = this._exportManager;
         const importManager = this._importManager;
+
+        const undoManager = this._undoManager;
         const drawerManager = this._drawerManager;
         const menuManager = this._menuManager;
         const viewportManager = this._viewportManager;
@@ -347,7 +348,6 @@ class App extends React.Component
         const menuPanelProps = menuManager.getPanelProps() || { session: session };
         const viewportViewClasses = viewportManager.getViewClasses();
         const viewportViewProps = viewportManager.getViewProps() || { session: session };
-        const defaultExporter = exportManager.getDefaultExporter();
 
         return (
             <div className={Style.app_container + (currentModule ? ' active ' : '')}>
@@ -385,7 +385,7 @@ class App extends React.Component
                         onClick={() => undoManager.redo()} />
                     <ToolbarButton title={I18N.toString('component.exporting.title')} icon={DownloadIcon}
                         onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_EXPORT)}
-                        disabled={!defaultExporter || !defaultExporter.canExport(currentModule)} />
+                        disabled={exportManager.isEmpty()} />
                     <ToolbarDivider />
                     <ToolbarButton title={I18N.toString('action.toolbar.bug')} icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
                         onClick={() => window.open(BUGREPORT_URL, '_blank')} />

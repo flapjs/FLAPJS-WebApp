@@ -18,6 +18,7 @@ class SessionExporter extends Exporter
         const currentModule = session.getCurrentModule();
 
         dst['_metadata'] = {
+            name: session.getProjectName(),
             module: currentModule.getModuleName(),
             version: process.env.VERSION + ':' + currentModule.getModuleVersion(),
             timestamp: new Date().toString()

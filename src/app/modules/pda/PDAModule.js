@@ -25,8 +25,6 @@ import TapePane from './components/views/TapePane.js';
 import { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
 import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
 
-import PDAGraphExporter from './exporter/PDAGraphExporter.js';
-import { DEFAULT_IMAGE_EXPORTERS } from 'modules/nodalgraph/NodalGraphImageExporter.js';
 import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
 
 import { registerNotifications } from './components/notifications/PDANotifications.js';
@@ -46,7 +44,8 @@ import GraphInitialPickHandler from 'modules/nodalgraph/controller/pickhandler/G
 import * as UserUtil from 'experimental/UserUtil.js';
 
 import PDAImporter from './filehandlers/PDAImporter.js';
-// import PDAExporter from './filehandlers/PDAExporter.js';
+import PDAExporter from './filehandlers/PDAExporter.js';
+import { registerImageExporters } from 'modules/nodalgraph/filehandlers/NodalGraphImageExporter.js';
 
 const MODULE_NAME = 'pda';
 const MODULE_LOCALIZED_NAME = 'PDA';
@@ -100,13 +99,13 @@ class PDAModule
 
         registerNotifications(app.getNotificationManager());
 
-        //TODO: These should have a pre/post handlers...
         app.getExportManager()
-            .addExporter(new PDAGraphExporter())
-            .addExporters(DEFAULT_IMAGE_EXPORTERS);
+            .registerExporter(new PDAExporter(PDAGraphParser.JSON), 'session');
+
+        registerImageExporters(app.getExportManager());
         
         app.getImportManager()
-            .addImporter(new PDAImporter(app, PDAGraphParser.JSON), '.pda.json');
+            .addImporter(new PDAImporter(app, PDAGraphParser.JSON), '.pda.json', '.json');
 
         app.getViewportManager()
             .addViewClass(EditPane)
@@ -127,8 +126,8 @@ class PDAModule
             .addPanelClass(AnalysisPanel);
 
         app.getHotKeyManager()
-            .registerHotKey('Export to PNG', [CTRL_KEY, 'KeyP'], () => { app.getExportManager().tryExportToFile(DEFAULT_IMAGE_EXPORTERS[0]); })
-            .registerHotKey('Save as JSON', [CTRL_KEY, 'KeyS'], () => { app.getExportManager().tryExportToFile(app.getExportManager().getDefaultExporter()); })
+            .registerHotKey('Export to PNG', [CTRL_KEY, 'KeyP'], () => { app.getExportManager().tryExportFile('image-png', app.getSession()); })
+            .registerHotKey('Save as JSON', [CTRL_KEY, 'KeyS'], () => { app.getExportManager().tryExportFile('session', app.getSession()); })
             .registerHotKey('New', [CTRL_KEY, 'KeyN'], () => { this.clear(app); })
             .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => { app.getUndoManager().undo(); })
             .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => { app.getUndoManager().redo(); });

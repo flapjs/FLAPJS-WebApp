@@ -25,9 +25,6 @@ import TapePane from './components/views/TapePane.js';
 import { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
 import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
 
-import FSAGraphExporter from './exporter/FSAGraphExporter.js';
-import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
-import { DEFAULT_IMAGE_EXPORTERS } from 'modules/nodalgraph/NodalGraphImageExporter.js';
 import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
 
 import { registerNotifications } from './components/notifications/FSANotifications.js';
@@ -53,9 +50,9 @@ import FSABroadcastHandler from './FSABroadcastHandler.js';
 
 import FSAImporter from './filehandlers/FSAImporter.js';
 import FSAJFFImporter from './filehandlers/FSAJFFImporter.js';
-// import FSAExporter from './filehandlers/FSAExporter.js';
-// import FSAJFFExporter from './filehandlers/FSAJFFExporter.js';
-// import { IMAGE_EXPORTERS } from 'modules/nodalgraph/filehandlers/NodalGraphImageExporter.js';
+import FSAExporter from './filehandlers/FSAExporter.js';
+import FSAJFFExporter from './filehandlers/FSAJFFExporter.js';
+import { registerImageExporters } from 'modules/nodalgraph/filehandlers/NodalGraphImageExporter.js';
 
 const MODULE_NAME = 'fsa2';
 const MODULE_VERSION = '0.0.1';
@@ -113,12 +110,13 @@ class FSAModule
 
         //TODO: These should have a pre/post handlers...
         app.getExportManager()
-            .addExporter(new FSAGraphExporter())
-            .addExporter(new JFLAPGraphExporter())
-            .addExporters(DEFAULT_IMAGE_EXPORTERS);
+            .registerExporter(new FSAExporter(FSAGraphParser.JSON), 'session')
+            .registerExporter(new FSAJFFExporter(FSAGraphParser.XML), 'jflap');
+
+        registerImageExporters(app.getExportManager());
         
         app.getImportManager()
-            .addImporter(new FSAImporter(app, FSAGraphParser.JSON), '.fsa.json')
+            .addImporter(new FSAImporter(app, FSAGraphParser.JSON), '.fsa.json', '.json')
             .addImporter(new FSAJFFImporter(app, FSAGraphParser.XML), '.jff');
 
         app.getViewportManager()
@@ -141,8 +139,8 @@ class FSAModule
             .addPanelClass(AnalysisPanel);
 
         app.getHotKeyManager()
-            .registerHotKey('Export to PNG', [CTRL_KEY, 'KeyP'], () => { app.getExportManager().tryExportToFile(DEFAULT_IMAGE_EXPORTERS[0]); })
-            .registerHotKey('Save as JSON', [CTRL_KEY, 'KeyS'], () => { app.getExportManager().tryExportToFile(app.getExportManager().getDefaultExporter()); })
+            .registerHotKey('Export to PNG', [CTRL_KEY, 'KeyP'], () => { app.getExportManager().tryExportFile('image-png', app.getSession()); })
+            .registerHotKey('Save as JSON', [CTRL_KEY, 'KeyS'], () => { app.getExportManager().tryExportFile('session', app.getSession()); })
             .registerHotKey('New', [CTRL_KEY, 'KeyN'], () => { this.clear(app); })
             .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => { app.getUndoManager().undo(); })
             .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => { app.getUndoManager().redo(); });

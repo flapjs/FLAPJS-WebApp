@@ -1,5 +1,6 @@
 import TextDownloader from './TextDownloader.js';
 import SVGImageDownloader from './SVGImageDownloader.js';
+import JSONDownloader from './JSONDownloader.js';
 
 class DownloadManager
 {
@@ -9,6 +10,7 @@ class DownloadManager
 
         this.addDownloader(new TextDownloader(), 'text');
         this.addDownloader(new SVGImageDownloader(), 'image');
+        this.addDownloader(new JSONDownloader(), 'object');
     }
 
     /**

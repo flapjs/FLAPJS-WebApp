@@ -32,14 +32,14 @@ class NodalGraphImageExporter extends Exporter
         const height = workspaceDim.height;
         const svg = this.processSVGForExport(svgElement, width, height, currentModule);
 
-        return {
+        return Promise.resolve({
             name: fileName + '.' + this._imageType,
             type: 'image',
             data: svg,
             width: width,
             height: height,
             'image-type': this._imageType
-        };
+        });
     }
 
     processSVGForExport(element, width, height, currentModule)
@@ -127,6 +127,11 @@ class NodalGraphImageExporter extends Exporter
         default: return super.getTitle();
         }
     }
+
+    getImageType()
+    {
+        return this._imageType;
+    }
 }
 
 export const IMAGE_EXPORTERS = [
@@ -134,5 +139,13 @@ export const IMAGE_EXPORTERS = [
     new NodalGraphImageExporter(IMAGE_TYPE_JPG),
     new NodalGraphImageExporter(IMAGE_TYPE_SVG)
 ];
+
+export function registerImageExporters(exportManager)
+{
+    for(const exporter of IMAGE_EXPORTERS)
+    {
+        exportManager.registerExporter(exporter, 'image-' + exporter.getImageType());
+    }
+}
 
 export default NodalGraphImageExporter;

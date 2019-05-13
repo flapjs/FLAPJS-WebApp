@@ -59,10 +59,12 @@ class FSAModule
     {
         registerNotifications(app.getNotificationManager());
 
+        /*
         app.getExportManager()
             .addExporter(new FSAGraphExporter())
             .addExporter(new JFLAPGraphExporter())
             .addExporters(DEFAULT_IMAGE_EXPORTERS);
+        */
 
         app.getRenderManager()
             .addRenderer(RENDER_LAYER_WORKSPACE, props => (

@@ -123,6 +123,17 @@ class ExportManager
     }
 
     /**
+     * Gets the associated exporter for the export type.
+     * 
+     * @param {String} exportType the registered export type
+     * @returns {Exporter} the associated exporter
+     */
+    getExporterByExportType(exportType)
+    {
+        return this._exporters.get(exportType);
+    }
+
+    /**
      * Gets the available registered export types in order.
      * 
      * @returns {Array.<String>} an array of export types
@@ -141,6 +152,11 @@ class ExportManager
     {
         return this._exporters.values();
     }
+
+    /**
+     * @returns {Boolean} whether there are available importers of any file type
+     */
+    isEmpty() { return this._exporters.size <= 0; }
 }
 
 export default ExportManager;

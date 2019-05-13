@@ -88,10 +88,12 @@ class NodalGraphModule
                     <p>{'<- Tap on a tab to begin!'}</p>
                 </PanelContainer>
             ));
-
+            
+        /*
         app.getExportManager()
             .addExporter(new NodalGraphExporter())
             .addExporters(DEFAULT_IMAGE_EXPORTERS);
+        */
 
         app.getViewportManager()
             .addViewClass(EditPane);
