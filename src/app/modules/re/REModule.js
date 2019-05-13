@@ -17,6 +17,7 @@ import ExpressionView from './components/views/ExpressionView.js';
 import {CTRL_KEY, SHIFT_KEY} from 'session/manager/hotkey/HotKeyManager.js';
 
 import REImporter from './filehandlers/REImporter.js';
+// import REExporter from './filehandlers/REExporter.js';
 
 const MODULE_NAME = 're';
 const MODULE_VERSION = '0.0.1';
