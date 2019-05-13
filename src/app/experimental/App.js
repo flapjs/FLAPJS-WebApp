@@ -38,9 +38,10 @@ import LanguageSaver from 'experimental/LanguageSaver.js';
 import AutoSave from 'util/storage/AutoSave.js';
 import LocalStorage from 'util/storage/LocalStorage.js';
 
+import ImportManager from 'util/file/import/ImportManager.js';
+
 import Session from 'session/Session.js';
 import ExportManager from 'session/manager/export/ExportManager.js';
-import ImportManager from 'session/manager/exporter/ImportManager.js';
 import DrawerManager from 'session/manager/DrawerManager.js';
 import MenuManager from 'session/manager/MenuManager.js';
 import ViewportManager from 'session/manager/ViewportManager.js';
@@ -126,10 +127,11 @@ class App extends React.Component
         this._colorSaver = new ColorSaver(this._themeManager);
         this._saver = new AppSaver(this);
 
+        this._importManager = new ImportManager();
+
         this._undoManager = new UndoManager();
         this._hotKeyManager = new HotKeyManager();
         this._exportManager = new ExportManager(this);
-        this._importManager = new ImportManager();
         this._drawerManager = new DrawerManager();
         this._menuManager = new MenuManager();
         this._viewportManager = new ViewportManager();
@@ -269,9 +271,9 @@ class App extends React.Component
     getWorkspaceComponent() { return this._workspace.current; }
     getToolbarComponent() { return this._toolbar; }
 
-    getExportManager() { return this._exportManager; }
     getImportManager() { return this._importManager; }
 
+    getExportManager() { return this._exportManager; }
     getUndoManager() { return this._undoManager; }
     getHotKeyManager() { return this._hotKeyManager; }
     getDrawerManager() { return this._drawerManager; }
@@ -366,13 +368,13 @@ class App extends React.Component
                             importManager.tryImportFile(fileBlob)
                                 .catch(e =>
                                     notificationManager.pushNotification(
-                                        'ERROR: Unable to import invalid file.',
+                                        'ERROR: Unable to import invalid file.\n' + e.message,
                                         ERROR_LAYOUT_ID,
                                         ERROR_UPLOAD_NOTIFICATION_TAG))
                                 .finally(() =>
                                     this._toolbar.closeBar());
                         }}
-                        disabled={!defaultExporter || !defaultExporter.canImport(currentModule)} />
+                        disabled={importManager.isEmpty()} />
                     <ToolbarButton title={I18N.toString('action.toolbar.undo')} icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
                         disabled={!undoManager.canUndo()}
                         onClick={() => undoManager.undo()} />

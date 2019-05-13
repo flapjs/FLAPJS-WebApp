@@ -25,12 +25,6 @@ import TapePane from './components/views/TapePane.js';
 import { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
 import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
 
-import { FILE_TYPE_JSON } from 'session/manager/exporter/JSONImporter.js';
-import FSAImporter from './FSAImporter.js';
-import FSAJFFImporter, { FILE_TYPE_JFF } from './FSAJFFImporter.js';
-// import FSAExporter from './FSAExporter.js';
-// import FSAJFFExporter from './FSAJFFExporter.js';
-
 import FSAGraphExporter from './exporter/FSAGraphExporter.js';
 import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
 import { DEFAULT_IMAGE_EXPORTERS } from 'modules/nodalgraph/NodalGraphImageExporter.js';
@@ -56,6 +50,9 @@ import StepTracer from './steptracer/StepTracer.js';
 import StepTracerView from './steptracer/StepTracerView.js';
 
 import FSABroadcastHandler from './FSABroadcastHandler.js';
+
+import FSAImporter from './filehandlers/FSAImporter.js';
+import FSAJFFImporter from './filehandlers/FSAJFFImporter.js';
 
 const MODULE_NAME = 'fsa2';
 const MODULE_VERSION = '0.0.1';
@@ -116,15 +113,10 @@ class FSAModule
             .addExporter(new FSAGraphExporter())
             .addExporter(new JFLAPGraphExporter())
             .addExporters(DEFAULT_IMAGE_EXPORTERS);
-        /*
-        app.getExportManager()
-            .addExporter('default', new FSAExporter(FSAGraphParser.JSON))
-            .addExporter('jflap', new FSAJFFExporter(FSAGraphParser.XML));
-            */
-
+        
         app.getImportManager()
-            .addImporter(FILE_TYPE_JSON, new FSAImporter(this, FSAGraphParser.JSON))
-            .addImporter(FILE_TYPE_JFF, new FSAJFFImporter(this, FSAGraphParser.XML));
+            .addImporter(new FSAImporter(app, FSAGraphParser.JSON), '.fsa.json')
+            .addImporter(new FSAJFFImporter(app, FSAGraphParser.XML), '.jff');
 
         app.getViewportManager()
             .addViewClass(EditPane)
