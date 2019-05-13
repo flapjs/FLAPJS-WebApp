@@ -132,6 +132,7 @@ class App extends React.Component
         this._undoManager = new UndoManager();
         this._hotKeyManager = new HotKeyManager();
         this._exportManager = new ExportManager(this);
+        this._importManager = new ImportManager();
         this._drawerManager = new DrawerManager();
         this._menuManager = new MenuManager();
         this._viewportManager = new ViewportManager();
