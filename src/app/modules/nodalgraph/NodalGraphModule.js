@@ -87,12 +87,6 @@ class NodalGraphModule
                 </PanelContainer>
             ));
             
-        /*
-        app.getExportManager()
-            .addExporter(new NodalGraphExporter())
-            .addExporters(DEFAULT_IMAGE_EXPORTERS);
-        */
-
         app.getViewportManager()
             .addViewClass(EditPane);
 
