@@ -27,7 +27,7 @@ function loadMachineFromData(graphController, machineController, machineData)
     }
 }
 
-class FSAImporter extends SessionImporter
+class PDAImporter extends SessionImporter
 {
     constructor(app, jsonGraphParser)
     {
@@ -88,4 +88,4 @@ class FSAImporter extends SessionImporter
     }
 }
 
-export default FSAImporter;
+export default PDAImporter;

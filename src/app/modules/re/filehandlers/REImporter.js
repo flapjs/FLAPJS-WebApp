@@ -1,46 +1,57 @@
-import Importer from 'util/file/import/Importer.js';
+import SessionImporter from 'session/SessionImporter.js';
 
-class REImporter extends Importer
+class REImporter extends SessionImporter
 {
-    constructor(app, reModule)
+    constructor(app)
     {
-        super();
+        super(app);
 
-        this._app = app;
-        this._module = reModule;
+        this._prevExpression = '';
     }
 
     /** @override */
-    importFileData(fileName, fileType, fileData)
+    onParseSession(session, fileData)
     {
-        const app = this._app;
-        const currentModule = this._module;
-        const machineController = currentModule.getMachineController();
-        const expression = machineController.getMachineExpression();
+        return JSON.parse(fileData);
+    }
 
-        const result = JSON.parse(fileData);
+    /** @override */
+    onPreImportSession(session)
+    {
+        const currentModule = session.getCurrentModule();
+        const machineController = currentModule.getMachineController();
+        this._prevExpression = machineController.getMachineExpression();
 
         // TODO: this should not be here, this should exist somewhere in graphController
-        if (!expression)
+        if (!this._prevExpression)
         {
-            app.getUndoManager().captureEvent();
+            session.getApp().getUndoManager().captureEvent();
         }
+    }
 
-        // const metadata = '_metadata' in result ? result['_metadata'] : {};
-        const machineExpression = result['machineData']['expression'];
+    /** @override */
+    onImportSession(session, sessionData)
+    {
+        const currentModule = session.getCurrentModule();
+        const machineController = currentModule.getMachineController();
+
+        const machineExpression = sessionData['machineData']['expression'];
         if (machineExpression) machineController.setMachineExpression(machineExpression);
-        
-        const projectName = fileName.substring(0, fileName.length - fileType.length);
-        app.getSession().setProjectName(projectName);
+    }
 
-        // compares GraphHash before and after import, captures event if they are not equal
-        if (expression !== machineExpression)
+    /** @override */
+    onPostImportSession(session)
+    {
+        const currentModule = session.getCurrentModule();
+        const machineController = currentModule.getMachineController();
+
+        // Compares the graph hash before and after import, captures event if they are not equal
+        const nextExpression = machineController.getMachineExpression();
+        if (this._prevExpression !== nextExpression)
         {
             // TODO: this should not be here
-            app.getUndoManager().captureEvent();
+            session.getApp().getUndoManager().captureEvent();
         }
-
-        return currentModule;
     }
 }
 
