@@ -241,6 +241,7 @@ class App extends React.Component
         AutoSave.unregisterHandler(this._langSaver);
 
         this._themeManager.clear();
+        this._importManager.clear();
     }
 
     onModuleTitleClick(e)

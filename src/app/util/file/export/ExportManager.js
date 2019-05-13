@@ -77,6 +77,15 @@ class ExportManager
     }
 
     /**
+     * Removes all exporters and export types.
+     */
+    clear()
+    {
+        this._exporters.clear();
+        this._exportTypes.length = 0;
+    }
+
+    /**
      * Tries to export the target to file.
      * 
      * @param {String} exportType the export type for the target
