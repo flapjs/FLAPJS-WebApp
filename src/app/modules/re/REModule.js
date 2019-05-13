@@ -2,8 +2,6 @@ import React from 'react';
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 
 import MachineController from './MachineController.js';
-import REGraphExporter from './exporter/REGraphExporter.js';
-import REtoFSAGraphExporter from './exporter/REtoFSAGraphExporter.js';
 import REErrorChecker from './REErrorChecker.js';
 import SafeExpressionEventHandler from './SafeExpressionEventHandler.js';
 

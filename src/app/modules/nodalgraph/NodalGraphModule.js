@@ -17,8 +17,6 @@ import * as NodalGraphParser from 'graph/parser/NodalGraphParser.js';
 import EditPane from './components/views/EditPane.js';
 import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
 
-import NodalGraphExporter from './NodalGraphExporter.js';
-import { DEFAULT_IMAGE_EXPORTERS } from './NodalGraphImageExporter.js';
 import SafeGraphEventHandler from './SafeGraphEventHandler.js';
 
 import GraphNodeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeInputHandler.js';
