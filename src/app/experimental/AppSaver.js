@@ -39,11 +39,18 @@ class AppSaver extends AbstractAutoSaveHandler
         const currentModule = session.getCurrentModule();
         const currentModuleName = currentModule.getModuleName();
 
-        app.getExportManager().tryExportTargetToData('session', session)
-            .then(result =>
-            {
-                dataStorage.setDataAsObject('graph-' + currentModuleName, result.data);
-            });
+        try
+        {
+            app.getExportManager().tryExportTargetToData('session', session)
+                .then(result =>
+                {
+                    dataStorage.setDataAsObject('graph-' + currentModuleName, result.data);
+                });
+        }
+        catch(e)
+        {
+            // Ignore error
+        }
     }
 
     /** @override */

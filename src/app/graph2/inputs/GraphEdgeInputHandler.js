@@ -13,8 +13,8 @@ export const GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE = 'error-edge-edit-while-delete'
 
 const EDGE_POSITION_INTERPOLATION_DELTA = 0.6;
 
-const SHOULD_DELETE_EDGE_PLACEHOLDER = true;
-const SHOULD_DELETE_EDGE_WITH_EMPTY_LABEL = true;
+const SHOULD_DELETE_EDGE_PLACEHOLDER = false;
+const SHOULD_DELETE_EDGE_WITH_EMPTY_LABEL = false;
 
 class GraphEdgeInputHandler extends AbstractInputHandler
 {
