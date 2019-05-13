@@ -87,6 +87,7 @@ class AnalysisPanel extends React.Component
         const session = this.props.session;
         const currentModule = session.getCurrentModule();
         const machineController = currentModule.getMachineController();
+        const graphController = currentModule.getGraphController();
 
         return (
             <PanelContainer id={this.props.id}

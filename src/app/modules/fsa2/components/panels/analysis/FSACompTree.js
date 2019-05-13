@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 
 import FSANodeRenderer from '../../../renderer/FSANodeRenderer.js';
 import FSAEdgeRenderer from '../../../renderer/FSAEdgeRenderer.js';
+import NodeRenderer from '../../../../../graph2/renderer/NodeRenderer.js';
 import StringTester from '../../../tester/StringTester.js';
 
 class FSACompTree extends React.Component
 {
-  constructor(props)
+  constructor(props) 
   {
     super(props);
     this._window = null;
@@ -18,7 +19,7 @@ class FSACompTree extends React.Component
     this.state = { containerTree: null };
   }
 
-  componentDidMount()
+  componentDidMount() 
   {
     this._window = window.open('', '', 'width=600,height=400,left=200,top=200');
     const containerTree = document.createElement('div');
@@ -48,13 +49,22 @@ class FSACompTree extends React.Component
     if (!this.state.containerTree) return null;
 
     const nextStep = this.nextStep;
+    console.log(this._tester.targets);
     return ReactDOM.createPortal(
       <div>
         {this._tester.targets.length > 0 &&
-          this._tester.targets.map((e) => <svg key={e.getGraphElementID()} xmlns="http://www.w3.org/2000/svg"
-          width="24" height="24" viewBox="0 0 24 24"><FSANodeRenderer node={e} /></svg>)
+          this._tester.targets.map(
+            (e, i) => <svg key={e.getGraphElementID() || i}>
+              <React.Fragment>
+                <NodeRenderer
+                  position={e}
+                  radius={e.getNodeSize()}
+                  label={e.getNodeLabel()} />
+              </React.Fragment>
+            </svg>
+          )
         }
-        <button onClick={nextStep}>next step bruh</button>
+        <button onClick={nextStep}>next step</button>
       </div>
       , this._window.document.body);
   }
@@ -62,3 +72,5 @@ class FSACompTree extends React.Component
 }
 
 export default FSACompTree;
+// need to make a function that calculates where the nodes should be and shit lmao
+// also probably need to add another array that keeps track of the older nodes

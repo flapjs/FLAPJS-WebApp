@@ -154,7 +154,7 @@ class NodeGraph
    * @param  {Number} [x=0]       the initial x position
    * @param  {Number} [y=0]       the initial y position
    * @param  {String} [id=null]   the new node id (will be generated if null)
-   * @returns {GraphNdoe}         the new node
+   * @returns {GraphNode}         the new node
    */
     createNode(x = 0, y = 0, id = null)
     {

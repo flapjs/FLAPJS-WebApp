@@ -22,6 +22,7 @@ class GraphNodeRenderer extends React.Component
         const label = node.getNodeLabel();
         const radius = node.getNodeSize();
 
+        //console.log(node);
         return (
             <React.Fragment>
                 <NodeRenderer
