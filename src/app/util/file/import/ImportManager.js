@@ -142,7 +142,7 @@ class ImportManager
             })
             .catch(err =>
             {
-                throw new Error('Failed to import file: ' + err.message)
+                throw new Error('Failed to import file: ' + err.message);
             });
     }
 
