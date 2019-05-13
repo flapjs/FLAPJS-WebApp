@@ -1,4 +1,4 @@
-import Parser from 'session/manager/exporter/Parser.js';
+import Parser from 'util/file/Parser.js';
 import SemanticVersion from 'util/version/SemanticVersion.js';
 import FSAGraph from './FSAGraph.js';
 
