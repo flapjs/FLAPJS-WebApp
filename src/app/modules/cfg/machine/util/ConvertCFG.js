@@ -48,7 +48,7 @@ export function convertToPDA(cfg)
                 machine.addTransition(prevState, newState, EMPTY_SYMBOL, EMPTY_SYMBOL, rhs.charAt(i));
             }
             //For the first rhs symbol, loop back to Qloop
-            machine.addTransition(newState, state3, EMPTY_SYMBOL, lhs, rhs.charAt(0));
+            machine.addTransition(newState, state3, EMPTY_SYMBOL, EMPTY_SYMBOL, rhs.charAt(0));
         }
     }
 
