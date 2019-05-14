@@ -61,6 +61,7 @@ The conversion algorithm is the same as described [above](#converting-to-push-do
 
 - Currently, when the CFG adds and verifies rules, it makes/expects uppercase letters to Variables and all other symbols (excluding PIPE and EMPTY) as terminals. This can be limiting if we want to use non-capital letters for Variables and/or we want to use capital letters for terminals.
 - The validation for CFGs does not check whether it is a  proper CFG (unreachable symbols, cycles, etc), which we might want to allow the user to fail with as a part of learning, but heads up
+- While I was testing ConvertCFGtoPDA and testing some strings on the PDA, I noticed that some strings would fail even though they were supposed to be in the language, and then realized it wasn't my code, but it's because there is a max amount of computation steps in SolvePDA. For some strings, it is probably taking too long, and it's not always based on length (I had some longer strings pass while shorter ones didn't). 
 
 
 # Work Log
