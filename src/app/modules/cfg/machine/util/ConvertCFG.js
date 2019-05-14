@@ -1,4 +1,5 @@
 import PDA, {EMPTY_SYMBOL} from 'modules/pda/machine/PDA.js';
+import { EMPTY } from 'modules/re/machine/RE.js';
 
 export function convertToPDA(cfg)
 {
@@ -31,24 +32,28 @@ export function convertToPDA(cfg)
         //***One symbol RHS doesn't require new states, just a self-loop to replace lhs symbol with rhs symbol***
         if(rhs.length == 1)
         {
-            machine.addTransition(state3, state3, EMPTY_SYMBOL, lhs, rhs);
+            let symbol = prepareTransitionSymbol(rhs);
+            machine.addTransition(state3, state3, EMPTY_SYMBOL, lhs, symbol);
             continue;
         }
         else
         {
             let i = rhs.length - 1;
             let newState = machine.createState(`q${++lastStateNum}`);
+            let symbol = prepareTransitionSymbol(rhs.charAt(i));
             //Replace lhs variable with rightmost symbol
-            machine.addTransition(state3, newState, EMPTY_SYMBOL, lhs, rhs.charAt(i));
+            machine.addTransition(state3, newState, EMPTY_SYMBOL, lhs, symbol);
             //Push symbols from right to left
             for( --i ; i > 0; i-- )
             {
                 let prevState = newState;
+                symbol = prepareTransitionSymbol(rhs.charAt(i));
                 newState = machine.createState(`q${++lastStateNum}`);
-                machine.addTransition(prevState, newState, EMPTY_SYMBOL, EMPTY_SYMBOL, rhs.charAt(i));
+                machine.addTransition(prevState, newState, EMPTY_SYMBOL, EMPTY_SYMBOL, symbol);
             }
             //For the first rhs symbol, loop back to Qloop
-            machine.addTransition(newState, state3, EMPTY_SYMBOL, EMPTY_SYMBOL, rhs.charAt(0));
+            let firstSymbol = prepareTransitionSymbol(rhs.charAt(0));
+            machine.addTransition(newState, state3, EMPTY_SYMBOL, EMPTY_SYMBOL, firstSymbol);
         }
     }
 
@@ -65,4 +70,16 @@ export function convertToPDA(cfg)
     machine.setFinalState(state4);
 
     return machine;
+}
+
+function prepareTransitionSymbol(symbol)
+{
+    if(symbol == EMPTY)
+    {
+        return EMPTY_SYMBOL;
+    }
+    else
+    {
+        return symbol;
+    }
 }

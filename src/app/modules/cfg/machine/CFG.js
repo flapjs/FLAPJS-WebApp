@@ -4,7 +4,7 @@ import { EMPTY } from 'modules/re/machine/RE.js';
 
 export const PIPE = "|";
 
-class Rule
+export class Rule
 {
     //lhs -> rhs
     constructor(lhs = "", rhs = "")
@@ -119,14 +119,14 @@ class CFG
         }
 
         //Check that there is no intersection between terminals and variables
-        let intersection = new Set([...this.getVariables()].filter(x => this.getTerminals.has(x)));
+        let intersection = new Set([...this.getVariables()].filter(x => this.getTerminals().has(x)));
         if(intersection.size > 0)
         {
             this._errors.push(new Error("A Terminal should not be a Variable too, or vice versa"))
         }
 
         //TODO Check if its a proper CFG(unreachable symbols, cycles, etc)????? Ehhhh?
-        return isValid();
+        return this.isValid();
     }
 	isValid()
 	{
@@ -141,19 +141,22 @@ class CFG
     {
         //LHS is size 1 and is a variable
         let LHSvalid = rule.getLHS().length == 1 && this.hasVariable(rule.getLHS())
+        if(!LHSvalid) console.log("LHS invalid");
         //RHS contains terminals and variables within the CFG
         let RHSvalid = true;
         for(let char of rule.getRHS())
         {
             if(char != PIPE && char != EMPTY)
             {
-                if(char == char.toUpperCase())
+                if(char.match(/^[a-z]+$/i) && char == char.toUpperCase())
                 {
                     RHSvalid = RHSvalid && this.hasVariable(char);
+                    if(!RHSvalid) console.log(char + " should be a variable");
                 }
                 else
                 {
                     RHSvalid = RHSvalid && this.hasTerminal(char);
+                    if(!RHSvalid) console.log(char + " should be a terminal");
                 }
             }
         }
@@ -166,14 +169,14 @@ class CFG
      */
     separateRulesBySubstitutions(changeCFG=false)
     {
-        const splitRules = [];
+        let splitRules = [];
         for(const rule of this.getRules())
         {
-            splitRules.push(rule.splitRHSByPipe());
+            splitRules = splitRules.concat(rule.splitRHSByPipe());
         }
         if(changeCFG)
         {
-            this.rules = splitRules;
+            this._rules = splitRules;
         }
         return splitRules;
     }

@@ -68,3 +68,11 @@ The conversion algorithm is the same as described [above](#converting-to-push-do
 5/13/19 - Seth
 
 This is the first entry, and although I will add entries for every change I make progressively, I'll just sum up what has been done up to this point. Two weeks ago I wrote CFG.js, which defines the CFG class. Last week I wrote ConvertCFGtoPDA but it has yet to be tested. And finally, I wrote this markdown file.
+
+5/14/19 - Seth
+
+While testing, I was able to do some debugging
+ - It is important to distinguish the EMPTY character that can be in a CFG from the EMPTY_SYMBOL that it ultimately has to become as a label for the transition in a PDA
+ - While validating, I had only checked if the character was equal to its upper case form, which is always true for numbers (that should be terminals, not variables). So I had to change it to check it is an alpha char first.
+ - Had a bug in separating rules by pipe that was just caused by a type between this.rules and this._rules, which was the difference between actually saving the changes and pulling my hair out
+ I've done a few test cases and it looks like she's running well
