@@ -1,4 +1,4 @@
-import Exporter from 'util/file/export/Exporter.js';
+import SessionExporter from 'session/SessionExporter.js';
 
 import PNGIcon from 'deprecated/icons/flat/PNGIcon.js';
 import JPGIcon from 'deprecated/icons/flat/JPGIcon.js';
@@ -11,7 +11,7 @@ export const IMAGE_TYPE_SVG = 'svg';
 const EXPORT_PADDING_X = 30;
 const EXPORT_PADDING_Y = 0;
 
-class NodalGraphImageExporter extends Exporter
+class NodalGraphImageExporter extends SessionExporter
 {
     constructor(imageType=IMAGE_TYPE_PNG)
     {
