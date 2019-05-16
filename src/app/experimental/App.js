@@ -243,6 +243,7 @@ class App extends React.Component
         this._themeManager.clear();
         this._importManager.clear();
         this._exportManager.clear();
+        this._menuManager.setSubtitleComponentClass(null);
     }
 
     onModuleTitleClick(e)
