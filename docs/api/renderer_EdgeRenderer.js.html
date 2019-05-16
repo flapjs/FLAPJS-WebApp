@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: renderer/EdgeRenderer.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: renderer/EdgeRenderer.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+
+const QUAD_RADIAN_THRESHOLD = 0.01;
+const QUAD_REVERSE_OFFSET_THRESHOLD = 4;
+const ARROW_WIDTH = 10;
+const SIXTH_PI = Math.PI / 6;
+
+export const DIRECTED_FORWARD = 'forward';
+export const DIRECTED_BACKWARD = 'backward';
+export const DIRECTED_BOTH = 'both';
+export const DIRECTED_NONE = 'undirected';
+
+export const DefaultEndpointRenderer = props => (
+    &lt;React.Fragment>
+        &lt;path d={
+            'M ' +
+            (props.position.x - (props.length * Math.sin(props.angle - SIXTH_PI))) +
+            ' ' +
+            (props.position.y - (props.length * Math.cos(props.angle - SIXTH_PI))) +
+            ' ' +
+            'L ' + props.position.x + ' ' + props.position.y +
+            ' ' +
+            'L ' +
+            (props.position.x - (props.length * Math.sin(props.angle + SIXTH_PI))) +
+            ' ' +
+            (props.position.y - (props.length * Math.cos(props.angle + SIXTH_PI)))
+        }
+        stroke={props.color}
+        fill="none" />
+    &lt;/React.Fragment>
+);
+
+export const DefaultLabelRenderer = props => (
+    &lt;g transform={'translate(' + props.position.x + ',' + props.position.y + ')' +
+        ' ' +
+        'rotate(' + (props.direction * 180 / Math.PI) + ')'}>
+        {
+            props.labels &amp;&amp; props.labels.length > 0 &amp;&amp;
+            props.labels.map((str, i) => 
+            {
+                return (
+                    &lt;text key={str + '.' + i}
+                        transform={'translate(0,' + ((i + 1) * -15) + ')' +
+                            (props.reverse ? ' scale(-1,-1)' : '')}
+                        alignmentBaseline="central"
+                        pointerEvents="none"
+                        style={{ userSelect: 'none' }}
+                        textAnchor="middle"
+                        fill={props.color}>
+                        {str}
+                    &lt;/text>
+                );
+            })
+        }
+    &lt;/g>
+);
+
+class EdgeRenderer extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+    }
+
+    /** @override */
+    render()
+    {
+        const directed = this.props.directed || DIRECTED_NONE;
+
+        const ForwardEndpointRenderer =
+            (directed === DIRECTED_FORWARD || directed === DIRECTED_BOTH) ?
+                (this.props.forwardEndpointRenderer ||
+                    this.props.endpointRenderer ||
+                    DefaultEndpointRenderer) : null;
+        const BackwardEndpointRenderer =
+            (directed === DIRECTED_BACKWARD || directed === DIRECTED_BOTH) ?
+                (this.props.backwardEndpointRenderer ||
+                    this.props.endpointRenderer ||
+                    DefaultEndpointRenderer) : null;
+        const EdgeLabelRenderer = this.props.labelRenderer || DefaultLabelRenderer;
+
+        const fromPoint = this.props.from;
+        const toPoint = this.props.to;
+        const centerPoint = this.props.center;
+        const label = this.props.label || '';
+        const direction = this.props.direction || 0;
+        const color = this.props.color || '#000000';
+
+        let reverseLabel = false;
+        let fromAngle;
+        let toAngle;
+        let quadLine = null;
+
+        const dftx = fromPoint.x - toPoint.x;
+        const dfty = fromPoint.y - toPoint.y;
+        const dfcx = fromPoint.x - centerPoint.x;
+        const dfcy = fromPoint.y - centerPoint.y;
+        const ftrad = Math.atan2(dfty, dftx);
+        const fcrad = Math.atan2(dfcy, dfcx);
+        if (Math.abs(ftrad - fcrad) &lt;= QUAD_RADIAN_THRESHOLD)
+        {
+            toAngle = Math.atan2(centerPoint.x - toPoint.x, centerPoint.y - toPoint.y) + Math.PI;
+            fromAngle = Math.atan2(centerPoint.x - fromPoint.x, centerPoint.y - fromPoint.y) + Math.PI;
+            quadLine = 'L ' + toPoint.x + ' ' + toPoint.y;
+            reverseLabel = false;
+        }
+        else
+        {
+            const cx = ((centerPoint.x * 4) - fromPoint.x - toPoint.x) / 2;
+            const cy = ((centerPoint.y * 4) - fromPoint.y - toPoint.y) / 2;
+            toAngle = Math.atan2(cx - toPoint.x, cy - toPoint.y) + Math.PI;
+            fromAngle = Math.atan2(cx - fromPoint.x, cy - fromPoint.y) + Math.PI;
+            quadLine = 'Q ' + cx + ' ' + cy + ' ' + toPoint.x + ' ' + toPoint.y;
+            reverseLabel = cy > centerPoint.y + QUAD_REVERSE_OFFSET_THRESHOLD;
+        }
+
+        return (
+            &lt;g>
+                &lt;path d={'M ' + fromPoint.x + ' ' + fromPoint.y + ' ' + quadLine}
+                    stroke={color}
+                    fill="none" />
+                {ForwardEndpointRenderer &amp;&amp;
+                    &lt;ForwardEndpointRenderer position={toPoint} angle={toAngle} length={ARROW_WIDTH} color={color} />}
+                {BackwardEndpointRenderer &amp;&amp;
+                    &lt;BackwardEndpointRenderer position={fromPoint} angle={fromAngle} length={ARROW_WIDTH} color={color} />}
+                {EdgeLabelRenderer &amp;&amp;
+                    &lt;EdgeLabelRenderer position={centerPoint} labels={label.split('\n')} direction={direction} reverse={reverseLabel} color={color} />}
+            &lt;/g>
+        );
+    }
+}
+
+export default EdgeRenderer;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphEditorView.html">GraphEditorView</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#doesSupportLocalStorage">doesSupportLocalStorage</a></li><li><a href="global.html#getCurrentURL">getCurrentURL</a></li><li><a href="global.html#getDirectionalVector">getDirectionalVector</a></li><li><a href="global.html#getFileExtFromName">getFileExtFromName</a></li><li><a href="global.html#getMidPoint">getMidPoint</a></li><li><a href="global.html#getURLParameters">getURLParameters</a></li><li><a href="global.html#guid">guid</a></li><li><a href="global.html#lerp">lerp</a></li><li><a href="global.html#loadMachineFromData">loadMachineFromData</a></li><li><a href="global.html#stringHash">stringHash</a></li><li><a href="global.html#uuid">uuid</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Wed May 15 2019 21:55:29 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

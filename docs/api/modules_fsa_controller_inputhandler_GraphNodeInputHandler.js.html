@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/fsa/controller/inputhandler/GraphNodeInputHandler.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/fsa/controller/inputhandler/GraphNodeInputHandler.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import GraphElementInputHandler from './GraphElementInputHandler.js';
+
+const SNAP_TO_GRID = true;
+const SNAP_SIZE = 48;
+
+class GraphNodeInputHandler extends GraphElementInputHandler
+{
+    constructor()
+    {
+        super('node');
+    }
+
+    /** @override */
+    onAction(inputController, graphController, pointer, target)
+    {
+        const picker = inputController.getPicker();
+
+        //Click to delete node
+        if (inputController.isTrashMode())
+        {
+            //So that the emitted 'delete' events can use this
+            graphController.prevX = target.x;
+            graphController.prevY = target.y;
+
+            //If there exists selected states, delete them all!
+            if (picker.hasSelection())
+            {
+                //Delete all selected nodes
+                graphController.deleteSelectedNodes(target);
+            }
+            else
+            {
+                //Delete a single node
+                graphController.deleteTargetNode(target);
+            }
+            return true;
+        }
+        //Edit click to toggle node
+        else if (!inputController.isMoveMode())
+        {
+            graphController.toggleNode(target);
+            return true;
+        }
+
+        return false;
+    }
+
+    /** @override */
+    onDragStart(inputController, graphController, pointer, target)
+    {
+        if (inputController.isMoveMode())
+        {
+            //Moving node (and selected nodes)
+            graphController.prevX = target.x;
+            graphController.prevY = target.y;
+        }
+        else
+        {
+            const picker = inputController.getPicker();
+            const graph = graphController.getGraph();
+            const edge = graph.createEdge(target, pointer);
+            edge.setEdgeLabel(graphController.getGraphLabeler().getDefaultEdgeLabel());
+
+            //Redirect pointer to refer to the edge as the new target
+            picker.setInitialTarget(edge, 'endpoint');
+            inputController.isNewEdge = true;
+
+            //Reset previous quad values for new proxy edge
+            const edgeQuad = edge.getQuadratic();
+            graphController.prevQuad.radians = edgeQuad.radians;
+            graphController.prevQuad.length = edgeQuad.length;
+            graphController.prevEdgeTo = null;
+
+            //Ready to move proxy edge to pointer...
+        }
+        return true;
+    }
+
+    /** @override */
+    onDragMove(inputController, graphController, pointer, target)
+    {
+        const picker = inputController.getPicker();
+        const graph = graphController.getGraph();
+        let x = pointer.x;
+        let y = pointer.y;
+
+        if (inputController._snapToGrid)
+        {
+            const snapSize = inputController._snapSize;
+            x = Math.round(x / snapSize) * snapSize;
+            y = Math.round(y / snapSize) * snapSize;
+        }
+
+        if (picker.hasSelection())
+        {
+            graphController.moveMultipleNodesTo(pointer, picker.getSelection(graph), x, y);
+        }
+        else
+        {
+            graphController.moveNodeTo(pointer, target, x, y);
+        }
+        return true;
+    }
+
+    /** @override */
+    onDragStop(inputController, graphController, pointer, target)
+    {
+        const picker = inputController.getPicker();
+        const graph = graphController.getGraph();
+        const x = pointer.x;
+        const y = pointer.y;
+
+        //Delete it if withing trash area...
+        if (inputController.isTrashMode())
+        {
+            //If there exists selected states, delete them all!
+            if (picker.hasSelection())
+            {
+                graphController.deleteSelectedNodes(target);
+            }
+            else
+            {
+                //Delete a single node
+                graphController.deleteTargetNode(target);
+            }
+
+            return true;
+        }
+        //If dragged to an empty space (not trash)
+        else
+        {
+            //Do nothing, since should have moved to position
+            if (picker.hasSelection())
+            {
+                const dx = x - graphController.prevX;
+                const dy = y - graphController.prevY;
+                graphController.onGraphIntentMoveAllNodes(picker.getSelection(graph), dx, dy);
+                //graphController.emit("nodeMoveAll", graph, picker.getSelection(graph), dx, dy);
+            }
+            else
+            {
+                graphController.onGraphIntentMoveNode(target, x, y, graphController.prevX, graphController.prevY);
+                //graphController.emit("nodeMove", graph, target, x, y, graphController.prevX, graphController.prevY);
+            }
+            return true;
+        }
+
+        return false;
+    }
+}
+
+export default GraphNodeInputHandler;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphEditorView.html">GraphEditorView</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#doesSupportLocalStorage">doesSupportLocalStorage</a></li><li><a href="global.html#getCurrentURL">getCurrentURL</a></li><li><a href="global.html#getDirectionalVector">getDirectionalVector</a></li><li><a href="global.html#getFileExtFromName">getFileExtFromName</a></li><li><a href="global.html#getMidPoint">getMidPoint</a></li><li><a href="global.html#getURLParameters">getURLParameters</a></li><li><a href="global.html#guid">guid</a></li><li><a href="global.html#lerp">lerp</a></li><li><a href="global.html#loadMachineFromData">loadMachineFromData</a></li><li><a href="global.html#stringHash">stringHash</a></li><li><a href="global.html#uuid">uuid</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Wed May 15 2019 21:55:29 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

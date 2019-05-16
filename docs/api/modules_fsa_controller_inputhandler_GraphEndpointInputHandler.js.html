@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/fsa/controller/inputhandler/GraphEndpointInputHandler.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/fsa/controller/inputhandler/GraphEndpointInputHandler.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import GraphElementInputHandler from './GraphElementInputHandler.js';
+import GraphNode from 'graph/elements/GraphNode.js';
+
+class GraphEndpointInputHandler extends GraphElementInputHandler
+{
+    constructor()
+    {
+        super('endpoint');
+    }
+
+    /** @override */
+    onAction(inputController, graphController, pointer, target)
+    {
+        if (inputController.isTrashMode())
+        {
+            //Delete a single edge
+            graphController.deleteTargetEdge(target);
+            return true;
+        }
+        return false;
+    }
+
+    /** @override */
+    onDragStart(inputController, graphController, pointer, target)
+    {
+        const targetQuad = target.getQuadratic();
+        graphController.prevQuad.radians = targetQuad.radians;
+        graphController.prevQuad.length = targetQuad.length;
+        graphController.prevEdgeTo = target.getEdgeTo();
+
+        inputController.isNewEdge = false;
+
+        //Ready to move the edge endpoint to pointer...
+        return true;
+    }
+
+    /** @override */
+    onDragMove(inputController, graphController, pointer, target)
+    {
+        graphController.moveEndpointTo(pointer, target, pointer.x, pointer.y);
+        return true;
+    }
+
+    /** @override */
+    onDragStop(inputController, graphController, pointer, target)
+    {
+        const graph = graphController.getGraph();
+        const x = pointer.x;
+        const y = pointer.y;
+
+        //Delete it if withing trash area...
+        if (inputController.isTrashMode())
+        {
+            graphController.deleteTargetEdge(target);
+            return true;
+        }
+        //If hovering over a node...
+        else if (target.getEdgeTo() instanceof GraphNode)
+        {
+            const result = graph.formatEdge(target);
+
+            //If a different edge is the result of the target...
+            if (result !== target)
+            {
+                //Allow the user to edit the merged labels
+                graphController.openLabelEditor(result, x, y, result.getEdgeLabel(), false);
+
+                //Delete the merged label
+                graph.deleteEdge(target);
+                return true;
+            }
+            //Open label editor if a new edge...
+            else
+            {
+                if (inputController.isNewEdge)
+                {
+                    graphController.openLabelEditor(target, x, y, null, true, () => 
+                    {
+                        graphController.onGraphIntentFinishEdge(target);
+                    });
+                }
+                else
+                {
+                    graphController.openLabelEditor(target, x, y);
+                }
+            }
+
+            if (inputController.isNewEdge)
+            {
+                //Must be after openLabelEditor() to allow the function to check it...
+                inputController.isNewEdge = false;
+
+                //Emit event
+                graphController.onGraphIntentCreateEdge(target);
+            }
+            else if (graphController.prevEdgeTo !== null)
+            {
+                //Emit event
+                graphController.onGraphIntentChangeDestination(target, target.getEdgeTo(), graphController.prevEdgeTo, graphController.prevQuad);
+            }
+
+            return true;
+        }
+        //If hovering over anything else...
+        else
+        {
+            //Destroy any edge that no longer have a destination
+            if (inputController.shouldDestroyPointlessEdges)
+            {
+                if (!inputController.isNewEdge)
+                {
+                    graphController.deleteTargetEdge(target);
+                }
+                else
+                {
+                    graph.deleteEdge(target);
+                }
+                return true;
+            }
+            //Keep edges as placeholders (used in DFA's)
+            else
+            {
+                target.changeDestinationNode(null);
+
+                //Open label editor if default edge...
+                if (target.getEdgeLabel().length &lt;= 0)
+                {
+                    graphController.openLabelEditor(target, x, y);
+                }
+                return true;
+            }
+        }
+    }
+}
+
+export default GraphEndpointInputHandler;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphEditorView.html">GraphEditorView</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#doesSupportLocalStorage">doesSupportLocalStorage</a></li><li><a href="global.html#getCurrentURL">getCurrentURL</a></li><li><a href="global.html#getDirectionalVector">getDirectionalVector</a></li><li><a href="global.html#getFileExtFromName">getFileExtFromName</a></li><li><a href="global.html#getMidPoint">getMidPoint</a></li><li><a href="global.html#getURLParameters">getURLParameters</a></li><li><a href="global.html#guid">guid</a></li><li><a href="global.html#lerp">lerp</a></li><li><a href="global.html#loadMachineFromData">loadMachineFromData</a></li><li><a href="global.html#stringHash">stringHash</a></li><li><a href="global.html#uuid">uuid</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Wed May 15 2019 21:55:29 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

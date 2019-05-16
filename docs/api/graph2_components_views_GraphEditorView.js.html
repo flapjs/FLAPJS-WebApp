@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: graph2/components/views/GraphEditorView.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: graph2/components/views/GraphEditorView.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import PropTypes from 'prop-types';
+
+import ViewportComponent from 'util/input/components/ViewportComponent.js';
+import NodeGraphView from './NodeGraphView.js';
+import LabelEditorView from './LabelEditorView.js';
+import ViewportLayer from '../layers/ViewportLayer.js';
+import ViewportNavigationLayer from '../layers/ViewportNavigationLayer.js';
+
+import InputController from 'graph2/controller/InputController.js';
+import SelectionBox from 'graph2/controller/SelectionBox.js';
+
+class GraphEditorView extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this._inputController = new InputController();
+        this._selectionBox = new SelectionBox();
+
+        this._viewportComponent = React.createRef();
+        this._labelEditorComponent = React.createRef();
+        this._graphViewComponent = React.createRef();
+
+        this.onMouseOver = this.onMouseOver.bind(this);
+        this.onMouseOut = this.onMouseOut.bind(this);
+    }
+
+    /** @override */
+    componentDidMount()
+    {
+        const inputController = this._inputController;
+        const selectionBox = this._selectionBox;
+
+        const graphController = this.props.graphController;
+        const labelFormatter = graphController.getLabelFormatter();
+
+        const viewport = this.getViewportComponent();
+        const inputAdapter = viewport.getInputAdapter();
+
+        graphController.setInputController(inputController);
+
+        inputController.setGraphController(graphController);
+        inputController.setSelectionBox(selectionBox);
+        inputController.setLabelFormatter(labelFormatter);
+        inputAdapter.bindContext(inputController.getInputContext());
+
+        inputController.initialize();
+        graphController.initialize();
+    }
+
+    /** @override */
+    componentDidUpdate()
+    {
+        this._inputController.update();
+        this.props.graphController.update();
+    }
+
+    /** @override */
+    componentWillUnmount()
+    {
+        const viewport = this.getViewportComponent();
+        const inputAdapter = viewport.getInputAdapter();
+        inputAdapter.unbindContext(this._inputController.getInputContext());
+
+        this.props.graphController.destroy();
+
+        this._selectionBox.clearSelection();
+        this._inputController.destroy();
+    }
+
+    onMouseOver(e) { this._inputController.onMouseOver(e); }
+    onMouseOut(e) { this._inputController.onMouseOut(e); }
+
+    getInputController() { return this._inputController; }
+    getSelectionBox() { return this._selectionBox; }
+
+    getViewportComponent() { return this._viewportComponent.current; }
+    getLabelEditorComponent() { return this._labelEditorComponent.current; }
+
+    /** @override */
+    render()
+    {
+        const viewport = this.getViewportComponent();
+
+        const inputController = this._inputController;
+        const selectionBox = this._selectionBox;
+
+        const graphController = this.props.graphController;
+        const labelFormatter = graphController.getLabelFormatter();
+
+        return (
+            &lt;React.Fragment>
+                &lt;ViewportComponent ref={this._viewportComponent}
+                    id={this.props.id}
+                    className={this.props.className}
+                    style={this.props.style}>
+                    {viewport &amp;&amp;
+                        &lt;React.Fragment>
+                            &lt;NodeGraphView ref={this._graphViewComponent}
+                                graphController={graphController}
+                                inputController={inputController}
+                                selectionBox={selectionBox}
+                                viewport={viewport}
+                                onMouseOver={this.onMouseOver}
+                                onMouseOut={this.onMouseOut} />
+                            {this.props.children}
+                        &lt;/React.Fragment>}
+                &lt;/ViewportComponent>
+                {viewport &amp;&amp;
+                    &lt;React.Fragment>
+                        &lt;ViewportLayer
+                            graphController={graphController}
+                            inputController={inputController}
+                            viewport={viewport}>
+                            &lt;ViewportNavigationLayer
+                                style={{ right: 0 }}
+                                viewportAdapter={viewport.getInputAdapter().getViewportAdapter()} />
+                            {this.props.overlay}
+                        &lt;/ViewportLayer>
+                        &lt;LabelEditorView ref={ref =>
+                        {
+                            this._labelEditorComponent.current = ref;
+                            graphController.setLabelEditor(ref);
+                        }}
+                        labelFormatter={labelFormatter}
+                        viewport={viewport}
+                        saveOnExit={true}>
+                            {this.props.labelEditor}
+                        &lt;/LabelEditorView>
+                    &lt;/React.Fragment>}
+            &lt;/React.Fragment>
+        );
+    }
+}
+
+GraphEditorView.propTypes = {
+    id: PropTypes.string,
+    className: PropTypes.string,
+    style: PropTypes.object
+};
+
+export default GraphEditorView;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphEditorView.html">GraphEditorView</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#doesSupportLocalStorage">doesSupportLocalStorage</a></li><li><a href="global.html#getCurrentURL">getCurrentURL</a></li><li><a href="global.html#getDirectionalVector">getDirectionalVector</a></li><li><a href="global.html#getFileExtFromName">getFileExtFromName</a></li><li><a href="global.html#getMidPoint">getMidPoint</a></li><li><a href="global.html#getURLParameters">getURLParameters</a></li><li><a href="global.html#guid">guid</a></li><li><a href="global.html#lerp">lerp</a></li><li><a href="global.html#loadMachineFromData">loadMachineFromData</a></li><li><a href="global.html#stringHash">stringHash</a></li><li><a href="global.html#uuid">uuid</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Wed May 15 2019 21:55:29 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

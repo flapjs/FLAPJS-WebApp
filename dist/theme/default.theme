@@ -1,0 +1,36 @@
+--color-graph-node = #FEE781
+--color-graph-text = #000000
+--color-graph-text-alt = #FFFFFF
+--color-graph-select = #808080
+
+--color-accent = #FFCD00
+
+--color-primary = #07889B
+--color-primary-text = #F7F5E6
+--color-primary-text-alt = #000000
+--color-primary-lite = #63ADB8
+--color-primary-dark = #077787
+
+--color-surface = #AAAAAA
+--color-surface-text = #000000
+--color-surface-text-alt = #FFFFFF
+--color-surface-active = #FFFFFF
+--color-surface-lite = #CCCCCC
+--color-surface-dark = #777777
+
+--color-background = #FFFFFF
+--color-background-lite = #CCCCCC
+--color-background-active = #777777
+
+// #B05454
+--color-error = #F54545
+--color-surface-error = #C77575
+--color-surface-error-dark = #B54A4A
+
+--color-success = #00FF00
+--color-surface-success = #A1C797
+--color-surface-success-dark = #468C34
+
+--color-warning = #E6CB53
+--color-surface-warning = #D6A922
+--color-surface-warning-dark = #AD8715
