@@ -18,7 +18,7 @@ class SelectionBoxInputHandler extends AbstractInputHandler
         const selectionBox = this._selectionBox;
         if (selectionBox.hasSelection())
         {
-            if (!inputController.isMoveMode() || !selectionBox.isTargetInSelection(inputController.getImmediateTargetSource()))
+            if (!inputController.isMoveMode(pointer.getInputAdapter()) || !selectionBox.isTargetInSelection(inputController.getImmediateTargetSource()))
             {
                 selectionBox.clearSelection();
             }
@@ -32,7 +32,7 @@ class SelectionBoxInputHandler extends AbstractInputHandler
     {
         const inputController = this._inputController;
         if (inputController.hasActiveTarget()) return false;
-        if (inputController.isMoveMode()) return false;
+        if (inputController.isMoveMode(pointer.getInputAdapter())) return false;
         if (inputController.hasCurrentTarget()) return false;
 
         const inputEventPosition = pointer.getInputEventPosition();

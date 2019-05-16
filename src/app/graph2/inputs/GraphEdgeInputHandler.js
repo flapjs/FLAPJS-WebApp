@@ -44,7 +44,7 @@ class GraphEdgeInputHandler extends AbstractInputHandler
         if (inputController.isTrashMode())
         {
             //Don't delete stuff if moving...
-            if (inputController.isMoveMode())
+            if (inputController.isMoveMode(pointer.getInputAdapter()))
             {
                 this._graphController.emitGraphEvent(GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE);
                 return false;
@@ -60,7 +60,7 @@ class GraphEdgeInputHandler extends AbstractInputHandler
             }
         }
 
-        if (!inputController.isMoveMode() && currentTargetType === EVENT_SOURCE_EDGE)
+        if (!inputController.isMoveMode(pointer.getInputAdapter()) && currentTargetType === EVENT_SOURCE_EDGE)
         {
             const currentTargetSource = inputController.getCurrentTargetSource();
             const graphController = this._graphController;
@@ -101,7 +101,7 @@ class GraphEdgeInputHandler extends AbstractInputHandler
         }
 
         const currentTargetType = inputController.getCurrentTargetType();
-        if (!inputController.isMoveMode() && currentTargetType === EVENT_SOURCE_NODE)
+        if (!inputController.isMoveMode(pointer.getInputAdapter()) && currentTargetType === EVENT_SOURCE_NODE)
         {
             const graphController = this._graphController;
             const graph = graphController.getGraph();

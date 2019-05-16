@@ -43,7 +43,7 @@ class ViewportLayer extends React.Component
         {
             if (inputController.isHandlingInput())
             {
-                moveMode = inputController.isMoveMode() ? MODE_MOVE : MODE_ACTION;
+                moveMode = inputController.isMoveMode(viewport.getInputAdapter()) ? MODE_MOVE : MODE_ACTION;
             }
             else
             {

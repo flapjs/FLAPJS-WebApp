@@ -35,7 +35,7 @@ class GraphNodeInputHandler extends AbstractInputHandler
         if (inputController.isTrashMode())
         {
             // Don't delete stuff if moving...
-            if (inputController.isMoveMode())
+            if (inputController.isMoveMode(pointer.getInputAdapter()))
             {
                 this._graphController.emitGraphEvent(GRAPH_EVENT_NODE_EDIT_WHILE_DELETE);
                 return false;
@@ -51,7 +51,7 @@ class GraphNodeInputHandler extends AbstractInputHandler
             }
         }
 
-        if (!inputController.isMoveMode() && currentTargetType === EVENT_SOURCE_NODE)
+        if (!inputController.isMoveMode(pointer.getInputAdapter()) && currentTargetType === EVENT_SOURCE_NODE)
         {
             const currentTargetSource = inputController.getCurrentTargetSource();
             const graphController = this._graphController;

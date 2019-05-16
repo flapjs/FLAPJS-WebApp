@@ -11,7 +11,6 @@ class InputController
     constructor()
     {
         this._trashMode = false;
-        this._moveMode = DEFAULT_MOVE_MODE_FIRST;
         this._nodeOnly = false;
         this._moveModeFirst = DEFAULT_MOVE_MODE_FIRST;
         this._handlingInput = false;
@@ -54,12 +53,6 @@ class InputController
     setLabelFormatter(labelFormatter)
     {
         this._labelFormatter = labelFormatter;
-        return this;
-    }
-
-    setMoveMode(flag)
-    {
-        this._moveMode = flag;
         return this;
     }
 
@@ -184,7 +177,7 @@ class InputController
     hasImmediateTarget() { return this._immediateTarget.type !== null; }
 
     isTrashMode() { return this._trashMode; }
-    isMoveMode() { return this._moveModeFirst ? this._moveMode : !this._moveMode; }
+    isMoveMode(inputAdapter) { return !(this._moveModeFirst ^ !inputAdapter.isAltInput()); }
     isNodeEventsOnly() { return this._nodeOnly; }
     isMoveModeFirst() { return this._moveModeFirst; }
 

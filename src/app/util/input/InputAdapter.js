@@ -66,23 +66,23 @@ class InputAdapter extends InputContext
 
     bindContext(context)
     {
-        if (!(context instanceof InputContext)) 
+        if (!(context instanceof InputContext))
             throw new Error('Cannot bind invalid context - must be an instance of InputContext');
-      
+
         this._contexts.unshift(context);
         return this;
     }
 
     bindContextAsLast(context)
     {
-        if (!(context instanceof InputContext)) 
+        if (!(context instanceof InputContext))
             throw new Error('Cannot bind invalid context - must be an instance of InputContext');
-      
+
         this._contexts.push(context);
         return this;
     }
 
-    unbindContext(context=null)
+    unbindContext(context = null)
     {
         if (context)
         {
@@ -166,7 +166,7 @@ class InputAdapter extends InputContext
     /** @override */
     handleEvent(eventName, ...eventArgs)
     {
-        for(const context of this._contexts)
+        for (const context of this._contexts)
         {
             const result = context.handleEvent(eventName, ...eventArgs);
             if (result)
@@ -174,7 +174,7 @@ class InputAdapter extends InputContext
                 return result;
             }
         }
-    
+
         return super.handleEvent(eventName, ...eventArgs);
     }
 
@@ -377,7 +377,7 @@ class InputAdapter extends InputContext
 
     onInputDown(x, y, button)
     {
-    //Setup for hold timer...
+        //Setup for hold timer...
         const cursor = this._cursor;
         const pointer = this._pointer;
         const mouse = this._viewportAdapter.transformScreenToView(x, y);
@@ -399,7 +399,7 @@ class InputAdapter extends InputContext
 
     onDelayedInputDown()
     {
-    //That means the input is remaining still (like a hold)...
+        //That means the input is remaining still (like a hold)...
         if (!this._dragging)
         {
             this._altinput = true;
@@ -493,8 +493,8 @@ class InputAdapter extends InputContext
                     const dist = dx * dx + dy * dy;
                     const dt = Date.now() - this._prevEmptyTime;
                     if (this._prevEmptyInput &&
-            dist < this._minTapRadius &&
-            dt < this._dblInputDelay)
+                        dist < this._minTapRadius &&
+                        dt < this._dblInputDelay)
                     {
                         //Double tap!
                         this.handleEvent('onDblInputEvent', pointer);

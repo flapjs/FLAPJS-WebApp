@@ -17,7 +17,7 @@ class ViewportInputHandler extends AbstractInputHandler
         const inputController = this._inputController;
         if (inputController.hasActiveTarget()) return false;
         if (inputController.hasCurrentTarget()) return false;
-        if (!inputController.isMoveMode()) return false;
+        if (!inputController.isMoveMode(pointer.getInputAdapter())) return false;
 
         const inputEventPosition = pointer.getInputEventPosition();
         this._cachedPosition.x = inputEventPosition.x;
