@@ -1,0 +1,13 @@
+# Task Checklist
+- [ ] Discuss and design the task.
+- [ ] Estimate and allocate "work" points to the task.
+- [ ] Complete the task.
+- [ ] Document the functions, members, and classes.
+- [ ] Run 'npm test' and make sure it passes
+    - _This is automatically performed for you before every commit and push :D_
+- [ ] Update the corresponding internal document.
+- [ ] Commit and push!
+- [ ] Submit a pull request.
+- [ ] Wait for remote tests and other checks to pass.
+- [ ] Have at least 1 other person to approve it.
+- [ ] If merging into master, you must run 'npm run build' to deploy the web app.
