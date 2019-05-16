@@ -1,75 +1,40 @@
-import FSAGraphExporter from 'modules/fsa2/exporter/FSAGraphExporter.js';
+import SessionExporter from 'session/SessionExporter.js';
+
+import JSONFileIcon from 'components/iconset/flat/JSONFileIcon.js';
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
 import {EMPTY_SYMBOL} from 'modules/fsa2/machine/FSA.js';
 import {EMPTY_CHAR, SYMBOL_SEPARATOR} from 'modules/fsa/graph/FSAEdge.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
-import { downloadText } from 'util/Downloader.js';
 
-class REtoFSAGraphExporter extends FSAGraphExporter
+class REToFSAExporter extends SessionExporter
 {
-    constructor() { super(); }
+    constructor() { super('.fsa.json'); }
 
-    /** @override */
-    toJSON(graphData, module)
+    onExportSession(session, dst)
     {
-        const dst = {};
-        dst['_metadata'] = {
-            module: module.getModuleName(),
-            version: process.env.VERSION + ':' + module.getModuleVersion(),
-            timestamp: new Date().toString()
-        };
-        dst['graphData'] = graphData;
-        dst['machineData'] = {
-            name: module.getApp().getSession().getProjectName(),
-            type: 'NFA',
-            symbols: []
-        };
-        return dst;
-    }
+        const currentModule = session.getCurrentModule();
+        const machineController = currentModule.getMachineController();
+        const machine = machineController.getEquivalentFSA();
 
-    /** @override */
-    doesSupportData()
-    {
-        return false;
-    }
-
-    /** @override */
-    exportToFile(filename, module)
-    {
-        const machine = module.getMachineController().getEquivalentFSA();
         const graph = new FSAGraph();
         setGraphToFSA(graph, machine);
         const graphData = JSONGraphParser.objectify(graph);
-        const dst = this.toJSON(graphData, module);
-        const jsonString = JSON.stringify(dst);
-        downloadText(filename + '.' + this.getFileType(), jsonString);
-    }
 
-    /** @override */
-    doesSupportFile()
-    {
-        return true;
+        dst['graphData'] = graphData;
+        dst['machineData'] = {
+            type: 'NFA',
+            symbols: []
+        };
     }
-
+    
     /** @override */
-    canImport(module)
-    {
-        return false;
-    }
-
+    getIconClass() { return JSONFileIcon; }
     /** @override */
-    canExport(module)
-    {
-        return module.getMachineController().getMachineExpression().length > 0;
-    }
-
+    getLabel() { return I18N.toString('file.export.convertfsa'); }
     /** @override */
-    getLabel()
-    {
-        return I18N.toString('file.export.convertfsa');
-    }
+    getTitle() { return I18N.toString('file.export.convertfsa'); }
 }
 
 function setGraphToFSA(graph, machine)
@@ -121,4 +86,4 @@ function setGraphToFSA(graph, machine)
     GraphLayout.applyLayout(graph);
 }
 
-export default REtoFSAGraphExporter;
+export default REToFSAExporter;

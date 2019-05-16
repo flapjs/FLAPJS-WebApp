@@ -14,10 +14,6 @@ import FSAErrorChecker from './FSAErrorChecker.js';
 // import TapePane from './components/views/TapePane.js';
 // import { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
 
-import FSAGraphExporter from './exporter/FSAGraphExporter.js';
-import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
-import { DEFAULT_IMAGE_EXPORTERS } from 'modules/nodalgraph/exporter/NodalGraphImageExporter.js';
-
 import { registerNotifications } from './components/notifications/FSANotifications.js';
 
 
@@ -59,10 +55,12 @@ class FSAModule
     {
         registerNotifications(app.getNotificationManager());
 
+        /*
         app.getExportManager()
             .addExporter(new FSAGraphExporter())
             .addExporter(new JFLAPGraphExporter())
             .addExporters(DEFAULT_IMAGE_EXPORTERS);
+        */
 
         app.getRenderManager()
             .addRenderer(RENDER_LAYER_WORKSPACE, props => (

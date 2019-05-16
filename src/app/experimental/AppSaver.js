@@ -20,12 +20,13 @@ class AppSaver extends AbstractAutoSaveHandler
         const data = dataStorage.getDataAsObject('graph-' + currentModuleName);
         if (data)
         {
-            const exporter = app.getExportManager().getDefaultExporter();
-            if (exporter)
+            try
             {
-                exporter.importFromData(data, currentModule);
-
-                app.getUndoManager().captureEvent();
+                app.getImportManager().tryImportFileFromData('', '.json', data);
+            }
+            catch(e)
+            {
+                // Ignore error
             }
         }
     }
@@ -38,18 +39,24 @@ class AppSaver extends AbstractAutoSaveHandler
         const currentModule = session.getCurrentModule();
         const currentModuleName = currentModule.getModuleName();
 
-        const exporter = app.getExportManager().getDefaultExporter();
-        if (exporter)
+        try
         {
-            const data = exporter.exportToData(currentModule);
-            dataStorage.setDataAsObject('graph-' + currentModuleName, data);
+            app.getExportManager().tryExportTargetToData('session', session)
+                .then(result =>
+                {
+                    dataStorage.setDataAsObject('graph-' + currentModuleName, result.data);
+                });
+        }
+        catch(e)
+        {
+            // Ignore error
         }
     }
 
     /** @override */
     onAutoSaveUnload(dataStorage)
     {
-    //Don't do anything...
+        //Don't do anything...
     }
 
     getApp() { return this._app; }

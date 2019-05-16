@@ -11,9 +11,6 @@ import QuadraticEdge from 'graph2/element/QuadraticEdge.js';
 import NodeGraphParser from 'graph2/NodeGraphParser.js';
 import NodeGraphController from './graph/controller/NodeGraphController.js';
 
-import NodalGraphExporter from './exporter/NodalGraphExporter.js';
-import { DEFAULT_IMAGE_EXPORTERS } from './exporter/NodalGraphImageExporter.js';
-
 const MODULE_NAME = 'nodegraph';
 const MODULE_VERSION = '0.0.1';
 const MODULE_LOCALIZED_NAME = 'Node Graph';
@@ -41,10 +38,12 @@ class NodalGraphModule
                     <p>{'<- Tap on a tab to begin!'}</p>
                 </PanelContainer>
             ));
-
+        
+        /*
         app.getExportManager()
             .addExporter(new NodalGraphExporter())
             .addExporters(DEFAULT_IMAGE_EXPORTERS);
+        */
 
         app.getRenderManager()
             .addRenderer(RENDER_LAYER_WORKSPACE, props => (

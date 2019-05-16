@@ -1,4 +1,4 @@
-import Parser from 'session/manager/exporter/Parser.js';
+import Parser from 'util/file/Parser.js';
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
 import { SYMBOL_SEPARATOR } from 'modules/fsa/graph/FSAEdge.js';
 

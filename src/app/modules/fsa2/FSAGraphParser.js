@@ -1,4 +1,4 @@
-import Parser from 'session/manager/exporter/Parser.js';
+import Parser from 'util/file/Parser.js';
 import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
 
 export const VERSION = '1.0.0';
@@ -11,11 +11,11 @@ class FSAGraphParser extends Parser
     }
 
     /**
-   * @override
-   * @param  {Object} data          the graph data to parse
-   * @param  {FSAGraph} [dst=null]  the target to set parsed graph data
-   * @return {FSAGraph}             the result in the passed-in dst
-   */
+     * @override
+     * @param  {Object} data          the graph data to parse
+     * @param  {FSAGraph} [dst=null]  the target to set parsed graph data
+     * @return {FSAGraph}             the result in the passed-in dst
+     */
     parse(data, dst=null)
     {
         if (typeof data !== 'object')
@@ -80,11 +80,11 @@ class FSAGraphParser extends Parser
     }
 
     /**
-   * @override
-   * @param  {FSAGraph} target      the graph to compose into data
-   * @param  {Object} [dst=null]    the object to append graph data
-   * @return {Object}               the result in the passed-in dst
-   */
+     * @override
+     * @param  {FSAGraph} target      the graph to compose into data
+     * @param  {Object} [dst=null]    the object to append graph data
+     * @return {Object}               the result in the passed-in dst
+     */
     compose(target, dst=null)
     {
         if (!(target instanceof FSAGraph))

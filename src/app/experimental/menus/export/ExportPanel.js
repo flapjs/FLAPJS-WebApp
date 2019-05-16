@@ -1,6 +1,7 @@
 import React from 'react';
 import Style from '../MenuPanel.css';
 
+import SessionExporter from 'session/SessionExporter.js';
 import IconButton from 'experimental/components/IconButton.js';
 
 class ExportPanel extends React.Component
@@ -10,16 +11,19 @@ class ExportPanel extends React.Component
         super(props);
     }
 
-    renderExporterButton(exporter)
+    renderExporterButton(exportType)
     {
-        if (!exporter.doesSupportFile()) return null;
+        const exporter = this.props.session.getApp().getExportManager().getExporterByExportType(exportType);
+        if (!(exporter instanceof SessionExporter)) return <span></span>;
+
         const IconClass = exporter.getIconClass();
+
         return (
-            <IconButton key={exporter.getLabel() + ':' + exporter.getFileType()}
+            <IconButton key={exporter.getLabel() + ':' + exportType}
                 className={Style.panel_button}
                 title={exporter.getLabel()}
-                onClick={() => this.props.session.getApp().getExportManager().tryExportToFile(exporter)}>
-                <IconClass/>
+                onClick={() => this.props.session.getApp().getExportManager().tryExportFile(exportType, this.props.session)}>
+                {IconClass && <IconClass/>}
             </IconButton>
         );
     }
@@ -29,7 +33,7 @@ class ExportPanel extends React.Component
     {
         const session = this.props.session;
         const exportManager = session.getApp().getExportManager();
-        const exporters = exportManager.getExporters();
+        const exportTypes = exportManager.getExportTypes();
 
         return (
             <div id={this.props.id}
@@ -40,7 +44,7 @@ class ExportPanel extends React.Component
                     <h1>{I18N.toString('component.exporting.title')}</h1>
                 </div>
                 <div className={Style.panel_content}>
-                    {exporters.map(e => this.renderExporterButton(e))}
+                    {exportTypes.map(e => this.renderExporterButton(e))}
                 </div>
             </div>
         );

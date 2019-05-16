@@ -15,8 +15,7 @@ class AnalysisPanel extends React.Component
 
     onConvertToNFA(e)
     {
-        const exportManager = this.props.session.getApp().getExportManager();
-        exportManager.tryExportToFile(exportManager.getExporters()[1]);
+        this.props.session.getApp().getExportManager().tryExportFile('re2fsa', this.props.session);
     }
 
     /** @override */
