@@ -157,8 +157,8 @@ class FSAModule
                 this._machineController.setMachineType(e.target.value);
             }}
             value={this._machineController.getMachineType()}>
-                <option value="DFA">Deterministic</option>
-                <option value="NFA">Nondeterministic</option>
+                <option value="DFA">DFA</option>
+                <option value="NFA">NFA</option>
             </select>
         ));
 
