@@ -31,9 +31,9 @@ An example CFG that describes the language 00\*11\*
 
 In this example, S, C, and D are Variables, S being the Start Variable (usually the lhs variable of the first rule). The terminals are 0 and 1. Each line is a rule and defines what each variable on the left hand side can be recursively substituted to. Variables can be replaced with other variables, terminals, or both.  
 
-### Converting to Push Down Automata
+### Converting to Pushdown Automata
 
-Context Free Grammars and Push Down Automata have the same expressive power, and we can algorithmically define PDAs that describe the same language as CFGs. There is a wonderful Youtube [video](https://www.youtube.com/watch?v=xWWRoiPRAi4&amp=&t=748s) that explains the algorithm we use, but the basic rules are listed below
+Context Free Grammars and Pushdown Automata have the same expressive power, and we can algorithmically define PDAs that describe the same language as CFGs. There is a wonderful Youtube [video](https://www.youtube.com/watch?v=xWWRoiPRAi4&amp=&t=748s) that explains the algorithm we use, but the basic rules are listed below
 
 1. Push a $ on the stack to make the bottom of the stack
 2. Push the starting variable of the CFG
