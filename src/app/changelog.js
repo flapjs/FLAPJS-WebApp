@@ -1,3 +1,17 @@
+//Version 0.4.1
+const changeLog = [
+    'Experimental mode is now LIVE! :D',
+    'Pushdown Automata & Regular Expression modules are now available.',
+    'Language is saved across sessions.',
+    'Regular expression scope highlighting.',
+    'Color theme preset loading.',
+    'MIT and Duke theme presets.',
+    'Added linting tests to enforce code style.',
+    'Added Travic CI build pipeline for more build automation.',
+    'Old app mode will be replaced by experimental mode permanently.',
+];
+
+/*
 //Version 0.4.0
 const changeLog = [
     'Changed default color scheme. Hope you like it!',
@@ -6,7 +20,6 @@ const changeLog = [
     'FIXED: Auto-rename nodes cannot be toggled.'
 ];
 
-/*
 //Version 0.3.4
 const changeLog = [
     'Added meta tags for those coming from a search engine.',
