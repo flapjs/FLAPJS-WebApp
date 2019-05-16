@@ -83,7 +83,10 @@ class FSAModule
 
         app.getRenderManager()
             .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-                <GraphEditorView ref={this._graphEditor} graphController={this._graphController} graphView={FSAGraphView} {...props}/>
+                <GraphEditorView
+                    ref={this._graphEditor}
+                    graphController={this._graphController}
+                    labelEditor={null} />
             ));
 
         /*

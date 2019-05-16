@@ -1,13 +1,10 @@
 import React from 'react';
 
-import BoxRenderer from 'graph2/renderer/BoxRenderer.js';
-
 import GraphNodeLayer from '../layers/GraphNodeLayer.js';
 import GraphEdgeLayer from '../layers/GraphEdgeLayer.js';
-import GraphHighlightLayer from '../layers/GraphHighlightLayer.js';
+import SelectionBoxLayer from '../layers/SelectionBoxLayer.js';
 
 import InputContext from 'util/input/InputContext.js';
-import SelectionBoxInputHandler from 'graph2/inputs/SelectionBoxInputHandler.js';
 import ViewportInputHandler from 'graph2/inputs/ViewportInputHandler.js';
 
 class NodeGraphView extends React.Component
@@ -24,15 +21,9 @@ class NodeGraphView extends React.Component
     {
         const viewport = this.props.viewport;
         const inputController = this.props.inputController;
-        const graphController = this.props.graphController;
-        const selectionBox = this.props.selectionBox;
         const inputAdapter = viewport.getInputAdapter();
 
         const context = this._inputContext;
-        if (selectionBox)
-        {
-            context.addInputHandler(new SelectionBoxInputHandler(inputController, graphController, selectionBox));
-        }
         if (inputController)
         {
             context.addInputHandler(new ViewportInputHandler(inputController));
@@ -62,7 +53,6 @@ class NodeGraphView extends React.Component
         const onMouseOut = this.props.onMouseOut;
 
         const graph = graphController.getGraph();
-        const selectionBoundingBox = selectionBox ? selectionBox.getBoundingBox() : null;
 
         // Order matters here, it determines the z-index!
         return (
@@ -75,16 +65,12 @@ class NodeGraphView extends React.Component
                     inputController={inputController}
                     onMouseOver={onMouseOver}
                     onMouseOut={onMouseOut} />
-                {selectionBox &&
-                    <React.Fragment>
-                        <GraphHighlightLayer
-                            nodes={selectionBox.getSelection()} />
-                        <BoxRenderer visible={selectionBox.isVisible()}
-                            fromX={selectionBoundingBox.fromX}
-                            fromY={selectionBoundingBox.fromY}
-                            toX={selectionBoundingBox.toX}
-                            toY={selectionBoundingBox.toY} />
-                    </React.Fragment>}
+                <SelectionBoxLayer
+                    inputController={inputController}
+                    graphController={graphController}
+                    selectionBox={selectionBox}
+                    inputContext={this._inputContext}
+                    inputPriority={0} />
             </React.Fragment>
         );
     }
