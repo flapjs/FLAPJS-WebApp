@@ -70,3 +70,16 @@
   visibility: hidden;
   transition: visibility 0s linear 0.3s;
 }
+
+:local(.fullscreen_widget) {
+  width: 2em;
+  height: 2em;
+
+  /* For some reason, top and right don't do anything. */
+  float: right;
+}
+
+.viewport {
+  width: 100%;
+  height: 100%;
+}

@@ -1,117 +1,99 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-//Changelog: imports
+import Logger from 'util/logger/Logger.js';
+const LOGGER_TAG = 'App';
+
+import App from 'experimental/App.js';
 import Changelog from 'changelog.js';
 
-//Router: imports
-import Router from 'router.js';
-import App from 'deprecated/content/App.js';
-import LandingPage from 'deprecated/landing/components/LandingPage.js';
-
-//Config: imports
-import Config from 'deprecated/config.js';
-import { loadConfig, saveConfig } from 'deprecated/config.js';
-const AUTOSAVE_CONFIG = true;
-//LocalSave: imports
-import LocalSave from 'deprecated/system/localsave/LocalSave.js';
+import LocalStorage from 'util/storage/LocalStorage.js';
 
 const SHOULD_WARN_USERS_ON_EXIT = true;
 
-//Setup viewport
-window.addEventListener('load', (event) => {
-  console.log("Preparing for \'" + process.env.NODE_ENV + "\' environment...");
-  console.log("Loading web app version \'" + process.env.VERSION + "\'...");
-  loadApplication();
-  window.requestAnimationFrame(updateApplication);
-});
+//Setup app
+window.addEventListener('load', (event) => 
+{
+    Logger.out(LOGGER_TAG, `Preparing for '${process.env.NODE_ENV}' environment...'`);
+    Logger.out(LOGGER_TAG, `Loading app version '${process.env.VERSION}'...`);
 
-//Warn user before exit
-window.addEventListener('beforeunload', (event) => {
-  //Config: Only save if changes were made
-  if (AUTOSAVE_CONFIG) saveConfig();
+    try
+    {
+        loadApplication();
+    }
+    catch (e)
+    {
+        throw e;
+    }
 
-  if (SHOULD_WARN_USERS_ON_EXIT && LocalSave.getStringFromStorage("disableExitWarning") !== "true")
-  {
-    const message = I18N.toString("alert.window.exit");
-    event = event || window.event;
-    // For IE and Firefox
-    if (event) event.returnValue = message;
+    //Warn user before exit
+    window.addEventListener('beforeunload', (event) => 
+    {
+        if (SHOULD_WARN_USERS_ON_EXIT && LocalStorage.getData('disableExitWarning') !== 'true')
+        {
+            const message = I18N.toString('alert.window.exit');
+            event = event || window.event;
+            // For IE and Firefox
+            if (event) event.returnValue = message;
+            //For Safari
+            return message;
+        }
+    });
 
-    //For Safari
-    return message;
-  }
+    //Cleanup app
+    window.addEventListener('unload', (event) => 
+    {
+        Logger.out(LOGGER_TAG, 'Unloading app...');
+        unloadApplication();
+    });
 
-  unloadApplication();
+    //Start app
+    window.requestAnimationFrame(updateApplication);
 });
 
 //Tell the client that an update is available
-window.isUpdateAvailable.then(hasUpdate => {
-  if (hasUpdate)
-  {
-    let message = "";
-    if (Changelog && Changelog['show'])
+window.isUpdateAvailable.then(hasUpdate => 
+{
+    if (hasUpdate)
     {
-      message += Changelog['log'];
-    }
+        let message = '';
+        if (Changelog && Changelog['show'])
+        {
+            message += Changelog['log'];
+        }
 
-    console.log("[App] Found update for version " + process.env.VERSION + "...");
-    window.alert("*** New update available! *** \n Please restart the browser." +
-      (message ? "\n" + message : ""));
-  }
+        Logger.out(LOGGER_TAG, `Found update for version ${process.env.VERSION}...`);
+        window.alert('*** New update available! *** \n Please restart the browser.' +
+            (message ? '\n' + message : ''));
+    }
 });
 
 //Setup application
-const FRAMES_PER_SECOND = 60;
-var prevtime = 0;
 var root;
-var dt;
 
 //Load application
 function loadApplication()
 {
-  LocalSave.initialize();
+    root = document.getElementById('root');
 
-  loadConfig();
-  root = document.getElementById("root");
-
-  //This should be the same as the one referred to by OptionsPanel
-  if (LocalSave.getStringFromStorage("skipWelcome") === "true")
-  {
-    if (LocalSave.getStringFromStorage("enableExperimental") === "true")
+    if (App['onWindowLoad'])
     {
-      import(/* webpackChunkName: "experimental" */ 'experimental/App.js')
-        .then(({ default: _ }) => Router.routeTo( _ ));
+        App.onWindowLoad.call(App);
     }
-    else
-    {
-      Router.routeTo(App);
-    }
-  }
-  else
-  {
-    Router.routeTo(LandingPage);
-  }
 }
 
 //Update application
 function updateApplication(time)
 {
-  dt = (time - prevtime) / FRAMES_PER_SECOND;
-  {
-    const page = Router.getCurrentPage();
-    const pageProps = Router.getCurrentPageProps();
-    if (page)
-    {
-      ReactDOM.render(React.createElement(page, pageProps), root);
-    }
-  }
-  prevtime = time;
-  window.requestAnimationFrame(updateApplication);
+    ReactDOM.render(React.createElement(App), root);
+    window.requestAnimationFrame(updateApplication);
 }
 
 //Unload application
 function unloadApplication()
 {
-  LocalSave.terminate();
+    if (App['onWindowUnload'])
+    {
+        App.onWindowUnload.call(App);
+    }
 }

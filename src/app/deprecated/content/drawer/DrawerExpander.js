@@ -27,7 +27,7 @@ class DrawerExpander extends React.Component
     }
   }
 
-  //Override
+  /** @override */
   render()
   {
     const app = this.props.app;

@@ -7,7 +7,7 @@ class SVGIcon extends React.Component
     super(props);
   }
 
-  //Override
+  /** @override */
   render()
   {
     return <svg className="svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56">

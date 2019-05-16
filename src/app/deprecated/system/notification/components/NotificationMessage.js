@@ -16,7 +16,7 @@ class NotificationMessage extends React.Component
     message.close();
   }
 
-  //Override
+  /** @override */
   render()
   {
     const message = this.props.value;

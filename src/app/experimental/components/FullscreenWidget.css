@@ -1,0 +1,8 @@
+:local(.fullscreen_button) {
+	color: var(--color-background-lite);
+	transition: color 0.3s ease;
+}
+
+:local(.fullscreen_button):hover {
+	color: var(--color-background-active);
+}

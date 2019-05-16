@@ -10,7 +10,7 @@ class AppSaver extends AbstractLocalSaver
     this._app = app;
   }
 
-  //Override
+  /** @override */
   onLoadSave()
   {
     const module = this._app.getCurrentModule();
@@ -27,13 +27,13 @@ class AppSaver extends AbstractLocalSaver
     if (module.captureGraphEvent) module.captureGraphEvent();
   }
 
-  //Override
+  /** @override */
   onUnloadSave()
   {
     //Don't do anything...
   }
 
-  //Override
+  /** @override */
   onAutoSave()
   {
     const module = this._app.getCurrentModule();

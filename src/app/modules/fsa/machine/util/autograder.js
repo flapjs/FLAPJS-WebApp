@@ -1,8 +1,6 @@
 
 export function toGradescope(machine)
 {
-  const src = {};
-  const result = JSON.stringify(src);
 }
 
 /*

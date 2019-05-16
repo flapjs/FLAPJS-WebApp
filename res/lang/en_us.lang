@@ -107,6 +107,11 @@ options.--color-viewport-testing = Viewport Testing
 options.--color-viewport-warning = Viewport Warning
 options.--color-highlight-select = Highlight Select
 
+//Color Groups
+options.colorgroup.general = General Colors
+options.colorgroup.surface = Surface Colors
+options.colorgroup.graph = Graph Colors
+
 options.checkerrors = Error Checking
 options.checkerrors.mode.none = None
 options.checkerrors.mode.delayed = Delayed

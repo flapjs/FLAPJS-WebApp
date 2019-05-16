@@ -23,59 +23,58 @@ import UserDeleteSymbolEventHandler from './controller/events/UserDeleteSymbolEv
 
 class EventManager
 {
-  constructor(undoManager)
-  {
-    this.graphController = null;
-    this.machineController = null;
-
-    this.eventHandlers = [];
-
-    this.undoManager = undoManager;
-  }
-
-  initialize(module)
-  {
-    this.graphController = module.getGraphController();
-    this.machineController = module.getMachineController();
-
-    const graph = this.graphController.getGraph();
-    const events = this.undoManager;
-
-    this.eventHandlers.push(new GraphNodeMoveEventHandler(events, this.graphController));
-    this.eventHandlers.push(new GraphNodeMoveAllEventHandler(events, this.graphController));
-    this.eventHandlers.push(new GraphEdgeMoveEventHandler(events, this.graphController));
-    this.eventHandlers.push(new GraphEdgeDestinationEventHandler(events, this.graphController));
-    this.eventHandlers.push(new GraphNodeInitialEventHandler(events, this.graphController));
-    this.eventHandlers.push(new GraphEdgeLabelEventHandler(events, this.graphController));
-
-    this.eventHandlers.push(new UserCreateNodeEventHandler(events, this.graphController));
-    this.eventHandlers.push(new UserRenameNodeEventHandler(events, this.graphController));
-    this.eventHandlers.push(new UserToggleNodeEventHandler(events, this.graphController));
-    this.eventHandlers.push(new UserDeleteNodesEventHandler(events, this.graphController));
-
-    this.eventHandlers.push(new UserCreateEdgeEventHandler(events, this.graphController));
-    this.eventHandlers.push(new UserDeleteEdgeEventHandler(events, this.graphController));
-
-    this.eventHandlers.push(new UserImportGraphEventHandler(events, this.graphController, this.machineController));
-    this.eventHandlers.push(new SafeGraphEventHandler(events, this.graphController, "userPreChangeLayout", "userPostChangeLayout"));
-
-    this.eventHandlers.push(new UserChangeMachineEventHandler(events, this.machineController));
-    this.eventHandlers.push(new UserConvertMachineEventHandler(events, this.machineController, this.graphController));
-    this.eventHandlers.push(new UserRenameMachineEventHandler(events, this.machineController));
-    this.eventHandlers.push(new UserRenameSymbolEventHandler(events, this.machineController, this.graphController));
-    this.eventHandlers.push(new UserDeleteSymbolEventHandler(events, this.machineController, this.graphController));
-  }
-
-  destroy()
-  {
-    for(const handler of this.eventHandlers)
+    constructor(undoManager)
     {
-      handler.destroy();
+        this.graphController = null;
+        this.machineController = null;
+
+        this.eventHandlers = [];
+
+        this.undoManager = undoManager;
     }
 
-    //TODO: Remove all event listeners...
-    this.graphController.clearEventListeners();
-  }
+    initialize(module)
+    {
+        this.graphController = module.getGraphController();
+        this.machineController = module.getMachineController();
+        
+        const events = this.undoManager;
+
+        this.eventHandlers.push(new GraphNodeMoveEventHandler(events, this.graphController));
+        this.eventHandlers.push(new GraphNodeMoveAllEventHandler(events, this.graphController));
+        this.eventHandlers.push(new GraphEdgeMoveEventHandler(events, this.graphController));
+        this.eventHandlers.push(new GraphEdgeDestinationEventHandler(events, this.graphController));
+        this.eventHandlers.push(new GraphNodeInitialEventHandler(events, this.graphController));
+        this.eventHandlers.push(new GraphEdgeLabelEventHandler(events, this.graphController));
+
+        this.eventHandlers.push(new UserCreateNodeEventHandler(events, this.graphController));
+        this.eventHandlers.push(new UserRenameNodeEventHandler(events, this.graphController));
+        this.eventHandlers.push(new UserToggleNodeEventHandler(events, this.graphController));
+        this.eventHandlers.push(new UserDeleteNodesEventHandler(events, this.graphController));
+
+        this.eventHandlers.push(new UserCreateEdgeEventHandler(events, this.graphController));
+        this.eventHandlers.push(new UserDeleteEdgeEventHandler(events, this.graphController));
+
+        this.eventHandlers.push(new UserImportGraphEventHandler(events, this.graphController, this.machineController));
+        this.eventHandlers.push(new SafeGraphEventHandler(events, this.graphController, 'userPreChangeLayout', 'userPostChangeLayout'));
+
+        this.eventHandlers.push(new UserChangeMachineEventHandler(events, this.machineController));
+        this.eventHandlers.push(new UserConvertMachineEventHandler(events, this.machineController, this.graphController));
+        this.eventHandlers.push(new UserRenameMachineEventHandler(events, this.machineController));
+        this.eventHandlers.push(new UserRenameSymbolEventHandler(events, this.machineController, this.graphController));
+        this.eventHandlers.push(new UserDeleteSymbolEventHandler(events, this.machineController, this.graphController));
+    }
+
+    destroy()
+    {
+        for(const handler of this.eventHandlers)
+        {
+            handler.destroy();
+        }
+
+        //TODO: Remove all event listeners...
+        this.graphController.clearEventListeners();
+    }
 }
 
 export default EventManager;

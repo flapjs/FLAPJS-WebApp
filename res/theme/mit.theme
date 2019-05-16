@@ -1,0 +1,19 @@
+//OFFICIAL MIT COLOR
+--color-accent = #000000
+
+//OFFICIAL MIT COLOR
+--color-primary = #A31F34
+
+--color-primary-text = #F7F5E6
+--color-primary-text-alt = #000000
+--color-primary-lite = #B45463
+--color-primary-dark = #862F3D
+
+//OFFICIAL MIT COLOR
+--color-surface = #8A8B8C
+
+--color-surface-text = #FFFFFF
+--color-surface-text-alt = #3D3D3D
+--color-surface-active = #9A9C9F
+--color-surface-lite = #AFA9A0
+--color-surface-dark = #4D4D4D
