@@ -56,11 +56,12 @@ To make a program that is more accessible and intuitive to use, so we can all be
 - [ ] Tape testing
   - [ ] TM
 
-### 0.4.0
+### 0.4.1
+- [x] Theme presets
 - [ ] Context-Free Grammars
 - [ ] StepTracer design
 - [ ] Cross-window operations
-- [ ] Theme presets
+- [x] Automatic build pipeline with TravisCI
 
 ### 0.3.4
 - [x] Pushdown Automata
@@ -98,6 +99,8 @@ To make a program that is more accessible and intuitive to use, so we can all be
 - [x] Autosave system
 - [x] Custom language
 - [x] Offline capabilities
+
+NOTE: Check out our CHANGELOG for more information!
 
 ---
 
