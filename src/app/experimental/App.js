@@ -387,16 +387,16 @@ class App extends React.Component
                         onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_EXPORT)}
                         disabled={exportManager.isEmpty()} />
                     <ToolbarDivider />
-                    <ToolbarButton title={I18N.toString('action.toolbar.bug')} icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => window.open(BUGREPORT_URL, '_blank')} />
-                    <ToolbarButton title={I18N.toString('action.toolbar.lang')} icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_LANGUAGE)} />
-                    <ToolbarButton title={I18N.toString('action.toolbar.help')} icon={HelpIcon}
-                        onClick={() => window.open(HELP_URL, '_blank')} />
-                    <ToolbarButton title={I18N.toString('component.options.title')} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_OPTION)} />
                     <ToolbarButton title={'Change Module'} icon={EditPencilIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
                         onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_MODULE)} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.lang')} icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_LANGUAGE)} />
+                    <ToolbarButton title={I18N.toString('component.options.title')} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_OPTION)} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.help')} icon={HelpIcon}
+                        onClick={() => window.open(HELP_URL, '_blank')} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.bug')} icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => window.open(BUGREPORT_URL, '_blank')} />
                 </ToolbarView>
 
                 <DrawerView ref={ref => this._drawer = ref} className={Style.app_content}
