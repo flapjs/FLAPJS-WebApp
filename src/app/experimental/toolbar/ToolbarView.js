@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './ToolbarView.css';
 
-import {TOOLBAR_CONTAINER_MENU, TOOLBAR_CONTAINER_TOOLBAR} from './ToolbarButton.js';
+import { TOOLBAR_CONTAINER_MENU, TOOLBAR_CONTAINER_TOOLBAR } from './ToolbarButton.js';
 import ToolbarTitle from './ToolbarTitle.js';
 
 import IconButton from 'experimental/components/IconButton.js';
@@ -28,7 +28,7 @@ class ToolbarView extends React.Component
         this.onTitleChange = this.onTitleChange.bind(this);
     }
 
-    openBar(callback=null)
+    openBar(callback = null)
     {
         if (!this.state.open)
         {
@@ -37,7 +37,7 @@ class ToolbarView extends React.Component
         }
     }
 
-    closeBar(callback=null)
+    closeBar(callback = null)
     {
         if (this.state.open)
         {
@@ -46,9 +46,9 @@ class ToolbarView extends React.Component
         }
     }
 
-    toggleBar(callback=null)
+    toggleBar(callback = null)
     {
-    //Toggle it, but also reset menu...
+        //Toggle it, but also reset menu...
         this.setState((prev, props) => 
         {
             return { open: !prev.open, menuIndex: TOOLBAR_DEFAULT_MENU_INDEX };
@@ -66,7 +66,7 @@ class ToolbarView extends React.Component
         if (menuIndex >= this.props.menus.length) menuIndex = TOOLBAR_DEFAULT_MENU_INDEX;
 
         //Open and set tab index
-        this.setState({open: true, menuIndex: menuIndex});
+        this.setState({ open: true, menuIndex: menuIndex });
     }
 
     getCurrentMenuIndex()
@@ -81,7 +81,7 @@ class ToolbarView extends React.Component
 
     onBarExpand(e)
     {
-        if (this.state.open && this.state.menuIndex  >= 0)
+        if (this.state.open && this.state.menuIndex >= 0)
         {
             this.setCurrentMenu(TOOLBAR_DEFAULT_MENU_INDEX);
         }
@@ -116,6 +116,7 @@ class ToolbarView extends React.Component
     render()
     {
         const title = this.props.title;
+        const subtitle = this.props.subtitle;
         const toolbarMenus = this.props.menus;
         const toolbarMenuIndex = this.state.menuIndex;
         const ToolbarMenu = toolbarMenuIndex >= 0 ? toolbarMenus[toolbarMenuIndex] : null;
@@ -130,37 +131,38 @@ class ToolbarView extends React.Component
         const showBarExpander = isBarOpen || (hasButtons && TOOLBAR_ALLOW_MENU_BAR);
 
         return (
-            <div ref={ref=>this.ref=ref}
+            <div ref={ref => this.ref = ref}
                 id={this.props.id}
                 className={Style.app_bar +
-        (isBarOpen ? ' open ' : '') +
-        (shouldBarHide ? ' hide ' : '') +
-        ' ' + this.props.className}
+                    (isBarOpen ? ' open ' : '') +
+                    (shouldBarHide ? ' hide ' : '') +
+                    ' ' + this.props.className}
                 style={this.props.style}>
                 <div className={Style.bar_menu}>
                     {showCustomToolbarMenu ?
                         <div className={Style.menu_container}>
-                            <ToolbarMenu {...this.props.menuProps} toolbar={this}/>
+                            <ToolbarMenu {...this.props.menuProps} toolbar={this} />
                         </div> :
                         <div className={Style.menu_button_container}>
                             {this.renderMenuButtons(this.props.children)}
                         </div>}
                 </div>
-                <div ref={ref=>this.toolbarElement=ref} className={Style.bar_toolbar}>
+                <div ref={ref => this.toolbarElement = ref} className={Style.bar_toolbar}>
                     <ToolbarTitle className={Style.toolbar_title}
                         title={title}
+                        subtitle={subtitle}
                         defaultValue={session.getProjectName()}
                         onChange={this.onTitleChange}
-                        onClick={onTitleClick}/>
+                        onClick={onTitleClick} />
 
                     <div className={Style.toolbar_button_container}>
                         {this.renderToolbarButtons(this.props.children)}
                     </div>
 
                     {showBarExpander &&
-          <IconButton className={Style.toolbar_expander} onClick={this.onBarExpand}>
-              <MenuIcon/>
-          </IconButton>}
+                        <IconButton className={Style.toolbar_expander} onClick={this.onBarExpand}>
+                            <MenuIcon />
+                        </IconButton>}
                 </div>
             </div>
         );

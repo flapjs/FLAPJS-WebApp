@@ -168,6 +168,7 @@ action.toolbar.uploadmachine = Upload
 action.toolbar.undo = Undo
 action.toolbar.redo = Redo
 action.toolbar.lang = Language
+action.toolbar.changemodule = Change Module
 action.workspace.submit = Submit
 action.workspace.cancel = Cancel
 
