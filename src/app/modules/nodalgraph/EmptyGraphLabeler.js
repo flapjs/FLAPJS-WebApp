@@ -2,30 +2,30 @@ import AbstractGraphLabeler from 'graph/AbstractGraphLabeler.js';
 
 class EmptyGraphLabeler extends AbstractGraphLabeler
 {
-  constructor()
-  {
-    super();
-  }
+    constructor()
+    {
+        super();
+    }
 
-  //TODO: this is from GraphController (refactor this out of here pls)
-  setGraphController(getGraphController) {}
+    //TODO: this is from GraphController (refactor this out of here pls)
+    setGraphController(getGraphController) {}
 
-  //Override
-  getDefaultNodeLabel() { return ""; }
+    /** @override */
+    getDefaultNodeLabel() { return ''; }
 
-  //Override
-  getDefaultEdgeLabel() { return ""; }
+    /** @override */
+    getDefaultEdgeLabel() { return ''; }
 
-  //Override
-  getNodeLabelFormatter() { return labelFormatter; }
+    /** @override */
+    getNodeLabelFormatter() { return labelFormatter; }
 
-  //Override
-  getEdgeLabelFormatter() { return labelFormatter; }
+    /** @override */
+    getEdgeLabelFormatter() { return labelFormatter; }
 }
 
 function labelFormatter(string)
 {
-  return string || "";
+    return string || '';
 }
 
 export default EmptyGraphLabeler;

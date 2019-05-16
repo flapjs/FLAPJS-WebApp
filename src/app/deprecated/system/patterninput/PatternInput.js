@@ -182,7 +182,7 @@ class PatternInput extends React.Component
     return this.state.value;
   }
 
-  //Override
+  /** @override */
   render()
   {
     const placeholder = this.placeholder;

@@ -13,101 +13,101 @@ import AutoStateLabelView from './AutoStateLabelView.js';
 
 class OverviewPanel extends React.Component
 {
-  constructor(props)
-  {
-    super(props);
+    constructor(props)
+    {
+        super(props);
 
-    this.onAutoLayoutApply = this.onAutoLayoutApply.bind(this);
-    this.onAutoLayoutChange = this.onAutoLayoutChange.bind(this);
-    this.onAutoLabelChange = this.onAutoLabelChange.bind(this);
-    this.onSnapToGridChange = this.onSnapToGridChange.bind(this);
-  }
+        this.onAutoLayoutApply = this.onAutoLayoutApply.bind(this);
+        this.onAutoLayoutChange = this.onAutoLayoutChange.bind(this);
+        this.onAutoLabelChange = this.onAutoLabelChange.bind(this);
+        this.onSnapToGridChange = this.onSnapToGridChange.bind(this);
+    }
 
-  onAutoLayoutApply(e)
-  {
-    const session = this.props.session;
-    const currentModule = session.getCurrentModule();
-    const graphController = currentModule.getGraphController();
-    graphController.applyAutoLayout();
-  }
+    onAutoLayoutApply(e)
+    {
+        const session = this.props.session;
+        const currentModule = session.getCurrentModule();
+        const graphController = currentModule.getGraphController();
+        graphController.applyAutoLayout();
+    }
 
-  onAutoLayoutChange(e)
-  {
+    onAutoLayoutChange(e)
+    {
     //TODO: Not yet implemented...
-  }
+    }
 
-  onAutoLabelChange(e)
-  {
-    const session = this.props.session;
-    const currentModule = session.getCurrentModule();
-    const graphController = currentModule.getGraphController();
-    graphController.setAutoRenameNodes(e.target.checked);
-  }
+    onAutoLabelChange(e)
+    {
+        const session = this.props.session;
+        const currentModule = session.getCurrentModule();
+        const graphController = currentModule.getGraphController();
+        graphController.setAutoRenameNodes(e.target.checked);
+    }
 
-  onSnapToGridChange(e)
-  {
+    onSnapToGridChange(e)
+    {
     //TODO: Not yet implemented...
-  }
+    }
 
-  //Override
-  render()
-  {
-    const drawer = this.props.drawer;
-    const session = this.props.session;
-    const currentModule = session.getCurrentModule();
-    const graphController = currentModule.getGraphController();
-    const machineController = currentModule.getMachineController();
-    const autoRename = graphController.shouldAutoRenameNodes();
+    /** @override */
+    render()
+    {
+        const drawer = this.props.drawer;
+        const session = this.props.session;
+        const currentModule = session.getCurrentModule();
+        const graphController = currentModule.getGraphController();
+        const machineController = currentModule.getMachineController();
+        const autoRename = graphController.shouldAutoRenameNodes();
 
-    const drawerFull = drawer.isDrawerFullscreen();
+        const drawerFull = drawer.isDrawerFullscreen();
 
-    return (
-      <PanelContainer id={this.props.id}
-        className={this.props.className}
-        style={this.props.style}
-        title={OverviewPanel.TITLE}>
+        return (
+            <PanelContainer id={this.props.id}
+                className={this.props.className}
+                style={this.props.style}
+                title={OverviewPanel.TITLE}>
 
-        <PanelSection title={"States"} initial={true} full={drawerFull}>
-          <StateListView graphController={graphController}/>
-        </PanelSection>
-        <PanelSection title={"Alphabet"} initial={true} full={drawerFull}>
-          <AlphabetListView machineController={machineController}/>
-        </PanelSection>
-        <PanelSection title={"Stack Alphabet"} initial={true} full={drawerFull}>
-          <StackAlphabetListView machineController={machineController}/>
-        </PanelSection>
+                <PanelSection title={'States'} initial={true} full={drawerFull}>
+                    <StateListView graphController={graphController}/>
+                </PanelSection>
+                <PanelSection title={'Alphabet'} initial={true} full={drawerFull}>
+                    <AlphabetListView machineController={machineController}/>
+                </PanelSection>
+                <PanelSection title={'Stack Alphabet'} initial={true} full={drawerFull}>
+                    <StackAlphabetListView machineController={machineController}/>
+                </PanelSection>
 
-        <PanelDivider/>
+                <PanelDivider/>
 
-        <AutoStateLabelView graphController={graphController}/>
+                <AutoStateLabelView graphController={graphController}/>
 
-        <button className={Style.autolayout_button} onClick={this.onAutoLayoutApply} disabled={graphController.getGraph().isEmpty()}>
-          {I18N.toString("action.overview.autolayout")}
-        </button>
+                <button className={Style.autolayout_button} onClick={this.onAutoLayoutApply} disabled={graphController.getGraph().isEmpty()}>
+                    {I18N.toString('action.overview.autolayout')}
+                </button>
 
-        <PanelDivider/>
+                <PanelDivider/>
 
-        <PanelSwitch id={"overview-auto-label"}
-          checked={autoRename}
-          title={"Auto rename nodes"}
-          onChange={this.onAutoLabelChange}/>
-        <PanelSwitch id={"overview-auto-layout"}
-          checked={false}
-          title={"Auto layout nodes"}
-          disabled={true}
-          onChange={this.onAutoLayoutChange}/>
-        <PanelSwitch id={"overview-snap-grid"}
-          checked={false}
-          title={"Snap-to-grid"}
-          disabled={true}
-          onChange={this.onSnapToGridChange}/>
+                <PanelSwitch id={'overview-auto-label'}
+                    checked={autoRename}
+                    title={'Auto rename nodes'}
+                    onChange={this.onAutoLabelChange}/>
+                <PanelSwitch id={'overview-auto-layout'}
+                    checked={false}
+                    title={'Auto layout nodes'}
+                    disabled={true}
+                    onChange={this.onAutoLayoutChange}/>
+                <PanelSwitch id={'overview-snap-grid'}
+                    checked={false}
+                    title={'Snap-to-grid'}
+                    disabled={true}
+                    onChange={this.onSnapToGridChange}/>
 
-      </PanelContainer>
-    );
-  }
+            </PanelContainer>
+        );
+    }
 }
 Object.defineProperty(OverviewPanel, 'TITLE', {
-  get: function() { return I18N.toString("component.overview.title"); }
+    get: function() { return I18N.toString('component.overview.title'); }
 });
 
 export default OverviewPanel;

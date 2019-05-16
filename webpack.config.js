@@ -64,49 +64,50 @@ const config = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: [
-          {loader: 'babel-loader'},
-          {loader: 'react-hot-loader/webpack'}
+          { loader: 'babel-loader' },
+          { loader: 'react-hot-loader/webpack' }
         ]
       },
       {
         //Load css
         test: /\.css$/,
         use: [
-          {loader: 'style-loader'},//, options: {sourceMap: true}},
-          {loader: 'css-loader', options: {importLoaders: 1, modules: 'global', localIdentName: "[path][name]__[local]--[hash:base64:5]"}}
+          { loader: 'style-loader' },//, options: {sourceMap: true}},
+          { loader: 'css-loader', options: { importLoaders: 1, modules: 'global', localIdentName: "[path][name]__[local]--[hash:base64:5]" } }
         ]
       }
     ]
   },
   resolve: {
     //Resolve by filename without extensions
-    extensions: [ '*', '.js', '.jsx', '.mjs' ],
+    extensions: ['*', '.js', '.jsx', '.mjs'],
     //Resolve by absolute path
     modules: MODULE_PATHS
   },
   //Allows access to filename from context dir
   node: { __filename: true },
   //Don't include xmlhttprequest in bundle
-  externals: [ {xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}'} ],
+  externals: [{ xmlhttprequest: '{XMLHttpRequest:XMLHttpRequest}' }],
   plugins: [
     new CopyPlugin([
       //Copy resource by directory...
-      {from: './res/document', to: 'document'},
-      {from: './res/image', to: 'image'},
-      {from: './res/lang', to: 'lang'},
-      {from: './res/script', to: 'script'},
-      {from: './res/style', to: 'style'},
-      {from: './res/theme', to: 'theme'},
+      { from: './res/document', to: 'document' },
+      { from: './res/image', to: 'image' },
+      { from: './res/lang', to: 'lang' },
+      { from: './res/script', to: 'script' },
+      { from: './res/style', to: 'style' },
+      { from: './res/theme', to: 'theme' },
       //Copy remaining resources...
       //NOTE: any files added here should also be added to CleanWebpackPlugin
-      {from: './res/404.html', to: '../404.html'}
+      { from: './res/404.html', to: '../404.html' }
     ]),
     new ServiceWorkerPlugin({
       filename: '../serviceWorker.js',
       entry: path.join(__dirname, './res/ServiceWorker.js'),
       publicPath: './' + OUTPUT_DIR + '/',
       excludes: ['**/.*', '**/*.map', '**/document/**', '**/image/**', '**/lang/**', '**/script/**', '**/style/**'],
-      transformOptions: serviceWorkerOption => {
+      transformOptions: serviceWorkerOption =>
+      {
         return {
           assets: serviceWorkerOption.assets,
           hash: Math.random().toString(36).substr(2, 9)
@@ -123,7 +124,8 @@ const config = {
   ]
 };
 
-module.exports = (env, argv) => {
+module.exports = (env, argv) =>
+{
   if (argv.mode === 'development')
   {
     //Do development stuff...
@@ -148,15 +150,15 @@ module.exports = (env, argv) => {
     //config.devtool = 'inline-source-map';
     config.output.filename = '[name].bundle.[chunkhash].js';
     config.output.chunkFilename = '[name].bundle.[chunkhash].js',
-    config.plugins.push(new webpack.SourceMapDevToolPlugin({
-      filename: 'sourcemap/[name].bundle.js.map',
-      exclude: [/vendors\.bundle.*\.js$/, '../serviceWorker.js']
-    }));
+      config.plugins.push(new webpack.SourceMapDevToolPlugin({
+        filename: 'sourcemap/[name].bundle.js.map',
+        exclude: [/vendors\.bundle.*\.js$/, '../serviceWorker.js']
+      }));
     config.plugins.push(new CleanPlugin(['./' + OUTPUT_DIR, './serviceWorker.js', './404.html', './index.html']));
 
     //Optimizations
     config.optimization = {
-      minimizer: [ new TerserPlugin({parallel: true, cache: true, sourceMap: true}) ],
+      minimizer: [new TerserPlugin({ parallel: true, cache: true, sourceMap: true })],
       runtimeChunk: { name: entrypoint => 'runtime~' + entrypoint.name },
       splitChunks: {
         cacheGroups: {

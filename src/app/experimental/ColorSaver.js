@@ -1,74 +1,74 @@
 import AbstractAutoSaveHandler from 'util/storage/AbstractAutoSaveHandler.js';
 
-export const THEME_STORAGE_ID = "prefs-theme";
-export const COLOR_STORAGE_ID = "prefs-color";
+export const THEME_STORAGE_ID = 'prefs-theme';
+export const COLOR_STORAGE_ID = 'prefs-color';
 
 class ColorSaver extends AbstractAutoSaveHandler
 {
-  constructor(themeManager)
-  {
-    super();
-
-    this._themeManager = themeManager;
-  }
-
-  //Override
-  onAutoSaveLoad(dataStorage)
-  {
-    const themeManager = this._themeManager;
-    const theme = dataStorage.getData(THEME_STORAGE_ID);
-    const data = dataStorage.getDataAsObject(COLOR_STORAGE_ID);
-
-    for(const key in data)
+    constructor(themeManager)
     {
-      const style = themeManager.getStyleByName(key);
-      if (style)
-      {
-        style.setValue(data[key]);
-      }
+        super();
+
+        this._themeManager = themeManager;
     }
-  }
 
-  //Override
-  onAutoSaveUnload(dataStorage)
-  {
-    //Don't do anything...
-  }
-
-  //Override
-  onAutoSaveUpdate(dataStorage)
-  {
-    const themeManager = this._themeManager;
-    const data = {};
-
-    const theme = themeManager.getCurrentTheme();
-    for(const style of themeManager.getStyles())
+    /** @override */
+    onAutoSaveLoad(dataStorage)
     {
-      const styleName = style.getName();
-      const styleValue = style.getValue();
+        const themeManager = this._themeManager;
+        // const theme = dataStorage.getData(THEME_STORAGE_ID);
+        const data = dataStorage.getDataAsObject(COLOR_STORAGE_ID);
 
-      //TODO: Just save everything, unless we can somehow cache theme files...
-      /*
-      if (theme)
-      {
-        const themeStyle = theme.getStyleByName(styleName);
-        if (themeStyle && themeStyle.getValue() === styleValue)
+        for (const key in data)
         {
-          continue;
+            const style = themeManager.getStyleByName(key);
+            if (style)
+            {
+                style.setValue(data[key]);
+            }
         }
-      }
-      */
-
-      data[styleName] = styleValue;
     }
-    dataStorage.setDataAsObject(COLOR_STORAGE_ID, data);
-    dataStorage.setData(THEME_STORAGE_ID, theme.getName());
-  }
 
-  getThemeManager()
-  {
-    return this._themeManager;
-  }
+    /** @override */
+    onAutoSaveUnload(dataStorage)
+    {
+        //Don't do anything...
+    }
+
+    /** @override */
+    onAutoSaveUpdate(dataStorage)
+    {
+        const themeManager = this._themeManager;
+        const data = {};
+
+        const theme = themeManager.getCurrentTheme();
+        for (const style of themeManager.getStyles())
+        {
+            const styleName = style.getName();
+            const styleValue = style.getValue();
+
+            //TODO: Just save everything, unless we can somehow cache theme files...
+            /*
+            if (theme)
+            {
+                const themeStyle = theme.getStyleByName(styleName);
+                if (themeStyle && themeStyle.getValue() === styleValue)
+                {
+                continue;
+                }
+            }
+            */
+
+            data[styleName] = styleValue;
+        }
+        dataStorage.setDataAsObject(COLOR_STORAGE_ID, data);
+        dataStorage.setData(THEME_STORAGE_ID, theme.getName());
+    }
+
+    getThemeManager()
+    {
+        return this._themeManager;
+    }
 }
 
 export default ColorSaver;

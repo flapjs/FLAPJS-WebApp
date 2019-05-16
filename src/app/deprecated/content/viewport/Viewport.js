@@ -18,7 +18,7 @@ class Viewport extends React.Component
     };
   }
 
-  //Override
+  /** @override */
   render()
   {
     const currentModule = this.props.currentModule;

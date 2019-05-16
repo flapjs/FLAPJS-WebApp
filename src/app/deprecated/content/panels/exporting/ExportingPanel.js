@@ -32,7 +32,7 @@ class ExportingPanel extends React.Component
     </IconButton>;
   }
 
-  //Override
+  /** @override */
   render()
   {
     const module = this.props.currentModule;
