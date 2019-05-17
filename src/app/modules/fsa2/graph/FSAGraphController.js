@@ -1,7 +1,7 @@
 import GraphController from 'graph2/controller/GraphController.js';
 
-import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE, GRAPH_EVENT_NODE_DELETE, GRAPH_EVENT_NODE_DELETE_ALL } from 'graph2/inputs/GraphNodeInputHandler.js';
-import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE } from 'graph2/inputs/GraphEdgeInputHandler.js';
+import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE, GRAPH_EVENT_NODE_DELETE, GRAPH_EVENT_NODE_DELETE_ALL } from 'graph2/inputhandler/GraphNodeInputHandler.js';
+import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE } from 'graph2/inputhandler/GraphEdgeInputHandler.js';
 
 import { WARNING_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
 import FSAGraphLabeler from './FSAGraphLabeler';

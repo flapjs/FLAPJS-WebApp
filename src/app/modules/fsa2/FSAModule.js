@@ -40,7 +40,7 @@ import TestingPanel from './components/panels/testing/TestingPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 
 import FSANodeRenderer from './graph/renderer/FSANodeRenderer.js';
-import FSANodeInputHandler from './graph/inputs/FSANodeInputHandler.js';
+import FSANodeInputHandler from './graph/inputhandler/FSANodeInputHandler.js';
 import FSAInitialMarkerLayer from './graph/renderer/FSAInitialMarkerLayer.js';
 import FSALabelEditorRenderer from './renderer/FSALabelEditorRenderer.js';
 

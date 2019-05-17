@@ -2,7 +2,7 @@ import React from 'react';
 
 import GraphEdgeRenderer from 'graph2/renderer/GraphEdgeRenderer.js';
 
-import GraphEdgeInputHandler from 'graph2/inputs/GraphEdgeInputHandler.js';
+import GraphEdgeInputHandler from 'graph2/inputhandler/GraphEdgeInputHandler.js';
 
 class GraphEdgeLayer extends React.Component
 {

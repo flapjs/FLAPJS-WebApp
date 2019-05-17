@@ -1,7 +1,7 @@
 import React from 'react';
 
 import FSAInitialMarkerRenderer from './FSAInitialMarkerRenderer.js';
-import FSAInitialMarkerInputHandler from '../inputs/FSAInitialMarkerInputHandler.js';
+import FSAInitialMarkerInputHandler from '../inputhandler/FSAInitialMarkerInputHandler.js';
 
 class FSAInitialMarkerLayer extends React.Component
 {
