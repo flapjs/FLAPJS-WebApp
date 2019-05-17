@@ -51,7 +51,7 @@ CFG.js contains two classes: Rules and CFG, which are both inspired by Productio
 
 A Rule just contains two strings, the left hand side (lhs) and the right hand side (rhs) of the arrow usually drawn when writing rules. **All strings meant to be lhs and rhs have all white space removed**
 
-A CFG has a set of Variables, a set of Terminals, a list of Rules, and a starting variable. Similar to RE, it also stores its errors from validation in a list. Aside from setting and getting all the fields, adding a rule can automatically update the variables and terminals (currently be making the lhs of a rule a Variable and adding the captial letters of the rhs to Variables and everything else as a Terminal). This function is called <code>addRule</code> and it also allows the user to add rules including pipes on the rhs to represent multiple substitutions (e.g. S -> A | B)
+A CFG has a set of Variables, a set of Terminals, a list of Rules, and a starting variable. Similar to RE, it also stores its errors from validation in a list. Aside from setting and getting all the fields, adding a rule can automatically update the variables and terminals (currently be making the lhs of a rule a Variable and adding non PIPE and EMPTY characters as terminals). This function is called <code>addRule</code> and it also allows the user to add rules including pipes on the rhs to represent multiple substitutions (e.g. S -> A | B)
 
 ### ConvertCFGtoPDA
 
@@ -60,8 +60,12 @@ The conversion algorithm is the same as described [above](#converting-to-push-do
 # Dangers/Pitfalls
 
 - Currently, when the CFG adds and verifies rules, it makes/expects uppercase letters to Variables and all other symbols (excluding PIPE and EMPTY) as terminals. This can be limiting if we want to use non-capital letters for Variables and/or we want to use capital letters for terminals.
+
+    - **Resolved** *One of the rules of CFG's is that all variables must eventually derive to an empty string or a terminal, which means that for every variable, there must be a rule defined where it is on the lhs, so I will just get my variables from all the lhs's of the rules instead of just from the uppercase!
+
+
 - The validation for CFGs does not check whether it is a  proper CFG (unreachable symbols, cycles, etc), which we might want to allow the user to fail with as a part of learning, but heads up
-- While I was testing ConvertCFGtoPDA and testing some strings on the PDA, I noticed that some strings would fail even though they were supposed to be in the language, and then realized it wasn't my code, but it's because there is a max amount of computation steps in SolvePDA. For some strings, it is probably taking too long, and it's not always based on length (I had some longer strings pass while shorter ones didn't). 
+- While I was testing ConvertCFGtoPDA and testing some strings on the PDA, I noticed that some strings would fail even though they were supposed to be in the language, and then realized it wasn't my code, but it's because there is a max amount of computation steps in SolvePDA. For some strings, it is probably taking too long, and it's not always based on length (I had some longer strings pass while shorter ones didn't).
 
 
 # Work Log

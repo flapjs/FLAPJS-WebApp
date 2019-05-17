@@ -122,7 +122,7 @@ class CFG
         let intersection = new Set([...this.getVariables()].filter(x => this.getTerminals().has(x)));
         if(intersection.size > 0)
         {
-            this._errors.push(new Error("A Terminal should not be a Variable too, or vice versa"))
+            this._errors.push(new Error("The set of Terminals and Variables should be disjoint"))
         }
 
         //TODO Check if its a proper CFG(unreachable symbols, cycles, etc)????? Ehhhh?
@@ -141,23 +141,14 @@ class CFG
     {
         //LHS is size 1 and is a variable
         let LHSvalid = rule.getLHS().length == 1 && this.hasVariable(rule.getLHS())
-        if(!LHSvalid) console.log("LHS invalid");
+
         //RHS contains terminals and variables within the CFG
         let RHSvalid = true;
         for(let char of rule.getRHS())
         {
             if(char != PIPE && char != EMPTY)
             {
-                if(char.match(/^[a-z]+$/i) && char == char.toUpperCase())
-                {
-                    RHSvalid = RHSvalid && this.hasVariable(char);
-                    if(!RHSvalid) console.log(char + " should be a variable");
-                }
-                else
-                {
-                    RHSvalid = RHSvalid && this.hasTerminal(char);
-                    if(!RHSvalid) console.log(char + " should be a terminal");
-                }
+                RHSvalid = RHSvalid && (this.hasVariable(char) || this.hasTerminal(char));
             }
         }
         return LHSvalid && RHSvalid;
@@ -185,27 +176,28 @@ class CFG
      * @param {Rule} rule   rule to insert into CFG.
      * rule can have a RHS with pipes to represent multiple substitutions
      *      e.g. S -> a | b
-     * Also, every rule that is added, the LHS is added to terminals, and for the RHS,
-     * the uppercase characters are added to terminals, other characters (excluding EMPTY) are added to variables
+     * Also, every rule that is added, the LHS is added to varaibles, and for the RHS,
+     * characters that aren't pipes, EMPTY, or Variables are added to Terminals
+     *
+     * NOTE, this means there is the potential to add intended Variables as Terminals if they
+     * are on the rhs of a rule before they get their own rule where they are on the LHS, this
+     * is why we will remove the LHS variable from terminals for every newly added rule
      */
     addRule(rule)
     {
+        // LHS is made a variable and (possibly) removed from terminals
         this.addVariable(rule.getLHS());
+        this._terminals.delete(rule.getLHS());
+
+        // RHS characters that are not PIPE, EMPTY, and Variables become terminals
         for(let char of rule.getRHS())
         {
-            if(char != PIPE && char != EMPTY)
+            if(char != PIPE && char != EMPTY && !this.hasVariable(char))
             {
-                if(char == char.toUpperCase())
-                {
-                    this.addVariable(char);
-                }
-                else
-                {
-                    this.addTerminal(char);
-                }
+                this.addTerminal(char);
             }
         }
-        this.rules.push(rule);
+        this._rules.push(rule);
     }
     hasRule(rule)
     {
@@ -265,7 +257,25 @@ class CFG
 
     getHashCode()
     {
-        //TODO
+        let string = '';
+        for(const variable of this.getVariables())
+        {
+            string += variable + ',';
+        }
+        string += '|';
+        for(const terminal of this.getTerminals())
+        {
+            string += terminal + ',';
+        }
+        string += '|';
+        for(const rule of this.getRules())
+        {
+            string += rule.toString() + ',';
+        }
+        string += '|';
+        string += this.getStartVariable();
+        string += '|';
+        return stringHash(string);
     }
 }
 
