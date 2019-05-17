@@ -3,9 +3,9 @@ import SessionExporter from 'session/SessionExporter.js';
 import JSONFileIcon from 'components/iconset/flat/JSONFileIcon.js';
 import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
 
-import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
+import FSAGraph from 'modules/fsa2/graph/FSAGraph.js';
 import {EMPTY_SYMBOL} from 'modules/fsa2/machine/FSA.js';
-import {EMPTY_CHAR, SYMBOL_SEPARATOR} from 'modules/fsa/graph/FSAEdge.js';
+import {EMPTY_CHAR, SYMBOL_SEPARATOR} from 'modules/fsa2/graph/element/FSAEdge.js';
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 
 class REToFSAExporter extends SessionExporter

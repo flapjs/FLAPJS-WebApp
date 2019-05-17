@@ -44,6 +44,7 @@ class SelectionBoxLayer extends React.Component
     }
 
     getSelectionBox() { return this._selectionBox; }
+    getSelectionBoxInputHandler() { return this._selectionBoxInputHandler; }
 
     /** @override */
     render()

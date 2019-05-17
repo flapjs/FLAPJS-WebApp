@@ -13,9 +13,6 @@ export const GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE = 'error-edge-edit-while-delete'
 
 const EDGE_POSITION_INTERPOLATION_DELTA = 0.6;
 
-const SHOULD_DELETE_EDGE_PLACEHOLDER = false;
-const SHOULD_DELETE_EDGE_WITH_EMPTY_LABEL = false;
-
 class GraphEdgeInputHandler extends AbstractInputHandler
 {
     constructor(inputController, graphController)
@@ -32,6 +29,21 @@ class GraphEdgeInputHandler extends AbstractInputHandler
         this._cachedEdgeTo = null;
         this._cachedPointer = { x: 0, y: 0 };
         this._newEdge = false;
+
+        this._shouldDeleteEdgePlaceholder = false;
+        this._shouldDeleteEdgeWithEmptyLabel = false;
+    }
+
+    setShouldDeleteEdgePlaceholder(flag)
+    {
+        this._shouldDeleteEdgePlaceholder = flag;
+        return this;
+    }
+
+    setShouldDeleteEdgeWithEmptyLabel(flag)
+    {
+        this._shouldDeleteEdgeWithEmptyLabel = flag;
+        return this;
     }
 
     /** @override */
@@ -66,7 +78,7 @@ class GraphEdgeInputHandler extends AbstractInputHandler
             graphController.openLabelEditor(currentTargetSource, currentTargetSource.getEdgeLabel(),
                 (target, value, hasChanged) => 
                 {
-                    if (SHOULD_DELETE_EDGE_WITH_EMPTY_LABEL && !value)
+                    if (this._shouldDeleteEdgeWithEmptyLabel && !value)
                     {
                         graphController.getGraph().deleteEdge(currentTargetSource);
                         graphController.emitGraphEvent(GRAPH_EVENT_EDGE_DELETE, {target: currentTargetSource});
@@ -245,7 +257,7 @@ class GraphEdgeInputHandler extends AbstractInputHandler
             const edgeTo = targetSource.getEdgeTo();
             if (!edgeTo || edgeTo === this._cachedPointer)
             {
-                if (SHOULD_DELETE_EDGE_PLACEHOLDER)
+                if (this._shouldDeleteEdgePlaceholder)
                 {
                     graphController.getGraph().deleteEdge(targetSource);
                     graphController.emitGraphEvent(GRAPH_EVENT_EDGE_DELETE, {target: targetSource});
@@ -280,7 +292,7 @@ class GraphEdgeInputHandler extends AbstractInputHandler
                 graphController.openLabelEditor(targetSource, isNewEdge ? null : targetSource.getEdgeLabel(),
                     (target, value, hasChanged) => 
                     {
-                        if (SHOULD_DELETE_EDGE_WITH_EMPTY_LABEL && !value)
+                        if (this._shouldDeleteEdgeWithEmptyLabel && !value)
                         {
                             graphController.getGraph().deleteEdge(targetSource);
                             graphController.emitGraphEvent(GRAPH_EVENT_EDGE_DELETE, {target: targetSource});

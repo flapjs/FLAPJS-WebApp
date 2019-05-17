@@ -1,7 +1,5 @@
 import GraphController from 'graph2/controller/GraphController.js';
 
-import NodeGraphChangeHandler from 'graph2/NodeGraphChangeHandler.js';
-
 import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE, GRAPH_EVENT_NODE_DELETE, GRAPH_EVENT_NODE_DELETE_ALL } from 'graph2/inputs/GraphNodeInputHandler.js';
 import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE } from 'graph2/inputs/GraphEdgeInputHandler.js';
 
@@ -25,7 +23,6 @@ class FSAGraphController extends GraphController
 
         this._app = app;
 
-        this.setGraphChangeHandler(new NodeGraphChangeHandler());
         this.setLabelFormatter(new FSAGraphLabeler().setGraphController(this));
 
 

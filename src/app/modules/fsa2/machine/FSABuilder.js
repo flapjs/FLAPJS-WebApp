@@ -1,7 +1,7 @@
 import AbstractMachineBuilder from 'modules/abstract/AbstractMachineBuilder.js';
 import FSA, { EMPTY_SYMBOL, State } from './FSA.js';
-import FSANode from 'modules/fsa/graph/FSANode.js';
-import { EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
+import FSANode from 'modules/fsa2/graph/element/FSANode.js';
+import { EMPTY_CHAR } from 'modules/fsa2/graph/element/FSAEdge.js';
 import {getUnreachableNodes} from 'modules/fsa2/graph/UnreachableNodes.js';
 
 export const ERROR_UNREACHABLE_STATE = 'unreachable_state';

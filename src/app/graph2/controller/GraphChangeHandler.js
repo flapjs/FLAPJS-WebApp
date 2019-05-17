@@ -1,6 +1,8 @@
+const DEFAULT_REFRESH_TICKS = 10;
+
 class NodeGraphChangeHandler
 {
-    constructor(refreshTicks = 10)
+    constructor(refreshTicks = DEFAULT_REFRESH_TICKS)
     {
         this._cachedGraphHash = 0;
 

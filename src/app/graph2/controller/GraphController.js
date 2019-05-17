@@ -1,5 +1,7 @@
 import {DEFAULT_LABEL_FORMATTER} from './LabelFormatter.js';
 
+import GraphChangeHandler from './GraphChangeHandler.js';
+
 import GraphNode from 'graph2/element/GraphNode.js';
 import GraphEdge from 'graph2/element/GraphEdge.js';
 
@@ -10,7 +12,7 @@ class GraphController
     constructor(graph)
     {
         this._graph = graph;
-        this._graphChangeHandler = null;
+        this._graphChangeHandler = new GraphChangeHandler();
 
         this._labelEditor = null;
         this._labelFormatter = null;
@@ -27,12 +29,6 @@ class GraphController
     setLabelFormatter(labelFormatter)
     {
         this._labelFormatter = labelFormatter;
-        return this;
-    }
-
-    setGraphChangeHandler(graphChangeHandler)
-    {
-        this._graphChangeHandler = graphChangeHandler;
         return this;
     }
 	

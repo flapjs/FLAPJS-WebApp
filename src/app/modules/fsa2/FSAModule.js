@@ -80,13 +80,22 @@ class FSAModule
                                 graphController={graphController}
                                 inputContext={graphView.getInputContext()}
                                 inputPriority={-1} />
-                            <GraphNodeLayer nodes={graph.getNodes()}
+                            <GraphNodeLayer
+                                nodes={graph.getNodes()}
                                 inputController={graphView.getInputController()}
                                 graphController={graphController}
                                 nodeRenderer={FSANodeRenderer}
                                 inputContext={graphView.getInputContext()}
                                 inputPriority={-1} />
-                            <GraphEdgeLayer edges={graph.getEdges()}
+                            <GraphEdgeLayer
+                                ref={ref =>
+                                {
+                                    if (!ref) return;
+                                    ref.getGraphEdgeInputHandler()
+                                        .setShouldDeleteEdgeWithEmptyLabel(true)
+                                        .setShouldDeleteEdgePlaceholder(true);
+                                }}
+                                edges={graph.getEdges()}
                                 inputController={graphView.getInputController()}
                                 graphController={graphController}
                                 inputContext={graphView.getInputContext()}

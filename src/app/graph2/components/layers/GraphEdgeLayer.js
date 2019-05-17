@@ -37,6 +37,8 @@ class GraphEdgeLayer extends React.Component
         }
     }
 
+    getGraphEdgeInputHandler() { return this._graphEdgeInputHandler; }
+
     /** @override */
     render()
     {

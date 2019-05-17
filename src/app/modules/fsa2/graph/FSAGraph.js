@@ -1,7 +1,7 @@
 import NodeGraph from 'graph2/NodeGraph.js';
 
-import FSANode from './FSANode.js';
-import FSAEdge from './FSAEdge.js';
+import FSANode from './element/FSANode.js';
+import FSAEdge from './element/FSAEdge.js';
 
 class FSAGraph extends NodeGraph
 {

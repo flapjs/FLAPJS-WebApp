@@ -37,6 +37,8 @@ class GraphNodeLayer extends React.Component
         }
     }
 
+    getGraphNodeInputHandler() { return this._graphNodeInputHandler; }
+
     /** @override */
     render()
     {
