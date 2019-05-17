@@ -29,7 +29,7 @@ export const DefaultLabelRenderer = props => (
             fontSize: `${(1 - Math.min(Math.max(props.label.length - 2, 0) / 6, 0.5))}em`
         }}
         textAnchor="middle"
-        stroke={props.color}>
+        fill={props.color}>
         {props.label}
     </text>
 );

@@ -118,6 +118,7 @@ class GraphController
     }
 
     getLabelFormatter() { return this._labelFormatter || DEFAULT_LABEL_FORMATTER; }
+    getLabelEditor() { return this._labelEditor; }
     
     getGraphChangeHandler() { return this._graphChangeHandler; }
     getGraph() { return this._graph; }

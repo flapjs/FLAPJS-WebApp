@@ -18,20 +18,22 @@ class FSALabelEditorRenderer extends React.Component
 
     renderSymbol(symbol)
     {
-        const labelEditor = this.props.parent;
+        const graphController = this.props.graphController;
+        const labelEditor = graphController.getLabelEditor();
         if (!labelEditor) return null;
 
         const inputComponent = labelEditor.inputComponent;
         return (
             <PatternInputButton key={symbol} parent={inputComponent} title={symbol}
-                onClick={e=>inputComponent.appendValue(symbol, SYMBOL_SEPARATOR)}/>
+                onClick={e => inputComponent.appendValue(symbol, SYMBOL_SEPARATOR)} />
         );
     }
 
     /** @override */
     render()
     {
-        const labelEditor = this.props.parent;
+        const graphController = this.props.graphController;
+        const labelEditor = graphController.getLabelEditor();
         const currentModule = this.props.currentModule;
         const machineController = currentModule.getMachineController();
         const alphabet = machineController.getAlphabet();
@@ -49,18 +51,18 @@ class FSALabelEditorRenderer extends React.Component
                     </span>
                     <span className={Style.tray_default}>
                         {showRecommended &&
-              RECOMMENDED_SYMBOLS.map(e => this.renderSymbol(e))}
+                            RECOMMENDED_SYMBOLS.map(e => this.renderSymbol(e))}
                         {showDefault &&
-              DEFAULT_SYMBOLS.map(e => this.renderSymbol(e))}
+                            DEFAULT_SYMBOLS.map(e => this.renderSymbol(e))}
                     </span>
                 </span>}
                 {showNodeTray && <span>
                     <PatternInputButton parent={labelEditor.inputComponent}
                         title={labelEditor.getTarget().getNodeCustom() ? 'Custom' : 'Auto'}
-                        onClick={() => {labelEditor.getTarget().setNodeCustom(!labelEditor.getTarget().getNodeCustom());}}/>
+                        onClick={() => { labelEditor.getTarget().setNodeCustom(!labelEditor.getTarget().getNodeCustom()); }} />
                     <PatternInputButton parent={labelEditor.inputComponent}
                         title={labelEditor.getTarget().getNodeAccept() ? 'Accept' : 'Reject'}
-                        onClick={() => {labelEditor.getTarget().setNodeAccept(!labelEditor.getTarget().getNodeAccept());}}/>
+                        onClick={() => { labelEditor.getTarget().setNodeAccept(!labelEditor.getTarget().getNodeAccept()); }} />
                 </span>}
             </div>
         );
