@@ -10,7 +10,7 @@ import QuadraticEdge from 'graph2/element/QuadraticEdge.js';
 import NodeGraphParser from 'graph2/NodeGraphParser.js';
 import NodeGraphController from './graph/controller/NodeGraphController.js';
 
-import GraphView from 'graph2/components/views/GraphView.js';
+import GraphView from 'graph2/components/GraphView.js';
 import GraphNodeLayer from 'graph2/components/layers/GraphNodeLayer.js';
 import GraphEdgeLayer from 'graph2/components/layers/GraphEdgeLayer.js';
 import SelectionBoxLayer from 'graph2/components/layers/SelectionBoxLayer.js';
