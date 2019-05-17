@@ -7,6 +7,8 @@ class FSAInitialMarkerRenderer extends React.Component
     constructor(props)
     {
         super(props);
+
+        this._prevSize = 1;
     }
 
     /** @override */
@@ -18,12 +20,26 @@ class FSAInitialMarkerRenderer extends React.Component
         const onMouseOut = this.props.onMouseOut;
         const pointerEvents = this.props.pointerEvents;
 
+        let offset, size;
+        if ('getNodeSize' in node)
+        {
+            offset = node.getNodeSize();
+            size = node.getNodeSize() / 2;
+
+            this._prevSize = size;
+        }
+        else
+        {
+            offset = 0;
+            size = this._prevSize;
+        }
+
         return (
             <React.Fragment>
                 <InitialMarkerRenderer
                     position={node}
-                    offset={node.getNodeSize()}
-                    size={node.getNodeSize() / 2}
+                    offset={offset}
+                    size={size}
                     color={color}
                     onMouseOver={onMouseOver ? e =>
                     {

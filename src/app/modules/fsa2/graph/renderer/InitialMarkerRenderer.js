@@ -14,7 +14,7 @@ class InitialMarkerRenderer extends React.Component
     {
         const position = this.props.position;
         const radians = this.props.radians || Math.PI;
-        const offset = this.props.offset || 16;
+        const offset = this.props.offset || 0;
         const size = this.props.size || 24;
         const color = this.props.color || '#000000';
 
@@ -36,8 +36,8 @@ class InitialMarkerRenderer extends React.Component
             <g>
                 <path
                     d={'M' + x + ' ' + y +
-                        ' L' + (x + diameterX) + ' ' + (y + Math.sin(radians + Math.PI / 2) * offset) +
-                        ' L' + (x + diameterX) + ' ' + (y - Math.sin(radians + Math.PI / 2) * offset) +
+                        ' L' + (x + diameterX) + ' ' + (y + Math.sin(radians + Math.PI / 2) * size * 2) +
+                        ' L' + (x + diameterX) + ' ' + (y - Math.sin(radians + Math.PI / 2) * size * 2) +
                         ' Z'}
                     fill="transparent"
                     stroke={color}

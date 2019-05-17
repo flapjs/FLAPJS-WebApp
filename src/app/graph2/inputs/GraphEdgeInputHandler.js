@@ -273,7 +273,7 @@ class GraphEdgeInputHandler extends AbstractInputHandler
             else if (edgeTo !== this._cachedEdgeTo)
             {
                 const labelFormatter = graphController.getLabelFormatter();
-                if (labelFormatter)
+                if (isNewEdge && labelFormatter)
                 {
                     targetSource.setEdgeLabel(labelFormatter.getDefaultEdgeLabel());
                 }

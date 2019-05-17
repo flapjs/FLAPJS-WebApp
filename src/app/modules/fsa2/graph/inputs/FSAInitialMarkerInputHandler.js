@@ -1,13 +1,13 @@
 import AbstractInputHandler from 'util/input/AbstractInputHandler.js';
 import { lerp } from 'util/MathHelper.js';
 import { EVENT_SOURCE_INITIAL_MARKER } from '../renderer/InitialMarkerRenderer.js';
-import { EVENT_SOURCE_NODE } from 'graph2/renderer/GraphNodeRenderer.js';
+import { EVENT_SOURCE_NODE } from 'graph2/renderer/NodeRenderer.js';
 
 export const GRAPH_EVENT_INITIAL_MARKER_CHANGE = 'initial-marker-change';
 
 const INITIAL_MARKER_POSITION_INTERPOLATION_DELTA = 0.6;
 
-class InitialMarkerInputHandler extends AbstractInputHandler
+class FSAInitialMarkerInputHandler extends AbstractInputHandler
 {
     constructor(inputController, graphController)
     {
@@ -26,19 +26,17 @@ class InitialMarkerInputHandler extends AbstractInputHandler
     {
         const inputController = this._inputController;
         const currentTargetType = inputController.getCurrentTargetType();
-        if (!inputController.isMoveMode()) return false;
+        if (!inputController.isMoveMode(pointer.getInputAdapter())) return false;
 
-        if (currentTargetType === 'initial-marker')
+        if (currentTargetType === EVENT_SOURCE_INITIAL_MARKER)
         {
             const currentTargetSource = inputController.getCurrentTargetSource();
-            this._ghostMarker = currentTargetSource;
-            this._cachedMarkerTarget = currentTargetSource.getInitialMarkerTarget();
+            this._cachedMarkerTarget = currentTargetSource;
             this._cachedPointer.x = pointer.x;
             this._cachedPointer.y = pointer.y;
+            this._ghostMarker = this._cachedPointer;
 
-            currentTargetSource.setInitialMarkerTarget(pointer);
-
-            inputController.bindActiveTarget(currentTargetSource, EVENT_SOURCE_INITIAL_MARKER, false);
+            inputController.bindActiveTarget(currentTargetSource, EVENT_SOURCE_INITIAL_MARKER, true);
             inputController.setNodeEventsOnly(true);
             return true;
         }
@@ -59,16 +57,16 @@ class InitialMarkerInputHandler extends AbstractInputHandler
             {
                 const immediateTargetSource = inputController.getImmediateTargetSource();
 
-                this._ghostMarker.setInitialMarkerTarget(immediateTargetSource);
+                this._ghostMarker = immediateTargetSource;
             }
             else
             {
                 this._cachedPointer.x = lerp(this._cachedPointer.x, pointer.x, INITIAL_MARKER_POSITION_INTERPOLATION_DELTA);
                 this._cachedPointer.y = lerp(this._cachedPointer.y, pointer.y, INITIAL_MARKER_POSITION_INTERPOLATION_DELTA);
 
-                if (this._ghostMarker.getInitialMarkerTarget() !== this._cachedPointer)
+                if (this._ghostMarker !== this._cachedPointer)
                 {
-                    this._ghostMarker.setInitialMarkerTarget(this._cachedPointer);
+                    this._ghostMarker = this._cachedPointer;
                 }
             }
         }
@@ -79,21 +77,25 @@ class InitialMarkerInputHandler extends AbstractInputHandler
     {
         const inputController = this._inputController;
         const targetType = inputController.getActiveTargetType();
-        const targetSource = inputController.getActiveTargetSource();
+        inputController.unbindActiveTarget();
 
         if (targetType === EVENT_SOURCE_INITIAL_MARKER)
         {
-            const initialMarkerTarget = targetSource.getInitialMarkerTarget();
-            if (!initialMarkerTarget || initialMarkerTarget === this._cachedPointer)
+            if (!this._ghostMarker || this._ghostMarker === this._cachedPointer)
             {
-                targetSource.setInitialMarkerTarget(this._cachedMarkerTarget);
+                // Don't do anything, cause it should already be correct...
             }
             else
             {
-                this._graphController.emitGraphEvent(GRAPH_EVENT_INITIAL_MARKER_CHANGE, { target: initialMarkerTarget });
+                this._graphController.getGraph().setStartNode(this._ghostMarker);
+                this._graphController.emitGraphEvent(GRAPH_EVENT_INITIAL_MARKER_CHANGE, { target: this._ghostMarker });
             }
+
+            this._ghostMarker = null;
         }
     }
+
+    getGhostMarker() { return this._ghostMarker; }
 }
 
-export default InitialMarkerInputHandler;
+export default FSAInitialMarkerInputHandler;

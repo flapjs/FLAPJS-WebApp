@@ -7,6 +7,7 @@ import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE } from 'graph2/inputs/GraphNodeInput
 import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE } from 'graph2/inputs/GraphEdgeInputHandler.js';
 
 import { WARNING_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
+import FSAGraphLabeler from './FSAGraphLabeler';
 
 export const TRASH_EDITING_NOTIFICATION_TAG = 'tryCreateWhileTrash';
 
@@ -19,6 +20,7 @@ class NodeGraphController extends GraphController
         this._app = app;
 
         this.setGraphChangeHandler(new NodeGraphChangeHandler());
+        this.setLabelFormatter(new FSAGraphLabeler().setGraphController(this));
 
         /*
         app.getUndoManager().setEventHandlerFactory(
@@ -42,6 +44,11 @@ class NodeGraphController extends GraphController
         default:
             this._app.getUndoManager().captureEvent();
         }
+    }
+
+    shouldAutoRenameNodes()
+    {
+        return true;
     }
 	
     getApp() { return this._app; }

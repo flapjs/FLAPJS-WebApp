@@ -41,13 +41,13 @@ class GraphNodeLayer extends React.Component
     render()
     {
         const inputController = this.props.inputController;
-        const NodeRenderer = this.props.nodeRenderer || GraphNodeRenderer;
+        const Renderer = this.props.nodeRenderer || GraphNodeRenderer;
 
         const nodes = [];
         for (const node of this.props.nodes)
         {
             nodes.push(
-                <NodeRenderer
+                <Renderer
                     key={node.getGraphElementID()}
                     node={node}
                     fill={'var(--color-graph-node)'}

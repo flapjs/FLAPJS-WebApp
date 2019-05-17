@@ -41,13 +41,13 @@ class GraphEdgeLayer extends React.Component
     render()
     {
         const inputController = this.props.inputController;
-        const EdgeRenderer = this.props.edgeRenderer || GraphEdgeRenderer;
+        const Renderer = this.props.edgeRenderer || GraphEdgeRenderer;
 		
         const edges = [];
         for(const edge of this.props.edges)
         {
             edges.push(
-                <EdgeRenderer
+                <Renderer
                     key={edge.getGraphElementID()}
                     edge={edge}
                     stroke={'var(--color-graph-text)'}

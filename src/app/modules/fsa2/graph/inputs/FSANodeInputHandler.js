@@ -14,7 +14,7 @@ class FSANodeInputHandler extends AbstractInputHandler
     }
 
     /** @override */
-    onInputEvent(pointer)
+    onDblInputEvent(pointer)
     {
         const inputController = this._inputController;
         const graphController = this._graphController;

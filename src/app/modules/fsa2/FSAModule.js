@@ -62,11 +62,18 @@ import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
 
 import FSAGraph from './graph/FSAGraph.js';
 import FSAGraphController from './graph/FSAGraphController.js';
-import GraphEditorView from 'graph2/components/views/GraphEditorView.js';
-import FSAGraphView from './graph/components/FSAGraphView.js';
 
-import InputContext from 'util/input/InputContext.js';
+import FSANodeRenderer from './graph/renderer/FSANodeRenderer.js';
 import FSANodeInputHandler from './graph/inputs/FSANodeInputHandler.js';
+import FSAInitialMarkerLayer from './graph/renderer/FSAInitialMarkerLayer.js';
+
+import GraphView from 'graph2/components/views/GraphView.js';
+import GraphNodeLayer from 'graph2/components/layers/GraphNodeLayer.js';
+import GraphEdgeLayer from 'graph2/components/layers/GraphEdgeLayer.js';
+import SelectionBoxLayer from 'graph2/components/layers/SelectionBoxLayer.js';
+import ViewportLayer from 'graph2/components/layers/ViewportLayer.js';
+import ViewportNavigationLayer from 'graph2/components/layers/ViewportNavigationLayer.js';
+import LabelEditorView from 'graph2/components/views/LabelEditorView.js';
 
 const MODULE_NAME = 'fsa2';
 const MODULE_VERSION = '0.0.1';
@@ -79,14 +86,59 @@ class FSAModule
 
         this._graph = new FSAGraph();
         this._graphController = new FSAGraphController(app, this._graph, null);
-        this._graphEditor = React.createRef();
+        this._graphViewComponent = React.createRef();
+
+        const graph = this._graph;
+        const graphController = this._graphController;
+        const labelFormatter = graphController.getLabelFormatter();
 
         app.getRenderManager()
             .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-                <GraphEditorView
-                    ref={this._graphEditor}
-                    graphController={this._graphController}
-                    labelEditor={null} />
+                <GraphView
+                    ref={this._graphViewComponent}
+                    renderGraph={graphView => (
+                        <React.Fragment>
+                            <FSAInitialMarkerLayer
+                                inputController={graphView.getInputController()}
+                                graphController={graphController}
+                                inputContext={graphView.getInputContext()}
+                                inputPriority={-1} />
+                            <GraphNodeLayer nodes={graph.getNodes()}
+                                inputController={graphView.getInputController()}
+                                graphController={graphController}
+                                nodeRenderer={FSANodeRenderer}
+                                inputContext={graphView.getInputContext()}
+                                inputPriority={-1} />
+                            <GraphEdgeLayer edges={graph.getEdges()}
+                                inputController={graphView.getInputController()}
+                                graphController={graphController}
+                                inputContext={graphView.getInputContext()}
+                                inputPriority={-1} />
+                            <SelectionBoxLayer
+                                inputController={graphView.getInputController()}
+                                graphController={graphController}
+                                inputContext={graphView.getInputContext()}
+                                inputPriority={-1} />
+                        </React.Fragment>
+                    )}
+                    renderOverlay={graphView => (
+                        <React.Fragment>
+                            <ViewportLayer
+                                graphController={graphController}
+                                inputController={graphView.getInputController()}
+                                viewport={graphView.getViewportComponent()}>
+                                <ViewportNavigationLayer
+                                    style={{ right: 0 }}
+                                    viewportAdapter={graphView.getViewportComponent().getInputAdapter().getViewportAdapter()} />
+                            </ViewportLayer>
+                            <LabelEditorView ref={ref => graphController.setLabelEditor(ref)}
+                                labelFormatter={labelFormatter}
+                                viewport={graphView.getViewportComponent()}
+                                saveOnExit={true}>
+                            </LabelEditorView>
+                        </React.Fragment>
+                    )}>
+                </GraphView>
             ));
 
         /*
@@ -119,15 +171,12 @@ class FSAModule
     /** @override */
     initialize(app)
     {
-        const graphEditor = this._graphEditor.current;
-        const viewportComponent = graphEditor.getViewportComponent();
-        const inputAdapter = viewportComponent.getInputAdapter();
-        const inputController = graphEditor.getInputController();
+        const graphView = this._graphViewComponent.current;
+        const inputController = graphView.getInputController();
+        const inputContext = graphView.getInputContext();
+        const graphController = this._graphController;
+        inputContext.addInputHandler(new FSANodeInputHandler(inputController, graphController));
 
-        const context = new InputContext();
-        context.addInputHandler(new FSANodeInputHandler(inputController, this._graphController));
-        inputAdapter.bindContext(context);
-        
         /*
         this._inputManager.onSessionStart(app.getSession());
 
@@ -212,6 +261,8 @@ class FSAModule
     /** @override */
     update(app)
     {
+        this._graphController.update();
+
         /*
         this._inputManager.update(this);
 

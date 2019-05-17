@@ -3,7 +3,7 @@ import PanelContainer from 'experimental/panels/PanelContainer.js';
 
 import * as UserUtil from 'experimental/UserUtil.js';
 import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
-import GraphEditorView from 'graph2/components/views/GraphEditorView.js';
+// import GraphEditorView from 'graph2/components/views/GraphEditorView.js';
 
 import NodeGraph from 'graph2/NodeGraph.js';
 import GraphNode from 'graph2/element/GraphNode.js';

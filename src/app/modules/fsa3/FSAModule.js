@@ -18,7 +18,6 @@ import { registerNotifications } from './components/notifications/FSANotificatio
 
 import * as UserUtil from 'experimental/UserUtil.js';
 import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
-import GraphEditorView from 'graph/components/views/GraphEditorView.js';
 
 import FSAGraph from './graph/FSAGraph.js';
 import FSAGraphController from './graph/controller/FSAGraphController.js';
@@ -54,11 +53,6 @@ class FSAModule
             .addExporter(new JFLAPGraphExporter())
             .addExporters(DEFAULT_IMAGE_EXPORTERS);
         */
-
-        app.getRenderManager()
-            .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-                <GraphEditorView graphController={this._graphController} />
-            ));
 
         app.getDrawerManager()
             .addPanelClass(props => (
