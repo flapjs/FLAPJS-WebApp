@@ -32,7 +32,6 @@ Modules['nodegraph'] = {
     name: 'Node Graph',
     version: '1.0.0',
     experimental: true,
-    disabled: true,
     fetch: function (callback) { import(/* webpackChunkName: "module_nodegraph" */ 'modules/nodegraph/NodeGraphModule.js').then(({ default: _ }) => callback(_)); }
 };
 

@@ -1,15 +1,22 @@
 import React from 'react';
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 
-import * as UserUtil from 'experimental/UserUtil.js';
+import { userClearGraph } from 'experimental/UserUtil.js';
 import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
-// import GraphEditorView from 'graph2/components/views/GraphEditorView.js';
 
 import NodeGraph from 'graph2/NodeGraph.js';
 import GraphNode from 'graph2/element/GraphNode.js';
 import QuadraticEdge from 'graph2/element/QuadraticEdge.js';
 import NodeGraphParser from 'graph2/NodeGraphParser.js';
 import NodeGraphController from './graph/controller/NodeGraphController.js';
+
+import GraphView from 'graph2/components/views/GraphView.js';
+import GraphNodeLayer from 'graph2/components/layers/GraphNodeLayer.js';
+import GraphEdgeLayer from 'graph2/components/layers/GraphEdgeLayer.js';
+import SelectionBoxLayer from 'graph2/components/layers/SelectionBoxLayer.js';
+import ViewportLayer from 'graph2/components/layers/ViewportLayer.js';
+import ViewportNavigationLayer from 'graph2/components/layers/ViewportNavigationLayer.js';
+import LabelEditorView from 'graph2/components/views/LabelEditorView.js';
 
 const MODULE_NAME = 'nodegraph';
 const MODULE_VERSION = '0.0.1';
@@ -23,6 +30,54 @@ class NodalGraphModule
 
         this._graph = new NodeGraph(GraphNode, QuadraticEdge);
         this._graphController = new NodeGraphController(app, this._graph, new NodeGraphParser());
+        this._graphViewComponent = React.createRef();
+
+        const graph = this._graph;
+        const graphController = this._graphController;
+        const labelFormatter = graphController.getLabelFormatter();
+
+        app.getRenderManager()
+            .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+                <GraphView
+                    ref={this._graphViewComponent}
+                    renderGraph={graphView => (
+                        <React.Fragment>
+                            <GraphNodeLayer nodes={graph.getNodes()}
+                                inputController={graphView.getInputController()}
+                                graphController={graphController}
+                                inputContext={graphView.getInputContext()}
+                                inputPriority={-1} />
+                            <GraphEdgeLayer edges={graph.getEdges()}
+                                inputController={graphView.getInputController()}
+                                graphController={graphController}
+                                inputContext={graphView.getInputContext()}
+                                inputPriority={-1} />
+                            <SelectionBoxLayer
+                                inputController={graphView.getInputController()}
+                                graphController={graphController}
+                                inputContext={graphView.getInputContext()}
+                                inputPriority={-1} />
+                        </React.Fragment>
+                    )}
+                    renderOverlay={graphView => (
+                        <React.Fragment>
+                            <ViewportLayer
+                                graphController={graphController}
+                                inputController={graphView.getInputController()}
+                                viewport={graphView.getViewportComponent()}>
+                                <ViewportNavigationLayer
+                                    style={{ right: 0 }}
+                                    viewportAdapter={graphView.getViewportComponent().getInputAdapter().getViewportAdapter()} />
+                            </ViewportLayer>
+                            <LabelEditorView ref={ref => graphController.setLabelEditor(ref)}
+                                labelFormatter={labelFormatter}
+                                viewport={graphView.getViewportComponent()}
+                                saveOnExit={true}>
+                            </LabelEditorView>
+                        </React.Fragment>
+                    )}>
+                </GraphView>
+            ));
     }
 
     /** @override */
@@ -37,17 +92,6 @@ class NodalGraphModule
                     <p>{'Brought to you with \u2764 by the Flap.js team.'}</p>
                     <p>{'<- Tap on a tab to begin!'}</p>
                 </PanelContainer>
-            ));
-        
-        /*
-        app.getExportManager()
-            .addExporter(new NodalGraphExporter())
-            .addExporters(DEFAULT_IMAGE_EXPORTERS);
-        */
-
-        app.getRenderManager()
-            .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-                <GraphEditorView graphController={this._graphController} />
             ));
     }
 
@@ -64,7 +108,7 @@ class NodalGraphModule
     /** @override */
     clear(app, graphOnly = false)
     {
-        UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
+        userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
     }
 
     getGraphController() { return this._graphController; }
