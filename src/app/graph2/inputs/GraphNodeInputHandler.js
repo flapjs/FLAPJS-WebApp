@@ -15,13 +15,11 @@ const SHOULD_DELETE_NODE_WITH_EMPTY_LABEL = false;
 
 class GraphNodeInputHandler extends AbstractInputHandler
 {
-    constructor(inputController, graphController, selectionBox, labelFormatter)
+    constructor(inputController, graphController)
     {
         super();
         this._inputController = inputController;
         this._graphController = graphController;
-        this._selectionBox = selectionBox;
-        this._labelFormatter = labelFormatter;
 
         this._cachedPosition = { x: 0, y: 0 };
     }
@@ -91,9 +89,13 @@ class GraphNodeInputHandler extends AbstractInputHandler
         if (!currentTargetType)
         {
             const graphController = this._graphController;
+            const labelFormatter = graphController.getLabelFormatter();
             const graph = graphController.getGraph();
             const node = graph.createNode(pointer.x, pointer.y);
-            node.setNodeLabel(this._labelFormatter.getDefaultNodeLabel());
+            if (labelFormatter)
+            {
+                node.setNodeLabel(labelFormatter.getDefaultNodeLabel());
+            }
             graphController.emitGraphEvent(GRAPH_EVENT_NODE_CREATE, { target: node });
         }
     }
@@ -110,14 +112,15 @@ class GraphNodeInputHandler extends AbstractInputHandler
         }
 
         const currentTargetType = inputController.getCurrentTargetType();
-        if (currentTargetType === EVENT_SOURCE_NODE)
+        if (inputController.isMoveMode(pointer.getInputAdapter()) && currentTargetType === EVENT_SOURCE_NODE)
         {
+            const selectionBox = inputController.getSelectionBox();
             const currentTargetSource = inputController.getCurrentTargetSource();
-            if (this._selectionBox.hasSelection())
+            if (selectionBox && selectionBox.hasSelection())
             {
-                if (!this._selectionBox.isTargetInSelection(currentTargetSource))
+                if (!selectionBox.isTargetInSelection(currentTargetSource))
                 {
-                    this._selectionBox.clearSelection();
+                    selectionBox.clearSelection();
                 }
                 else
                 {
@@ -136,12 +139,13 @@ class GraphNodeInputHandler extends AbstractInputHandler
     onDragMove(pointer)
     {
         const inputController = this._inputController;
+        const selectionBox = inputController.getSelectionBox();
         const targetSource = inputController.getActiveTargetSource();
-        if (this._selectionBox.hasSelection())
+        if (selectionBox && selectionBox.hasSelection())
         {
             const dx = pointer.x - this._cachedPosition.x;
             const dy = pointer.y - this._cachedPosition.y;
-            for (const node of this._selectionBox.getSelection())
+            for (const node of selectionBox.getSelection())
             {
                 node.x += dx;
                 node.y += dy;
@@ -160,7 +164,7 @@ class GraphNodeInputHandler extends AbstractInputHandler
     {
         const inputController = this._inputController;
         const graphController = this._graphController;
-        const selectionBox = this._selectionBox;
+        const selectionBox = inputController.getSelectionBox();
 
         const targetSource = inputController.getActiveTargetSource();
         inputController.unbindActiveTarget();

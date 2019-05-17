@@ -3,6 +3,7 @@ import React from 'react';
 import BoxRenderer from 'graph2/renderer/BoxRenderer.js';
 import GraphHighlightLayer from './GraphHighlightLayer.js';
 
+import SelectionBox from 'graph2/controller/SelectionBox.js';
 import SelectionBoxInputHandler from 'graph2/inputs/SelectionBoxInputHandler.js';
 
 class SelectionBoxLayer extends React.Component
@@ -13,17 +14,16 @@ class SelectionBoxLayer extends React.Component
 
         const inputController = props.inputController;
         const graphController = props.graphController;
-        const selectionBox = props.selectionBox;
+        this._selectionBox = new SelectionBox();
 
-        //this._selectionBox = new SelectionBox();
-        this._selectionBoxInputHandler = new SelectionBoxInputHandler(inputController, graphController, selectionBox);
+        inputController.setSelectionBox(this._selectionBox);
+        this._selectionBoxInputHandler = new SelectionBoxInputHandler(inputController, graphController, this._selectionBox);
     }
 
     /** @override */
     componentDidMount()
     {
         const inputContext = this.props.inputContext;
-
         if (inputContext)
         {
             const inputPriority = this.props.inputPriority || -1;
@@ -34,8 +34,7 @@ class SelectionBoxLayer extends React.Component
     /** @override */
     componentWillUnmount()
     {
-        this.props.selectionBox.clearSelection();
-        // this._selectionBox.clearSelection();
+        this._selectionBox.clearSelection();
 
         const inputContext = this.props.inputContext;
         if (inputContext)
@@ -49,8 +48,7 @@ class SelectionBoxLayer extends React.Component
     /** @override */
     render()
     {
-        // const selectionBox = this._selectionBox;
-        const selectionBox = this.props.selectionBox;
+        const selectionBox = this._selectionBox;
         const selectionBoundingBox = selectionBox.getBoundingBox();
 
         return (

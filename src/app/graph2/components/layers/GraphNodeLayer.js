@@ -1,24 +1,50 @@
 import React from 'react';
 
-import GraphNodeRenderer from '../../renderer/GraphNodeRenderer.js';
+import GraphNodeRenderer from 'graph2/renderer/GraphNodeRenderer.js';
+
+import GraphNodeInputHandler from 'graph2/inputs/GraphNodeInputHandler.js';
 
 class GraphNodeLayer extends React.Component
 {
     constructor(props)
     {
         super(props);
+
+        const inputController = props.inputController;
+        const graphController = props.graphController;
+
+        this._graphNodeInputHandler = new GraphNodeInputHandler(inputController, graphController);
+    }
+
+    /** @override */
+    componentDidMount()
+    {
+        const inputContext = this.props.inputContext;
+        if (inputContext)
+        {
+            const inputPriority = this.props.inputPriority || -1;
+            inputContext.addInputHandler(this._graphNodeInputHandler, inputPriority);
+        }
+    }
+
+    /** @override */
+    componentWillUnmount()
+    {
+        const inputContext = this.props.inputContext;
+        if (inputContext)
+        {
+            inputContext.removeInputHandler(this._graphNodeInputHandler);
+        }
     }
 
     /** @override */
     render()
     {
         const inputController = this.props.inputController;
-        const onMouseOver = this.props.onMouseOver;
-        const onMouseOut = this.props.onMouseOut;
         const NodeRenderer = this.props.nodeRenderer || GraphNodeRenderer;
 
         const nodes = [];
-        for(const node of this.props.nodes)
+        for (const node of this.props.nodes)
         {
             nodes.push(
                 <NodeRenderer
@@ -26,8 +52,8 @@ class GraphNodeLayer extends React.Component
                     node={node}
                     fill={'var(--color-graph-node)'}
                     stroke={'var(--color-graph-text)'}
-                    onMouseOver={onMouseOver}
-                    onMouseOut={onMouseOut}
+                    onMouseOver={inputController.onMouseOver}
+                    onMouseOut={inputController.onMouseOut}
                     pointerEvents={inputController.hasPointerEvents(node) ? 'all' : 'none'} />
             );
         }

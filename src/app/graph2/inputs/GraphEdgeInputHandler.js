@@ -18,13 +18,12 @@ const SHOULD_DELETE_EDGE_WITH_EMPTY_LABEL = false;
 
 class GraphEdgeInputHandler extends AbstractInputHandler
 {
-    constructor(inputController, graphController, labelFormatter)
+    constructor(inputController, graphController)
     {
         super();
 
         this._inputController = inputController;
         this._graphController = graphController;
-        this._labelFormatter = labelFormatter;
 
         this._cachedEdgeQuads = {
             radians: 0,
@@ -258,7 +257,11 @@ class GraphEdgeInputHandler extends AbstractInputHandler
 
                     if (isNewEdge)
                     {
-                        targetSource.setEdgeLabel(this._labelFormatter.getDefaultEdgeLabel());
+                        const labelFormatter = graphController.getLabelFormatter();
+                        if (labelFormatter)
+                        {
+                            targetSource.setEdgeLabel(labelFormatter.getDefaultEdgeLabel());
+                        }
                         graphController.emitGraphEvent(GRAPH_EVENT_EDGE_CREATE, {target: targetSource});
                     }
                     else
@@ -269,7 +272,11 @@ class GraphEdgeInputHandler extends AbstractInputHandler
             }
             else if (edgeTo !== this._cachedEdgeTo)
             {
-                targetSource.setEdgeLabel(this._labelFormatter.getDefaultEdgeLabel());
+                const labelFormatter = graphController.getLabelFormatter();
+                if (labelFormatter)
+                {
+                    targetSource.setEdgeLabel(labelFormatter.getDefaultEdgeLabel());
+                }
                 graphController.openLabelEditor(targetSource, isNewEdge ? null : targetSource.getEdgeLabel(),
                     (target, value, hasChanged) => 
                     {

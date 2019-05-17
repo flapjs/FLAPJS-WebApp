@@ -12,17 +12,10 @@ class GraphController
         this._graph = graph;
         this._graphChangeHandler = null;
 
-        this._inputController = null;
         this._labelEditor = null;
         this._labelFormatter = null;
 
         this._listeners = [];
-    }
-
-    setInputController(inputController)
-    {
-        this._inputController = inputController;
-        return this;
     }
 
     setLabelEditor(labelEditor)
@@ -59,9 +52,6 @@ class GraphController
 
     initialize()
     {
-        const inputController = this._inputController;
-
-        if (!inputController) throw new Error('Must set input controller before init');
     }
 
     update()
@@ -128,8 +118,9 @@ class GraphController
     }
 
     getLabelFormatter() { return this._labelFormatter || DEFAULT_LABEL_FORMATTER; }
-    getGraph() { return this._graph; }
+    
     getGraphChangeHandler() { return this._graphChangeHandler; }
+    getGraph() { return this._graph; }
 }
 
 export default GraphController;

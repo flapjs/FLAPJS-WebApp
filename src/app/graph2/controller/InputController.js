@@ -1,7 +1,3 @@
-import GraphNodeInputHandler from '../inputs/GraphNodeInputHandler.js';
-import GraphEdgeInputHandler from '../inputs/GraphEdgeInputHandler.js';
-import InputContext from 'util/input/InputContext.js';
-
 import GraphNode from 'graph2/element/GraphNode.js';
 
 const DEFAULT_MOVE_MODE_FIRST = true;
@@ -29,30 +25,15 @@ class InputController
             type: null
         };
 
-        this._inputContext = new InputContext();
-        this._graphController = null;
         this._selectionBox = null;
-        this._labelFormatter = null;
 
         this.onMouseOver = this.onMouseOver.bind(this);
         this.onMouseOut = this.onMouseOut.bind(this);
     }
 
-    setGraphController(graphController)
-    {
-        this._graphController = graphController;
-        return this;
-    }
-
     setSelectionBox(selectionBox)
     {
         this._selectionBox = selectionBox;
-        return this;
-    }
-
-    setLabelFormatter(labelFormatter)
-    {
-        this._labelFormatter = labelFormatter;
         return this;
     }
 
@@ -74,36 +55,10 @@ class InputController
         return this;
     }
 
-    initialize()
-    {
-        const graphController = this._graphController;
-        if (!graphController) throw new Error('Must set graph controller before init');
-        const selectionBox = this._selectionBox;
-        if (!selectionBox) throw new Error('Must set selection box before init');
-        const labelFormatter = this._labelFormatter;
-        if (!labelFormatter) throw new Error('Must set label formatter before init');
-
-        this._inputContext
-            .addInputHandler(this)
-            .addInputHandler(new GraphEdgeInputHandler(this, graphController, labelFormatter))
-            .addInputHandler(new GraphNodeInputHandler(this, graphController, selectionBox, labelFormatter));
-    }
-
-    update()
-    {
-        // There's nothing to do yet...
-    }
-
-    destroy()
-    {
-        this._inputContext.clearInputHandlers();
-    }
-
     /** @override */
     onPreInputEvent(pointer)
     {
         this._handlingInput = true;
-        this._moveMode = !pointer.getInputAdapter().isAltInput();
 
         this.updateCurrentTarget(this._immediateTarget.source, this._immediateTarget.type);
         return false;
@@ -182,7 +137,8 @@ class InputController
     isMoveModeFirst() { return this._moveModeFirst; }
 
     isHandlingInput() { return this._handlingInput; }
-    getInputContext() { return this._inputContext; }
+
+    getSelectionBox() { return this._selectionBox; }
 }
 
 export default InputController;

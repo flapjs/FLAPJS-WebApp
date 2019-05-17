@@ -1,17 +1,46 @@
 import React from 'react';
 
-import GraphEdgeRenderer from '../../renderer/GraphEdgeRenderer.js';
+import GraphEdgeRenderer from 'graph2/renderer/GraphEdgeRenderer.js';
+
+import GraphEdgeInputHandler from 'graph2/inputs/GraphEdgeInputHandler.js';
 
 class GraphEdgeLayer extends React.Component
 {
-    constructor(props) { super(props); }
+    constructor(props)
+    {
+        super(props);
+
+        const inputController = props.inputController;
+        const graphController = props.graphController;
+        
+        this._graphEdgeInputHandler = new GraphEdgeInputHandler(inputController, graphController);
+    }
+
+    /** @override */
+    componentDidMount()
+    {
+        const inputContext = this.props.inputContext;
+        if (inputContext)
+        {
+            const inputPriority = this.props.inputPriority || -1;
+            inputContext.addInputHandler(this._graphEdgeInputHandler, inputPriority);
+        }
+    }
+
+    /** @override */
+    componentWillUnmount()
+    {
+        const inputContext = this.props.inputContext;
+        if (inputContext)
+        {
+            inputContext.removeInputHandler(this._graphEdgeInputHandler);
+        }
+    }
 
     /** @override */
     render()
     {
         const inputController = this.props.inputController;
-        const onMouseOver = this.props.onMouseOver;
-        const onMouseOut = this.props.onMouseOut;
         const EdgeRenderer = this.props.edgeRenderer || GraphEdgeRenderer;
 		
         const edges = [];
@@ -22,8 +51,8 @@ class GraphEdgeLayer extends React.Component
                     key={edge.getGraphElementID()}
                     edge={edge}
                     stroke={'var(--color-graph-text)'}
-                    onMouseOver={onMouseOver}
-                    onMouseOut={onMouseOut}
+                    onMouseOver={inputController.onMouseOver}
+                    onMouseOut={inputController.onMouseOut}
                     pointerEvents={inputController.hasPointerEvents(edge) ? 'all' : 'none'} />
             );
         }
