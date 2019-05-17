@@ -7,7 +7,7 @@ import TransitionErrorMessage from 'modules/fsa/notifications/TransitionErrorMes
 
 import StateMissingTransitionErrorMessage from 'modules/fsa/notifications/StateMissingTransitionErrorMessage.js';
 
-import {getUnreachableNodes} from 'modules/fsa2/graph/UnreachableNodes.js';
+import { getUnreachableNodes } from 'graph2/util/NodeGraphUtils.js';
 
 class FSAErrorChecker
 {
@@ -45,7 +45,7 @@ class FSAErrorChecker
 
         //Get Unreachable nodes...
         const unreachNodes = getUnreachableNodes(graphController.getGraph());
-        for(const node of unreachNodes)
+        for (const node of unreachNodes)
         {
             warnNodes.push(node);
         }
@@ -54,7 +54,7 @@ class FSAErrorChecker
         const placeholderEdges = [];
         const emptyEdges = [];
         const dupeEdges = [];
-        for(const edge of graph.getEdges())
+        for (const edge of graph.getEdges())
         {
             //check incomplete edges
             if (edge.isPlaceholder())
@@ -69,10 +69,10 @@ class FSAErrorChecker
                 const from = edge.getEdgeFrom();
                 const labels = edge.getEdgeSymbolsFromLabel();
 
-                for(const label of labels)
+                for (const label of labels)
                 {
                     //check for empty transitions
-                    if(label == EMPTY)
+                    if (label == EMPTY)
                     {
                         //Update cached error targets
                         emptyEdges.push(edge);
@@ -80,7 +80,7 @@ class FSAErrorChecker
                     }
                     else
                     {
-                        if(!nodeTransitionMap.has(from))
+                        if (!nodeTransitionMap.has(from))
                         {
                             nodeTransitionMap.set(from, [label]);
                         }
@@ -88,7 +88,7 @@ class FSAErrorChecker
                         {
                             //check for duplicate transitions
                             const currentAlphabet = nodeTransitionMap.get(from);
-                            if(currentAlphabet.includes(label))
+                            if (currentAlphabet.includes(label))
                             {
                                 //Update cached error targets
                                 dupeEdges.push(edge);
@@ -109,11 +109,11 @@ class FSAErrorChecker
         if (deterministic)
         {
             //Check for missing transitions
-            for(const node of graph.getNodes())
+            for (const node of graph.getNodes())
             {
                 const nodeTransitions = nodeTransitionMap.get(node);
                 if (!nodeTransitions && alphabet.length != 0 ||
-          nodeTransitions && nodeTransitions.length < alphabet.length)
+                    nodeTransitions && nodeTransitions.length < alphabet.length)
                 {
                     //Get the required missing symbols
                     /*
@@ -143,7 +143,7 @@ class FSAErrorChecker
         }
 
         const result = !(errorNodes.length === 0 && errorEdges.length === 0 &&
-      warnNodes.length === 0 && warnEdges.length === 0);
+            warnNodes.length === 0 && warnEdges.length === 0);
 
         //Callbacks for all collected errors
         if (shouldNotifyErrors)
@@ -160,7 +160,7 @@ class FSAErrorChecker
             //There are some errors/warnings...
             else
             {
-                const props = {graphController: graphController, machineController: machineController};
+                const props = { graphController: graphController, machineController: machineController };
 
                 //Add new warning messages
                 if (unreachNodes.length > 0)
@@ -171,22 +171,22 @@ class FSAErrorChecker
                 //Add new error messages
                 if (placeholderEdges.length > 0)
                 {
-                    Notifications.addMessage({text: I18N.toString('message.error.incomplete'), targets: placeholderEdges},
+                    Notifications.addMessage({ text: I18N.toString('message.error.incomplete'), targets: placeholderEdges },
                         'error', messageTag, TransitionErrorMessage, props, false);
                 }
                 if (emptyEdges.length > 0)
                 {
-                    Notifications.addMessage({text: I18N.toString('message.error.empty'), targets: emptyEdges},
+                    Notifications.addMessage({ text: I18N.toString('message.error.empty'), targets: emptyEdges },
                         'error', messageTag, TransitionErrorMessage, props, false);
                 }
                 if (dupeEdges.length > 0)
                 {
-                    Notifications.addMessage({text: I18N.toString('message.error.dupe'), targets: dupeEdges},
+                    Notifications.addMessage({ text: I18N.toString('message.error.dupe'), targets: dupeEdges },
                         'error', messageTag, TransitionErrorMessage, props, false);
                 }
                 if (missingNodes.length > 0)
                 {
-                    Notifications.addMessage({targets: missingNodes},
+                    Notifications.addMessage({ targets: missingNodes },
                         'error', messageTag, StateMissingTransitionErrorMessage, props, false);
                 }
             }

@@ -2,7 +2,7 @@ import AbstractMachineBuilder from 'modules/abstract/AbstractMachineBuilder.js';
 import PDA, { EMPTY_SYMBOL, State } from './PDA.js';
 import PDANode from 'modules/pda/graph/PDANode.js';
 import { EMPTY_CHAR } from 'modules/pda/graph/PDAEdge.js';
-import { getUnreachableNodes } from 'modules/fsa2/graph/FSAGraphUtil.js';
+import { getUnreachableNodes } from 'graph2/util/NodeGraphUtils.js';
 
 export const ERROR_UNREACHABLE_STATE = 'unreachable_state';
 export const ERROR_DUPLICATE_STATE = 'duplicate_state';
