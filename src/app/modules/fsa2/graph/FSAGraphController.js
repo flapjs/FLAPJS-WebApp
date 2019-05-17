@@ -2,7 +2,7 @@ import GraphController from 'graph2/controller/GraphController.js';
 
 import NodeGraphChangeHandler from 'graph2/NodeGraphChangeHandler.js';
 
-import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE } from 'graph2/inputs/GraphNodeInputHandler.js';
+import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE, GRAPH_EVENT_NODE_DELETE, GRAPH_EVENT_NODE_DELETE_ALL } from 'graph2/inputs/GraphNodeInputHandler.js';
 import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE } from 'graph2/inputs/GraphEdgeInputHandler.js';
 
 import { WARNING_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
@@ -10,7 +10,14 @@ import FSAGraphLabeler from './FSAGraphLabeler';
 
 export const TRASH_EDITING_NOTIFICATION_TAG = 'tryCreateWhileTrash';
 
-class NodeGraphController extends GraphController
+
+// This really shouldn't be here....
+import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
+const DEFAULT_AUTO_RENAME = true;
+
+
+
+class FSAGraphController extends GraphController
 {
     constructor(app, graph, graphParser)
     {
@@ -20,12 +27,11 @@ class NodeGraphController extends GraphController
 
         this.setGraphChangeHandler(new NodeGraphChangeHandler());
         this.setLabelFormatter(new FSAGraphLabeler().setGraphController(this));
-    }
 
-    /** @deprecated */
-    getGraphLabeler()
-    {
-        return this.getLabelFormatter();
+
+        // This really shouldn't be here...
+
+        this.shouldAutoLabel = DEFAULT_AUTO_RENAME;
     }
 
     /** @override */
@@ -35,6 +41,14 @@ class NodeGraphController extends GraphController
 
         switch (eventName)
         {
+        case GRAPH_EVENT_NODE_DELETE:
+        case GRAPH_EVENT_NODE_DELETE_ALL:
+            if (this.shouldAutoLabel)
+            {
+                this.applyAutoRename();
+            }
+            this._app.getUndoManager().captureEvent();
+            break;
         case GRAPH_EVENT_NODE_EDIT_WHILE_DELETE:
         case GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE:
             this._app.getNotificationManager().pushNotification(
@@ -45,13 +59,76 @@ class NodeGraphController extends GraphController
             this._app.getUndoManager().captureEvent();
         }
     }
+	
+    getApp() { return this._app; }
+
+    // these really shouldn't be here...
+
+    deleteTargetNodes(targets)
+    {
+        if (!targets || targets.length <= 0) return;
+
+        const graph = this.getGraph();
+        for(const node of targets)
+        {
+            graph.deleteNode(node);
+        }
+
+        //Emit event
+        this.emitGraphEvent(GRAPH_EVENT_NODE_DELETE_ALL, {target: targets});
+        this._app.getUndoManager().captureEvent();
+    }
+
+    /** @deprecated */
+    getGraphLabeler()
+    {
+        return this.getLabelFormatter();
+    }
+
+    applyAutoLayout()
+    {
+        GraphLayout.applyLayout(this.getGraph());
+
+        this._app.getUndoManager().captureEvent();
+    }
+
+    applyAutoRename()
+    {
+        const graphLabeler = this._labelFormatter;
+        const graph = this._graph;
+
+        if (graph.isEmpty()) return;
+
+        //Reset all default labels...
+        for(const node of graph.getNodes())
+        {
+            if (!node.getNodeCustom()) node.setNodeLabel('');
+        }
+
+        //Rename all default labels appropriately...
+        for(const node of graph.getNodes())
+        {
+            if (!node.getNodeCustom())
+            {
+                node.setNodeLabel(graphLabeler.getDefaultNodeLabel());
+            }
+        }
+    }
+
+    setAutoRenameNodes(enable)
+    {
+        const prev = this.shouldAutoLabel;
+        this.shouldAutoLabel = enable;
+        if (enable && !prev)
+        {
+            this.applyAutoRename();
+        }
+    }
 
     shouldAutoRenameNodes()
     {
         return true;
     }
-	
-    getApp() { return this._app; }
 }
 
-export default NodeGraphController;
+export default FSAGraphController;

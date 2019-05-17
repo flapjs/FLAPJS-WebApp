@@ -13,20 +13,19 @@ class InputContext
         }
         else
         {
-            let flag = false;
-            while(this._inputHandlers.length <= priority || (flag = this._inputHandlers[priority]))
+            if (this._inputHandlers.length <= priority)
             {
-                if (flag)
-                {
-                    ++priority;
-                    flag = false;
-                }
-                else
-                {
-                    this._inputHandlers.push(null);
-                }
+                this._inputHandlers.length = priority + 1;
             }
-            this._inputHandlers[priority] = inputHandler;
+
+            if (this._inputHandlers[priority])
+            {
+                this._inputHandlers.splice(1, 0, inputHandler);
+            }
+            else
+            {
+                this._inputHandlers[priority] = inputHandler;
+            }
         }
 
         return this;

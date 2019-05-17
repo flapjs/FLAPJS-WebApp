@@ -180,6 +180,7 @@ class GraphNodeInputHandler extends AbstractInputHandler
                     graph.deleteNode(node);
                     dst.push(node);
                 }
+                selectionBox.clearSelection();
                 graphController.emitGraphEvent(GRAPH_EVENT_NODE_DELETE_ALL, { target: dst });
             }
             else
