@@ -64,7 +64,6 @@ class GraphView extends React.Component
                     {renderGraph && viewport && renderGraph(this, viewport, inputController)}
                 </ViewportComponent>
                 {renderOverlay && viewport && renderOverlay(this, viewport, inputController)}
-                {this.props.children}
             </div>
         );
     }
