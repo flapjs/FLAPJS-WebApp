@@ -44,6 +44,10 @@ class GraphNodeLayer extends React.Component
     {
         const inputController = this.props.inputController;
         const Renderer = this.props.nodeRenderer || GraphNodeRenderer;
+        const editable = this.props.editable;
+
+        const onMouseOver = inputController ? inputController.onMouseOver : null;
+        const onMouseOut = inputController ? inputController.onMouseOut : null;
 
         const nodes = [];
         for (const node of this.props.nodes)
@@ -54,9 +58,9 @@ class GraphNodeLayer extends React.Component
                     node={node}
                     fill={'var(--color-graph-node)'}
                     stroke={'var(--color-graph-text)'}
-                    onMouseOver={inputController.onMouseOver}
-                    onMouseOut={inputController.onMouseOut}
-                    pointerEvents={inputController.hasPointerEvents(node) ? 'all' : 'none'} />
+                    onMouseOver={onMouseOver}
+                    onMouseOut={onMouseOut}
+                    pointerEvents={editable && inputController && inputController.hasPointerEvents(node) ? 'all' : 'none'} />
             );
         }
 

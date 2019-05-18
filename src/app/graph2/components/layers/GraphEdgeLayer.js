@@ -44,6 +44,10 @@ class GraphEdgeLayer extends React.Component
     {
         const inputController = this.props.inputController;
         const Renderer = this.props.edgeRenderer || GraphEdgeRenderer;
+        const editable = this.props.editable;
+
+        const onMouseOver = inputController ? inputController.onMouseOver : null;
+        const onMouseOut = inputController ? inputController.onMouseOut : null;
 		
         const edges = [];
         for(const edge of this.props.edges)
@@ -53,9 +57,9 @@ class GraphEdgeLayer extends React.Component
                     key={edge.getGraphElementID()}
                     edge={edge}
                     stroke={'var(--color-graph-text)'}
-                    onMouseOver={inputController.onMouseOver}
-                    onMouseOut={inputController.onMouseOut}
-                    pointerEvents={inputController.hasPointerEvents(edge) ? 'all' : 'none'} />
+                    onMouseOver={onMouseOver}
+                    onMouseOut={onMouseOut}
+                    pointerEvents={editable && inputController && inputController.hasPointerEvents(edge) ? 'all' : 'none'} />
             );
         }
 

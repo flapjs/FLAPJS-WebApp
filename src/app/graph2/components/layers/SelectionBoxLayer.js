@@ -14,15 +14,20 @@ class SelectionBoxLayer extends React.Component
 
         const inputController = props.inputController;
         const graphController = props.graphController;
-        this._selectionBox = new SelectionBox();
 
-        inputController.setSelectionBox(this._selectionBox);
+        this._selectionBox = new SelectionBox();
         this._selectionBoxInputHandler = new SelectionBoxInputHandler(inputController, graphController, this._selectionBox);
     }
 
     /** @override */
     componentDidMount()
     {
+        const inputController = this.props.inputController;
+        if (inputController)
+        {
+            inputController.setSelectionBox(this._selectionBox);
+        }
+
         const inputContext = this.props.inputContext;
         if (inputContext)
         {

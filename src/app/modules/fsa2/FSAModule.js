@@ -33,6 +33,7 @@ import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 
 import FSAGraphLayer from './components/FSAGraphLayer.js';
 import FSAGraphOverlayLayer from './components/FSAGraphOverlayLayer.js';
+import FSATapeGraphOverlayLayer from './components/FSATapeGraphOverlayLayer.js';
 
 import GraphView from 'graph2/components/GraphView.js';
 
@@ -56,11 +57,24 @@ class FSAModule
                 <GraphView
                     ref={this._graphViewComponent}
                     renderGraph={graphView =>
-                        <FSAGraphLayer graphView={graphView} graphController={graphController} />}
+                    {
+                        return <FSAGraphLayer graphView={graphView} graphController={graphController} editable={!this._testMode} />;
+                    }}
                     renderOverlay={graphView =>
-                        <FSAGraphOverlayLayer graphView={graphView} graphController={graphController} module={this} />}>
+                    {
+                        if (!this._testMode)
+                        {
+                            return <FSAGraphOverlayLayer graphView={graphView} graphController={graphController} module={this} />;
+                        }
+                        else
+                        {
+                            return <FSATapeGraphOverlayLayer graphView={graphView} tester={this._tester} />;
+                        }
+                    }}>
                 </GraphView>
             ));
+        
+        // <FSAGraphOverlayLayer graphView={graphView} graphController={graphController} module={this} />
 
         this._machineController = new MachineController(this);
 
@@ -68,6 +82,8 @@ class FSAModule
             this._graphController,
             this._machineController);
         this._tester = new StringTester();
+        this._testMode = false;
+        this._stepMode = false;
 
         this._broadcastHandler = new FSABroadcastHandler();
     }

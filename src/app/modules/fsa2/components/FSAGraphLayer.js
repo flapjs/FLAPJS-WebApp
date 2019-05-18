@@ -43,22 +43,28 @@ class FSAGraphLayer extends React.Component
     {
         const graphView = this.props.graphView;
         const graphController = this.props.graphController;
+        const editable = this.props.editable;
+
         const graph = graphController.getGraph();
+        const inputController = graphView.getInputController();
+        const inputContext = graphView.getInputContext();
 
         return (
             <React.Fragment>
                 <FSAInitialMarkerLayer
-                    inputController={graphView.getInputController()}
+                    inputController={inputController}
                     graphController={graphController}
-                    inputContext={graphView.getInputContext()}
-                    inputPriority={-1} />
+                    inputContext={inputContext}
+                    inputPriority={-1}
+                    editable={editable} />
                 <GraphNodeLayer
                     nodes={graph.getNodes()}
-                    inputController={graphView.getInputController()}
+                    inputController={inputController}
                     graphController={graphController}
                     nodeRenderer={FSANodeRenderer}
-                    inputContext={graphView.getInputContext()}
-                    inputPriority={-1} />
+                    inputContext={inputContext}
+                    inputPriority={-1}
+                    editable={editable} />
                 <GraphEdgeLayer
                     ref={ref =>
                     {
@@ -68,14 +74,15 @@ class FSAGraphLayer extends React.Component
                             .setShouldDeleteEdgePlaceholder(true);
                     }}
                     edges={graph.getEdges()}
-                    inputController={graphView.getInputController()}
+                    inputController={inputController}
                     graphController={graphController}
-                    inputContext={graphView.getInputContext()}
-                    inputPriority={-1} />
+                    inputContext={inputContext}
+                    inputPriority={-1}
+                    editable={editable} />
                 <SelectionBoxLayer
-                    inputController={graphView.getInputController()}
+                    inputController={inputController}
                     graphController={graphController}
-                    inputContext={graphView.getInputContext()}
+                    inputContext={inputContext}
                     inputPriority={-1} />
             </React.Fragment>
         );

@@ -13,26 +13,28 @@ class FSAGraphOverlayLayer extends React.Component
     /** @override */
     render()
     {
+        const currentModule = this.props.module;
         const graphView = this.props.graphView;
         const graphController = this.props.graphController;
         const labelFormatter = graphController.getLabelFormatter();
-        const currentModule = this.props.module;
+        const inputController = graphView.getInputController();
 
         return (
             <React.Fragment>
                 <ViewportLayer
                     graphController={graphController}
-                    inputController={graphView.getInputController()}
-                    viewport={graphView.getViewportComponent()}>
-                    <ViewportNavigationLayer
-                        style={{ right: 0 }}
-                        viewportAdapter={graphView.getViewportComponent().getViewportAdapter()} />
-                </ViewportLayer>
+                    inputController={inputController}
+                    viewport={graphView.getViewportComponent()}/>
+                <ViewportNavigationLayer
+                    style={{ right: 0 }}
+                    viewportAdapter={graphView.getViewportAdapter()} />
                 <LabelEditorView ref={ref => graphController.setLabelEditor(ref)}
                     labelFormatter={labelFormatter}
                     viewport={graphView.getViewportComponent()}
                     saveOnExit={true}>
-                    <FSALabelEditorRenderer graphController={graphController} currentModule={currentModule} />
+                    <FSALabelEditorRenderer
+                        graphController={graphController}
+                        currentModule={currentModule} />
                 </LabelEditorView>
             </React.Fragment>
         );

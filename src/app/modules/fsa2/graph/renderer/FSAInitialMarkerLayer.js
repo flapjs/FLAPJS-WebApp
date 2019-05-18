@@ -41,18 +41,23 @@ class FSAInitialMarkerLayer extends React.Component
     {
         const inputController = this.props.inputController;
         const Renderer = this.props.initialMarkerRenderer || FSAInitialMarkerRenderer;
+        const editable = this.props.editable;
 
         const graphController = this.props.graphController;
         const target = this._initialMarkerInputHandler.getGhostMarker() || graphController.getGraph().getStartNode();
+
+        const onMouseOver = inputController ? inputController.onMouseOver : null;
+        const onMouseOut = inputController ? inputController.onMouseOut : null;
+        
         return (
             <g>
                 {target &&
                     <Renderer
                         node={target}
                         color={'var(--color-graph-text)'}
-                        onMouseOver={inputController.onMouseOver}
-                        onMouseOut={inputController.onMouseOut}
-                        pointerEvents={inputController.hasPointerEvents(target) ? 'all' : 'none'} />}
+                        onMouseOver={onMouseOver}
+                        onMouseOut={onMouseOut}
+                        pointerEvents={editable && inputController && inputController.hasPointerEvents(target) ? 'all' : 'none'} />}
             </g>
         );
     }
