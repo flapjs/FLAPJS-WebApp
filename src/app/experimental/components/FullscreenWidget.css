@@ -1,4 +1,11 @@
 :local(.fullscreen_button) {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	
+	width: 2em;
+	height: 2em;
+
 	color: var(--color-background-lite);
 	transition: color 0.3s ease;
 }

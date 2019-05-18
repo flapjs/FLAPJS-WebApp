@@ -4,7 +4,6 @@ import Style from './App.css';
 
 import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION_VERTICAL, DRAWER_BAR_DIRECTION_HORIZONTAL } from 'experimental/drawer/DrawerView.js';
 import ToolbarView from 'experimental/toolbar/ToolbarView.js';
-import ViewportView from 'experimental/viewport/ViewportView.js';
 import TooltipView from 'experimental/tooltip/TooltipView.js';
 import UploadDropZone from 'experimental/components/UploadDropZone.js';
 import NotificationView from 'session/manager/notification/components/NotificationView.js';
@@ -49,8 +48,7 @@ import HotKeyManager from 'session/manager/hotkey/HotKeyManager.js';
 import HotKeyView from 'session/manager/hotkey/HotKeyView.js';
 import UndoManager from 'session/manager/undo/UndoManager.js';
 import RenderManager, {
-    RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
-    RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY
+    RENDER_LAYER_WORKSPACE
 } from 'session/manager/RenderManager.js';
 import TooltipManager from 'session/manager/TooltipManager.js';
 import NotificationManager, { ERROR_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
@@ -337,7 +335,6 @@ class App extends React.Component
         const undoManager = this._undoManager;
         const drawerManager = this._drawerManager;
         const menuManager = this._menuManager;
-        const viewportManager = this._viewportManager;
         // const renderManager = this._renderManager;
         const tooltipManager = this._tooltipManager;
         const notificationManager = this._notificationManager;
@@ -346,8 +343,6 @@ class App extends React.Component
         const drawerPanelProps = drawerManager.getPanelProps() || { session: session };
         const menuPanelClasses = menuManager.getPanelClasses();
         const menuPanelProps = menuManager.getPanelProps() || { session: session };
-        const viewportViewClasses = viewportManager.getViewClasses();
-        const viewportViewProps = viewportManager.getViewProps() || { session: session };
 
         return (
             <div className={Style.app_container + (currentModule ? ' active ' : '')}>
@@ -408,7 +403,6 @@ class App extends React.Component
 
                     <UploadDropZone>
                         <div className="viewport">
-
                             <TooltipView mode={tooltipManager.getTransitionMode()}
                                 visible={/* TODO: For the initial fade-in animation */this._init && !undoManager.canUndo()}>
                                 {tooltipManager.getTooltips().map((e, i) => <label key={e + ':' + i}>{e}</label>)}
@@ -417,23 +411,11 @@ class App extends React.Component
                             {/* RENDER_LAYER_WORKSPACE */}
                             {this.renderRenderLayer(RENDER_LAYER_WORKSPACE)}
 
-                            {/* RENDER_LAYER_WORKSPACE_OVERLAY */}
-                            {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_OVERLAY)}
-
                             <FullscreenWidget className={Style.fullscreen_widget} app={this} />
+
                             <NotificationView notificationManager={notificationManager} />
+                            
                             {this._hotKeyManager.isEnabled() && <HotKeyView hotKeyManager={this._hotKeyManager} />}
-
-                            <ViewportView ref={ref => this._viewport = ref}
-                                views={viewportViewClasses}
-                                viewProps={viewportViewProps}>
-                                {/* RENDER_LAYER_VIEWPORT */}
-                                {this.renderRenderLayer(RENDER_LAYER_VIEWPORT, { viewport: this._viewport })}
-                            </ViewportView>
-
-                            {/* RENDER_LAYER_VIEWPORT_OVERLAY */}
-                            {this.renderRenderLayer(RENDER_LAYER_VIEWPORT_OVERLAY, { viewport: this._viewport })}
-
                         </div>
                     </UploadDropZone>
                 </DrawerView>
