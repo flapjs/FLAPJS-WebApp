@@ -1,13 +1,5 @@
 import React from 'react';
 
-/*
-import EditPane from './components/views/EditPane.js';
-import TapePane from './components/views/TapePane.js';
-
-import StepTracer from './steptracer/StepTracer.js';
-import StepTracerView from './steptracer/StepTracerView.js';
-*/
-
 import { userClearGraph } from 'experimental/UserUtil.js';
 import { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
 import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
@@ -134,7 +126,6 @@ class FSAModule
             this._graphController,
             this._machineController);
         this._tester = new StringTester();
-        // this._stepTracer = new StepTracer(this.getGraphController(), this.getMachineController());
 
         this._broadcastHandler = new FSABroadcastHandler();
     }
@@ -164,12 +155,6 @@ class FSAModule
         app.getUndoManager()
             .setEventHandlerFactory((...args) => new SafeGraphEventHandler(
                 this._graphController, FSAGraphParser.JSON));
-        /*
-        app.getViewportManager()
-            .addViewClass(EditPane)
-            .addViewClass(TapePane)
-            .addViewClass(StepTracerView);
-        */
 
         app.getDrawerManager()
             .addPanelClass(props => (
@@ -235,7 +220,6 @@ class FSAModule
 
     getErrorChecker() { return this._errorChecker; }
     getStringTester() { return this._tester; }
-    getStepTracer() { return this._stepTracer; }
     getBroadcastHandler() { return this._broadcastHandler; }
 
     /** @override */

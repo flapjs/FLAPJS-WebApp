@@ -124,7 +124,7 @@ class FSAGraphController extends GraphController
 
     shouldAutoRenameNodes()
     {
-        return true;
+        return this.shouldAutoLabel;
     }
 
     deleteSelectedNodes(selectedNode)

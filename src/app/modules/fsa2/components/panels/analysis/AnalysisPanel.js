@@ -43,7 +43,7 @@ class AnalysisPanel extends React.Component
         const machineController = currentModule.getMachineController();
         const props = { graphController: graphController, machineController: machineController };
 
-        //Will do: machineController.convertMachineTo("DFA");
+        // Will do: machineController.convertMachineTo("DFA");
         session.getApp().getNotificationManager().pushNotification(
             I18N.toString('message.warning.convertNFAToDFA'),
             MACHINE_CONVERSION_LAYOUT_ID, MACHINE_CONVERSION_NOTIFICATION_TAG, props, true

@@ -37,7 +37,7 @@ class OverviewPanel extends React.Component
         const machineController = currentModule.getMachineController();
         const machine = machineController.getMachineBuilder().getMachine();
 
-        switch(newValue)
+        switch (newValue)
         {
         case MACHINE_TYPE_DFA:
             machine.setDeterministic(true);
@@ -59,7 +59,7 @@ class OverviewPanel extends React.Component
 
     onAutoLayoutChange(e)
     {
-    //TODO: Not yet implemented...
+        //TODO: Not yet implemented...
     }
 
     onAutoLabelChange(e)
@@ -71,7 +71,7 @@ class OverviewPanel extends React.Component
 
     onSnapToGridChange(e)
     {
-    //TODO: Not yet implemented...
+        //TODO: Not yet implemented...
     }
 
     /** @override */
@@ -100,55 +100,57 @@ class OverviewPanel extends React.Component
                     <option>{MACHINE_TYPE_NFA}</option>
                 </select>
 
-                <PanelDivider/>
+                <PanelDivider />
 
                 <PanelSection title={'States'} initial={true} full={drawerFull}>
-                    <StateListView graphController={graphController}/>
+                    <StateListView graphController={graphController} />
                 </PanelSection>
                 <PanelSection title={'Alphabet'} initial={true} full={drawerFull}>
-                    <AlphabetListView machineController={machineController}/>
+                    <AlphabetListView machineController={machineController} />
                 </PanelSection>
 
-                <PanelDivider/>
+                <PanelDivider />
 
                 <PanelSection title={'Transition Chart'} full={drawerFull} disabled={graphController.getGraph().getEdgeCount() <= 0}>
-                    <TransitionChartView machineController={machineController}/>
+                    <TransitionChartView machineController={machineController} />
                 </PanelSection>
                 <PanelSection title={'Transition Table'} full={drawerFull} disabled={graphController.getGraph().getNodeCount() <= 0}>
-                    <TransitionTableView machineController={machineController}/>
+                    <TransitionTableView machineController={machineController} />
                 </PanelSection>
 
-                <PanelDivider/>
+                <PanelDivider />
 
-                <AutoStateLabelView graphController={graphController}/>
+                <AutoStateLabelView graphController={graphController} />
 
-                <button className={Style.autolayout_button} onClick={this.onAutoLayoutApply} disabled={graphController.getGraph().isEmpty()}>
+                <button className={Style.autolayout_button}
+                    onClick={this.onAutoLayoutApply}
+                    disabled={graphController.getGraph().isEmpty()}>
                     {I18N.toString('action.overview.autolayout')}
                 </button>
 
-                <PanelDivider/>
+                <PanelDivider />
 
                 <PanelSwitch id={'overview-auto-label'}
                     checked={autoRename}
                     title={'Auto rename nodes'}
-                    onChange={this.onAutoLabelChange}/>
+                    onChange={this.onAutoLabelChange} />
                 <PanelSwitch id={'overview-auto-layout'}
                     checked={false}
                     title={'Auto layout nodes'}
                     disabled={true}
-                    onChange={this.onAutoLayoutChange}/>
+                    onChange={this.onAutoLayoutChange} />
                 <PanelSwitch id={'overview-snap-grid'}
                     checked={false}
                     title={'Snap-to-grid'}
                     disabled={true}
-                    onChange={this.onSnapToGridChange}/>
+                    onChange={this.onSnapToGridChange} />
 
             </PanelContainer>
         );
     }
 }
 Object.defineProperty(OverviewPanel, 'TITLE', {
-    get: function() { return I18N.toString('component.overview.title'); }
+    get: function () { return I18N.toString('component.overview.title'); }
 });
 
 export default OverviewPanel;
