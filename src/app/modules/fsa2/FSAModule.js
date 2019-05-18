@@ -12,7 +12,7 @@ import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
 import { registerNotifications } from './components/notifications/FSANotifications.js';
 
-import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
+import * as FSAGraphParser from './FSAGraphParser.js';
 import FSAImporter from './filehandlers/FSAImporter.js';
 import FSAJFFImporter from './filehandlers/FSAJFFImporter.js';
 import FSAExporter from './filehandlers/FSAExporter.js';
