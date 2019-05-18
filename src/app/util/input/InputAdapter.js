@@ -1,6 +1,5 @@
 import InputContext from './InputContext.js';
 import InputPointer from './InputPointer.js';
-import ViewportAdapter from './ViewportAdapter.js';
 
 const LONG_TAP_TICKS = 600;
 const DOUBLE_TAP_TICKS = 600;
@@ -16,9 +15,12 @@ const DRAGGING_BUFFER_SQU = DRAGGING_BUFFER * DRAGGING_BUFFER;
  */
 class InputAdapter extends InputContext
 {
-    constructor()
+    constructor(viewportAdapter)
     {
         super();
+        
+        this._viewportAdapter = viewportAdapter;
+
         this._contexts = [];
         this._activeDragHandler = null;
 
@@ -31,8 +33,6 @@ class InputAdapter extends InputContext
             _timer: null
         };
         this._pointer = null;
-
-        this._viewportAdapter = new ViewportAdapter();
 
         //Although dragging could be in pointer, it should be here to allow
         //the adapter to be independent of pointer.
@@ -131,7 +131,7 @@ class InputAdapter extends InputContext
         if (this._element) throw new Error('Trying to initialize an InputAdapter already initialized');
 
         this._viewportAdapter.setElement(this._element = element);
-        this._pointer = new InputPointer(this, this._element, this._viewportAdapter);
+        this._pointer = new InputPointer(this, this._viewportAdapter, this._element);
 
         this._element.addEventListener('mousedown', this.onMouseDown);
         this._element.addEventListener('mousemove', this.onMouseMove);

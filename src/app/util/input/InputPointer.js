@@ -3,11 +3,11 @@
  */
 class InputPointer
 {
-    constructor(inputAdapter, element, viewportAdapter)
+    constructor(inputAdapter, viewportAdapter, element)
     {
         this._inputAdapter = inputAdapter;
-        this._element = element;
         this._viewportAdapter = viewportAdapter;
+        this._element = element;
 
         this._active = false;
         this._x = 0;
