@@ -6,11 +6,14 @@
 
   height: 100%;
   overflow-y: scroll;
+
+  pointer-events: none;
 }
 
 :local(.notifications_container) > * {
   margin: 0.5em;
   width: 12em;
+  pointer-events: auto;
 
   box-shadow: 2px 2px 5px -2px rgba(0,0,0,0.3);
 }
