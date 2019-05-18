@@ -3,7 +3,7 @@ import AbstractMachineController from 'modules/abstract/AbstractMachineControlle
 import FSABuilder from 'modules/fsa2/machine/FSABuilder.js';
 import { convertToDFA, invertDFA } from 'modules/fsa2/machine/FSAUtils.js';
 
-import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
+import GraphLayout from 'modules/fsa2/GraphLayout.js';
 
 class MachineController extends AbstractMachineController
 {

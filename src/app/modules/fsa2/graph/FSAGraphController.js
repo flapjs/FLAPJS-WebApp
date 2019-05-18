@@ -10,7 +10,7 @@ export const TRASH_EDITING_NOTIFICATION_TAG = 'tryCreateWhileTrash';
 
 
 // This really shouldn't be here....
-import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
+import GraphLayout from 'modules/fsa2/GraphLayout.js';
 const DEFAULT_AUTO_RENAME = true;
 const NODE_SPAWN_RADIUS = 64;
 

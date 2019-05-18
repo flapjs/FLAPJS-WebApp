@@ -2,7 +2,7 @@ import AbstractGraphController from 'modules/abstract/AbstractGraphController.js
 
 import Eventable from 'util/Eventable.js';
 import GraphEdge from 'graph/elements/GraphEdge.js';
-import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
+import GraphLayout from 'modules/fsa2/GraphLayout.js';
 
 import GraphChangeHandler from 'experimental/GraphChangeHandler.js';
 

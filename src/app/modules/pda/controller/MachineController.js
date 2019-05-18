@@ -2,7 +2,7 @@ import AbstractMachineController from 'modules/abstract/AbstractMachineControlle
 
 import PDABuilder from 'modules/pda/machine/PDABuilder.js';
 
-import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
+import GraphLayout from 'modules/fsa2/GraphLayout.js';
 
 class MachineController extends AbstractMachineController
 {
