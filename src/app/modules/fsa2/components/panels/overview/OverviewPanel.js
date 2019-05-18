@@ -82,6 +82,7 @@ class OverviewPanel extends React.Component
         const currentModule = session.getCurrentModule();
         const graphController = currentModule.getGraphController();
         const machineController = currentModule.getMachineController();
+        const graphView = currentModule.getGraphView();
         const machineType = machineController.getMachineBuilder().getMachine().isDeterministic() ? MACHINE_TYPE_DFA : MACHINE_TYPE_NFA;
         const autoRename = graphController.shouldAutoRenameNodes();
 
@@ -103,7 +104,7 @@ class OverviewPanel extends React.Component
                 <PanelDivider />
 
                 <PanelSection title={'States'} initial={true} full={drawerFull}>
-                    <StateListView graphController={graphController} />
+                    <StateListView graphController={graphController} graphView={graphView} />
                 </PanelSection>
                 <PanelSection title={'Alphabet'} initial={true} full={drawerFull}>
                     <AlphabetListView machineController={machineController} />
