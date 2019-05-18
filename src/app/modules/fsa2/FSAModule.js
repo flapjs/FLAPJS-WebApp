@@ -74,8 +74,6 @@ class FSAModule
                 </GraphView>
             ));
         
-        // <FSAGraphOverlayLayer graphView={graphView} graphController={graphController} module={this} />
-
         this._machineController = new MachineController(this);
 
         this._errorChecker = new FSAErrorChecker(app,
@@ -83,7 +81,6 @@ class FSAModule
             this._machineController);
         this._tester = new StringTester();
         this._testMode = false;
-        this._stepMode = false;
 
         this._broadcastHandler = new FSABroadcastHandler();
     }
