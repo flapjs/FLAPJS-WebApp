@@ -1,5 +1,5 @@
 import Parser from 'util/file/Parser.js';
-import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
+import FSAGraph from '../graph/FSAGraph.js';
 
 export const VERSION = '1.0.0';
 

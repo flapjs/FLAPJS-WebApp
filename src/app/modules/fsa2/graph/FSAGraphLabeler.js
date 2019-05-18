@@ -1,7 +1,6 @@
 import AbstractGraphLabeler from 'graph/AbstractGraphLabeler.js';
 
-import { SYMBOL_SEPARATOR } from 'modules/fsa2/graph/element/FSAEdge.js';
-import { EMPTY } from 'modules/fsa/machine/Symbols.js';
+import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/fsa2/graph/element/FSAEdge.js';
 
 const DEFAULT_NODE_LABEL_PREFIX = 'q';
 
@@ -115,7 +114,7 @@ function edgeLabelFormatter(string, allowNull=false)
     }
 
     //If it is an empty string...
-    if (result.size <= 0) return allowNull ? null : EMPTY;
+    if (result.size <= 0) return allowNull ? null : EMPTY_CHAR;
     return Array.from(result).join(SYMBOL_SEPARATOR);
 }
 
