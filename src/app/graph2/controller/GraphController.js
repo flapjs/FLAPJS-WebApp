@@ -65,8 +65,11 @@ class GraphController
 	
     clearGraph()
     {
-        this._graph.clear();
-        this.emitGraphEvent(GRAPH_EVENT_CLEAR);
+        if (window.confirm(I18N.toString('alert.graph.clear')))
+        {
+            this._graph.clear();
+            this.emitGraphEvent(GRAPH_EVENT_CLEAR);
+        }
     }
 
     onGraphEvent(eventName, eventData)
