@@ -25,7 +25,7 @@ class TestingPanel extends React.Component
     /** @override */
     componentDidMount()
     {
-    //TODO: This should be in modules...
+        //TODO: This should be in modules...
         const session = this.props.session;
         const app = session.getApp();
         const currentModule = session.getCurrentModule();
@@ -48,7 +48,7 @@ class TestingPanel extends React.Component
     {
         this.setState((prev, props) => 
         {
-            return {stepMode: !prev.stepMode};
+            return { stepMode: !prev.stepMode };
         });
     }
 
@@ -60,8 +60,13 @@ class TestingPanel extends React.Component
         errorChecker.setErrorChecking(!errorCheck);
         if (errorCheck)
         {
-            //Turning it off
+            // Turning it off
             this.props.session.getApp().getNotificationManager().clearNotifications(MACHINE_ERROR_NOTIFICATION_TAG);
+        }
+        else
+        {
+            // Run it at least once on start
+            errorChecker.showErrors();
         }
     }
 
@@ -81,20 +86,20 @@ class TestingPanel extends React.Component
         return (
             <PanelContainer id={this.props.id}
                 className={Style.panel_container +
-          ' ' + this.props.className}
+                    ' ' + this.props.className}
                 style={this.props.style}
                 title={TestingPanel.TITLE}>
 
-                <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode}/>
-                <PanelSwitch id={'testing-step-test'} checked={stepMode} onChange={this.onStepTestChange} title={'Step testing'}/>
-                <PanelSwitch id={'testing-error-check'} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={'Auto error checking'}/>
+                <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode} />
+                <PanelSwitch id={'testing-step-test'} checked={stepMode} onChange={this.onStepTestChange} title={'Step testing'} />
+                <PanelSwitch id={'testing-error-check'} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={'Auto error checking'} />
 
             </PanelContainer>
         );
     }
 }
 Object.defineProperty(TestingPanel, 'TITLE', {
-    get: function() { return I18N.toString('component.testing.title'); }
+    get: function () { return I18N.toString('component.testing.title'); }
 });
 
 export default TestingPanel;
