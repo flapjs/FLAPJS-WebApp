@@ -31,8 +31,7 @@ class ViewportInputHandler extends AbstractInputHandler
         const dx = pointer.x - this._cachedPosition.x;
         const dy = pointer.y - this._cachedPosition.y;
 
-        const adapter = pointer.getInputAdapter();
-        const viewport = adapter.getViewportAdapter();
+        const viewport = pointer.getViewportAdapter();
         viewport.addOffset(dx, dy, true);
 
         /*

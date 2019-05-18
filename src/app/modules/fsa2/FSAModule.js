@@ -115,7 +115,7 @@ class FSAModule
                                 viewport={graphView.getViewportComponent()}>
                                 <ViewportNavigationLayer
                                     style={{ right: 0 }}
-                                    viewportAdapter={graphView.getViewportComponent().getInputAdapter().getViewportAdapter()} />
+                                    viewportAdapter={graphView.getViewportComponent().getViewportAdapter()} />
                             </ViewportLayer>
                             <LabelEditorView ref={ref => graphController.setLabelEditor(ref)}
                                 labelFormatter={labelFormatter}
@@ -231,6 +231,7 @@ class FSAModule
 
     getMachineController() { return this._machineController; }
     getGraphController() { return this._graphController; }
+    getGraphView() { return this._graphViewComponent.current; }
 
     getErrorChecker() { return this._errorChecker; }
     getStringTester() { return this._tester; }

@@ -16,7 +16,7 @@ class FSAGraphParser extends Parser
      * @param  {FSAGraph} [dst=null]  the target to set parsed graph data
      * @return {FSAGraph}             the result in the passed-in dst
      */
-    parse(data, dst=null)
+    parse(data, dst = null)
     {
         if (typeof data !== 'object')
         {
@@ -40,7 +40,7 @@ class FSAGraphParser extends Parser
         const initialIndex = data['initial'] || 0;
 
         const nodeIndices = new Map();
-        for(let i = 0; i < nodeCount; ++i)
+        for (let i = 0; i < nodeCount; ++i)
         {
             const nodeData = nodeDatas[i];
             if (!nodeData) continue;
@@ -60,7 +60,7 @@ class FSAGraphParser extends Parser
             dst.setStartNode(initialNode);
         }
 
-        for(let i = 0; i < edgeCount; ++i)
+        for (let i = 0; i < edgeCount; ++i)
         {
             const edgeData = edgeDatas[i];
             if (!edgeData) continue;
@@ -85,7 +85,7 @@ class FSAGraphParser extends Parser
      * @param  {Object} [dst=null]    the object to append graph data
      * @return {Object}               the result in the passed-in dst
      */
-    compose(target, dst=null)
+    compose(target, dst = null)
     {
         if (!(target instanceof FSAGraph))
         {
@@ -103,7 +103,7 @@ class FSAGraphParser extends Parser
         const nodeDatas = new Array(nodeCount);
         const nodeIndices = new Map();
         let node;
-        for(let i = 0; i < nodeCount; ++i)
+        for (let i = 0; i < nodeCount; ++i)
         {
             node = graphNodes[i];
             if (node)
@@ -124,7 +124,7 @@ class FSAGraphParser extends Parser
 
         const edgeDatas = new Array(edgeCount);
         let edge;
-        for(let i = 0; i < edgeCount; ++i)
+        for (let i = 0; i < edgeCount; ++i)
         {
             edge = graphEdges[i];
             if (edge)

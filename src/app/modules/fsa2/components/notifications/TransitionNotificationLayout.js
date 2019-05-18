@@ -1,5 +1,5 @@
 import React from 'react';
-import DefaultNotificationLayout, {STYLE_TYPE_ERROR} from 'session/manager/notification/components/DefaultNotificationLayout.js';
+import DefaultNotificationLayout, { STYLE_TYPE_ERROR } from 'session/manager/notification/components/DefaultNotificationLayout.js';
 import GraphNode from 'graph/elements/GraphNode.js';
 
 const ARROW = '\u2192';
@@ -13,15 +13,15 @@ class TransitionNotificationLayout extends React.Component
         this.targetIndex = 0;
         this.targetLabel = '';
         const targets = props.message.targets;
-        for(const target of targets)
+        for (const target of targets)
         {
             if (this.targetLabel.length > 0)
             {
                 this.targetLabel += ', ';
             }
             this.targetLabel += '(' + target.getEdgeFrom().getNodeLabel() + ', ' +
-        target.getEdgeLabel() + ') ' +
-        ARROW + ' ' + (target.getEdgeTo() instanceof GraphNode ? target.getEdgeTo().getNodeLabel() : 'null');
+                target.getEdgeLabel() + ') ' +
+                ARROW + ' ' + (target.getEdgeTo() instanceof GraphNode ? target.getEdgeTo().getNodeLabel() : 'null');
         }
 
         this.onClick = this.onClick.bind(this);
@@ -31,10 +31,11 @@ class TransitionNotificationLayout extends React.Component
     {
         const notification = this.props.notification;
         const message = this.props.message;
+        const app = this.props.app;
 
         const graphController = this.props.graphController;
 
-        switch(e.target.value)
+        switch (e.target.value)
         {
         case 'locate':
             {
@@ -47,7 +48,9 @@ class TransitionNotificationLayout extends React.Component
                     if (this.targetIndex >= targetLength) this.targetIndex = 0;
 
                     //Move pointer to target
-                    graphController.focusOnEdge(target);
+                    const graphView = app.getSession().getCurrentModule().getGraphView();
+                    const center = target.getCenterPoint();
+                    graphView.moveViewToPosition(center.x, center.y);
                 }
             }
             break;

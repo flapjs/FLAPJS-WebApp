@@ -43,10 +43,18 @@ class GraphView extends React.Component
         inputAdapter.unbindContext(inputContext);
     }
 
+    moveViewToPosition(x, y)
+    {
+        //Center view at position; inverted due to graph-to-screen space
+        this.getViewportAdapter().setOffset(-x, -y);
+    }
+
     getInputController() { return this._inputController; }
     getInputContext() { return this._inputContext; }
 
     getViewportComponent() { return this._viewportComponent.current; }
+    getInputAdapter() { return this._viewportComponent.current.getInputAdapter(); }
+    getViewportAdapter() { return this._viewportComponent.current.getViewportAdapter(); }
 
     /** @override */
     render()

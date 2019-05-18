@@ -1,7 +1,7 @@
 import GraphController from 'graph2/controller/GraphController.js';
 
 import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE, GRAPH_EVENT_NODE_DELETE, GRAPH_EVENT_NODE_DELETE_ALL } from 'graph2/inputhandler/GraphNodeInputHandler.js';
-import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE } from 'graph2/inputhandler/GraphEdgeInputHandler.js';
+import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE, GRAPH_EVENT_EDGE_DELETE } from 'graph2/inputhandler/GraphEdgeInputHandler.js';
 
 import { WARNING_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
 import FSAGraphLabeler from './FSAGraphLabeler';
@@ -12,7 +12,7 @@ export const TRASH_EDITING_NOTIFICATION_TAG = 'tryCreateWhileTrash';
 // This really shouldn't be here....
 import GraphLayout from 'modules/fsa/graph/GraphLayout.js';
 const DEFAULT_AUTO_RENAME = true;
-
+const NODE_SPAWN_RADIUS = 64;
 
 
 class FSAGraphController extends GraphController
@@ -56,7 +56,7 @@ class FSAGraphController extends GraphController
             this._app.getUndoManager().captureEvent();
         }
     }
-	
+
     getApp() { return this._app; }
 
     // these really shouldn't be here...
@@ -66,13 +66,13 @@ class FSAGraphController extends GraphController
         if (!targets || targets.length <= 0) return;
 
         const graph = this.getGraph();
-        for(const node of targets)
+        for (const node of targets)
         {
             graph.deleteNode(node);
         }
 
         //Emit event
-        this.emitGraphEvent(GRAPH_EVENT_NODE_DELETE_ALL, {target: targets});
+        this.emitGraphEvent(GRAPH_EVENT_NODE_DELETE_ALL, { target: targets });
         this._app.getUndoManager().captureEvent();
     }
 
@@ -97,13 +97,13 @@ class FSAGraphController extends GraphController
         if (graph.isEmpty()) return;
 
         //Reset all default labels...
-        for(const node of graph.getNodes())
+        for (const node of graph.getNodes())
         {
             if (!node.getNodeCustom()) node.setNodeLabel('');
         }
 
         //Rename all default labels appropriately...
-        for(const node of graph.getNodes())
+        for (const node of graph.getNodes())
         {
             if (!node.getNodeCustom())
             {
@@ -125,6 +125,67 @@ class FSAGraphController extends GraphController
     shouldAutoRenameNodes()
     {
         return true;
+    }
+
+    deleteSelectedNodes(selectedNode)
+    {
+        const selectionBox = this.inputController.getSelectionBox();
+        const selection = selectionBox.getSelection(this.getGraph()).slice();
+
+        //Remove from graph
+        for(const node of selection)
+        {
+            this._graph.deleteNode(node);
+        }
+
+        //Remove from selection
+        selectionBox.clearSelection();
+
+        //Emit event
+        this.emitGraphEvent(GRAPH_EVENT_NODE_DELETE_ALL, { target: selection });
+        this._app.getUndoManager().captureEvent();
+    }
+
+    deleteTargetNode(target)
+    {
+        this._graph.deleteNode(target);
+
+        //Emit event
+        this.emitGraphEvent(GRAPH_EVENT_NODE_DELETE, { target: target });
+        this._app.getUndoManager().captureEvent();
+    }
+
+    deleteTargetEdge(target)
+    {
+        this._graph.deleteEdge(target);
+
+        //Emit event
+        this.emitGraphEvent(GRAPH_EVENT_EDGE_DELETE, { target: target });
+        this._app.getUndoManager().captureEvent();
+    }
+
+    deleteTargetEdges(targets)
+    {
+        if (!targets || targets.length <= 0) return;
+
+        for(const target of targets)
+        {
+            this.deleteTargetEdge(target);
+        }
+    }
+
+    createNode(x, y)
+    {
+        if (typeof x === 'undefined') x = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
+        if (typeof y === 'undefined') y = (Math.random() * NODE_SPAWN_RADIUS * 2) - NODE_SPAWN_RADIUS;
+
+        const node = this._graph.createNode(x, y);
+
+        const newNodeLabel = this.getGraphLabeler().getDefaultNodeLabel();
+        node.setNodeLabel(newNodeLabel);
+
+        this._app.getUndoManager().captureEvent();
+        return node;
     }
 }
 
