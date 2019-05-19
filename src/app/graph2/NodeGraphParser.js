@@ -14,71 +14,11 @@ export const VERSION = SemanticVersion.parse(VERSION_STRING);
  */
 class NodeGraphParser extends Parser
 {
-    constructor() { super(); }
-
-    onParseGraph(graphData, targetGraph)
+    constructor()
     {
-        const hasQuad = graphData['quad'] || false;
-        if (!targetGraph)
-        {
-            targetGraph = new NodeGraph(GraphNode, hasQuad ? QuadraticEdge : GraphEdge);
-        }
-        else
-        {
-            targetGraph.clear();
-        }
-        return targetGraph;
-    }
+        super();
 
-    onParseNode(nodeData, targetNode)
-    {
-        // Nothing else needs to be done :3
-    }
-
-    onParseEdge(edgeData, targetEdge)
-    {
-        if (targetEdge instanceof QuadraticEdge)
-        {
-            const quadData = edgeData['quad'] || {};
-            targetEdge.setQuadraticRadians(quadData['radians'] || 0);
-            targetEdge.setQuadraticLength(quadData['length'] || 0);
-        }
-    }
-
-    onComposeGraph(graph, graphData)
-    {
-        if (!graphData) graphData = {};
-
-        let hasQuad = false;
-        const edges = graph.getEdges();
-        for(const edge of edges)
-        {
-            if (edge instanceof QuadraticEdge)
-            {
-                hasQuad = true;
-                break;
-            }
-        }
-        graphData['hasQuad'] = hasQuad;
-
-        return graphData;
-    }
-
-    onComposeNode(node, nodeData)
-    {
-        // Yep. It's all good.
-    }
-
-    onComposeEdge(edge, edgeData)
-    {
-        if (edge instanceof QuadraticEdge)
-        {
-            const quad = edge.getQuadratic() || {};
-            edgeData['quad'] = {
-                radians: quad['radians'] || 0,
-                length: quad['length'] || 0
-            };
-        }
+        this._nodeIndices = new Map();
     }
 
     /**
@@ -105,15 +45,15 @@ class NodeGraphParser extends Parser
         const edgeDatas = data['edges'] || [];
         const edgeCount = Math.min(edgeDatas.length || 0, data['edgeCount'] || 0);
 
-        dst = this.onParseGraph(data, dst);
+        dst = this.onParseGraphCreate(data, dst);
 
-        const nodeIndices = new Map();
+        const nodeIndices = this._nodeIndices;
         for (let i = 0; i < nodeCount; ++i)
         {
             const nodeData = nodeDatas[i];
             if (!nodeData) continue;
 
-            //NOTE: Assumes createNode will maintain order
+            // NOTE: Assumes createNode will maintain order
             const node = dst.createNode(nodeData['x'] || 0, nodeData['y'] || 0, nodeData['id']);
             node.setNodeLabel(nodeData['label'] || '');
 
@@ -127,16 +67,21 @@ class NodeGraphParser extends Parser
             const edgeData = edgeDatas[i];
             if (!edgeData) continue;
             const sourceNode = nodeIndices.get(edgeData['from']) || null;
-            //Cannot create source-less edges
+            // Cannot create source-less edges
             if (!sourceNode) continue;
             const destinationNode = nodeIndices.get(edgeData['to']) || null;
 
-            //NOTE: Assumes createEdge will maintain order
+            // NOTE: Assumes createEdge will maintain order
             const edge = dst.createEdge(sourceNode, destinationNode, edgeData['id']);
             edge.setEdgeLabel(edgeData['label'] || '');
 
             this.onParseEdge(edgeData, edge);
         }
+
+        this.onParseGraphResult(data, dst);
+
+        // Clean-up
+        nodeIndices.clear();
 
         return dst;
     }
@@ -154,7 +99,7 @@ class NodeGraphParser extends Parser
             throw new Error('Unable to compose target of non-graph type');
         }
 
-        dst = this.onComposeGraph(target, dst);
+        dst = this.onComposeGraphCreate(target, dst);
 
         const graphNodes = target.getNodes() || [];
         const nodeCount = graphNodes.length || 0;
@@ -162,7 +107,7 @@ class NodeGraphParser extends Parser
         const edgeCount = graphEdges.length || 0;
 
         const nodeDatas = new Array(nodeCount);
-        const nodeIndices = new Map();
+        const nodeIndices = this._nodeIndices;
         let node;
         for (let i = 0; i < nodeCount; ++i)
         {
@@ -219,7 +164,83 @@ class NodeGraphParser extends Parser
         dst['edgeCount'] = edgeCount;
         dst['edges'] = edgeDatas;
 
+        this.onComposeGraphResult(target, dst);
+
+        // Clean-up
+        nodeIndices.clear();
+
         return dst;
+    }
+
+    onParseGraphCreate(graphData, targetGraph)
+    {
+        const hasQuad = graphData['quad'] || false;
+        if (!targetGraph)
+        {
+            targetGraph = new NodeGraph(GraphNode, hasQuad ? QuadraticEdge : GraphEdge);
+        }
+        else
+        {
+            targetGraph.clear();
+        }
+        return targetGraph;
+    }
+
+    onParseNode(nodeData, targetNode)
+    {
+        // Nothing else needs to be done :3
+    }
+
+    onParseEdge(edgeData, targetEdge)
+    {
+        if (targetEdge instanceof QuadraticEdge)
+        {
+            const quadData = edgeData['quad'] || {};
+            targetEdge.setQuadraticRadians(quadData['radians'] || 0);
+            targetEdge.setQuadraticLength(quadData['length'] || 0);
+        }
+    }
+
+    onParseGraphResult(graphData, targetGraph)
+    {
+        // Everything is handled so far...
+    }
+
+    onComposeGraphCreate(graph, graphData)
+    {
+        return graphData || {};
+    }
+
+    onComposeNode(node, nodeData)
+    {
+        // Yep. It's all good.
+    }
+
+    onComposeEdge(edge, edgeData)
+    {
+        if (edge instanceof QuadraticEdge)
+        {
+            const quad = edge.getQuadratic() || {};
+            edgeData['quad'] = {
+                radians: quad['radians'] || 0,
+                length: quad['length'] || 0
+            };
+        }
+    }
+
+    onComposeGraphResult(graph, graphData)
+    {
+        let hasQuad = false;
+        const edges = graph.getEdges();
+        for(const edge of edges)
+        {
+            if (edge instanceof QuadraticEdge)
+            {
+                hasQuad = true;
+                break;
+            }
+        }
+        graphData['hasQuad'] = hasQuad;
     }
 }
 
