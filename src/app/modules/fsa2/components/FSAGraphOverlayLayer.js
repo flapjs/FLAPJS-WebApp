@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ViewportLayer from 'graph2/components/layer/ViewportLayer.js';
+import ViewportEditLayer from 'graph2/components/layer/ViewportEditLayer.js';
 import ViewportNavigationLayer from 'graph2/components/layer/ViewportNavigationLayer.js';
 import LabelEditorView from 'graph2/components/views/LabelEditorView.js';
 
@@ -21,7 +21,7 @@ class FSAGraphOverlayLayer extends React.Component
 
         return (
             <React.Fragment>
-                <ViewportLayer
+                <ViewportEditLayer
                     graphController={graphController}
                     inputController={inputController}
                     viewport={graphView.getViewportComponent()}/>

@@ -1,10 +1,10 @@
 import React from 'react';
-import Style from './ViewportLayer.css';
+import Style from './ViewportEditLayer.css';
 
 import TrashCanWidget from '../widgets/TrashCanWidget.js';
 import ModeTrayWidget, { MODE_ACTION, MODE_MOVE } from '../widgets/ModeTrayWidget.js';
 
-class ViewportLayer extends React.Component
+class ViewportEditLayer extends React.Component
 {
     constructor(props)
     {
@@ -73,4 +73,4 @@ class ViewportLayer extends React.Component
     }
 }
 
-export default ViewportLayer;
+export default ViewportEditLayer;

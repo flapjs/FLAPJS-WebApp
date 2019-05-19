@@ -14,7 +14,7 @@ import GraphView from 'graph2/components/GraphView.js';
 import GraphNodeLayer from 'graph2/components/layer/GraphNodeLayer.js';
 import GraphEdgeLayer from 'graph2/components/layer/GraphEdgeLayer.js';
 import SelectionBoxLayer from 'graph2/components/layer/SelectionBoxLayer.js';
-import ViewportLayer from 'graph2/components/layer/ViewportLayer.js';
+import ViewportEditLayer from 'graph2/components/layer/ViewportEditLayer.js';
 import ViewportNavigationLayer from 'graph2/components/layer/ViewportNavigationLayer.js';
 import LabelEditorView from 'graph2/components/views/LabelEditorView.js';
 
@@ -61,14 +61,13 @@ class NodalGraphModule
                     )}
                     renderOverlay={graphView => (
                         <React.Fragment>
-                            <ViewportLayer
+                            <ViewportEditLayer
                                 graphController={graphController}
                                 inputController={graphView.getInputController()}
-                                viewport={graphView.getViewportComponent()}>
-                                <ViewportNavigationLayer
-                                    style={{ right: 0 }}
-                                    viewportAdapter={graphView.getViewportComponent().getInputAdapter().getViewportAdapter()} />
-                            </ViewportLayer>
+                                viewport={graphView.getViewportComponent()} />
+                            <ViewportNavigationLayer
+                                style={{ right: 0 }}
+                                viewportAdapter={graphView.getViewportComponent().getInputAdapter().getViewportAdapter()} />
                             <LabelEditorView ref={ref => graphController.setLabelEditor(ref)}
                                 labelFormatter={labelFormatter}
                                 viewport={graphView.getViewportComponent()}
