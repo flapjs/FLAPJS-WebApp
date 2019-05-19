@@ -311,7 +311,7 @@ class JFLAPGraphParser extends Parser
 
         for(let edge of graphEdges)
         {
-            const symbols = edge.getEdgeSymbolsFromLabel();
+            const symbols = edge.getEdgeLabel().split(SYMBOL_SEPARATOR);
             for(let symbol of symbols)
             {
                 //transition tag

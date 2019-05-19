@@ -11,11 +11,11 @@ import NodeGraphParser from 'graph2/NodeGraphParser.js';
 import NodeGraphController from './graph/controller/NodeGraphController.js';
 
 import GraphView from 'graph2/components/GraphView.js';
-import GraphNodeLayer from 'graph2/components/layers/GraphNodeLayer.js';
-import GraphEdgeLayer from 'graph2/components/layers/GraphEdgeLayer.js';
-import SelectionBoxLayer from 'graph2/components/layers/SelectionBoxLayer.js';
-import ViewportLayer from 'graph2/components/layers/ViewportLayer.js';
-import ViewportNavigationLayer from 'graph2/components/layers/ViewportNavigationLayer.js';
+import GraphNodeLayer from 'graph2/components/layer/GraphNodeLayer.js';
+import GraphEdgeLayer from 'graph2/components/layer/GraphEdgeLayer.js';
+import SelectionBoxLayer from 'graph2/components/layer/SelectionBoxLayer.js';
+import ViewportLayer from 'graph2/components/layer/ViewportLayer.js';
+import ViewportNavigationLayer from 'graph2/components/layer/ViewportNavigationLayer.js';
 import LabelEditorView from 'graph2/components/views/LabelEditorView.js';
 
 const MODULE_NAME = 'nodegraph';

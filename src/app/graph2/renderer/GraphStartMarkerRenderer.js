@@ -1,8 +1,8 @@
 import React from 'react';
 
-import InitialMarkerRenderer from './InitialMarkerRenderer.js';
+import StartMarkerRenderer from './StartMarkerRenderer.js';
 
-class FSAInitialMarkerRenderer extends React.Component
+class GraphStartMarkerRenderer extends React.Component
 {
     constructor(props)
     {
@@ -36,7 +36,7 @@ class FSAInitialMarkerRenderer extends React.Component
 
         return (
             <React.Fragment>
-                <InitialMarkerRenderer
+                <StartMarkerRenderer
                     position={node}
                     offset={offset}
                     size={size}
@@ -59,4 +59,4 @@ class FSAInitialMarkerRenderer extends React.Component
     }
 }
 
-export default FSAInitialMarkerRenderer;
+export default GraphStartMarkerRenderer;

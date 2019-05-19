@@ -2,7 +2,7 @@ import React from 'react';
 
 import TapeWidget from 'experimental/widgets/TapeWidget.js';
 
-import ViewportNavigationLayer from 'graph2/components/layers/ViewportNavigationLayer.js';
+import ViewportNavigationLayer from 'graph2/components/layer/ViewportNavigationLayer.js';
 
 class FSATapeGraphOverlayLayer extends React.Component
 {

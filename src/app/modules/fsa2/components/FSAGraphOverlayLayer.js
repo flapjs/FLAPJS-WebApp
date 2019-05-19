@@ -1,7 +1,7 @@
 import React from 'react';
 
-import ViewportLayer from 'graph2/components/layers/ViewportLayer.js';
-import ViewportNavigationLayer from 'graph2/components/layers/ViewportNavigationLayer.js';
+import ViewportLayer from 'graph2/components/layer/ViewportLayer.js';
+import ViewportNavigationLayer from 'graph2/components/layer/ViewportNavigationLayer.js';
 import LabelEditorView from 'graph2/components/views/LabelEditorView.js';
 
 import FSALabelEditorRenderer from '../graph/widgets/FSALabelEditorRenderer.js';

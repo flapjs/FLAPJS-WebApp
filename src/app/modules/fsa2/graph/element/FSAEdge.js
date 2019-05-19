@@ -22,11 +22,6 @@ class FSAEdge extends QuadraticEdge
             super.setEdgeLabel(EMPTY_CHAR);
         }
     }
-
-    getEdgeSymbolsFromLabel()
-    {
-        return this.getEdgeLabel().split(SYMBOL_SEPARATOR);
-    }
 }
 
 export default FSAEdge;

@@ -37,8 +37,8 @@ import FSATapeGraphOverlayLayer from './components/FSATapeGraphOverlayLayer.js';
 
 import GraphView from 'graph2/components/GraphView.js';
 
-const MODULE_NAME = 'fsa2';
-const MODULE_VERSION = '0.0.1';
+const MODULE_NAME = 'fsa';
+const MODULE_VERSION = '3.0.0';
 
 class FSAModule
 {

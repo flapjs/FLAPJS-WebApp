@@ -1,9 +1,9 @@
 import React from 'react';
 
-import FSAInitialMarkerRenderer from './FSAInitialMarkerRenderer.js';
-import FSAInitialMarkerInputHandler from '../inputhandler/FSAInitialMarkerInputHandler.js';
+import GraphStartMarkerRenderer from '../../renderer/GraphStartMarkerRenderer.js';
+import GraphStartMarkerInputHandler from '../../inputhandler/GraphStartMarkerInputHandler.js';
 
-class FSAInitialMarkerLayer extends React.Component
+class GraphStartMarkerLayer extends React.Component
 {
     constructor(props)
     {
@@ -12,7 +12,7 @@ class FSAInitialMarkerLayer extends React.Component
         const inputController = props.inputController;
         const graphController = props.graphController;
 
-        this._initialMarkerInputHandler = new FSAInitialMarkerInputHandler(inputController, graphController);
+        this._startMarkerInputHandler = new GraphStartMarkerInputHandler(inputController, graphController);
     }
 
     /** @override */
@@ -22,7 +22,7 @@ class FSAInitialMarkerLayer extends React.Component
         if (inputContext)
         {
             const inputPriority = this.props.inputPriority || -1;
-            inputContext.addInputHandler(this._initialMarkerInputHandler, inputPriority);
+            inputContext.addInputHandler(this._startMarkerInputHandler, inputPriority);
         }
     }
 
@@ -32,7 +32,7 @@ class FSAInitialMarkerLayer extends React.Component
         const inputContext = this.props.inputContext;
         if (inputContext)
         {
-            inputContext.removeInputHandler(this._initialMarkerInputHandler);
+            inputContext.removeInputHandler(this._startMarkerInputHandler);
         }
     }
 
@@ -40,11 +40,17 @@ class FSAInitialMarkerLayer extends React.Component
     render()
     {
         const inputController = this.props.inputController;
-        const Renderer = this.props.initialMarkerRenderer || FSAInitialMarkerRenderer;
+        const Renderer = this.props.startMarkerRenderer || GraphStartMarkerRenderer;
         const editable = this.props.editable;
 
         const graphController = this.props.graphController;
-        const target = this._initialMarkerInputHandler.getGhostMarker() || graphController.getGraph().getStartNode();
+        const graph = graphController.getGraph();
+        let target = this._startMarkerInputHandler.getGhostMarker();
+        
+        if ('getStartNode' in graph && !target)
+        {
+            target = graph.getStartNode();
+        }
 
         const onMouseOver = inputController ? inputController.onMouseOver : null;
         const onMouseOut = inputController ? inputController.onMouseOut : null;
@@ -63,4 +69,4 @@ class FSAInitialMarkerLayer extends React.Component
     }
 }
 
-export default FSAInitialMarkerLayer;
+export default GraphStartMarkerLayer;

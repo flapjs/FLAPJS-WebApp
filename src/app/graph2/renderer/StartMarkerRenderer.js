@@ -1,8 +1,8 @@
 import React from 'react';
 
-export const EVENT_SOURCE_INITIAL_MARKER = 'initial-marker';
+export const EVENT_SOURCE_START_MARKER = 'start-marker';
 
-class InitialMarkerRenderer extends React.Component
+class StartMarkerRenderer extends React.Component
 {
     constructor(props)
     {
@@ -26,7 +26,7 @@ class InitialMarkerRenderer extends React.Component
         // FIXME: this does not work for ALL arbitrary angles...
         const radiusX = dx * size;
         const diameterX = radiusX * 2;
-        //const radiusY = dy * size;
+        // const radiusY = dy * size;
 
         const onMouseOver = this.props.onMouseOver;
         const onMouseOut = this.props.onMouseOut;
@@ -45,13 +45,13 @@ class InitialMarkerRenderer extends React.Component
                     onMouseOver={onMouseOver ? e =>
                     {
                         const value = e.target['value'] || (e.target['value'] = {});
-                        value.type = EVENT_SOURCE_INITIAL_MARKER;
+                        value.type = EVENT_SOURCE_START_MARKER;
                         onMouseOver(e);
                     } : null}
                     onMouseOut={onMouseOut ? e =>
                     {
                         const value = e.target['value'] || (e.target['value'] = {});
-                        value.type = EVENT_SOURCE_INITIAL_MARKER;
+                        value.type = EVENT_SOURCE_START_MARKER;
                         onMouseOut(e);
                     } : null}
                     pointerEvents={pointerEvents} />
@@ -60,4 +60,4 @@ class InitialMarkerRenderer extends React.Component
     }
 }
 
-export default InitialMarkerRenderer;
+export default StartMarkerRenderer;

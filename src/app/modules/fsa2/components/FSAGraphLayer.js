@@ -1,12 +1,11 @@
 import React from 'react';
 
-import GraphNodeLayer from 'graph2/components/layers/GraphNodeLayer.js';
-import GraphEdgeLayer from 'graph2/components/layers/GraphEdgeLayer.js';
-import SelectionBoxLayer from 'graph2/components/layers/SelectionBoxLayer.js';
+import GraphNodeLayer from 'graph2/components/layer/GraphNodeLayer.js';
+import GraphEdgeLayer from 'graph2/components/layer/GraphEdgeLayer.js';
+import SelectionBoxLayer from 'graph2/components/layer/SelectionBoxLayer.js';
+import GraphStartMarkerLayer from 'graph2/components/layer/GraphStartMarkerLayer.js';
 
 import FSANodeRenderer from '../graph/renderer/FSANodeRenderer.js';
-import FSAInitialMarkerLayer from '../graph/renderer/FSAInitialMarkerLayer.js';
-
 import FSANodeInputHandler from '../graph/inputhandler/FSANodeInputHandler.js';
 
 class FSAGraphLayer extends React.Component
@@ -51,7 +50,7 @@ class FSAGraphLayer extends React.Component
 
         return (
             <React.Fragment>
-                <FSAInitialMarkerLayer
+                <GraphStartMarkerLayer
                     inputController={inputController}
                     graphController={graphController}
                     inputContext={inputContext}
