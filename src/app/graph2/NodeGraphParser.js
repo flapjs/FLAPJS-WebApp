@@ -16,6 +16,71 @@ class NodeGraphParser extends Parser
 {
     constructor() { super(); }
 
+    onParseGraph(graphData, targetGraph)
+    {
+        const hasQuad = graphData['quad'] || false;
+        if (!targetGraph)
+        {
+            targetGraph = new NodeGraph(GraphNode, hasQuad ? QuadraticEdge : GraphEdge);
+        }
+        else
+        {
+            targetGraph.clear();
+        }
+        return targetGraph;
+    }
+
+    onParseNode(nodeData, targetNode)
+    {
+        // Nothing else needs to be done :3
+    }
+
+    onParseEdge(edgeData, targetEdge)
+    {
+        if (targetEdge instanceof QuadraticEdge)
+        {
+            const quadData = edgeData['quad'] || {};
+            targetEdge.setQuadraticRadians(quadData['radians'] || 0);
+            targetEdge.setQuadraticLength(quadData['length'] || 0);
+        }
+    }
+
+    onComposeGraph(graph, graphData)
+    {
+        if (!graphData) graphData = {};
+
+        let hasQuad = false;
+        const edges = graph.getEdges();
+        for(const edge of edges)
+        {
+            if (edge instanceof QuadraticEdge)
+            {
+                hasQuad = true;
+                break;
+            }
+        }
+        graphData['hasQuad'] = hasQuad;
+
+        return graphData;
+    }
+
+    onComposeNode(node, nodeData)
+    {
+        // Yep. It's all good.
+    }
+
+    onComposeEdge(edge, edgeData)
+    {
+        if (edge instanceof QuadraticEdge)
+        {
+            const quad = edge.getQuadratic() || {};
+            edgeData['quad'] = {
+                radians: quad['radians'] || 0,
+                length: quad['length'] || 0
+            };
+        }
+    }
+
     /**
 	 * @override
 	 * @param  {Object} data         		the graph data to parse
@@ -39,16 +104,8 @@ class NodeGraphParser extends Parser
         const nodeCount = Math.min(nodeDatas.length || 0, data['nodeCount'] || 0);
         const edgeDatas = data['edges'] || [];
         const edgeCount = Math.min(edgeDatas.length || 0, data['edgeCount'] || 0);
-        const hasQuad = data['quad'] || false;
 
-        if (!dst)
-        {
-            dst = new NodeGraph(GraphNode, hasQuad ? QuadraticEdge : GraphEdge);
-        }
-        else
-        {
-            dst.clear();
-        }
+        dst = this.onParseGraph(data, dst);
 
         const nodeIndices = new Map();
         for (let i = 0; i < nodeCount; ++i)
@@ -59,6 +116,8 @@ class NodeGraphParser extends Parser
             //NOTE: Assumes createNode will maintain order
             const node = dst.createNode(nodeData['x'] || 0, nodeData['y'] || 0, nodeData['id']);
             node.setNodeLabel(nodeData['label'] || '');
+
+            this.onParseNode(nodeData, node);
 
             nodeIndices.set(i, node);
         }
@@ -71,16 +130,12 @@ class NodeGraphParser extends Parser
             //Cannot create source-less edges
             if (!sourceNode) continue;
             const destinationNode = nodeIndices.get(edgeData['to']) || null;
+
             //NOTE: Assumes createEdge will maintain order
             const edge = dst.createEdge(sourceNode, destinationNode, edgeData['id']);
             edge.setEdgeLabel(edgeData['label'] || '');
 
-            if (edge instanceof QuadraticEdge)
-            {
-                const quadData = edgeData['quad'] || {};
-                edge.setQuadraticRadians(quadData['radians'] || 0);
-                edge.setQuadraticLength(quadData['length'] || 0);
-            }
+            this.onParseEdge(edgeData, edge);
         }
 
         return dst;
@@ -96,10 +151,10 @@ class NodeGraphParser extends Parser
     {
         if (!(target instanceof NodeGraph))
         {
-            throw new Error('Unable to compose target of unknown type');
+            throw new Error('Unable to compose target of non-graph type');
         }
 
-        if (!dst) dst = {};
+        dst = this.onComposeGraph(target, dst);
 
         const graphNodes = target.getNodes() || [];
         const nodeCount = graphNodes.length || 0;
@@ -118,15 +173,19 @@ class NodeGraphParser extends Parser
                 const elementID = node.getGraphElementID();
 
                 nodeIndices.set(node, i);
-                nodeDatas[i] = {
+
+                const nodeData = {
                     id: elementID,
                     x: node.x || 0, y: node.y || 0,
                     label: node.getNodeLabel() || ''
                 };
+
+                this.onComposeNode(node, nodeData);
+                
+                nodeDatas[i] = nodeData;
             }
         }
 
-        let hasQuad = false;
         const edgeDatas = new Array(edgeCount);
         let edge;
         for (let i = 0; i < edgeCount; ++i)
@@ -141,22 +200,16 @@ class NodeGraphParser extends Parser
                 const edgeDestination = edge.getEdgeTo();
                 const sourceIndex = nodeIndices.has(edgeSource) ? nodeIndices.get(edgeSource) : -1;
                 const destinationIndex = nodeIndices.has(edgeDestination) ? nodeIndices.get(edgeDestination) : -1;
-                edgeDatas[i] = {
+                const edgeData = {
                     id: elementID,
                     from: sourceIndex,
                     to: destinationIndex,
                     label: edge.getEdgeLabel() || ''
                 };
 
-                if (edge instanceof QuadraticEdge)
-                {
-                    const quad = edge.getQuadratic() || {};
-                    hasQuad = true;
-                    edgeDatas[i]['quad'] = {
-                        radians: quad['radians'] || 0,
-                        length: quad['length'] || 0
-                    };
-                }
+                this.onComposeEdge(edge, edgeData);
+
+                edgeDatas[i] = edgeData;
             }
         }
 
@@ -165,7 +218,6 @@ class NodeGraphParser extends Parser
         dst['nodes'] = nodeDatas;
         dst['edgeCount'] = edgeCount;
         dst['edges'] = edgeDatas;
-        dst['hasQuad'] = hasQuad;
 
         return dst;
     }
