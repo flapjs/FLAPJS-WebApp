@@ -75,7 +75,6 @@ class FSAGraphController extends GraphController
 
         //Emit event
         this.emitGraphEvent(GRAPH_EVENT_NODE_DELETE_ALL, { target: targets });
-        this._app.getUndoManager().captureEvent();
     }
 
     /** @deprecated */
@@ -145,7 +144,6 @@ class FSAGraphController extends GraphController
 
         //Emit event
         this.emitGraphEvent(GRAPH_EVENT_NODE_DELETE_ALL, { target: selection });
-        this._app.getUndoManager().captureEvent();
     }
 
     deleteTargetNode(target)
@@ -154,7 +152,6 @@ class FSAGraphController extends GraphController
 
         //Emit event
         this.emitGraphEvent(GRAPH_EVENT_NODE_DELETE, { target: target });
-        this._app.getUndoManager().captureEvent();
     }
 
     deleteTargetEdge(target)
@@ -163,7 +160,6 @@ class FSAGraphController extends GraphController
 
         //Emit event
         this.emitGraphEvent(GRAPH_EVENT_EDGE_DELETE, { target: target });
-        this._app.getUndoManager().captureEvent();
     }
 
     deleteTargetEdges(targets)
