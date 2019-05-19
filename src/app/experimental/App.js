@@ -210,6 +210,7 @@ class App extends React.Component
     onSessionStart(session)
     {
         const currentModule = session.getCurrentModule();
+
         // Default values
         this._menuManager
             .addPanelClass(ExportPanel)         // MENU_INDEX_EXPORT
@@ -227,6 +228,20 @@ class App extends React.Component
             this._hotKeyManager
                 .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => this.getUndoManager().undo())
                 .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => this.getUndoManager().redo());
+        }
+
+        if (!this._tooltipManager.hasTooltips())
+        {
+            this._tooltipManager
+                .addTooltip('If you need help, try the \'?\' at the top.')
+                .addTooltip('Or you can choose to do nothing.')
+                .addTooltip('I can\'t do anything about that.')
+                .addTooltip('You really should consider doing something though, for the sake of both of us.')
+                .addTooltip('Of course, it is your free will.')
+                .addTooltip('You do you.')
+                .addTooltip('Please do something.')
+                .addTooltip('I need my job.')
+                .addTooltip('Welcome to Flap.js!');
         }
 
         this._themeManager.setElement(document.getElementById('root'));
