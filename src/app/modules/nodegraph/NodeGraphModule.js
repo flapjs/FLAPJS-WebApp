@@ -1,22 +1,28 @@
 import React from 'react';
-import PanelContainer from 'experimental/panels/PanelContainer.js';
 
 import { userClearGraph } from 'experimental/UserUtil.js';
+import { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
 import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
 
 import NodeGraph from 'graph2/NodeGraph.js';
 import GraphNode from 'graph2/element/GraphNode.js';
 import QuadraticEdge from 'graph2/element/QuadraticEdge.js';
+
 import NodeGraphParser from 'graph2/NodeGraphParser.js';
-import NodeGraphController from './graph/controller/NodeGraphController.js';
+import NodeGraphController from './graph/NodeGraphController.js';
+
+import { registerImageExporters } from 'modules/nodalgraph/filehandlers/NodalGraphImageExporter.js';
+
+import SafeUndoNodeGraphEventHandler from 'graph2/SafeUndoNodeGraphEventHandler.js';
+
+/* COMPONENTS */
+
+import PanelContainer from 'experimental/panels/PanelContainer.js';
+
+import NodeGraphLayer from './components/layers/NodeGraphLayer.js';
+import NodeGraphOverlayLayer from './components/layers/NodeGraphOverlayLayer.js';
 
 import GraphView from 'graph2/components/GraphView.js';
-import GraphNodeLayer from 'graph2/components/layers/GraphNodeLayer.js';
-import GraphEdgeLayer from 'graph2/components/layers/GraphEdgeLayer.js';
-import SelectionBoxLayer from 'graph2/components/layers/SelectionBoxLayer.js';
-import ViewportEditLayer from 'graph2/components/layers/ViewportEditLayer.js';
-import ViewportNavigationLayer from 'graph2/components/layers/ViewportNavigationLayer.js';
-import LabelEditorWidget from 'graph2/components/widgets/LabelEditorWidget.js';
 
 const MODULE_NAME = 'nodegraph';
 const MODULE_VERSION = '0.0.1';
@@ -29,52 +35,20 @@ class NodalGraphModule
         this._app = app;
 
         this._graph = new NodeGraph(GraphNode, QuadraticEdge);
-        this._graphController = new NodeGraphController(app, this._graph, new NodeGraphParser());
+        this._graphParser = new NodeGraphParser();
+        this._graphController = new NodeGraphController(app, this._graph);
         this._graphViewComponent = React.createRef();
 
-        const graph = this._graph;
         const graphController = this._graphController;
-        const labelFormatter = graphController.getLabelFormatter();
 
         app.getRenderManager()
             .addRenderer(RENDER_LAYER_WORKSPACE, props => (
                 <GraphView
                     ref={this._graphViewComponent}
-                    renderGraph={graphView => (
-                        <React.Fragment>
-                            <GraphNodeLayer nodes={graph.getNodes()}
-                                inputController={graphView.getInputController()}
-                                graphController={graphController}
-                                inputContext={graphView.getInputContext()}
-                                inputPriority={-1} />
-                            <GraphEdgeLayer edges={graph.getEdges()}
-                                inputController={graphView.getInputController()}
-                                graphController={graphController}
-                                inputContext={graphView.getInputContext()}
-                                inputPriority={-1} />
-                            <SelectionBoxLayer
-                                inputController={graphView.getInputController()}
-                                graphController={graphController}
-                                inputContext={graphView.getInputContext()}
-                                inputPriority={-1} />
-                        </React.Fragment>
-                    )}
-                    renderOverlay={graphView => (
-                        <React.Fragment>
-                            <ViewportEditLayer
-                                graphController={graphController}
-                                inputController={graphView.getInputController()}
-                                viewport={graphView.getViewportComponent()} />
-                            <ViewportNavigationLayer
-                                style={{ right: 0 }}
-                                viewportAdapter={graphView.getViewportComponent().getInputAdapter().getViewportAdapter()} />
-                            <LabelEditorWidget ref={ref => graphController.setLabelEditor(ref)}
-                                labelFormatter={labelFormatter}
-                                viewport={graphView.getViewportComponent()}
-                                saveOnExit={true}>
-                            </LabelEditorWidget>
-                        </React.Fragment>
-                    )}>
+                    renderGraph={graphView =>
+                        <NodeGraphLayer graphView={graphView} graphController={graphController} editable={true} />}
+                    renderOverlay={graphView =>
+                        <NodeGraphOverlayLayer graphView={graphView} graphController={graphController} module={this} />}>
                 </GraphView>
             ));
     }
@@ -82,6 +56,12 @@ class NodalGraphModule
     /** @override */
     initialize(app)
     {
+        registerImageExporters(app.getExportManager());
+
+        app.getUndoManager()
+            .setEventHandlerFactory((...args) =>
+                new SafeUndoNodeGraphEventHandler(this._graphController, this._graphParser));
+
         app.getDrawerManager()
             .addPanelClass(props => (
                 <PanelContainer id={props.id}
@@ -92,16 +72,26 @@ class NodalGraphModule
                     <p>{'<- Tap on a tab to begin!'}</p>
                 </PanelContainer>
             ));
+
+        app.getHotKeyManager()
+            .registerHotKey('Export to PNG', [CTRL_KEY, 'KeyP'], () => { app.getExportManager().tryExportFile('image-png', app.getSession()); })
+            .registerHotKey('New', [CTRL_KEY, 'KeyN'], () => { this.clear(app); })
+            .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => { app.getUndoManager().undo(); })
+            .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => { app.getUndoManager().redo(); });
+
+        this._graphController.initialize();
     }
 
     /** @override */
     update(app)
     {
+        this._graphController.update();
     }
 
     /** @override */
     destroy(app)
     {
+        this._graphController.destroy();
     }
 
     /** @override */
@@ -111,6 +101,7 @@ class NodalGraphModule
     }
 
     getGraphController() { return this._graphController; }
+    getGraphView() { return this._graphViewComponent.current; }
 
     /** @override */
     getModuleVersion() { return MODULE_VERSION; }

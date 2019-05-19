@@ -142,6 +142,7 @@ class FSAModule
             .addMessageHandler(this._broadcastHandler);
 
         this._machineController.initialize(this);
+        this._graphController.initialize();
     }
 
     /** @override */
@@ -155,6 +156,7 @@ class FSAModule
     destroy(app)
     {
         this._machineController.destroy(this);
+        this._graphController.destroy();
     }
 
     /** @override */
