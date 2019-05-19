@@ -6,7 +6,7 @@ import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
 
 import FSAGraph from './graph/FSAGraph.js';
 import FSAGraphController from './graph/FSAGraphController.js';
-import MachineController from './controller/MachineController.js';
+import MachineController from './machine/MachineController.js';
 
 import StringTester from './tester/StringTester.js';
 import FSAErrorChecker from './FSAErrorChecker.js';
