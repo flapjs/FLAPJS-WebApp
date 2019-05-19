@@ -1,9 +1,9 @@
 import React from 'react';
 
-import GraphNodeLayer from 'graph2/components/layer/GraphNodeLayer.js';
-import GraphEdgeLayer from 'graph2/components/layer/GraphEdgeLayer.js';
-import SelectionBoxLayer from 'graph2/components/layer/SelectionBoxLayer.js';
-import IndexedGraphStartMarkerLayer from 'graph2/components/layer/IndexedGraphStartMarkerLayer.js';
+import GraphNodeLayer from 'graph2/components/layers/GraphNodeLayer.js';
+import GraphEdgeLayer from 'graph2/components/layers/GraphEdgeLayer.js';
+import SelectionBoxLayer from 'graph2/components/layers/SelectionBoxLayer.js';
+import IndexedGraphStartMarkerLayer from 'graph2/components/layers/IndexedGraphStartMarkerLayer.js';
 
 import FSANodeRenderer from '../graph/renderer/FSANodeRenderer.js';
 import FSANodeInputHandler from '../graph/inputhandler/FSANodeInputHandler.js';

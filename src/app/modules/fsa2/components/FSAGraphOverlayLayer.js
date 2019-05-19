@@ -1,8 +1,9 @@
 import React from 'react';
 
-import ViewportEditLayer from 'graph2/components/layer/ViewportEditLayer.js';
-import ViewportNavigationLayer from 'graph2/components/layer/ViewportNavigationLayer.js';
-import LabelEditorView from 'graph2/components/views/LabelEditorView.js';
+import ViewportEditLayer from 'graph2/components/layers/ViewportEditLayer.js';
+import ViewportNavigationLayer from 'graph2/components/layers/ViewportNavigationLayer.js';
+
+import LabelEditorWidget from 'graph2/components/widgets/LabelEditorWidget.js';
 
 import FSALabelEditorRenderer from '../graph/widgets/FSALabelEditorRenderer.js';
 
@@ -28,14 +29,14 @@ class FSAGraphOverlayLayer extends React.Component
                 <ViewportNavigationLayer
                     style={{ right: 0 }}
                     viewportAdapter={graphView.getViewportAdapter()} />
-                <LabelEditorView ref={ref => graphController.setLabelEditor(ref)}
+                <LabelEditorWidget ref={ref => graphController.setLabelEditor(ref)}
                     labelFormatter={labelFormatter}
                     viewport={graphView.getViewportComponent()}
                     saveOnExit={true}>
                     <FSALabelEditorRenderer
                         graphController={graphController}
                         currentModule={currentModule} />
-                </LabelEditorView>
+                </LabelEditorWidget>
             </React.Fragment>
         );
     }

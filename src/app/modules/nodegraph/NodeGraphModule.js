@@ -11,12 +11,12 @@ import NodeGraphParser from 'graph2/NodeGraphParser.js';
 import NodeGraphController from './graph/controller/NodeGraphController.js';
 
 import GraphView from 'graph2/components/GraphView.js';
-import GraphNodeLayer from 'graph2/components/layer/GraphNodeLayer.js';
-import GraphEdgeLayer from 'graph2/components/layer/GraphEdgeLayer.js';
-import SelectionBoxLayer from 'graph2/components/layer/SelectionBoxLayer.js';
-import ViewportEditLayer from 'graph2/components/layer/ViewportEditLayer.js';
-import ViewportNavigationLayer from 'graph2/components/layer/ViewportNavigationLayer.js';
-import LabelEditorView from 'graph2/components/views/LabelEditorView.js';
+import GraphNodeLayer from 'graph2/components/layers/GraphNodeLayer.js';
+import GraphEdgeLayer from 'graph2/components/layers/GraphEdgeLayer.js';
+import SelectionBoxLayer from 'graph2/components/layers/SelectionBoxLayer.js';
+import ViewportEditLayer from 'graph2/components/layers/ViewportEditLayer.js';
+import ViewportNavigationLayer from 'graph2/components/layers/ViewportNavigationLayer.js';
+import LabelEditorWidget from 'graph2/components/widgets/LabelEditorWidget.js';
 
 const MODULE_NAME = 'nodegraph';
 const MODULE_VERSION = '0.0.1';
@@ -68,11 +68,11 @@ class NodalGraphModule
                             <ViewportNavigationLayer
                                 style={{ right: 0 }}
                                 viewportAdapter={graphView.getViewportComponent().getInputAdapter().getViewportAdapter()} />
-                            <LabelEditorView ref={ref => graphController.setLabelEditor(ref)}
+                            <LabelEditorWidget ref={ref => graphController.setLabelEditor(ref)}
                                 labelFormatter={labelFormatter}
                                 viewport={graphView.getViewportComponent()}
                                 saveOnExit={true}>
-                            </LabelEditorView>
+                            </LabelEditorWidget>
                         </React.Fragment>
                     )}>
                 </GraphView>

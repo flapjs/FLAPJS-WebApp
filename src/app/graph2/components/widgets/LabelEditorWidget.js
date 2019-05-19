@@ -1,5 +1,5 @@
 import React from 'react';
-import Style from './LabelEditorView.css';
+import Style from './LabelEditorWidget.css';
 
 import GraphElement from 'graph2/element/GraphElement.js';
 import GraphNode from 'graph2/element/GraphNode.js';
@@ -7,7 +7,7 @@ import GraphEdge from 'graph2/element/GraphEdge.js';
 
 import PatternInput from 'graph2/components/widgets/pattern/PatternInput.js';
 
-class LabelEditorView extends React.Component
+class LabelEditorWidget extends React.Component
 {
     constructor(props)
     {
@@ -160,4 +160,4 @@ function transformViewToScreen(svg, x, y)
     };
 }
 
-export default LabelEditorView;
+export default LabelEditorWidget;
