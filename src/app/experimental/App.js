@@ -44,7 +44,7 @@ import Session from 'session/Session.js';
 import DrawerManager from 'session/manager/DrawerManager.js';
 import MenuManager from 'session/manager/MenuManager.js';
 import ViewportManager from 'session/manager/ViewportManager.js';
-import HotKeyManager from 'session/manager/hotkey/HotKeyManager.js';
+import HotKeyManager, { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
 import HotKeyView from 'session/manager/hotkey/HotKeyView.js';
 import UndoManager from 'session/manager/undo/UndoManager.js';
 import RenderManager, {
@@ -209,14 +209,25 @@ class App extends React.Component
     //DuckType
     onSessionStart(session)
     {
-        //Default values
+        const currentModule = session.getCurrentModule();
+        // Default values
         this._menuManager
-            .addPanelClass(ExportPanel)//MENU_INDEX_EXPORT
-            .addPanelClass(OptionPanel)//MENU_INDEX_OPTION
-            .addPanelClass(LanguagePanel)//MENU_INDEX_LANGUAGE
-            .addPanelClass(ModuleLoaderPanel);//MENU_INDEX_MODULE
+            .addPanelClass(ExportPanel)         // MENU_INDEX_EXPORT
+            .addPanelClass(OptionPanel)         // MENU_INDEX_OPTION
+            .addPanelClass(LanguagePanel)       // MENU_INDEX_LANGUAGE
+            .addPanelClass(ModuleLoaderPanel);  // MENU_INDEX_MODULE
+
         this._hotKeyManager
+            .registerHotKey('New', [CTRL_KEY, 'KeyN'], () => currentModule.clear(this))
             .registerAltHotKey('Show Hints', () => { IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL; });
+
+        // Only register undo / redo hotkeys if undo is possible
+        if (this._undoManager.getEventHandlerFactory())
+        {
+            this._hotKeyManager
+                .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => this.getUndoManager().undo())
+                .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => this.getUndoManager().redo());
+        }
 
         this._themeManager.setElement(document.getElementById('root'));
 
@@ -414,7 +425,7 @@ class App extends React.Component
                             <FullscreenWidget className={Style.fullscreen_widget} app={this} />
 
                             <NotificationView notificationManager={notificationManager} />
-                            
+
                             {this._hotKeyManager.isEnabled() && <HotKeyView hotKeyManager={this._hotKeyManager} />}
                         </div>
                     </UploadDropZone>

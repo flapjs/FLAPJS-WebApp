@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { userClearGraph } from 'experimental/UserUtil.js';
-import { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
+import { CTRL_KEY } from 'session/manager/hotkey/HotKeyManager.js';
 import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
 
 import NodeGraph from 'graph2/NodeGraph.js';
@@ -74,10 +74,7 @@ class NodalGraphModule
             ));
 
         app.getHotKeyManager()
-            .registerHotKey('Export to PNG', [CTRL_KEY, 'KeyP'], () => { app.getExportManager().tryExportFile('image-png', app.getSession()); })
-            .registerHotKey('New', [CTRL_KEY, 'KeyN'], () => { this.clear(app); })
-            .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => { app.getUndoManager().undo(); })
-            .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => { app.getUndoManager().redo(); });
+            .registerHotKey('Export to PNG', [CTRL_KEY, 'KeyP'], () => { app.getExportManager().tryExportFile('image-png', app.getSession()); });
 
         this._graphController.initialize();
     }
