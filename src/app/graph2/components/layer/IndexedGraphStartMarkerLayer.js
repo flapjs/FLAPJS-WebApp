@@ -1,9 +1,9 @@
 import React from 'react';
 
-import GraphStartMarkerRenderer from '../../renderer/GraphStartMarkerRenderer.js';
-import GraphStartMarkerInputHandler from '../../inputhandler/GraphStartMarkerInputHandler.js';
+import IndexedGraphStartMarkerRenderer from '../../renderer/IndexedGraphStartMarkerRenderer.js';
+import IndexedGraphStartMarkerInputHandler from '../../inputhandler/IndexedGraphStartMarkerInputHandler.js';
 
-class GraphStartMarkerLayer extends React.Component
+class IndexedGraphStartMarkerLayer extends React.Component
 {
     constructor(props)
     {
@@ -12,7 +12,7 @@ class GraphStartMarkerLayer extends React.Component
         const inputController = props.inputController;
         const graphController = props.graphController;
 
-        this._startMarkerInputHandler = new GraphStartMarkerInputHandler(inputController, graphController);
+        this._startMarkerInputHandler = new IndexedGraphStartMarkerInputHandler(inputController, graphController);
     }
 
     /** @override */
@@ -40,7 +40,7 @@ class GraphStartMarkerLayer extends React.Component
     render()
     {
         const inputController = this.props.inputController;
-        const Renderer = this.props.startMarkerRenderer || GraphStartMarkerRenderer;
+        const Renderer = this.props.startMarkerRenderer || IndexedGraphStartMarkerRenderer;
         const editable = this.props.editable;
 
         const graphController = this.props.graphController;
@@ -69,4 +69,4 @@ class GraphStartMarkerLayer extends React.Component
     }
 }
 
-export default GraphStartMarkerLayer;
+export default IndexedGraphStartMarkerLayer;

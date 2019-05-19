@@ -2,7 +2,7 @@ import React from 'react';
 
 import StartMarkerRenderer from './StartMarkerRenderer.js';
 
-class GraphStartMarkerRenderer extends React.Component
+class IndexedGraphStartMarkerRenderer extends React.Component
 {
     constructor(props)
     {
@@ -59,4 +59,4 @@ class GraphStartMarkerRenderer extends React.Component
     }
 }
 
-export default GraphStartMarkerRenderer;
+export default IndexedGraphStartMarkerRenderer;

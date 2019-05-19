@@ -32,6 +32,11 @@ class OrderedNodeGraph extends NodeGraph
 
     getStartNode() { return this._nodes.length > 0 ? this._nodes[0] : null; }
 
+    getNodeByIndex(index)
+    {
+        return this._nodes[index];
+    }
+
     /** @override */
     addNode(node)
     {

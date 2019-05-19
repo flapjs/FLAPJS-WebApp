@@ -1,9 +1,9 @@
-import OrderedNodeGraph from 'graph2/OrderedNodeGraph.js';
+import IndexedNodeGraph from 'graph2/IndexedNodeGraph.js';
 
 import FSANode from './element/FSANode.js';
 import FSAEdge from './element/FSAEdge.js';
 
-class FSAGraph extends OrderedNodeGraph
+class FSAGraph extends IndexedNodeGraph
 {
     constructor()
     {

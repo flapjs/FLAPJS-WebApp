@@ -3,7 +3,7 @@ import React from 'react';
 import GraphNodeLayer from 'graph2/components/layer/GraphNodeLayer.js';
 import GraphEdgeLayer from 'graph2/components/layer/GraphEdgeLayer.js';
 import SelectionBoxLayer from 'graph2/components/layer/SelectionBoxLayer.js';
-import GraphStartMarkerLayer from 'graph2/components/layer/GraphStartMarkerLayer.js';
+import IndexedGraphStartMarkerLayer from 'graph2/components/layer/IndexedGraphStartMarkerLayer.js';
 
 import FSANodeRenderer from '../graph/renderer/FSANodeRenderer.js';
 import FSANodeInputHandler from '../graph/inputhandler/FSANodeInputHandler.js';
@@ -50,7 +50,7 @@ class FSAGraphLayer extends React.Component
 
         return (
             <React.Fragment>
-                <GraphStartMarkerLayer
+                <IndexedGraphStartMarkerLayer
                     inputController={inputController}
                     graphController={graphController}
                     inputContext={inputContext}
