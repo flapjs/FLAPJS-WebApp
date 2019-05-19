@@ -5,8 +5,8 @@ import GraphEdgeLayer from 'graph2/components/layers/GraphEdgeLayer.js';
 import SelectionBoxLayer from 'graph2/components/layers/SelectionBoxLayer.js';
 import IndexedGraphStartMarkerLayer from 'graph2/components/layers/IndexedGraphStartMarkerLayer.js';
 
-import FSANodeRenderer from '../graph/renderer/FSANodeRenderer.js';
-import FSANodeInputHandler from '../graph/inputhandler/FSANodeInputHandler.js';
+import FSANodeRenderer from '../../graph/renderer/FSANodeRenderer.js';
+import FSANodeInputHandler from '../../graph/inputhandler/FSANodeInputHandler.js';
 
 class FSAGraphLayer extends React.Component
 {

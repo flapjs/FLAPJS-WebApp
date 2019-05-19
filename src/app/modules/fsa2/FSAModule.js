@@ -31,9 +31,9 @@ import OverviewPanel from './components/panels/overview/OverviewPanel.js';
 import TestingPanel from './components/panels/testing/TestingPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 
-import FSAGraphLayer from './components/FSAGraphLayer.js';
-import FSAGraphOverlayLayer from './components/FSAGraphOverlayLayer.js';
-import FSATapeGraphOverlayLayer from './components/FSATapeGraphOverlayLayer.js';
+import FSAGraphLayer from './components/layers/FSAGraphLayer.js';
+import FSAGraphOverlayLayer from './components/layers/FSAGraphOverlayLayer.js';
+import FSATapeGraphOverlayLayer from './components/layers/FSATapeGraphOverlayLayer.js';
 
 import GraphView from 'graph2/components/GraphView.js';
 
