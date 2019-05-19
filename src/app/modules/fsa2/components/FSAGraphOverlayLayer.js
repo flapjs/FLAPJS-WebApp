@@ -5,7 +5,7 @@ import ViewportNavigationLayer from 'graph2/components/layers/ViewportNavigation
 
 import LabelEditorWidget from 'graph2/components/widgets/LabelEditorWidget.js';
 
-import FSALabelEditorRenderer from '../graph/widgets/FSALabelEditorRenderer.js';
+import FSALabelEditorRenderer from '../graph/components/widgets/FSALabelEditorRenderer.js';
 
 class FSAGraphOverlayLayer extends React.Component
 {

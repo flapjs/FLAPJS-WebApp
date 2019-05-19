@@ -47,7 +47,7 @@ class FSAGraphLabeler extends AbstractGraphLabeler
             if (startNode && startNode.getNodeCustom()) nodeIndex = 1;
 
             let newNodeLabel = this.getDefaultNodeLabelPrefix() + nodeIndex;
-            while(graph.getNodesByLabel(newNodeLabel, otherNodes).length > 0)
+            while (graph.getNodesByLabel(newNodeLabel, otherNodes).length > 0)
             {
                 otherNodes.length = 0;
                 ++nodeIndex;
@@ -77,7 +77,7 @@ class FSAGraphLabeler extends AbstractGraphLabeler
     }
 }
 
-function edgeLabelFormatter(string, allowNull=false)
+function edgeLabelFormatter(string, allowNull = false)
 {
     const symbols = string.split(SYMBOL_SEPARATOR);
     const result = new Set();
@@ -85,7 +85,7 @@ function edgeLabelFormatter(string, allowNull=false)
     let symbol = '';
     let symbolLength = 0;
     const length = symbols.length;
-    for(let i = 0; i < length; ++i)
+    for (let i = 0; i < length; ++i)
     {
         symbol = symbols[i].trim();
         symbolLength = symbol.length;
@@ -97,7 +97,7 @@ function edgeLabelFormatter(string, allowNull=false)
             //Divide multi-char symbol into smaller single char symbols
             if (symbolLength > 1)
             {
-                for(let subsymbol of symbol.split(''))
+                for (let subsymbol of symbol.split(''))
                 {
                     subsymbol = subsymbol.trim();
                     if (!result.has(subsymbol))

@@ -1,6 +1,6 @@
 const DEFAULT_REFRESH_TICKS = 10;
 
-class NodeGraphChangeHandler
+class GraphChangeHandler
 {
     constructor(refreshTicks = DEFAULT_REFRESH_TICKS)
     {
@@ -58,4 +58,4 @@ class NodeGraphChangeHandler
     }
 }
 
-export default NodeGraphChangeHandler;
+export default GraphChangeHandler;
