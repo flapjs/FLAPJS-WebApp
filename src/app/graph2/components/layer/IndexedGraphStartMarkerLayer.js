@@ -1,6 +1,6 @@
 import React from 'react';
 
-import IndexedGraphStartMarkerRenderer from '../../renderer/IndexedGraphStartMarkerRenderer.js';
+import StartNodeMarkerRenderer from '../../renderer/StartNodeMarkerRenderer.js';
 import IndexedGraphStartMarkerInputHandler from '../../inputhandler/IndexedGraphStartMarkerInputHandler.js';
 
 class IndexedGraphStartMarkerLayer extends React.Component
@@ -40,7 +40,7 @@ class IndexedGraphStartMarkerLayer extends React.Component
     render()
     {
         const inputController = this.props.inputController;
-        const Renderer = this.props.startMarkerRenderer || IndexedGraphStartMarkerRenderer;
+        const Renderer = this.props.startMarkerRenderer || StartNodeMarkerRenderer;
         const editable = this.props.editable;
 
         const graphController = this.props.graphController;

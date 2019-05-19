@@ -1,6 +1,6 @@
 import NodeGraph from 'graph2/NodeGraph.js';
 
-class OrderedNodeGraph extends NodeGraph
+class IndexedNodeGraph extends NodeGraph
 {
     constructor(nodeClass, edgeClass)
     {
@@ -66,4 +66,4 @@ class OrderedNodeGraph extends NodeGraph
     }
 }
 
-export default OrderedNodeGraph;
+export default IndexedNodeGraph;
