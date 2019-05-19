@@ -13,7 +13,7 @@ const EXPORT_PADDING_Y = 0;
 
 class NodalGraphImageExporter extends SessionExporter
 {
-    constructor(imageType=IMAGE_TYPE_PNG)
+    constructor(imageType = IMAGE_TYPE_PNG)
     {
         super();
         this._imageType = imageType;
@@ -25,7 +25,7 @@ class NodalGraphImageExporter extends SessionExporter
         const session = target;
         const currentModule = session.getCurrentModule();
         const fileName = session.getProjectName();
-        const workspace = session.getApp().getWorkspaceComponent();
+        const workspace = session.getCurrentModule().getGraphView().getViewportComponent();
         const svgElement = workspace.getSVGElement();
         const workspaceDim = svgElement.viewBox.baseVal;
         const width = workspaceDim.width;
@@ -42,11 +42,24 @@ class NodalGraphImageExporter extends SessionExporter
         });
     }
 
+    processColorAttribute(themeManager, attributeValue)
+    {
+        if (!attributeValue) return attributeValue;
+
+        const startIndex = attributeValue.indexOf('var(--');
+        if (startIndex < 0) return attributeValue;
+
+        const stopIndex = attributeValue.indexOf(')', startIndex);
+        const value = attributeValue.substring(startIndex + 4, stopIndex);
+        const style = themeManager.getStyleByName(value);
+        return style ? style.getValue() : '#000000';
+    }
+
     processSVGForExport(element, width, height, currentModule)
     {
         const graphController = currentModule.getGraphController();
 
-        const viewport = currentModule.getApp().getInputAdapter().getViewportAdapter();
+        const viewport = currentModule.getGraphView().getViewportAdapter();
         const offsetX = viewport.getOffsetX();
         const offsetY = viewport.getOffsetY();
         const bounds = graphController.getGraph().getBoundingRect();
@@ -59,34 +72,31 @@ class NodalGraphImageExporter extends SessionExporter
         clone.setAttribute('width', width);
         clone.setAttribute('height', height);
 
-        //Apply the workspace font (refer to Workspace.css)
+        // Apply the workspace font (refer to Workspace.css)
         clone.setAttribute('font-size', '16px');
         clone.setAttribute('font-family', 'monospace');
         clone.setAttribute('style', '.graph-ui {display: none;}');
 
-        /*
-        const nodeColor = styleOpts.getOptionByProp("--color-graph-node").getStyle();
-        const textColor = styleOpts.getOptionByProp("--color-graph-text").getStyle();
-        console.log(nodeColor);
-        const styleString = "* {"
-        + "--color-graph-node: blue;"
-        + "--color-graph-text: " + textColor + ";"
-        + "}";
-        */
+        // Go through and replace all colors...
+        const themeManager = currentModule.getApp().getThemeManager();
+        for (const element of clone.getElementsByTagName('*'))
+        {
+            const strokeValue = element.getAttribute('stroke');
+            const strokeResult = this.processColorAttribute(themeManager, strokeValue);
+            if (strokeValue !== strokeResult) element.setAttribute('stroke', strokeResult);
 
-        /*
-        //TODO: Link the font family to svg
-        const link = document.createElement("link");
-        link.setAttribute("rel", "stylesheet");
-        clone.appendChild(link);
-        */
+            const fillValue = element.getAttribute('fill');
+            const fillResult = this.processColorAttribute(themeManager, fillValue);
+            if (fillValue !== fillResult) element.setAttribute('fill', fillResult);
+        }
 
         //Remove unwanted ui elements from image
         const uiElements = clone.getElementsByClassName('graph-ui');
-        while(uiElements.length > 0)
+        while (uiElements.length > 0)
         {
+            // This will propagate changes to uiElements, so be careful
             const e = uiElements[0];
-            e.remove();//This will propagate changes to uiElements, so be careful
+            e.remove();
         }
 
         return clone;
@@ -95,7 +105,7 @@ class NodalGraphImageExporter extends SessionExporter
     /** @override */
     getIconClass()
     {
-        switch(this._imageType)
+        switch (this._imageType)
         {
         case IMAGE_TYPE_PNG: return PNGIcon;
         case IMAGE_TYPE_JPG: return JPGIcon;
@@ -107,7 +117,7 @@ class NodalGraphImageExporter extends SessionExporter
     /** @override */
     getLabel()
     {
-        switch(this._imageType)
+        switch (this._imageType)
         {
         case IMAGE_TYPE_PNG: return I18N.toString('file.export.png');
         case IMAGE_TYPE_JPG: return I18N.toString('file.export.jpg');
@@ -119,7 +129,7 @@ class NodalGraphImageExporter extends SessionExporter
     /** @override */
     getTitle()
     {
-        switch(this._imageType)
+        switch (this._imageType)
         {
         case IMAGE_TYPE_PNG: return I18N.toString('file.export.png.hint');
         case IMAGE_TYPE_JPG: return I18N.toString('file.export.jpg.hint');
@@ -142,7 +152,7 @@ export const IMAGE_EXPORTERS = [
 
 export function registerImageExporters(exportManager)
 {
-    for(const exporter of IMAGE_EXPORTERS)
+    for (const exporter of IMAGE_EXPORTERS)
     {
         exportManager.registerExporter(exporter, 'image-' + exporter.getImageType());
     }

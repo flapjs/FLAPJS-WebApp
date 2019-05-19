@@ -112,17 +112,15 @@ class App extends React.Component
         super(props);
 
         App.INSTANCE = this;
-
-        this._workspace = React.createRef();
-        this._toolbar = null;
+        
+        this._toolbarComponent = React.createRef();
         this._drawer = null;
         this._viewport = null;
         this._labeleditor = null;
 
         this._themeManager = new ThemeManager();
-
-        this._langSaver = new LanguageSaver();
         this._colorSaver = new ColorSaver(this._themeManager);
+        this._langSaver = new LanguageSaver();
         this._saver = new AppSaver(this);
 
         this._exportManager = new ExportManager();
@@ -280,8 +278,8 @@ class App extends React.Component
         else
         {
             //On another click... open module change panel
-            const toolbar = this._toolbar;
-            toolbar.setCurrentMenu(MENU_INDEX_MODULE);
+            const toolbarComponent = this._toolbarComponent.current;
+            toolbarComponent.setCurrentMenu(MENU_INDEX_MODULE);
         }
     }
 
@@ -294,8 +292,7 @@ class App extends React.Component
         }
     }
 
-    getWorkspaceComponent() { return this._workspace.current; }
-    getToolbarComponent() { return this._toolbar; }
+    getToolbarComponent() { return this._toolbarComponent.current; }
 
     getExportManager() { return this._exportManager; }
     getImportManager() { return this._importManager; }
@@ -313,7 +310,6 @@ class App extends React.Component
 
     getSession() { return this._session; }
     getCurrentModule() { return this._session.getCurrentModule(); }
-    getInputAdapter() { return this.getWorkspaceComponent().getInputAdapter(); }
 
     isExperimental() { return true; }
 
@@ -322,9 +318,10 @@ class App extends React.Component
     {
         this._session.updateSession(this);
 
+        const toolbarComponent = this._toolbarComponent.current;
         //Disable hotkeys when graph is not in view
         this._hotKeyManager.setEnabled(
-            !(this._toolbar && this._toolbar.isBarOpen()) &&
+            !(toolbarComponent && toolbarComponent.isBarOpen()) &&
             !(this._drawer && this._drawer.isDrawerOpen() &&
                 this._drawer.isDrawerFullscreen())
         );
@@ -361,9 +358,10 @@ class App extends React.Component
         const undoManager = this._undoManager;
         const drawerManager = this._drawerManager;
         const menuManager = this._menuManager;
-        // const renderManager = this._renderManager;
         const tooltipManager = this._tooltipManager;
         const notificationManager = this._notificationManager;
+
+        const toolbarComponent = this._toolbarComponent.current;
 
         const drawerPanelClasses = drawerManager.getPanelClasses();
         const drawerPanelProps = drawerManager.getPanelProps() || { session: session };
@@ -372,7 +370,7 @@ class App extends React.Component
 
         return (
             <div className={Style.app_container + (currentModule ? ' active ' : '')}>
-                <ToolbarView ref={ref => this._toolbar = ref} className={Style.app_bar}
+                <ToolbarView ref={this._toolbarComponent} className={Style.app_bar}
                     menus={menuPanelClasses}
                     menuProps={menuPanelProps}
                     hide={isFullscreen}
@@ -395,7 +393,7 @@ class App extends React.Component
                                         ERROR_LAYOUT_ID,
                                         ERROR_UPLOAD_NOTIFICATION_TAG))
                                 .finally(() =>
-                                    this._toolbar.closeBar());
+                                    toolbarComponent.closeBar());
                         }}
                         disabled={importManager.isEmpty()} />
                     <ToolbarButton title={I18N.toString('action.toolbar.undo')} icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
@@ -405,19 +403,19 @@ class App extends React.Component
                         disabled={!undoManager.canRedo()}
                         onClick={() => undoManager.redo()} />
                     <ToolbarButton title={I18N.toString('component.exporting.title')} icon={DownloadIcon}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_EXPORT)}
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_EXPORT)}
                         disabled={exportManager.isEmpty()} />
                     <ToolbarDivider />
                     <ToolbarButton title={I18N.toString('action.toolbar.bug')} icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
                         onClick={() => window.open(BUGREPORT_URL, '_blank')} />
                     <ToolbarButton title={I18N.toString('action.toolbar.lang')} icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_LANGUAGE)} />
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_LANGUAGE)} />
                     <ToolbarButton title={I18N.toString('action.toolbar.help')} icon={HelpIcon}
                         onClick={() => window.open(HELP_URL, '_blank')} />
                     <ToolbarButton title={I18N.toString('component.options.title')} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_OPTION)} />
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_OPTION)} />
                     <ToolbarButton title={'Change Module'} icon={EditPencilIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_MODULE)} />
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_MODULE)} />
                 </ToolbarView>
 
                 <DrawerView ref={ref => this._drawer = ref} className={Style.app_content}
