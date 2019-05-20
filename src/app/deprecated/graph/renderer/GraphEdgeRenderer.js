@@ -1,6 +1,6 @@
 import React from 'react';
 
-import EdgeRenderer, { DIRECTED_NONE } from 'renderer/EdgeRenderer.js';
+import EdgeRenderer, { DIRECTED_NONE } from 'deprecated/renderer/EdgeRenderer.js';
 
 const GRAPH_EDGE_CONTAINER_STYLE_NAME = 'graph-edge-container';
 
