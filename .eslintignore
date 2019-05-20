@@ -8,6 +8,3 @@
 **/*.test.js
 # Ignore test directory
 /src/test
-
-# Ignore old depcrated fsa module (should remove this once dealt with)
-/src/app/modules/fsa
