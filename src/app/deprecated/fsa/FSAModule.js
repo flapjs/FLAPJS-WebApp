@@ -1,4 +1,4 @@
-import AbstractModule from 'modules/abstract/AbstractModule.js';
+import AbstractModule from 'deprecated/modules/abstract/AbstractModule.js';
 
 import Notifications from 'deprecated/system/notification/Notifications.js';
 
