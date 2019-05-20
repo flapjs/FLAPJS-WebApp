@@ -61,7 +61,9 @@ class GraphEdgeInputHandler extends AbstractInputHandler
                 return false;
             }
 
-            if (currentTargetType === EVENT_SOURCE_EDGE || currentTargetType === EVENT_SOURCE_FORWARD_ENDPOINT || currentTargetType === EVENT_SOURCE_LABEL)
+            if (currentTargetType === EVENT_SOURCE_EDGE ||
+                currentTargetType === EVENT_SOURCE_FORWARD_ENDPOINT ||
+                currentTargetType === EVENT_SOURCE_LABEL)
             {
                 const currentTargetSource = inputController.getCurrentTargetSource();
                 const graphController = this._graphController;
@@ -71,7 +73,7 @@ class GraphEdgeInputHandler extends AbstractInputHandler
             }
         }
 
-        if (!inputController.isMoveMode(pointer.getInputAdapter()) && currentTargetType === EVENT_SOURCE_EDGE)
+        if (currentTargetType === EVENT_SOURCE_LABEL || currentTargetType === EVENT_SOURCE_EDGE)
         {
             const currentTargetSource = inputController.getCurrentTargetSource();
             const graphController = this._graphController;
@@ -182,46 +184,51 @@ class GraphEdgeInputHandler extends AbstractInputHandler
         }
         else if (targetType === EVENT_SOURCE_FORWARD_ENDPOINT)
         {
-            const immediateTargetType = inputController.getImmediateTargetType();
-            if (immediateTargetType === EVENT_SOURCE_NODE)
+            this.handleDragMoveForEndpoint(targetSource, targetType, pointer, inputController);
+        }
+    }
+
+    handleDragMoveForEndpoint(targetSource, targetType, pointer, inputController)
+    {
+        const immediateTargetType = inputController.getImmediateTargetType();
+        if (immediateTargetType === EVENT_SOURCE_NODE)
+        {
+            const immediateTargetSource = inputController.getImmediateTargetSource();
+            
+            // Restore the previously cached edge quadratics
+            if (targetSource.getEdgeTo() === this._cachedEdgeTo)
             {
-                const immediateTargetSource = inputController.getImmediateTargetSource();
-				
-                // Restore the previously cached edge quadratics
-                if (targetSource.getEdgeTo() === this._cachedEdgeTo)
-                {
-                    targetSource.setQuadraticRadians(this._cachedEdgeQuads.radians);
-                    targetSource.setQuadraticLength(this._cachedEdgeQuads.length);
-                }
-                // Angle the self-loop edge towards the pointer
-                else if (targetSource.getEdgeFrom() === immediateTargetSource)
-                {
-                    const from = targetSource.getEdgeFrom();
-                    const dx = from.x - pointer.x;
-                    const dy = from.y - pointer.y;
-                    const radians = Math.PI + Math.atan2(dy, dx);
-                    targetSource.setQuadraticRadians(radians);
-                    targetSource.setEdgeTo(immediateTargetSource);
-                }
-                else
-                {
-                    targetSource.setQuadraticRadians(0);
-                    targetSource.setQuadraticLength(0);
-                    targetSource.setEdgeTo(immediateTargetSource);
-                }
+                targetSource.setQuadraticRadians(this._cachedEdgeQuads.radians);
+                targetSource.setQuadraticLength(this._cachedEdgeQuads.length);
+            }
+            // Angle the self-loop edge towards the pointer
+            else if (targetSource.getEdgeFrom() === immediateTargetSource)
+            {
+                const from = targetSource.getEdgeFrom();
+                const dx = from.x - pointer.x;
+                const dy = from.y - pointer.y;
+                const radians = Math.PI + Math.atan2(dy, dx);
+                targetSource.setQuadraticRadians(radians);
+                targetSource.setEdgeTo(immediateTargetSource);
             }
             else
             {
-                this._cachedPointer.x = lerp(this._cachedPointer.x, pointer.x, EDGE_POSITION_INTERPOLATION_DELTA);
-                this._cachedPointer.y = lerp(this._cachedPointer.y, pointer.y, EDGE_POSITION_INTERPOLATION_DELTA);
+                targetSource.setQuadraticRadians(0);
+                targetSource.setQuadraticLength(0);
+                targetSource.setEdgeTo(immediateTargetSource);
+            }
+        }
+        else
+        {
+            this._cachedPointer.x = lerp(this._cachedPointer.x, pointer.x, EDGE_POSITION_INTERPOLATION_DELTA);
+            this._cachedPointer.y = lerp(this._cachedPointer.y, pointer.y, EDGE_POSITION_INTERPOLATION_DELTA);
 
-                if (targetSource.getEdgeTo() !== this._cachedPointer)
-                {
-                    targetSource.setQuadraticRadians(0);
-                    targetSource.setQuadraticLength(0);
+            if (targetSource.getEdgeTo() !== this._cachedPointer)
+            {
+                targetSource.setQuadraticRadians(0);
+                targetSource.setQuadraticLength(0);
 
-                    targetSource.setEdgeTo(this._cachedPointer);
-                }
+                targetSource.setEdgeTo(this._cachedPointer);
             }
         }
     }

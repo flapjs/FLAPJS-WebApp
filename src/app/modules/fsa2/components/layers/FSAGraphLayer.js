@@ -8,6 +8,8 @@ import IndexedGraphStartMarkerLayer from 'graph2/components/layers/IndexedGraphS
 import FSANodeRenderer from '../../graph/renderer/FSANodeRenderer.js';
 import FSANodeInputHandler from '../../graph/inputhandler/FSANodeInputHandler.js';
 
+import FSAEdgeRenderer from '../../graph/renderer/FSAEdgeRenderer.js';
+
 class FSAGraphLayer extends React.Component
 {
     constructor(props)
@@ -75,6 +77,7 @@ class FSAGraphLayer extends React.Component
                     edges={graph.getEdges()}
                     inputController={inputController}
                     graphController={graphController}
+                    edgeRenderer={FSAEdgeRenderer}
                     inputContext={inputContext}
                     inputPriority={-1}
                     editable={editable} />
