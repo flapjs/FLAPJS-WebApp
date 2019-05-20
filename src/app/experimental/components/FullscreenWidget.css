@@ -8,6 +8,7 @@
 
 	color: var(--color-background-lite);
 	transition: color 0.3s ease;
+	z-index: 1000;
 }
 
 :local(.fullscreen_button):hover {

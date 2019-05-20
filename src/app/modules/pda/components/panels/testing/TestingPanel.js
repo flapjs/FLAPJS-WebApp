@@ -86,7 +86,7 @@ class TestingPanel extends React.Component
                 title={TestingPanel.TITLE}>
 
                 <TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode}/>
-                <PanelSwitch id={'testing-step-test'} checked={stepMode} onChange={this.onStepTestChange} title={'Step testing'}/>
+                {/*<PanelSwitch id={'testing-step-test'} checked={stepMode} onChange={this.onStepTestChange} title={'Step testing'}/>*/}
                 <PanelSwitch id={'testing-error-check'} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={'Auto error checking'}/>
 
             </PanelContainer>

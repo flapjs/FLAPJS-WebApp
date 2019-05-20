@@ -267,6 +267,7 @@ class App extends React.Component
         this._themeManager.clear();
         this._importManager.clear();
         this._exportManager.clear();
+        this._menuManager.setSubtitleComponentClass(null);
     }
 
     onModuleTitleClick(e)
@@ -283,6 +284,9 @@ class App extends React.Component
             const toolbarComponent = this._toolbarComponent.current;
             toolbarComponent.setCurrentMenu(MENU_INDEX_MODULE);
         }
+
+        e.preventDefault();
+        e.stopPropagation();
     }
 
     onToolbarClearButton(e)
@@ -369,22 +373,27 @@ class App extends React.Component
         const drawerPanelProps = drawerManager.getPanelProps() || { session: session };
         const menuPanelClasses = menuManager.getPanelClasses();
         const menuPanelProps = menuManager.getPanelProps() || { session: session };
+        const MenuSubtitleClass = menuManager.getSubtitleComponentClass();
 
         return (
             <div className={Style.app_container + (currentModule ? ' active ' : '')}>
                 <ToolbarView ref={this._toolbarComponent} className={Style.app_bar}
                     menus={menuPanelClasses}
                     menuProps={menuPanelProps}
+                    subtitle={MenuSubtitleClass}
                     hide={isFullscreen}
                     title={currentModuleLocalizedName}
                     session={session}
                     onTitleClick={this.onModuleTitleClick}>
-                    <ToolbarButton title={I18N.toString('action.toolbar.newmachine')} icon={PageEmptyIcon}
+                    <ToolbarButton title={I18N.toString('action.toolbar.newmachine')}
+                        icon={PageEmptyIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
                         onClick={this.onToolbarClearButton}
                         disabled={!currentModule} />
                     <ToolbarUploadButton
                         title={I18N.toString('action.toolbar.uploadmachine')}
                         icon={UploadIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
                         accept={importManager.getFileTypesAsAcceptString()}
                         onUpload={fileBlob => 
                         {
@@ -398,26 +407,41 @@ class App extends React.Component
                                     toolbarComponent.closeBar());
                         }}
                         disabled={importManager.isEmpty()} />
-                    <ToolbarButton title={I18N.toString('action.toolbar.undo')} icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+                    <ToolbarButton title={I18N.toString('action.toolbar.undo')}
+                        icon={UndoIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
                         disabled={!undoManager.canUndo()}
                         onClick={() => undoManager.undo()} />
-                    <ToolbarButton title={I18N.toString('action.toolbar.redo')} icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+                    <ToolbarButton title={I18N.toString('action.toolbar.redo')}
+                        icon={RedoIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
                         disabled={!undoManager.canRedo()}
                         onClick={() => undoManager.redo()} />
-                    <ToolbarButton title={I18N.toString('component.exporting.title')} icon={DownloadIcon}
-                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_EXPORT)}
+                    <ToolbarButton title={I18N.toString('component.exporting.title')}
+                        icon={DownloadIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_EXPORT)}
                         disabled={exportManager.isEmpty()} />
                     <ToolbarDivider />
-                    <ToolbarButton title={I18N.toString('action.toolbar.bug')} icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => window.open(BUGREPORT_URL, '_blank')} />
-                    <ToolbarButton title={I18N.toString('action.toolbar.lang')} icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_LANGUAGE)} />
-                    <ToolbarButton title={I18N.toString('action.toolbar.help')} icon={HelpIcon}
+                    <ToolbarButton title={I18N.toString('action.toolbar.changemodule')}
+                        icon={EditPencilIcon}
+                        containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_MODULE)} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.lang')}
+                        icon={WorldIcon}
+                        containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_LANGUAGE)} />
+                    <ToolbarButton title={I18N.toString('component.options.title')}
+                        icon={SettingsIcon}
+                        containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_OPTION)} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.help')}
+                        icon={HelpIcon}
                         onClick={() => window.open(HELP_URL, '_blank')} />
-                    <ToolbarButton title={I18N.toString('component.options.title')} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_OPTION)} />
-                    <ToolbarButton title={'Change Module'} icon={EditPencilIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_MODULE)} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.bug')}
+                        icon={BugIcon}
+                        containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => window.open(BUGREPORT_URL, '_blank')} />
                 </ToolbarView>
 
                 <DrawerView ref={ref => this._drawer = ref} className={Style.app_content}

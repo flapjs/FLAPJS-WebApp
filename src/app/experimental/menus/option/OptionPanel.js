@@ -129,6 +129,9 @@ class OptionPanel extends React.Component
                         this.setState({exitWarning: result});
                         LocalStorage.setData(DISABLE_EXIT_WARNING_STORAGE_ID, '' + result);
                     }}/>
+                <label className={Style.version}>
+                    {`v${process.env.VERSION}`}
+                </label>
             </PanelContainer>
         );
     }
