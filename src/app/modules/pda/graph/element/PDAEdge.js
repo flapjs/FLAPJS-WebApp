@@ -28,6 +28,22 @@ class PDAEdge extends QuadraticEdge
                 EMPTY_CHAR);
         }
     }
+    
+    getEdgeSymbolsFromLine(line)
+    {
+        line = line.trim();
+        let readIndex = line.indexOf(READ_SEPARATOR);
+        let popIndex = line.indexOf(POP_SEPARATOR);
+
+        if (readIndex <= 0) return [EMPTY_CHAR, EMPTY_CHAR, EMPTY_CHAR];
+        let readSymbol = line.substring(0, readIndex);
+        if (popIndex <= 0) return [readSymbol, EMPTY_CHAR, EMPTY_CHAR];
+        let popSymbol = line.substring(readIndex + 1, popIndex);
+        let pushSymbol = line.substring(popIndex + 1);
+        if (pushSymbol.length <= 0) return [readSymbol, popSymbol, EMPTY_CHAR];
+
+        return [readSymbol, popSymbol, pushSymbol];
+    }
 }
 
 export default PDAEdge;

@@ -1,7 +1,17 @@
 import NodeGraph from 'graph2/NodeGraph.js';
 
+/**
+ * A class that represents a node graph with indexed and ordered node list.
+ * This means that there exists a first node, which would be used for the
+ * start node, if that semantically makes sense for your graph.
+ */
 class IndexedNodeGraph extends NodeGraph
 {
+    /**
+     * Create an IndexedNodeGraph with the respective node and edge classes.
+     * @param {Class} [nodeClass]
+     * @param {Class} [edgeClass]
+     */
     constructor(nodeClass, edgeClass)
     {
         super(nodeClass, edgeClass);
@@ -9,6 +19,11 @@ class IndexedNodeGraph extends NodeGraph
         this._nodes = [];
     }
 
+    /**
+     * Sets the first node, which is at index 0, to the passed-in node. The node must
+     * already exist in the graph.
+     * @param {GraphNode} node the node to be first
+     */
     setStartNode(node)
     {
         if (this._nodes.length <= 0) throw new Error('Cannot set start node to empty graph');
@@ -30,8 +45,15 @@ class IndexedNodeGraph extends NodeGraph
         }
     }
 
+    /**
+     * Gets the first node, which is at index 0, for the graph.
+     */
     getStartNode() { return this._nodes.length > 0 ? this._nodes[0] : null; }
 
+    /**
+     * Gets the node by its index. The index must be between 0 and the node count.
+     * @param {Number} index 
+     */
     getNodeByIndex(index)
     {
         return this._nodes[index];

@@ -1,7 +1,7 @@
 import AbstractMachineBuilder from 'modules/abstract/AbstractMachineBuilder.js';
 import PDA, { EMPTY_SYMBOL, State } from './PDA.js';
-import PDANode from 'modules/pda/graph/element/PDANode.js';
-import { EMPTY_CHAR } from 'modules/pda/graph/element/PDAEdge.js';
+import PDANode from '../graph/element/PDANode.js';
+import { LINE_SEPARATOR, EMPTY_CHAR } from '../graph/element/PDAEdge.js';
 import { getUnreachableNodes } from 'graph2/util/NodeGraphUtils.js';
 
 export const ERROR_UNREACHABLE_STATE = 'unreachable_state';
@@ -116,7 +116,7 @@ class PDABuilder extends AbstractMachineBuilder
                 const dstState = dst.getStateByID(dstNode.getGraphElementID());
                 if (!srcState || !dstState) throw new Error('Cannot find state for edge source/destination nodes - mismatch id');
 
-                const edgeLabelLines = edge.getEdgeLinesFromLabel();
+                const edgeLabelLines = edge.getEdgeLabel().split(LINE_SEPARATOR);
                 for (const line of edgeLabelLines)
                 {
                     if (!line) continue;

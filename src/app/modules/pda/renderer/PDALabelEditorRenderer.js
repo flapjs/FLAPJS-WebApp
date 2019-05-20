@@ -22,7 +22,7 @@ class PDALabelEditorRenderer extends React.Component
         const inputComponent = labelEditor.inputComponent;
         return (
             <PatternInputButton key={symbol} parent={inputComponent} title={symbol}
-                onClick={e=>inputComponent.appendValue(symbol, SYMBOL_SEPARATOR)}/>
+                onClick={e => inputComponent.appendValue(symbol, SYMBOL_SEPARATOR)} />
         );
     }
 
@@ -44,9 +44,9 @@ class PDALabelEditorRenderer extends React.Component
                 </span>
                 <span className={Style.tray_default}>
                     {showRecommended &&
-            RECOMMENDED_SYMBOLS.map(e => this.renderSymbol(e))}
+                        RECOMMENDED_SYMBOLS.map(e => this.renderSymbol(e))}
                     {showDefault &&
-            DEFAULT_SYMBOLS.map(e => this.renderSymbol(e))}
+                        DEFAULT_SYMBOLS.map(e => this.renderSymbol(e))}
                 </span>
             </div>
         );
