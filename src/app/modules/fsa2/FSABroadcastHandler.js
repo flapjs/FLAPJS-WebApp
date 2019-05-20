@@ -1,8 +1,8 @@
 import BroadcastHandler from 'session/manager/broadcast/BroadcastHandler.js';
 
-import { JSON as JSONGraphParser } from 'modules/fsa/graph/FSAGraphParser.js';
+import { JSON as JSONGraphParser } from 'modules/fsa2/FSAGraphParser.js';
 import FSA from 'modules/fsa2/machine/FSA.js';
-import {isEquivalentFSA} from 'modules/fsa2/machine/FSAUtils.js';
+import { isEquivalentFSA } from 'modules/fsa2/machine/FSAUtils.js';
 
 const MACHINE_REQUEST_MESSAGE_TYPE = 'fsa-machine-request';
 const MACHINE_RESPONSE_MESSAGE_TYPE = 'fsa-machine-response';

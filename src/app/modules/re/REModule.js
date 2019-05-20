@@ -2,19 +2,22 @@ import React from 'react';
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 
 import MachineController from './MachineController.js';
-import REGraphExporter from './exporter/REGraphExporter.js';
-import REtoFSAGraphExporter from './exporter/REtoFSAGraphExporter.js';
 import REErrorChecker from './REErrorChecker.js';
 import SafeExpressionEventHandler from './SafeExpressionEventHandler.js';
+import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
 
-import {registerNotifications} from './components/notifications/RENotifications.js';
+import { registerNotifications } from './components/notifications/RENotifications.js';
 
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 import TestingPanel from './components/panels/testing/TestingPanel.js';
 
 import ExpressionView from './components/views/ExpressionView.js';
-import {CTRL_KEY, SHIFT_KEY} from 'session/manager/hotkey/HotKeyManager.js';
+import { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
+
+import REImporter from './filehandlers/REImporter.js';
+import REExporter from './filehandlers/REExporter.js';
+import REToFSAExporter from './filehandlers/REToFSAExporter.js';
 
 const MODULE_NAME = 're';
 const MODULE_VERSION = '0.0.1';
@@ -29,6 +32,9 @@ class REModule
         this._machineController = new MachineController();
         this._errorChecker = new REErrorChecker(app,
             this._machineController);
+
+        app.getRenderManager()
+            .addRenderer(RENDER_LAYER_WORKSPACE, props => <ExpressionView session={app.getSession()} />);
     }
 
     /** @override */
@@ -50,24 +56,22 @@ class REModule
             .addPanelClass(AnalysisPanel)
             .addPanelClass(TestingPanel);
 
-        app.getViewportManager()
-            .addViewClass(ExpressionView);
-
         app.getUndoManager()
-            .setEventHandlerFactory((...args) => 
-            {
-                return new SafeExpressionEventHandler(this._machineController);
-            });
+            .setEventHandlerFactory((...args) =>
+                new SafeExpressionEventHandler(this._machineController));
 
         app.getExportManager()
-            .addExporter(new REGraphExporter())
-            .addExporter(new REtoFSAGraphExporter());
+            .registerExporter(new REExporter(), 'session')
+            .registerExporter(new REToFSAExporter(), 're2fsa');
+
+        app.getImportManager()
+            .addImporter(new REImporter(app), '.re.json', '.json');
 
         app.getHotKeyManager()
-            .registerHotKey('Save as JSON', [CTRL_KEY, 'KeyS'], () => {app.getExportManager().tryExportToFile(app.getExportManager().getDefaultExporter());})
-            .registerHotKey('New', [CTRL_KEY, 'KeyN'], () => {this.clear(app);})
-            .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => {app.getUndoManager().undo();})
-            .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {app.getUndoManager().redo();});
+            .registerHotKey('Save as JSON', [CTRL_KEY, 'KeyS'], () => { app.getExportManager().tryExportFile('session', app.getSession()); })
+            .registerHotKey('New', [CTRL_KEY, 'KeyN'], () => { this.clear(app); })
+            .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => { app.getUndoManager().undo(); })
+            .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => { app.getUndoManager().redo(); });
     }
 
     /** @override */

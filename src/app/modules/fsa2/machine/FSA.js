@@ -1,4 +1,4 @@
-import GraphElement from 'graph/elements/GraphElement.js';
+import GraphElement from 'graph2/element/GraphElement.js';
 import { guid, stringHash } from 'util/MathHelper.js';
 
 // const FROM_STATE_INDEX = 0;
@@ -9,7 +9,7 @@ export const EMPTY_SYMBOL = '&empty';
 
 export class State
 {
-    constructor(label='', src=null)
+    constructor(label = '', src = null)
     {
         this._label = label;
 
@@ -39,7 +39,7 @@ export class State
 
 export class Transition
 {
-    constructor(from, to, symbols=[])
+    constructor(from, to, symbols = [])
     {
         this._from = from;
         this._to = to;
@@ -70,9 +70,9 @@ export class Transition
 
 class FSA
 {
-    constructor(deterministic=false)
+    constructor(deterministic = false)
     {
-    //state id -> state
+        //state id -> state
         this._states = new Map();
         //symbol -> symbol use counter
         this._alphabet = new Map();
@@ -93,14 +93,14 @@ class FSA
    */
     copy(fsa)
     {
-    //You are already yourself, don't copy nothing.
+        //You are already yourself, don't copy nothing.
         if (fsa === this) return;
 
         //Make room for the copy...
         this.clear();
 
         //Copy state
-        for(const [key, value] of fsa._states.entries())
+        for (const [key, value] of fsa._states.entries())
         {
             const result = value.copy();
             this._states.set(key, result);
@@ -117,12 +117,12 @@ class FSA
             }
         }
         //Copy alphabet
-        for(const [key, value] of fsa._alphabet.entries())
+        for (const [key, value] of fsa._alphabet.entries())
         {
             this._alphabet.set(key, value);
         }
         //Copy transitions
-        for(const [key, value] of fsa._transitions.entries())
+        for (const [key, value] of fsa._transitions.entries())
         {
             const result = value.copy();
             result._from = this._states.get(value.getSourceState().getStateID());
@@ -130,7 +130,7 @@ class FSA
             this._transitions.set(key, result);
         }
         //Copy custom symbols
-        for(const symbol of fsa._customSymbols)
+        for (const symbol of fsa._customSymbols)
         {
             this._customSymbols.add(symbol);
         }
@@ -139,7 +139,7 @@ class FSA
         this._deterministic = fsa._deterministic;
 
         //Copy errors
-        for(const error of fsa._errors)
+        for (const error of fsa._errors)
         {
             //WARNING: if the error's store state objects, they need to be redirected to the copies
             this._errors.push(error);
@@ -163,22 +163,22 @@ class FSA
 
     validate()
     {
-    //Reset errors
+        //Reset errors
         this._errors.length = 0;
 
         if (this._deterministic)
         {
             const foundSymbols = new Map();
-            for(const key of this._alphabet.keys())
+            for (const key of this._alphabet.keys())
             {
                 foundSymbols.set(key, false);
             }
 
-            for(const state of this._states.values())
+            for (const state of this._states.values())
             {
                 //Get all outgoing transitions
                 const transitions = this.getOutgoingTransitions(state);
-                for(const transition of transitions)
+                for (const transition of transitions)
                 {
                     const symbol = transition[SYMBOL_INDEX];
 
@@ -197,7 +197,7 @@ class FSA
                 }
 
                 //Reset foundSymbols for next state
-                for(const key of foundSymbols.keys())
+                for (const key of foundSymbols.keys())
                 {
                     if (!foundSymbols.get(key))
                     {
@@ -225,7 +225,7 @@ class FSA
     isValid() { return this._errors.length == 0; }
     getErrors() { return this._errors; }
 
-    createState(label='')
+    createState(label = '')
     {
         return this.addState(new State(label));
     }
@@ -267,7 +267,7 @@ class FSA
 
     hasStateWithLabel(label)
     {
-        for(const state of this._states.values())
+        for (const state of this._states.values())
         {
             if (state.getStateLabel() == label)
             {
@@ -277,9 +277,9 @@ class FSA
         return false;
     }
 
-    getStatesByLabel(label, dst=[])
+    getStatesByLabel(label, dst = [])
     {
-        for(const state of this._states.values())
+        for (const state of this._states.values())
         {
             if (state.getStateLabel() == label)
             {
@@ -330,7 +330,7 @@ class FSA
         return true;
     }
 
-    removeTransition(from, to, symbol=null)
+    removeTransition(from, to, symbol = null)
     {
         const transitionKey = from.getStateID() + '->' + to.getStateID();
         if (!this._transitions.has(transitionKey)) return false;
@@ -360,7 +360,7 @@ class FSA
         else
         {
             //Update symbol counts...
-            for(const symbol of symbols)
+            for (const symbol of symbols)
             {
                 this._decrSymbolCount(symbol);
             }
@@ -371,7 +371,7 @@ class FSA
         }
     }
 
-    hasTransition(from, to, symbol=null)
+    hasTransition(from, to, symbol = null)
     {
         const transitionKey = from.getStateID() + '->' + to.getStateID();
         if (!this._transitions.has(transitionKey)) return false;
@@ -393,7 +393,7 @@ class FSA
 
     _incrSymbolCount(symbol)
     {
-    //Don't add empty symbol to the alphabet
+        //Don't add empty symbol to the alphabet
         if (symbol === EMPTY_SYMBOL) return;
 
         const symbolCount = this._alphabet.get(symbol) || 0;
@@ -435,7 +435,7 @@ class FSA
         if (newSymbol === EMPTY_SYMBOL) throw new Error('Cannot change to the empty symbol');
         if (this._alphabet.has(newSymbol)) throw new Error('Cannot change symbol to another existing symbol');
 
-        for(const transition of this._transitions.values())
+        for (const transition of this._transitions.values())
         {
             const symbols = transition.getSymbols();
             const index = symbols.indexOf(symbol);
@@ -463,7 +463,7 @@ class FSA
     removeSymbol(symbol)
     {
         const cache = [];
-        for(const [key, transition] of this._transitions.entries())
+        for (const [key, transition] of this._transitions.entries())
         {
             const symbols = transition.getSymbols();
             const index = symbols.indexOf(symbol);
@@ -482,7 +482,7 @@ class FSA
         }
 
         //Delete any transitions that have no more symbols...
-        for(const transitionKey of cache)
+        for (const transitionKey of cache)
         {
             this._transitions.delete(transitionKey);
         }
@@ -501,7 +501,7 @@ class FSA
         }
     }
 
-    setCustomSymbol(symbol, custom=true)
+    setCustomSymbol(symbol, custom = true)
     {
         if (symbol === EMPTY_SYMBOL) throw new Error('Cannot change the empty symbol as a custom symbol');
 
@@ -570,9 +570,9 @@ class FSA
     isStartState(state) { return this._startState === state; }
     getStartState() { return this._startState; }
 
-    setFinalState(state, final=true)
+    setFinalState(state, final = true)
     {
-    //Make final
+        //Make final
         if (final)
         {
             //If missing from state set, add it in...
@@ -595,7 +595,7 @@ class FSA
     isFinalState(state) { return this._finalStates.has(state); }
     getFinalStates() { return this._finalStates; }
 
-    doTransition(state, symbol, forceNondeterminism=false, dst=[])
+    doTransition(state, symbol, forceNondeterminism = false, dst = [])
     {
         if (!state) return dst;
         if (!(state instanceof State)) throw new Error('Invalid state instance type \'' + (typeof state) + '\'');
@@ -604,7 +604,7 @@ class FSA
         if (!symbol) symbol = EMPTY_SYMBOL;
 
         const fromTransitionKey = state.getStateID() + '->';
-        for(const key of this._transitions.keys())
+        for (const key of this._transitions.keys())
         {
             if (key.startsWith(fromTransitionKey))
             {
@@ -621,7 +621,7 @@ class FSA
         return dst;
     }
 
-    doTerminalTransition(state, symbol, dst=[])
+    doTerminalTransition(state, symbol, dst = [])
     {
         if (!state) return dst;
         if (!this._states.has(state.getStateID())) throw new Error('Unable to find source state with id \'' + state.getStateID() + '\'');
@@ -629,7 +629,7 @@ class FSA
         if (!symbol) symbol = EMPTY_SYMBOL;
 
         const fromTransitionKey = state.getStateID() + '->';
-        for(const key of this._transitions.keys())
+        for (const key of this._transitions.keys())
         {
             if (key.startsWith(fromTransitionKey))
             {
@@ -638,7 +638,7 @@ class FSA
                 {
                     const toState = transition.getDestinationState();
                     const result = this.doClosureTransition(toState);
-                    for(const s of result)
+                    for (const s of result)
                     {
                         if (!dst.includes(s)) dst.push(s);
                     }
@@ -649,15 +649,15 @@ class FSA
         return dst;
     }
 
-    doClosureTransition(state, dst=[])
+    doClosureTransition(state, dst = [])
     {
         if (!state) return dst;
 
         dst.push(state);
-        for(let i = 0; i < dst.length; ++i)
+        for (let i = 0; i < dst.length; ++i)
         {
             const transitions = this.getOutgoingTransitions(dst[i]);
-            for(const transition of transitions)
+            for (const transition of transitions)
             {
                 if (transition[SYMBOL_INDEX] === EMPTY_SYMBOL)
                 {
@@ -672,19 +672,19 @@ class FSA
         return dst;
     }
 
-    getOutgoingTransitions(state, dst=[])
+    getOutgoingTransitions(state, dst = [])
     {
         if (!state) return dst;
         if (!this._states.has(state.getStateID())) throw new Error('Unable to find source state with id \'' + state.getStateID() + '\'');
 
         const fromTransitionKey = state.getStateID() + '->';
-        for(const key of this._transitions.keys())
+        for (const key of this._transitions.keys())
         {
             if (key.startsWith(fromTransitionKey))
             {
                 const transition = this._transitions.get(key);
                 const symbols = transition.getSymbols();
-                for(const symbol of symbols)
+                for (const symbol of symbols)
                 {
                     dst.push([state, symbol, transition.getDestinationState()]);
                 }
@@ -697,17 +697,17 @@ class FSA
     getHashCode()
     {
         let string = '';
-        for(const state of this._states.values())
+        for (const state of this._states.values())
         {
             string += state.getHashString() + ',';
         }
         string += '|';
-        for(const transition of this._transitions.values())
+        for (const transition of this._transitions.values())
         {
             string += transition.getHashString() + ',';
         }
         string += '|';
-        for(const state of this._finalStates)
+        for (const state of this._finalStates)
         {
             string += state.getHashString();
         }

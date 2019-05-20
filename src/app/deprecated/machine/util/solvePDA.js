@@ -1,5 +1,5 @@
 import PDA from 'modules/pda/machine/PDA.js'
-import { EMPTY } from 'modules/fsa/machine/Symbols.js'
+import { EMPTY } from 'deprecated/fsa/machine/Symbols.js'
 
 
 export function solvePDA(pda, input)

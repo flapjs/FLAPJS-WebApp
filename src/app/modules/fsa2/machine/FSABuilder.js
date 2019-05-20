@@ -1,8 +1,8 @@
 import AbstractMachineBuilder from 'modules/abstract/AbstractMachineBuilder.js';
 import FSA, { EMPTY_SYMBOL, State } from './FSA.js';
-import FSANode from 'modules/fsa/graph/FSANode.js';
-import { EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
-import {getUnreachableNodes} from 'modules/fsa2/graph/UnreachableNodes.js';
+import FSANode from 'modules/fsa2/graph/element/FSANode.js';
+import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/fsa2/graph/element/FSAEdge.js';
+import { getUnreachableNodes } from 'graph2/util/NodeGraphUtils.js';
 
 export const ERROR_UNREACHABLE_STATE = 'unreachable_state';
 export const ERROR_DUPLICATE_STATE = 'duplicate_state';
@@ -123,7 +123,7 @@ class FSABuilder extends AbstractMachineBuilder
                 const dstState = dst.getStateByID(dstNode.getGraphElementID());
                 if (!srcState || !dstState) throw new Error('Cannot find state for edge source/destination nodes - mismatch id');
 
-                const edgeLabelSymbols = edge.getEdgeSymbolsFromLabel();
+                const edgeLabelSymbols = edge.getEdgeLabel().split(SYMBOL_SEPARATOR);
                 for (const symbol of edgeLabelSymbols)
                 {
                     if (!symbol) continue;
@@ -190,7 +190,7 @@ class FSABuilder extends AbstractMachineBuilder
         }
 
         //Check for unreachable nodes
-        const unreachables =  getUnreachableNodes(graph);
+        const unreachables = getUnreachableNodes(graph);
         if (unreachables && unreachables.length > 0)
         {
             warnings.push({

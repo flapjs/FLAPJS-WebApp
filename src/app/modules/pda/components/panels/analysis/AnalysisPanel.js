@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './AnalysisPanel.css';
 
-import { getUnreachableNodes } from 'modules/fsa2/graph/FSAGraphUtil.js';
+import { getUnreachableNodes } from 'graph2/util/NodeGraphUtils.js';
 
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';

@@ -1,5 +1,5 @@
 import React from 'react';
-import DefaultNotificationLayout, {STYLE_TYPE_WARNING} from 'session/manager/notification/components/DefaultNotificationLayout.js';
+import DefaultNotificationLayout, { STYLE_TYPE_WARNING } from 'session/manager/notification/components/DefaultNotificationLayout.js';
 
 class StateUnreachableNotificationLayout extends React.Component
 {
@@ -10,7 +10,7 @@ class StateUnreachableNotificationLayout extends React.Component
         this.targetIndex = 0;
         this.targetLabel = '';
         const targets = props.message;
-        for(const target of targets)
+        for (const target of targets)
         {
             if (this.targetLabel.length > 0)
             {
@@ -26,9 +26,10 @@ class StateUnreachableNotificationLayout extends React.Component
     {
         const notification = this.props.notification;
         const message = this.props.message;
+        const app = this.props.app;
         const graphController = this.props.graphController;
 
-        switch(e.target.value)
+        switch (e.target.value)
         {
         case 'locate':
             {
@@ -40,7 +41,8 @@ class StateUnreachableNotificationLayout extends React.Component
                 }
 
                 //Move pointer to target
-                graphController.focusOnNode(target);
+                const graphView = app.getSession().getCurrentModule().getGraphView();
+                graphView.moveViewToPosition(target.x, target.y);
             }
             break;
         case 'deleteall':

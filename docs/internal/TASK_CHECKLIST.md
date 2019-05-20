@@ -1,0 +1,26 @@
+# Task Checklist
+- [ ] Discuss and design the task.
+- [ ] Estimate and allocate "work" points to the task.
+- [ ] Complete the task.
+- [ ] Update the language registry for all displayed string literals.
+    - _Be sure to any new ones and remove any entries no longer used._
+- [ ] Document the functions, members, and classes.
+- [ ] Run 'npm test' and make sure it passes
+    - _This is automatically performed for you before every commit and push :D_
+- [ ] Update the corresponding internal document.
+- [ ] Commit and push!
+- [ ] Submit a pull request.
+- [ ] Wait for remote tests and other checks to pass.
+- [ ] Have at least 1 other person to approve it.
+- [ ] Approve the merge!
+
+- If you are releasing...
+- [ ] Increment the version number. (Usually, this is done at the start of a version.)
+    - [ ] Make sure the version number in package.json is updated.
+    - [ ] Make sure CHANGELOG.md is updated.
+    - [ ] Make sure src/app/changlog.js is the same as CHANGELOG.md.
+- [ ] Run a smoke test on dev branch.
+- [ ] Merge into master.
+- [ ] Run 'npm run build' to deploy the web app.
+- [ ] Run another smoke test.
+    - Make sure in the console, it says it is in the 'production' environment.

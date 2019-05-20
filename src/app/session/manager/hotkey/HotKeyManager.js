@@ -183,6 +183,11 @@ class HotKeyManager
     {
         if (!this._enabled) return;
 
+        // As long as it's not an input-like element (cause they have their own hotkeys)
+        if (document.activeElement instanceof HTMLInputElement) return;
+        if (document.activeElement instanceof HTMLTextAreaElement) return;
+        if (document.activeElement.hasAttribute('contenteditable')) return;
+
         if (!e.repeat)
         {
             this.captureKeyEvent(e, false);

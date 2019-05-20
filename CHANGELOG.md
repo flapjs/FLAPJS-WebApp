@@ -6,16 +6,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Module version is now visible in Options.
+- Change machine type for FA module in the title bar.
+
+### Changed
+- Menu entries are now ordered more logically.
+- Fullscreen mode is available for ALL modules.
+
+### Removed
+- Unused modules are no longer visible in module selection.
+
+## [0.4.1] - 2019-05-15
+### Added
+- Pushdown Automata & Regular Expression modules are now available.
 - Language is saved across sessions.
 - Regular expression scope highlighting.
 - Cross-window communication through BroadcastChannel.
 - Color theme preset loading.
 - MIT and Duke theme presets.
-- Added linting tests.
-- Added Travic CI build pipeline.
+- Added linting tests to enforce code style.
+- Added Travic CI build pipeline for more build automation.
 
 ### Changed
 - Have actual changelog that is not code :P
+- Experimental mode is now LIVE! :D
 
 ### Removed
 - Old app mode will be replaced by experimental mode permanently :(
@@ -100,7 +114,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Localization for English and Pirate Speak.
 - Offline capabilities with working ServiceWorker.
 
-[Unreleased]: https://github.com/flapjs/FLAPJS-WebApp/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/flapjs/FLAPJS-WebApp/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/flapjs/FLAPJS-WebApp/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/flapjs/FLAPJS-WebApp/compare/v0.3.4...v0.4.0
 [0.3.4]: https://github.com/flapjs/FLAPJS-WebApp/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/flapjs/FLAPJS-WebApp/compare/v0.3.2...v0.3.3

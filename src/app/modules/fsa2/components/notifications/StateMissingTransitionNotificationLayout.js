@@ -1,5 +1,5 @@
 import React from 'react';
-import DefaultNotificationLayout, {STYLE_TYPE_ERROR} from 'session/manager/notification/components/DefaultNotificationLayout.js';
+import DefaultNotificationLayout, { STYLE_TYPE_ERROR } from 'session/manager/notification/components/DefaultNotificationLayout.js';
 
 // TODO: add @see for usage
 class StateMissingTransitionNotificationLayout extends React.Component
@@ -13,7 +13,7 @@ class StateMissingTransitionNotificationLayout extends React.Component
         this.targetLabel = '';
         // TODO: clarify what target is, specify type
         const targets = props.message.targets;
-        for(const target of targets)
+        for (const target of targets)
         {
             if (this.targetLabel.length > 0)
             {
@@ -31,9 +31,9 @@ class StateMissingTransitionNotificationLayout extends React.Component
     {
         // const notification = this.props.notification;
         const message = this.props.message;
-        const graphController = this.props.graphController;
-
-        switch(e.target.value)
+        const app = this.props.app;
+        
+        switch (e.target.value)
         {
         case 'locate':
             {
@@ -46,7 +46,8 @@ class StateMissingTransitionNotificationLayout extends React.Component
                     if (this.targetIndex >= targetLength) this.targetIndex = 0;
 
                     //Move pointer to target
-                    graphController.focusOnNode(target);
+                    const graphView = app.getSession().getCurrentModule().getGraphView();
+                    graphView.moveViewToPosition(target.x, target.y);
                 }
             }
             break;
@@ -56,7 +57,7 @@ class StateMissingTransitionNotificationLayout extends React.Component
     /** @override */
     render()
     {
-    // TODO: I18N - look out for localization
+        // TODO: I18N - look out for localization
         return (
             <DefaultNotificationLayout id={this.props.id}
                 className={this.props.className}

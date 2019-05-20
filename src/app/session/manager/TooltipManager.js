@@ -34,15 +34,9 @@ class TooltipManager
         this._transitionMode = ONESHOT_MODE;
     }
 
-    getTransitionMode()
-    {
-        return this._transitionMode;
-    }
-
-    getTooltips()
-    {
-        return this._tooltips;
-    }
+    getTransitionMode() { return this._transitionMode; }
+    getTooltips() { return this._tooltips; }
+    hasTooltips() { return this._tooltips.length > 0; }
 }
 
 export default TooltipManager;

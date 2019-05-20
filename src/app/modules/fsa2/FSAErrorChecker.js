@@ -1,5 +1,6 @@
-import {SUCCESS_LAYOUT_ID} from 'session/manager/notification/NotificationManager.js';
-import {
+import { SUCCESS_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
+import
+{
     MACHINE_ERROR_NOTIFICATION_TAG,
     STATE_LAYOUT_ID,
     TRANSITION_LAYOUT_ID,
@@ -7,7 +8,8 @@ import {
     STATE_MISSING_LAYOUT_ID
 } from './components/notifications/FSANotifications.js';
 
-import {
+import
+{
     ERROR_UNREACHABLE_STATE,
     ERROR_DUPLICATE_STATE,
     ERROR_INCOMPLETE_TRANSITION,
@@ -50,7 +52,11 @@ class FSAErrorChecker
 
     showErrors()
     {
-        const props = {graphController: this._graphController, machineController: this._machineController};
+        const props = {
+            graphController: this._graphController,
+            machineController: this._machineController,
+            app: this._app
+        };
         const machineBuilder = this._machineController.getMachineBuilder();
         const errors = machineBuilder.getMachineErrors();
         const warnings = machineBuilder.getMachineWarnings();
@@ -66,9 +72,9 @@ class FSAErrorChecker
         }
         else
         {
-            for(const warning of warnings)
+            for (const warning of warnings)
             {
-                switch(warning.name)
+                switch (warning.name)
                 {
                 case ERROR_UNREACHABLE_STATE:
                     notificationManager.pushNotification(warning.nodes,
@@ -77,9 +83,9 @@ class FSAErrorChecker
                 }
             }
 
-            for(const error of errors)
+            for (const error of errors)
             {
-                switch(error.name)
+                switch (error.name)
                 {
                 case ERROR_DUPLICATE_STATE:
                     notificationManager.pushNotification({

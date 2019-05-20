@@ -1,6 +1,7 @@
 import React from 'react';
 
-import EdgeRenderer, {DIRECTED_FORWARD} from 'renderer/EdgeRenderer.js';
+import { LINE_SEPARATOR } from '../graph/element/PDAEdge.js';
+import EdgeRenderer, { DIRECTED_FORWARD } from 'renderer/EdgeRenderer.js';
 
 const GRAPH_EDGE_CONTAINER_STYLE_NAME = 'graph-edge-container';
 
@@ -20,7 +21,7 @@ class PDAEdgeRenderer extends React.Component
         const end = edge.getEndPoint();
         const center = edge.getCenterPoint();
         // const label = edge.getEdgeLabel();
-        const labels = edge.getEdgeLinesFromLabel();
+        const labels = edge.getEdgeLabel().split(LINE_SEPARATOR);
         const edgeDir = edge.getEdgeDirection();
 
         return <g className={GRAPH_EDGE_CONTAINER_STYLE_NAME}>
@@ -31,7 +32,7 @@ class PDAEdgeRenderer extends React.Component
                 center={center}
                 label={labels.join('\n')}
                 direction={edgeDir}
-                color={stroke}/>
+                color={stroke} />
         </g>;
     }
 }
