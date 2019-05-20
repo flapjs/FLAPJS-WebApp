@@ -1,6 +1,4 @@
-import GraphNode from 'graph/elements/GraphNode.js';
-
-const NODE_RADIUS = 16;
+import GraphNode from 'graph2/element/GraphNode.js';
 
 class PDANode extends GraphNode
 {
@@ -35,10 +33,7 @@ class PDANode extends GraphNode
     }
 
     /** @override */
-    getNodeSize() { return NODE_RADIUS; }
-
-    /** @override */
-    getHashString(usePosition=true)
+    getHashString(usePosition = true)
     {
         return super.getHashString(usePosition) + ':' + (this._accept ? '1' : '0');
     }

@@ -58,22 +58,29 @@ class FSAModule
                     ref={this._graphViewComponent}
                     renderGraph={graphView =>
                     {
-                        return <FSAGraphLayer graphView={graphView} graphController={graphController} editable={!this._testMode} />;
+                        return <FSAGraphLayer
+                            graphView={graphView}
+                            graphController={graphController}
+                            editable={!this._testMode} />;
                     }}
                     renderOverlay={graphView =>
                     {
                         if (!this._testMode)
                         {
-                            return <FSAGraphOverlayLayer graphView={graphView} graphController={graphController} module={this} />;
+                            return <FSAGraphOverlayLayer
+                                graphView={graphView}
+                                graphController={graphController}
+                                module={this} />;
                         }
                         else
                         {
-                            return <FSATapeGraphOverlayLayer graphView={graphView} tester={this._tester} />;
+                            return <FSATapeGraphOverlayLayer
+                                graphView={graphView}
+                                tester={this._tester} />;
                         }
                     }}>
                 </GraphView>
             ));
-        
         this._machineController = new MachineController(this);
 
         this._errorChecker = new FSAErrorChecker(app,
@@ -164,6 +171,7 @@ class FSAModule
     getModuleName() { return MODULE_NAME; }
     /** @override */
     getLocalizedModuleName() { return this._machineController.getMachineType(); }
+    /** @override */
     getApp() { return this._app; }
 }
 

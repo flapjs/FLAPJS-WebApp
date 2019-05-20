@@ -2,9 +2,9 @@ import React from 'react';
 
 import EdgeRenderer, { DIRECTED_FORWARD } from 'graph2/renderer/EdgeRenderer.js';
 
-import { SYMBOL_SEPARATOR } from '../element/FSAEdge.js';
+import { SYMBOL_SEPARATOR } from '../element/PDAEdge.js';
 
-class FSAEdgeRenderer extends React.Component
+class PDAEdgeRenderer extends React.Component
 {
     constructor(props)
     {
@@ -54,4 +54,4 @@ class FSAEdgeRenderer extends React.Component
     }
 }
 
-export default FSAEdgeRenderer;
+export default PDAEdgeRenderer;

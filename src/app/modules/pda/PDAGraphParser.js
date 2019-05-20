@@ -1,4 +1,4 @@
-import PDAGraph from './PDAGraph.js';
+import PDAGraph from './graph/PDAGraph.js';
 
 const GRAPH_PARSER_VERSION = '1.0.0';
 
