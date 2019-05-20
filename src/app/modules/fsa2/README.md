@@ -1,4 +1,5 @@
 # Finite Automata
+This is a module for finite automata, also named FA or FSA and commonly used in CSE 105 Theory of Computation at UCSD. For more information about finite automata, refer to the [theory](#theory) below.
 
 ## Motivation
 The FSA module will allow users to define Finite Automata and analyze them. Users will be able to explore and debug different constructions as they are built over time through testing, conversion, editing, and exporting. 
@@ -11,6 +12,7 @@ The FSA module will allow users to define Finite Automata and analyze them. User
     - [x] Nondeterministic Finite Automata
 - [x] FSA Graph
     - [x] GraphController
+    - [x] LabelEditor
 - [x] Exporting / Importing FSA
     - [x] Exporting / Importing FSA for file
     - [x] Exporting / Importing FSA for .jff
@@ -23,12 +25,23 @@ The FSA module will allow users to define Finite Automata and analyze them. User
     - [x] Final States (F)
 - [x] Editable form for defining FSAs
 - [x] NFA to DFA conversion
+    - [x] DFA to NFA conversion (should be pretty easy though)
 - [x] FSA string testing
 - [ ] FSA equivalence testing
 - [ ] FSA minimization
+- [ ] FSA computation tree
+
+## Entrypoints
+The class FSAModule.js is the main entrypoint. From here, any setup and cleanup are performed here or further delegated to other classes.
+
+The class FSA.js is used to represent the accurate and valid model of a finite automata. By default, it is defined as nondeterministic. Use setDeterministic() to change it to a DFA. Although this makes a machine to be recognized as a DFA, it may not be valid since it does not convert the machine if the change occurs from NFA to DFA.
+
+The class FSAGraph.js is used to represent the graphical reprsentation of the machine. Instead of State and Transition, it uses Node and Edge respectively.
+
+## Don'ts & Dangers
+- TODO: PUT DANGERS HERE!
 
 ## Theory
-
 If you are at UCSD, please refer to CSE 105 Theory of Computation for more detailed information.
 Otherwise, the recommended text is __Introduction to the Theory of Computation__ by Michael Sipser. The project has used both 2nd and 3rd edition and will be following as closely as possible to their format.
 
@@ -53,11 +66,7 @@ Deterministic finite automata and nondeterministic finite automata actually have
 
 1. TODO: PUT DOWN THE THEORY HERE!
 
-## Don'ts & Dangers
-- TODO: PUT DANGERS HERE!
-
 ## Ideas
-
 ### FSA class
 FSA.js contains two classes: State and Transition.
 
