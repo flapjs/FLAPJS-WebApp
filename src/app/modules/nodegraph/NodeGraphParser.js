@@ -1,4 +1,4 @@
-import NodeGraph from 'graph/NodeGraph.js';
+import NodeGraph from 'graph2/NodeGraph.js';
 
 import GraphNode from 'graph2/element/GraphNode.js';
 import GraphEdge from 'graph2/element/GraphEdge.js';

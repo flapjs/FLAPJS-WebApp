@@ -1,6 +1,6 @@
 import React from 'react';
 import DefaultNotificationLayout, { STYLE_TYPE_ERROR } from 'session/manager/notification/components/DefaultNotificationLayout.js';
-import GraphNode from 'graph/elements/GraphNode.js';
+import GraphNode from 'graph2/element/GraphNode.js';
 
 const ARROW = '\u2192';
 

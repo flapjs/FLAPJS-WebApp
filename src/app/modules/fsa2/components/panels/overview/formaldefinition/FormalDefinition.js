@@ -1,9 +1,9 @@
 import React from 'react';
 import './FormalDefinition.css';
-import { EMPTY } from 'modules/fsa/machine/Symbols.js';
 
-import { EMPTY_SET } from 'modules/fsa/machine/Symbols.js';
+import { EMPTY_CHAR } from 'modules/fsa2/graph/element/FSAEdge.js';
 
+const EMPTY_SET = '\u2205';
 const EQUAL = '=';
 const DELTA = '\u03b4';
 
@@ -42,41 +42,41 @@ class FormalDefinition extends React.Component
                     {
                         states.map((state, i) => 
                         {
-                            let emptrans = machine.doTransition(state, EMPTY);
+                            let emptrans = machine.doTransition(state, EMPTY_CHAR);
                             let empclassName = '';
 
                             let transitions = alphabet.map((symbol, j) => 
                             {
                                 let className = '';
                                 let trans = machine.doTransition(state, symbol);
-                                if(isNFA && !trans.length) return;
-                                if(!isNFA && !trans.length) 
+                                if (isNFA && !trans.length) return;
+                                if (!isNFA && !trans.length) 
                                 {
                                     className = 'error';
                                     trans = '-';
                                 }
-                                if(!isNFA && trans.length > 1) 
+                                if (!isNFA && trans.length > 1) 
                                 {
                                     className = 'error';
                                     trans = '{ ' + trans + ' }';
                                 }
                                 trans = isNFA ? '{ ' + trans + ' }' : '' + trans;
-                                return <div key={''+state+symbol} className={className}>
+                                return <div key={'' + state + symbol} className={className}>
                                     {DELTA + '( ( ' + state + ', ' + symbol + ' ) )' + ' ' + EQUAL + ' ' + trans}
                                 </div>;
                             });
 
-                            if(emptrans.length > 0) 
+                            if (emptrans.length > 0) 
                             {
-                                if(!isNFA) 
+                                if (!isNFA) 
                                 {
                                     empclassName = 'error';
                                 }
                                 const addBrac = isNFA || emptrans.length > 1;
                                 emptrans = addBrac ? '{ ' + emptrans + ' }' : '' + emptrans;
                                 transitions.unshift(
-                                    <div key={'' + state + EMPTY} className={empclassName}>
-                                        {DELTA + '( ( ' + state + ', ' + EMPTY + ' ) )' + ' ' + EQUAL + ' ' + emptrans}
+                                    <div key={'' + state + EMPTY_CHAR} className={empclassName}>
+                                        {DELTA + '( ( ' + state + ', ' + EMPTY_CHAR + ' ) )' + ' ' + EQUAL + ' ' + emptrans}
                                     </div>
                                 );
                             }
