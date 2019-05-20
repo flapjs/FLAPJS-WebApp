@@ -1,15 +1,28 @@
 import React from 'react';
-import PanelContainer from 'experimental/panels/PanelContainer.js';
 
-import * as UserUtil from 'experimental/UserUtil.js';
+import { userClearGraph } from 'experimental/UserUtil.js';
+import { CTRL_KEY } from 'session/manager/hotkey/HotKeyManager.js';
 import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
-import GraphEditorView from 'graph2/components/views/GraphEditorView.js';
 
 import NodeGraph from 'graph2/NodeGraph.js';
 import GraphNode from 'graph2/element/GraphNode.js';
 import QuadraticEdge from 'graph2/element/QuadraticEdge.js';
+
 import NodeGraphParser from 'graph2/NodeGraphParser.js';
-import NodeGraphController from './graph/controller/NodeGraphController.js';
+import NodeGraphController from './graph/NodeGraphController.js';
+
+import { registerImageExporters } from './filehandlers/NodalGraphImageExporter.js';
+
+import SafeUndoNodeGraphEventHandler from 'graph2/SafeUndoNodeGraphEventHandler.js';
+
+/* COMPONENTS */
+
+import PanelContainer from 'experimental/panels/PanelContainer.js';
+
+import NodeGraphLayer from './components/layers/NodeGraphLayer.js';
+import NodeGraphOverlayLayer from './components/layers/NodeGraphOverlayLayer.js';
+
+import GraphView from 'graph2/components/GraphView.js';
 
 const MODULE_NAME = 'nodegraph';
 const MODULE_VERSION = '0.0.1';
@@ -22,12 +35,33 @@ class NodalGraphModule
         this._app = app;
 
         this._graph = new NodeGraph(GraphNode, QuadraticEdge);
-        this._graphController = new NodeGraphController(app, this._graph, new NodeGraphParser());
+        this._graphParser = new NodeGraphParser();
+        this._graphController = new NodeGraphController(app, this._graph);
+        this._graphViewComponent = React.createRef();
+
+        const graphController = this._graphController;
+
+        app.getRenderManager()
+            .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+                <GraphView
+                    ref={this._graphViewComponent}
+                    renderGraph={graphView =>
+                        <NodeGraphLayer graphView={graphView} graphController={graphController} editable={true} />}
+                    renderOverlay={graphView =>
+                        <NodeGraphOverlayLayer graphView={graphView} graphController={graphController} module={this} />}>
+                </GraphView>
+            ));
     }
 
     /** @override */
     initialize(app)
     {
+        registerImageExporters(app.getExportManager());
+
+        app.getUndoManager()
+            .setEventHandlerFactory((...args) =>
+                new SafeUndoNodeGraphEventHandler(this._graphController, this._graphParser));
+
         app.getDrawerManager()
             .addPanelClass(props => (
                 <PanelContainer id={props.id}
@@ -38,36 +72,33 @@ class NodalGraphModule
                     <p>{'<- Tap on a tab to begin!'}</p>
                 </PanelContainer>
             ));
-        
-        /*
-        app.getExportManager()
-            .addExporter(new NodalGraphExporter())
-            .addExporters(DEFAULT_IMAGE_EXPORTERS);
-        */
 
-        app.getRenderManager()
-            .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-                <GraphEditorView graphController={this._graphController} />
-            ));
+        app.getHotKeyManager()
+            .registerHotKey('Export to PNG', [CTRL_KEY, 'KeyP'], () => { app.getExportManager().tryExportFile('image-png', app.getSession()); });
+
+        this._graphController.initialize();
     }
 
     /** @override */
     update(app)
     {
+        this._graphController.update();
     }
 
     /** @override */
     destroy(app)
     {
+        this._graphController.destroy();
     }
 
     /** @override */
     clear(app, graphOnly = false)
     {
-        UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
+        userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
     }
 
     getGraphController() { return this._graphController; }
+    getGraphView() { return this._graphViewComponent.current; }
 
     /** @override */
     getModuleVersion() { return MODULE_VERSION; }

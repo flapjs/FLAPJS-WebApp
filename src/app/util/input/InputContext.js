@@ -5,16 +5,39 @@ class InputContext
         this._inputHandlers = [];
     }
 
-    addInputHandler(inputHandler)
+    addInputHandler(inputHandler, priority = -1)
     {
-        this._inputHandlers.push(inputHandler);
+        if (priority < 0)
+        {
+            this._inputHandlers.push(inputHandler);
+        }
+        else
+        {
+            if (this._inputHandlers.length <= priority)
+            {
+                this._inputHandlers.length = priority + 1;
+            }
+
+            if (this._inputHandlers[priority])
+            {
+                this._inputHandlers.splice(1, 0, inputHandler);
+            }
+            else
+            {
+                this._inputHandlers[priority] = inputHandler;
+            }
+        }
+
         return this;
     }
 
     removeInputHandler(inputHandler)
     {
         const index = this._inputHandlers.indexOf(inputHandler);
-        if (index >= 0) this._inputHandlers.splice(index, 1);
+        if (index >= 0)
+        {
+            this._inputHandlers[index] = null;
+        }
         return this;
     }
 
@@ -25,6 +48,7 @@ class InputContext
         //Let others handle this event...
         for (const inputHandler of this._inputHandlers)
         {
+            if (!inputHandler) continue;
             const handlerEventCallback = inputHandler[eventName];
             if (typeof handlerEventCallback === 'function')
             {
@@ -39,7 +63,6 @@ class InputContext
     }
 
     getInputHandlers() { return this._inputHandlers; }
-    hasInputHandlers() { return this._inputHandlers.length > 0; }
 }
 
 export default InputContext;

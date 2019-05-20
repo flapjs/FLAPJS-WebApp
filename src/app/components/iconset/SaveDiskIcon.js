@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Icon extends React.Component
+class SaveDiskIcon extends React.PureComponent
 {
     constructor(props) { super(props); }
 
@@ -18,4 +18,4 @@ class Icon extends React.Component
         );
     }
 }
-export default Icon;
+export default SaveDiskIcon;

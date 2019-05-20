@@ -1,5 +1,5 @@
 import React from 'react';
-import DefaultNotificationLayout, {STYLE_TYPE_WARNING} from 'session/manager/notification/components/DefaultNotificationLayout.js';
+import DefaultNotificationLayout, { STYLE_TYPE_WARNING } from 'session/manager/notification/components/DefaultNotificationLayout.js';
 
 // TODO: specify what the class does
 class NFAToDFAConversionNotificationLayout extends React.Component
@@ -15,7 +15,7 @@ class NFAToDFAConversionNotificationLayout extends React.Component
     {
         const notification = this.props.notification;
         // TODO: specify what e is
-        switch(e.target.value)
+        switch (e.target.value)
         {
         case 'convert':
             {
@@ -31,7 +31,7 @@ class NFAToDFAConversionNotificationLayout extends React.Component
     /** @override */
     render()
     {
-    // TODO: clarify machineController?
+        // TODO: clarify machineController?
         const machineController = this.props.machineController;
         const stateCount = machineController.countStates();
 

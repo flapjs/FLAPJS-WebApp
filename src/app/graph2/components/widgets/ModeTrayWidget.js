@@ -23,26 +23,26 @@ class ModeTrayWidget extends React.Component
         return (
             <div id={this.props.id}
                 className={Style.tray_container +
-          (hide ? ' hide ' : '') +
-          ' ' + this.props.className}
+                    (hide ? ' hide ' : '') +
+                    ' ' + this.props.className}
                 style={this.props.style}>
                 <IconButton className={Style.tray_button +
-          (mode === MODE_ACTION ? ' active ' : '')}
+                    (mode === MODE_ACTION ? ' active ' : '')}
                 onClick={() => 
                 {
                     if (onChange) onChange(MODE_ACTION);
                 }}
                 title={I18N.toString('cursor.actionmode')}>
-                    <EditPencilIcon/>
+                    <EditPencilIcon />
                 </IconButton>
                 <IconButton className={Style.tray_button +
-          (mode === MODE_MOVE ? ' active ' : '')}
+                    (mode === MODE_MOVE ? ' active ' : '')}
                 onClick={() => 
                 {
                     if (onChange) onChange(MODE_MOVE);
                 }}
                 title={I18N.toString('cursor.movemode')}>
-                    <MoveIcon/>
+                    <MoveIcon />
                 </IconButton>
             </div>
         );

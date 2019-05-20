@@ -124,6 +124,8 @@ class UndoManager
         this.history.length = 0;
         this.offsetIndex = 0;
     }
+
+    getEventHandlerFactory() { return this._handlerFactory; }
 }
 
 export default UndoManager;

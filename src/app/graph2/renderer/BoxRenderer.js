@@ -25,7 +25,7 @@ class BoxRenderer extends React.Component
         return (
             <g>
                 {visible &&
-                    <rect
+                    <rect className="graph-ui"
                         x={Math.min(toX, fromX)}
                         y={Math.min(toY, fromY)}
                         width={Math.abs(dx)}

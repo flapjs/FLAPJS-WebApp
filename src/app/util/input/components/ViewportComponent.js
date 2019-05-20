@@ -1,6 +1,7 @@
 import React from 'react';
 import Style from './ViewportComponent.css';
 
+import ViewportAdapter from '../ViewportAdapter.js';
 import InputAdapter from '../InputAdapter.js';
 import AbstractInputHandler from '../AbstractInputHandler.js';
 
@@ -17,11 +18,11 @@ class ViewportComponent extends React.Component
 
         this._ref = React.createRef();
 
-        this._inputAdapter = new InputAdapter();
-        this._inputAdapter.getViewportAdapter()
+        this._viewportAdapter = new ViewportAdapter()
             .setMinScale(MIN_SCALE)
             .setMaxScale(MAX_SCALE)
             .setOffsetDamping(SMOOTH_OFFSET_DAMPING);
+        this._inputAdapter = new InputAdapter(this._viewportAdapter);
     }
 
     addInputHandler(inputHandler)
@@ -51,13 +52,13 @@ class ViewportComponent extends React.Component
 
     getSVGTransformString()
     {
-        const viewport = this._inputAdapter.getViewportAdapter();
+        const viewport = this._viewportAdapter;
         return 'translate(' + viewport.getOffsetX() + ' ' + viewport.getOffsetY() + ')';
     }
 
     getSVGViewBoxString(baseViewSize)
     {
-        const viewport = this._inputAdapter.getViewportAdapter();
+        const viewport = this._viewportAdapter;
         const viewSize = baseViewSize * Math.max(Number.MIN_VALUE, viewport.getScale());
         const halfViewSize = viewSize / 2;
         return (-halfViewSize) + ' ' + (-halfViewSize) + ' ' + viewSize + ' ' + viewSize;
@@ -71,6 +72,11 @@ class ViewportComponent extends React.Component
     getInputAdapter()
     {
         return this._inputAdapter;
+    }
+
+    getViewportAdapter()
+    {
+        return this._inputAdapter.getViewportAdapter();
     }
 
     /** @override */
