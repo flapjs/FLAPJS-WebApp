@@ -48,7 +48,9 @@ import HotKeyManager, { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKe
 import HotKeyView from 'session/manager/hotkey/HotKeyView.js';
 import UndoManager from 'session/manager/undo/UndoManager.js';
 import RenderManager, {
-    RENDER_LAYER_WORKSPACE
+    RENDER_LAYER_WORKSPACE_PRE,
+    RENDER_LAYER_WORKSPACE,
+    RENDER_LAYER_WORKSPACE_POST,
 } from 'session/manager/RenderManager.js';
 import TooltipManager from 'session/manager/TooltipManager.js';
 import NotificationManager, { ERROR_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
@@ -112,7 +114,7 @@ class App extends React.Component
         super(props);
 
         App.INSTANCE = this;
-        
+
         this._toolbarComponent = React.createRef();
         this._drawer = null;
         this._viewport = null;
@@ -432,8 +434,14 @@ class App extends React.Component
                                 {tooltipManager.getTooltips().map((e, i) => <label key={e + ':' + i}>{e}</label>)}
                             </TooltipView>
 
+                            {/* RENDER_LAYER_WORKSPACE_PRE */}
+                            {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_PRE)}
+
                             {/* RENDER_LAYER_WORKSPACE */}
                             {this.renderRenderLayer(RENDER_LAYER_WORKSPACE)}
+
+                            {/* RENDER_LAYER_WORKSPACE_POST */}
+                            {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_POST)}
 
                             <FullscreenWidget className={Style.fullscreen_widget} app={this} />
 

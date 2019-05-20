@@ -45,7 +45,7 @@ class GraphView extends React.Component
 
     moveViewToPosition(x, y)
     {
-        //Center view at position; inverted due to graph-to-screen space
+        // Center view at position; inverted due to graph-to-screen space
         this.getViewportAdapter().setOffset(-x, -y);
     }
 

@@ -48,6 +48,16 @@ class FormattedInput extends React.Component
             this.setState((prev, props) =>
             {
                 return {value: prev.prevValue};
+            }, () =>
+            {
+                if (this.props.onCancel)
+                {
+                    const event = {
+                        target: this._debounceComponent.getInputElement(),
+                        value: this.state.value
+                    };
+                    this.props.onCancel(event);
+                }
             });
         }
         else
@@ -55,6 +65,16 @@ class FormattedInput extends React.Component
             this.setState((prev, props) =>
             {
                 return {prevValue: prev.value};
+            }, () =>
+            {
+                if (this.props.onSubmit)
+                {
+                    const event = {
+                        target: this._debounceComponent.getInputElement(),
+                        value: this.state.value
+                    };
+                    this.props.onSubmit(event);
+                }
             });
         }
     }
@@ -193,6 +213,8 @@ class FormattedInput extends React.Component
     getInputElement() { return this._debounceComponent.current.getInputElement(); }
     getValue() { return this.state.value; }
 
+    hasFocus() { return this._debounceComponent.current.hasFocus(); }
+
     /** @override */
     render()
     {
@@ -209,7 +231,7 @@ class FormattedInput extends React.Component
                 onKeyDown={this.onKeyDown}
 
                 onFocus={this.onFocus}
-                onBlur={this.onBlur}/>
+                onBlur={this.onBlur} />
         );
     }
 }

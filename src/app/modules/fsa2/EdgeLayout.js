@@ -1,4 +1,4 @@
-import { SYMBOL_SEPARATOR } from './element/FSAEdge.js';
+import { SYMBOL_SEPARATOR } from './graph/element/FSAEdge.js';
 
 const PARALLEL_EDGE_HEIGHT = 10;
 
