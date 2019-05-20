@@ -1,4 +1,4 @@
-import AbstractGraphLabeler from 'graph/AbstractGraphLabeler.js';
+import AbstractGraphLabeler from 'graph2/AbstractGraphLabeler.js';
 
 import
 {

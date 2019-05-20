@@ -1,4 +1,4 @@
-import AbstractGraphLabeler from 'graph/AbstractGraphLabeler.js';
+import AbstractGraphLabeler from 'graph2/AbstractGraphLabeler.js';
 
 import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/fsa2/graph/element/FSAEdge.js';
 

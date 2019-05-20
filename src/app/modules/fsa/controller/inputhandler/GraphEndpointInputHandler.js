@@ -1,5 +1,5 @@
 import GraphElementInputHandler from './GraphElementInputHandler.js';
-import GraphNode from 'graph/elements/GraphNode.js';
+import GraphNode from 'deprecated/graph/elements/GraphNode.js';
 
 class GraphEndpointInputHandler extends GraphElementInputHandler
 {

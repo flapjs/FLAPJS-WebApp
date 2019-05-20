@@ -1,4 +1,4 @@
-import NodeGraph from 'graph/NodeGraph.js';
+import NodeGraph from 'deprecated/graph/NodeGraph.js';
 import FSANode from './FSANode.js';
 import FSAEdge, { SYMBOL_SEPARATOR } from './FSAEdge.js';
 
