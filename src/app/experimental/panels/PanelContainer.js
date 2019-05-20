@@ -7,7 +7,7 @@ class PanelContainer extends React.Component
     {
         super(props);
     }
-  
+
     /** @override */
     render()
     {
@@ -16,7 +16,7 @@ class PanelContainer extends React.Component
         return (
             <div id={this.props.id}
                 className={Style.panel_container +
-          ' ' + this.props.className}
+                    ' ' + this.props.className}
                 style={this.props.style}>
                 <div className={Style.panel_title}>
                     <h1>{title}</h1>

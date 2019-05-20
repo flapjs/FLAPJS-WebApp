@@ -27,7 +27,7 @@ class ToolbarTitle extends React.Component
 
     onSubmit(newValue, prevValue)
     {
-    //If the value has changed or the value remained empty...
+        //If the value has changed or the value remained empty...
         if (newValue !== prevValue)
         {
             if (this.props.onChange) this.props.onChange(newValue);
@@ -38,22 +38,27 @@ class ToolbarTitle extends React.Component
     render()
     {
         const title = this.props.title;
+        const SubtitleClass = this.props.subtitle;
         const offline = !(navigator && navigator.onLine);
         const onClick = this.props.onClick;
 
         return (
             <div id={this.props.id}
                 className={Style.title_container +
-          ' ' + this.props.className}
+                    ' ' + this.props.className}
                 style={this.props.style}>
                 <span className={Style.title_input_container}>
-                    <FormattedInput ref={ref=>this.inputElement=ref}
+                    <FormattedInput ref={ref => this.inputElement = ref}
                         defaultValue={this.props.defaultValue}
-                        onSubmit={this.onSubmit}/>
-                    {offline && <OfflineIcon className={Style.offline_status}/>}
+                        onSubmit={this.onSubmit} />
+                    {offline && <OfflineIcon className={Style.offline_status} />}
                 </span>
-                <div className={Style.title_subtitle} onClick={onClick}>
+                <div className={Style.title_label} onClick={onClick}>
                     {title}
+                    {SubtitleClass &&
+                        <span className={Style.title_subtitle} onClick={e => e.stopPropagation()}>
+                            <SubtitleClass />
+                        </span>}
                 </div>
             </div>
         );
