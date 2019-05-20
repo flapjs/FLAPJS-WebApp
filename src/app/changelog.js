@@ -1,3 +1,21 @@
+//Version 0.4.2
+const changeLog = [
+    '### Added',
+    '- Module version is now visible in Options.',
+    '- Change machine type for FA module in the title bar.',
+    '- A new and improved graph picking system.',
+    '- Allow clicking on labels to edit them.',
+    '- Custom node color styles are now applied to exported images.',
+    '',
+    '### Changed',
+    '- Menu entries are now ordered more logically.',
+    '- Fullscreen mode is available for ALL modules.',
+    '',
+    '### Removed',
+    '- Unused modules are no longer visible in module selection.'
+];
+
+/*
 //Version 0.4.1
 const changeLog = [
     'Experimental mode is now LIVE! :D',
@@ -11,7 +29,6 @@ const changeLog = [
     'Old app mode will be replaced by experimental mode permanently.',
 ];
 
-/*
 //Version 0.4.0
 const changeLog = [
     'Changed default color scheme. Hope you like it!',
