@@ -1,5 +1,5 @@
 # Finite Automata
-This is a module for finite automata, also named FA or FSA and commonly used in CSE 105 Theory of Computation at UCSD. For more information about finite automata, refer to the [theory](#theories) explained below.
+This is a Flap.js module for finite automata, also named FA or FSA, and is initially made for CSE 105 Theory of Computation at UC San Diego. For more information about finite automata, refer to the [theory](#theories) explained below.
 
 ## Motivation
 The FSA module will allow users to define finite automata and analyze them. Users will be able to explore and debug different constructions as they are built over time through testing, conversion, editing, and exporting. 
