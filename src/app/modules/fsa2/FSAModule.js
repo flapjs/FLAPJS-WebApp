@@ -17,9 +17,9 @@ import FSAImporter from './filehandlers/FSAImporter.js';
 import FSAJFFImporter from './filehandlers/FSAJFFImporter.js';
 import FSAExporter from './filehandlers/FSAExporter.js';
 import FSAJFFExporter from './filehandlers/FSAJFFExporter.js';
-import { registerImageExporters } from 'modules/nodalgraph/filehandlers/NodalGraphImageExporter.js';
+import { registerImageExporters } from 'modules/nodegraph/filehandlers/NodalGraphImageExporter.js';
 
-import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
+import SafeGraphEventHandler from 'modules/nodegraph/SafeGraphEventHandler.js';
 
 import FSABroadcastHandler from './FSABroadcastHandler.js';
 

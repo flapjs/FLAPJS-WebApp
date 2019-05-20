@@ -11,7 +11,7 @@ import QuadraticEdge from 'graph2/element/QuadraticEdge.js';
 import NodeGraphParser from 'graph2/NodeGraphParser.js';
 import NodeGraphController from './graph/NodeGraphController.js';
 
-import { registerImageExporters } from 'modules/nodalgraph/filehandlers/NodalGraphImageExporter.js';
+import { registerImageExporters } from './filehandlers/NodalGraphImageExporter.js';
 
 import SafeUndoNodeGraphEventHandler from 'graph2/SafeUndoNodeGraphEventHandler.js';
 

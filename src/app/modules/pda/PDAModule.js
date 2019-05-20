@@ -15,9 +15,9 @@ import { registerNotifications } from './components/notifications/PDANotificatio
 import * as PDAGraphParser from './PDAGraphParser.js';
 import PDAImporter from './filehandlers/PDAImporter.js';
 import PDAExporter from './filehandlers/PDAExporter.js';
-import { registerImageExporters } from 'modules/nodalgraph/filehandlers/NodalGraphImageExporter.js';
+import { registerImageExporters } from 'modules/nodegraph/filehandlers/NodalGraphImageExporter.js';
 
-import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
+import SafeGraphEventHandler from 'modules/nodegraph/SafeGraphEventHandler.js';
 
 /* COMPONENTS */
 
