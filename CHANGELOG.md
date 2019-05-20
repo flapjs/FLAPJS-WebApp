@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Module version is now visible in Options.
 - Change machine type for FA module in the title bar.
+- A new and improved graph picking system.
+- Allow clicking on labels to edit them.
+- Custom node color styles are now applied to exported images.
 
 ### Changed
 - Menu entries are now ordered more logically.
