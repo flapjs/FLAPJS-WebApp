@@ -420,21 +420,21 @@ class App extends React.Component
                     <ToolbarButton title={I18N.toString('component.exporting.title')}
                         icon={DownloadIcon}
                         containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_EXPORT)}
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_EXPORT)}
                         disabled={exportManager.isEmpty()} />
                     <ToolbarDivider />
                     <ToolbarButton title={I18N.toString('action.toolbar.changemodule')}
                         icon={EditPencilIcon}
                         containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_MODULE)} />
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_MODULE)} />
                     <ToolbarButton title={I18N.toString('action.toolbar.lang')}
                         icon={WorldIcon}
                         containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_LANGUAGE)} />
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_LANGUAGE)} />
                     <ToolbarButton title={I18N.toString('component.options.title')}
                         icon={SettingsIcon}
                         containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_OPTION)} />
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_OPTION)} />
                     <ToolbarButton title={I18N.toString('action.toolbar.help')}
                         icon={HelpIcon}
                         onClick={() => window.open(HELP_URL, '_blank')} />
