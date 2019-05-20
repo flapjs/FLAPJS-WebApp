@@ -1,3 +1,8 @@
+
+/**
+ * A class that represents a parser that can encode (compose)
+ * and decode (parse) to and from a target object and data.
+ */
 class Parser
 {
     constructor() {}

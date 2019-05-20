@@ -158,7 +158,11 @@ module.exports = (env, argv) =>
         filename: 'sourcemap/[name].bundle.js.map',
         exclude: [/vendors\.bundle.*\.js$/, '../serviceWorker.js']
       }));
-    config.plugins.push(new CleanPlugin(['./' + OUTPUT_DIR, './serviceWorker.js', './404.html', './index.html']));
+    config.plugins.push(new CleanPlugin({
+      cleanOnceBeforeBuildPatterns: ['../serviceWorker.js', '../404.html', '../index.html'],
+      dangerouslyAllowCleanPatternsOutsideProject: true,
+      dry: false
+    }));
 
     //Optimizations
     config.optimization = {
