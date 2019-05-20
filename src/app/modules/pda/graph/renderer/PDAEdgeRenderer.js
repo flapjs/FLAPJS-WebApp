@@ -2,7 +2,7 @@ import React from 'react';
 
 import EdgeRenderer, { DIRECTED_FORWARD } from 'graph2/renderer/EdgeRenderer.js';
 
-import { SYMBOL_SEPARATOR } from '../element/PDAEdge.js';
+import { LINE_SEPARATOR } from '../element/PDAEdge.js';
 
 class PDAEdgeRenderer extends React.Component
 {
@@ -33,7 +33,7 @@ class PDAEdgeRenderer extends React.Component
                     from={start}
                     to={end}
                     center={center}
-                    label={label.split(SYMBOL_SEPARATOR).join('\n')}
+                    label={label.split(LINE_SEPARATOR).join('\n')}
                     direction={edgeDir}
                     color={stroke}
                     onMouseOver={onMouseOver ? e =>
