@@ -1,8 +1,8 @@
 # Finite Automata
-This is a module for finite automata, also named FA or FSA and commonly used in CSE 105 Theory of Computation at UCSD. For more information about finite automata, refer to the [theory](#theory) below.
+This is a module for finite automata, also named FA or FSA and commonly used in CSE 105 Theory of Computation at UCSD. For more information about finite automata, refer to the [theory](#theories) explained below.
 
 ## Motivation
-The FSA module will allow users to define Finite Automata and analyze them. Users will be able to explore and debug different constructions as they are built over time through testing, conversion, editing, and exporting. 
+The FSA module will allow users to define finite automata and analyze them. Users will be able to explore and debug different constructions as they are built over time through testing, conversion, editing, and exporting. 
 
 ## Goals
 - [x] FSA Module
@@ -41,7 +41,7 @@ The class FSAGraph.js is used to represent the graphical reprsentation of the ma
 ## Don'ts & Dangers
 - TODO: PUT DANGERS HERE!
 
-## Theory
+## Theories
 If you are at UCSD, please refer to CSE 105 Theory of Computation for more detailed information.
 Otherwise, the recommended text is __Introduction to the Theory of Computation__ by Michael Sipser. The project has used both 2nd and 3rd edition and will be following as closely as possible to their format.
 
@@ -84,5 +84,5 @@ The conversion algorithm is the same as described [above](#converting-between-df
 
 ## Changelog
 
-5/20/19 - Andrew
+**5/20/19 - Andrew:**
 This is the first entry for FSA module. However, much has been done before this point as the module is currently on version 3.0.0. With its first version completed about a year ago, it may be impossible to recover all the changes that this module has undergone. Hopefully, when new updates are made for this module, its contents will slowly become more documented and refined. I will try my best to flesh out anything confusing from the past, but I am just a human like you. To the features I've missed, I wish you the best of luck.
