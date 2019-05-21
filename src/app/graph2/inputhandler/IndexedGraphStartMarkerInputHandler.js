@@ -27,7 +27,6 @@ class GraphStartMarkerInputHandler extends AbstractInputHandler
     {
         const inputController = this._inputController;
         const currentTargetType = inputController.getCurrentTargetType();
-        if (!inputController.isMoveMode(pointer.getInputAdapter())) return false;
 
         if (currentTargetType === EVENT_SOURCE_START_MARKER)
         {
