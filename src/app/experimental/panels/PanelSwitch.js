@@ -21,13 +21,13 @@ class PanelSwitch extends React.Component
         return (
             <div id={id}
                 className={Style.switch_container +
-          (disabled ? ' disabled ' : '') +
-          (checked ? ' active ' : '') +
-          ' ' + this.props.className}
+                    (disabled ? ' disabled ' : '') +
+                    (checked ? ' active ' : '') +
+                    ' ' + this.props.className}
                 style={this.props.style}>
                 <label className={Style.panel_switch}
                     style={this.props.style}>
-                    <input type="checkbox" id={id + '-switch'} checked={checked} onChange={onChange} disabled={disabled}/>
+                    <input type="checkbox" id={id + '-switch'} checked={checked} onChange={onChange} disabled={disabled} />
                     <div className={Style.switch_slider}></div>
                 </label>
                 <label className={Style.switch_label}
