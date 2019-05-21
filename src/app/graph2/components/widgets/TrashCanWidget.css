@@ -4,13 +4,13 @@
 
   cursor: pointer;
 
-  fill: var(--color-viewport-text);
+  color: var(--color-viewport-text);
 
   opacity: 1;
   transition: opacity 0.3s ease;
 }
 :local(.trash_container).active {
-  fill: var(--color-viewport-error);
+  color: var(--color-viewport-error);
 }
 :local(.trash_container).hide {
   pointer-events: none;

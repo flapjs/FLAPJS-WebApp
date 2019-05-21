@@ -1,6 +1,7 @@
 import React from 'react';
 import Style from './TrashCanWidget.css';
 
+import IconButton from 'experimental/components/IconButton.js';
 import TrashCanDetailedIcon from 'components/iconset/TrashCanDetailedIcon.js';
 
 const DOUBLE_TAP_TIME = 250;
@@ -122,17 +123,19 @@ class TrashCanWidget extends React.Component
         const hide = !active && !visible;
 
         return (
-            <div ref={ref => this.ref = ref} id={this.props.id}
+            <IconButton ref={ref => this.ref = ref}
+                id={this.props.id}
                 className={Style.trash_container +
-          (active ? ' active ' : '') +
-          (hide ? ' hide ' : '') +
-          ' ' + this.props.className}
+                    (active ? ' active ' : '') +
+                    (hide ? ' hide ' : '') +
+                    ' ' + this.props.className}
                 style={this.props.style}
+                title={'Delete'}
                 onMouseEnter={this.onMouseEnter}
                 onMouseLeave={this.onMouseLeave}
                 onClick={this.onClick}>
                 <TrashCanDetailedIcon />
-            </div>
+            </IconButton>
         );
     }
 }
