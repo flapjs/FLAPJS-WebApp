@@ -1,0 +1,132 @@
+:local(.tape_container) {
+  --tape-text-size: 2em;
+
+  --color-tape-text: black;
+  --color-tape-back: rgba(200, 200, 200, 0.9);
+  --color-tape-symbol-back: white;
+  --color-tape-symbol-back-active: lightgray;
+  --color-tape-symbol-back-disabled: lightgray;
+  --color-tape-highlight: black;
+  --color-tape-outline: darkgray;
+  --color-tape-shadow: gold;
+
+  display: flex;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+}
+
+:local(.tape_control_tray) {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.tape-row {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  font-size: var(--tape-text-size);
+  padding: 0.2em 0.4em;
+  min-height: 2em;/* entry size + pointer size */
+  width: 100%;
+
+  border: 1px solid var(--color-tape-text);
+  border-radius: 0.5em;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  /* remove scrollbar */
+  -ms-overflow-style: none;
+}
+/* remove scrollbar */
+.tape-row::-webkit-scrollbar {
+  display: none;
+}
+/* Just some spacing, since the last border edge is cut off */
+.tape-row::after {
+  content: "";
+  min-width: 1px;
+  min-height: 1px;
+}
+.tape-pointer {
+  position: absolute;
+  bottom: 1.5em;
+  left: 0em;/* Will be handled by JavaScript*/
+  margin-left: 0.4em;/* half of entry width + row padding */
+  width: 1em;
+  height: 1em;
+  z-index: 2;
+
+  transform: scaleX(0.5);
+
+  transition: left 0.3s ease;
+}
+.tape-row-entry.infinite + .tape-pointer {
+  margin-left: 2.4em;/* infinite width + half of entry width + row padding */
+}
+.tape-row-entry {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  min-width: 1em;
+  border-bottom: 4px solid var(--color-tape-shadow);
+}
+/* INFINITE ENTRY */
+.tape-row-entry.infinite {
+  min-width: 2em;
+  border-bottom: none;
+}
+.tape-row-entry.infinite .tape-row-symbol {
+  outline: none;
+  border: 1px solid var(--color-tape-outline);
+  margin-bottom: -0.1em;
+}
+.tape-row-entry:first-of-type.infinite .tape-row-symbol {
+  border-left: none;
+  background: linear-gradient(to right, transparent, var(--color-tape-symbol-back) 0.5em);
+}
+.tape-row-entry:last-of-type.infinite .tape-row-symbol {
+  border-right: none;
+  background: linear-gradient(to left, transparent, var(--color-tape-symbol-back) 0.5em);
+}
+/* NORMAL ENTRY */
+.tape-row-symbol {
+  text-align: center;
+
+  background: var(--color-tape-symbol-back);
+  outline: 1px solid var(--color-tape-outline);
+}
+.tape-row-symbol:hover {
+  background: var(--color-tape-symbol-back-active);
+  cursor: pointer;
+}
+.tape-row-states {
+  flex: 1;
+  display: flex;
+  flex-direction: column-reverse;
+  padding-bottom: 0.2em;
+  transform: translateX(-0.25em);
+
+  pointer-events: none;
+  user-select: none;
+  -moz-user-select: none;
+}
+.tape-row-states > label {
+  font-size: 0.5em;
+}
+/* When tape symbol is active... */
+.tape-row-entry.active .tape-row-symbol {
+  z-index: 1;/* must be higher than the rest */
+  outline-width: 0.2em;
+  outline-color: var(--color-tape-highlight);
+  font-weight: bold;
+}
+.tape-row-entry.active-read .tape-row-states {
+  font-weight: bold;
+}
+/* When tape symbol is disabled... */
+.tape-row-entry.disabled .tape-row-symbol {
+  background: var(--color-tape-symbol-back-disabled);
+}

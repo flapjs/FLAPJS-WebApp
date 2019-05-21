@@ -5,7 +5,7 @@ import ViewportNavigationLayer from 'graph2/components/layers/ViewportNavigation
 
 import LabelEditorWidget from 'graph2/components/widgets/LabelEditorWidget.js';
 
-import PDALabelEditorRenderer from '../../graph/components/widgets/PDALabelEditorRenderer.js';
+import PDALabelEditorRenderer from '../widgets/PDALabelEditorRenderer.js';
 
 class PDAGraphOverlayLayer extends React.Component
 {

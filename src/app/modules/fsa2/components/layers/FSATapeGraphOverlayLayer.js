@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TapeWidget from 'experimental/widgets/TapeWidget.js';
+import TapeWidget from '../widgets/TapeWidget.js';
 
 import ViewportNavigationLayer from 'graph2/components/layers/ViewportNavigationLayer.js';
 

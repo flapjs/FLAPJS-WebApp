@@ -4,7 +4,8 @@ import Style from './PDALabelEditorRenderer.css';
 import GraphEdge from 'graph2/element/GraphEdge.js';
 import GraphNode from 'graph2/element/GraphNode.js';
 import PatternInputButton from 'graph2/components/widgets/pattern/PatternInputButton.js';
-import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/pda/graph/element/PDAEdge.js';
+
+import { SYMBOL_SEPARATOR, EMPTY_CHAR } from '../../graph/element/PDAEdge.js';
 
 const RECOMMENDED_SYMBOLS = ['0', '1'];
 const DEFAULT_SYMBOLS = [EMPTY_CHAR];
