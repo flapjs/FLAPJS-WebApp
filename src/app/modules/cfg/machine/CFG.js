@@ -216,6 +216,10 @@ class CFG
     {
         this._variables.add(x);
     }
+    removeVariable(x)
+    {
+        this._variables.delete(x);
+    }
     hasVariable(x)
     {
         return this._variables.has(x);
@@ -233,6 +237,10 @@ class CFG
 	{
 		this._terminals.add(x);
 	}
+    removeTerminal(x)
+    {
+        this._variables.delete(x);
+    }
 	hasTerminal(x)
 	{
 		return this._terminals.has(x);
