@@ -33,7 +33,7 @@ class FSACompTreeView extends React.Component {
           </button>
         {
           this.state.activeTree && (
-            <FSACompTree closeTreeWindow={this.closeTreeWindow} testStr="ab"
+            <FSACompTree closeTreeWindow={this.closeTreeWindow} testStr="ababa"
               machineController={this.props.machineController}
               graphController={this.props.graphController} />
           )
