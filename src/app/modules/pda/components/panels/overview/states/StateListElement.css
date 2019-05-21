@@ -33,7 +33,7 @@
   background: var(--color-panel-error);
 }
 :local(.element_container).custom input {
-  color: var(--color-panel-text-active);
+  color: var(--color-panel-text);
 }
 :local(.element_container).error input {
   color: var(--color-panel-error);
