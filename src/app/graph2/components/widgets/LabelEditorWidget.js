@@ -49,10 +49,7 @@ class LabelEditorWidget extends React.Component
 
         this.setState({ open: true }, () =>
         {
-            if (defaultValue !== null)
-            {
-                this.inputComponent.resetValue(defaultValue);
-            }
+            this.inputComponent.resetValue(defaultValue || '');
             this.inputComponent.focus();
         });
     }
