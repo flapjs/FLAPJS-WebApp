@@ -3,15 +3,16 @@ import {stringHash} from 'util/MathHelper.js';
 import CFG, {Rule} from './machine/CFG.js';
 import {convertToPDA} from './machine/CFGUtil.js';
 
-//import RuleChangeHandler from './RuleChangeHandler.js';
+import GrammarChangeHandler from './GrammarChangeHandler.js';
 
+const EXPRESSION_REFRESH_RATE = 30;
 
 class MachineController
 {
     constructor()
     {
         this._machine = new CFG();
-        //this._ruleChangeHandler
+        this._grammarChangeHandler = new GrammarChangeHandler(EXPRESSION_REFRESH_RATE);
 
         this._equalPDA = null;
         this._equalCFGHash = this._machine.getHashCode();
@@ -19,7 +20,7 @@ class MachineController
 
     update()
     {
-
+        this._grammarChangeHandler.update(this._machine);
     }
 
     clear()
@@ -158,6 +159,11 @@ class MachineController
     getMachine()
     {
         return this._machine;
+    }
+
+    getGrammarChangeHandler()
+    {
+        return this._grammarChangeHandler;
     }
 
 }
