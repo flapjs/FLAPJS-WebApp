@@ -1,6 +1,6 @@
 /********* APP BAR *********/
 :local(.app_bar) {
-  --toolbar-height: 70px;
+  --toolbar-height: 80px;
 
   --color-toolbar-highlight: var(--color-accent);
   --color-toolbar-back: var(--color-primary);
@@ -76,6 +76,11 @@
 
   animation-name: toolbar-view-slidein;
   animation-duration: 0.3s;
+
+  /* Centered buttons */
+  justify-content: center;
+  align-items: center;
+  margin-top: 3em;
 }
 :local(.menu_button_container) > * {
   flex: 1;
@@ -85,9 +90,10 @@
 :local(.menu_button_container) button {
   background: var(--color-toolbar-menu);
   border-bottom: 1px solid var(--color-toolbar-menu-detail);
-
   /* Override default icon button size */
-  width: 100%;
+  width: 20em; /* 100% */
+
+  text-align: right;
 }
 :local(.menu_button_container) button:last-of-type {
   border-bottom: none;
@@ -99,12 +105,16 @@
   background: var(--color-toolbar-menu-disabled);
 }
 :local(.menu_button_container) button svg {
-  width: 16vmin;
-  height: 16vmin;
+  width: 10vmin; /* 16vmin*/
+  height: 10vmin; /* 16vmin*/
+  margin: 0.5em;
+
+  min-width: 2em;
+  min-height: 2em;
 }
 :local(.menu_button_container) button label {
   flex: 1;
-  font-size: 9vmin;
+  font-size: 2em; /* 9vmin */
   align-self: center;
 
   /* Override default icon button styles */
@@ -149,7 +159,7 @@
 
 /********* TOOLBAR CONTENTS *********/
 :local(.toolbar_title) {
-  padding: 0px 10px;
+  padding: 0.2em 1em;
   z-index: 10001;
   margin-right: auto;
 
