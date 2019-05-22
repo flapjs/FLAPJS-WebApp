@@ -1,7 +1,16 @@
 const RGB_WHITE = [255, 255, 255];
 const RGB_BLACK = [0, 0, 0];
 
-export function blendRGB(percent, rgb1, rgb2=null, dst=[])
+export function grayscaleRGB(rgb, dst = [])
+{
+    const grayscaleAmount = rgb[0] * 0.3 + rgb[1] * 0.59 + rgb[2] * 0.11;
+    dst[0] = grayscaleAmount;
+    dst[1] = grayscaleAmount;
+    dst[2] = grayscaleAmount;
+    return dst;
+}
+
+export function blendRGB(percent, rgb1, rgb2 = null, dst = [])
 {
     const blendAmount = Math.abs(percent);
     if (!rgb2) rgb2 = percent < 0 ? RGB_BLACK : RGB_WHITE;
@@ -12,11 +21,11 @@ export function blendRGB(percent, rgb1, rgb2=null, dst=[])
     return dst;
 }
 
-export function invertRGB(rgb, blackwhite=false, dst=[])
+export function invertRGB(rgb, blackwhite = false, dst = [])
 {
     if (blackwhite)
     {
-    // http://stackoverflow.com/a/3943023/112731
+        // http://stackoverflow.com/a/3943023/112731
         if ((rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[2] * 0.114) > 186)
         {
             dst[0] = 0;
@@ -40,7 +49,7 @@ export function invertRGB(rgb, blackwhite=false, dst=[])
 }
 
 /* RGB and HSL conversions: https://gist.github.com/mjackson/5311256 */
-export function HEXtoRGB(hex, dst=[])
+export function HEXtoRGB(hex, dst = [])
 {
     if (hex.indexOf('#') === 0) hex = hex.slice(1);
     if (hex.length === 3) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
@@ -58,7 +67,7 @@ export function RGBtoHEX(rgb)
 {
     return '#' + (rgb[2] | (rgb[1] << 8) | (rgb[0] << 16) | (1 << 24)).toString(16).slice(1);
 }
-export function RGBtoHSV(rgb, dst=[])
+export function RGBtoHSV(rgb, dst = [])
 {
     let r = rgb[0] / 255;
     let g = rgb[1] / 255;
@@ -76,7 +85,7 @@ export function RGBtoHSV(rgb, dst=[])
     }
     else
     {
-        switch(max)
+        switch (max)
         {
         case r: h = (g - b) / d + (g < b ? 6 : 0); break;
         case g: h = (b - r) / d + 2; break;
@@ -91,7 +100,7 @@ export function RGBtoHSV(rgb, dst=[])
     dst[2] = v;
     return dst;
 }
-export function HSVtoRGB(h, s, v, dst=[])
+export function HSVtoRGB(h, s, v, dst = [])
 {
     let r = 0; let g = 0; let b = 0;
     const i = Math.floor(h * 6);
@@ -99,7 +108,7 @@ export function HSVtoRGB(h, s, v, dst=[])
     const p = v * (1 - s);
     const q = v * (1 - f * s);
     const t = v * (1 - (1 - f) * s);
-    switch(i % 6)
+    switch (i % 6)
     {
     case 0: r = v, g = t, b = p; break;
     case 1: r = q, g = v, b = p; break;
