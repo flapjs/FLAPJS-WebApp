@@ -63,11 +63,17 @@ Most importantly, above all else, it explains the reasons it was built, potentia
 ```markdown
 # Motivation
     Here we describe why this system exists. For who is it intended for.
+# Goals
+    What we are planning to do with it. Usually this is a checklist.
+# Entrypoints
+    Where we can start.
 # Dangers / Pitfalls
     Here we list the potential holes and mistakes that developers may run into. Any unfixed bugs or hack-y solutions are noted here.
-# Interactions
+# Theories
+    Any theory behind the graph that may need some explanation. If it is a complex topic, it should be a simple introduction that can let the user at LEAST know what is going on and an idea on how to use the module effectively.
+# Interactions / Ideas
     A high level description of how you as a user interact with it and how it as a system works.
-# Work Log
+# Changelog
     A summary of work done in the future. This should be dated.
 ```
 

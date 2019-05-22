@@ -18,6 +18,14 @@ class ViewportEditLayer extends React.Component
     onTrashChange(flag)
     {
         this.props.inputController.setTrashMode(flag);
+        if (flag)
+        {
+            this.props.session.getApp().getDrawerComponent().setViewportColor('var(--color-viewport-error)');
+        }
+        else
+        {
+            this.props.session.getApp().getDrawerComponent().setViewportColor(null);
+        }
     }
 
     onTrashClear()
