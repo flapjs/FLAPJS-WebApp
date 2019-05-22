@@ -12,7 +12,7 @@ class TrashCanWidget extends React.Component
     {
         super(props);
 
-        this.ref = null;
+        this._ref = React.createRef();
 
         this.state = {
             active: false,
@@ -101,7 +101,7 @@ class TrashCanWidget extends React.Component
 
     onAnyMouseDownNotConsumed(e)
     {
-        if (this.state.forceActive && this.ref !== e.target)
+        if (this.state.forceActive && this._ref.current !== e.target)
         {
             e.stopPropagation();
             e.preventDefault();
@@ -115,6 +115,7 @@ class TrashCanWidget extends React.Component
             });
         }
     }
+
     /** @override */
     render()
     {
@@ -123,7 +124,7 @@ class TrashCanWidget extends React.Component
         const hide = !active && !visible;
 
         return (
-            <IconButton ref={ref => this.ref = ref}
+            <IconButton ref={this._ref}
                 id={this.props.id}
                 className={Style.trash_container +
                     (active ? ' active ' : '') +
