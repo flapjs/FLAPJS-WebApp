@@ -1,6 +1,7 @@
 import React from 'react';
 import Style from './TrashCanWidget.css';
 
+import IconButton from 'experimental/components/IconButton.js';
 import TrashCanDetailedIcon from 'components/iconset/TrashCanDetailedIcon.js';
 
 const DOUBLE_TAP_TIME = 250;
@@ -11,7 +12,8 @@ class TrashCanWidget extends React.Component
     {
         super(props);
 
-        this.ref = null;
+        this._ref = React.createRef();
+        this._buttonElement = React.createRef();
 
         this.state = {
             active: false,
@@ -100,13 +102,13 @@ class TrashCanWidget extends React.Component
 
     onAnyMouseDownNotConsumed(e)
     {
-        if (this.state.forceActive && this.ref !== e.target)
+        if (this.state.forceActive && this._buttonElement.current !== e.target)
         {
             e.stopPropagation();
             e.preventDefault();
 
             document.documentElement.removeEventListener('mousedown', this.onAnyMouseDownNotConsumed);
-
+            
             this.setState({ active: false, forceActive: false }, () =>
             {
                 const onChange = this.props.onChange;
@@ -114,6 +116,7 @@ class TrashCanWidget extends React.Component
             });
         }
     }
+
     /** @override */
     render()
     {
@@ -122,17 +125,20 @@ class TrashCanWidget extends React.Component
         const hide = !active && !visible;
 
         return (
-            <div ref={ref => this.ref = ref} id={this.props.id}
+            <IconButton ref={this._ref}
+                refButton={this._buttonElement}
+                id={this.props.id}
                 className={Style.trash_container +
-          (active ? ' active ' : '') +
-          (hide ? ' hide ' : '') +
-          ' ' + this.props.className}
+                    (active ? ' active ' : '') +
+                    (hide ? ' hide ' : '') +
+                    ' ' + this.props.className}
                 style={this.props.style}
+                title={'Delete'}
                 onMouseEnter={this.onMouseEnter}
                 onMouseLeave={this.onMouseLeave}
                 onClick={this.onClick}>
                 <TrashCanDetailedIcon />
-            </div>
+            </IconButton>
         );
     }
 }

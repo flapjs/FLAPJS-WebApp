@@ -116,7 +116,7 @@ class App extends React.Component
         App.INSTANCE = this;
 
         this._toolbarComponent = React.createRef();
-        this._drawer = null;
+        this._drawerComponent = React.createRef();
         this._viewport = null;
         this._labeleditor = null;
 
@@ -272,7 +272,7 @@ class App extends React.Component
 
     onModuleTitleClick(e)
     {
-        const drawer = this._drawer;
+        const drawer = this._drawerComponent.current;
         if (!drawer.isDrawerOpen() || !drawer.isCurrentTab(DRAWER_INDEX_ABOUT))
         {
             //Open current module info panel
@@ -299,6 +299,7 @@ class App extends React.Component
     }
 
     getToolbarComponent() { return this._toolbarComponent.current; }
+    getDrawerComponent() { return this._drawerComponent.current; }
 
     getExportManager() { return this._exportManager; }
     getImportManager() { return this._importManager; }
@@ -325,11 +326,12 @@ class App extends React.Component
         this._session.updateSession(this);
 
         const toolbarComponent = this._toolbarComponent.current;
+        const drawerComponent = this._drawerComponent.current;
         //Disable hotkeys when graph is not in view
         this._hotKeyManager.setEnabled(
             !(toolbarComponent && toolbarComponent.isBarOpen()) &&
-            !(this._drawer && this._drawer.isDrawerOpen() &&
-                this._drawer.isDrawerFullscreen())
+            !(drawerComponent && drawerComponent.isDrawerOpen() &&
+                drawerComponent.isDrawerFullscreen())
         );
     }
 
@@ -444,7 +446,7 @@ class App extends React.Component
                         onClick={() => window.open(BUGREPORT_URL, '_blank')} />
                 </ToolbarView>
 
-                <DrawerView ref={ref => this._drawer = ref} className={Style.app_content}
+                <DrawerView ref={this._drawerComponent} className={Style.app_content}
                     panels={drawerPanelClasses}
                     panelProps={drawerPanelProps}
                     side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
