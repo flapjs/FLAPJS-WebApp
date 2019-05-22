@@ -78,7 +78,7 @@ class InputPointer
    * The viewport for this pointer operates within; this should be the same
    * viewport as in the input adapter.
    */
-  getViewport()
+  getViewportAdapter()
   {
     return this._viewport;
   }
@@ -86,7 +86,7 @@ class InputPointer
   /**
    * The input adapter that controls this pointer's properties
    */
-  getAdapter()
+  getInputAdapter()
   {
     return this._adapter;
   }

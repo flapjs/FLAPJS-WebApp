@@ -70,3 +70,8 @@
   visibility: hidden;
   transition: visibility 0s linear 0.3s;
 }
+
+.viewport {
+  width: 100%;
+  height: 100%;
+}

@@ -34,7 +34,7 @@ class FormattedInput extends React.Component
     //  multiline - whether to allow multiple lines
   }
 
-  //Override
+  /** @override */
   componentWillReceiveProps(nextProps)
   {
     //Don't overwrite user input...
@@ -231,7 +231,7 @@ class FormattedInput extends React.Component
     return result || "";
   }
 
-  //Override
+  /** @override */
   render()
   {
     if (this.props.multiline)

@@ -40,7 +40,7 @@ class OptionsPanel extends React.Component
     this.onChangeModule = this.onChangeModule.bind(this);
   }
 
-  //Override
+  /** @override */
   componentDidMount()
   {
     const root = document.getElementById("root");
@@ -166,7 +166,7 @@ class OptionsPanel extends React.Component
     this.onLoadSave();
   }
 
-  //Override
+  /** @override */
   componentWillUnmount()
   {
     this.styleOpts.terminate();
@@ -227,7 +227,7 @@ class OptionsPanel extends React.Component
     ModuleLoader.loadModule(moduleName);
   }
 
-  //Override
+  /** @override */
   render()
   {
     const root = document.getElementById("root");

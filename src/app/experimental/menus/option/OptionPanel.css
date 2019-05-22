@@ -1,0 +1,14 @@
+:local(.input_option) {
+  display: block;
+}
+:local(.version) {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 0.5em;
+  padding: 0.5em 1em;
+  color: var(--color-toolbar-menu-text);
+  background: var(--color-toolbar-menu-detail);
+  border-radius: 1em;
+  animation: fade-in 0.1s ease-out;
+}

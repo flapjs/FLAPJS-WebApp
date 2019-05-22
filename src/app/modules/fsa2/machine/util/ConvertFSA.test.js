@@ -1,57 +1,66 @@
 import FSA, { EMPTY_SYMBOL } from '../FSA.js';
 import { solveFSA, convertToDFA } from '../FSAUtils.js';
 
-function testSolveFSA(machine, testString, expectedResult=true)
+function testSolveFSA(machine, testString, expectedResult = true)
 {
-  test("test string \'" + testString + "\'", () => {
+  test("test string \'" + testString + "\'", () =>
+  {
     expect(solveFSA(machine, testString)).toBe(expectedResult);
   });
 }
 
-describe("Trying to convert an empty NFA machine", () => {
+describe("Trying to convert an empty NFA machine", () =>
+{
   const nfa = new FSA(false);
   const dfa = convertToDFA(nfa, nfa);
 
-  test("is a valid empty DFA", () => {
+  test("is a valid empty DFA", () =>
+  {
     expect(dfa).toBeDefined();
     expect(dfa.validate()).toBe(true);
     expect(dfa.isValid()).toBe(true);
   });
 });
 
-describe("Trying to convert a simple state machine", () => {
+describe("Trying to convert a simple state machine", () =>
+{
   const nfa = new FSA(false);
   const state0 = nfa.createState("q0");
   nfa.addTransition(state0, state0, "0");
   nfa.addTransition(state0, state0, "1");
   const dfa = convertToDFA(nfa, nfa);
 
-  test("trap state exists", () => {
+  test("trap state exists", () =>
+  {
     const trapStates = nfa.getStatesByLabel("{}");
     expect(trapStates).toBeDefined();
     expect(trapStates).toHaveLength(1);
   });
 
-  test("is valid DFA machine", () => {
+  test("is valid DFA machine", () =>
+  {
     expect(dfa).toBeDefined();
     expect(dfa.validate()).toBe(true);
     expect(dfa.isValid()).toBe(true);
   });
 
-  test("has the expected generated states", () => {
+  test("has the expected generated states", () =>
+  {
     const states = Array.from(dfa.getStates());
     expect(states).toHaveLength(2);
     expect(dfa.hasStateWithLabel("{q0}")).toBe(true);
   });
 
-  test("has the expected alphabet", () => {
+  test("has the expected alphabet", () =>
+  {
     const alphabet = Array.from(dfa.getAlphabet());
     expect(alphabet).toHaveLength(2);
     expect(alphabet).toContain("0");
     expect(alphabet).toContain("1");
   });
 
-  test("has the expected transitions", () => {
+  test("has the expected transitions", () =>
+  {
     const transitions = dfa.getTransitions();
 
     let q0 = dfa.getStatesByLabel("{q0}");
@@ -69,7 +78,8 @@ describe("Trying to convert a simple state machine", () => {
   });
 });
 
-describe("Trying recursive test", () => {
+describe("Trying recursive test", () =>
+{
   const machine = new FSA();
   const state0 = machine.createState("q0");
   const state1 = machine.createState("q1");
@@ -79,14 +89,16 @@ describe("Trying recursive test", () => {
   machine.setFinalState(state0);
 
   const result = convertToDFA(machine, machine);
-  test("is a valid DFA machine", () => {
+  test("is a valid DFA machine", () =>
+  {
     expect(result).toBeDefined();
     expect(result.validate()).toBe(true);
     expect(result.isValid()).toBe(true);
   })
 });
 
-describe("Trying another machine", () => {
+describe("Trying another machine", () =>
+{
   const nfa = new FSA(false);
   const state0 = nfa.createState("q0");
   const state1 = nfa.createState("q1");
@@ -96,7 +108,8 @@ describe("Trying another machine", () => {
   nfa.setFinalState(state1);
 
   const result = convertToDFA(nfa, nfa);
-  test("is a valid DFA", () => {
+  test("is a valid DFA", () =>
+  {
     expect(result).toBeDefined();
     expect(result.validate()).toBe(true);
     expect(result.isValid()).toBe(true);
@@ -118,7 +131,8 @@ describe("Trying another machine", () => {
   testSolveFSA(result, "101010010010100101", true);
 });
 
-describe("Trying a machine with immediate moves", () => {
+describe("Trying a machine with immediate moves", () =>
+{
   const nfa = new FSA(false);
   const state0 = nfa.createState("q0");
   const state1 = nfa.createState("q1");
@@ -130,7 +144,8 @@ describe("Trying a machine with immediate moves", () => {
 
   const result = convertToDFA(nfa, nfa);
 
-  test("is a valid DFA", () => {
+  test("is a valid DFA", () =>
+  {
     expect(result).toBeDefined();
     expect(result.validate()).toBe(true);
     expect(result.isValid()).toBe(true);

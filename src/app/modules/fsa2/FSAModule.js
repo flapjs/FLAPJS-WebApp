@@ -1,194 +1,201 @@
 import React from 'react';
+
+import { userClearGraph } from 'experimental/UserUtil.js';
+import { CTRL_KEY } from 'session/manager/hotkey/HotKeyManager.js';
+import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
+
+import FSAGraph from './graph/FSAGraph.js';
+import FSAGraphController from './graph/FSAGraphController.js';
+import MachineController from './machine/MachineController.js';
+
+import StringTester from './tester/StringTester.js';
+import FSAErrorChecker from './FSAErrorChecker.js';
+import { registerNotifications } from './components/notifications/FSANotifications.js';
+
+import * as FSAGraphParser from './FSAGraphParser.js';
+import FSAImporter from './filehandlers/FSAImporter.js';
+import FSAJFFImporter from './filehandlers/FSAJFFImporter.js';
+import FSAExporter from './filehandlers/FSAExporter.js';
+import FSAJFFExporter from './filehandlers/FSAJFFExporter.js';
+import { registerImageExporters } from 'modules/nodegraph/filehandlers/NodalGraphImageExporter.js';
+
+import SafeGraphEventHandler from 'modules/nodegraph/SafeGraphEventHandler.js';
+
+import FSABroadcastHandler from './FSABroadcastHandler.js';
+
+/* COMPONENTS */
+
 import PanelContainer from 'experimental/panels/PanelContainer.js';
-
-import NodalGraphInputManager from 'modules/nodalgraph/manager/NodalGraphInputManager.js';
-import MachineController from './controller/MachineController.js';
-
-import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
-import FSAGraphLabeler from 'modules/fsa/graph/FSAGraphLabeler.js';
-import * as FSAGraphParser from 'modules/fsa/graph/FSAGraphParser.js';
-
-import FSAGraphRenderer from './renderer/FSAGraphRenderer.js';
-import FSALabelEditorRenderer from './renderer/FSALabelEditorRenderer.js';
-import GraphInputRenderer from 'modules/nodalgraph/controller/renderer/GraphInputRenderer.js';
 
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
 import TestingPanel from './components/panels/testing/TestingPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 
-import StringTester from './tester/StringTester.js';
-import FSAErrorChecker from './FSAErrorChecker.js';
+import FSAGraphLayer from './components/layers/FSAGraphLayer.js';
+import FSAGraphOverlayLayer from './components/layers/FSAGraphOverlayLayer.js';
+import FSATapeGraphOverlayLayer from './components/layers/FSATapeGraphOverlayLayer.js';
 
-import EditPane from './components/views/EditPane.js';
-import TapePane from './components/views/TapePane.js';
-import {CTRL_KEY, ALT_KEY, SHIFT_KEY} from 'session/manager/hotkey/HotKeyManager.js';
-import {RENDER_LAYER_WORKSPACE} from 'session/manager/RenderManager.js';
+import GraphView from 'graph2/components/GraphView.js';
 
-import FSAGraphExporter from './exporter/FSAGraphExporter.js';
-import JFLAPGraphExporter from './exporter/JFLAPGraphExporter.js';
-import {DEFAULT_IMAGE_EXPORTERS} from 'modules/nodalgraph/NodalGraphImageExporter.js';
-import SafeGraphEventHandler from 'modules/nodalgraph/SafeGraphEventHandler.js';
-
-import {registerNotifications} from './components/notifications/FSANotifications.js';
-
-import GraphNodeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeInputHandler.js';
-import GraphInitialInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphInitialInputHandler.js';
-import GraphEdgeInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphEdgeInputHandler.js';
-import GraphEndpointInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphEndpointInputHandler.js';
-import GraphNodeCreateInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeCreateInputHandler.js';
-import GraphNodeAcceptInputHandler from 'modules/nodalgraph/controller/inputhandler/GraphNodeAcceptInputHandler.js';
-
-import GraphNodePickHandler from 'modules/nodalgraph/controller/pickhandler/GraphNodePickHandler.js';
-import GraphEdgePickHandler from 'modules/nodalgraph/controller/pickhandler/GraphEdgePickHandler.js';
-import GraphEndpointPickHandler from 'modules/nodalgraph/controller/pickhandler/GraphEndpointPickHandler.js';
-import GraphInitialPickHandler from 'modules/nodalgraph/controller/pickhandler/GraphInitialPickHandler.js';
-
-import * as UserUtil from 'experimental/UserUtil.js';
-
-const MODULE_NAME = "fsa2";
-const MODULE_VERSION = "0.0.1";
+const MODULE_NAME = 'fsa';
+const MODULE_VERSION = '3.0.0';
 
 class FSAModule
 {
-  constructor(app)
-  {
-    this._app = app;
+    constructor(app)
+    {
+        this._app = app;
 
-    this._inputManager = new NodalGraphInputManager(this,
-      new FSAGraph(),
-      new FSAGraphLabeler(),
-      FSAGraphParser,
-      FSALabelEditorRenderer);
-    this._inputManager.getInputController().getPicker()
-      .addPickHandler(this._initialPickHandler = new GraphInitialPickHandler())
-      .addPickHandler(this._endpointPickHandler = new GraphEndpointPickHandler())
-      .addPickHandler(this._nodePickHandler = new GraphNodePickHandler())
-      .addPickHandler(this._edgePickHandler = new GraphEdgePickHandler());
-    this._inputManager.getInputController()
-      .addInputHandler(this._nodeInputHandler = new GraphNodeInputHandler())
-      .addInputHandler(this._edgeInputHandler = new GraphEdgeInputHandler())
-      .addInputHandler(this._endpointInputHandler = new GraphEndpointInputHandler())
-      .addInputHandler(this._initialInputHandler = new GraphInitialInputHandler())
-      .addInputHandler(this._createInputHandler = new GraphNodeCreateInputHandler())
-      .addInputHandler(this._acceptInputHandler = new GraphNodeAcceptInputHandler());
-    this._machineController = new MachineController(this);
+        this._graph = new FSAGraph();
+        this._graphController = new FSAGraphController(app, this._graph, null);
+        this._graphViewComponent = React.createRef();
+        
+        const graphController = this._graphController;
 
-    this._errorChecker = new FSAErrorChecker(app,
-      this._inputManager.getGraphController(),
-      this._machineController);
-    this._tester = new StringTester();
-  }
+        app.getRenderManager()
+            .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+                <GraphView
+                    ref={this._graphViewComponent}
+                    renderGraph={graphView =>
+                    {
+                        return <FSAGraphLayer
+                            graphView={graphView}
+                            graphController={graphController}
+                            editable={!this._testMode} />;
+                    }}
+                    renderOverlay={graphView =>
+                    {
+                        if (!this._testMode)
+                        {
+                            return <FSAGraphOverlayLayer
+                                graphView={graphView}
+                                graphController={graphController}
+                                session={this._app.getSession()} />;
+                        }
+                        else
+                        {
+                            return <FSATapeGraphOverlayLayer
+                                graphView={graphView}
+                                tester={this._tester} />;
+                        }
+                    }}>
+                </GraphView>
+            ));
+        this._machineController = new MachineController(this);
 
-  //Override
-  initialize(app)
-  {
-    registerNotifications(app.getNotificationManager());
+        this._errorChecker = new FSAErrorChecker(app,
+            this._graphController,
+            this._machineController);
+        this._tester = new StringTester();
+        this._testMode = false;
 
-    //TODO: These should have a pre/post handlers...
-    app.getExportManager()
-      .addExporter(new FSAGraphExporter())
-      .addExporter(new JFLAPGraphExporter())
-      .addExporters(DEFAULT_IMAGE_EXPORTERS);
+        this._broadcastHandler = new FSABroadcastHandler();
+    }
 
-    app.getViewportManager()
-      .addViewClass(EditPane)
-      .addViewClass(TapePane);
+    /** @override */
+    initialize(app)
+    {
+        registerNotifications(app.getNotificationManager());
 
-    app.getDrawerManager()
-      .addPanelClass(props => (
-        <PanelContainer id={props.id}
-          className={props.className}
-          style={props.style}
-          title={"Finite State Automata"}>
-          <p>{"Brought to you with \u2764 by the Flap.js team."}</p>
-          <p>{"<- Tap on a tab to begin!"}</p>
-        </PanelContainer>
-      ))
-      .addPanelClass(OverviewPanel)
-      .addPanelClass(TestingPanel)
-      .addPanelClass(AnalysisPanel);
+        // TODO: These should have a pre/post handlers...
+        app.getExportManager()
+            .registerExporter(new FSAExporter(FSAGraphParser.JSON), 'session')
+            .registerExporter(new FSAJFFExporter(FSAGraphParser.XML), 'jflap');
 
-    app.getHotKeyManager()
-      .registerHotKey("Export to PNG", [CTRL_KEY, 'KeyP'], () => {app.getExportManager().tryExportToFile(DEFAULT_IMAGE_EXPORTERS[0])})
-      .registerHotKey("Save as JSON", [CTRL_KEY, 'KeyS'], () => {app.getExportManager().tryExportToFile(app.getExportManager().getDefaultExporter())})
-      .registerHotKey("New", [CTRL_KEY, 'KeyN'], () => {this.clear(app)})
-      .registerHotKey("Undo", [CTRL_KEY, 'KeyZ'], () => {app.getUndoManager().undo()})
-      .registerHotKey("Redo", [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {app.getUndoManager().redo()});
+        registerImageExporters(app.getExportManager());
 
-    app.getRenderManager()
-      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-        <>
-          {/* Graph objects */
-            <FSAGraphRenderer currentModule={this} parent={props.workspace}/>}
-        </>
-      ))
-      .addRenderer(RENDER_LAYER_WORKSPACE, props => (
-        <GraphInputRenderer currentModule={this}/>
-      ));
+        app.getImportManager()
+            .addImporter(new FSAImporter(app, FSAGraphParser.JSON), '.fsa.json', '.json')
+            .addImporter(new FSAJFFImporter(app, FSAGraphParser.XML), '.jff');
 
-    app.getUndoManager()
-      .setEventHandlerFactory((...args) => {
-        return new SafeGraphEventHandler(this._inputManager.getGraphController(), this._inputManager.getGraphParser());
-      });
+        app.getUndoManager()
+            .setEventHandlerFactory((...args) => new SafeGraphEventHandler(
+                this._graphController, FSAGraphParser.JSON));
 
-    app.getTooltipManager()
-      .addTooltip(I18N.toString("message.workspace.empty"))
-      .addTooltip("If you need help, try the \'?\' at the top.")
-      .addTooltip("Or you can choose to do nothing.")
-      .addTooltip("I can't do anything about that.")
-      .addTooltip("You really should consider doing something though, for the sake of both of us.")
-      .addTooltip("Of course, it is your free will.")
-      .addTooltip("You do you.")
-      .addTooltip("Please do something.")
-      .addTooltip("I need my job.")
-      .addTooltip(I18N.toString("message.workspace.empty"));
+        app.getDrawerManager()
+            .addPanelClass(props => (
+                <PanelContainer id={props.id}
+                    className={props.className}
+                    style={props.style}
+                    title={'Finite State Automata'}>
+                    <p>{'Brought to you with \u2764 by the Flap.js team.'}</p>
+                    <p>{'<- Tap on a tab to begin!'}</p>
+                </PanelContainer>
+            ))
+            .addPanelClass(OverviewPanel)
+            .addPanelClass(TestingPanel)
+            .addPanelClass(AnalysisPanel);
 
-    const machineController = this.getMachineController();
-    machineController.initialize(this);
+        app.getHotKeyManager()
+            .registerHotKey('Export to PNG', [CTRL_KEY, 'KeyP'], () => { app.getExportManager().tryExportFile('image-png', app.getSession()); })
+            .registerHotKey('Save as JSON', [CTRL_KEY, 'KeyS'], () => { app.getExportManager().tryExportFile('session', app.getSession()); });
+        
+        app.getMenuManager().setSubtitleComponentClass(props => (
+            <select onChange={(e) =>
+            {
+                this._machineController.setMachineType(e.target.value);
+            }}
+            value={this._machineController.getMachineType()}>
+                <option value="DFA">DFA</option>
+                <option value="NFA">NFA</option>
+            </select>
+        ));
 
-    this._inputManager.onSessionStart(app.getSession());
-  }
+        app.getTooltipManager()
+            .addTooltip(I18N.toString('message.workspace.empty'))
+            .addTooltip('If you need help, try the \'?\' at the top.')
+            .addTooltip('Or you can choose to do nothing.')
+            .addTooltip('I can\'t do anything about that.')
+            .addTooltip('You really should consider doing something though, for the sake of both of us.')
+            .addTooltip('Of course, it is your free will.')
+            .addTooltip('You do you.')
+            .addTooltip('Please do something.')
+            .addTooltip('I need my job.')
+            .addTooltip(I18N.toString('message.workspace.empty'));
 
-  //Override
-  update(app)
-  {
-    this._inputManager.update(this);
+        app.getBroadcastManager()
+            .addMessageHandler(this._broadcastHandler);
 
-    const machineController = this.getMachineController();
-    machineController.update(this);
-  }
+        this._machineController.initialize(this);
+        this._graphController.initialize();
+    }
 
-  //Override
-  destroy(app)
-  {
-    this._inputManager.onSessionStop(app.getSession());
+    /** @override */
+    update(app)
+    {
+        this._graphController.update();
+        this._machineController.update(this);
+    }
 
-    const machineController = this.getMachineController();
-    machineController.destroy(this);
-  }
+    /** @override */
+    destroy(app)
+    {
+        this._machineController.destroy(this);
+        this._graphController.destroy();
+    }
 
-  //Override
-  clear(app, graphOnly=false)
-  {
-    UserUtil.userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
-  }
+    /** @override */
+    clear(app, graphOnly = false)
+    {
+        userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
+    }
 
-  getInputManager() { return this._inputManager; }
+    getMachineController() { return this._machineController; }
+    getGraphController() { return this._graphController; }
+    getGraphView() { return this._graphViewComponent.current; }
 
-  getInputController() { return this._inputManager.getInputController(); }
-  getMachineController() { return this._machineController; }
-  getGraphController() { return this._inputManager.getGraphController(); }
+    getErrorChecker() { return this._errorChecker; }
+    getStringTester() { return this._tester; }
+    getBroadcastHandler() { return this._broadcastHandler; }
 
-  getErrorChecker() { return this._errorChecker; }
-  getStringTester() { return this._tester; }
-
-  //Override
-  getModuleVersion() { return MODULE_VERSION; }
-  //Override
-  getModuleName() { return MODULE_NAME; }
-  //Override
-  getLocalizedModuleName() { return this._machineController.getMachineType(); }
-  getApp() { return this._app; }
+    /** @override */
+    getModuleVersion() { return MODULE_VERSION; }
+    /** @override */
+    getModuleName() { return MODULE_NAME; }
+    /** @override */
+    getLocalizedModuleName() { return 'Finite Automata'; }
+    /** @override */
+    getApp() { return this._app; }
 }
 
 export default FSAModule;
