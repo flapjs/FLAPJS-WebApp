@@ -38,21 +38,18 @@ class LabelEditorWidget extends React.Component
 
         if (graphElement instanceof GraphNode)
         {
-            const formatter = this.props.labelFormatter['formatNodeLabel'];
+            const formatter = this.props.labelFormatter.getNodeLabelFormatter();
             this.inputComponent.setFormatter(formatter);
         }
         else if (graphElement instanceof GraphEdge)
         {
-            const formatter = this.props.labelFormatter['formatEdgeLabel'];
+            const formatter = this.props.labelFormatter.getEdgeLabelFormatter();
             this.inputComponent.setFormatter(formatter);
         }
 
         this.setState({ open: true }, () =>
         {
-            if (defaultValue !== null)
-            {
-                this.inputComponent.resetValue(defaultValue);
-            }
+            this.inputComponent.resetValue(defaultValue || '');
             this.inputComponent.focus();
         });
     }
