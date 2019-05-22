@@ -54,13 +54,6 @@ class GraphEdgeInputHandler extends AbstractInputHandler
 
         if (inputController.isTrashMode())
         {
-            //Don't delete stuff if moving...
-            if (inputController.isMoveMode(pointer.getInputAdapter()))
-            {
-                this._graphController.emitGraphEvent(GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE);
-                return false;
-            }
-
             if (currentTargetType === EVENT_SOURCE_EDGE ||
                 currentTargetType === EVENT_SOURCE_FORWARD_ENDPOINT ||
                 currentTargetType === EVENT_SOURCE_LABEL)
@@ -109,6 +102,7 @@ class GraphEdgeInputHandler extends AbstractInputHandler
         if (inputController.hasActiveTarget()) return false;
         if (inputController.isTrashMode())
         {
+            //Don't delete stuff if moving...
             this._graphController.emitGraphEvent(GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE);
             return false;
         }
