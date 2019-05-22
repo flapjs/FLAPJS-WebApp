@@ -6,6 +6,7 @@ import ToolbarTitle from './ToolbarTitle.js';
 
 import IconButton from 'experimental/components/IconButton.js';
 import MenuIcon from 'components/iconset/MenuIcon.js';
+import CrossIcon from 'components/iconset/CrossIcon.js';
 
 const TOOLBAR_ALLOW_MENU_BAR = true;
 const TOOLBAR_DEFAULT_MENU_INDEX = -1;
@@ -150,8 +151,12 @@ class ToolbarView extends React.Component
                         {this.renderToolbarButtons(this.props.children)}
                     </div>
 
-                    {showBarExpander &&
-                        <IconButton className={Style.toolbar_expander} onClick={this.onBarExpand}>
+                    {showBarExpander && isBarOpen ?
+                        <IconButton className={Style.toolbar_expander} onClick={this.onBarExpand} title="Back">
+                            <CrossIcon />
+                        </IconButton>
+                        :
+                        <IconButton className={Style.toolbar_expander} onClick={this.onBarExpand} title="Menu">
                             <MenuIcon />
                         </IconButton>}
                 </div>
