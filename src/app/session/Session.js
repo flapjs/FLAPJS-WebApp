@@ -6,7 +6,7 @@ import { guid } from 'util/MathHelper.js';
 import Logger from 'util/logger/Logger.js';
 const LOGGER_TAG = 'Session';
 
-const DEFAULT_MODULE_ID = 'fsa2';
+const DEFAULT_MODULE_ID = 'fsa';
 export const CURRENT_MODULE_STORAGE_ID = 'currentModule';
 const MODULE_LOAD_DELAY = 300;
 let MODULE_TIMEOUT = null;
