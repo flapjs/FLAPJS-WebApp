@@ -185,6 +185,13 @@ class PDAGraphController extends GraphController
         this._app.getUndoManager().captureEvent();
         return node;
     }
+
+    renameNode(node, newLabel)
+    {
+        node.setNodeLabel(newLabel);
+        node.setNodeCustom(true);
+        this._app.getUndoManager().captureEvent();
+    }
 }
 
 export default PDAGraphController;

@@ -33,7 +33,7 @@ class StateListElement extends React.Component
             error: false
         }, () => target.select());
 
-        //Call any listening focus
+        // Call any listening focus
         if (this.props.onFocus) this.props.onFocus(e, this);
     }
 
@@ -41,10 +41,10 @@ class StateListElement extends React.Component
     {
         const nextLabel = this.state.value;
 
-        //Reset to nothing (will use node.getNodeLabel() instead)
+        // Reset to nothing (will use node.getNodeLabel() instead)
         this.setState({ value: null, error: false });
 
-        //Call any listening blurs
+        // Call any listening blurs
         if (this.props.onBlur) this.props.onBlur(e, this, nextLabel);
     }
 
@@ -87,7 +87,7 @@ class StateListElement extends React.Component
             {
                 this.props.onChange(e, this, value);
             }
-            catch(e)
+            catch (e)
             {
                 error = true;
             }
@@ -108,27 +108,27 @@ class StateListElement extends React.Component
         const nodeLabel = node ? node.getNodeLabel() : '';
         const nodeCustom = node ? (node.getNodeCustom() || inputValue !== null && inputValue !== nodeLabel) : false;
         const nodeAccept = node ? node.getNodeAccept() : false;
-        //Must check for null, not ONLY truthy because value might be empty string.
+        // Must check for null, not ONLY truthy because value might be empty string.
         const displayValue = inputValue === null ? nodeLabel : inputValue;
 
         return (
             <div id={this.props.id}
                 className={Style.element_container +
-          (nodeCustom ? ' custom ' : '') +
-          ((!node.getNodeCustom() && displayValue.length <= 0) ? ' empty ' : '') +
-          (inputValue !== null && this.state.error ? ' error ' : '') +
-          (nodeAccept ? ' accept ' : '') +
-          ' ' + this.props.className}
+                    (nodeCustom ? ' custom ' : '') +
+                    ((!node.getNodeCustom() && displayValue.length <= 0) ? ' empty ' : '') +
+                    (inputValue !== null && this.state.error ? ' error ' : '') +
+                    (nodeAccept ? ' accept ' : '') +
+                    ' ' + this.props.className}
                 style={this.props.style}>
                 <input
                     spellCheck={false}
-                    style={{width: displayValue.length + 'ch'}}
+                    style={{ width: displayValue.length + 'ch' }}
                     value={displayValue}
                     onChange={this.onValueChange}
                     onFocus={this.onFocus}
                     onBlur={this.onBlur}
                     onKeyDown={this.onKeyDown}
-                    onKeyUp={this.onKeyUp}/>
+                    onKeyUp={this.onKeyUp} />
             </div>
         );
     }
