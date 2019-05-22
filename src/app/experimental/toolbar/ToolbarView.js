@@ -48,10 +48,9 @@ class ToolbarView extends React.Component
 
     toggleBar(callback = null)
     {
-        //Toggle it, but also reset menu...
         this.setState((prev, props) => 
         {
-            return { open: !prev.open, menuIndex: TOOLBAR_DEFAULT_MENU_INDEX };
+            return { open: !prev.open };
         }, callback);
     }
 
@@ -81,14 +80,7 @@ class ToolbarView extends React.Component
 
     onBarExpand(e)
     {
-        if (this.state.open && this.state.menuIndex >= 0)
-        {
-            this.setCurrentMenu(TOOLBAR_DEFAULT_MENU_INDEX);
-        }
-        else
-        {
-            this.toggleBar();
-        }
+        this.toggleBar();
     }
 
     onTitleChange(value)
@@ -139,13 +131,12 @@ class ToolbarView extends React.Component
                     ' ' + this.props.className}
                 style={this.props.style}>
                 <div className={Style.bar_menu}>
-                    {showCustomToolbarMenu ?
-                        <div className={Style.menu_container}>
-                            <ToolbarMenu {...this.props.menuProps} toolbar={this} />
-                        </div> :
-                        <div className={Style.menu_button_container}>
-                            {this.renderMenuButtons(this.props.children)}
-                        </div>}
+                    <div className={Style.menu_container}>
+                        {showCustomToolbarMenu && <ToolbarMenu {...this.props.menuProps} toolbar={this} />}
+                    </div>
+                    <div className={Style.menu_button_container}>
+                        {this.renderMenuButtons(this.props.children)}
+                    </div>
                 </div>
                 <div ref={ref => this.toolbarElement = ref} className={Style.bar_toolbar}>
                     <ToolbarTitle className={Style.toolbar_title}
