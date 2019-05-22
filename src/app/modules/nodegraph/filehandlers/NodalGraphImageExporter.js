@@ -1,12 +1,16 @@
 import SessionExporter from 'session/SessionExporter.js';
 
+import * as ColorHelper from 'util/ColorHelper.js';
+
 import PNGIcon from 'deprecated/icons/flat/PNGIcon.js';
 import JPGIcon from 'deprecated/icons/flat/JPGIcon.js';
 import SVGIcon from 'deprecated/icons/flat/SVGIcon.js';
+import BWIcon from 'components/iconset/flat/PNGFileIcon.js';
 
 export const IMAGE_TYPE_PNG = 'png';
 export const IMAGE_TYPE_JPG = 'jpg';
 export const IMAGE_TYPE_SVG = 'svg';
+export const IMAGE_TYPE_BW = 'bw';
 
 const EXPORT_PADDING_X = 30;
 const EXPORT_PADDING_Y = 0;
@@ -32,13 +36,14 @@ class NodalGraphImageExporter extends SessionExporter
         const height = workspaceDim.height;
         const svg = this.processSVGForExport(svgElement, width, height, currentModule);
 
+        const fileExt = this._imageType === IMAGE_TYPE_BW ? IMAGE_TYPE_PNG : this._imageType;
         return Promise.resolve({
-            name: fileName + '.' + this._imageType,
+            name: fileName + '.' + fileExt,
             type: 'image',
             data: svg,
             width: width,
             height: height,
-            'image-type': this._imageType
+            'image-type': fileExt
         });
     }
 
@@ -52,7 +57,16 @@ class NodalGraphImageExporter extends SessionExporter
         const stopIndex = attributeValue.indexOf(')', startIndex);
         const value = attributeValue.substring(startIndex + 4, stopIndex);
         const style = themeManager.getStyleByName(value);
-        return style ? style.getValue() : '#000000';
+        let result = style ? style.getValue() : '#000000';
+
+        if (this._imageType === IMAGE_TYPE_BW)
+        {
+            const rgb = ColorHelper.HEXtoRGB(result);
+            ColorHelper.grayscaleRGB(rgb, rgb);
+            result = ColorHelper.RGBtoHEX(rgb);
+        }
+
+        return result;
     }
 
     processSVGForExport(element, width, height, currentModule)
@@ -110,6 +124,7 @@ class NodalGraphImageExporter extends SessionExporter
         case IMAGE_TYPE_PNG: return PNGIcon;
         case IMAGE_TYPE_JPG: return JPGIcon;
         case IMAGE_TYPE_SVG: return SVGIcon;
+        case IMAGE_TYPE_BW: return BWIcon;
         default: return null;
         }
     }
@@ -122,6 +137,7 @@ class NodalGraphImageExporter extends SessionExporter
         case IMAGE_TYPE_PNG: return I18N.toString('file.export.png');
         case IMAGE_TYPE_JPG: return I18N.toString('file.export.jpg');
         case IMAGE_TYPE_SVG: return I18N.toString('file.export.svg');
+        case IMAGE_TYPE_BW: return I18N.toString('file.export.bw');
         default: return super.getLabel();
         }
     }
@@ -134,6 +150,7 @@ class NodalGraphImageExporter extends SessionExporter
         case IMAGE_TYPE_PNG: return I18N.toString('file.export.png.hint');
         case IMAGE_TYPE_JPG: return I18N.toString('file.export.jpg.hint');
         case IMAGE_TYPE_SVG: return I18N.toString('file.export.svg.hint');
+        case IMAGE_TYPE_BW: return I18N.toString('file.export.bw.hint');
         default: return super.getTitle();
         }
     }
@@ -147,7 +164,8 @@ class NodalGraphImageExporter extends SessionExporter
 export const IMAGE_EXPORTERS = [
     new NodalGraphImageExporter(IMAGE_TYPE_PNG),
     new NodalGraphImageExporter(IMAGE_TYPE_JPG),
-    new NodalGraphImageExporter(IMAGE_TYPE_SVG)
+    new NodalGraphImageExporter(IMAGE_TYPE_SVG),
+    new NodalGraphImageExporter(IMAGE_TYPE_BW)
 ];
 
 export function registerImageExporters(exportManager)

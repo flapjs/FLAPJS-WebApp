@@ -14,7 +14,8 @@ class PDAGraphOverlayLayer extends React.Component
     /** @override */
     render()
     {
-        const currentModule = this.props.module;
+        const session = this.props.session;
+        const currentModule = session.getCurrentModule();
         const graphView = this.props.graphView;
         const graphController = this.props.graphController;
         const labelFormatter = graphController.getLabelFormatter();
@@ -25,7 +26,8 @@ class PDAGraphOverlayLayer extends React.Component
                 <ViewportEditLayer
                     graphController={graphController}
                     inputController={inputController}
-                    viewport={graphView.getViewportComponent()}/>
+                    viewport={graphView.getViewportComponent()}
+                    session={session}/>
                 <ViewportNavigationLayer
                     style={{ right: 0 }}
                     viewportAdapter={graphView.getViewportAdapter()} />

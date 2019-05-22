@@ -48,7 +48,7 @@ class NodalGraphModule
                     renderGraph={graphView =>
                         <NodeGraphLayer graphView={graphView} graphController={graphController} editable={true} />}
                     renderOverlay={graphView =>
-                        <NodeGraphOverlayLayer graphView={graphView} graphController={graphController} module={this} />}>
+                        <NodeGraphOverlayLayer graphView={graphView} graphController={graphController} session={this._app.getSession()} />}>
                 </GraphView>
             ));
     }

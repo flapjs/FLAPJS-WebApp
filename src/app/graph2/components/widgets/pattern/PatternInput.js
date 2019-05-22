@@ -209,7 +209,7 @@ class PatternInput extends React.Component
                             disabled={disabled}
                             placeholder={placeholder}
                             maxLength={maxlength}
-                            value={value}
+                            value={value || ''}
                             onChange={this.onChange}
                             onFocus={this.onFocus}
                             onBlur={this.onBlur}
@@ -220,7 +220,7 @@ class PatternInput extends React.Component
                             disabled={disabled}
                             placeholder={placeholder}
                             maxLength={maxlength}
-                            value={value}
+                            value={value || ''}
                             onChange={this.onChange}
                             onFocus={this.onFocus}
                             onBlur={this.onBlur}

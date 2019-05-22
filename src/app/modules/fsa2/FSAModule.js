@@ -70,7 +70,7 @@ class FSAModule
                             return <FSAGraphOverlayLayer
                                 graphView={graphView}
                                 graphController={graphController}
-                                module={this} />;
+                                session={this._app.getSession()} />;
                         }
                         else
                         {
