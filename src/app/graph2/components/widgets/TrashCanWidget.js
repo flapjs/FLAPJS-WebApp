@@ -13,6 +13,7 @@ class TrashCanWidget extends React.Component
         super(props);
 
         this._ref = React.createRef();
+        this._buttonElement = React.createRef();
 
         this.state = {
             active: false,
@@ -101,13 +102,13 @@ class TrashCanWidget extends React.Component
 
     onAnyMouseDownNotConsumed(e)
     {
-        if (this.state.forceActive && this._ref.current !== e.target)
+        if (this.state.forceActive && this._buttonElement.current !== e.target)
         {
             e.stopPropagation();
             e.preventDefault();
 
             document.documentElement.removeEventListener('mousedown', this.onAnyMouseDownNotConsumed);
-
+            
             this.setState({ active: false, forceActive: false }, () =>
             {
                 const onChange = this.props.onChange;
@@ -125,6 +126,7 @@ class TrashCanWidget extends React.Component
 
         return (
             <IconButton ref={this._ref}
+                refButton={this._buttonElement}
                 id={this.props.id}
                 className={Style.trash_container +
                     (active ? ' active ' : '') +

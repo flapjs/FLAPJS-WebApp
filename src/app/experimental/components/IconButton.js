@@ -11,14 +11,15 @@ class IconButton extends React.Component
     /** @override */
     render()
     {
-        const title = this.props.title;
+        const { refButton, title, className, ...props } = this.props;
         const showButtonLabel = IconButton.SHOW_LABEL && title;
 
         return (
-            <button {...this.props}
+            <button {...props}
+                ref={refButton}
                 className={Style.icon_button +
                     (showButtonLabel ? ' hint ' : '') +
-                    ' ' + this.props.className}
+                    ' ' + className}
                 title={title}>
                 {this.props.children}
                 <label>{title}</label>
