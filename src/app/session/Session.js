@@ -54,11 +54,17 @@ class Session
         }
 
         // Check registered module info...
-        const moduleInfo = Modules[moduleName];
+        let moduleInfo = Modules[moduleName];
         if (!moduleInfo)
         {
-            window.alert('Cannot find registered module with id \'' + moduleName + '\'');
-            return;
+            moduleName = DEFAULT_MODULE_ID;
+            moduleInfo = Modules[moduleName];
+            
+            if (!moduleInfo)
+            {
+                window.alert('Cannot find registered module with id \'' + moduleName + '\'');
+                return;
+            }
         }
         const useExperimental = moduleInfo['experimental'];
         if (useExperimental && !app.isExperimental())
