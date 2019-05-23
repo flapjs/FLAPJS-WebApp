@@ -46,6 +46,7 @@ const I18N = {
         for (let line of lines)
         {
             line = line.trim();
+            if (line.startsWith('#')) continue;
             if (line.startsWith('//')) continue;
             if (line.startsWith('//TODO:'))
             {
