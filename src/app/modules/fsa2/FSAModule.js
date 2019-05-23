@@ -122,14 +122,18 @@ class FSAModule
                     title={'Finite State Automata'}>
                     <p>{'Brought to you with \u2764 by the Flap.js team.'}</p>
                     <p>{'<- Tap on a tab to begin!'}</p>
-                    <p style={{position: 'absolute', bottom: 0, right: 0, marginRight: '1em'}}>
+                    <div style={{position: 'absolute', bottom: 0, right: 0, marginRight: '1em'}}>
                         {'Looking for Bab\'s Tutorial?'}
-                        <div style={{display: 'flex', marginTop: '0.5em'}}>
-                            <button style={{flex: 1}} onClick={e => this._tutorialHandler.start(app, true)}>
+                        <div style={{display: 'flex', margin: '0.5em 0'}}>
+                            <button style={{flex: 1}} onClick={e =>
+                            {
+                                app.getDrawerComponent().closeDrawer();
+                                this._tutorialHandler.start(app, true);
+                            }}>
                                 {I18N.toString('message.action.next')}
                             </button>
                         </div>
-                    </p>
+                    </div>
                 </PanelContainer>
             ))
             .addPanelClass(OverviewPanel)
