@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+### Changed
+### Removed
+### Fixed
+
+## [0.4.2] - 2019-05-22
+### Added
 - Module version is now visible in Options.
 - Change machine type for FA module in the title bar.
 - A new and improved graph picking system.
