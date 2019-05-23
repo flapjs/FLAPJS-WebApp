@@ -159,7 +159,7 @@ module.exports = (env, argv) =>
         exclude: [/vendors\.bundle.*\.js$/, '../serviceWorker.js']
       }));
     config.plugins.push(new CleanPlugin({
-      cleanOnceBeforeBuildPatterns: ['../serviceWorker.js', '../404.html', '../index.html'],
+      cleanOnceBeforeBuildPatterns: ['../dist', '../serviceWorker.js', '../404.html', '../index.html'],
       dangerouslyAllowCleanPatternsOutsideProject: true,
       dry: false
     }));
