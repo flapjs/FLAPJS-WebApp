@@ -2,6 +2,9 @@ import SessionExporter from 'session/SessionExporter.js';
 
 import JSONFileIcon from 'components/iconset/flat/JSONFileIcon.js';
 
+/**
+ * A class that represents a session exporter for the PDA module.
+ */
 class PDAExporter extends SessionExporter
 {
     constructor(jsonGraphParser)

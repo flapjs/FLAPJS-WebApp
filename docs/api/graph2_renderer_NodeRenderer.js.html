@@ -38,13 +38,14 @@ export const DefaultNodeShapeRenderer = props => (
             r={props.radius}
             fill={props.color}
             stroke={props.outline} />
-        &lt;circle cx={props.position.x} cy={props.position.y}
-            r={props.radius + INPUT_MASK_NODE_RADIUS_OFFSET}
-            fill="transparent"
-            cursor="pointer"
-            onMouseOver={props.onMouseOver}
-            onMouseOut={props.onMouseOut}
-            pointerEvents={props.pointerEvents} />
+        {(props.onMouseOver || props.onMouseOut) &amp;&amp;
+            &lt;circle cx={props.position.x} cy={props.position.y}
+                r={props.radius + INPUT_MASK_NODE_RADIUS_OFFSET}
+                fill="transparent"
+                cursor="pointer"
+                onMouseOver={props.onMouseOver}
+                onMouseOut={props.onMouseOut}
+                pointerEvents={props.pointerEvents} />}
     &lt;/React.Fragment>
 );
 
@@ -56,7 +57,7 @@ export const DefaultLabelRenderer = props => (
             fontSize: `${(1 - Math.min(Math.max(props.label.length - 2, 0) / 6, 0.5))}em`
         }}
         textAnchor="middle"
-        stroke={props.color}>
+        fill={props.color}>
         {props.label}
     &lt;/text>
 );
@@ -83,29 +84,29 @@ class NodeRenderer extends React.Component
         return (
             &lt;g>
                 {NodeShapeRenderer &amp;&amp;
-          &lt;NodeShapeRenderer
-              position={position}
-              radius={radius}
-              color={color}
-              outline={outline}
-              onMouseOver={onMouseOver ? e =>
-              {
-                  const value = e.target['value'] || (e.target['value'] = {});
-                  value.type = EVENT_SOURCE_NODE;
-                  onMouseOver(e);
-              } : null}
-              onMouseOut={onMouseOut ? e =>
-              {
-                  const value = e.target['value'] || (e.target['value'] = {});
-                  value.type = EVENT_SOURCE_NODE;
-                  onMouseOut(e);
-              } : null}
-              pointerEvents={pointerEvents} />}
+                    &lt;NodeShapeRenderer
+                        position={position}
+                        radius={radius}
+                        color={color}
+                        outline={outline}
+                        onMouseOver={onMouseOver ? e =>
+                        {
+                            const value = e.target['value'] || (e.target['value'] = {});
+                            value.type = EVENT_SOURCE_NODE;
+                            onMouseOver(e);
+                        } : null}
+                        onMouseOut={onMouseOut ? e =>
+                        {
+                            const value = e.target['value'] || (e.target['value'] = {});
+                            value.type = EVENT_SOURCE_NODE;
+                            onMouseOut(e);
+                        } : null}
+                        pointerEvents={pointerEvents} />}
                 {NodeLabelRenderer &amp;&amp;
-          &lt;NodeLabelRenderer
-              position={position}
-              label={label}
-              color={outline} />}
+                    &lt;NodeLabelRenderer
+                        position={position}
+                        label={label}
+                        color={outline} />}
             &lt;/g>
         );
     }
@@ -122,13 +123,13 @@ export default NodeRenderer;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphEditorView.html">GraphEditorView</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#doesSupportLocalStorage">doesSupportLocalStorage</a></li><li><a href="global.html#getCurrentURL">getCurrentURL</a></li><li><a href="global.html#getDirectionalVector">getDirectionalVector</a></li><li><a href="global.html#getFileExtFromName">getFileExtFromName</a></li><li><a href="global.html#getMidPoint">getMidPoint</a></li><li><a href="global.html#getURLParameters">getURLParameters</a></li><li><a href="global.html#guid">guid</a></li><li><a href="global.html#lerp">lerp</a></li><li><a href="global.html#loadMachineFromData">loadMachineFromData</a></li><li><a href="global.html#stringHash">stringHash</a></li><li><a href="global.html#uuid">uuid</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#transformViewToScreenPosition">transformViewToScreenPosition</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Wed May 15 2019 21:55:29 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed May 22 2019 21:17:04 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

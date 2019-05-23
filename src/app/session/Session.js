@@ -6,7 +6,7 @@ import { guid } from 'util/MathHelper.js';
 import Logger from 'util/logger/Logger.js';
 const LOGGER_TAG = 'Session';
 
-const DEFAULT_MODULE_ID = 'fsa2';
+const DEFAULT_MODULE_ID = 'fsa';
 export const CURRENT_MODULE_STORAGE_ID = 'currentModule';
 const MODULE_LOAD_DELAY = 300;
 let MODULE_TIMEOUT = null;
@@ -38,7 +38,7 @@ class Session
 
         Logger.out(LOGGER_TAG, `Starting session for module '${moduleName}'...`);
 
-        //Load from storage, url, or default, if not specified...
+        // Load from storage, url, or default, if not specified...
         if (!moduleName || moduleName.length <= 0)
         {
             const urlParams = URLHelper.getURLParameters(URLHelper.getCurrentURL());
@@ -53,7 +53,7 @@ class Session
             }
         }
 
-        //Check registered module info...
+        // Check registered module info...
         const moduleInfo = Modules[moduleName];
         if (!moduleInfo)
         {
@@ -72,7 +72,7 @@ class Session
             return;
         }
 
-        //Overwrite any past calls...
+        // Overwrite any past calls...
         if (MODULE_TIMEOUT) clearTimeout(MODULE_TIMEOUT);
 
         MODULE_TIMEOUT = setTimeout(() =>
@@ -104,7 +104,7 @@ class Session
                 }
                 catch (e)
                 {
-                    window.alert('Could not load module with id \'' + moduleName + '\'');
+                    window.alert('Could not load module with id \'' + moduleName + '\':\n' + e.message);
                 }
             });
         }, MODULE_LOAD_DELAY);

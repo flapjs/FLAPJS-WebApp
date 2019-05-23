@@ -1,32 +1,8 @@
 import SessionImporter from 'session/SessionImporter.js';
 
 /**
- * Sets all of the details pertaining to the module (and the machine)
- *
- * @param  {GraphController} graphController        the controller for the graph to be constructed
- * @param  {MachineController} machineController    the controller for the machine to be constructed
- * @param  {Object} machineData                     the machine data to be parsed
+ * A class that represents a session importer for the PDA module.
  */
-function loadMachineFromData(graphController, machineController, machineData)
-{
-    const machineType = machineData.type;
-    if (machineType) machineController.setMachineType(machineType);
-    const customSymbols = machineData.symbols;
-    if (customSymbols && Array.isArray(customSymbols))
-    {
-        machineController.clearCustomSymbols();
-        for(const symbol of customSymbols)
-        {
-            machineController.addCustomSymbol(symbol);
-        }
-    }
-    const statePrefix = machineData.statePrefix;
-    if (statePrefix)
-    {
-        graphController.getGraphLabeler().setDefaultNodeLabelPrefix(statePrefix);
-    }
-}
-
 class PDAImporter extends SessionImporter
 {
     constructor(app, jsonGraphParser)
@@ -85,6 +61,34 @@ class PDAImporter extends SessionImporter
             // TODO: this should not be here
             session.getApp().getUndoManager().captureEvent();
         }
+    }
+}
+
+/**
+ * Sets all of the details pertaining to the module (and the machine)
+ *
+ * @private
+ * @param  {GraphController} graphController        the controller for the graph to be constructed
+ * @param  {MachineController} machineController    the controller for the machine to be constructed
+ * @param  {Object} machineData                     the machine data to be parsed
+ */
+function loadMachineFromData(graphController, machineController, machineData)
+{
+    const machineType = machineData.type;
+    if (machineType) machineController.setMachineType(machineType);
+    const customSymbols = machineData.symbols;
+    if (customSymbols && Array.isArray(customSymbols))
+    {
+        machineController.clearCustomSymbols();
+        for(const symbol of customSymbols)
+        {
+            machineController.addCustomSymbol(symbol);
+        }
+    }
+    const statePrefix = machineData.statePrefix;
+    if (statePrefix)
+    {
+        graphController.getGraphLabeler().setDefaultNodeLabelPrefix(statePrefix);
     }
 }
 

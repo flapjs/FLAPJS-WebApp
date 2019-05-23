@@ -4,6 +4,12 @@ class MenuManager
     {
         this._panelClasses = [];
         this._panelProps = null;
+        this._subtitleComponentClass = null;
+    }
+
+    setSubtitleComponentClass(componentClass)
+    {
+        this._subtitleComponentClass = componentClass;
     }
 
     setPanelProps(props)
@@ -40,6 +46,11 @@ class MenuManager
     getPanelClasses()
     {
         return this._panelClasses;
+    }
+
+    getSubtitleComponentClass()
+    {
+        return this._subtitleComponentClass;
     }
 }
 

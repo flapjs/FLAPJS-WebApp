@@ -5,7 +5,7 @@ import './App.css';
 import Config from 'deprecated/config.js';
 
 //import Modules from './Modules.js';
-import Module from 'modules/fsa/FSAModule.js';
+import Module from 'deprecated/fsa/FSAModule.js';
 import ModuleLoader from 'deprecated/modules/ModuleLoader.js';
 
 import HotKeys from './HotKeys.js';

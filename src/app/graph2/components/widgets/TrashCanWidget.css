@@ -1,16 +1,21 @@
 :local(.trash_container) {
-  width: 3.5em;
+  width: 4em;
+  height: 4em;
   padding: 0.5em;
 
   cursor: pointer;
 
-  fill: var(--color-viewport-text);
+  color: var(--color-viewport-text);
+  border-radius: 1em;
 
   opacity: 1;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease,
+    color 0.15s ease,
+    background-color 0.15s ease;
 }
 :local(.trash_container).active {
-  fill: var(--color-viewport-error);
+  color: var(--color-viewport-error);
+  background-color: var(--color-viewport-back);
 }
 :local(.trash_container).hide {
   pointer-events: none;

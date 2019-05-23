@@ -45,9 +45,11 @@
     <section>
         <article><h1>Flap.js</h1>
 <p><em>Formal Languages and Automata Package</em></p>
+<p><a href="https://travis-ci.org/flapjs/FLAPJS-WebApp"><img src="https://travis-ci.org/flapjs/FLAPJS-WebApp.svg?branch=master" alt="Build Status"></a></p>
 <blockquote>
 <p>By the students. For the students.</p>
 </blockquote>
+<p>ANNOUNCEMENT: We are always looking for interested contributors and new members for the team! If you have any interest in web development, UI/UX design, computation theory, or general graphing systems, please contact us. We encourage you to play around with our repo and try out its features! (For more info, go to the bottom of this page.)</p>
 <hr>
 <h2>Purpose</h2>
 <p>To make a program that is more accessible and intuitive to use, so we can all become a <a href="http://www.jflap.org/">JFLAP</a>-free homework group for Professor Minnes’s class (CSE 105).</p>
@@ -113,12 +115,13 @@
 </ul>
 </li>
 </ul>
-<h3>0.4.0</h3>
+<h3>0.4.1</h3>
 <ul>
+<li>[x] Theme presets</li>
 <li>[ ] Context-Free Grammars</li>
 <li>[ ] StepTracer design</li>
 <li>[ ] Cross-window operations</li>
-<li>[ ] Theme presets</li>
+<li>[x] Automatic build pipeline with TravisCI</li>
 </ul>
 <h3>0.3.4</h3>
 <ul>
@@ -169,6 +172,7 @@
 <li>[x] Custom language</li>
 <li>[x] Offline capabilities</li>
 </ul>
+<p>NOTE: Check out our CHANGELOG for more information!</p>
 <hr>
 <h2>Getting Started</h2>
 <h3>Installing <a href="https://nodejs.org/en/">Node.js</a></h3>
@@ -354,7 +358,13 @@ class SomeClass extends SomeOtherClass
 Eventable.mixin(SomeClass);
 </code></pre>
 <h3>Notification System</h3>
-<p><code>NotificationSystem.js</code> handles all notifications that are reported by other various components to the user. The messages can be grouped and searched by tags and sorted into various levels: <code>ERROR</code>, <code>WARNING</code>, <code>DEBUG</code>, <code>INFO</code>. Each message can also be dynamically altered by external handlers.</p></article>
+<p><code>NotificationSystem.js</code> handles all notifications that are reported by other various components to the user. The messages can be grouped and searched by tags and sorted into various levels: <code>ERROR</code>, <code>WARNING</code>, <code>DEBUG</code>, <code>INFO</code>. Each message can also be dynamically altered by external handlers.</p>
+<h3>Conclusion</h3>
+<p>If you have any more questions, please contact any Flap.js dev team member.</p>
+<p>Or, you can contact me:
+andykuo1supergreen@gmail.com
+(Please begin the subject with 'Flap.js - ')</p>
+<p>Thank you for reading me!</p></article>
     </section>
 
 
@@ -365,13 +375,13 @@ Eventable.mixin(SomeClass);
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphEditorView.html">GraphEditorView</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#doesSupportLocalStorage">doesSupportLocalStorage</a></li><li><a href="global.html#getCurrentURL">getCurrentURL</a></li><li><a href="global.html#getDirectionalVector">getDirectionalVector</a></li><li><a href="global.html#getFileExtFromName">getFileExtFromName</a></li><li><a href="global.html#getMidPoint">getMidPoint</a></li><li><a href="global.html#getURLParameters">getURLParameters</a></li><li><a href="global.html#guid">guid</a></li><li><a href="global.html#lerp">lerp</a></li><li><a href="global.html#loadMachineFromData">loadMachineFromData</a></li><li><a href="global.html#stringHash">stringHash</a></li><li><a href="global.html#uuid">uuid</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#transformViewToScreenPosition">transformViewToScreenPosition</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Wed May 15 2019 21:55:30 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed May 22 2019 21:17:04 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

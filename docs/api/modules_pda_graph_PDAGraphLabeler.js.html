@@ -26,13 +26,16 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import AbstractGraphLabeler from 'graph/AbstractGraphLabeler.js';
+            <pre class="prettyprint source linenums"><code>import AbstractGraphLabeler from 'graph2/AbstractGraphLabeler.js';
 
-import {EMPTY_CHAR,
+import
+{
+    EMPTY_CHAR,
     LINE_SEPARATOR,
     SYMBOL_SEPARATOR,
     READ_SEPARATOR,
-    POP_SEPARATOR} from './PDAEdge.js';
+    POP_SEPARATOR
+} from './element/PDAEdge.js';
 
 const DEFAULT_NODE_LABEL_PREFIX = 'q';
 
@@ -79,7 +82,7 @@ class PDAGraphLabeler extends AbstractGraphLabeler
             if (startNode &amp;&amp; startNode.getNodeCustom()) nodeIndex = 1;
 
             let newNodeLabel = this.getDefaultNodeLabelPrefix() + nodeIndex;
-            while(graph.getNodesByLabel(newNodeLabel, otherNodes).length > 0)
+            while (graph.getNodesByLabel(newNodeLabel, otherNodes).length > 0)
             {
                 otherNodes.length = 0;
                 ++nodeIndex;
@@ -112,13 +115,13 @@ class PDAGraphLabeler extends AbstractGraphLabeler
 function isValidSymbol(symbol)
 {
     return symbol.length === 1 &amp;&amp;
-    symbol !== LINE_SEPARATOR &amp;&amp;
-    symbol !== SYMBOL_SEPARATOR &amp;&amp;
-    symbol !== READ_SEPARATOR &amp;&amp;
-    symbol !== POP_SEPARATOR;
+        symbol !== LINE_SEPARATOR &amp;&amp;
+        symbol !== SYMBOL_SEPARATOR &amp;&amp;
+        symbol !== READ_SEPARATOR &amp;&amp;
+        symbol !== POP_SEPARATOR;
 }
 
-function edgeLabelFormatter(string, allowNull=false)
+function edgeLabelFormatter(string, allowNull = false)
 {
     const lines = string.split(LINE_SEPARATOR);
     const result = new Set();
@@ -126,7 +129,7 @@ function edgeLabelFormatter(string, allowNull=false)
 
     let symbols;
     let symbolLength = 0;
-    for(let i = 0; i &lt; length; ++i)
+    for (let i = 0; i &lt; length; ++i)
     {
         symbols = lines[i].trim().split('');
         symbolLength = symbols.length;
@@ -142,7 +145,7 @@ function edgeLabelFormatter(string, allowNull=false)
         let pushSymbol = null;
         let symbol = null;
 
-        for(let j = 0; j &lt; symbolLength; ++j)
+        for (let j = 0; j &lt; symbolLength; ++j)
         {
             if (readSymbol === null)
             {
@@ -213,13 +216,13 @@ export default PDAGraphLabeler;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphEditorView.html">GraphEditorView</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#doesSupportLocalStorage">doesSupportLocalStorage</a></li><li><a href="global.html#getCurrentURL">getCurrentURL</a></li><li><a href="global.html#getDirectionalVector">getDirectionalVector</a></li><li><a href="global.html#getFileExtFromName">getFileExtFromName</a></li><li><a href="global.html#getMidPoint">getMidPoint</a></li><li><a href="global.html#getURLParameters">getURLParameters</a></li><li><a href="global.html#guid">guid</a></li><li><a href="global.html#lerp">lerp</a></li><li><a href="global.html#loadMachineFromData">loadMachineFromData</a></li><li><a href="global.html#stringHash">stringHash</a></li><li><a href="global.html#uuid">uuid</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#transformViewToScreenPosition">transformViewToScreenPosition</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Wed May 15 2019 21:55:29 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed May 22 2019 21:17:04 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

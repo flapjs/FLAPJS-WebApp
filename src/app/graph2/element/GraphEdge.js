@@ -9,12 +9,12 @@ import GraphElement from './GraphElement.js';
 class GraphEdge extends GraphElement
 {
     /**
-   * Creates a edge with the unique id.
-   * 
-   * @param {String} id           The element id for this node.
-   * @param {GraphNode} from      The from node of the edge.
-   * @param {GraphNode} [to=null] The to node of the edge.
-   */
+     * Creates a edge with the unique id.
+     * 
+     * @param {String} id           The element id for this node.
+     * @param {GraphNode} from      The from node of the edge.
+     * @param {GraphNode} [to=null] The to node of the edge.
+     */
     constructor(id, from, to=null)
     {
         super(id);
@@ -40,12 +40,12 @@ class GraphEdge extends GraphElement
     }
 
     /**
-   * Sets the edge label to the passed-in string.
-   *
-   * Assumes the label is NOT null.
-   * @param {String} label  The new edge label.
-   * @returns {this}
-   */
+     * Sets the edge label to the passed-in string.
+     *
+     * Assumes the label is NOT null.
+     * @param {String} label  The new edge label.
+     * @returns {this}
+     */
     setEdgeLabel(label)
     {
         this._label = label;
@@ -128,10 +128,10 @@ class GraphEdge extends GraphElement
     isSelfLoop() { return this._from === this._to; }
 
     /**
-   * Gets the label of the edge. If the edge has no label, it will return an
-   * empty string.
-   * @returns {String} The edge's label.
-   */
+     * Gets the label of the edge. If the edge has no label, it will return an
+     * empty string.
+     * @returns {String} The edge's label.
+     */
     getEdgeLabel() { return this._label; }
 
     getEdgeFrom() { return this._from; }

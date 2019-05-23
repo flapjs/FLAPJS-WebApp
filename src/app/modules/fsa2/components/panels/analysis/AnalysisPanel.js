@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './AnalysisPanel.css';
 
-import { getUnreachableNodes } from 'modules/fsa2/graph/FSAGraphUtil.js';
+import { getUnreachableNodes } from 'graph2/util/NodeGraphUtils.js';
 
 import PanelContainer from 'experimental/panels/PanelContainer.js';
 import PanelSection from 'experimental/panels/PanelSection.js';
@@ -43,7 +43,7 @@ class AnalysisPanel extends React.Component
         const machineController = currentModule.getMachineController();
         const props = { graphController: graphController, machineController: machineController };
 
-        //Will do: machineController.convertMachineTo("DFA");
+        // Will do: machineController.convertMachineTo("DFA");
         session.getApp().getNotificationManager().pushNotification(
             I18N.toString('message.warning.convertNFAToDFA'),
             MACHINE_CONVERSION_LAYOUT_ID, MACHINE_CONVERSION_NOTIFICATION_TAG, props, true

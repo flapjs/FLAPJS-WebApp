@@ -32,15 +32,16 @@ import PanelContainer from 'experimental/panels/PanelContainer.js';
 import MachineController from './MachineController.js';
 import REErrorChecker from './REErrorChecker.js';
 import SafeExpressionEventHandler from './SafeExpressionEventHandler.js';
+import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
 
-import {registerNotifications} from './components/notifications/RENotifications.js';
+import { registerNotifications } from './components/notifications/RENotifications.js';
 
 import OverviewPanel from './components/panels/overview/OverviewPanel.js';
 import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 import TestingPanel from './components/panels/testing/TestingPanel.js';
 
 import ExpressionView from './components/views/ExpressionView.js';
-import {CTRL_KEY, SHIFT_KEY} from 'session/manager/hotkey/HotKeyManager.js';
+import { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
 
 import REImporter from './filehandlers/REImporter.js';
 import REExporter from './filehandlers/REExporter.js';
@@ -59,6 +60,9 @@ class REModule
         this._machineController = new MachineController();
         this._errorChecker = new REErrorChecker(app,
             this._machineController);
+
+        app.getRenderManager()
+            .addRenderer(RENDER_LAYER_WORKSPACE, props => &lt;ExpressionView session={app.getSession()} />);
     }
 
     /** @override */
@@ -80,27 +84,22 @@ class REModule
             .addPanelClass(AnalysisPanel)
             .addPanelClass(TestingPanel);
 
-        app.getViewportManager()
-            .addViewClass(ExpressionView);
-
         app.getUndoManager()
-            .setEventHandlerFactory((...args) => 
-            {
-                return new SafeExpressionEventHandler(this._machineController);
-            });
-            
+            .setEventHandlerFactory((...args) =>
+                new SafeExpressionEventHandler(this._machineController));
+
         app.getExportManager()
             .registerExporter(new REExporter(), 'session')
             .registerExporter(new REToFSAExporter(), 're2fsa');
-        
+
         app.getImportManager()
             .addImporter(new REImporter(app), '.re.json', '.json');
 
         app.getHotKeyManager()
             .registerHotKey('Save as JSON', [CTRL_KEY, 'KeyS'], () => { app.getExportManager().tryExportFile('session', app.getSession()); })
-            .registerHotKey('New', [CTRL_KEY, 'KeyN'], () => {this.clear(app);})
-            .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => {app.getUndoManager().undo();})
-            .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => {app.getUndoManager().redo();});
+            .registerHotKey('New', [CTRL_KEY, 'KeyN'], () => { this.clear(app); })
+            .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => { app.getUndoManager().undo(); })
+            .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => { app.getUndoManager().redo(); });
     }
 
     /** @override */
@@ -150,13 +149,13 @@ export default REModule;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphEditorView.html">GraphEditorView</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#doesSupportLocalStorage">doesSupportLocalStorage</a></li><li><a href="global.html#getCurrentURL">getCurrentURL</a></li><li><a href="global.html#getDirectionalVector">getDirectionalVector</a></li><li><a href="global.html#getFileExtFromName">getFileExtFromName</a></li><li><a href="global.html#getMidPoint">getMidPoint</a></li><li><a href="global.html#getURLParameters">getURLParameters</a></li><li><a href="global.html#guid">guid</a></li><li><a href="global.html#lerp">lerp</a></li><li><a href="global.html#loadMachineFromData">loadMachineFromData</a></li><li><a href="global.html#stringHash">stringHash</a></li><li><a href="global.html#uuid">uuid</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#transformViewToScreenPosition">transformViewToScreenPosition</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Wed May 15 2019 21:55:29 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed May 22 2019 21:17:04 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

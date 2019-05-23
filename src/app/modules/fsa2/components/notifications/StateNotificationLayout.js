@@ -1,17 +1,12 @@
 import React from 'react';
-import DefaultNotificationLayout, {STYLE_TYPE_ERROR}
+import DefaultNotificationLayout, { STYLE_TYPE_ERROR }
     from 'session/manager/notification/components/DefaultNotificationLayout.js';
 
 /**
- * @class
  * A class representing the layout for a notification referring to states
  */
 class StateNotificationLayout extends React.Component
 {
-    /**
-   * @constructor
-   * @param {Object} props component's properties
-   */
     constructor(props)
     {
         super(props);
@@ -19,7 +14,7 @@ class StateNotificationLayout extends React.Component
         this._targetIndex = 0;
         this._targetLabel = '';
         const targets = props.message.targets;
-        for(const target of targets)
+        for (const target of targets)
         {
             if (this._targetLabel.length > 0)
             {
@@ -33,17 +28,19 @@ class StateNotificationLayout extends React.Component
     }
 
     /**
-   * Handles onclick events for the buttons
-   * @param {Event} e the input event
-   */
+     * Handles onclick events for the buttons
+     * 
+     * @param {Event} e the input event
+     */
     onClick(e)
     {
         const notification = this.props.notification;
         const message = this.props.message;
+        const app = this.props.app;
 
         const graphController = this.props.graphController;
 
-        switch(e.target.value)
+        switch (e.target.value)
         {
         // Cycle through all of the targets and center the viewport on it
         case 'locate':
@@ -57,7 +54,8 @@ class StateNotificationLayout extends React.Component
                     if (this._targetIndex >= targetLength) this._targetIndex = 0;
 
                     // Move pointer to target
-                    graphController.focusOnNode(target);
+                    const graphView = app.getSession().getCurrentModule().getGraphView();
+                    graphView.moveViewToPosition(target.x, target.y);
                 }
             }
             break;

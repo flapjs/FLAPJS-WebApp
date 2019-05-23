@@ -22,7 +22,7 @@ class PanelSection extends React.Component
     {
         this.setState((prev, props) => 
         {
-            return {open: !prev.open};
+            return { open: !prev.open };
         });
     }
 
@@ -31,7 +31,7 @@ class PanelSection extends React.Component
     {
         if (this.state.open && this.props.disabled)
         {
-            this.setState({open: false});
+            this.setState({ open: false });
         }
     }
 
@@ -45,17 +45,17 @@ class PanelSection extends React.Component
         return (
             <section id={this.props.id}
                 className={Style.section_container +
-          ' ' + this.props.className}
+                    ' ' + this.props.className}
                 style={this.props.style}>
                 <IconButton className={Style.section_header}
                     title={title}
                     disabled={isDisabled}
                     onClick={this.onClick}>
-                    {!isOpen ? <TinyDownIcon/> : <TinyUpIcon/>}
+                    {!isOpen ? <TinyDownIcon /> : <TinyUpIcon />}
                 </IconButton>
                 <div className={Style.section_content_container +
-          (isOpen ? ' open ' : '') +
-          (isFull ? ' full ' : '')}>
+                    (isOpen ? ' open ' : '') +
+                    (isFull ? ' full ' : '')}>
                     <div className={Style.section_content}>
                         {this.props.children}
                     </div>

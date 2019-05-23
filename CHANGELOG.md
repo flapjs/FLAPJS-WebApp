@@ -6,6 +6,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+### Changed
+### Removed
+### Fixed
+
+## [0.4.2] - 2019-05-22
+### Added
+- Module version is now visible in Options.
+- Change machine type for FA module in the title bar.
+- A new and improved graph picking system.
+- Allow clicking on labels to edit them.
+- Custom node color styles are now applied to exported images.
+- Grayscale image exporting.
+
+### Changed
+- Menu entries are now ordered more logically.
+- Fullscreen mode is available for ALL modules.
+- Trash can looks nicer when red :D
+- A new menu design.
+
+### Removed
+- Unused modules are no longer visible in module selection.
+
+### Fixed
+- Previous labels sometimes show up in future label editors.
+- FA/PDA: Auto-formatting sometimes fails for edge labels.
+- FA/PDA: Initial marker cannot be dragged with left mouse button.
+- FA/PDA: State label editing won't save.
+- FA/PDA: Trash can icon is missing label.
+- FA/PDA: Trash can cannot delete edges.
+- FA/PDA: Missing red border for delete mode.
+
+## [0.4.1] - 2019-05-15
+### Added
 - Pushdown Automata & Regular Expression modules are now available.
 - Language is saved across sessions.
 - Regular expression scope highlighting.
@@ -102,7 +135,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Localization for English and Pirate Speak.
 - Offline capabilities with working ServiceWorker.
 
-[Unreleased]: https://github.com/flapjs/FLAPJS-WebApp/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/flapjs/FLAPJS-WebApp/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/flapjs/FLAPJS-WebApp/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/flapjs/FLAPJS-WebApp/compare/v0.3.4...v0.4.0
 [0.3.4]: https://github.com/flapjs/FLAPJS-WebApp/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/flapjs/FLAPJS-WebApp/compare/v0.3.2...v0.3.3

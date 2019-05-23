@@ -17,14 +17,14 @@ class NotificationView extends React.Component
         return (
             <div id={this.props.id}
                 className={Style.notifications_container +
-          ' ' + this.props.className}
+                    ' ' + this.props.className}
                 style={this.props.style}>
                 {notificationManager.getNotifications().map(notification => 
                 {
                     const layoutID = notification.getLayoutID();
                     const NotificationLayout = layoutID ? notificationManager.getNotificationLayout(layoutID) : DefaultNotificationLayout;
                     return (
-                        <NotificationLayout key={notification.getID()} notification={notification} message={notification.getMessage()} {...notification.getProps()}/>
+                        <NotificationLayout key={notification.getID()} notification={notification} message={notification.getMessage()} {...notification.getProps()} />
                     );
                 })}
             </div>

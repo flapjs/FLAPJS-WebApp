@@ -28,7 +28,6 @@
         <article>
             <pre class="prettyprint source linenums"><code>import InputContext from './InputContext.js';
 import InputPointer from './InputPointer.js';
-import ViewportAdapter from './ViewportAdapter.js';
 
 const LONG_TAP_TICKS = 600;
 const DOUBLE_TAP_TICKS = 600;
@@ -44,9 +43,12 @@ const DRAGGING_BUFFER_SQU = DRAGGING_BUFFER * DRAGGING_BUFFER;
  */
 class InputAdapter extends InputContext
 {
-    constructor()
+    constructor(viewportAdapter)
     {
         super();
+        
+        this._viewportAdapter = viewportAdapter;
+
         this._contexts = [];
         this._activeDragHandler = null;
 
@@ -59,8 +61,6 @@ class InputAdapter extends InputContext
             _timer: null
         };
         this._pointer = null;
-
-        this._viewportAdapter = new ViewportAdapter();
 
         //Although dragging could be in pointer, it should be here to allow
         //the adapter to be independent of pointer.
@@ -94,23 +94,23 @@ class InputAdapter extends InputContext
 
     bindContext(context)
     {
-        if (!(context instanceof InputContext)) 
+        if (!(context instanceof InputContext))
             throw new Error('Cannot bind invalid context - must be an instance of InputContext');
-      
+
         this._contexts.unshift(context);
         return this;
     }
 
     bindContextAsLast(context)
     {
-        if (!(context instanceof InputContext)) 
+        if (!(context instanceof InputContext))
             throw new Error('Cannot bind invalid context - must be an instance of InputContext');
-      
+
         this._contexts.push(context);
         return this;
     }
 
-    unbindContext(context=null)
+    unbindContext(context = null)
     {
         if (context)
         {
@@ -159,7 +159,7 @@ class InputAdapter extends InputContext
         if (this._element) throw new Error('Trying to initialize an InputAdapter already initialized');
 
         this._viewportAdapter.setElement(this._element = element);
-        this._pointer = new InputPointer(this, this._element, this._viewportAdapter);
+        this._pointer = new InputPointer(this, this._viewportAdapter, this._element);
 
         this._element.addEventListener('mousedown', this.onMouseDown);
         this._element.addEventListener('mousemove', this.onMouseMove);
@@ -194,7 +194,7 @@ class InputAdapter extends InputContext
     /** @override */
     handleEvent(eventName, ...eventArgs)
     {
-        for(const context of this._contexts)
+        for (const context of this._contexts)
         {
             const result = context.handleEvent(eventName, ...eventArgs);
             if (result)
@@ -202,7 +202,7 @@ class InputAdapter extends InputContext
                 return result;
             }
         }
-    
+
         return super.handleEvent(eventName, ...eventArgs);
     }
 
@@ -405,7 +405,7 @@ class InputAdapter extends InputContext
 
     onInputDown(x, y, button)
     {
-    //Setup for hold timer...
+        //Setup for hold timer...
         const cursor = this._cursor;
         const pointer = this._pointer;
         const mouse = this._viewportAdapter.transformScreenToView(x, y);
@@ -427,7 +427,7 @@ class InputAdapter extends InputContext
 
     onDelayedInputDown()
     {
-    //That means the input is remaining still (like a hold)...
+        //That means the input is remaining still (like a hold)...
         if (!this._dragging)
         {
             this._altinput = true;
@@ -521,8 +521,8 @@ class InputAdapter extends InputContext
                     const dist = dx * dx + dy * dy;
                     const dt = Date.now() - this._prevEmptyTime;
                     if (this._prevEmptyInput &amp;&amp;
-            dist &lt; this._minTapRadius &amp;&amp;
-            dt &lt; this._dblInputDelay)
+                        dist &lt; this._minTapRadius &amp;&amp;
+                        dt &lt; this._dblInputDelay)
                     {
                         //Double tap!
                         this.handleEvent('onDblInputEvent', pointer);
@@ -594,13 +594,13 @@ export default InputAdapter;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphEditorView.html">GraphEditorView</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#doesSupportLocalStorage">doesSupportLocalStorage</a></li><li><a href="global.html#getCurrentURL">getCurrentURL</a></li><li><a href="global.html#getDirectionalVector">getDirectionalVector</a></li><li><a href="global.html#getFileExtFromName">getFileExtFromName</a></li><li><a href="global.html#getMidPoint">getMidPoint</a></li><li><a href="global.html#getURLParameters">getURLParameters</a></li><li><a href="global.html#guid">guid</a></li><li><a href="global.html#lerp">lerp</a></li><li><a href="global.html#loadMachineFromData">loadMachineFromData</a></li><li><a href="global.html#stringHash">stringHash</a></li><li><a href="global.html#uuid">uuid</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#transformViewToScreenPosition">transformViewToScreenPosition</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Wed May 15 2019 21:55:29 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed May 22 2019 21:17:04 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

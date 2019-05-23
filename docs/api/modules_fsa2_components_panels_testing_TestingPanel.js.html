@@ -53,20 +53,20 @@ class TestingPanel extends React.Component
     /** @override */
     componentDidMount()
     {
-    //TODO: This should be in modules...
+        //TODO: This should be in modules...
         const session = this.props.session;
         const app = session.getApp();
         const currentModule = session.getCurrentModule();
         const tester = currentModule._tester;
         tester.on('startTest', (tester) => 
         {
-            app._viewport.setCurrentView(1);
+            currentModule._testMode = true;
             app._drawer.setDrawerSoloClass(TestingPanel);
             app._drawer.closeDrawer();
         });
         tester.on('stopTest', (tester) => 
         {
-            app._viewport.setCurrentView(0);
+            currentModule._testMode = false;
             app._drawer.setDrawerSoloClass(null);
             app._drawer.openDrawer();
         });
@@ -76,7 +76,7 @@ class TestingPanel extends React.Component
     {
         this.setState((prev, props) => 
         {
-            return {stepMode: !prev.stepMode};
+            return { stepMode: !prev.stepMode };
         });
     }
 
@@ -88,8 +88,13 @@ class TestingPanel extends React.Component
         errorChecker.setErrorChecking(!errorCheck);
         if (errorCheck)
         {
-            //Turning it off
+            // Turning it off
             this.props.session.getApp().getNotificationManager().clearNotifications(MACHINE_ERROR_NOTIFICATION_TAG);
+        }
+        else
+        {
+            // Run it at least once on start
+            errorChecker.showErrors();
         }
     }
 
@@ -109,20 +114,20 @@ class TestingPanel extends React.Component
         return (
             &lt;PanelContainer id={this.props.id}
                 className={Style.panel_container +
-          ' ' + this.props.className}
+                    ' ' + this.props.className}
                 style={this.props.style}
                 title={TestingPanel.TITLE}>
 
-                &lt;TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode}/>
-                &lt;PanelSwitch id={'testing-step-test'} checked={stepMode} onChange={this.onStepTestChange} title={'Step testing'}/>
-                &lt;PanelSwitch id={'testing-error-check'} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={'Auto error checking'}/>
+                &lt;TestListView tester={tester} graphController={graphController} machineController={machineController} immediate={!stepMode} />
+                &lt;PanelSwitch id={'testing-step-test'} checked={stepMode} onChange={this.onStepTestChange} title={'Step testing'} />
+                &lt;PanelSwitch id={'testing-error-check'} checked={errorCheck} onChange={this.onAutoErrorCheckChange} title={'Auto error checking'} />
 
             &lt;/PanelContainer>
         );
     }
 }
 Object.defineProperty(TestingPanel, 'TITLE', {
-    get: function() { return I18N.toString('component.testing.title'); }
+    get: function () { return I18N.toString('component.testing.title'); }
 });
 
 export default TestingPanel;
@@ -136,13 +141,13 @@ export default TestingPanel;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphEditorView.html">GraphEditorView</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#doesSupportLocalStorage">doesSupportLocalStorage</a></li><li><a href="global.html#getCurrentURL">getCurrentURL</a></li><li><a href="global.html#getDirectionalVector">getDirectionalVector</a></li><li><a href="global.html#getFileExtFromName">getFileExtFromName</a></li><li><a href="global.html#getMidPoint">getMidPoint</a></li><li><a href="global.html#getURLParameters">getURLParameters</a></li><li><a href="global.html#guid">guid</a></li><li><a href="global.html#lerp">lerp</a></li><li><a href="global.html#loadMachineFromData">loadMachineFromData</a></li><li><a href="global.html#stringHash">stringHash</a></li><li><a href="global.html#uuid">uuid</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#transformViewToScreenPosition">transformViewToScreenPosition</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Wed May 15 2019 21:55:29 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed May 22 2019 21:17:04 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

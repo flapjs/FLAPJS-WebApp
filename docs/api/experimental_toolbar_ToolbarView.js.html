@@ -29,11 +29,12 @@
             <pre class="prettyprint source linenums"><code>import React from 'react';
 import Style from './ToolbarView.css';
 
-import {TOOLBAR_CONTAINER_MENU, TOOLBAR_CONTAINER_TOOLBAR} from './ToolbarButton.js';
+import { TOOLBAR_CONTAINER_MENU, TOOLBAR_CONTAINER_TOOLBAR } from './ToolbarButton.js';
 import ToolbarTitle from './ToolbarTitle.js';
 
 import IconButton from 'experimental/components/IconButton.js';
 import MenuIcon from 'components/iconset/MenuIcon.js';
+import CrossIcon from 'components/iconset/CrossIcon.js';
 
 const TOOLBAR_ALLOW_MENU_BAR = true;
 const TOOLBAR_DEFAULT_MENU_INDEX = -1;
@@ -56,7 +57,7 @@ class ToolbarView extends React.Component
         this.onTitleChange = this.onTitleChange.bind(this);
     }
 
-    openBar(callback=null)
+    openBar(callback = null)
     {
         if (!this.state.open)
         {
@@ -65,7 +66,7 @@ class ToolbarView extends React.Component
         }
     }
 
-    closeBar(callback=null)
+    closeBar(callback = null)
     {
         if (this.state.open)
         {
@@ -74,12 +75,11 @@ class ToolbarView extends React.Component
         }
     }
 
-    toggleBar(callback=null)
+    toggleBar(callback = null)
     {
-    //Toggle it, but also reset menu...
         this.setState((prev, props) => 
         {
-            return { open: !prev.open, menuIndex: TOOLBAR_DEFAULT_MENU_INDEX };
+            return { open: !prev.open };
         }, callback);
     }
 
@@ -94,7 +94,7 @@ class ToolbarView extends React.Component
         if (menuIndex >= this.props.menus.length) menuIndex = TOOLBAR_DEFAULT_MENU_INDEX;
 
         //Open and set tab index
-        this.setState({open: true, menuIndex: menuIndex});
+        this.setState({ open: true, menuIndex: menuIndex });
     }
 
     getCurrentMenuIndex()
@@ -109,14 +109,7 @@ class ToolbarView extends React.Component
 
     onBarExpand(e)
     {
-        if (this.state.open &amp;&amp; this.state.menuIndex  >= 0)
-        {
-            this.setCurrentMenu(TOOLBAR_DEFAULT_MENU_INDEX);
-        }
-        else
-        {
-            this.toggleBar();
-        }
+        this.toggleBar();
     }
 
     onTitleChange(value)
@@ -144,6 +137,7 @@ class ToolbarView extends React.Component
     render()
     {
         const title = this.props.title;
+        const subtitle = this.props.subtitle;
         const toolbarMenus = this.props.menus;
         const toolbarMenuIndex = this.state.menuIndex;
         const ToolbarMenu = toolbarMenuIndex >= 0 ? toolbarMenus[toolbarMenuIndex] : null;
@@ -158,37 +152,41 @@ class ToolbarView extends React.Component
         const showBarExpander = isBarOpen || (hasButtons &amp;&amp; TOOLBAR_ALLOW_MENU_BAR);
 
         return (
-            &lt;div ref={ref=>this.ref=ref}
+            &lt;div ref={ref => this.ref = ref}
                 id={this.props.id}
                 className={Style.app_bar +
-        (isBarOpen ? ' open ' : '') +
-        (shouldBarHide ? ' hide ' : '') +
-        ' ' + this.props.className}
+                    (isBarOpen ? ' open ' : '') +
+                    (shouldBarHide ? ' hide ' : '') +
+                    ' ' + this.props.className}
                 style={this.props.style}>
                 &lt;div className={Style.bar_menu}>
-                    {showCustomToolbarMenu ?
-                        &lt;div className={Style.menu_container}>
-                            &lt;ToolbarMenu {...this.props.menuProps} toolbar={this}/>
-                        &lt;/div> :
-                        &lt;div className={Style.menu_button_container}>
-                            {this.renderMenuButtons(this.props.children)}
-                        &lt;/div>}
+                    &lt;div className={Style.menu_container}>
+                        {showCustomToolbarMenu &amp;&amp; &lt;ToolbarMenu {...this.props.menuProps} toolbar={this} />}
+                    &lt;/div>
+                    &lt;div className={Style.menu_button_container}>
+                        {this.renderMenuButtons(this.props.children)}
+                    &lt;/div>
                 &lt;/div>
-                &lt;div ref={ref=>this.toolbarElement=ref} className={Style.bar_toolbar}>
+                &lt;div ref={ref => this.toolbarElement = ref} className={Style.bar_toolbar}>
                     &lt;ToolbarTitle className={Style.toolbar_title}
                         title={title}
+                        subtitle={subtitle}
                         defaultValue={session.getProjectName()}
                         onChange={this.onTitleChange}
-                        onClick={onTitleClick}/>
+                        onClick={onTitleClick} />
 
                     &lt;div className={Style.toolbar_button_container}>
                         {this.renderToolbarButtons(this.props.children)}
                     &lt;/div>
 
-                    {showBarExpander &amp;&amp;
-          &lt;IconButton className={Style.toolbar_expander} onClick={this.onBarExpand}>
-              &lt;MenuIcon/>
-          &lt;/IconButton>}
+                    {showBarExpander &amp;&amp; isBarOpen ?
+                        &lt;IconButton className={Style.toolbar_expander} onClick={this.onBarExpand} title="Back">
+                            &lt;CrossIcon />
+                        &lt;/IconButton>
+                        :
+                        &lt;IconButton className={Style.toolbar_expander} onClick={this.onBarExpand} title="Menu">
+                            &lt;MenuIcon />
+                        &lt;/IconButton>}
                 &lt;/div>
             &lt;/div>
         );
@@ -205,13 +203,13 @@ export default ToolbarView;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphEditorView.html">GraphEditorView</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li></ul><h3>Global</h3><ul><li><a href="global.html#doesSupportLocalStorage">doesSupportLocalStorage</a></li><li><a href="global.html#getCurrentURL">getCurrentURL</a></li><li><a href="global.html#getDirectionalVector">getDirectionalVector</a></li><li><a href="global.html#getFileExtFromName">getFileExtFromName</a></li><li><a href="global.html#getMidPoint">getMidPoint</a></li><li><a href="global.html#getURLParameters">getURLParameters</a></li><li><a href="global.html#guid">guid</a></li><li><a href="global.html#lerp">lerp</a></li><li><a href="global.html#loadMachineFromData">loadMachineFromData</a></li><li><a href="global.html#stringHash">stringHash</a></li><li><a href="global.html#uuid">uuid</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#transformViewToScreenPosition">transformViewToScreenPosition</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Wed May 15 2019 21:55:29 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed May 22 2019 21:17:04 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
