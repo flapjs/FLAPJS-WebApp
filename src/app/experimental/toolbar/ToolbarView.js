@@ -133,7 +133,32 @@ class ToolbarView extends React.Component
                 style={this.props.style}>
                 <div className={Style.bar_menu}>
                     <div className={Style.menu_container}>
-                        {showCustomToolbarMenu && <ToolbarMenu {...this.props.menuProps} toolbar={this} />}
+                        {showCustomToolbarMenu ?
+                            <ToolbarMenu {...this.props.menuProps} toolbar={this} />
+                            :
+                            <div>
+                                <h1>
+                                    Flap.js
+                                </h1>
+                                <p>
+                                    Something cool will be here soon. ;)
+                                </p>
+                                <p>
+                                    Have an awesome day!
+                                </p>
+                                <div style={{position: 'absolute', bottom: '0'}}>
+                                    <h3>Found a bug or have a cool idea?</h3>
+                                    <p>
+                                        Feel free to leave a comment or any feedback in <b>{'"'}Report a Bug{'"'}</b>.
+                                    </p>
+                                    <p>
+                                        It{'\''}s for both <b>bugs</b> and <b>suggestions</b>!
+                                    </p>
+                                    <p style={{marginTop: '3em'}}>
+                                        And if you are at all interested in what we do and would like to join the team, please contact us!
+                                    </p>
+                                </div>
+                            </div>}
                     </div>
                     <div className={Style.menu_button_container}>
                         {this.renderMenuButtons(this.props.children)}
