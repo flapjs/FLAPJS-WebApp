@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Exporter</title>
+    <title>JSDoc: Class: DrawerView</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Exporter</h1>
+    <h1 class="page-title">Class: DrawerView</h1>
 
     
 
@@ -28,10 +28,13 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Exporter<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>DrawerView<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">A class that exports a specific target to data. The outputs of this class are usually
-then passed to a downloader.</div>
+            <div class="class-description">A component that renders a collapsible drawer. It also handles the viewport beside
+the drawer. To update the panels available in the drawer, you can pass an array of
+component classes through the props.
+
+TODO: The drawer should not be responsible for the viewport as well. Separation of concerns.</div>
         
     
 </header>
@@ -46,7 +49,7 @@ then passed to a downloader.</div>
     
 
     
-    <h4 class="name" id="Exporter"><span class="type-signature"></span>new Exporter<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="DrawerView"><span class="type-signature"></span>new DrawerView<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -94,7 +97,7 @@ then passed to a downloader.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_file_export_Exporter.js.html">util/file/export/Exporter.js</a>, <a href="util_file_export_Exporter.js.html#line19">line 19</a>
+        <a href="experimental_drawer_DrawerView.js.html">experimental/drawer/DrawerView.js</a>, <a href="experimental_drawer_DrawerView.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -150,199 +153,12 @@ then passed to a downloader.</div>
     
 
     
-    <h4 class="name" id="exportTarget"><span class="type-signature"></span>exportTarget<span class="signature">(exportType, target)</span><span class="type-signature"> &rarr; {<a href="global.html#ExportData">ExportData</a>}</span></h4>
+    <h4 class="name" id="componentDidMount"><span class="type-signature"></span>componentDidMount<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
 
 
-
-<div class="description">
-    Exports the target to an export data object. This is then usually passed to a
-downloader to process and download to the client's machine.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>exportType</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the export type for the target</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>target</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the target to export</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_file_export_Exporter.js.html">util/file/export/Exporter.js</a>, <a href="util_file_export_Exporter.js.html#line29">line 29</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    the processed export data that represents the target's current state
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="global.html#ExportData">ExportData</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getIconClass"><span class="type-signature"></span>getIconClass<span class="signature">()</span><span class="type-signature"> &rarr; {React.Component}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    The representive icon class for this exporter.
-</div>
 
 
 
@@ -385,117 +201,7 @@ downloader to process and download to the client's machine.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_file_export_Exporter.js.html">util/file/export/Exporter.js</a>, <a href="util_file_export_Exporter.js.html#line43">line 43</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    the icon component class
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">React.Component</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getLabel"><span class="type-signature"></span>getLabel<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    The label for the exporter.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_file_export_Exporter.js.html">util/file/export/Exporter.js</a>, <a href="util_file_export_Exporter.js.html#line48">line 48</a>
+        <a href="experimental_drawer_DrawerView.js.html">experimental/drawer/DrawerView.js</a>, <a href="experimental_drawer_DrawerView.js.html#line71">line 71</a>
     </li></ul></dd>
     
 
@@ -531,7 +237,91 @@ downloader to process and download to the client's machine.
     
 
     
-    <h4 class="name" id="getTitle"><span class="type-signature"></span>getTitle<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="componentWillUnmount"><span class="type-signature"></span>componentWillUnmount<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="experimental_drawer_DrawerView.js.html">experimental/drawer/DrawerView.js</a>, <a href="experimental_drawer_DrawerView.js.html#line77">line 77</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getViewportColor"><span class="type-signature"></span>getViewportColor<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -539,7 +329,7 @@ downloader to process and download to the client's machine.
 
 
 <div class="description">
-    The hint for the exporter.
+    Gets the viewport boundary color
 </div>
 
 
@@ -583,7 +373,179 @@ downloader to process and download to the client's machine.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_file_export_Exporter.js.html">util/file/export/Exporter.js</a>, <a href="util_file_export_Exporter.js.html#line53">line 53</a>
+        <a href="experimental_drawer_DrawerView.js.html">experimental/drawer/DrawerView.js</a>, <a href="experimental_drawer_DrawerView.js.html#line161">line 161</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="experimental_drawer_DrawerView.js.html">experimental/drawer/DrawerView.js</a>, <a href="experimental_drawer_DrawerView.js.html#line334">line 334</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setViewportColor"><span class="type-signature"></span>setViewportColor<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Sets the viewport boundary color
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="experimental_drawer_DrawerView.js.html">experimental/drawer/DrawerView.js</a>, <a href="experimental_drawer_DrawerView.js.html#line155">line 155</a>
     </li></ul></dd>
     
 

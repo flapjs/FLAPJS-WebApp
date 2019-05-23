@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: graph2/components/layers/IndexedGraphStartMarkerLayer.js</title>
+    <title>JSDoc: Source: components/speechbubble/SpeechBubble.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: graph2/components/layers/IndexedGraphStartMarkerLayer.js</h1>
+    <h1 class="page-title">Source: components/speechbubble/SpeechBubble.js</h1>
 
     
 
@@ -27,77 +27,31 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './SpeechBubble.css';
 
-import StartNodeMarkerRenderer from '../../renderer/StartNodeMarkerRenderer.js';
-import IndexedGraphStartMarkerInputHandler from '../../inputhandler/IndexedGraphStartMarkerInputHandler.js';
-
-class IndexedGraphStartMarkerLayer extends React.Component
+class SpeechBubble extends React.Component
 {
-    constructor(props)
-    {
-        super(props);
-
-        const inputController = props.inputController;
-        const graphController = props.graphController;
-
-        this._startMarkerInputHandler = new IndexedGraphStartMarkerInputHandler(inputController, graphController);
-    }
-
-    /** @override */
-    componentDidMount()
-    {
-        const inputContext = this.props.inputContext;
-        if (inputContext)
-        {
-            const inputPriority = this.props.inputPriority || -1;
-            inputContext.addInputHandler(this._startMarkerInputHandler, inputPriority);
-        }
-    }
-
-    /** @override */
-    componentWillUnmount()
-    {
-        const inputContext = this.props.inputContext;
-        if (inputContext)
-        {
-            inputContext.removeInputHandler(this._startMarkerInputHandler);
-        }
-    }
+    constructor(props) { super(props); }
 
     /** @override */
     render()
     {
-        const inputController = this.props.inputController;
-        const Renderer = this.props.startMarkerRenderer || StartNodeMarkerRenderer;
-        const editable = this.props.editable;
+        const x = this.props.x;
+        const y = this.props.y;
 
-        const graphController = this.props.graphController;
-        const graph = graphController.getGraph();
-        let target = this._startMarkerInputHandler.getGhostMarker();
-        
-        if ('getStartNode' in graph &amp;&amp; !target)
-        {
-            target = graph.getStartNode();
-        }
-
-        const onMouseOver = inputController ? inputController.onMouseOver : null;
-        const onMouseOut = inputController ? inputController.onMouseOut : null;
-        
         return (
-            &lt;g>
-                {target &amp;&amp;
-                    &lt;Renderer
-                        node={target}
-                        color={'var(--color-graph-text)'}
-                        onMouseOver={onMouseOver}
-                        onMouseOut={onMouseOut}
-                        pointerEvents={editable &amp;&amp; inputController &amp;&amp; inputController.hasPointerEvents(target) ? 'all' : 'none'} />}
-            &lt;/g>
+            &lt;div {...this.props}
+                className={Style.speech_container + ' upside '}
+                style={{top: `${y}px`, left: `${x}px`}}>
+                &lt;div className={Style.speech_content}>
+                &lt;/div>
+            &lt;/div>
         );
     }
 }
 
-export default IndexedGraphStartMarkerLayer;</code></pre>
+export default SpeechBubble;
+</code></pre>
         </article>
     </section>
 

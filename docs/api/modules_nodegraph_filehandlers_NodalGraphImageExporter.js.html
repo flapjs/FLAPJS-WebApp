@@ -28,13 +28,17 @@
         <article>
             <pre class="prettyprint source linenums"><code>import SessionExporter from 'session/SessionExporter.js';
 
+import * as ColorHelper from 'util/ColorHelper.js';
+
 import PNGIcon from 'deprecated/icons/flat/PNGIcon.js';
 import JPGIcon from 'deprecated/icons/flat/JPGIcon.js';
 import SVGIcon from 'deprecated/icons/flat/SVGIcon.js';
+import BWIcon from 'components/iconset/flat/PNGFileIcon.js';
 
 export const IMAGE_TYPE_PNG = 'png';
 export const IMAGE_TYPE_JPG = 'jpg';
 export const IMAGE_TYPE_SVG = 'svg';
+export const IMAGE_TYPE_BW = 'bw';
 
 const EXPORT_PADDING_X = 30;
 const EXPORT_PADDING_Y = 0;
@@ -60,13 +64,14 @@ class NodalGraphImageExporter extends SessionExporter
         const height = workspaceDim.height;
         const svg = this.processSVGForExport(svgElement, width, height, currentModule);
 
+        const fileExt = this._imageType === IMAGE_TYPE_BW ? IMAGE_TYPE_PNG : this._imageType;
         return Promise.resolve({
-            name: fileName + '.' + this._imageType,
+            name: fileName + '.' + fileExt,
             type: 'image',
             data: svg,
             width: width,
             height: height,
-            'image-type': this._imageType
+            'image-type': fileExt
         });
     }
 
@@ -80,7 +85,16 @@ class NodalGraphImageExporter extends SessionExporter
         const stopIndex = attributeValue.indexOf(')', startIndex);
         const value = attributeValue.substring(startIndex + 4, stopIndex);
         const style = themeManager.getStyleByName(value);
-        return style ? style.getValue() : '#000000';
+        let result = style ? style.getValue() : '#000000';
+
+        if (this._imageType === IMAGE_TYPE_BW)
+        {
+            const rgb = ColorHelper.HEXtoRGB(result);
+            ColorHelper.grayscaleRGB(rgb, rgb);
+            result = ColorHelper.RGBtoHEX(rgb);
+        }
+
+        return result;
     }
 
     processSVGForExport(element, width, height, currentModule)
@@ -138,6 +152,7 @@ class NodalGraphImageExporter extends SessionExporter
         case IMAGE_TYPE_PNG: return PNGIcon;
         case IMAGE_TYPE_JPG: return JPGIcon;
         case IMAGE_TYPE_SVG: return SVGIcon;
+        case IMAGE_TYPE_BW: return BWIcon;
         default: return null;
         }
     }
@@ -150,6 +165,7 @@ class NodalGraphImageExporter extends SessionExporter
         case IMAGE_TYPE_PNG: return I18N.toString('file.export.png');
         case IMAGE_TYPE_JPG: return I18N.toString('file.export.jpg');
         case IMAGE_TYPE_SVG: return I18N.toString('file.export.svg');
+        case IMAGE_TYPE_BW: return I18N.toString('file.export.bw');
         default: return super.getLabel();
         }
     }
@@ -162,6 +178,7 @@ class NodalGraphImageExporter extends SessionExporter
         case IMAGE_TYPE_PNG: return I18N.toString('file.export.png.hint');
         case IMAGE_TYPE_JPG: return I18N.toString('file.export.jpg.hint');
         case IMAGE_TYPE_SVG: return I18N.toString('file.export.svg.hint');
+        case IMAGE_TYPE_BW: return I18N.toString('file.export.bw.hint');
         default: return super.getTitle();
         }
     }
@@ -175,7 +192,8 @@ class NodalGraphImageExporter extends SessionExporter
 export const IMAGE_EXPORTERS = [
     new NodalGraphImageExporter(IMAGE_TYPE_PNG),
     new NodalGraphImageExporter(IMAGE_TYPE_JPG),
-    new NodalGraphImageExporter(IMAGE_TYPE_SVG)
+    new NodalGraphImageExporter(IMAGE_TYPE_SVG),
+    new NodalGraphImageExporter(IMAGE_TYPE_BW)
 ];
 
 export function registerImageExporters(exportManager)
@@ -197,13 +215,13 @@ export default NodalGraphImageExporter;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#transformViewToScreenPosition">transformViewToScreenPosition</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Mon May 20 2019 13:46:29 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed May 22 2019 21:17:04 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
