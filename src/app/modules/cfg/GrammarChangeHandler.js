@@ -65,4 +65,4 @@ class GrammarChangeHandler
     }
 }
 
-export default ExpressionChangeHandler;
+export default GrammarChangeHandler;

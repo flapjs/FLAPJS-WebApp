@@ -30,4 +30,4 @@ class SafeGrammarEventHandler extends AbstractEventHandler
         this._machineController.setMachine(this._machine);
     }
 }
-export default SafeExpressionEventHandler;
+export default SafeGrammarEventHandler;
