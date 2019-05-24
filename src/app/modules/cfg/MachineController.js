@@ -161,6 +161,11 @@ class MachineController
         return this._machine;
     }
 
+    setMachine(machine)
+    {
+        this._machine = machine;
+    }
+
     getGrammarChangeHandler()
     {
         return this._grammarChangeHandler;
