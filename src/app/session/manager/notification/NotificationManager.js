@@ -7,11 +7,13 @@ import DefaultNotificationLayout, {
     STYLE_TYPE_ERROR,
     STYLE_TYPE_SUCCESS
 } from './components/DefaultNotificationLayout.js';
+import SequenceNotificationLayout from './components/SequenceNotificationLayout.js';
 
 export const DEFAULT_LAYOUT_ID = 'default';
 export const WARNING_LAYOUT_ID = 'warning';
 export const ERROR_LAYOUT_ID = 'error';
 export const SUCCESS_LAYOUT_ID = 'success';
+export const SEQUENCE_LAYOUT_ID = 'sequence';
 
 class NotificationManager
 {
@@ -33,9 +35,9 @@ class NotificationManager
         return this;
     }
 
-    pushNotification(message, layoutID=null, tags=[], props={}, replace=true)
+    pushNotification(message, layoutID = null, tags = [], props = {}, replace = true)
     {
-        if (replace)
+        if (replace && tags.length > 0)
         {
             this.clearNotifications(tags);
         }
@@ -45,17 +47,17 @@ class NotificationManager
         return notification;
     }
 
-    popNotification(tags=null)
+    popNotification(tags = null)
     {
         if (this._notifications.length <= 0) return null;
 
         if (Array.isArray(tags))
         {
-            for(let i = this._notifications.length - 1; i >= 0; --i)
+            for (let i = this._notifications.length - 1; i >= 0; --i)
             {
                 const notification = this._notifications[i];
                 let flag = true;
-                for(const tag of tags)
+                for (const tag of tags)
                 {
                     if (!notification.hasTag(tag))
                     {
@@ -72,7 +74,7 @@ class NotificationManager
         }
         else if (typeof tags === 'string')
         {
-            for(let i = 0, length = this._notifications.length; i < length; ++i)
+            for (let i = 0, length = this._notifications.length; i < length; ++i)
             {
                 const notification = this._notifications[i];
                 if (notification.hasTag(tags))
@@ -97,17 +99,17 @@ class NotificationManager
         }
     }
 
-    clearNotifications(tags=null)
+    clearNotifications(tags = null)
     {
         if (this._notifications.length <= 0) return;
 
         if (Array.isArray(tags))
         {
-            for(let i = this._notifications.length - 1; i >= 0; --i)
+            for (let i = this._notifications.length - 1; i >= 0; --i)
             {
                 const notification = this._notifications[i];
                 let flag = true;
-                for(const tag of tags)
+                for (const tag of tags)
                 {
                     if (!notification.hasTag(tag))
                     {
@@ -123,7 +125,7 @@ class NotificationManager
         }
         else if (typeof tags === 'string')
         {
-            for(let i = this._notifications.length - 1; i >= 0; --i)
+            for (let i = this._notifications.length - 1; i >= 0; --i)
             {
                 const notification = this._notifications[i];
                 if (notification.hasTag(tags))
@@ -141,11 +143,12 @@ class NotificationManager
     //DuckType(SessionListener)
     onSessionStart(session)
     {
-    //Overwrite any changes to default notifications...
-        this.registerNotificationLayout(DEFAULT_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_DEFAULT} {...props}/>);
-        this.registerNotificationLayout(WARNING_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_WARNING} {...props}/>);
-        this.registerNotificationLayout(ERROR_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_ERROR} {...props}/>);
-        this.registerNotificationLayout(SUCCESS_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_SUCCESS} {...props}/>);
+        //Overwrite any changes to default notifications...
+        this.registerNotificationLayout(DEFAULT_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_DEFAULT} {...props} />);
+        this.registerNotificationLayout(WARNING_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_WARNING} {...props} />);
+        this.registerNotificationLayout(ERROR_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_ERROR} {...props} />);
+        this.registerNotificationLayout(SUCCESS_LAYOUT_ID, props => <DefaultNotificationLayout styleType={STYLE_TYPE_SUCCESS} {...props} />);
+        this.registerNotificationLayout(SEQUENCE_LAYOUT_ID, props => <SequenceNotificationLayout {...props} />);
     }
 
     //DuckType(SessionListener)
