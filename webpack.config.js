@@ -130,7 +130,12 @@ const config = {
 
 module.exports = (env, argv) =>
 {
-  if (argv.mode === 'development')
+  if (NODE_ENV === 'test')
+  {
+    config.entry = ['./src/app/test-index.js'];
+    config.output.path = path.resolve(__dirname, './test');
+  }
+  else if (argv.mode === 'development')
   {
     //Do development stuff...
     //config.devtool = 'eval-source-map';

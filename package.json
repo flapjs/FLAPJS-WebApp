@@ -8,6 +8,7 @@
     "lint": "eslint ./src",
     "docs": "jsdoc --readme ./README.md --recurse -c ./jsdoc.conf.json --destination ./docs/api ./src",
     "test": "npm run lint && jest",
+    "build-test": "cross-env NODE_ENV=test webpack --mode production --config webpack.config.js",
     "evali18n": "node ./tools/I18NLog.js ./src/app ./out/i18n_log.md && node ./tools/I18NDiff.js ./src/app ./res/lang ./out/i18n_diff.md"
   },
   "repository": {
