@@ -6,7 +6,11 @@ import FSAGraph from 'modules/fsa2/graph/FSAGraph.js';
 const exporter = new FSAJFFExporter(FSAGraphParser.XML);
 const graph = new FSAGraph();
 
-graph.createNode(0, 0);
+const result = graph.createNode();
+console.log(graph._nodeMapping.values());
+console.log()
+console.log(graph, result);
+
 
 const mockSession = {
     getCurrentModule()
@@ -41,5 +45,3 @@ exporter.exportTarget('', mockSession).then(result =>
 //zip.file(targetData.name, targetData.data);
 
 graph.clear();
-
-console.log(graph);
