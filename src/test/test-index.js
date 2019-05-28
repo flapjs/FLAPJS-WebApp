@@ -1,4 +1,4 @@
-import './index.js';
+import '../app/index.js';
 import FSAJFFExporter from 'modules/fsa2/filehandlers/FSAJFFExporter.js';
 import * as FSAGraphParser from 'modules/fsa2/FSAGraphParser.js';
 import FSAGraph from 'modules/fsa2/graph/FSAGraph.js';
