@@ -1,4 +1,3 @@
-import GraphElement from 'graph/GraphElement.js';
 import { guid, stringHash } from 'util/MathHelper.js';
 import { EMPTY } from 'modules/re/machine/RE.js';
 
@@ -143,7 +142,7 @@ class CFG
         let LHSvalid = rule.getLHS().length == 1 && this.hasVariable(rule.getLHS())
 
         //RHS contains terminals and variables within the CFG
-        let RHSvalid = true;
+        let RHSvalid = rule.getRHS().length > 0;
         for(let char of rule.getRHS())
         {
             if(char != PIPE && char != EMPTY)

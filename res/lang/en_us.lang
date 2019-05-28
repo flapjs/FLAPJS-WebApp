@@ -153,6 +153,7 @@ action.testing.save = Save Tests
 
 action.overview.convertdfa = Convert To DFA
 action.overview.convertnfa = Convert To NFA
+action.overview.convertpda = Convert To PDA
 action.overview.autolayout = Auto-Layout
 
 action.options.changetheme = Customize Theme

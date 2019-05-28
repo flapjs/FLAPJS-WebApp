@@ -118,7 +118,11 @@ class MachineController
 
     setMachineRules(rules)
     {
-        this._machine._rules = rules;
+        this._machine.clearRules();
+        for(const rule of rules)
+        {
+            this.addMachineRule(rule);
+        }
     }
 
     getMachineTerminals()
