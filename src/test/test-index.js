@@ -1,4 +1,4 @@
-import '../app/index.js';
+import 'index.js';
 import FSAJFFExporter from 'modules/fsa2/filehandlers/FSAJFFExporter.js';
 import * as FSAGraphParser from 'modules/fsa2/FSAGraphParser.js';
 import FSAGraph from 'modules/fsa2/graph/FSAGraph.js';
@@ -12,6 +12,8 @@ const mockSession = {
     getCurrentModule()
     {
         return {
+            getModuleName() { return 'fsa'; },
+            getModuleVersion() { return '0.0.0'; },
             getGraphController()
             {
                 return {
@@ -22,8 +24,15 @@ const mockSession = {
                 };
             }
         };
+    },
+    getProjectName()
+    {
+        return 'YourGraphName';
     }
 };
+
+console.log("HELLO");
+console.log(exporter);
 
 exporter.exportTarget('', mockSession).then(result =>
 {

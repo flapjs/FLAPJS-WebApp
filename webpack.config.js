@@ -132,8 +132,30 @@ module.exports = (env, argv) =>
 {
   if (NODE_ENV === 'test')
   {
-    config.entry = ['./src/app/test-index.js'];
-    config.output.path = path.resolve(__dirname, './test');
+    config.plugins.splice(0, 3);
+    config.plugins.unshift(new HtmlPlugin({
+      filename: '../out/index.html',
+      template: './src/test/index.html',
+      alwaysWriteToDisk: true
+    }));
+    config.plugins.unshift(new CopyPlugin([
+        //Copy resource by directory...
+        { from: './res/document', to: 'document' },
+        { from: './res/image', to: 'image' },
+        { from: './res/lang', to: 'lang' },
+        { from: './res/script', to: 'script' },
+        { from: './res/style', to: 'style' },
+        { from: './res/theme', to: 'theme' },
+      ]));
+    config.plugins.push(new CleanPlugin({
+      cleanOnceBeforeBuildPatterns: ['../out'],
+      dangerouslyAllowCleanPatternsOutsideProject: true,
+      dry: false
+    }));
+
+    config.entry = ['./src/test/test-index.js'];
+    config.output.path = path.resolve(__dirname, './out');
+    config.output.publicPath = './';
   }
   else if (argv.mode === 'development')
   {
