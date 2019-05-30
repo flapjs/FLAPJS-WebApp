@@ -4,13 +4,11 @@ import { guid, stringHash } from 'util/MathHelper.js';
 
 /**
  * A class that represents a graph that coordinates nodes and edges.
- * 
  */
 class NodeGraph
 {
     /**
-     * Create a NodeGraph.
-     * 
+     * Create a NodeGraph with the respective node and edge classes.
      * @param {Class} [nodeClass=GraphNode] The class that represents a node.
      * @param {Class} [edgeClass=GraphEdge] The class that represents an edge.
      */
@@ -44,8 +42,8 @@ class NodeGraph
     /**
      * Computes the boundaries of the graph that surrounds all nodes and edges. If
      * the graph is empty, a rectangle at the origin of size 1 is returned.
-     * @returns {Object} The object which represents the bounding rectangle. It has
-     *                  the properties: minX, minY, maxX, maxY, width, height.
+     * @returns {Object}    The object which represents the bounding rectangle. It has
+     *                      the properties: minX, minY, maxX, maxY, width, height.
      */
     getBoundingRect()
     {

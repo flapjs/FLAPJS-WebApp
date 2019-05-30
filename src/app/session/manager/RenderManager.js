@@ -1,7 +1,6 @@
+export const RENDER_LAYER_WORKSPACE_PRE = 'workspace-pre';
 export const RENDER_LAYER_WORKSPACE = 'workspace';
-export const RENDER_LAYER_WORKSPACE_OVERLAY = 'workspace-overlay';
-export const RENDER_LAYER_VIEWPORT = 'viewport';
-export const RENDER_LAYER_VIEWPORT_OVERLAY = 'viewport-overlay';
+export const RENDER_LAYER_WORKSPACE_POST = 'workspace-post';
 
 class RenderManager
 {

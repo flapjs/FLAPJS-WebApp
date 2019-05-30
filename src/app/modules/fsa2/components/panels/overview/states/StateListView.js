@@ -28,15 +28,17 @@ class StateListView extends React.Component
         this._prevX += 16;
         this._prevY += 16;
         const node = graphController.createNode(this._prevX, this._prevY);
-        graphController.focusOnNode(node);
+        const graphView = this.props.graphView;
+        graphView.moveViewToPosition(node.x, node.y);
     }
 
     onElementFocus(e, element)
     {
-        this._prevX = element.props.node.x;
-        this._prevY = element.props.node.y;
-        const graphController = this.props.graphController;
-        graphController.focusOnNode(element.props.node);
+        const node = element.props.node;
+        this._prevX = node.x;
+        this._prevY = node.y;
+        const graphView = this.props.graphView;
+        graphView.moveViewToPosition(node.x, node.y);
     }
 
     onElementBlur(e, element, nextLabel)

@@ -5,6 +5,8 @@
 
 > By the students. For the students.
 
+ANNOUNCEMENT: We are always looking for interested contributors and new members for the team! If you have any interest in web development, UI/UX design, computation theory, or general graphing systems, please contact us. We encourage you to play around with our repo and try out its features! (For more info, go to the bottom of this page.)
+
 ---
 
 ## Purpose
@@ -30,6 +32,7 @@ To make a program that is more accessible and intuitive to use, so we can all be
   * [NotificationSystem](#notificationsystem)
 
 ---
+
 ## Compatibility
 - [x] Windows
 - [x] Mac
@@ -395,3 +398,14 @@ Eventable.mixin(SomeClass);
 
 ### Notification System
 `NotificationSystem.js` handles all notifications that are reported by other various components to the user. The messages can be grouped and searched by tags and sorted into various levels: `ERROR`, `WARNING`, `DEBUG`, `INFO`. Each message can also be dynamically altered by external handlers.
+
+
+### Conclusion
+
+If you have any more questions, please contact any Flap.js dev team member.
+
+Or, you can contact me:
+andykuo1supergreen@gmail.com
+(Please begin the subject with 'Flap.js - ')
+
+Thank you for reading me!

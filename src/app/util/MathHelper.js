@@ -1,4 +1,9 @@
 /**
+ * Contains utility functions for useful math algorithms.
+ * @module MathHelper
+ */
+
+/**
  * Generates a guid. (You should use {@link uuid} instead. It is just better.)
  * 
  * @returns {String} the globally unique id

@@ -1,5 +1,5 @@
 import React from 'react';
-import Style from 'experimental/viewport/ViewportView.css';
+import Style from './ViewportView.css';
 import ExpressionViewStyle from './ExpressionView.css';
 
 import {EMPTY, CONCAT, UNION, KLEENE, SIGMA, EMPTY_SET, PLUS} from 'modules/re/machine/RE.js';

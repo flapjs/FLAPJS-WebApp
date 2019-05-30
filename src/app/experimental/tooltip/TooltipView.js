@@ -29,7 +29,7 @@ class TooltipView extends React.Component
 
     setTooltipIndex(index)
     {
-        this.setState({index: index});
+        this.setState({ index: index });
     }
 
     getTooltipIndex()
@@ -99,13 +99,13 @@ class TooltipView extends React.Component
         return (
             <div id={this.props.id}
                 className={Style.tooltip_container +
-          (visible ? ' visible ' : '') +
-          ' ' + this.props.className}
+                    (visible ? ' visible ' : '') +
+                    ' ' + this.props.className}
                 style={this.props.style}>
                 {React.Children.map(this.props.children, (child, i) => 
                 {
                     return (
-                        <label style={{opacity: tooltipIndex === i ? 1 : 0}}>
+                        <label style={{ opacity: tooltipIndex === i ? 1 : 0 }}>
                             {child}
                         </label>
                     );

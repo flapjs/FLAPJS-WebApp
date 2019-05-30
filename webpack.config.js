@@ -27,6 +27,9 @@ const GLOBAL_VARS = {
   'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
 };
 const OUTPUT_DIR = "dist";
+const ALIAS = {
+  '@res': './res'
+};
 const MODULE_PATHS = [
   //For webpack HMR dev server
   'webpack-dev-server/client?http://' + DEV_SERVER_IP + ':' + DEV_SERVER_PORT,
@@ -34,8 +37,7 @@ const MODULE_PATHS = [
   //'webpack/hot/dev-server'//HMR, but reloads on error
   //The used entrypoints
   './node_modules',
-  './src/app',
-  './res'
+  './src/app'
 ];
 const ENTRIES = {
   app: './src/app/index.js'
@@ -81,6 +83,8 @@ const config = {
   resolve: {
     //Resolve by filename without extensions
     extensions: ['*', '.js', '.jsx', '.mjs'],
+    //Resolve by aliases
+    alias: ALIAS,
     //Resolve by absolute path
     modules: MODULE_PATHS
   },
@@ -154,7 +158,11 @@ module.exports = (env, argv) =>
         filename: 'sourcemap/[name].bundle.js.map',
         exclude: [/vendors\.bundle.*\.js$/, '../serviceWorker.js']
       }));
-    config.plugins.push(new CleanPlugin(['./' + OUTPUT_DIR, './serviceWorker.js', './404.html', './index.html']));
+    config.plugins.push(new CleanPlugin({
+      cleanOnceBeforeBuildPatterns: ['../dist', '../serviceWorker.js', '../404.html', '../index.html'],
+      dangerouslyAllowCleanPatternsOutsideProject: true,
+      dry: false
+    }));
 
     //Optimizations
     config.optimization = {

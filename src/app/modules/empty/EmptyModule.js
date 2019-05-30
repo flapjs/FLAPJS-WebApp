@@ -1,5 +1,5 @@
 const MODULE_NAME = 'empty';
-const MODULE_VERSION = '0.0.1';
+const MODULE_VERSION = '1.0.0';
 const MODULE_LOCALIZED_NAME = 'Empty';
 
 class EmptyModule

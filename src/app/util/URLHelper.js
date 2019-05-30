@@ -1,4 +1,9 @@
 /**
+ * Contains utility functions for url-related actions.
+ * @module URLHelper
+ */
+
+/**
  * Gets the current window's url,
  * 
  * @returns {String} the current url

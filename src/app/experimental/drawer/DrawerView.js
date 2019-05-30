@@ -22,6 +22,13 @@ export const DRAWER_SIDE_RIGHT = 'right';
 export const DRAWER_BAR_DIRECTION_VERTICAL = 'vertical';
 export const DRAWER_BAR_DIRECTION_HORIZONTAL = 'horizontal';
 
+/**
+ * A component that renders a collapsible drawer. It also handles the viewport beside
+ * the drawer. To update the panels available in the drawer, you can pass an array of
+ * component classes through the props.
+ * 
+ * TODO: The drawer should not be responsible for the viewport as well. Separation of concerns.
+ */
 class DrawerView extends React.Component
 {
     constructor(props)
@@ -144,11 +151,13 @@ class DrawerView extends React.Component
         return this.state.tabIndex === tabIndex;
     }
 
+    /** Sets the viewport boundary color */
     setViewportColor(color)
     {
         this.setState({ viewportColor: color });
     }
-
+    
+    /** Gets the viewport boundary color */
     getViewportColor()
     {
         return this.state.viewportColor;

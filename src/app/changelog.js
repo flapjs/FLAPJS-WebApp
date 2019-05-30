@@ -1,3 +1,33 @@
+//Version 0.4.2
+const changeLog = `
+### Added
+- Module version is now visible in Options.
+- Change machine type for FA module in the title bar.
+- A new and improved graph picking system.
+- Allow clicking on labels to edit them.
+- Custom node color styles are now applied to exported images.
+- Grayscale image exporting.
+
+### Changed
+- Menu entries are now ordered more logically.
+- Fullscreen mode is available for ALL modules.
+- Trash can looks nicer when red :D
+- A new menu design.
+
+### Removed
+- Unused modules are no longer visible in module selection.
+
+### Fixed
+- Previous labels sometimes show up in future label editors.
+- FA/PDA: Auto-formatting sometimes fails for edge labels.
+- FA/PDA: Initial marker cannot be dragged with left mouse button.
+- FA/PDA: State label editing won't save.
+- FA/PDA: Trash can icon is missing label.
+- FA/PDA: Trash can cannot delete edges.
+- FA/PDA: Missing red border for delete mode.
+`.split('\n');
+
+/*
 //Version 0.4.1
 const changeLog = [
     'Experimental mode is now LIVE! :D',
@@ -11,7 +41,6 @@ const changeLog = [
     'Old app mode will be replaced by experimental mode permanently.',
 ];
 
-/*
 //Version 0.4.0
 const changeLog = [
     'Changed default color scheme. Hope you like it!',
