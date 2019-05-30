@@ -26,5 +26,5 @@
   color: var(--color-panel-error);
 }
 :local(.element_container):not(.used) input {
-  color: var(--color-panel-text-active);
+  color: var(--color-panel-text);
 }
