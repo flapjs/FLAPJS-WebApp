@@ -62,7 +62,8 @@ class FSAModule
                         return <FSAGraphLayer
                             graphView={graphView}
                             graphController={graphController}
-                            editable={!this._testMode} />;
+                            editable={!this._testMode}
+                            session={this._app.getSession()} />;
                     }}
                     renderOverlay={graphView =>
                     {
