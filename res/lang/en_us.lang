@@ -14,6 +14,7 @@ message.action.locate = Where is it?
 message.action.deleteall = Delete them all.
 message.action.close = Get out of my way!
 message.action.convert = Convert anyway
+message.action.next = Next
 message.workspace.empty = Double-tap to create a node
 message.offline.ready = You are already ready for offline!
 message.offline.failed = You are not ready for offline. Please refresh the page!
@@ -107,6 +108,11 @@ options.--color-viewport-testing = Viewport Testing
 options.--color-viewport-warning = Viewport Warning
 options.--color-highlight-select = Highlight Select
 
+//Color Groups
+options.colorgroup.general = General Colors
+options.colorgroup.surface = Surface Colors
+options.colorgroup.graph = Graph Colors
+
 options.checkerrors = Error Checking
 options.checkerrors.mode.none = None
 options.checkerrors.mode.delayed = Delayed
@@ -126,6 +132,7 @@ file.export.jff = Save machine for JFLAP
 file.export.png = Export diagram as PNG
 file.export.jpg = Export diagram as JPG
 file.export.svg = Export diagram as SVG
+file.export.bw = Export diagram in grayscale
 file.export.convertfsa = Save equivalent FA for Flap.js
 
 file.export.machine.hint = Save machine as .json
@@ -133,6 +140,7 @@ file.export.jff.hint = Save machine as .jff
 file.export.png.hint = Export diagram as .png
 file.export.jpg.hint = Export diagram as .jpg
 file.export.svg.hint = Export diagram as .svg
+file.export.bw.hint = Export diagram in grayscale
 
 //testing.placeholder = Test string
 
@@ -163,6 +171,7 @@ action.toolbar.uploadmachine = Upload
 action.toolbar.undo = Undo
 action.toolbar.redo = Redo
 action.toolbar.lang = Language
+action.toolbar.changemodule = Change Module
 action.workspace.submit = Submit
 action.workspace.cancel = Cancel
 

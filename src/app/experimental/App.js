@@ -4,329 +4,484 @@ import Style from './App.css';
 
 import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION_VERTICAL, DRAWER_BAR_DIRECTION_HORIZONTAL } from 'experimental/drawer/DrawerView.js';
 import ToolbarView from 'experimental/toolbar/ToolbarView.js';
-import ViewportView from 'experimental/viewport/ViewportView.js';
-import TooltipView, { ONESHOT_MODE } from 'experimental/tooltip/TooltipView.js';
+import TooltipView from 'experimental/tooltip/TooltipView.js';
 import UploadDropZone from 'experimental/components/UploadDropZone.js';
-import ViewportComponent from 'input/components/ViewportComponent.js';
+import NotificationView from 'session/manager/notification/components/NotificationView.js';
+import IconButton from 'experimental/components/IconButton.js';
+import FullscreenWidget from 'experimental/components/FullscreenWidget.js';
 
 import ExportPanel from 'experimental/menus/export/ExportPanel.js';
 import OptionPanel from 'experimental/menus/option/OptionPanel.js';
 import LanguagePanel from 'experimental/menus/language/LanguagePanel.js';
 import ModuleLoaderPanel from 'experimental/menus/moduleloader/ModuleLoaderPanel.js';
 
-import ToolbarButton, {TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU} from 'experimental/toolbar/ToolbarButton.js';
+import ToolbarButton, { TOOLBAR_CONTAINER_TOOLBAR, TOOLBAR_CONTAINER_MENU } from 'experimental/toolbar/ToolbarButton.js';
 import ToolbarDivider from 'experimental/toolbar/ToolbarDivider.js';
 import ToolbarUploadButton from 'experimental/toolbar/ToolbarUploadButton.js';
-import PageEmptyIcon from 'experimental/iconset/PageEmptyIcon.js';
-import UndoIcon from 'experimental/iconset/UndoIcon.js';
-import RedoIcon from 'experimental/iconset/RedoIcon.js';
-import UploadIcon from 'experimental/iconset/UploadIcon.js';
-import DownloadIcon from 'experimental/iconset/DownloadIcon.js';
-import BugIcon from 'experimental/iconset/BugIcon.js';
-import WorldIcon from 'experimental/iconset/WorldIcon.js';
-import HelpIcon from 'experimental/iconset/HelpIcon.js';
-import SettingsIcon from 'experimental/iconset/SettingsIcon.js';
-import EditPencilIcon from 'experimental/iconset/EditPencilIcon.js';
+import PageEmptyIcon from 'components/iconset/PageEmptyIcon.js';
+import UndoIcon from 'components/iconset/UndoIcon.js';
+import RedoIcon from 'components/iconset/RedoIcon.js';
+import UploadIcon from 'components/iconset/UploadIcon.js';
+import DownloadIcon from 'components/iconset/DownloadIcon.js';
+import BugIcon from 'components/iconset/BugIcon.js';
+import WorldIcon from 'components/iconset/WorldIcon.js';
+import HelpIcon from 'components/iconset/HelpIcon.js';
+import SettingsIcon from 'components/iconset/SettingsIcon.js';
+import EditPencilIcon from 'components/iconset/EditPencilIcon.js';
 
-import * as UserUtil from 'experimental/UserUtil.js';
 import AppSaver from 'experimental/AppSaver.js';
 import ColorSaver from 'experimental/ColorSaver.js';
+import * as ColorTransform from 'util/ColorTransform.js';
+import LanguageSaver from 'experimental/LanguageSaver.js';
 
-import IconButton from 'experimental/components/IconButton.js';
+import AutoSave from 'util/storage/AutoSave.js';
+import LocalStorage from 'util/storage/LocalStorage.js';
 
-import NotificationView from 'experimental/notification/NotificationView.js';
-import Notifications from 'system/notification/Notifications.js';
+import ExportManager from 'util/file/export/ExportManager.js';
+import ImportManager from 'util/file/import/ImportManager.js';
 
-import LocalSave from 'system/localsave/LocalSave.js';
-import StyleOptionRegistry from 'system/styleopt/StyleOptionRegistry.js';
+import Session from 'session/Session.js';
+import DrawerManager from 'session/manager/DrawerManager.js';
+import MenuManager from 'session/manager/MenuManager.js';
+import ViewportManager from 'session/manager/ViewportManager.js';
+import HotKeyManager, { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
+import HotKeyView from 'session/manager/hotkey/HotKeyView.js';
+import UndoManager from 'session/manager/undo/UndoManager.js';
+import RenderManager, {
+    RENDER_LAYER_WORKSPACE_PRE,
+    RENDER_LAYER_WORKSPACE,
+    RENDER_LAYER_WORKSPACE_POST,
+} from 'session/manager/RenderManager.js';
+import TooltipManager from 'session/manager/TooltipManager.js';
+import NotificationManager, { ERROR_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
+import ThemeManager from '../util/theme/ThemeManager';
+import BroadcastManager from 'session/manager/broadcast/BroadcastManager.js';
+import Broadcast from 'util/broadcast/Broadcast.js';
 
-import Session from 'modules/Session.js';
-import ExportManager from 'manager/export/ExportManager.js';
-import DrawerManager from 'manager/DrawerManager.js';
-import MenuManager from 'manager/MenuManager.js';
-import ViewportManager from 'manager/ViewportManager.js';
-import HotKeyManager from 'manager/hotkey/HotKeyManager.js';
-import HotKeyView from 'manager/hotkey/HotKeyView.js';
-import UndoManager from 'manager/undo/UndoManager.js';
-import RenderManager, {RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
-  RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY} from 'manager/RenderManager.js';
-import TooltipManager from 'manager/TooltipManager.js';
+const BUGREPORT_URL = 'https://goo.gl/forms/XSil43Xl5xLHsa0E2';
+const HELP_URL = 'https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md';
 
-const BUGREPORT_URL = "https://goo.gl/forms/XSil43Xl5xLHsa0E2";
-const HELP_URL = "https://github.com/flapjs/FLAPJS-WebApp/blob/master/docs/HELP.md";
-
-const SMOOTH_OFFSET_DAMPING = 0.4;
-const MIN_SCALE = 0.1;
-const MAX_SCALE = 10;
+const DRAWER_INDEX_ABOUT = 0;
 
 const MENU_INDEX_EXPORT = 0;
 const MENU_INDEX_OPTION = 1;
 const MENU_INDEX_LANGUAGE = 2;
 const MENU_INDEX_MODULE = 3;
 
+const ERROR_UPLOAD_NOTIFICATION_TAG = 'error_upload';
+
+const BROADCAST_CHANNEL_ID = 'flapjs';
+
+function registerAppStyles(themeManager)
+{
+    themeManager.register('--color-graph-node', 'graph');
+    themeManager.register('--color-graph-text', 'graph');
+    themeManager.register('--color-graph-select', 'graph');
+
+    themeManager.register('--color-accent', 'general');
+    const colorPrimary = themeManager.register('--color-primary', 'general');
+    themeManager.register('--color-primary-text', 'general');
+    themeManager.register('--color-primary-lite', 'hidden', colorPrimary, ColorTransform.lite);
+    themeManager.register('--color-primary-dark', 'hidden', colorPrimary, ColorTransform.dark);
+
+    const colorBackground = themeManager.register('--color-background', 'general');
+    themeManager.register('--color-background-active', 'hidden', colorBackground, ColorTransform.invert);
+    themeManager.register('--color-background-lite', 'hidden', colorBackground, ColorTransform.lite);
+
+    themeManager.register('--color-success', 'general');
+    themeManager.register('--color-warning', 'general');
+
+    const colorSurface = themeManager.register('--color-surface', 'surface');
+    themeManager.register('--color-surface-text', 'surface');
+    themeManager.register('--color-surface-active', 'hidden', colorSurface, ColorTransform.invert);
+    themeManager.register('--color-surface-lite', 'hidden', colorSurface, ColorTransform.lite);
+    themeManager.register('--color-surface-dark', 'hidden', colorSurface, ColorTransform.dark);
+
+    const colorSurfaceError = themeManager.register('--color-surface-error', 'surface');
+    themeManager.register('--color-surface-error-dark', 'hidden', colorSurfaceError, ColorTransform.dark);
+
+    const colorSurfaceSuccess = themeManager.register('--color-surface-success', 'surface');
+    themeManager.register('--color-surface-success-dark', 'hidden', colorSurfaceSuccess, ColorTransform.dark);
+
+    const colorSurfaceWarning = themeManager.register('--color-surface-warning', 'surface');
+    themeManager.register('--color-surface-warning-dark', 'hidden', colorSurfaceWarning, ColorTransform.dark);
+}
+
 class App extends React.Component
 {
-  constructor(props)
-  {
-    super(props);
+    constructor(props)
+    {
+        super(props);
 
-    this._workspace = React.createRef();
-    this._toolbar = null;
-    this._drawer = null;
-    this._viewport = null;
-    this._labeleditor = null;
+        App.INSTANCE = this;
 
-    this._styleOpts = new StyleOptionRegistry();
-    this._colorSaver = new ColorSaver(this._styleOpts);
+        this._toolbarComponent = React.createRef();
+        this._drawerComponent = React.createRef();
+        this._viewport = null;
+        this._labeleditor = null;
 
-    this._saver = new AppSaver(this);
+        this._themeManager = new ThemeManager();
+        this._colorSaver = new ColorSaver(this._themeManager);
+        this._langSaver = new LanguageSaver();
+        this._saver = new AppSaver(this);
 
-    this._undoManager = new UndoManager();
-    this._hotKeyManager = new HotKeyManager();
-    this._exportManager = new ExportManager(this);
-    this._drawerManager = new DrawerManager();
-    this._menuManager = new MenuManager();
-    this._viewportManager = new ViewportManager();
-    this._renderManager = new RenderManager();
-    this._tooltipManager = new TooltipManager();
+        this._exportManager = new ExportManager();
+        this._importManager = new ImportManager();
 
-    this._session = new Session()
-      .addListener(this._undoManager)
-      .addListener(this._hotKeyManager)
-      .addListener(this._exportManager)
-      .addListener(this._drawerManager)
-      .addListener(this._menuManager)
-      .addListener(this._viewportManager)
-      .addListener(this._renderManager)
-      .addListener(this._tooltipManager)
-      .addListener(this);
+        this._undoManager = new UndoManager();
+        this._hotKeyManager = new HotKeyManager();
+        this._drawerManager = new DrawerManager();
+        this._menuManager = new MenuManager();
+        this._viewportManager = new ViewportManager();
+        this._renderManager = new RenderManager();
+        this._tooltipManager = new TooltipManager();
+        this._notificationManager = new NotificationManager();
+        this._broadcastManager = new BroadcastManager(this);
 
-    //TODO: This is only used to control transitions (do we really need it?)
-    this._init = false;
+        this._session = new Session()
+            .addListener(this._undoManager)
+            .addListener(this._hotKeyManager)
+            .addListener(this._drawerManager)
+            .addListener(this._menuManager)
+            .addListener(this._viewportManager)
+            .addListener(this._renderManager)
+            .addListener(this._tooltipManager)
+            .addListener(this._notificationManager)
+            .addListener(this._broadcastManager)
+            .addListener(this);
 
-    this.state = {
-      hide: false
-    };
+        // TODO: This is only used to control transitions (do we really need it?)
+        this._init = false;
 
-    this._mediaQuerySmallWidthList = window.matchMedia("only screen and (max-width: 400px)");
-    this._mediaQuerySmallHeightList = window.matchMedia("only screen and (min-height: 400px)");
+        this.state = {
+            hide: false
+        };
 
-    //Notifications.addMessage("Welcome to Flap.js");
-    this.onModuleTitleClick = this.onModuleTitleClick.bind(this);
-  }
+        this._mediaQuerySmallWidthList = window.matchMedia('only screen and (max-width: 400px)');
+        this._mediaQuerySmallHeightList = window.matchMedia('only screen and (min-height: 400px)');
 
-  //Override
-  componentDidMount()
-  {
-    //Start session
-    this._session.startSession(this);
-  }
+        // this._notificationManager.pushNotification("Welcome to Flap.js");
+        this.onModuleTitleClick = this.onModuleTitleClick.bind(this);
+        this.onToolbarClearButton = this.onToolbarClearButton.bind(this);
+    }
 
-  //Override
-  componentWillUnmount()
-  {
-    this._session.stopSession(this);
-  }
+    /** @override */
+    componentDidMount()
+    {
+        //Start session
+        this._session.startSession(this);
+    }
 
-  onSessionStart(session)
-  {
-    //Default values
-    this._menuManager
-      .addPanelClass(ExportPanel)//MENU_INDEX_EXPORT
-      .addPanelClass(OptionPanel)//MENU_INDEX_OPTION
-      .addPanelClass(LanguagePanel)//MENU_INDEX_LANGUAGE
-      .addPanelClass(ModuleLoaderPanel);//MENU_INDEX_MODULE
-    this._hotKeyManager
-      .registerAltHotKey("Show Hints", () => {IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL});
+    /** @override */
+    componentWillUnmount()
+    {
+        //Stop session
+        this._session.stopSession(this);
+    }
 
-    this._colorSaver.initialize();
+    /**
+     * Called once by index.js when the window is opened, before
+     * this constructor or any React components are initialized. This also must be
+     * static since React instances are not yet available.
+     */
+    static onWindowLoad()
+    {
+        AutoSave.initialize(LocalStorage);
+        Broadcast.initialize(BROADCAST_CHANNEL_ID);
+    }
 
-    LocalSave.registerHandler(this._saver);
-    LocalSave.registerHandler(this._colorSaver);
+    /**
+     * Called once by index.js when the window is closed. This is the alternative
+     * for clean up since componentWillUnmount() from React will not be called for
+     * window events. This also must be static since React instances are no longer
+     * available.
+     */
+    static onWindowUnload()
+    {
+        AutoSave.destroy();
 
-    this._init = true;
-  }
+        if (App.INSTANCE)
+        {
+            App.INSTANCE.componentWillUnmount();
+        }
+    }
 
-  onSessionStop(session)
-  {
-    this._init = false;
+    //DuckType
+    onSessionStart(session)
+    {
+        const currentModule = session.getCurrentModule();
 
-    Notifications.clearMessages();
+        // Default values
+        this._menuManager
+            .addPanelClass(ExportPanel)         // MENU_INDEX_EXPORT
+            .addPanelClass(OptionPanel)         // MENU_INDEX_OPTION
+            .addPanelClass(LanguagePanel)       // MENU_INDEX_LANGUAGE
+            .addPanelClass(ModuleLoaderPanel);  // MENU_INDEX_MODULE
 
-    LocalSave.unregisterHandler(this._saver);
-    LocalSave.unregisterHandler(this._colorSaver);
+        this._hotKeyManager
+            .registerHotKey('New', [CTRL_KEY, 'KeyN'], () => currentModule.clear(this))
+            .registerAltHotKey('Show Hints', () => { IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL; });
 
-    this._colorSaver.destroy();
-  }
+        // Only register undo / redo hotkeys if undo is possible
+        if (this._undoManager.getEventHandlerFactory())
+        {
+            this._hotKeyManager
+                .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => this.getUndoManager().undo())
+                .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => this.getUndoManager().redo());
+        }
 
-  onModuleTitleClick(e)
-  {
-    this._drawer.setCurrentTab(0);
-  }
+        if (!this._tooltipManager.hasTooltips())
+        {
+            this._tooltipManager
+                .addTooltip('If you need help, try the \'?\' at the top.')
+                .addTooltip('Or you can choose to do nothing.')
+                .addTooltip('I can\'t do anything about that.')
+                .addTooltip('You really should consider doing something though, for the sake of both of us.')
+                .addTooltip('Of course, it is your free will.')
+                .addTooltip('You do you.')
+                .addTooltip('Please do something.')
+                .addTooltip('I need my job.')
+                .addTooltip('Welcome to Flap.js!');
+        }
 
-  getWorkspaceComponent() { return this._workspace.current; }
-  getToolbarComponent() { return this._toolbar; }
+        this._themeManager.setElement(document.getElementById('root'));
 
-  getUndoManager() { return this._undoManager; }
-  getHotKeyManager() { return this._hotKeyManager; }
-  getExportManager() { return this._exportManager; }
-  getDrawerManager() { return this._drawerManager; }
-  getMenuManager() { return this._menuManager; }
-  getViewportManager() { return this._viewportManager; }
-  getRenderManager() { return this._renderManager; }
-  getTooltipManager() { return this._tooltipManager; }
+        registerAppStyles(this._themeManager);
 
-  getSession() { return this._session; }
-  getCurrentModule() { return this._session.getCurrentModule(); }
-  getInputAdapter() { return this.getWorkspaceComponent().getInputAdapter(); }
-  getStyleOpts() { return this._styleOpts; }
+        AutoSave.registerHandler(this._saver);
+        AutoSave.registerHandler(this._colorSaver);
+        AutoSave.registerHandler(this._langSaver);
 
-  isExperimental() { return true; }
+        this._init = true;
+    }
 
-  //Override
-  componentDidUpdate()
-  {
-    this._session.updateSession(this);
+    //DuckType
+    onSessionStop(session)
+    {
+        this._init = false;
 
-    //Disable hotkeys when graph is not in view
-    this._hotKeyManager.setEnabled(
-      !(this._toolbar && this._toolbar.isBarOpen()) &&
-      !(this._drawer && this._drawer.isDrawerOpen() &&
-        this._drawer.isDrawerFullscreen())
-      );
-  }
+        AutoSave.unregisterHandler(this._saver);
+        AutoSave.unregisterHandler(this._colorSaver);
+        AutoSave.unregisterHandler(this._langSaver);
 
-  //Override
-  render()
-  {
-    const session = this._session;
-    const currentModule = session.getCurrentModule();
-    const currentModuleLocalizedName = currentModule ? currentModule.getLocalizedModuleName() : null;
+        this._themeManager.clear();
+        this._importManager.clear();
+        this._exportManager.clear();
+        this._menuManager.setSubtitleComponentClass(null);
+    }
 
-    const hasSmallWidth = this._mediaQuerySmallWidthList.matches;
-    const hasSmallHeight = this._mediaQuerySmallHeightList.matches;
-    const isFullscreen = this.state.hide;
+    onModuleTitleClick(e)
+    {
+        const drawer = this._drawerComponent.current;
+        if (!drawer.isDrawerOpen() || !drawer.isCurrentTab(DRAWER_INDEX_ABOUT))
+        {
+            //Open current module info panel
+            drawer.setCurrentTab(DRAWER_INDEX_ABOUT);
+        }
+        else
+        {
+            //On another click... open module change panel
+            const toolbarComponent = this._toolbarComponent.current;
+            toolbarComponent.setCurrentMenu(MENU_INDEX_MODULE);
+        }
 
-    const undoManager = this._undoManager;
-    const exportManager = this._exportManager;
-    const drawerManager = this._drawerManager;
-    const menuManager = this._menuManager;
-    const viewportManager = this._viewportManager;
-    const renderManager = this._renderManager;
-    const tooltipManager = this._tooltipManager;
+        e.preventDefault();
+        e.stopPropagation();
+    }
 
-    const drawerPanelClasses = drawerManager.getPanelClasses();
-    const drawerPanelProps = drawerManager.getPanelProps() || {session: session};
-    const menuPanelClasses = menuManager.getPanelClasses();
-    const menuPanelProps = menuManager.getPanelProps() || {session: session};
-    const viewportViewClasses = viewportManager.getViewClasses();
-    const viewportViewProps = viewportManager.getViewProps() || {session: session};
-    const defaultExporter = exportManager.getDefaultExporter();
+    onToolbarClearButton(e)
+    {
+        const currentModule = this._session.getCurrentModule();
+        if (currentModule)
+        {
+            currentModule.clear(this);
+        }
+    }
 
-    const workspaceRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_WORKSPACE);
-    const workspaceOverlayRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_WORKSPACE_OVERLAY);
-    const viewportRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_VIEWPORT);
-    const viewportOverlayRenderers = renderManager.getRenderersByLayer(RENDER_LAYER_VIEWPORT_OVERLAY);
+    getToolbarComponent() { return this._toolbarComponent.current; }
+    getDrawerComponent() { return this._drawerComponent.current; }
 
-    return (
-      <div className={Style.app_container + (currentModule ? " active " : "")}>
-        <ToolbarView ref={ref=>this._toolbar=ref} className={Style.app_bar}
-          menus={menuPanelClasses}
-          menuProps={menuPanelProps}
-          hide={isFullscreen}
-          title={currentModuleLocalizedName}
-          session={session}
-          onTitleClick={this.onModuleTitleClick}>
-          <ToolbarButton title={I18N.toString("action.toolbar.newmachine")} icon={PageEmptyIcon}
-            onClick={() => currentModule.clear(this)}/>
-          <ToolbarUploadButton title={I18N.toString("action.toolbar.uploadmachine")} icon={UploadIcon} accept={exportManager.getImportFileTypes().join(",")}
-            onUpload={fileBlob => {
-              exportManager.tryImportFromFile(fileBlob)
-                .catch((e) => {
-                  Notifications.addErrorMessage("ERROR: Unable to load invalid JSON file.", "errorUpload");
-                  console.error(e);
-                })
-                .finally(() => {
-                  this._toolbar.closeBar();
-                });
-            }}
-            disabled={!defaultExporter || !defaultExporter.canImport(currentModule)}/>
-          <ToolbarButton title={I18N.toString("action.toolbar.undo")} icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
-            disabled={!undoManager.canUndo()}
-            onClick={()=>undoManager.undo()}/>
-          <ToolbarButton title={I18N.toString("action.toolbar.redo")} icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
-            disabled={!undoManager.canRedo()}
-            onClick={()=>undoManager.redo()}/>
-          <ToolbarButton title={I18N.toString("component.exporting.title")} icon={DownloadIcon}
-            onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_EXPORT)}
-            disabled={!defaultExporter || !defaultExporter.canExport(currentModule)}/>
-          <ToolbarDivider/>
-          <ToolbarButton title={I18N.toString("action.toolbar.bug")} icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-            onClick={()=>window.open(BUGREPORT_URL, '_blank')}/>
-          <ToolbarButton title={I18N.toString("action.toolbar.lang")} icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-            onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_LANGUAGE)}/>
-          <ToolbarButton title={I18N.toString("action.toolbar.help")} icon={HelpIcon}
-            onClick={()=>window.open(HELP_URL, '_blank')}/>
-          <ToolbarButton title={I18N.toString("component.options.title")} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-            onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_OPTION)}/>
-          <ToolbarButton title={"Change Module"} icon={EditPencilIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-            onClick={()=>this._toolbar.setCurrentMenu(MENU_INDEX_MODULE)}/>
-        </ToolbarView>
+    getExportManager() { return this._exportManager; }
+    getImportManager() { return this._importManager; }
 
-        <DrawerView ref={ref=>this._drawer=ref} className={Style.app_content}
-          panels={drawerPanelClasses}
-          panelProps={drawerPanelProps}
-          side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
-          direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
-          hide={isFullscreen}>
+    getUndoManager() { return this._undoManager; }
+    getHotKeyManager() { return this._hotKeyManager; }
+    getDrawerManager() { return this._drawerManager; }
+    getMenuManager() { return this._menuManager; }
+    getViewportManager() { return this._viewportManager; }
+    getRenderManager() { return this._renderManager; }
+    getTooltipManager() { return this._tooltipManager; }
+    getNotificationManager() { return this._notificationManager; }
+    getThemeManager() { return this._themeManager; }
+    getBroadcastManager() { return this._broadcastManager; }
 
-          <UploadDropZone>
-            <div className="viewport">
+    getSession() { return this._session; }
+    getCurrentModule() { return this._session.getCurrentModule(); }
 
-              <TooltipView mode={tooltipManager.getTransitionMode()}
-                visible={/* TODO: For the initial fade-in animation */this._init && !undoManager.canUndo()}>
-                {tooltipManager.getTooltips().map((e, i) => <label key={e + ":" + i}>{e}</label>)}
-              </TooltipView>
+    isExperimental() { return true; }
 
-              <ViewportComponent ref={this._workspace}>
-                {/* RENDER_LAYER_WORKSPACE */
-                  workspaceRenderers &&
-                  workspaceRenderers.map((WorkspaceRenderer, i) =>
-                    <WorkspaceRenderer key={currentModuleLocalizedName + ":" + i} workspace={this.getWorkspaceComponent()}/>)}
-              </ViewportComponent>
+    /** @override */
+    componentDidUpdate()
+    {
+        this._session.updateSession(this);
 
-              {/* RENDER_LAYER_WORKSPACE_OVERLAY */
-                workspaceOverlayRenderers &&
-                workspaceOverlayRenderers.map((WorkspaceOverlayRenderer, i) =>
-                  <WorkspaceOverlayRenderer key={currentModuleLocalizedName + ":" + i} workspace={this.getWorkspaceComponent()}/>)}
+        const toolbarComponent = this._toolbarComponent.current;
+        const drawerComponent = this._drawerComponent.current;
+        //Disable hotkeys when graph is not in view
+        this._hotKeyManager.setEnabled(
+            !(toolbarComponent && toolbarComponent.isBarOpen()) &&
+            !(drawerComponent && drawerComponent.isDrawerOpen() &&
+                drawerComponent.isDrawerFullscreen())
+        );
+    }
 
-              <NotificationView notificationManager={Notifications}>
-              </NotificationView>
+    renderRenderLayer(renderLayerName, props)
+    {
+        const sessionID = this._session.getSessionID();
+        const renderers = this._renderManager.getRenderersByLayer(renderLayerName);
+        if (renderers && renderers.length > 0)
+        {
+            return renderers.map((R, i) => <R key={sessionID + '.' + R.constructor.name + '.' + i} {...props} />);
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-              {this._hotKeyManager.isEnabled() &&
-                <HotKeyView hotKeyManager={this._hotKeyManager}/>}
+    /** @override */
+    render()
+    {
+        const session = this._session;
+        const currentModule = session.getCurrentModule();
+        const currentModuleLocalizedName = currentModule ? currentModule.getLocalizedModuleName() : null;
 
-              <ViewportView ref={ref=>this._viewport=ref}
-                views={viewportViewClasses}
-                viewProps={viewportViewProps}>
-                {/* RENDER_LAYER_VIEWPORT */
-                  viewportRenderers &&
-                  viewportRenderers.map((ViewportRenderer, i) =>
-                    <ViewportRenderer key={currentModuleLocalizedName + ":" + i} viewport={this._viewport}/>)}
-              </ViewportView>
+        const hasSmallWidth = this._mediaQuerySmallWidthList.matches;
+        const hasSmallHeight = this._mediaQuerySmallHeightList.matches;
+        const isFullscreen = this.state.hide;
 
-              {/* RENDER_LAYER_VIEWPORT_OVERLAY */
-                viewportOverlayRenderers &&
-                viewportOverlayRenderers.map((ViewportOverlayRenderer, i) =>
-                  <ViewportOverlayRenderer key={currentModuleLocalizedName + ":" + i} viewport={this._viewport}/>)}
+        const exportManager = this._exportManager;
+        const importManager = this._importManager;
 
+        const undoManager = this._undoManager;
+        const drawerManager = this._drawerManager;
+        const menuManager = this._menuManager;
+        const tooltipManager = this._tooltipManager;
+        const notificationManager = this._notificationManager;
+
+        const toolbarComponent = this._toolbarComponent.current;
+
+        const drawerPanelClasses = drawerManager.getPanelClasses();
+        const drawerPanelProps = drawerManager.getPanelProps() || { session: session };
+        const menuPanelClasses = menuManager.getPanelClasses();
+        const menuPanelProps = menuManager.getPanelProps() || { session: session };
+        const MenuSubtitleClass = menuManager.getSubtitleComponentClass();
+
+        return (
+            <div className={Style.app_container + (currentModule ? ' active ' : '')}>
+                <ToolbarView ref={this._toolbarComponent} className={Style.app_bar}
+                    menus={menuPanelClasses}
+                    menuProps={menuPanelProps}
+                    subtitle={MenuSubtitleClass}
+                    hide={isFullscreen}
+                    title={currentModuleLocalizedName}
+                    session={session}
+                    onTitleClick={this.onModuleTitleClick}>
+                    <ToolbarButton title={I18N.toString('action.toolbar.newmachine')}
+                        icon={PageEmptyIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+                        onClick={this.onToolbarClearButton}
+                        disabled={!currentModule} />
+                    <ToolbarUploadButton
+                        title={I18N.toString('action.toolbar.uploadmachine')}
+                        icon={UploadIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+                        accept={importManager.getFileTypesAsAcceptString()}
+                        onUpload={fileBlob => 
+                        {
+                            importManager.tryImportFile(fileBlob)
+                                .catch(e =>
+                                    notificationManager.pushNotification(
+                                        'ERROR: Unable to import invalid file.\n' + e.message,
+                                        ERROR_LAYOUT_ID,
+                                        ERROR_UPLOAD_NOTIFICATION_TAG))
+                                .finally(() =>
+                                    toolbarComponent.closeBar());
+                        }}
+                        disabled={importManager.isEmpty()} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.undo')}
+                        icon={UndoIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+                        disabled={!undoManager.canUndo()}
+                        onClick={() => undoManager.undo()} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.redo')}
+                        icon={RedoIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+                        disabled={!undoManager.canRedo()}
+                        onClick={() => undoManager.redo()} />
+                    <ToolbarButton title={I18N.toString('component.exporting.title')}
+                        icon={DownloadIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_EXPORT)}
+                        disabled={exportManager.isEmpty()} />
+                    <ToolbarDivider />
+                    <ToolbarButton title={I18N.toString('action.toolbar.changemodule')}
+                        icon={EditPencilIcon}
+                        containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_MODULE)} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.lang')}
+                        icon={WorldIcon}
+                        containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_LANGUAGE)} />
+                    <ToolbarButton title={I18N.toString('component.options.title')}
+                        icon={SettingsIcon}
+                        containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_OPTION)} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.help')}
+                        icon={HelpIcon}
+                        onClick={() => window.open(HELP_URL, '_blank')} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.bug')}
+                        icon={BugIcon}
+                        containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => window.open(BUGREPORT_URL, '_blank')} />
+                </ToolbarView>
+
+                <DrawerView ref={this._drawerComponent} className={Style.app_content}
+                    panels={drawerPanelClasses}
+                    panelProps={drawerPanelProps}
+                    side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
+                    direction={hasSmallHeight ? DRAWER_BAR_DIRECTION_VERTICAL : DRAWER_BAR_DIRECTION_HORIZONTAL}
+                    hide={isFullscreen}>
+
+                    <UploadDropZone>
+                        <div className="viewport">
+                            <TooltipView mode={tooltipManager.getTransitionMode()}
+                                visible={/* TODO: For the initial fade-in animation */this._init && !undoManager.canUndo()}>
+                                {tooltipManager.getTooltips().map((e, i) => <label key={e + ':' + i}>{e}</label>)}
+                            </TooltipView>
+
+                            {/* RENDER_LAYER_WORKSPACE_PRE */}
+                            {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_PRE)}
+
+                            {/* RENDER_LAYER_WORKSPACE */}
+                            {this.renderRenderLayer(RENDER_LAYER_WORKSPACE)}
+
+                            {/* RENDER_LAYER_WORKSPACE_POST */}
+                            {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_POST)}
+
+                            <FullscreenWidget className={Style.fullscreen_widget} app={this} />
+
+                            <NotificationView notificationManager={notificationManager} />
+
+                            {this._hotKeyManager.isEnabled() && <HotKeyView hotKeyManager={this._hotKeyManager} />}
+                        </div>
+                    </UploadDropZone>
+                </DrawerView>
             </div>
-          </UploadDropZone>
-        </DrawerView>
-      </div>
-    );
-  }
+        );
+    }
 }
+App.INSTANCE = null;
 
 //For hotloading this class
 export default hot(App);

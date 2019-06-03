@@ -1,42 +1,42 @@
-const MODULE_NAME = "empty";
-const MODULE_VERSION = "0.0.1";
-const MODULE_LOCALIZED_NAME = "Empty";
+const MODULE_NAME = 'empty';
+const MODULE_VERSION = '1.0.0';
+const MODULE_LOCALIZED_NAME = 'Empty';
 
 class EmptyModule
 {
-  constructor(app)
-  {
-    this._app = app;
-  }
+    constructor(app)
+    {
+        this._app = app;
+    }
 
-  //Override
-  initialize(app)
-  {
-  }
+    /** @override */
+    initialize(app)
+    {
+    }
 
-  //Override
-  update(app)
-  {
-  }
+    /** @override */
+    update(app)
+    {
+    }
 
-  //Override
-  destroy(app)
-  {
-  }
+    /** @override */
+    destroy(app)
+    {
+    }
 
-  //Override
-  clear(app)
-  {
-  }
+    /** @override */
+    clear(app)
+    {
+    }
 
-  //Override
-  getModuleVersion() { return MODULE_VERSION; }
-  //Override
-  getModuleName() { return MODULE_NAME; }
-  //Override
-  getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
-  //Override
-  getApp() { return this._app; }
+    /** @override */
+    getModuleVersion() { return MODULE_VERSION; }
+    /** @override */
+    getModuleName() { return MODULE_NAME; }
+    /** @override */
+    getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
+    /** @override */
+    getApp() { return this._app; }
 }
 
 export default EmptyModule;

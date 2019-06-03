@@ -1,7 +1,11 @@
 # Flap.js
 *Formal Languages and Automata Package*
 
+[![Build Status](https://travis-ci.org/flapjs/FLAPJS-WebApp.svg?branch=master)](https://travis-ci.org/flapjs/FLAPJS-WebApp)
+
 > By the students. For the students.
+
+ANNOUNCEMENT: We are always looking for interested contributors and new members for the team! If you have any interest in web development, UI/UX design, computation theory, or general graphing systems, please contact us. We encourage you to play around with our repo and try out its features! (For more info, go to the bottom of this page.)
 
 ---
 
@@ -18,7 +22,7 @@ To make a program that is more accessible and intuitive to use, so we can all be
   * [Pages](#pages)
   * [App Page](#app-page)
   * [Graph Pipeline](#graph-pipeline)
-    * [NodalGraph](#nodalgraph)
+    * [NodeGraph](#nodegraph)
     * [Machines](#machines)
     * [GraphRenderer](#graphrenderer)
   * [InputController](#inputcontroller)
@@ -28,6 +32,7 @@ To make a program that is more accessible and intuitive to use, so we can all be
   * [NotificationSystem](#notificationsystem)
 
 ---
+
 ## Compatibility
 - [x] Windows
 - [x] Mac
@@ -54,11 +59,12 @@ To make a program that is more accessible and intuitive to use, so we can all be
 - [ ] Tape testing
   - [ ] TM
 
-### 0.4.0
+### 0.4.1
+- [x] Theme presets
 - [ ] Context-Free Grammars
 - [ ] StepTracer design
 - [ ] Cross-window operations
-- [ ] Theme presets
+- [x] Automatic build pipeline with TravisCI
 
 ### 0.3.4
 - [x] Pushdown Automata
@@ -96,6 +102,8 @@ To make a program that is more accessible and intuitive to use, so we can all be
 - [x] Autosave system
 - [x] Custom language
 - [x] Offline capabilities
+
+NOTE: Check out our CHANGELOG for more information!
 
 ---
 
@@ -311,14 +319,14 @@ All graph elements are rendered and manipulated here. The `InputController` will
 ### Graph Pipeline
 There are 3 representations of a graph, with each abstracting from the user interface, the computation, and the rendering.
 
-#### NodalGraph
-The first layer directly manipulated by the user is the `NodalGraph`. It can represent any graph that contains nodes and edges with labels (including DFAs, PDAs, TMs, etc).
+#### NodeGraph
+The first layer directly manipulated by the user is the `NodeGraph`. It can represent any graph that contains nodes and edges with labels (including DFAs, PDAs, TMs, etc).
 
 The purpose of this layer is to serve as the interface between user intention and graph representation. Although the graph _can_ represent any nodal graph, it does not mean it _should_ in the final output. However, these restrictions should be handled by the input controller or other handlers listening to its events to ensure logical and effective manipulation and also separation of responsibility.
 
-The `NodalGraph` is comprised of `Node` and `Edge` objects, each with its own position, labels, and other properties to decorate a graph. The labels are just strings, and are not enforced to any format (as suggested earlier, formatting and other rules should be applied by other handlers).
+The `NodeGraph` is comprised of `GraphNode` and `GraphEdge` objects, each with its own position, labels, and other properties to decorate a graph. The labels are just strings, and are not enforced to any format (as suggested earlier, formatting and other rules should be applied by other handlers).
 
-Available events to listen for are listed at the top of `NodalGraph.js`.
+Available events to listen for are listed at the top of `NodeGraph.js`.
 
 #### Machines
 This layer represents the mathematical definitions of the graph. Therefore, it provides functionality such as `getAlphabet` or `doClosureTransition` but are also specific to its machine type.
@@ -328,27 +336,27 @@ In each machine, named by their machine type (i.e. `DFA.js`, `NFA.js`, `FSA.js`)
 For symbol representation, these are maintained in `Symbols.js`. When considering the character representation in computing a machine, use these constants to allow easy change of symbols. For example, the empty transition, as represented by a lambda or an epsilon, is referred to as: `Symbols.EMPTY`. Other symbols can be added to the script.
 
 ##### MachineBuilder
-In order to facilitate responses to these erroneous constructions, a `MachineBuilder` is used. The current valid machine of the workspace is maintained by a builder (i.e. `FSABuilder.js`) in `App` and derived from the `NodalGraph`. Its purpose is to enforce the rules of the machine on the user interactions. Actions and changes that violate these rules, or, in other words, throw errors, should either be reverted or be notified to the user through the builder. The machine is continually "rebuilt" by the builder on graph changes and therefore should have its content always in sync with the user's graph. Any custom rules should be implemented here.
+In order to facilitate responses to these erroneous constructions, a `MachineBuilder` is used. The current valid machine of the workspace is maintained by a builder (i.e. `FSABuilder.js`) in `App` and derived from the `NodeGraph`. Its purpose is to enforce the rules of the machine on the user interactions. Actions and changes that violate these rules, or, in other words, throw errors, should either be reverted or be notified to the user through the builder. The machine is continually "rebuilt" by the builder on graph changes and therefore should have its content always in sync with the user's graph. Any custom rules should be implemented here.
 
 **Note:** If certain actions or changes would result in critical errors, such as violating universal graph rules, then it should be implemented in the input controller to consume the action before it is performed.
 
 **Note:** Expensive error-checking should be checked on intervals rather than only on change in order to save computation costs. Since these errors will not provide immediate feedback, the actions should not be reverted, but rather the user should be notified of the error instead. This also suggests that the output machine may not always be in sync with the graph. However, this is fine, since other functionality dependent on a machine expects a _valid_ graph and therefore should be disabled if this occurs.
 
-**Note:** This representation loses the graphical data that allows it to be reconstructed back into its original `NodalGraph`, such as position or direction. Although mathematically similar, both are structurally different, which enables both to effectively serve their unique functions.
+**Note:** This representation loses the graphical data that allows it to be reconstructed back into its original `NodeGraph`, such as position or direction. Although mathematically similar, both are structurally different, which enables both to effectively serve their unique functions.
 
 ##### Machine functions
-Certain functionality that requires non-negligible computation time are divided into machine-specific `util` functions. These include `convertNFA`, `minimizeFSA`, `solveNFA`, etc. These are often called by specific actions or buttons within the panels and other areas and will should only calculate on machines (not `NodalGraph`).
+Certain functionality that requires non-negligible computation time are divided into machine-specific `util` functions. These include `convertNFA`, `minimizeFSA`, `solveNFA`, etc. These are often called by specific actions or buttons within the panels and other areas and will should only calculate on machines (not `NodeGraph`).
 
 Each is stored in their own script and can be tested separately from the main program. Refer to [Testing the Machine Functions](#testing-the-machine-functions) for more information on how to test them.
 
 #### GraphRenderer
-This final layer evaluates the `NodalGraph` and constructs a renderable structure to display to the user. In other words, this is the `React` component representation of `NodalGraph`. Because of this abstraction, the graph could be rendered in `Canvas` or other rendering systems if required. Currently, the individual elements are rendered onto the workspace in `SVG` for scalability.
+This final layer evaluates the `NodeGraph` and constructs a renderable structure to display to the user. In other words, this is the `React` component representation of `NodeGraph`. Because of this abstraction, the graph could be rendered in `Canvas` or other rendering systems if required. Currently, the individual elements are rendered onto the workspace in `SVG` for scalability.
 
 ### InputAdapter
 This handles all complex input manipulations of the graph workspace. All raw input (i.e. `onTouchStart`, `onMouseDown`) are first evaluated by `InputAdapter.js` into more abstract actions. Both touch and mouse actions are converted to abstracted input actions to simplify input logic.
 
 #### InputController
-These input actions (i.e. `onDragStart`, `onInputAction`) are then handled by `InputController.js`, which applies context-specific actions to the elements in the `NodalGraph`. In addition to the controller handling the input action events, it also emits events for external handlers to listen and respond to.
+These input actions (i.e. `onDragStart`, `onInputAction`) are then handled by `InputController.js`, which applies context-specific actions to the elements in the `NodeGraph`. In addition to the controller handling the input action events, it also emits events for external handlers to listen and respond to.
 
 Available events to listen for are listed at the top of `InputController.js`.
 
@@ -361,10 +369,10 @@ The position, timing, initial state, and target are kept in a `GraphPointer`. It
 This is maintained by `AutoSaver.js`. The script will intermittently save on defined interval to local storage on the local system. This is handled by the browser and is specific to the browser. It is only initialized on component mount in `App.js`, and then it will update itself.
 
 ### Event History
-This is maintained by `EventHistory.js`. The script will record all non-negligible events fired by `GraphInputController.js` and `NodalGraph.js`. On user request, the log is cleared, decreased, or increased.
+This is maintained by `EventHistory.js`. The script will record all non-negligible events fired by `GraphInputController.js` and `NodeGraph.js`. On user request, the log is cleared, decreased, or increased.
 
 ### Eventable
-This is a mixin class that enables emit/listen functionality for a class. It is currently used by `NodalGraph.js` and `GraphInputController.js`.
+This is a mixin class that enables emit/listen functionality for a class. It is currently used by `NodeGraph.js` and `GraphInputController.js`.
 
 To fire an event:
 ```
@@ -390,3 +398,14 @@ Eventable.mixin(SomeClass);
 
 ### Notification System
 `NotificationSystem.js` handles all notifications that are reported by other various components to the user. The messages can be grouped and searched by tags and sorted into various levels: `ERROR`, `WARNING`, `DEBUG`, `INFO`. Each message can also be dynamically altered by external handlers.
+
+
+### Conclusion
+
+If you have any more questions, please contact any Flap.js dev team member.
+
+Or, you can contact me:
+andykuo1supergreen@gmail.com
+(Please begin the subject with 'Flap.js - ')
+
+Thank you for reading me!
