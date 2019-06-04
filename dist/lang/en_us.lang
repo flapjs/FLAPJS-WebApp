@@ -14,6 +14,7 @@ message.action.locate = Where is it?
 message.action.deleteall = Delete them all.
 message.action.close = Get out of my way!
 message.action.convert = Convert anyway
+message.action.next = Next
 message.workspace.empty = Double-tap to create a node
 message.offline.ready = You are already ready for offline!
 message.offline.failed = You are not ready for offline. Please refresh the page!

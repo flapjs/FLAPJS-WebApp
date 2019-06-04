@@ -13,6 +13,7 @@ message.warning.convertNFAToDFA = Beware! Convertin' thar machine be explodin'!
 message.action.locate = Whar be the loot?
 message.action.deleteall = More fer the fishes!
 message.action.close = Get out o' me way, seadog!
+message.action.next = More!
 message.action.convert = Set sail, ye landlubbers!
 message.workspace.empty = Ahoy matey! All hands on deck!
 message.offline.ready = Ye ar' ready for open waters!
