@@ -1,0 +1,10 @@
+# A whitelist approach...
+/*
+!/src
+
+# Ignore deprecated directories
+**/deprecated
+# Ignore test files
+**/*.test.js
+# Ignore test directory
+/src/test

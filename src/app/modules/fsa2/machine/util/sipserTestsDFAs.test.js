@@ -1,6 +1,6 @@
 import FSA, { EMPTY_SYMBOL } from '../FSA.js';
 import { solveFSA, convertToDFA } from '../FSAUtils.js';
-import FSAGraph from 'modules/fsa/graph/FSAGraph.js';
+import FSAGraph from 'modules/fsa2/graph/FSAGraph.js';
 import FSABuilder from 'modules/fsa2/machine/FSABuilder.js';
 import JFLAPGraphExporter from 'modules/fsa2/exporter/JFLAPGraphExporter'
 

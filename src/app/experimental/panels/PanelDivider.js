@@ -3,22 +3,22 @@ import Style from './PanelDivider.css';
 
 class PanelDivider extends React.Component
 {
-  constructor(props)
-  {
-    super(props);
-  }
+    constructor(props)
+    {
+        super(props);
+    }
 
-  //Override
-  render()
-  {
-    return (
-      <div id={this.props.id}
-        className={Style.panel_divider +
-          " " + this.props.className}
-        style={this.props.style}>
-      </div>
-    );
-  }
+    /** @override */
+    render()
+    {
+        return (
+            <div id={this.props.id}
+                className={Style.panel_divider +
+          ' ' + this.props.className}
+                style={this.props.style}>
+            </div>
+        );
+    }
 }
 
 export default PanelDivider;

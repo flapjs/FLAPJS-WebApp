@@ -1,7 +1,17 @@
 :local(.panel_container) {
 }
+:local(.panel_title) {
+  position: sticky;
+  top: 0;
+  padding: 1em 0.5em;
+  margin-bottom: 0.5em;
+  z-index: 1000;
+
+  background: var(--color-panel-back);
+  border-bottom: 2px solid var(--color-panel-back-detail);
+}
 :local(.panel_title) > h1 {
-  border-bottom: 1px solid var(--color-panel-back-detail);
+  margin: 0;
 }
 :local(.panel_content) {
   display: flex;

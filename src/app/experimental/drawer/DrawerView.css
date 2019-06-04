@@ -16,7 +16,7 @@
   --color-viewport-back: var(--color-background);
   --color-viewport-back-detail: var(--color-background-lite);
   --color-viewport-outline: rgba(0, 0, 0, 0.03);
-  --color-viewport-text: var(--color-surface-text);
+  --color-viewport-text: var(--color-background-text);
   --color-viewport-text-active: var(--color-background-active);
   --color-viewport-error: var(--color-error);
 
@@ -31,7 +31,7 @@
   outline: 1em dashed var(--color-viewport-outline);
   outline-offset: -2em;
 
-  transition: outline-color 0.1s ease;
+  transition: outline-color 0.15s ease;
 }
 /********* APP DRAWER *********/
 :local(.app_drawer) {
