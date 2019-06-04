@@ -26,6 +26,7 @@ class FSABuilder extends AbstractMachineBuilder
         dst.clear();
 
         //Add all states
+        const nodeMapping = new Map();
         let node;
         for (const state of machine.getStates())
         {
@@ -35,31 +36,27 @@ class FSABuilder extends AbstractMachineBuilder
             {
                 node.setNodeAccept(true);
             }
+            nodeMapping.set(state, node);
         }
 
         //Add all transitions
         let edge, from, to, read;
         for (let transition of machine.getTransitions())
         {
-            let fromNodes = dst.getNodesByLabel(transition[0]);
-            if (!fromNodes || fromNodes.length <= 0) continue;
-            from = fromNodes[0];
+            from = nodeMapping.get(transition.getSourceState());
+            if (!from) continue;
 
-            read = transition[1];
+            read = transition.getSymbols().join(' ');
 
-            let toNodes = dst.getNodesByLabel(transition[2]);
-            if (!toNodes || toNodes.length <= 0) continue;
-            from = toNodes[0];
+            to = nodeMapping.get(transition.getDestinationState());
+            if (!to) continue;
 
             edge = dst.createEdge(from, to);
             edge.setEdgeLabel(read);
-            const formattedEdge = dst.formatEdge(edge);
-            if (edge != formattedEdge) dst.deleteEdge(edge);
         }
 
         //Set start state
         const startState = machine.getStartState();
-
 
         let startNodes = dst.getNodesByLabel(startState);
         if (startNodes && startNodes.length > 0)
