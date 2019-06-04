@@ -22,16 +22,16 @@ class DefaultNotificationLayout extends React.Component
         return (
             <div id={this.props.id}
                 className={Style.notification_container +
-          ' ' + this.props.styleType +
-          ' ' + this.props.className}
+                    ' ' + this.props.styleType +
+                    ' ' + this.props.className}
                 style={this.props.style}>
                 {message &&
-          message.split('\n').map((e, i) => <p key={e + ':' + i}>{e}</p>)}
+                    message.split('\n').map((e, i) => <p key={e + ':' + i}>{e}</p>)}
                 {this.props.children}
                 {notification &&
-          <button onClick={e => notification.close()}>
-              {I18N.toString('message.action.close')}
-          </button>}
+                    <button onClick={e => notification.close()}>
+                        {I18N.toString('message.action.close')}
+                    </button>}
             </div>
         );
     }

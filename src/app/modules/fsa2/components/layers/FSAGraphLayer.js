@@ -4,6 +4,7 @@ import GraphNodeLayer from 'graph2/components/layers/GraphNodeLayer.js';
 import GraphEdgeLayer from 'graph2/components/layers/GraphEdgeLayer.js';
 import SelectionBoxLayer from 'graph2/components/layers/SelectionBoxLayer.js';
 import IndexedGraphStartMarkerLayer from 'graph2/components/layers/IndexedGraphStartMarkerLayer.js';
+import GraphHighlightLayer from 'graph2/components/layers/GraphHighlightLayer.js';
 
 import FSANodeRenderer from '../../graph/renderer/FSANodeRenderer.js';
 import FSANodeInputHandler from '../../graph/inputhandler/FSANodeInputHandler.js';
@@ -50,6 +51,9 @@ class FSAGraphLayer extends React.Component
         const inputController = graphView.getInputController();
         const inputContext = graphView.getInputContext();
 
+        const session = this.props.session;
+        const testTargetNodes = session.getCurrentModule()._tester.targets;
+
         return (
             <React.Fragment>
                 <IndexedGraphStartMarkerLayer
@@ -86,6 +90,8 @@ class FSAGraphLayer extends React.Component
                     graphController={graphController}
                     inputContext={inputContext}
                     inputPriority={-1} />
+                <GraphHighlightLayer
+                    nodes={testTargetNodes} />
             </React.Fragment>
         );
     }

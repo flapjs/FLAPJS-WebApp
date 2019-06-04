@@ -102,12 +102,20 @@ class DebounceInput extends React.Component
     render()
     {
         return (
-            <textarea
-                {...this.props}
-                ref={this._inputElement}
-                onFocus={this.onFocus}
-                onBlur={this.onBlur}>
-            </textarea>
+            this.props.multiline ?
+                <textarea
+                    {...this.props}
+                    ref={this._inputElement}
+                    onFocus={this.onFocus}
+                    onBlur={this.onBlur}>
+                </textarea> :
+                <input
+                    {...this.props}
+                    type='text'
+                    ref={this._inputElement}
+                    onFocus={this.onFocus}
+                    onBlur={this.onBlur}>
+                </input>
         );
     }
 }

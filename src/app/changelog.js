@@ -1,3 +1,18 @@
+//Version 0.4.3
+const changeLog = `
+### Added
+- The new Bab's tutorial
+
+### Changed
+- App will check for updates only if it can.
+
+### Fixed
+- Missing test highlights.
+- Missing edge formatting.
+- Weird collapse for menu screen.
+`.split('\n');
+
+/*
 //Version 0.4.2
 const changeLog = `
 ### Added
@@ -27,7 +42,6 @@ const changeLog = `
 - FA/PDA: Missing red border for delete mode.
 `.split('\n');
 
-/*
 //Version 0.4.1
 const changeLog = [
     'Experimental mode is now LIVE! :D',

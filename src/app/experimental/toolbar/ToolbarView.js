@@ -136,17 +136,19 @@ class ToolbarView extends React.Component
                         {showCustomToolbarMenu ?
                             <ToolbarMenu {...this.props.menuProps} toolbar={this} />
                             :
-                            <div>
-                                <h1>
-                                    Flap.js
-                                </h1>
-                                <p>
-                                    Something cool will be here soon. ;)
-                                </p>
-                                <p>
-                                    Have an awesome day!
-                                </p>
-                                <div style={{position: 'absolute', bottom: '0'}}>
+                            <div style={{display: 'flex', flexDirection: 'column'}}>
+                                <div>
+                                    <h1>
+                                        Flap.js
+                                    </h1>
+                                    <p>
+                                        Something cool will be here soon. ;)
+                                    </p>
+                                    <p>
+                                        Have an awesome day!
+                                    </p>
+                                </div>
+                                <div>
                                     <h3>Found a bug or have a cool idea?</h3>
                                     <p>
                                         Feel free to leave a comment or any feedback in <b>{'"'}Report a Bug{'"'}</b>.

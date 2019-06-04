@@ -22,6 +22,7 @@ import { registerImageExporters } from 'modules/nodegraph/filehandlers/NodalGrap
 import SafeGraphEventHandler from 'modules/nodegraph/SafeGraphEventHandler.js';
 
 import FSABroadcastHandler from './FSABroadcastHandler.js';
+import TutorialHandler from './TutorialHandler.js';
 
 /* COMPONENTS */
 
@@ -61,7 +62,8 @@ class FSAModule
                         return <FSAGraphLayer
                             graphView={graphView}
                             graphController={graphController}
-                            editable={!this._testMode} />;
+                            editable={!this._testMode}
+                            session={this._app.getSession()} />;
                     }}
                     renderOverlay={graphView =>
                     {
@@ -90,6 +92,7 @@ class FSAModule
         this._testMode = false;
 
         this._broadcastHandler = new FSABroadcastHandler();
+        this._tutorialHandler = new TutorialHandler(app);
     }
 
     /** @override */
@@ -120,6 +123,18 @@ class FSAModule
                     title={'Finite State Automata'}>
                     <p>{'Brought to you with \u2764 by the Flap.js team.'}</p>
                     <p>{'<- Tap on a tab to begin!'}</p>
+                    <div style={{position: 'absolute', bottom: 0, right: 0, marginRight: '1em'}}>
+                        {'Looking for Bab\'s Tutorial?'}
+                        <div style={{display: 'flex', margin: '0.5em 0'}}>
+                            <button style={{flex: 1}} onClick={e =>
+                            {
+                                app.getDrawerComponent().closeDrawer();
+                                this._tutorialHandler.start(app, true);
+                            }}>
+                                {I18N.toString('message.action.next')}
+                            </button>
+                        </div>
+                    </div>
                 </PanelContainer>
             ))
             .addPanelClass(OverviewPanel)
@@ -158,6 +173,8 @@ class FSAModule
 
         this._machineController.initialize(this);
         this._graphController.initialize();
+
+        this._tutorialHandler.start(app);
     }
 
     /** @override */
