@@ -50,6 +50,7 @@ import { registerImageExporters } from 'modules/nodegraph/filehandlers/NodalGrap
 import SafeGraphEventHandler from 'modules/nodegraph/SafeGraphEventHandler.js';
 
 import FSABroadcastHandler from './FSABroadcastHandler.js';
+import TutorialHandler from './TutorialHandler.js';
 
 /* COMPONENTS */
 
@@ -89,7 +90,8 @@ class FSAModule
                         return &lt;FSAGraphLayer
                             graphView={graphView}
                             graphController={graphController}
-                            editable={!this._testMode} />;
+                            editable={!this._testMode}
+                            session={this._app.getSession()} />;
                     }}
                     renderOverlay={graphView =>
                     {
@@ -98,7 +100,7 @@ class FSAModule
                             return &lt;FSAGraphOverlayLayer
                                 graphView={graphView}
                                 graphController={graphController}
-                                module={this} />;
+                                session={this._app.getSession()} />;
                         }
                         else
                         {
@@ -118,6 +120,7 @@ class FSAModule
         this._testMode = false;
 
         this._broadcastHandler = new FSABroadcastHandler();
+        this._tutorialHandler = new TutorialHandler(app);
     }
 
     /** @override */
@@ -148,6 +151,18 @@ class FSAModule
                     title={'Finite State Automata'}>
                     &lt;p>{'Brought to you with \u2764 by the Flap.js team.'}&lt;/p>
                     &lt;p>{'&lt;- Tap on a tab to begin!'}&lt;/p>
+                    &lt;div style={{position: 'absolute', bottom: 0, right: 0, marginRight: '1em'}}>
+                        {'Looking for Bab\'s Tutorial?'}
+                        &lt;div style={{display: 'flex', margin: '0.5em 0'}}>
+                            &lt;button style={{flex: 1}} onClick={e =>
+                            {
+                                app.getDrawerComponent().closeDrawer();
+                                this._tutorialHandler.start(app, true);
+                            }}>
+                                {I18N.toString('message.action.next')}
+                            &lt;/button>
+                        &lt;/div>
+                    &lt;/div>
                 &lt;/PanelContainer>
             ))
             .addPanelClass(OverviewPanel)
@@ -186,6 +201,8 @@ class FSAModule
 
         this._machineController.initialize(this);
         this._graphController.initialize();
+
+        this._tutorialHandler.start(app);
     }
 
     /** @override */
@@ -237,13 +254,13 @@ export default FSAModule;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Mon May 20 2019 13:46:29 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 09:20:14 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
