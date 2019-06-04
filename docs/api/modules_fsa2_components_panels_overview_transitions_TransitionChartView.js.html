@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/fsa2/components/panels/overview/transitions/TransitionChartView.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/fsa2/components/panels/overview/transitions/TransitionChartView.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './TransitionChartView.css';
+
+import { EMPTY_CHAR } from 'modules/fsa2/graph/element/FSAEdge.js';
+import { EMPTY_SYMBOL } from 'modules/fsa2/machine/FSA.js';
+
+class TransitionChartView extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        //NOTE: this only works if machine hashing is faster than a re-calculate
+        this._cachedMachineHash = 0;
+        this._cachedMachineComponents = [];
+    }
+
+    /** @override */
+    componentWillUnmount()
+    {
+    //Reset cached components for re-rendering
+        this._cachedMachineHash = 0;
+        this._cachedMachineComponents.length = 0;
+    }
+
+    renderTransitionEntry(machine, state, symbol)
+    {
+        const deterministic = machine.isDeterministic();
+
+        let destinations = machine.doTransition(state, symbol, true);
+        let transitionString = '';
+        let error = false;
+
+        if (destinations.length &lt;= 0)
+        {
+            if (deterministic)
+            {
+                error = true;
+                transitionString = '-';
+                if (symbol === EMPTY_SYMBOL)
+                {
+                    //Don't show missing empty transitions for DFA's
+                    return null;
+                }
+            }
+            else
+            {
+                //Don't show missing transitions for NFA's
+                return null;
+            }
+        }
+        else if (destinations.length === 1)
+        {
+            //Regardless if it's deterministic, it is a valid transition
+            error = false;
+            transitionString = destinations[0].getStateLabel();
+
+            if (!deterministic) transitionString = '{' + transitionString + '}';
+        }
+        else
+        {
+            //If it's deterministic, it is not valid
+            if (deterministic) error = true;
+
+            let string = '';
+            for(const state of destinations)
+            {
+                if (string.length > 0) string += ',';
+                string += state.getStateLabel();
+            }
+            transitionString = '{' + string + '}';
+        }
+
+        //Convert empty symbol to the expected char value
+        if (symbol === EMPTY_SYMBOL)
+        {
+            symbol = EMPTY_CHAR;
+
+            //DFA's can't have empty symbols
+            if (deterministic) error = true;
+        }
+
+        return (
+            &lt;tr key={state.getStateID() + ':' + symbol}>
+                &lt;td className={Style.chart_key + (error ? ' error ' : '')}>{'(' + state.getStateLabel() + ',' + symbol + ')'}&lt;/td>
+                &lt;td className={Style.chart_value + (error ? ' error ' : '')}>{transitionString}&lt;/td>
+            &lt;/tr>
+        );
+    }
+
+    renderTransitionTable(machine)
+    {
+        const machineHash = machine.getHashCode();
+        if (machineHash !== this._cachedMachineHash)
+        {
+            this._cachedMachineHash = machineHash;
+        }
+        else
+        {
+            return this._cachedMachineComponents;
+        }
+
+        const result = this._cachedMachineComponents = [];
+        // const deterministic = machine.isDeterministic();
+
+        for(const state of machine.getStates())
+        {
+            let entry = null;
+
+            //The empty transitions...
+            entry = this.renderTransitionEntry(machine, state, EMPTY_SYMBOL);
+            if (entry) result.push(entry);
+
+            //The other transitions...
+            for(const symbol of machine.getAlphabet())
+            {
+                entry = this.renderTransitionEntry(machine, state, symbol);
+                if (entry) result.push(entry);
+            }
+        }
+        return result;
+    }
+
+    /** @override */
+    render()
+    {
+        const machineController = this.props.machineController;
+        const machine = machineController.getMachineBuilder().getMachine();
+        const deterministic = machineController.getMachineType() === 'DFA';
+
+        return (
+            &lt;div id={this.props.id}
+                className={Style.chart_container +
+        ' ' + this.props.className}
+                style={this.props.style}>
+                &lt;table>
+                    &lt;tbody>
+                        &lt;tr>
+                            &lt;th>
+                                {'Q\u00d7\u03A3'}
+                            &lt;/th>
+                            &lt;th>
+                                {deterministic ?
+                                    &lt;span>{'Q'}&lt;/span> :
+                                    &lt;span>
+                                        &lt;span style={{fontFamily: 'cursive'}}>{'P'}&lt;/span>
+                                        &lt;span>{'(Q)'}&lt;/span>
+                                    &lt;/span>}
+                            &lt;/th>
+                        &lt;/tr>
+                        {this.renderTransitionTable(machine)}
+                    &lt;/tbody>
+                &lt;/table>
+            &lt;/div>
+        );
+    }
+}
+
+export default TransitionChartView;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

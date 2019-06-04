@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: experimental/menus/option/OptionPanel.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: experimental/menus/option/OptionPanel.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './OptionPanel.css';
+
+import LocalStorage from 'util/storage/LocalStorage.js';
+import StyleInput from 'util/theme/components/StyleInput.js';
+
+import PanelContainer from 'experimental/panels/PanelContainer.js';
+import PanelSection from 'experimental/panels/PanelSection.js';
+import PanelSwitch from 'experimental/panels/PanelSwitch.js';
+import PanelButton from 'experimental/panels/PanelButton.js';
+
+import PreviewView from './PreviewView.js';
+
+const HIDDEN_STYLE_GROUP_NAME = 'hidden';
+
+//This should be the same as the one referred to by index.js
+const DISABLE_EXIT_WARNING_STORAGE_ID = 'disableExitWarning';
+
+class OptionPanel extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this.state = {
+            theme: 'default',
+            customTheme: false,
+            exitWarning: LocalStorage.getData(DISABLE_EXIT_WARNING_STORAGE_ID) === 'true'
+        };
+
+        this.onChangeTheme = this.onChangeTheme.bind(this);
+    }
+
+    onChangeTheme(e)
+    {
+        const session = this.props.session;
+        const app = session.getApp();
+
+        const themeManager = app.getThemeManager();
+        const prevTheme = this.state.theme;
+        const theme = e.target.value;
+        if (prevTheme === theme) return;
+
+        themeManager.loadTheme(theme);
+
+        this.setState({ theme: theme });
+    }
+
+    renderStyleGroups()
+    {
+        const themeManager = this.props.session.getApp().getThemeManager();
+        const result = [];
+        for (const groupName of themeManager.getStyleGroupNames())
+        {
+            if (groupName === HIDDEN_STYLE_GROUP_NAME) continue;
+            const styles = themeManager.getStylesByGroup(groupName);
+            result.push(
+                &lt;PanelSection
+                    key={groupName}
+                    title={I18N.toString('options.colorgroup.' + groupName)}
+                    full={true}>
+                    {styles.map(e =>
+                        &lt;StyleInput key={e.getName()} className={Style.input_option} value={e}
+                            title={I18N.toString('options.' + e.getName())} />)}
+                &lt;/PanelSection>
+            );
+        }
+        return result;
+    }
+
+    /** @override */
+    render()
+    {
+        const session = this.props.session;
+        const themeManager = session.getApp().getThemeManager();
+
+        return (
+            &lt;PanelContainer id={this.props.id}
+                className={this.props.className}
+                style={this.props.style}
+                title={I18N.toString('component.options.title')}>
+                &lt;PanelSection title="Theme">
+                    &lt;div style={{ display: 'flex' }}>
+                        &lt;div style={{ width: '60%' }}>
+                            &lt;div id="options-theme-select-container">
+                                &lt;select id="options-theme-select" className="panel-select"
+                                    value={this.state.theme}
+                                    onChange={this.onChangeTheme}
+                                    disabled={this.state.customTheme}>
+                                    &lt;option value="default">Default&lt;/option>
+                                    &lt;option value="ucsd">UC San Diego&lt;/option>
+                                    &lt;option value="duke">Duke University&lt;/option>
+                                    &lt;option value="mit">MIT&lt;/option>
+                                &lt;/select>
+                                {
+                                    !this.state.customTheme &amp;&amp;
+                                    &lt;PanelButton onClick={() => this.setState({ customTheme: true })}>
+                                        {I18N.toString('action.options.changetheme')}
+                                    &lt;/PanelButton>
+                                }
+                            &lt;/div>
+                            {
+                                this.state.customTheme &amp;&amp;
+                                &lt;div>
+                                    {this.renderStyleGroups()}
+
+                                    &lt;PanelButton onClick={(e) => 
+                                    {
+                                        themeManager.reset();
+                                        this.setState({ customTheme: false });
+                                    }}>
+                                        {I18N.toString('action.options.reset')}
+                                    &lt;/PanelButton>
+                                &lt;/div>
+                            }
+                        &lt;/div>
+                        &lt;div>
+                            &lt;PreviewView />
+                        &lt;/div>
+                    &lt;/div>
+                &lt;/PanelSection>
+
+                &lt;PanelSwitch id={'option-exitwarning'}
+                    checked={this.state.exitWarning}
+                    title={I18N.toString('options.exitwarning')}
+                    onChange={(e) => 
+                    {
+                        const result = e.target.checked;
+                        this.setState({ exitWarning: result });
+                        LocalStorage.setData(DISABLE_EXIT_WARNING_STORAGE_ID, '' + result);
+                    }} />
+                &lt;label className={Style.version}>
+                    {`v${process.env.VERSION}`}
+                &lt;/label>
+            &lt;/PanelContainer>
+        );
+    }
+}
+
+export default OptionPanel;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

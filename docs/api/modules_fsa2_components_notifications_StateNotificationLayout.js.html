@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/fsa2/components/notifications/StateNotificationLayout.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/fsa2/components/notifications/StateNotificationLayout.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import DefaultNotificationLayout, { STYLE_TYPE_ERROR }
+    from 'session/manager/notification/components/DefaultNotificationLayout.js';
+
+/**
+ * A class representing the layout for a notification referring to states
+ */
+class StateNotificationLayout extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this._targetIndex = 0;
+        this._targetLabel = '';
+        const targets = props.message.targets;
+        for (const target of targets)
+        {
+            if (this._targetLabel.length > 0)
+            {
+                this._targetLabel += ', ';
+            }
+            // TODO: make a helper function for this type of constructor
+            this._targetLabel += target.getNodeLabel();
+        }
+
+        this.onClick = this.onClick.bind(this);
+    }
+
+    /**
+     * Handles onclick events for the buttons
+     * 
+     * @param {Event} e the input event
+     */
+    onClick(e)
+    {
+        const notification = this.props.notification;
+        const message = this.props.message;
+        const app = this.props.app;
+
+        const graphController = this.props.graphController;
+
+        switch (e.target.value)
+        {
+        // Cycle through all of the targets and center the viewport on it
+        case 'locate':
+            {
+                const targets = message.targets;
+                const targetLength = targets.length;
+                if (targetLength > 0 &amp;&amp; this._targetIndex &lt; targetLength)
+                {
+                    // Locate the target edge
+                    const target = targets[this._targetIndex++];
+                    if (this._targetIndex >= targetLength) this._targetIndex = 0;
+
+                    // Move pointer to target
+                    const graphView = app.getSession().getCurrentModule().getGraphView();
+                    graphView.moveViewToPosition(target.x, target.y);
+                }
+            }
+            break;
+            // Delete all targets
+        case 'deleteall':
+            {
+                const targets = message.targets;
+                // Delete all target nodes
+                graphController.deleteTargetNodes(targets);
+
+                // Sort the nodes after deleting if enabled...
+                graphController.applyAutoRename();
+
+                // Exit the message
+                notification.close();
+            }
+            break;
+        }
+    }
+
+    /** @override */
+    render()
+    {
+        const message = this.props.message;
+
+        // TODO: localization issues
+        return (
+            &lt;DefaultNotificationLayout id={this.props.id}
+                className={this.props.className}
+                style={this.props.style}
+                styleType={STYLE_TYPE_ERROR}
+                notification={this.props.notification}>
+                &lt;p>{message.text + ': ' + this._targetLabel}&lt;/p>
+                &lt;button value="locate" onClick={this.onClick}>
+                    {I18N.toString('message.action.locate')}
+                &lt;/button>
+                &lt;button value="deleteall" onClick={this.onClick}>
+                    {I18N.toString('message.action.deleteall')}
+                &lt;/button>
+            &lt;/DefaultNotificationLayout>
+        );
+    }
+}
+
+export default StateNotificationLayout;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

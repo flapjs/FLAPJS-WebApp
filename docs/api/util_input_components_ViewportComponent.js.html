@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: util/input/components/ViewportComponent.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: util/input/components/ViewportComponent.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './ViewportComponent.css';
+
+import ViewportAdapter from '../ViewportAdapter.js';
+import InputAdapter from '../InputAdapter.js';
+import AbstractInputHandler from '../AbstractInputHandler.js';
+
+const DEFAULT_VIEW_SIZE = 300;
+const SMOOTH_OFFSET_DAMPING = 0.4;
+const MIN_SCALE = 0.1;
+const MAX_SCALE = 10;
+
+class ViewportComponent extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this._ref = React.createRef();
+
+        this._viewportAdapter = new ViewportAdapter()
+            .setMinScale(MIN_SCALE)
+            .setMaxScale(MAX_SCALE)
+            .setOffsetDamping(SMOOTH_OFFSET_DAMPING);
+        this._inputAdapter = new InputAdapter(this._viewportAdapter);
+    }
+
+    addInputHandler(inputHandler)
+    {
+        if (!(inputHandler instanceof AbstractInputHandler)) throw new Error('input handler must be an instanceof AbstractInputHandler');
+        this._inputAdapter.addInputHandler(inputHandler);
+        return this;
+    }
+
+    /** @override */
+    componentDidMount()
+    {
+        this._inputAdapter.initialize(this._ref.current);
+    }
+
+    /** @override */
+    componentWillUnmount()
+    {
+        this._inputAdapter.destroy();
+    }
+
+    /** @override */
+    componentDidUpdate()
+    {
+        this._inputAdapter.update();
+    }
+
+    getSVGTransformString()
+    {
+        const viewport = this._viewportAdapter;
+        return 'translate(' + viewport.getOffsetX() + ' ' + viewport.getOffsetY() + ')';
+    }
+
+    getSVGViewBoxString(baseViewSize)
+    {
+        const viewport = this._viewportAdapter;
+        const viewSize = baseViewSize * Math.max(Number.MIN_VALUE, viewport.getScale());
+        const halfViewSize = viewSize / 2;
+        return (-halfViewSize) + ' ' + (-halfViewSize) + ' ' + viewSize + ' ' + viewSize;
+    }
+
+    getSVGElement()
+    {
+        return this._ref.current;
+    }
+
+    getInputAdapter()
+    {
+        return this._inputAdapter;
+    }
+
+    getViewportAdapter()
+    {
+        return this._inputAdapter.getViewportAdapter();
+    }
+
+    /** @override */
+    render()
+    {
+        const viewBox = this.getSVGViewBoxString(this.props.viewSize || DEFAULT_VIEW_SIZE);
+        const transform = this.getSVGTransformString();
+
+        return (
+            &lt;svg ref={this._ref}
+                id={this.props.id}
+                className={Style.viewport_component + ' ' + this.props.className}
+                style={this.props.style}
+                viewBox={viewBox}>
+                &lt;g transform={transform}>
+                    {this.props.children}
+                &lt;/g>
+            &lt;/svg>
+        );
+    }
+}
+
+export default ViewportComponent;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

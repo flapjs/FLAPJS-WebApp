@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/nodegraph/NodeGraphModule.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/nodegraph/NodeGraphModule.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+
+import { userClearGraph } from 'experimental/UserUtil.js';
+import { CTRL_KEY } from 'session/manager/hotkey/HotKeyManager.js';
+import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
+
+import NodeGraph from 'graph2/NodeGraph.js';
+import GraphNode from 'graph2/element/GraphNode.js';
+import QuadraticEdge from 'graph2/element/QuadraticEdge.js';
+
+import NodeGraphParser from 'graph2/NodeGraphParser.js';
+import NodeGraphController from './graph/NodeGraphController.js';
+
+import { registerImageExporters } from './filehandlers/NodalGraphImageExporter.js';
+
+import SafeUndoNodeGraphEventHandler from 'graph2/SafeUndoNodeGraphEventHandler.js';
+
+/* COMPONENTS */
+
+import PanelContainer from 'experimental/panels/PanelContainer.js';
+
+import NodeGraphLayer from './components/layers/NodeGraphLayer.js';
+import NodeGraphOverlayLayer from './components/layers/NodeGraphOverlayLayer.js';
+
+import GraphView from 'graph2/components/GraphView.js';
+
+const MODULE_NAME = 'nodegraph';
+const MODULE_VERSION = '0.0.1';
+const MODULE_LOCALIZED_NAME = 'Node Graph';
+
+class NodalGraphModule
+{
+    constructor(app)
+    {
+        this._app = app;
+
+        this._graph = new NodeGraph(GraphNode, QuadraticEdge);
+        this._graphParser = new NodeGraphParser();
+        this._graphController = new NodeGraphController(app, this._graph);
+        this._graphViewComponent = React.createRef();
+
+        const graphController = this._graphController;
+
+        app.getRenderManager()
+            .addRenderer(RENDER_LAYER_WORKSPACE, props => (
+                &lt;GraphView
+                    ref={this._graphViewComponent}
+                    renderGraph={graphView =>
+                        &lt;NodeGraphLayer graphView={graphView} graphController={graphController} editable={true} />}
+                    renderOverlay={graphView =>
+                        &lt;NodeGraphOverlayLayer graphView={graphView} graphController={graphController} session={this._app.getSession()} />}>
+                &lt;/GraphView>
+            ));
+    }
+
+    /** @override */
+    initialize(app)
+    {
+        registerImageExporters(app.getExportManager());
+
+        app.getUndoManager()
+            .setEventHandlerFactory((...args) =>
+                new SafeUndoNodeGraphEventHandler(this._graphController, this._graphParser));
+
+        app.getDrawerManager()
+            .addPanelClass(props => (
+                &lt;PanelContainer id={props.id}
+                    className={props.className}
+                    style={props.style}
+                    title={'Your Average Graph Editor'}>
+                    &lt;p>{'Brought to you with \u2764 by the Flap.js team.'}&lt;/p>
+                    &lt;p>{'&lt;- Tap on a tab to begin!'}&lt;/p>
+                &lt;/PanelContainer>
+            ));
+
+        app.getHotKeyManager()
+            .registerHotKey('Export to PNG', [CTRL_KEY, 'KeyP'], () => { app.getExportManager().tryExportFile('image-png', app.getSession()); });
+
+        this._graphController.initialize();
+    }
+
+    /** @override */
+    update(app)
+    {
+        this._graphController.update();
+    }
+
+    /** @override */
+    destroy(app)
+    {
+        this._graphController.destroy();
+    }
+
+    /** @override */
+    clear(app, graphOnly = false)
+    {
+        userClearGraph(app, graphOnly, () => app.getToolbarComponent().closeBar());
+    }
+
+    getGraphController() { return this._graphController; }
+    getGraphView() { return this._graphViewComponent.current; }
+
+    /** @override */
+    getModuleVersion() { return MODULE_VERSION; }
+    /** @override */
+    getModuleName() { return MODULE_NAME; }
+    /** @override */
+    getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
+
+    getApp() { return this._app; }
+}
+
+export default NodalGraphModule;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

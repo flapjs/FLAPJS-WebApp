@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/pda/filehandlers/PDAImporter.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/pda/filehandlers/PDAImporter.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import SessionImporter from 'session/SessionImporter.js';
+
+/**
+ * A class that represents a session importer for the PDA module.
+ */
+class PDAImporter extends SessionImporter
+{
+    constructor(app, jsonGraphParser)
+    {
+        super(app);
+
+        this._graphParser = jsonGraphParser;
+        this._prevGraphHash = 0;
+    }
+
+    /** @override */
+    onParseSession(session, fileData)
+    {
+        return JSON.parse(fileData);
+    }
+
+    /** @override */
+    onPreImportSession(session)
+    {
+        const currentModule = session.getCurrentModule();
+        const graphController = currentModule.getGraphController();
+        const graph = graphController.getGraph();
+        this._prevGraphHash = graph.getHashCode(true);
+
+        // TODO: this should not be here, this should exist somewhere in graphController
+        if (!graph.isEmpty())
+        {
+            session.getApp().getUndoManager().captureEvent();
+        }
+    }
+
+    /** @override */
+    onImportSession(session, sessionData)
+    {
+        const currentModule = session.getCurrentModule();
+        const graphController = currentModule.getGraphController();
+        const machineController = currentModule.getMachineController();
+        const graph = graphController.getGraph();
+
+        this._graphParser.parse(sessionData['graphData'], graph);
+
+        loadMachineFromData(currentModule, graphController, machineController, sessionData['machineData']);
+    }
+
+    /** @override */
+    onPostImportSession(session)
+    {
+        const currentModule = session.getCurrentModule();
+        const graphController = currentModule.getGraphController();
+        const graph = graphController.getGraph();
+
+        // Compares the graph hash before and after import, captures event if they are not equal
+        const nextGraphHash = graph.getHashCode(true);
+        if (this._prevGraphHash !== nextGraphHash)
+        {
+            // TODO: this should not be here
+            session.getApp().getUndoManager().captureEvent();
+        }
+    }
+}
+
+/**
+ * Sets all of the details pertaining to the module (and the machine)
+ *
+ * @private
+ * @param  {GraphController} graphController        the controller for the graph to be constructed
+ * @param  {MachineController} machineController    the controller for the machine to be constructed
+ * @param  {Object} machineData                     the machine data to be parsed
+ */
+function loadMachineFromData(graphController, machineController, machineData)
+{
+    const machineType = machineData.type;
+    if (machineType) machineController.setMachineType(machineType);
+    const customSymbols = machineData.symbols;
+    if (customSymbols &amp;&amp; Array.isArray(customSymbols))
+    {
+        machineController.clearCustomSymbols();
+        for(const symbol of customSymbols)
+        {
+            machineController.addCustomSymbol(symbol);
+        }
+    }
+    const statePrefix = machineData.statePrefix;
+    if (statePrefix)
+    {
+        graphController.getGraphLabeler().setDefaultNodeLabelPrefix(statePrefix);
+    }
+}
+
+export default PDAImporter;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

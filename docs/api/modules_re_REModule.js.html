@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/re/REModule.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/re/REModule.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import PanelContainer from 'experimental/panels/PanelContainer.js';
+
+import MachineController from './MachineController.js';
+import REErrorChecker from './REErrorChecker.js';
+import SafeExpressionEventHandler from './SafeExpressionEventHandler.js';
+import { RENDER_LAYER_WORKSPACE } from 'session/manager/RenderManager.js';
+
+import { registerNotifications } from './components/notifications/RENotifications.js';
+
+import OverviewPanel from './components/panels/overview/OverviewPanel.js';
+import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
+import TestingPanel from './components/panels/testing/TestingPanel.js';
+
+import ExpressionView from './components/views/ExpressionView.js';
+import { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
+
+import REImporter from './filehandlers/REImporter.js';
+import REExporter from './filehandlers/REExporter.js';
+import REToFSAExporter from './filehandlers/REToFSAExporter.js';
+
+const MODULE_NAME = 're';
+const MODULE_VERSION = '0.0.1';
+const MODULE_LOCALIZED_NAME = 'RE';
+
+class REModule
+{
+    constructor(app)
+    {
+        this._app = app;
+
+        this._machineController = new MachineController();
+        this._errorChecker = new REErrorChecker(app,
+            this._machineController);
+
+        app.getRenderManager()
+            .addRenderer(RENDER_LAYER_WORKSPACE, props => &lt;ExpressionView session={app.getSession()} />);
+    }
+
+    /** @override */
+    initialize(app)
+    {
+        registerNotifications(app.getNotificationManager());
+
+        app.getDrawerManager()
+            .addPanelClass(props => (
+                &lt;PanelContainer id={props.id}
+                    className={props.className}
+                    style={props.style}
+                    title={'Regular Expressions'}>
+                    &lt;p>{'Brought to you with \u2764 by the Flap.js team.'}&lt;/p>
+                    &lt;p>{'&lt;- Tap on a tab to begin!'}&lt;/p>
+                &lt;/PanelContainer>
+            ))
+            .addPanelClass(OverviewPanel)
+            .addPanelClass(AnalysisPanel)
+            .addPanelClass(TestingPanel);
+
+        app.getUndoManager()
+            .setEventHandlerFactory((...args) =>
+                new SafeExpressionEventHandler(this._machineController));
+
+        app.getExportManager()
+            .registerExporter(new REExporter(), 'session')
+            .registerExporter(new REToFSAExporter(), 're2fsa');
+
+        app.getImportManager()
+            .addImporter(new REImporter(app), '.re.json', '.json');
+
+        app.getHotKeyManager()
+            .registerHotKey('Save as JSON', [CTRL_KEY, 'KeyS'], () => { app.getExportManager().tryExportFile('session', app.getSession()); })
+            .registerHotKey('New', [CTRL_KEY, 'KeyN'], () => { this.clear(app); })
+            .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => { app.getUndoManager().undo(); })
+            .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => { app.getUndoManager().redo(); });
+    }
+
+    /** @override */
+    update(app)
+    {
+        this._machineController.update();
+    }
+
+    /** @override */
+    destroy(app)
+    {
+    }
+
+    /** @override */
+    clear(app)
+    {
+        if (window.confirm(I18N.toString('alert.graph.clear')))
+        {
+            this._machineController.setMachineExpression('');
+            app.getUndoManager().clear();
+            app.getSession().setProjectName(null);
+            app.getToolbarComponent().closeBar();
+        }
+    }
+
+    getMachineController() { return this._machineController; }
+    getErrorChecker() { return this._errorChecker; }
+
+    /** @override */
+    getModuleVersion() { return MODULE_VERSION; }
+    /** @override */
+    getModuleName() { return MODULE_NAME; }
+    /** @override */
+    getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
+    /** @override */
+    getApp() { return this._app; }
+}
+
+export default REModule;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/fsa2/components/widgets/TapeWidget.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/fsa2/components/widgets/TapeWidget.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './TapeWidget.css';
+
+import DownArrowIcon from 'components/iconset/DownArrowIcon.js';
+
+const TAPE_INFINITE_LEFT = true;
+const TAPE_INFINITE_RIGHT = true;
+
+class TapeWidget extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this.onTapeStepBackward = this.onTapeStepBackward.bind(this);
+        this.onTapeStepForward = this.onTapeStepForward.bind(this);
+        this.onTapeFinish = this.onTapeFinish.bind(this);
+        this.onTapeReset = this.onTapeReset.bind(this);
+        this.onTapeSkipForward = this.onTapeSkipForward.bind(this);
+        this.onTapeSkipBackward = this.onTapeSkipBackward.bind(this);
+        this.onTapeStop = this.onTapeStop.bind(this);
+    }
+
+    onTapeStepBackward(e)
+    {
+        const tapeContext = this.props.value;
+        tapeContext.stepBackward();
+    }
+
+    onTapeStepForward(e)
+    {
+        const tapeContext = this.props.value;
+        tapeContext.stepForward();
+    }
+
+    onTapeSkipForward(e)
+    {
+    }
+
+    onTapeSkipBackward(e)
+    {
+    }
+
+    onTapeReset(e)
+    {
+        const tapeContext = this.props.value;
+        tapeContext.reset();
+    }
+
+    onTapeFinish(e)
+    {
+        const tapeContext = this.props.value;
+        tapeContext.finish();
+    }
+
+    onTapeStop(e)
+    {
+        const tapeContext = this.props.value;
+        tapeContext.stop();
+    }
+
+    /** @override */
+    render()
+    {
+        const showTransitionStates = true;
+        const tapeContext = this.props.value;
+        const tapeIndex = tapeContext ? tapeContext.getCurrentTapeIndex() : -1;
+
+        if (!tapeContext) return null;
+
+        return (
+            &lt;div id={this.props.id}
+                className={Style.tape_container +
+                    ' ' + this.props.className}
+                style={this.props.style}>
+
+                &lt;div className={Style.tape_control_tray}>
+                    &lt;button onClick={this.onTapeStepBackward}>BACK&lt;/button>
+                    &lt;button onClick={this.onTapeStepForward}>STEP&lt;/button>
+                    &lt;button onClick={this.onTapeReset}>RESET&lt;/button>
+                    &lt;button onClick={this.onTapeFinish}>TO END&lt;/button>
+                &lt;/div>
+
+                &lt;div className={Style.tape_control_tray}>
+                    &lt;button onClick={this.onTapeSkipForward}>SKIP TO NEXT&lt;/button>
+                    &lt;button onClick={this.onTapeSkipBackward}>SKIP TO PREV&lt;/button>
+                    &lt;button onClick={this.onTapeStop}>STOP&lt;/button>
+                &lt;/div>
+
+                &lt;div className={'tape-row'}>
+
+                    {TAPE_INFINITE_LEFT &amp;&amp; tapeContext.isTapeLeftInfinite() &amp;&amp;
+                        &lt;div className="tape-row-entry infinite">
+                            &lt;span className="tape-row-states">&lt;/span>
+                            &lt;label className="tape-row-symbol">{'...'}&lt;/label>
+                        &lt;/div>}
+
+                    &lt;DownArrowIcon
+                        className="tape-pointer"
+                        style={{ opacity: tapeIndex &lt; 0 ? 0 : 1, left: tapeIndex + 'em' }} />
+
+                    {tapeContext.getTapeInput().map((e, i) => 
+                    {
+                        let active = false;
+                        let activeRead = false;
+                        active = tapeIndex === i;
+                        activeRead = tapeIndex === i - 1;
+                        /*
+                        const currentIndex = Math.floor(tapeIndex / 2);
+                        if (currentIndex === i)
+                        {
+                        //It's the current index...
+                        active = tapeIndex % 2 === 1;
+                        activeRead = tapeIndex % 2 === 0;
+                        }
+                        else if (currentIndex === i + 1)
+                        {
+                        //It's the previous index...
+                        active = tapeIndex % 2 === 0;
+                        }
+                        */
+
+                        const sourceStates = tapeContext.getTapeSourceStatesByIndex(i);
+                        const disabled = sourceStates === null;
+                        return (
+                            &lt;div key={e + ':' + i} className={'tape-row-entry' +
+                                (active ? ' active ' : '') +
+                                (activeRead ? ' active-read ' : '') +
+                                (disabled ? ' disabled ' : '')}
+                            onClick={(e) => (!disabled ? tapeContext.setCurrentTapeIndex(i) : null)}>
+                                {showTransitionStates &amp;&amp;
+                                    sourceStates &amp;&amp;
+                                    &lt;span className="tape-row-states">
+                                        {sourceStates.map(sourceState => 
+                                        {
+                                            return (
+                                                &lt;label key={sourceState.getGraphElementID()}>
+                                                    {sourceState.getNodeLabel()}
+                                                &lt;/label>
+                                            );
+                                        })}
+                                    &lt;/span>}
+                                &lt;label className="tape-row-symbol">
+                                    {e}
+                                &lt;/label>
+                            &lt;/div>
+                        );
+                    })}
+
+                    {TAPE_INFINITE_RIGHT &amp;&amp; tapeContext.isTapeRightInfinite() &amp;&amp;
+                        &lt;div className="tape-row-entry infinite">
+                            &lt;span className="tape-row-states">&lt;/span>
+                            &lt;label className="tape-row-symbol">{'...'}&lt;/label>
+                        &lt;/div>}
+                &lt;/div>
+            &lt;/div>
+        );
+    }
+}
+
+export default TapeWidget;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
