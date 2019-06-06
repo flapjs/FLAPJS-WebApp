@@ -1,10 +1,10 @@
-:local(.flex_container) {
+.flex_container {
     height: 20%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-:local(.custom_svg) {
+.custom_svg {
     display: block;
 }
