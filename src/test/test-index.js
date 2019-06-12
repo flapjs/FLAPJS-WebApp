@@ -53,7 +53,7 @@ dfa.setFinalState(q2);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_1_m1'
+name = 'flapjs1_1_m1'
 exporter.exportTarget('', mockSession)
 resetSession();
 
@@ -74,7 +74,7 @@ dfa.setFinalState(q2);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_1_m2'
+name = 'flapjs1_1_m2'
 exporter.exportTarget('', mockSession)
 resetSession();
 
@@ -98,11 +98,11 @@ dfa.setFinalState(q3);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_3'
+name = 'flapjs1_3'
 exporter.exportTarget('', mockSession)
 resetSession();
 
-// Example 1_16_a
+// Example 1_16_b
 const q3 = dfa.createState("1");
 const q1 = dfa.createState("2");
 const q2 = dfa.createState("3");
@@ -116,7 +116,7 @@ dfa.setFinalState(q2);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_16_b'
+name = 'flapjs1_16_b'
 exporter.exportTarget('', mockSession)
 resetSession();
 
@@ -131,7 +131,7 @@ dfa.setFinalState(q1);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_16_a'
+name = 'flapjs1_16_a'
 exporter.exportTarget('', mockSession)
 resetSession();
 
@@ -146,7 +146,7 @@ dfa.setFinalState(q2);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_7'
+name = 'flapjs1_7'
 exporter.exportTarget('', mockSession)
 resetSession();
 
@@ -164,7 +164,7 @@ dfa.setFinalState(q1);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_41'
+name = 'flapjs1_41'
 exporter.exportTarget('', mockSession)
 resetSession();
 
@@ -186,7 +186,7 @@ dfa.setFinalState(q4);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_38'
+name = 'flapjs1_38'
 exporter.exportTarget('', mockSession)
 resetSession();
 
@@ -206,7 +206,7 @@ dfa.setFinalState(q1);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_35'
+name = 'flapjs1_35'
 exporter.exportTarget('', mockSession)
 resetSession();
 
@@ -231,7 +231,7 @@ dfa.setFinalState(q3);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_33'
+name = 'flapjs1_33'
 exporter.exportTarget('', mockSession)
 resetSession();
 
@@ -254,7 +254,7 @@ dfa.setFinalState(q4);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_30'
+name = 'flapjs1_30'
 exporter.exportTarget('', mockSession)
 resetSession();
 
@@ -277,7 +277,7 @@ dfa.setFinalState(q001);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_21'
+name = 'flapjs1_21'
 exporter.exportTarget('', mockSession)
 resetSession();
 
@@ -303,7 +303,7 @@ dfa.setFinalState(q0);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_13'
+name = 'flapjs1_13'
 exporter.exportTarget('', mockSession)
 resetSession();
 
@@ -330,7 +330,7 @@ dfa.setFinalState(r1);
 
 builder.getMachine().copy(dfa);
 builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_11'
+name = 'flapjs1_11'
 exporter.exportTarget('', mockSession)
 resetSession();
 
