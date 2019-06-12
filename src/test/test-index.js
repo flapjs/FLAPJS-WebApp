@@ -334,32 +334,6 @@ name = 'flapjs_ex1_11'
 exporter.exportTarget('', mockSession)
 resetSession();
 
-// Example 1_11
-const s = dfa.createState("s");
-const q1 = dfa.createState("q1");
-const q2 = dfa.createState("q2");
-const r1 = dfa.createState("r1");
-const r2 = dfa.createState("r2");
-
-dfa.addTransition(s,q1,"a");
-dfa.addTransition(q1,q1,"a");
-dfa.addTransition(q1,q2,"b");
-dfa.addTransition(q2,q2,"b");
-dfa.addTransition(q2,q1,"a");
-dfa.addTransition(s,r1,"b");
-dfa.addTransition(r1,r1,"b");
-dfa.addTransition(r1,r2,"a");
-dfa.addTransition(r2,r2,"a");
-dfa.addTransition(r2,r1,"b");
-dfa.setFinalState(q1);
-dfa.setFinalState(r1);
-
-
-builder.getMachine().copy(dfa);
-builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs_ex1_13'
-exporter.exportTarget('', mockSession)
-resetSession();
 
 exporter.exportTarget('', mockSession).then(result =>
 {
