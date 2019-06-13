@@ -1,8 +1,8 @@
 import AbstractMachineBuilder from 'modules/abstract/AbstractMachineBuilder.js';
 import FSA, { EMPTY_SYMBOL, State } from './FSA.js';
-import FSANode from 'modules/fsa/graph/FSANode.js';
-import { EMPTY_CHAR } from 'modules/fsa/graph/FSAEdge.js';
-import {getUnreachableNodes} from 'modules/fsa2/graph/UnreachableNodes.js';
+import FSANode from 'modules/fsa2/graph/element/FSANode.js';
+import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/fsa2/graph/element/FSAEdge.js';
+import { getUnreachableNodes } from 'graph2/util/NodeGraphUtils.js';
 
 export const ERROR_UNREACHABLE_STATE = 'unreachable_state';
 export const ERROR_DUPLICATE_STATE = 'duplicate_state';
@@ -26,6 +26,7 @@ class FSABuilder extends AbstractMachineBuilder
         dst.clear();
 
         //Add all states
+        const nodeMapping = new Map();
         let node;
         for (const state of machine.getStates())
         {
@@ -35,31 +36,27 @@ class FSABuilder extends AbstractMachineBuilder
             {
                 node.setNodeAccept(true);
             }
+            nodeMapping.set(state, node);
         }
 
         //Add all transitions
         let edge, from, to, read;
         for (let transition of machine.getTransitions())
         {
-            let fromNodes = dst.getNodesByLabel(transition[0]);
-            if (!fromNodes || fromNodes.length <= 0) continue;
-            from = fromNodes[0];
+            from = nodeMapping.get(transition.getSourceState());
+            if (!from) continue;
 
-            read = transition[1];
+            read = transition.getSymbols().join(' ');
 
-            let toNodes = dst.getNodesByLabel(transition[2]);
-            if (!toNodes || toNodes.length <= 0) continue;
-            from = toNodes[0];
+            to = nodeMapping.get(transition.getDestinationState());
+            if (!to) continue;
 
             edge = dst.createEdge(from, to);
             edge.setEdgeLabel(read);
-            const formattedEdge = dst.formatEdge(edge);
-            if (edge != formattedEdge) dst.deleteEdge(edge);
         }
 
         //Set start state
         const startState = machine.getStartState();
-
 
         let startNodes = dst.getNodesByLabel(startState);
         if (startNodes && startNodes.length > 0)
@@ -123,7 +120,7 @@ class FSABuilder extends AbstractMachineBuilder
                 const dstState = dst.getStateByID(dstNode.getGraphElementID());
                 if (!srcState || !dstState) throw new Error('Cannot find state for edge source/destination nodes - mismatch id');
 
-                const edgeLabelSymbols = edge.getEdgeSymbolsFromLabel();
+                const edgeLabelSymbols = edge.getEdgeLabel().split(SYMBOL_SEPARATOR);
                 for (const symbol of edgeLabelSymbols)
                 {
                     if (!symbol) continue;
@@ -190,7 +187,7 @@ class FSABuilder extends AbstractMachineBuilder
         }
 
         //Check for unreachable nodes
-        const unreachables =  getUnreachableNodes(graph);
+        const unreachables = getUnreachableNodes(graph);
         if (unreachables && unreachables.length > 0)
         {
             warnings.push({

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/fsa2/components/panels/overview/transitions/TransitionTableView.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/fsa2/components/panels/overview/transitions/TransitionTableView.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './TransitionTableView.css';
+
+import { EMPTY_CHAR } from 'modules/fsa2/graph/element/FSAEdge.js';
+import { EMPTY_SYMBOL } from 'modules/fsa2/machine/FSA.js';
+
+const SYMBOL_AXIS = 'symbols';
+const STATE_AXIS = 'states';
+
+class TransitionTableView extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this.state = {
+            rowAxis: SYMBOL_AXIS
+        };
+
+        this.onRowAxisSwitch = this.onRowAxisSwitch.bind(this);
+    }
+
+    onRowAxisSwitch(e)
+    {
+        this.setState((prev, props) => 
+        {
+            return {
+                rowAxis: prev.rowAxis === SYMBOL_AXIS ? STATE_AXIS : SYMBOL_AXIS
+            };
+        });
+    }
+
+    renderTableEntryForSymbolAxis(machine, state, symbol)
+    {
+        const deterministic = machine.isDeterministic();
+        const destinations = machine.doTransition(state, symbol);
+        let transitionString = '';
+        let error = false;
+
+        if (destinations.length &lt;= 0)
+        {
+            if (deterministic &amp;&amp; symbol !== EMPTY_SYMBOL) error = true;
+            transitionString = '-';
+        }
+        else if (destinations.length === 1)
+        {
+            if (deterministic &amp;&amp; symbol === EMPTY_SYMBOL) error = true;
+            transitionString = destinations[0].getStateLabel();
+        }
+        else
+        {
+            if (deterministic) error = true;
+            let string = '';
+            for (const other of destinations)
+            {
+                if (string.length > 0) string += ',';
+                string += other.getStateLabel();
+            }
+            transitionString = '{' + string + '}';
+        }
+
+        const disabled = deterministic &amp;&amp; symbol === EMPTY_SYMBOL;
+
+        return (
+            &lt;td key={state.getStateID() + ':' + symbol}
+                className={Style.table_entry +
+                    (error ? ' error ' : '') +
+                    (disabled ? ' disabled ' : '')}>
+                {transitionString}
+            &lt;/td>
+        );
+    }
+
+    renderTableEntries(machine, rowAxis)
+    {
+        // const deterministic = machine.isDeterministic();
+
+        const result = [];
+        for (const state of machine.getStates())
+        {
+            const rowComponents = [];
+            switch (rowAxis)
+            {
+            case SYMBOL_AXIS:
+                for (const symbol of machine.getAlphabet())
+                {
+                    rowComponents.push(this.renderTableEntryForSymbolAxis(machine, state, symbol));
+                }
+                rowComponents.push(this.renderTableEntryForSymbolAxis(machine, state, EMPTY_SYMBOL));
+                break;
+            case STATE_AXIS:
+                for (const other of machine.getStates())
+                {
+                    const symbols = machine.getTransitionSymbols(state, other);
+                    let string = '';
+                    if (symbols)
+                    {
+                        for (const symbol of symbols)
+                        {
+                            if (string.length > 0) string += '\n';
+                            if (symbol === EMPTY_SYMBOL) string += EMPTY_CHAR;
+                            else string += symbol;
+                        }
+                    }
+                    else
+                    {
+                        string = '-';
+                    }
+                    rowComponents.push(
+                        &lt;td key={state.getStateID() + ':' + other.getStateID()}>
+                            {string}
+                        &lt;/td>
+                    );
+                }
+                break;
+            default:
+                throw new Error('Unknown row axis type \'' + rowAxis + '\'');
+            }
+            result.push(
+                &lt;tr key={state.getStateID()}>
+                    &lt;th scope="row" className={Style.table_axis_header + ' row'}>
+                        {state.getStateLabel()}
+                    &lt;/th>
+                    {rowComponents}
+                &lt;/tr>
+            );
+        }
+        return result;
+    }
+
+    renderTableAxis(machine, rowAxis)
+    {
+        let result = [];
+        const disabled = machine.isDeterministic();
+        switch (rowAxis)
+        {
+        case SYMBOL_AXIS:
+            for (const symbol of machine.getAlphabet())
+            {
+                result.push(
+                    &lt;th key={symbol} scope="col" className={Style.table_axis_header + ' col'}>
+                        {symbol}
+                    &lt;/th>
+                );
+            }
+            result.push(
+                &lt;th key={EMPTY_SYMBOL} scope="col"
+                    className={Style.table_axis_header +
+                            (disabled ? ' disabled ' : '') +
+                            ' col'}>
+                    {EMPTY_CHAR}
+                &lt;/th>
+            );
+            return result;
+        case STATE_AXIS:
+            for (const state of machine.getStates())
+            {
+                result.push(
+                    &lt;th key={state.getStateID()} scope="col" className={Style.table_axis_header + ' col'}>
+                        {state.getStateLabel()}
+                    &lt;/th>
+                );
+            }
+            return result;
+        default:
+            throw new Error('Unknown row axis type \'' + rowAxis + '\'');
+        }
+    }
+
+    /** @override */
+    render()
+    {
+        const rowAxis = this.state.rowAxis;
+        const machineController = this.props.machineController;
+        const machine = machineController.getMachineBuilder().getMachine();
+
+        return (
+            &lt;div id={this.props.id}
+                className={Style.table_container +
+                    ' ' + this.props.className}
+                style={this.props.style}>
+                &lt;table>
+                    &lt;tbody>
+                        &lt;tr>
+                            &lt;th>
+                                &lt;button onClick={this.onRowAxisSwitch}>
+                                    {rowAxis === SYMBOL_AXIS ? 'Q/\u03A3' : 'Q/Q'}
+                                &lt;/button>
+                            &lt;/th>
+                            {this.renderTableAxis(machine, rowAxis)}
+                        &lt;/tr>
+                        {this.renderTableEntries(machine, rowAxis)}
+                    &lt;/tbody>
+                &lt;/table>
+            &lt;/div>
+        );
+    }
+}
+
+export default TransitionTableView;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

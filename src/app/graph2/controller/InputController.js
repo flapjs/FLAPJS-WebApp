@@ -1,7 +1,3 @@
-import GraphNodeInputHandler from '../inputs/GraphNodeInputHandler.js';
-import GraphEdgeInputHandler from '../inputs/GraphEdgeInputHandler.js';
-import InputContext from 'util/input/InputContext.js';
-
 import GraphNode from 'graph2/element/GraphNode.js';
 
 const DEFAULT_MOVE_MODE_FIRST = true;
@@ -11,55 +7,54 @@ class InputController
     constructor()
     {
         this._trashMode = false;
-        this._moveMode = DEFAULT_MOVE_MODE_FIRST;
         this._nodeOnly = false;
         this._moveModeFirst = DEFAULT_MOVE_MODE_FIRST;
         this._handlingInput = false;
 
+        /*
+            This is the current target for the event. If this is a multi-stage event,
+            such as dragging, then this will only refer to the first target, the source
+            of the event.
+        */
         this._target = {
             source: null,
             type: null
         };
+
+        /*
+            This is the active target. It can only be manually set by binding source and
+            type through bindActiveTarget(). This allows future input handling to ignore
+            this target for intersection tests, etc.
+
+            NOTE: You must bind AND unbind the active target.
+        */
         this._activeTarget = {
             source: null,
             type: null,
             input: true
         };
+
+        /*
+            This is the immediate target under the cursor. Regardless of input event, this
+            will always refer to the element directly intersecting the cursor. The active target
+            with the proper options may be ignored as possible candidates.
+        */
         this._immediateTarget = {
             source: null,
             type: null
         };
 
-        this._inputContext = new InputContext();
-        this._graphController = null;
+        // This is only used if set.
         this._selectionBox = null;
-        this._labelFormatter = null;
 
+        // Although not used here, it is used to connect to components.
         this.onMouseOver = this.onMouseOver.bind(this);
         this.onMouseOut = this.onMouseOut.bind(this);
-    }
-
-    setGraphController(graphController)
-    {
-        this._graphController = graphController;
-        return this;
     }
 
     setSelectionBox(selectionBox)
     {
         this._selectionBox = selectionBox;
-        return this;
-    }
-
-    setLabelFormatter(labelFormatter)
-    {
-        this._labelFormatter = labelFormatter;
-        return this;
-    }
-
-    setMoveMode(flag)
-    {
-        this._moveMode = flag;
         return this;
     }
 
@@ -81,36 +76,10 @@ class InputController
         return this;
     }
 
-    initialize()
-    {
-        const graphController = this._graphController;
-        if (!graphController) throw new Error('Must set graph controller before init');
-        const selectionBox = this._selectionBox;
-        if (!selectionBox) throw new Error('Must set selection box before init');
-        const labelFormatter = this._labelFormatter;
-        if (!labelFormatter) throw new Error('Must set label formatter before init');
-
-        this._inputContext
-            .addInputHandler(this)
-            .addInputHandler(new GraphEdgeInputHandler(this, graphController, labelFormatter))
-            .addInputHandler(new GraphNodeInputHandler(this, graphController, selectionBox, labelFormatter));
-    }
-
-    update()
-    {
-        // There's nothing to do yet...
-    }
-
-    destroy()
-    {
-        this._inputContext.clearInputHandlers();
-    }
-
     /** @override */
     onPreInputEvent(pointer)
     {
         this._handlingInput = true;
-        this._moveMode = !pointer.getInputAdapter().isAltInput();
 
         this.updateCurrentTarget(this._immediateTarget.source, this._immediateTarget.type);
         return false;
@@ -184,12 +153,13 @@ class InputController
     hasImmediateTarget() { return this._immediateTarget.type !== null; }
 
     isTrashMode() { return this._trashMode; }
-    isMoveMode() { return this._moveModeFirst ? this._moveMode : !this._moveMode; }
+    isMoveMode(inputAdapter) { return !(this._moveModeFirst ^ !inputAdapter.isAltInput()); }
     isNodeEventsOnly() { return this._nodeOnly; }
     isMoveModeFirst() { return this._moveModeFirst; }
 
     isHandlingInput() { return this._handlingInput; }
-    getInputContext() { return this._inputContext; }
+
+    getSelectionBox() { return this._selectionBox; }
 }
 
 export default InputController;

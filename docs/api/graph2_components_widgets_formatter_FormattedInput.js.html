@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: graph2/components/widgets/formatter/FormattedInput.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: graph2/components/widgets/formatter/FormattedInput.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+
+import DebounceInput from './DebounceInput.js';
+
+class FormattedInput extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this._debounceComponent = React.createRef();
+
+        this._submitOnBlurEvent = true;
+
+        this.state = {
+            value: '',
+            prevValue: ''
+        };
+
+        this.onChange = this.onChange.bind(this);
+        this.onKeyDown = this.onKeyDown.bind(this);
+
+        this.onFocus = this.onFocus.bind(this);
+        this.onBlur = this.onBlur.bind(this);
+    }
+
+    focus() { this._debounceComponent.current.focus(); }
+    blur(submit = true)
+    {
+        this._submitOnBlurEvent = submit;
+        this._debounceComponent.current.blur();
+    }
+
+    onFocus(e)
+    {
+        if (this.props.onFocus) this.props.onFocus(e);
+
+        e.target.select();
+    }
+
+    onBlur(e)
+    {
+        if (this.props.onBlur) this.props.onBlur(e);
+
+        if (!this._submitOnBlurEvent)
+        {
+            this._submitOnBlurEvent = true;
+            this.setState((prev, props) =>
+            {
+                return {value: prev.prevValue};
+            }, () =>
+            {
+                if (this.props.onCancel)
+                {
+                    const event = {
+                        target: this._debounceComponent.getInputElement(),
+                        value: this.state.value
+                    };
+                    this.props.onCancel(event);
+                }
+            });
+        }
+        else
+        {
+            this.setState((prev, props) =>
+            {
+                return {prevValue: prev.value};
+            }, () =>
+            {
+                if (this.props.onSubmit)
+                {
+                    const event = {
+                        target: this._debounceComponent.getInputElement(),
+                        value: this.state.value
+                    };
+                    this.props.onSubmit(event);
+                }
+            });
+        }
+    }
+
+    onKeyDown(e)
+    {
+        if (e.key === 'Enter')
+        {
+            // Allow Shift+Enter to create new lines if multiline is on.
+            if (e.shiftKey &amp;&amp; this.props.multiline) return;
+
+            this.blur(true);
+
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        else if (e.key === 'Escape')
+        {
+            this.blur(false);
+
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+
+    onChange(e)
+    {
+        const event = {
+            target: e.target,
+            value: e.target.value,
+            previous: this.state.value,
+            position: this._debounceComponent.current.getCaretPosition()
+        };
+
+        if (this.props.onChange) this.props.onChange(event);
+
+        this.setState((prev, props) =>
+        {
+            return {value: event.value};
+        });
+    }
+
+    setValue(value, updatePrevious = false)
+    {
+        this.setState((prev, props) =>
+        {
+            const previous = prev.value;
+
+            let result;
+            const component = this._debounceComponent.current;
+            if (component.hasCaretSelection())
+            {
+                result = previous;
+                
+                const caretPosition = component.getCaretPosition();
+                result = result.substring(0, caretPosition.start) + value + result.substring(caretPosition.end);
+                component.setCaretPosition(caretPosition.start, caretPosition.start + value.length);
+            }
+            else
+            {
+                result = value;
+                component.setCaretPosition(0, value.length);
+            }
+
+            if (this.props.onChange)
+            {
+                const event = {
+                    target: component.getInputElement(),
+                    value: result,
+                    previous: previous,
+                    position: component.getCaretPosition()
+                };
+
+                this.props.onChange(event);
+
+                result = event.value;
+            }
+
+            return {
+                value: result,
+                prevValue: updatePrevious ? result : prev.prevValue
+            };
+        });
+        return this;
+    }
+
+    appendValue(value, updatePrevious = false)
+    {
+        this.setState((prev, props) =>
+        {
+            const previous = prev.value;
+
+            let result;
+            const component = this._debounceComponent.current;
+            if (component.hasCaretPosition())
+            {
+                const caretPosition = component.getCaretPosition();
+                if (caretPosition.end + 1 >= previous.length || caretPosition.start > caretPosition.end)
+                {
+                    result = previous + value;
+                }
+                else
+                {
+                    result = previous.substring(0, caretPosition.end) + value + previous.substring(caretPosition.end);
+                }
+
+                component.setCaretPosition(caretPosition.start, caretPosition.end + value.length);
+            }
+            else
+            {
+                result = previous + value;
+            }
+
+            if (this.props.onChange)
+            {
+                const event = {
+                    target: component.getInputElement(),
+                    value: result,
+                    previous: previous,
+                    position: component.getCaretPosition()
+                };
+
+                this.props.onChange(event);
+
+                result = event.value;
+            }
+
+            return {
+                value: result,
+                prevValue: updatePrevious ? result : prev.prevValue
+            };
+        });
+    }
+
+    getDebounceComponent() { return this._debounceComponent.current; }
+    getInputElement() { return this._debounceComponent.current.getInputElement(); }
+    getValue() { return this.state.value; }
+
+    hasFocus() { return this._debounceComponent.current.hasFocus(); }
+
+    /** @override */
+    render()
+    {
+        return (
+            &lt;DebounceInput
+                {...this.props}
+                ref={this._debounceComponent}
+                type="text"
+                rows="1"
+                spellCheck="false"
+                style={{resize: this.props.multiline ? 'both' : 'none'}}
+                value={this.state.value}
+                onChange={this.onChange}
+                onKeyDown={this.onKeyDown}
+
+                onFocus={this.onFocus}
+                onBlur={this.onBlur} />
+        );
+    }
+}
+
+export default FormattedInput;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

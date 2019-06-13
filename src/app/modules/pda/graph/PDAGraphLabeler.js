@@ -1,10 +1,13 @@
-import AbstractGraphLabeler from 'graph/AbstractGraphLabeler.js';
+import AbstractGraphLabeler from 'graph2/AbstractGraphLabeler.js';
 
-import {EMPTY_CHAR,
+import
+{
+    EMPTY_CHAR,
     LINE_SEPARATOR,
     SYMBOL_SEPARATOR,
     READ_SEPARATOR,
-    POP_SEPARATOR} from './PDAEdge.js';
+    POP_SEPARATOR
+} from './element/PDAEdge.js';
 
 const DEFAULT_NODE_LABEL_PREFIX = 'q';
 
@@ -51,7 +54,7 @@ class PDAGraphLabeler extends AbstractGraphLabeler
             if (startNode && startNode.getNodeCustom()) nodeIndex = 1;
 
             let newNodeLabel = this.getDefaultNodeLabelPrefix() + nodeIndex;
-            while(graph.getNodesByLabel(newNodeLabel, otherNodes).length > 0)
+            while (graph.getNodesByLabel(newNodeLabel, otherNodes).length > 0)
             {
                 otherNodes.length = 0;
                 ++nodeIndex;
@@ -84,13 +87,13 @@ class PDAGraphLabeler extends AbstractGraphLabeler
 function isValidSymbol(symbol)
 {
     return symbol.length === 1 &&
-    symbol !== LINE_SEPARATOR &&
-    symbol !== SYMBOL_SEPARATOR &&
-    symbol !== READ_SEPARATOR &&
-    symbol !== POP_SEPARATOR;
+        symbol !== LINE_SEPARATOR &&
+        symbol !== SYMBOL_SEPARATOR &&
+        symbol !== READ_SEPARATOR &&
+        symbol !== POP_SEPARATOR;
 }
 
-function edgeLabelFormatter(string, allowNull=false)
+function edgeLabelFormatter(string, allowNull = false)
 {
     const lines = string.split(LINE_SEPARATOR);
     const result = new Set();
@@ -98,7 +101,7 @@ function edgeLabelFormatter(string, allowNull=false)
 
     let symbols;
     let symbolLength = 0;
-    for(let i = 0; i < length; ++i)
+    for (let i = 0; i < length; ++i)
     {
         symbols = lines[i].trim().split('');
         symbolLength = symbols.length;
@@ -114,7 +117,7 @@ function edgeLabelFormatter(string, allowNull=false)
         let pushSymbol = null;
         let symbol = null;
 
-        for(let j = 0; j < symbolLength; ++j)
+        for (let j = 0; j < symbolLength; ++j)
         {
             if (readSymbol === null)
             {

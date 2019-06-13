@@ -1,3 +1,7 @@
+/**
+ * A wrapper for a more intuitive use of SessionStorage.
+ * @module SessionStorage
+ */
 const SessionStorage = {
     clear()
     {

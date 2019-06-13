@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/fsa2/components/panels/testing/TestItem.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/fsa2/components/panels/testing/TestItem.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './TestItem.css';
+
+import IconButton from 'experimental/components/IconButton.js';
+import SubtractIcon from 'components/iconset/SubtractIcon.js';
+import CheckCircleIcon from 'components/iconset/CheckCircleIcon.js';
+import CrossCircleIcon from 'components/iconset/CrossCircleIcon.js';
+import PendingIcon from 'components/iconset/PendingIcon.js';
+import RunningManIcon from 'components/iconset/RunningManIcon.js';
+
+export const DEFAULT_MODE = 'default';
+export const SUCCESS_MODE = 'success';
+export const FAILURE_MODE = 'failure';
+export const WORKING_MODE = 'working';
+
+class TestItem extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this.inputElement = null;
+
+        this.state = {
+            value: this.props.defaultValue || '',
+            status: DEFAULT_MODE
+        };
+
+        this.onChange = this.onChange.bind(this);
+    }
+
+    focus()
+    {
+        if (this.inputElement)
+        {
+            this.inputElement.focus();
+        }
+    }
+
+    setValue(value, callback=null)
+    {
+        if (this.state.value !== value)
+        {
+            this.setState({value: value}, callback);
+        }
+        else if (callback)
+        {
+            callback();
+        }
+    }
+
+    setStatus(status, callback=null)
+    {
+        if (this.state.status !== status)
+        {
+            this.setState({status: status}, callback);
+        }
+        else if (callback)
+        {
+            callback();
+        }
+    }
+
+    resetStatus(callback=null)
+    {
+        if (this.state.status !== DEFAULT_MODE)
+        {
+            this.setState({status: DEFAULT_MODE}, callback);
+        }
+        else if (callback)
+        {
+            callback();
+        }
+    }
+
+    getValue()
+    {
+        return this.state.value;
+    }
+
+    getStatus()
+    {
+        return this.state.status;
+    }
+
+    onChange(e)
+    {
+        const nextValue = e.target.value;
+        if (this.state.value !== nextValue)
+        {
+            this.setState({value: nextValue, status: DEFAULT_MODE});
+        }
+    }
+
+    /** @override */
+    render()
+    {
+        const onDelete = this.props.onDelete;
+        const showDelete = true;
+
+        const onTest = this.props.onTest;
+        const showTest = true;
+
+        const active = this.props.active;
+        // const subtitle = this.props.subtitle;
+        const placeholder = this.props.placeholder;
+        const status = this.state.status;
+
+        return (
+            &lt;div id={this.props.id}
+                className={Style.test_item_container +
+          (active ? ' active ' : '') +
+          ' ' + status +
+          ' ' + this.props.className}
+                style={this.props.style}>
+                {showTest &amp;&amp;
+          &lt;IconButton className={Style.test_button}
+              title={'Test'}
+              disabled={!onTest}
+              onClick={(e) => onTest(e, this)}>
+              {status === SUCCESS_MODE ?
+                  &lt;CheckCircleIcon/> :
+                  status === FAILURE_MODE ?
+                      &lt;CrossCircleIcon/> :
+                      status === WORKING_MODE ?
+                          &lt;PendingIcon/> :
+                          &lt;RunningManIcon/>}
+          &lt;/IconButton>}
+                &lt;div className={Style.test_input}>
+                    &lt;input ref={ref=>this.inputElement=ref} type="text"
+                        placeholder={placeholder}
+                        value={this.state.value}
+                        onChange={this.onChange}/>
+                    &lt;label>{this.props.subtitle}&lt;/label>
+                &lt;/div>
+                {showDelete &amp;&amp;
+          &lt;IconButton className={Style.delete_button}
+              title={'Delete'}
+              disabled={!onDelete}
+              onClick={(e) => onDelete(e, this)}>
+              &lt;SubtractIcon/>
+          &lt;/IconButton>}
+            &lt;/div>
+        );
+    }
+}
+
+export default TestItem;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

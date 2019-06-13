@@ -2,13 +2,14 @@ import AbstractEventHandler from 'session/manager/undo/AbstractEventHandler.js';
 
 class SafeUndoNodeGraphEventHandler extends AbstractEventHandler
 {
-    constructor(graph, graphParser)
+    constructor(graphController, graphParser)
     {
         super();
 
-        this._graph = graph;
+        this._graphController = graphController;
         this._graphParser = graphParser;
-        this._graphData = graphParser.compose(graph);
+
+        this._graphData = this._graphParser.compose(graphController.getGraph());
     }
 
     /** @override */
@@ -21,14 +22,16 @@ class SafeUndoNodeGraphEventHandler extends AbstractEventHandler
         }
         else
         {
-            this._graph.clear();
+            const graph = this._graphController.getGraph();
+            graph.clear();
         }
     }
 
     /** @override */
     applyRedo(undoManager)
     {
-        this._graphParser.parse(this._graphData, this._graph);
+        const graph = this._graphController.getGraph();
+        this._graphParser.parse(this._graphData, graph);
     }
 }
 export default SafeUndoNodeGraphEventHandler;

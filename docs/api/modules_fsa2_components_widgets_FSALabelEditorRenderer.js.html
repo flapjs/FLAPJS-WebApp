@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/fsa2/components/widgets/FSALabelEditorRenderer.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/fsa2/components/widgets/FSALabelEditorRenderer.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './FSALabelEditorRenderer.css';
+
+import GraphEdge from 'graph2/element/GraphEdge.js';
+import GraphNode from 'graph2/element/GraphNode.js';
+import PatternInputButton from 'graph2/components/widgets/pattern/PatternInputButton.js';
+import { SYMBOL_SEPARATOR, EMPTY_CHAR } from 'modules/fsa2/graph/element/FSAEdge.js';
+
+const RECOMMENDED_SYMBOLS = ['0', '1'];
+const DEFAULT_SYMBOLS = [EMPTY_CHAR];
+
+class FSALabelEditorRenderer extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+    }
+
+    renderSymbol(symbol)
+    {
+        const graphController = this.props.graphController;
+        const labelEditor = graphController.getLabelEditor();
+        if (!labelEditor) return null;
+
+        const inputComponent = labelEditor.inputComponent;
+        return (
+            &lt;PatternInputButton key={symbol} parent={inputComponent} title={symbol}
+                onClick={e => inputComponent.appendValue(symbol, SYMBOL_SEPARATOR)} />
+        );
+    }
+
+    /** @override */
+    render()
+    {
+        const graphController = this.props.graphController;
+        const labelEditor = graphController.getLabelEditor();
+        const currentModule = this.props.currentModule;
+        const machineController = currentModule.getMachineController();
+        const alphabet = machineController.getAlphabet();
+
+        const showEdgeTray = labelEditor &amp;&amp; labelEditor.getTarget() instanceof GraphEdge;
+        const showNodeTray = labelEditor &amp;&amp; labelEditor.getTarget() instanceof GraphNode;
+        const showDefault = true;
+        const showRecommended = !alphabet || alphabet.length &lt;= 1;
+
+        return (
+            &lt;div className={Style.tray_container}>
+                {showEdgeTray &amp;&amp; &lt;span>
+                    &lt;span className={Style.tray_used}>
+                        {alphabet.map(e => this.renderSymbol(e))}
+                    &lt;/span>
+                    &lt;span className={Style.tray_default}>
+                        {showRecommended &amp;&amp;
+                            RECOMMENDED_SYMBOLS.map(e => this.renderSymbol(e))}
+                        {showDefault &amp;&amp;
+                            DEFAULT_SYMBOLS.map(e => this.renderSymbol(e))}
+                    &lt;/span>
+                &lt;/span>}
+                {showNodeTray &amp;&amp; &lt;span>
+                    &lt;PatternInputButton parent={labelEditor.inputComponent}
+                        title={labelEditor.getTarget().getNodeCustom() ? 'Custom' : 'Auto'}
+                        onClick={() => { labelEditor.getTarget().setNodeCustom(!labelEditor.getTarget().getNodeCustom()); }} />
+                    &lt;PatternInputButton parent={labelEditor.inputComponent}
+                        title={labelEditor.getTarget().getNodeAccept() ? 'Accept' : 'Reject'}
+                        onClick={() => { labelEditor.getTarget().setNodeAccept(!labelEditor.getTarget().getNodeAccept()); }} />
+                &lt;/span>}
+            &lt;/div>
+        );
+    }
+}
+
+export default FSALabelEditorRenderer;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

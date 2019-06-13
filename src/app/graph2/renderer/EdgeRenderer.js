@@ -4,6 +4,7 @@ const QUAD_RADIAN_THRESHOLD = 0.01;
 const QUAD_REVERSE_OFFSET_THRESHOLD = 4;
 const ARROW_WIDTH = 10;
 const SIXTH_PI = Math.PI / 6;
+const HALF_PI = Math.PI / 4;
 const INPUT_MASK_EDGE_WIDTH = 8;
 
 export const DIRECTED_FORWARD = 'forward';
@@ -32,8 +33,8 @@ export const DefaultEndpointRenderer = props => (
             (props.position.y - (props.length * Math.cos(props.angle + SIXTH_PI)))}
         stroke={props.color}
         fill="none" />
-        <circle cx={props.position.x} cy={props.position.y}
-            r={props.length / 2}
+        <circle cx={props.position.x - (props.length * Math.cos(-props.angle + HALF_PI))} cy={props.position.y - (props.length * Math.sin(-props.angle + HALF_PI))}
+            r={props.length}
             fill="transparent"
             cursor="pointer"
             onMouseOver={props.onMouseOver}

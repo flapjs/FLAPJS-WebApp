@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: experimental/toolbar/ToolbarView.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: experimental/toolbar/ToolbarView.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './ToolbarView.css';
+
+import { TOOLBAR_CONTAINER_MENU, TOOLBAR_CONTAINER_TOOLBAR } from './ToolbarButton.js';
+import ToolbarTitle from './ToolbarTitle.js';
+
+import IconButton from 'experimental/components/IconButton.js';
+import MenuIcon from 'components/iconset/MenuIcon.js';
+import CrossIcon from 'components/iconset/CrossIcon.js';
+
+const TOOLBAR_ALLOW_MENU_BAR = true;
+const TOOLBAR_DEFAULT_MENU_INDEX = -1;
+
+class ToolbarView extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this.ref = null;
+        this.toolbarElement = null;
+
+        this.state = {
+            open: false,
+            menuIndex: TOOLBAR_DEFAULT_MENU_INDEX
+        };
+
+        this.onBarExpand = this.onBarExpand.bind(this);
+        this.onTitleChange = this.onTitleChange.bind(this);
+    }
+
+    openBar(callback = null)
+    {
+        if (!this.state.open)
+        {
+            //Open it, but also reset menu...
+            this.setState({ open: true, menuIndex: TOOLBAR_DEFAULT_MENU_INDEX }, callback);
+        }
+    }
+
+    closeBar(callback = null)
+    {
+        if (this.state.open)
+        {
+            //Close it, but also reset menu...
+            this.setState({ open: false, menuIndex: TOOLBAR_DEFAULT_MENU_INDEX }, callback);
+        }
+    }
+
+    toggleBar(callback = null)
+    {
+        this.setState((prev, props) => 
+        {
+            return { open: !prev.open };
+        }, callback);
+    }
+
+    isBarOpen()
+    {
+        return this.state.open;
+    }
+
+    setCurrentMenu(menuIndex)
+    {
+        if (!this.props.menus) return;
+        if (menuIndex >= this.props.menus.length) menuIndex = TOOLBAR_DEFAULT_MENU_INDEX;
+
+        //Open and set tab index
+        this.setState({ open: true, menuIndex: menuIndex });
+    }
+
+    getCurrentMenuIndex()
+    {
+        return this.state.menuIndex;
+    }
+
+    isCurrentMenu(menuIndex)
+    {
+        return this.state.menuIndex === menuIndex;
+    }
+
+    onBarExpand(e)
+    {
+        this.toggleBar();
+    }
+
+    onTitleChange(value)
+    {
+        this.props.session.setProjectName(value);
+    }
+
+    renderMenuButtons(children)
+    {
+        return React.Children.map(children, child => 
+        {
+            if (child.props.containerOnly !== TOOLBAR_CONTAINER_TOOLBAR) return child;
+        });
+    }
+
+    renderToolbarButtons(children)
+    {
+        return React.Children.map(children, child => 
+        {
+            if (child.props.containerOnly !== TOOLBAR_CONTAINER_MENU) return child;
+        });
+    }
+
+    /** @override */
+    render()
+    {
+        const title = this.props.title;
+        const subtitle = this.props.subtitle;
+        const toolbarMenus = this.props.menus;
+        const toolbarMenuIndex = this.state.menuIndex;
+        const ToolbarMenu = toolbarMenuIndex >= 0 ? toolbarMenus[toolbarMenuIndex] : null;
+        const showCustomToolbarMenu = ToolbarMenu != null;
+        const onTitleClick = this.props.onTitleClick;
+
+        const session = this.props.session;
+
+        const hasButtons = React.Children.count(this.props.children) > 0;
+        const isBarOpen = this.state.open;
+        const shouldBarHide = this.props.hide || false;
+        const showBarExpander = isBarOpen || (hasButtons &amp;&amp; TOOLBAR_ALLOW_MENU_BAR);
+
+        return (
+            &lt;div ref={ref => this.ref = ref}
+                id={this.props.id}
+                className={Style.app_bar +
+                    (isBarOpen ? ' open ' : '') +
+                    (shouldBarHide ? ' hide ' : '') +
+                    ' ' + this.props.className}
+                style={this.props.style}>
+                &lt;div className={Style.bar_menu}>
+                    &lt;div className={Style.menu_container}>
+                        {showCustomToolbarMenu ?
+                            &lt;ToolbarMenu {...this.props.menuProps} toolbar={this} />
+                            :
+                            &lt;div style={{display: 'flex', flexDirection: 'column'}}>
+                                &lt;div>
+                                    &lt;h1>
+                                        Flap.js
+                                    &lt;/h1>
+                                    &lt;p>
+                                        Something cool will be here soon. ;)
+                                    &lt;/p>
+                                    &lt;p>
+                                        Have an awesome day!
+                                    &lt;/p>
+                                &lt;/div>
+                                &lt;div>
+                                    &lt;h3>Found a bug or have a cool idea?&lt;/h3>
+                                    &lt;p>
+                                        Feel free to leave a comment or any feedback in &lt;b>{'"'}Report a Bug{'"'}&lt;/b>.
+                                    &lt;/p>
+                                    &lt;p>
+                                        It{'\''}s for both &lt;b>bugs&lt;/b> and &lt;b>suggestions&lt;/b>!
+                                    &lt;/p>
+                                    &lt;p style={{marginTop: '3em'}}>
+                                        And if you are at all interested in what we do and would like to join the team, please contact us!
+                                    &lt;/p>
+                                &lt;/div>
+                            &lt;/div>}
+                    &lt;/div>
+                    &lt;div className={Style.menu_button_container}>
+                        {this.renderMenuButtons(this.props.children)}
+                    &lt;/div>
+                &lt;/div>
+                &lt;div ref={ref => this.toolbarElement = ref} className={Style.bar_toolbar}>
+                    &lt;ToolbarTitle className={Style.toolbar_title}
+                        title={title}
+                        subtitle={subtitle}
+                        defaultValue={session.getProjectName()}
+                        onChange={this.onTitleChange}
+                        onClick={onTitleClick} />
+
+                    &lt;div className={Style.toolbar_button_container}>
+                        {this.renderToolbarButtons(this.props.children)}
+                    &lt;/div>
+
+                    {showBarExpander &amp;&amp; isBarOpen ?
+                        &lt;IconButton className={Style.toolbar_expander} onClick={this.onBarExpand} title="Back">
+                            &lt;CrossIcon />
+                        &lt;/IconButton>
+                        :
+                        &lt;IconButton className={Style.toolbar_expander} onClick={this.onBarExpand} title="Menu">
+                            &lt;MenuIcon />
+                        &lt;/IconButton>}
+                &lt;/div>
+            &lt;/div>
+        );
+    }
+}
+export default ToolbarView;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

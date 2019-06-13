@@ -52,21 +52,24 @@ window.addEventListener('load', (event) =>
 });
 
 //Tell the client that an update is available
-window.isUpdateAvailable.then(hasUpdate => 
+if (typeof window['isUpdateAvailable'] === 'function')
 {
-    if (hasUpdate)
+    window.isUpdateAvailable.then(hasUpdate => 
     {
-        let message = '';
-        if (Changelog && Changelog['show'])
+        if (hasUpdate)
         {
-            message += Changelog['log'];
+            let message = '';
+            if (Changelog && Changelog['show'])
+            {
+                message += Changelog['log'];
+            }
+    
+            Logger.out(LOGGER_TAG, `Found update for version ${process.env.VERSION}...`);
+            window.alert('*** New update available! *** \n Please restart the browser.' +
+                (message ? '\n' + message : ''));
         }
-
-        Logger.out(LOGGER_TAG, `Found update for version ${process.env.VERSION}...`);
-        window.alert('*** New update available! *** \n Please restart the browser.' +
-            (message ? '\n' + message : ''));
-    }
-});
+    });
+}
 
 //Setup application
 var root;

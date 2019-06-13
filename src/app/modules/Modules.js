@@ -1,10 +1,10 @@
 const Modules = {};
 
-Modules['fsa2'] = {
+Modules['fsa'] = {
     name: 'Finite Automata',
-    version: '2.0.0',
+    version: '3.0.0',
     experimental: true,
-    fetch: function (callback) { import(/* webpackChunkName: "module_fsa2" */ 'modules/fsa2/FSAModule.js').then(({ default: _ }) => callback(_)); }
+    fetch: function (callback) { import(/* webpackChunkName: "module_fsa" */ 'modules/fsa2/FSAModule.js').then(({ default: _ }) => callback(_)); }
 };
 
 Modules['pda'] = {
@@ -35,11 +35,10 @@ Modules['tm'] = {
     fetch: function (callback) { throw new Error('Module not yet implemented. Sorry :('); }
 };
 
-Modules['nodegraph'] = {
+Modules['node'] = {
     name: 'Node Graph',
     version: '1.0.0',
     experimental: true,
-    disabled: true,
     fetch: function (callback) { import(/* webpackChunkName: "module_nodegraph" */ 'modules/nodegraph/NodeGraphModule.js').then(({ default: _ }) => callback(_)); }
 };
 

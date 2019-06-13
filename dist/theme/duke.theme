@@ -1,0 +1,19 @@
+//OFFICIAL Duke COLOR
+--color-accent = #0577B1
+
+//OFFICIAL Duke COLOR
+--color-primary = #012169
+
+--color-primary-text = #F7F5E6
+--color-primary-text-alt = #000000
+--color-primary-lite = #00539B
+--color-primary-dark = #005587
+
+//OFFICIAL Duke COLOR
+--color-surface = #666666
+
+--color-surface-text = #FFFFFF
+--color-surface-text-alt = #3D3D3D
+--color-surface-active = #9A9C9F
+--color-surface-lite = #AFA9A0
+--color-surface-dark = #4D4D4D

@@ -2,7 +2,7 @@
 
 The old system was hard to change. This should have a better sense of division of responsibility.
 
-The primary component that manages everything for editing a graph is the GraphEditorView. The view is further divided into a graph view (NodeGraphView) and a label editing view (LabelEditorView). More views can be added through the graph editor's children or the corresponding props.
+The primary component that manages everything for editing a graph is the GraphView. The view is further divided into a graph view (NodeGraphView) and a label editing view (LabelEditorView). More views can be added through the graph editor's children or the corresponding props.
 
 The components of the editor are divided into 4 categories:
 

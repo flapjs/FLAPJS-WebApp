@@ -17,10 +17,10 @@ class GraphHighlightRenderer extends React.Component
         const center = this.props.center;
         const stroke = this.props.color || '#CCCCCC';
         const radius = this.props.radius || 24;
-
+        
         return (
             <React.Fragment>
-                <circle
+                <circle className="graph-ui"
                     cx={center.x} cy={center.y} r={radius}
                     stroke={stroke}
                     strokeDashoffset={HIGHLIGHT_OFFSET}

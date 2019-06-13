@@ -43,14 +43,14 @@ class OptionPanel extends React.Component
 
         themeManager.loadTheme(theme);
 
-        this.setState({theme: theme});
+        this.setState({ theme: theme });
     }
 
     renderStyleGroups()
     {
         const themeManager = this.props.session.getApp().getThemeManager();
         const result = [];
-        for(const groupName of themeManager.getStyleGroupNames())
+        for (const groupName of themeManager.getStyleGroupNames())
         {
             if (groupName === HIDDEN_STYLE_GROUP_NAME) continue;
             const styles = themeManager.getStylesByGroup(groupName);
@@ -61,7 +61,7 @@ class OptionPanel extends React.Component
                     full={true}>
                     {styles.map(e =>
                         <StyleInput key={e.getName()} className={Style.input_option} value={e}
-                            title={I18N.toString('options.' + e.getName())}/>)}
+                            title={I18N.toString('options.' + e.getName())} />)}
                 </PanelSection>
             );
         }
@@ -80,8 +80,8 @@ class OptionPanel extends React.Component
                 style={this.props.style}
                 title={I18N.toString('component.options.title')}>
                 <PanelSection title="Theme">
-                    <div style={{display: 'flex'}}>
-                        <div style={{width: '60%'}}>
+                    <div style={{ display: 'flex' }}>
+                        <div style={{ width: '60%' }}>
                             <div id="options-theme-select-container">
                                 <select id="options-theme-select" className="panel-select"
                                     value={this.state.theme}
@@ -94,28 +94,28 @@ class OptionPanel extends React.Component
                                 </select>
                                 {
                                     !this.state.customTheme &&
-                  <PanelButton onClick={() => this.setState({customTheme: true})}>
-                      {I18N.toString('action.options.changetheme')}
-                  </PanelButton>
+                                    <PanelButton onClick={() => this.setState({ customTheme: true })}>
+                                        {I18N.toString('action.options.changetheme')}
+                                    </PanelButton>
                                 }
                             </div>
                             {
                                 this.state.customTheme &&
-                <div>
-                    {this.renderStyleGroups()}
+                                <div>
+                                    {this.renderStyleGroups()}
 
-                    <PanelButton onClick={(e) => 
-                    {
-                        themeManager.reset();
-                        this.setState({customTheme: false});
-                    }}>
-                        {I18N.toString('action.options.reset')}
-                    </PanelButton>
-                </div>
+                                    <PanelButton onClick={(e) => 
+                                    {
+                                        themeManager.reset();
+                                        this.setState({ customTheme: false });
+                                    }}>
+                                        {I18N.toString('action.options.reset')}
+                                    </PanelButton>
+                                </div>
                             }
                         </div>
                         <div>
-                            <PreviewView/>
+                            <PreviewView />
                         </div>
                     </div>
                 </PanelSection>
@@ -126,9 +126,12 @@ class OptionPanel extends React.Component
                     onChange={(e) => 
                     {
                         const result = e.target.checked;
-                        this.setState({exitWarning: result});
+                        this.setState({ exitWarning: result });
                         LocalStorage.setData(DISABLE_EXIT_WARNING_STORAGE_ID, '' + result);
-                    }}/>
+                    }} />
+                <label className={Style.version}>
+                    {`v${process.env.VERSION}`}
+                </label>
             </PanelContainer>
         );
     }

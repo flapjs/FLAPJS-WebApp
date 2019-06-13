@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: graph2/components/widgets/formatter/DebounceInput.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: graph2/components/widgets/formatter/DebounceInput.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+
+const DEBOUNCE_DELAY = 30;
+
+// TODO: we need to somehow maintain caret position between focus.
+class DebounceInput extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this._inputElement = React.createRef();
+
+        this._debounceTimeout = null;
+        this._ignoreNextBlurEvent = false;
+
+        this._prevCaretPosition = { start: -1, end: -1 };
+
+        this.onFocus = this.onFocus.bind(this);
+        this.onBlur = this.onBlur.bind(this);
+    }
+
+    focus() { this._inputElement.current.focus(); }
+    blur() { this._inputElement.current.blur(); }
+
+    ignoreNextBlurEvent()
+    {
+        this._ignoreNextBlurEvent = true;
+        return this;
+    }
+
+    onFocus(e)
+    {
+        if (this._ignoreNextBlurEvent)
+        {
+            this._ignoreNextBlurEvent = false;
+
+            e.target.setSelectionRange(this._prevCaretPosition.start, this._prevCaretPosition.end);
+            return;
+        }
+
+        if (this.props.onFocus) this.props.onFocus(e);
+
+        // Update caret position for current computation...
+        this.updateCaretPosition();
+    }
+
+    onBlur(e)
+    {
+        // Save current caret position for later...
+        this.updateCaretPosition();
+
+        if (!this._debounceTimeout)
+        {
+            this._debounceTimeout = setTimeout(() => 
+            {
+                this._debounceTimeout = null;
+                if (this._ignoreNextBlurEvent)
+                {
+                    // If ignored, we are promised to return focus...
+                    return;
+                }
+
+                // Reset! We lost focus.
+                this.resetCaretPosition();
+
+                // NOTE: You cannot pass the event here due to how React handles events.
+                // ... so we made our own :D
+                if (this.props.onBlur) this.props.onBlur({ target: null });
+            }, DEBOUNCE_DELAY);
+        }
+    }
+    
+    hasFocus() { return document.activeElement === this._inputElement.current; }
+    getIgnoreNextBlurEvent() { return this._ignoreNextBlurEvent; }
+
+    hasCaretSelection() { return this._prevCaretPosition.start !== this._prevCaretPosition.end; }
+    hasCaretPosition() { return this._prevCaretPosition.start >= 0; }
+    getCaretPosition() { return this._prevCaretPosition; }
+    setCaretPosition(start, end = start, forceUpdate = false)
+    {
+        this._prevCaretPosition.start = start;
+        this._prevCaretPosition.end = end;
+
+        if (forceUpdate)
+        {
+            this._inputElement.current.setSelectionRange(start, end);
+        }
+        return this;
+    }
+    
+    resetCaretPosition() { this.setCaretPosition(-1, -1); }
+    updateCaretPosition()
+    {
+        const element = this._inputElement.current;
+        this.setCaretPosition(element.selectionStart, element.selectionEnd);
+    }
+
+    getInputElement() { return this._inputElement.current; }
+
+    /** @override */
+    render()
+    {
+        return (
+            this.props.multiline ?
+                &lt;textarea
+                    {...this.props}
+                    ref={this._inputElement}
+                    onFocus={this.onFocus}
+                    onBlur={this.onBlur}>
+                &lt;/textarea> :
+                &lt;input
+                    {...this.props}
+                    type='text'
+                    ref={this._inputElement}
+                    onFocus={this.onFocus}
+                    onBlur={this.onBlur}>
+                &lt;/input>
+        );
+    }
+}
+
+export default DebounceInput;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

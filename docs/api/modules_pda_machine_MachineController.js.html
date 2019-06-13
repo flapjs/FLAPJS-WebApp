@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/pda/machine/MachineController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/pda/machine/MachineController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import AbstractMachineController from 'modules/abstract/AbstractMachineController.js';
+
+import PDABuilder from 'modules/pda/machine/PDABuilder.js';
+
+import GraphLayout from 'modules/fsa2/GraphLayout.js';
+
+class MachineController extends AbstractMachineController
+{
+    constructor(module)
+    {
+        super(module, new PDABuilder());
+
+        this.graphController = null;
+    }
+
+    /** @override */
+    initialize(module)
+    {
+        super.initialize(module);
+
+        this.graphController = module.getGraphController();
+    }
+
+    /** @override */
+    destroy(module)
+    {
+        super.destroy(module);
+    }
+
+    /** @override */
+    update(module)
+    {
+        super.update(module);
+    }
+
+    getFirstGraphNodeByLabel(graph, label)
+    {
+        for (const node of graph.getNodes())
+        {
+            if (node.getNodeLabel() == label)
+            {
+                return node;
+            }
+        }
+
+        return null;
+    }
+
+    setGraphToMachine(graph, machine)
+    {
+        this._machineBuilder.attemptBuildGraph(machine, graph);
+
+        //Auto layout graph
+        GraphLayout.applyLayout(graph);
+    }
+
+    getStates()
+    {
+        return this._machineBuilder.getMachine().getStates();
+    }
+
+    countStates()
+    {
+        return this.getStates().length;
+    }
+
+    getFinalStates()
+    {
+        return this._machineBuilder.getMachine().getFinalStates();
+    }
+
+    getTransitions()
+    {
+        return this._machineBuilder.getMachine().getTransitions();
+    }
+
+    getAlphabet()
+    {
+        const machine = this._machineBuilder.getMachine();
+        return Array.from(machine.getAlphabet());
+    }
+
+    isUsedSymbol(symbol)
+    {
+        return !this.isCustomSymbol(symbol);
+    }
+
+    createSymbol(symbol)
+    {
+        this.addCustomSymbol(symbol);
+    }
+
+    deleteSymbol(symbol)
+    {
+        let edge = null;
+        let index = null;
+        let result = null;
+        const targets = [];
+
+        const graph = this.graphController.getGraph();
+        for (let i = graph.getEdges().length - 1; i >= 0; --i)
+        {
+            edge = graph.getEdges()[i];
+            index = edge.getEdgeLabel().indexOf(symbol);
+            if (index >= 0)
+            {
+                result = edge.getEdgeLabel().substring(0, index) + edge.getEdgeLabel().substring(index + 1);
+                if (result.length > 0)
+                {
+                    edge.setEdgeLabel(result);
+                }
+                else
+                {
+                    edge.setEdgeLabel('');
+                    graph.deleteEdge(edge);
+                }
+                targets.push(edge);
+            }
+        }
+
+        if (targets.length &lt;= 0)
+        {
+            this.getMachineBuilder().removeCustomSymbol(symbol);
+        }
+    }
+
+    renameSymbol(prevSymbol, nextSymbol)
+    {
+        let edge = null;
+        let result = null;
+        const targets = [];
+
+        const graph = this.graphController.getGraph();
+        const length = graph.getEdges().length;
+        for (let i = 0; i &lt; length; ++i)
+        {
+            edge = graph.getEdges()[i];
+            result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
+            if (result != edge.getEdgeLabel())
+            {
+                targets.push(edge);
+            }
+            edge.setEdgeLabel(result);
+        }
+
+        if (targets.length &lt;= 0)
+        {
+            this.getMachineBuilder().renameCustomSymbol(prevSymbol, nextSymbol);
+        }
+    }
+
+    getCustomSymbols()
+    {
+        return Array.from(this._machineBuilder.getMachine().getCustomSymbols());
+    }
+
+    isCustomSymbol(symbol)
+    {
+        return this._machineBuilder.isCustomSymbol(symbol);
+    }
+
+    addCustomSymbol(symbol)
+    {
+        this._machineBuilder.getMachine().setCustomSymbol(symbol);
+    }
+
+    clearCustomSymbols()
+    {
+        this._machineBuilder.getMachine().clearCustomSymbols();
+    }
+
+    getStackAlphabet()
+    {
+        const machine = this._machineBuilder.getMachine();
+        return Array.from(machine.getStackAlphabet());
+    }
+
+    isUsedStackSymbol(symbol)
+    {
+        return !this.isCustomStackSymbol(symbol);
+    }
+
+    createStackSymbol(symbol)
+    {
+        this.addCustomStackSymbol(symbol);
+    }
+
+    deleteStackSymbol(symbol)
+    {
+        let edge = null;
+        let index = null;
+        let result = null;
+        const targets = [];
+
+        const graph = this.graphController.getGraph();
+        for (let i = graph.getEdges().length - 1; i >= 0; --i)
+        {
+            edge = graph.getEdges()[i];
+            index = edge.getEdgeLabel().indexOf(symbol);
+            if (index >= 0)
+            {
+                result = edge.getEdgeLabel().substring(0, index) + edge.getEdgeLabel().substring(index + 1);
+                if (result.length > 0)
+                {
+                    edge.setEdgeLabel(result);
+                }
+                else
+                {
+                    edge.setEdgeLabel('');
+                    graph.deleteEdge(edge);
+                }
+                targets.push(edge);
+            }
+        }
+
+        if (targets.length &lt;= 0)
+        {
+            this.getMachineBuilder().removeCustomStackSymbol(symbol);
+        }
+    }
+
+    renameStackSymbol(prevSymbol, nextSymbol)
+    {
+        let edge = null;
+        let result = null;
+        const targets = [];
+
+        const graph = this.graphController.getGraph();
+        const length = graph.getEdges().length;
+        for (let i = 0; i &lt; length; ++i)
+        {
+            edge = graph.getEdges()[i];
+            result = edge.getEdgeLabel().replace(prevSymbol, nextSymbol);
+            if (result != edge.getEdgeLabel())
+            {
+                targets.push(edge);
+            }
+            edge.setEdgeLabel(result);
+        }
+
+        if (targets.length &lt;= 0)
+        {
+            this.getMachineBuilder().renameCustomStackSymbol(prevSymbol, nextSymbol);
+        }
+    }
+
+    getCustomStackSymbols()
+    {
+        return Array.from(this._machineBuilder.getMachine().getCustomStackSymbols());
+    }
+
+    isCustomStackSymbol(symbol)
+    {
+        return this._machineBuilder.isCustomStackSymbol(symbol);
+    }
+
+    addCustomStackSymbol(symbol)
+    {
+        this._machineBuilder.getMachine().setCustomStackSymbol(symbol);
+    }
+
+    clearCustomStackSymbols()
+    {
+        this._machineBuilder.getMachine().clearCustomStackSymbols();
+    }
+}
+
+export default MachineController;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

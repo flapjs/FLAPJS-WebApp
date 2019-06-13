@@ -6,12 +6,12 @@ export function solveFSA(fsa, input)
 
     if (fsa.isDeterministic())
     {
-    //Solve if the DFA way...
+        //Solve if the DFA way...
         let state = fsa.getStartState();
         let symbol = null;
 
         //Is testing null after assignment
-        while((symbol = input.next().value))
+        while ((symbol = input.next().value))
         {
             const states = fsa.doTransition(state, symbol);
             if (states.length < 1) return false;
@@ -22,18 +22,18 @@ export function solveFSA(fsa, input)
     }
     else
     {
-    //Solve it the NFA way...
+        //Solve it the NFA way...
         const cachedStates = [];
         const cachedSymbols = [];
 
         //Start with the start state...
         const startState = fsa.getStartState();
         //(index refers to the "level" of computation)
-        cachedStates.push({state: startState, index: 0});
+        cachedStates.push({ state: startState, index: 0 });
         //...and any state defined similarly by closure...
-        for(const relatedState of fsa.doClosureTransition(startState))
+        for (const relatedState of fsa.doClosureTransition(startState))
         {
-            cachedStates.push({state: relatedState, index: 0});
+            cachedStates.push({ state: relatedState, index: 0 });
         }
 
         //The next symbol to compute...
@@ -41,7 +41,7 @@ export function solveFSA(fsa, input)
 
         //Just to be safe from infinite loops...
         let counter = 0;
-        while(cachedStates.length > 0)
+        while (cachedStates.length > 0)
         {
             symbol = input.next().value;
             if (solveFSAByStep(fsa, symbol, cachedStates, cachedSymbols))
@@ -76,7 +76,7 @@ export function solveFSAByStep(nfa, symbol, cachedStates, cachedSymbols)
         cachedSymbols.push(symbol);
     }
 
-    for(const cstate of cachedStates)
+    for (const cstate of cachedStates)
     {
         state = cstate.state;
         symbol = cstate.index < cachedSymbols.length ? cachedSymbols[cstate.index] : null;
@@ -85,9 +85,9 @@ export function solveFSAByStep(nfa, symbol, cachedStates, cachedSymbols)
         {
             //Read to next state...
             nextIndex = cstate.index + 1;
-            for(const nextState of nfa.doTerminalTransition(state, symbol))
+            for (const nextState of nfa.doTerminalTransition(state, symbol))
             {
-                nextStates.push({state: nextState, index: nextIndex});
+                nextStates.push({ state: nextState, index: nextIndex });
             }
         }
         else

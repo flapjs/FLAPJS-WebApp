@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: graph2/inputhandler/GraphNodeInputHandler.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: graph2/inputhandler/GraphNodeInputHandler.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import AbstractInputHandler from 'util/input/AbstractInputHandler.js';
+import { lerp } from 'util/MathHelper.js';
+import { EVENT_SOURCE_NODE } from 'graph2/renderer/NodeRenderer.js';
+
+export const GRAPH_EVENT_NODE_CREATE = 'node-create';
+export const GRAPH_EVENT_NODE_DELETE = 'node-delete';
+export const GRAPH_EVENT_NODE_DELETE_ALL = 'node-delete-all';
+export const GRAPH_EVENT_NODE_LABEL_CHANGE = 'edge-label-change';
+export const GRAPH_EVENT_NODE_MOVE = 'node-move';
+export const GRAPH_EVENT_NODE_MOVE_ALL = 'node-move-all';
+export const GRAPH_EVENT_NODE_EDIT_WHILE_DELETE = 'error-node-edit-while-delete';
+
+const NODE_POSITION_INTERPOLATION_DELTA = 0.6;
+const SHOULD_DELETE_NODE_WITH_EMPTY_LABEL = false;
+
+class GraphNodeInputHandler extends AbstractInputHandler
+{
+    constructor(inputController, graphController)
+    {
+        super();
+        this._inputController = inputController;
+        this._graphController = graphController;
+
+        this._cachedPosition = { x: 0, y: 0 };
+    }
+
+    /** @override */
+    onInputEvent(pointer)
+    {
+        const inputController = this._inputController;
+        const currentTargetType = inputController.getCurrentTargetType();
+
+        if (inputController.isTrashMode())
+        {
+            if (currentTargetType === EVENT_SOURCE_NODE)
+            {
+                const currentTargetSource = inputController.getCurrentTargetSource();
+                const graphController = this._graphController;
+                graphController.getGraph().deleteNode(currentTargetSource);
+                graphController.emitGraphEvent(GRAPH_EVENT_NODE_DELETE, { target: currentTargetSource });
+                return true;
+            }
+        }
+
+        if (!inputController.isMoveMode(pointer.getInputAdapter()) &amp;&amp; currentTargetType === EVENT_SOURCE_NODE)
+        {
+            const currentTargetSource = inputController.getCurrentTargetSource();
+            const graphController = this._graphController;
+            graphController.openLabelEditor(currentTargetSource, currentTargetSource.getNodeLabel(),
+                (target, value, hasChanged) => 
+                {
+                    if (SHOULD_DELETE_NODE_WITH_EMPTY_LABEL &amp;&amp; !value)
+                    {
+                        graphController.getGraph().deleteNode(currentTargetSource);
+                        graphController.emitGraphEvent(GRAPH_EVENT_NODE_DELETE, { target: currentTargetSource });
+                    }
+                    else if (hasChanged)
+                    {
+                        graphController.emitGraphEvent(GRAPH_EVENT_NODE_LABEL_CHANGE, { target: currentTargetSource });
+                    }
+                });
+            return true;
+        }
+
+        return false;
+    }
+
+    /** @override */
+    onAltInputEvent(pointer)
+    {
+        return this.onInputEvent(pointer);
+    }
+
+    /** @override */
+    onDblInputEvent(pointer)
+    {
+        const inputController = this._inputController;
+        if (inputController.hasActiveTarget()) return false;
+        if (inputController.isTrashMode()) return false;
+
+        const currentTargetType = inputController.getCurrentTargetType();
+        if (!currentTargetType)
+        {
+            const graphController = this._graphController;
+            const labelFormatter = graphController.getLabelFormatter();
+            const graph = graphController.getGraph();
+            const node = graph.createNode(pointer.x, pointer.y);
+            if (labelFormatter)
+            {
+                node.setNodeLabel(labelFormatter.getDefaultNodeLabel());
+            }
+            graphController.emitGraphEvent(GRAPH_EVENT_NODE_CREATE, { target: node });
+        }
+    }
+
+    /** @override */
+    onDragStart(pointer)
+    {
+        const inputController = this._inputController;
+        if (inputController.hasActiveTarget()) return false;
+        if (inputController.isTrashMode())
+        {
+            // Don't delete stuff if moving...
+            this._graphController.emitGraphEvent(GRAPH_EVENT_NODE_EDIT_WHILE_DELETE);
+            return false;
+        }
+        
+        const currentTargetType = inputController.getCurrentTargetType();
+        if (inputController.isMoveMode(pointer.getInputAdapter()) &amp;&amp; currentTargetType === EVENT_SOURCE_NODE)
+        {
+            const selectionBox = inputController.getSelectionBox();
+            const currentTargetSource = inputController.getCurrentTargetSource();
+            if (selectionBox &amp;&amp; selectionBox.hasSelection())
+            {
+                if (!selectionBox.isTargetInSelection(currentTargetSource))
+                {
+                    selectionBox.clearSelection();
+                }
+                else
+                {
+                    this._cachedPosition.x = pointer.x;
+                    this._cachedPosition.y = pointer.y;
+                }
+            }
+            inputController.bindActiveTarget(currentTargetSource, currentTargetType, false);
+            return true;
+        }
+
+        return false;
+    }
+
+    /** @override */
+    onDragMove(pointer)
+    {
+        const inputController = this._inputController;
+        const selectionBox = inputController.getSelectionBox();
+        const targetSource = inputController.getActiveTargetSource();
+        if (selectionBox &amp;&amp; selectionBox.hasSelection())
+        {
+            const dx = pointer.x - this._cachedPosition.x;
+            const dy = pointer.y - this._cachedPosition.y;
+            for (const node of selectionBox.getSelection())
+            {
+                node.x += dx;
+                node.y += dy;
+            }
+            this._cachedPosition.x = pointer.x;
+            this._cachedPosition.y = pointer.y;
+        }
+        else
+        {
+            this.moveNodeTo(this._graphController.getGraph(), targetSource, pointer.x, pointer.y);
+        }
+    }
+
+    /** @override */
+    onDragStop(pointer)
+    {
+        const inputController = this._inputController;
+        const graphController = this._graphController;
+        const selectionBox = inputController.getSelectionBox();
+
+        const targetSource = inputController.getActiveTargetSource();
+        inputController.unbindActiveTarget();
+
+        if (inputController.isTrashMode())
+        {
+            if (selectionBox.hasSelection())
+            {
+                const graph = graphController.getGraph();
+                const dst = [];
+                for (const node of selectionBox.getSelection())
+                {
+                    graph.deleteNode(node);
+                    dst.push(node);
+                }
+                selectionBox.clearSelection();
+                graphController.emitGraphEvent(GRAPH_EVENT_NODE_DELETE_ALL, { target: dst });
+            }
+            else
+            {
+                graphController.getGraph().deleteNode(targetSource);
+                graphController.emitGraphEvent(GRAPH_EVENT_NODE_DELETE, { target: targetSource });
+            }
+            return;
+        }
+
+        if (selectionBox.hasSelection())
+        {
+            graphController.emitGraphEvent(GRAPH_EVENT_NODE_MOVE_ALL, { target: selectionBox.getSelection() });
+        }
+        else
+        {
+            graphController.emitGraphEvent(GRAPH_EVENT_NODE_MOVE, { target: targetSource });
+        }
+    }
+
+    moveNodeTo(graph, node, x, y)
+    {
+        x = lerp(node.x, x, NODE_POSITION_INTERPOLATION_DELTA);
+        y = lerp(node.y, y, NODE_POSITION_INTERPOLATION_DELTA);
+
+        const nodeSize = node.getNodeSize();
+        for (const other of graph.getNodes())
+        {
+            //Update node collision
+            if (node === other) continue;
+
+            const dx = x - other.x;
+            const dy = y - other.y;
+            const angle = Math.atan2(dy, dx);
+
+            const diameter = (nodeSize * 2);
+            const nextDX = other.x + (Math.cos(angle) * diameter) - x;
+            const nextDY = other.y + (Math.sin(angle) * diameter) - y;
+
+            if (dx * dx + dy * dy &lt; nodeSize * nodeSize * 4)
+            {
+                x += nextDX;
+                y += nextDY;
+            }
+        }
+
+        node.x = x;
+        node.y = y;
+    }
+}
+
+export default GraphNodeInputHandler;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

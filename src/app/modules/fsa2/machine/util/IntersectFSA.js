@@ -2,13 +2,12 @@ import FSA from '../FSA.js';
 // TODO: add function headers-
 
 // TODO:explain intersected FSA
-export function intersectFSA(fsa1, fsa2, dst=new FSA(true))
+export function intersectFSA(fsa1, fsa2, dst = new FSA(true))
 {
     throw new Error('Unsupported operation - not yet implemented');
 }
 
-
-export function intersectDFA(dfa1, dfa2, dst=new FSA(true))
+export function intersectDFA(dfa1, dfa2, dst = new FSA(true))
 {
     if (!checkSameAlphabet(dfa1, dfa2))
         throw new Error('Mismatched machine alphabet');
@@ -47,7 +46,7 @@ export function intersectDFA(dfa1, dfa2, dst=new FSA(true))
     //Add remaining states by symbol
     const remainingPairIDs = [];
     remainingPairIDs.push(startPairID);
-    while(remainingPairIDs.length > 0)
+    while (remainingPairIDs.length > 0)
     {
         const parentPairID = remainingPairIDs.pop();
         const parentPair = pairIDs.get(parentPairID);
@@ -55,7 +54,7 @@ export function intersectDFA(dfa1, dfa2, dst=new FSA(true))
         const parent2 = parentPair[1];
 
         const result = [];
-        for(const symbol of alphabet)
+        for (const symbol of alphabet)
         {
             let state1;
             let state2;
@@ -64,7 +63,7 @@ export function intersectDFA(dfa1, dfa2, dst=new FSA(true))
             if (result.length !== 1)
             {
                 throw new Error('Found non-deterministic transition from \'' +
-          parent1.getStateLabel() + '\' for \'' + symbol + '\' - transitions to \'' + result.join(',') + '\'');
+                    parent1.getStateLabel() + '\' for \'' + symbol + '\' - transitions to \'' + result.join(',') + '\'');
             }
             state1 = result[0];
             result.length = 0;
@@ -73,7 +72,7 @@ export function intersectDFA(dfa1, dfa2, dst=new FSA(true))
             if (result.length !== 1)
             {
                 throw new Error('Found non-deterministic transition from \'' +
-          parent2.getStateLabel() + '\' for \'' + symbol + '\' - transitions to \'' + result.join(',') + '\'');
+                    parent2.getStateLabel() + '\' for \'' + symbol + '\' - transitions to \'' + result.join(',') + '\'');
             }
             state2 = result[0];
             result.length = 0;
@@ -105,7 +104,7 @@ export function intersectDFA(dfa1, dfa2, dst=new FSA(true))
 
     //Add state/final pairs to the machine
     const pairToState = new Map();
-    for(const [statePairID, statePair] of pairIDs.entries())
+    for (const [statePairID, statePair] of pairIDs.entries())
     {
         const state = dst.createState('(' + statePair[0].getStateLabel() + ',' + statePair[1].getStateLabel() + ')');
         if (finalPairIDs.has(statePairID))
@@ -121,7 +120,7 @@ export function intersectDFA(dfa1, dfa2, dst=new FSA(true))
     dst.setStartState(startState);
 
     //Add transitions to the machine
-    for(const transition of transitions)
+    for (const transition of transitions)
     {
         const fromPairID = transition[0];
         const symbol = transition[1];
@@ -140,9 +139,9 @@ export function intersectDFA(dfa1, dfa2, dst=new FSA(true))
 function checkSameAlphabet(fsa1, fsa2)
 {
     const alphabet = new Set();
-    for(let symbol of fsa1.getAlphabet()) { alphabet.add(symbol); }
+    for (let symbol of fsa1.getAlphabet()) { alphabet.add(symbol); }
 
-    for(let symbol of fsa2.getAlphabet())
+    for (let symbol of fsa2.getAlphabet())
     {
         if (!alphabet.has(symbol))
         {

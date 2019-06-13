@@ -4,7 +4,6 @@ import Style from './App.css';
 
 import DrawerView, { DRAWER_SIDE_RIGHT, DRAWER_SIDE_BOTTOM, DRAWER_BAR_DIRECTION_VERTICAL, DRAWER_BAR_DIRECTION_HORIZONTAL } from 'experimental/drawer/DrawerView.js';
 import ToolbarView from 'experimental/toolbar/ToolbarView.js';
-import ViewportView from 'experimental/viewport/ViewportView.js';
 import TooltipView from 'experimental/tooltip/TooltipView.js';
 import UploadDropZone from 'experimental/components/UploadDropZone.js';
 import NotificationView from 'session/manager/notification/components/NotificationView.js';
@@ -45,12 +44,13 @@ import Session from 'session/Session.js';
 import DrawerManager from 'session/manager/DrawerManager.js';
 import MenuManager from 'session/manager/MenuManager.js';
 import ViewportManager from 'session/manager/ViewportManager.js';
-import HotKeyManager from 'session/manager/hotkey/HotKeyManager.js';
+import HotKeyManager, { CTRL_KEY, SHIFT_KEY } from 'session/manager/hotkey/HotKeyManager.js';
 import HotKeyView from 'session/manager/hotkey/HotKeyView.js';
 import UndoManager from 'session/manager/undo/UndoManager.js';
 import RenderManager, {
-    RENDER_LAYER_WORKSPACE, RENDER_LAYER_WORKSPACE_OVERLAY,
-    RENDER_LAYER_VIEWPORT, RENDER_LAYER_VIEWPORT_OVERLAY
+    RENDER_LAYER_WORKSPACE_PRE,
+    RENDER_LAYER_WORKSPACE,
+    RENDER_LAYER_WORKSPACE_POST,
 } from 'session/manager/RenderManager.js';
 import TooltipManager from 'session/manager/TooltipManager.js';
 import NotificationManager, { ERROR_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
@@ -115,16 +115,14 @@ class App extends React.Component
 
         App.INSTANCE = this;
 
-        this._workspace = React.createRef();
-        this._toolbar = null;
-        this._drawer = null;
+        this._toolbarComponent = React.createRef();
+        this._drawerComponent = React.createRef();
         this._viewport = null;
         this._labeleditor = null;
 
         this._themeManager = new ThemeManager();
-
-        this._langSaver = new LanguageSaver();
         this._colorSaver = new ColorSaver(this._themeManager);
+        this._langSaver = new LanguageSaver();
         this._saver = new AppSaver(this);
 
         this._exportManager = new ExportManager();
@@ -211,14 +209,40 @@ class App extends React.Component
     //DuckType
     onSessionStart(session)
     {
-        //Default values
+        const currentModule = session.getCurrentModule();
+
+        // Default values
         this._menuManager
-            .addPanelClass(ExportPanel)//MENU_INDEX_EXPORT
-            .addPanelClass(OptionPanel)//MENU_INDEX_OPTION
-            .addPanelClass(LanguagePanel)//MENU_INDEX_LANGUAGE
-            .addPanelClass(ModuleLoaderPanel);//MENU_INDEX_MODULE
+            .addPanelClass(ExportPanel)         // MENU_INDEX_EXPORT
+            .addPanelClass(OptionPanel)         // MENU_INDEX_OPTION
+            .addPanelClass(LanguagePanel)       // MENU_INDEX_LANGUAGE
+            .addPanelClass(ModuleLoaderPanel);  // MENU_INDEX_MODULE
+
         this._hotKeyManager
+            .registerHotKey('New', [CTRL_KEY, 'KeyN'], () => currentModule.clear(this))
             .registerAltHotKey('Show Hints', () => { IconButton.SHOW_LABEL = !IconButton.SHOW_LABEL; });
+
+        // Only register undo / redo hotkeys if undo is possible
+        if (this._undoManager.getEventHandlerFactory())
+        {
+            this._hotKeyManager
+                .registerHotKey('Undo', [CTRL_KEY, 'KeyZ'], () => this.getUndoManager().undo())
+                .registerHotKey('Redo', [CTRL_KEY, SHIFT_KEY, 'KeyZ'], () => this.getUndoManager().redo());
+        }
+
+        if (!this._tooltipManager.hasTooltips())
+        {
+            this._tooltipManager
+                .addTooltip('If you need help, try the \'?\' at the top.')
+                .addTooltip('Or you can choose to do nothing.')
+                .addTooltip('I can\'t do anything about that.')
+                .addTooltip('You really should consider doing something though, for the sake of both of us.')
+                .addTooltip('Of course, it is your free will.')
+                .addTooltip('You do you.')
+                .addTooltip('Please do something.')
+                .addTooltip('I need my job.')
+                .addTooltip('Welcome to Flap.js!');
+        }
 
         this._themeManager.setElement(document.getElementById('root'));
 
@@ -243,11 +267,12 @@ class App extends React.Component
         this._themeManager.clear();
         this._importManager.clear();
         this._exportManager.clear();
+        this._menuManager.setSubtitleComponentClass(null);
     }
 
     onModuleTitleClick(e)
     {
-        const drawer = this._drawer;
+        const drawer = this._drawerComponent.current;
         if (!drawer.isDrawerOpen() || !drawer.isCurrentTab(DRAWER_INDEX_ABOUT))
         {
             //Open current module info panel
@@ -256,9 +281,12 @@ class App extends React.Component
         else
         {
             //On another click... open module change panel
-            const toolbar = this._toolbar;
-            toolbar.setCurrentMenu(MENU_INDEX_MODULE);
+            const toolbarComponent = this._toolbarComponent.current;
+            toolbarComponent.setCurrentMenu(MENU_INDEX_MODULE);
         }
+
+        e.preventDefault();
+        e.stopPropagation();
     }
 
     onToolbarClearButton(e)
@@ -270,8 +298,8 @@ class App extends React.Component
         }
     }
 
-    getWorkspaceComponent() { return this._workspace.current; }
-    getToolbarComponent() { return this._toolbar; }
+    getToolbarComponent() { return this._toolbarComponent.current; }
+    getDrawerComponent() { return this._drawerComponent.current; }
 
     getExportManager() { return this._exportManager; }
     getImportManager() { return this._importManager; }
@@ -289,7 +317,6 @@ class App extends React.Component
 
     getSession() { return this._session; }
     getCurrentModule() { return this._session.getCurrentModule(); }
-    getInputAdapter() { return this.getWorkspaceComponent().getInputAdapter(); }
 
     isExperimental() { return true; }
 
@@ -298,11 +325,13 @@ class App extends React.Component
     {
         this._session.updateSession(this);
 
+        const toolbarComponent = this._toolbarComponent.current;
+        const drawerComponent = this._drawerComponent.current;
         //Disable hotkeys when graph is not in view
         this._hotKeyManager.setEnabled(
-            !(this._toolbar && this._toolbar.isBarOpen()) &&
-            !(this._drawer && this._drawer.isDrawerOpen() &&
-                this._drawer.isDrawerFullscreen())
+            !(toolbarComponent && toolbarComponent.isBarOpen()) &&
+            !(drawerComponent && drawerComponent.isDrawerOpen() &&
+                drawerComponent.isDrawerFullscreen())
         );
     }
 
@@ -337,33 +366,36 @@ class App extends React.Component
         const undoManager = this._undoManager;
         const drawerManager = this._drawerManager;
         const menuManager = this._menuManager;
-        const viewportManager = this._viewportManager;
-        // const renderManager = this._renderManager;
         const tooltipManager = this._tooltipManager;
         const notificationManager = this._notificationManager;
+
+        const toolbarComponent = this._toolbarComponent.current;
 
         const drawerPanelClasses = drawerManager.getPanelClasses();
         const drawerPanelProps = drawerManager.getPanelProps() || { session: session };
         const menuPanelClasses = menuManager.getPanelClasses();
         const menuPanelProps = menuManager.getPanelProps() || { session: session };
-        const viewportViewClasses = viewportManager.getViewClasses();
-        const viewportViewProps = viewportManager.getViewProps() || { session: session };
+        const MenuSubtitleClass = menuManager.getSubtitleComponentClass();
 
         return (
             <div className={Style.app_container + (currentModule ? ' active ' : '')}>
-                <ToolbarView ref={ref => this._toolbar = ref} className={Style.app_bar}
+                <ToolbarView ref={this._toolbarComponent} className={Style.app_bar}
                     menus={menuPanelClasses}
                     menuProps={menuPanelProps}
+                    subtitle={MenuSubtitleClass}
                     hide={isFullscreen}
                     title={currentModuleLocalizedName}
                     session={session}
                     onTitleClick={this.onModuleTitleClick}>
-                    <ToolbarButton title={I18N.toString('action.toolbar.newmachine')} icon={PageEmptyIcon}
+                    <ToolbarButton title={I18N.toString('action.toolbar.newmachine')}
+                        icon={PageEmptyIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
                         onClick={this.onToolbarClearButton}
                         disabled={!currentModule} />
                     <ToolbarUploadButton
                         title={I18N.toString('action.toolbar.uploadmachine')}
                         icon={UploadIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
                         accept={importManager.getFileTypesAsAcceptString()}
                         onUpload={fileBlob => 
                         {
@@ -374,32 +406,47 @@ class App extends React.Component
                                         ERROR_LAYOUT_ID,
                                         ERROR_UPLOAD_NOTIFICATION_TAG))
                                 .finally(() =>
-                                    this._toolbar.closeBar());
+                                    toolbarComponent.closeBar());
                         }}
                         disabled={importManager.isEmpty()} />
-                    <ToolbarButton title={I18N.toString('action.toolbar.undo')} icon={UndoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+                    <ToolbarButton title={I18N.toString('action.toolbar.undo')}
+                        icon={UndoIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
                         disabled={!undoManager.canUndo()}
                         onClick={() => undoManager.undo()} />
-                    <ToolbarButton title={I18N.toString('action.toolbar.redo')} icon={RedoIcon} containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+                    <ToolbarButton title={I18N.toString('action.toolbar.redo')}
+                        icon={RedoIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
                         disabled={!undoManager.canRedo()}
                         onClick={() => undoManager.redo()} />
-                    <ToolbarButton title={I18N.toString('component.exporting.title')} icon={DownloadIcon}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_EXPORT)}
+                    <ToolbarButton title={I18N.toString('component.exporting.title')}
+                        icon={DownloadIcon}
+                        containerOnly={TOOLBAR_CONTAINER_TOOLBAR}
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_EXPORT)}
                         disabled={exportManager.isEmpty()} />
                     <ToolbarDivider />
-                    <ToolbarButton title={I18N.toString('action.toolbar.bug')} icon={BugIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => window.open(BUGREPORT_URL, '_blank')} />
-                    <ToolbarButton title={I18N.toString('action.toolbar.lang')} icon={WorldIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_LANGUAGE)} />
-                    <ToolbarButton title={I18N.toString('action.toolbar.help')} icon={HelpIcon}
+                    <ToolbarButton title={I18N.toString('action.toolbar.changemodule')}
+                        icon={EditPencilIcon}
+                        containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_MODULE)} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.lang')}
+                        icon={WorldIcon}
+                        containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_LANGUAGE)} />
+                    <ToolbarButton title={I18N.toString('component.options.title')}
+                        icon={SettingsIcon}
+                        containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => toolbarComponent.setCurrentMenu(MENU_INDEX_OPTION)} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.help')}
+                        icon={HelpIcon}
                         onClick={() => window.open(HELP_URL, '_blank')} />
-                    <ToolbarButton title={I18N.toString('component.options.title')} icon={SettingsIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_OPTION)} />
-                    <ToolbarButton title={'Change Module'} icon={EditPencilIcon} containerOnly={TOOLBAR_CONTAINER_MENU}
-                        onClick={() => this._toolbar.setCurrentMenu(MENU_INDEX_MODULE)} />
+                    <ToolbarButton title={I18N.toString('action.toolbar.bug')}
+                        icon={BugIcon}
+                        containerOnly={TOOLBAR_CONTAINER_MENU}
+                        onClick={() => window.open(BUGREPORT_URL, '_blank')} />
                 </ToolbarView>
 
-                <DrawerView ref={ref => this._drawer = ref} className={Style.app_content}
+                <DrawerView ref={this._drawerComponent} className={Style.app_content}
                     panels={drawerPanelClasses}
                     panelProps={drawerPanelProps}
                     side={hasSmallWidth ? DRAWER_SIDE_BOTTOM : DRAWER_SIDE_RIGHT}
@@ -408,32 +455,25 @@ class App extends React.Component
 
                     <UploadDropZone>
                         <div className="viewport">
-
                             <TooltipView mode={tooltipManager.getTransitionMode()}
                                 visible={/* TODO: For the initial fade-in animation */this._init && !undoManager.canUndo()}>
                                 {tooltipManager.getTooltips().map((e, i) => <label key={e + ':' + i}>{e}</label>)}
                             </TooltipView>
 
+                            {/* RENDER_LAYER_WORKSPACE_PRE */}
+                            {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_PRE)}
+
                             {/* RENDER_LAYER_WORKSPACE */}
                             {this.renderRenderLayer(RENDER_LAYER_WORKSPACE)}
 
-                            {/* RENDER_LAYER_WORKSPACE_OVERLAY */}
-                            {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_OVERLAY)}
+                            {/* RENDER_LAYER_WORKSPACE_POST */}
+                            {this.renderRenderLayer(RENDER_LAYER_WORKSPACE_POST)}
 
                             <FullscreenWidget className={Style.fullscreen_widget} app={this} />
+
                             <NotificationView notificationManager={notificationManager} />
+
                             {this._hotKeyManager.isEnabled() && <HotKeyView hotKeyManager={this._hotKeyManager} />}
-
-                            <ViewportView ref={ref => this._viewport = ref}
-                                views={viewportViewClasses}
-                                viewProps={viewportViewProps}>
-                                {/* RENDER_LAYER_VIEWPORT */}
-                                {this.renderRenderLayer(RENDER_LAYER_VIEWPORT, { viewport: this._viewport })}
-                            </ViewportView>
-
-                            {/* RENDER_LAYER_VIEWPORT_OVERLAY */}
-                            {this.renderRenderLayer(RENDER_LAYER_VIEWPORT_OVERLAY, { viewport: this._viewport })}
-
                         </div>
                     </UploadDropZone>
                 </DrawerView>

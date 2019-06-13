@@ -1,13 +1,14 @@
 {
   "name": "flap.js",
-  "version": "0.4.1",
+  "version": "0.4.3",
   "description": "Repository for flap.js web app project",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --mode development --config webpack.config.js",
     "build": "cross-env NODE_ENV=production webpack --mode production --config webpack.config.js",
     "lint": "eslint ./src",
-    "docs": "jsdoc --readme ./README.md --recurse --destination ./docs/api ./src",
-    "test": "npm run lint && jest"
+    "docs": "jsdoc --readme ./README.md --recurse -c ./jsdoc.conf.json --destination ./docs/api ./src",
+    "test": "npm run lint && jest",
+    "evali18n": "node ./tools/I18NLog.js ./src/app ./out/i18n_log.md && node ./tools/I18NDiff.js ./src/app ./res/lang ./out/i18n_diff.md"
   },
   "repository": {
     "type": "git",
@@ -33,26 +34,26 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.6.0",
     "babel-loader": "^8.0.5",
-    "clean-webpack-plugin": "^1.0.0",
-    "copy-webpack-plugin": "^4.6.0",
+    "clean-webpack-plugin": "^2.0.2",
+    "copy-webpack-plugin": "^5.0.3",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.0",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "eslint": "^5.16.0",
-    "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-react": "^7.13.0",
     "html-webpack-harddisk-plugin": "^1.0.1",
     "html-webpack-plugin": "^3.2.0",
-    "husky": "^2.2.0",
+    "husky": "^2.3.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.6.0",
-    "jsdoc": "^3.6.1",
+    "jsdoc": "^3.6.2",
     "lint-diff": "^1.2.1",
     "serviceworker-webpack-plugin": "^1.0.1",
     "style-loader": "^0.23.1",
     "terser-webpack-plugin": "^1.2.1",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
-    "webpack-dev-server": "^3.1.14"
+    "webpack-dev-server": "^3.4.1"
   }
 }
