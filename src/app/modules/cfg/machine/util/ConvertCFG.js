@@ -4,20 +4,20 @@ import { EMPTY } from 'modules/re/machine/RE.js';
 export function convertToPDA(cfg)
 {
     //Check if CFG is valid
-    if(!cfg.validate()) throw new Error("Trying to convert an invalid cfg to a pda");
+    if(!cfg.validate()) throw new Error('Trying to convert an invalid cfg to a pda');
 
     //Split rules by PIPE
     cfg.separateRulesBySubstitutions(true);
 
     const machine = new PDA();
-    const state1 = machine.createState("q1");
-    const state2 = machine.createState("q2");
-    const state3 = machine.createState("q3");
-    const state4 = machine.createState("q4");
+    const state1 = machine.createState('q1');
+    const state2 = machine.createState('q2');
+    const state3 = machine.createState('q3');
+    const state4 = machine.createState('q4');
     let lastStateNum = 4;
 
     //STEP 1: Push a dollar sign onto the stack to mark the bottom
-    machine.addTransition(state1, state2, EMPTY_SYMBOL, EMPTY_SYMBOL, "$");
+    machine.addTransition(state1, state2, EMPTY_SYMBOL, EMPTY_SYMBOL, '$');
 
     //STEP 2: Push startVariable to the stack
     machine.addTransition(state2, state3, EMPTY_SYMBOL, EMPTY_SYMBOL, cfg.getStartVariable());
@@ -64,7 +64,7 @@ export function convertToPDA(cfg)
     }
 
     //STEP 5: Pop dollar sign to get to accept state
-    machine.addTransition(state3, state4, EMPTY_SYMBOL, "$", EMPTY_SYMBOL);
+    machine.addTransition(state3, state4, EMPTY_SYMBOL, '$', EMPTY_SYMBOL);
 
     machine.setStartState(state1);
     machine.setFinalState(state4);

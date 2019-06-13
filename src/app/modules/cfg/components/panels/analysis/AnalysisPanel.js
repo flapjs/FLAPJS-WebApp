@@ -15,7 +15,7 @@ class AnalysisPanel extends React.Component
 
     onConvertToPDA(e)
     {
-        console.log("Convert to PDA would go here!");
+        //console.log('Convert to PDA would go here!');
         //this.props.session.getApp().getExportManager().tryExportFile('re2fsa', this.props.session);
     }
 

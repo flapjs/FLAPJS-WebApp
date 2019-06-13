@@ -45,12 +45,12 @@ class AlphabetListView extends React.Component
         {
             if (nextSymbol.length > 0)
             {
-                if (content == "terminals" ? !machineController.isSymbol(nextSymbol) : !machineController.isVariable(nextSymbol))
+                if (content == 'terminals' ? !machineController.isSymbol(nextSymbol) : !machineController.isVariable(nextSymbol))
                 {
                     if (symbol)
                     {
                         //None other have the same name. Rename it!
-                        if(conent == "terminals")
+                        if(conent == 'terminals')
                         {
                             machineController.renameSymbol(symbol, nextSymbol);
                         }
@@ -73,7 +73,7 @@ class AlphabetListView extends React.Component
             else if (symbol)
             {
                 //Delete!
-                if(conent == "terminals")
+                if(conent == 'terminals')
                 {
                     machineController.deleteSymbol(symbol);
                 }
@@ -100,11 +100,11 @@ class AlphabetListView extends React.Component
         {
             //If there are more than 1 symbols by the same name,
             //OR if the duplicate symbol found is NOT the same symbol
-            if (content == "terminals" && machineController.isSymbol(symbol) && symbol !== element.props.symbol)
+            if (content == 'terminals' && machineController.isSymbol(symbol) && symbol !== element.props.symbol)
             {
                 throw new Error('Not a valid symbol');
             }
-            else if (content == "variables" && machineController.isVariable(symbol) && symbol !== element.props.symbol)
+            else if (content == 'variables' && machineController.isVariable(symbol) && symbol !== element.props.symbol)
             {
                 throw new Error('Not a valid variable');
             }
@@ -149,7 +149,7 @@ class AlphabetListView extends React.Component
     render()
     {
         const machineController = this.props.machineController;
-        const isTerminals = this.props.content == "terminals";
+        const isTerminals = this.props.content == 'terminals';
         const terminals = machineController.getMachineTerminals();
         const variables = machineController.getMachineVariables();
 

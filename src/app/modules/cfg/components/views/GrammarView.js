@@ -11,7 +11,7 @@ class GrammarView extends React.Component
         super(props);
         this.state =
         {
-            input_rules: [""]
+            input_rules: ['']
         };
 
         this.onInputChange = this.onInputChange.bind(this);
@@ -27,7 +27,7 @@ class GrammarView extends React.Component
         machineController.clear();
         this.state.input_rules.map( (input) =>
         {
-            let sides = input.split("->");
+            let sides = input.split('->');
             machineController.addMachineRule(new Rule(sides[0], sides[1]));
         });
     }
@@ -39,8 +39,8 @@ class GrammarView extends React.Component
         const machineController = currentModule.getMachineController();
 
         const value = e.target.value;
-        let input_rules = [...this.state.input_rules]
-        input_rules[index] = e.target.value
+        let input_rules = [...this.state.input_rules];
+        input_rules[index] = e.target.value;
         this.setState({
             input_rules
         });
@@ -55,11 +55,11 @@ class GrammarView extends React.Component
         const currentModule = session.getCurrentModule();
         const machineController = currentModule.getMachineController();
 
-        e.preventDefault()
+        e.preventDefault();
         let input_rules = [
             ...this.state.input_rules.slice(0, index),
             ...this.state.input_rules.slice(index + 1)
-        ]
+        ];
         this.setState({
             input_rules
         });

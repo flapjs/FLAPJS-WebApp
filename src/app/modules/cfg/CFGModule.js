@@ -12,11 +12,12 @@ import AnalysisPanel from './components/panels/analysis/AnalysisPanel.js';
 //import TestingPanel from './components/panels/testing/TestingPanel.js';
 
 import GrammarView from './components/views/GrammarView.js';
-import {CTRL_KEY, SHIFT_KEY} from 'session/manager/hotkey/HotKeyManager.js';
+//import {CTRL_KEY, SHIFT_KEY} from 'session/manager/hotkey/HotKeyManager.js';
 
 //import REImporter from './filehandlers/REImporter.js';
 //import REExporter from './filehandlers/REExporter.js';
 //import REToFSAExporter from './filehandlers/REToFSAExporter.js';
+const TestingPanel = null;
 
 const MODULE_NAME = 'cfg';
 const MODULE_VERSION = '0.0.1';

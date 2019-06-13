@@ -45,7 +45,7 @@ class MachineController
         for(const rule of prevRules)
         {
             const newRule = new Rule(rule.getLHS().replace(new RegExp(symbol, 'g'), nextSymbol),
-                                    rule.getRHS().replace(new RegExp(symbol, 'g'), nextSymbol));
+                rule.getRHS().replace(new RegExp(symbol, 'g'), nextSymbol));
             newRules.push(newRule);
         }
         this.setMachineRules(newRules);
@@ -60,7 +60,7 @@ class MachineController
         for(const rule of prevRules)
         {
             const newRule = new Rule(rule.getLHS().replace(new RegExp(symbol, 'g'), ''),
-                                    rule.getRHS().replace(new RegExp(symbol, 'g'), ''));
+                rule.getRHS().replace(new RegExp(symbol, 'g'), ''));
             newRules.push(newRule);
         }
         this.setMachineRules(newRules);
@@ -84,7 +84,7 @@ class MachineController
         for(const rule of prevRules)
         {
             const newRule = new Rule(rule.getLHS().replace(new RegExp(variable, 'g'), nextVariable),
-                                    rule.getRHS().replace(new RegExp(variable, 'g'), nextVariable));
+                rule.getRHS().replace(new RegExp(variable, 'g'), nextVariable));
             newRules.push(newRule);
         }
         this.setMachineRules(newRules);
