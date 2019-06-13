@@ -3,9 +3,17 @@ import { EMPTY } from 'modules/re/machine/RE.js';
 
 export const PIPE = '|';
 
+/**
+ * A class that represents a rule in a Context Free Grammar
+ */
 export class Rule
 {
-    //lhs -> rhs
+    /**
+     * Create a Rule with two strings to represent the
+     * left and right hand size of a rule (lhs -> rhs)
+     * @param {String} [lhs=''] Represents the Variable on the left hand side of a production rule
+     * @param {String} [rhs=''] Represents the substitutions on the right hand side of production rules
+     */
     constructor(lhs = '', rhs = '')
     {
         //Remove whitespace from within the strings
@@ -31,7 +39,10 @@ export class Rule
         return this._rhs;
     }
 
-    // A rule with multiple substitutions, S -> a | b becomes multiple rules: S -> a , S -> b
+    /**
+     * A rule with multiple substitutions ( S -> a | b ) becomes multiple rules: S -> a , S -> b
+     * @returns {Array} Array of rules
+     */
     splitRHSByPipe()
     {
         const subRules = [];
@@ -54,8 +65,19 @@ export class Rule
     }
 }
 
+/**
+ * A class that represents a Context Free Grammar, containing the 4-tuple that makes one up
+ * such as starting variable, variables, terminals, and rules.
+ */
 class CFG
 {
+    /**
+     * Create a CFG with 4-tuple (S, V, R, T) initialized
+     * @param {Set} [variables=new Set()] Set of variables
+     * @param {Set} [terminals=new Set()] Set of terminals
+     * @param {Array} [rules=[]] List of rules/productions
+     * @param {String} [startVariable] Start variable
+     */
     constructor(variables = new Set(), terminals = new Set(), rules = [], startVariable = '')
     {
         this._variables = variables;
@@ -65,6 +87,9 @@ class CFG
         this._errors = [];
     }
 
+    /**
+     * Removes all variables, terminals, rules, starting variable and errors of CFG
+     */
     clear()
     {
         this.clearVariables();

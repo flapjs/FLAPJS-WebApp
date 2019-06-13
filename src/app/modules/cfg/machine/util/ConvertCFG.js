@@ -1,6 +1,12 @@
 import PDA, {EMPTY_SYMBOL} from 'modules/pda/machine/PDA.js';
 import { EMPTY } from 'modules/re/machine/RE.js';
 
+/**
+ * A function for converting a CFG into a PDA based on algorithm from the following video:
+ * https://www.youtube.com/watch?v=xWWRoiPRAi4&t=748s 
+ * @param {CFG} CFG to convert
+ * @returns {PDA} PDA of CFG
+ */
 export function convertToPDA(cfg)
 {
     //Check if CFG is valid
