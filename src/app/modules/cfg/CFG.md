@@ -5,8 +5,8 @@ Similar to the Regular Expression module, the CFG module will allow users to def
 # Goals
 
 - [x] CFG class
-- [ ] MachineController
-- [ ] CFGModule.js
+- [x] MachineController
+- [x] CFGModule.js
 - [ ] UI (forms) for defining/editing CFGs
 - [ ] UI for seeing Variables, Terminals, Formal Definitions (etc)
 - [x] CFG to PDA conversion
