@@ -4,11 +4,11 @@ import FSAJFFExporter from 'modules/fsa2/filehandlers/FSAJFFExporter.js';
 import * as FSAGraphParser from 'modules/fsa2/FSAGraphParser.js';
 import FSAGraph from 'modules/fsa2/graph/FSAGraph.js';
 import FSABuilder from 'modules/fsa2/machine/FSABuilder.js';
-
+// PUT BOOK CHAPTER 1 PAGES ETC FOR REFERENCE
 const exporter = new FSAJFFExporter(FSAGraphParser.XML);
-const fsa = new FSA()
-const graph = new FSAGraph();
-const builder = new FSABuilder();
+let fsa = new FSA()
+let graph = new FSAGraph();
+let builder = new FSABuilder();
 const name = '';
 resetSession(){
   fsa = new FSA();
@@ -39,24 +39,31 @@ const mockSession = {
         return name;
     }
 };
+
+function exportToFile(graph, name)
+{
+
+}
+
 // Example 1_1_m1
-const q1 = dfa.createState("q1");
-const q2 = dfa.createState("q2");
-const q3 = dfa.createState("q3");
-dfa.addTransition(q1,q1,"b");
-dfa.addTransition(q1,q2,"a");
-dfa.addTransition(q2,q3,"a");
-dfa.addTransition(q2,q3,"b");
-dfa.addTransition(q3,q1,"b");
-dfa.addTransition(q3,q1,"a");
-dfa.setFinalState(q2);
+{
+  const q1 = dfa.createState("q1");
+  const q2 = dfa.createState("q2");
+  const q3 = dfa.createState("q3");
+  dfa.addTransition(q1,q1,"b");
+  dfa.addTransition(q1,q2,"a");
+  dfa.addTransition(q2,q3,"a");
+  dfa.addTransition(q2,q3,"b");
+  dfa.addTransition(q3,q1,"b");
+  dfa.addTransition(q3,q1,"a");
+  dfa.setFinalState(q2);
 
-builder.getMachine().copy(dfa);
-builder.attemptBuildGraph(dfa, graph);
-name = 'flapjs1_1_m1'
-exporter.exportTarget('', mockSession)
-resetSession();
-
+  builder.getMachine().copy(dfa);
+  builder.attemptBuildGraph(dfa, graph);
+  name = 'flapjs1_1_m1'
+  exporter.exportTarget('', mockSession)
+  resetSession();
+}
 // Example 1_1_m2
 const q1 = dfa.createState("q1");
 const q2 = dfa.createState("q2");
