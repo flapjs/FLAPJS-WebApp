@@ -1,4 +1,4 @@
-import FSA, { EMPTY_SYMBOL } from '../FSA.js';
+mport FSA, { EMPTY_SYMBOL } from '../FSA.js';
 import { solveFSA } from '../FSAUtils.js';
 
 function createTestMachine()
@@ -25,9 +25,7 @@ function createTestMachine()
   return dfa;
 }
 
-describe("Example 1.30 () => {
-
-}", () =>
+describe("Example 1.30", () =>
 {
   const dfa = createTestMachine();
   test("is a valid DFA", () =>

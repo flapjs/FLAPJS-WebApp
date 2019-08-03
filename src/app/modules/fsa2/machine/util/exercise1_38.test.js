@@ -25,9 +25,7 @@ function createTestMachine()
   return dfa;
 }
 
-describe("Example 1.38 () => {
-
-}", () =>
+describe("Example 1.38", () =>
 {
   const dfa = createTestMachine();
   test("is a valid DFA", () =>

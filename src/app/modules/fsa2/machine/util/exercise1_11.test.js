@@ -29,9 +29,7 @@ function createTestMachine()
   return dfa;
 }
 
-describe("Example 1.11 () => {
-
-}", () =>
+describe("Example 1.11", () =>
 {
   const dfa = createTestMachine();
   test("is a valid DFA", () =>
