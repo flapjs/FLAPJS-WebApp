@@ -10,7 +10,7 @@ function createTestMachine()
   const q0 = dfa.createState("q0");
   const q1 = dfa.createState("q1");
   const q2 = dfa.createState("q2");
-  const r = "<RESET>"
+  const r = "r" // <RESET>
   dfa.addTransition(q0,q0,"0");
   dfa.addTransition(q0,q0,r);
   dfa.addTransition(q0,q1,"1");
@@ -43,14 +43,14 @@ describe("Example 1.13 ", () =>
     expect(dfa.getStartState().getStateLabel()).toBe("q0");
   });
 
-  test("accepts '0000000<RESET>00'", () =>
+  test("accepts '0000000r00'", () =>
   {
     let newDFA = createTestMachine();
-    expect(solveFSA(dfa, "0000000<RESET>00")).toBe(true);
+    expect(solveFSA(dfa, "0000000r00")).toBe(true);
   });
-  test("accepts '<RESET>11112<RESET>'", () =>
+  test("accepts 'r11112r'", () =>
   {
     let newDFA = createTestMachine();
-    expect(solveFSA(dfa, "<RESET>11112<RESET>")).toBe(true);
+    expect(solveFSA(dfa, "r11112r")).toBe(true);
   });
 });
