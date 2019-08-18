@@ -1,4 +1,4 @@
-mport FSA, { EMPTY_SYMBOL } from '../FSA.js';
+import FSA, { EMPTY_SYMBOL } from '../FSA.js';
 import { solveFSA } from '../FSAUtils.js';
 
 function createTestMachine()

@@ -26,7 +26,7 @@ describe("Exercise 1.1 - M1", () =>
   test("is a valid DFA", () =>
   {
     expect(dfa).toBeDefined();
-    expect(dfa.validate()).toBe(false);
+    expect(dfa.validate()).toBe(true);
     expect(dfa.isValid()).toBe(true);
   });
 
@@ -45,9 +45,9 @@ describe("Exercise 1.1 - M1", () =>
     let newDFA = createTestMachine();
     expect(solveFSA(dfa, "bbbba")).toBe(true);
   });
-  test("accepts 'bbbba'", () =>
+  test("accepts 'bbbbabbbba'", () =>
   {
     let newDFA = createTestMachine();
-    expect(solveFSA(dfa, "bbbbabbbb")).toBe(true);
+    expect(solveFSA(dfa, "bbbbabbbba")).toBe(true);
   });
 });

@@ -9,7 +9,7 @@ function createTestMachine()
   // Example 1_21
   const q = dfa.createState("q");
   const q0 = dfa.createState("q0");
-  const q0 = dfa.createState("q00");
+  const q00 = dfa.createState("q00");
   const q001 = dfa.createState("q001");
 
   dfa.addTransition(q,q,"1");

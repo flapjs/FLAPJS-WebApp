@@ -9,7 +9,7 @@ function createTestMachine()
   // Example 1_41
   const q1 = nfa.createState("1");
   const q2 = nfa.createState("2");
-  const q2 = nfa.createState("3");
+  const q3 = nfa.createState("3");
   nfa.addTransition(q1,q2,"b");
   nfa.addTransition(q2,q2,"a");
   nfa.addTransition(q2,q3,"a");

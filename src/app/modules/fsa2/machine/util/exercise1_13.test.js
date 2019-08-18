@@ -22,7 +22,7 @@ function createTestMachine()
   dfa.addTransition(q2,q1,"2");
   dfa.addTransition(q2,q0,"1");
   dfa.addTransition(q2,q1,r);
-  dfa.addTransition(q1,q2,"2");
+  dfa.addTransition(q0,q2,"2");
   dfa.setFinalState(q0);
 
   return dfa;

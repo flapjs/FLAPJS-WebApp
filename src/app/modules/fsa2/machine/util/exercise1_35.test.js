@@ -38,12 +38,12 @@ describe("Example 1.35", () =>
     expect(nfa.getStartState().getStateLabel()).toBe("q1");
   });
 
-  test("accepts 'aaaabb'", () =>
+  test("accepts 'aaaabba'", () =>
   {
     let newnfa = createTestMachine();
-    expect(solveFSA(nfa, "aaaabb")).toBe(true);
+    expect(solveFSA(nfa, "aaaabba")).toBe(true);
   });
-  test("accepts 'bbbba'", () =>
+  test("accepts 'bba'", () =>
   {
     let newnfa = createTestMachine();
     expect(solveFSA(nfa, "bbbba")).toBe(true);

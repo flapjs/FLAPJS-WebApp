@@ -7,9 +7,9 @@ function createTestMachine()
 
   // Build NFA...
   // Example 1_16_b
-  const q3 = nfa.createState("1");
-  const q1 = nfa.createState("2");
-  const q2 = nfa.createState("3");
+  const q1 = nfa.createState("1");
+  const q2 = nfa.createState("2");
+  const q3 = nfa.createState("3");
   nfa.addTransition(q1,q2,EMPTY_SYMBOL);
   nfa.addTransition(q2,q1,"a");
   nfa.addTransition(q1,q3,"a");
