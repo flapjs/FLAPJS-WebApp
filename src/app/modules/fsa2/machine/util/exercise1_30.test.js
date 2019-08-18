@@ -40,15 +40,10 @@ describe("Example 1.30", () =>
     expect(nfa.getStartState().getStateLabel()).toBe("q1");
   });
 
-  test("accepts ''", () =>
-  {
-    let newnfa = createTestMachine();
-    expect(solveFSA(nfa, "000100")).toBe(true);
-  });
   test("accepts '000100'", () =>
   {
     let newnfa = createTestMachine();
-    expect(solveFSA(nfa, "00")).toBe(true);
+    expect(solveFSA(nfa, "000100")).toBe(true);
   });
   test("accepts '0011'", () =>
   {

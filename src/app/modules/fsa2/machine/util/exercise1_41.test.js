@@ -49,6 +49,6 @@ describe("Example 1.41", () =>
   test("accepts 'abaaaabaa'", () =>
   {
     let newnfa = createTestMachine();
-    expect(solveFSA(nfa, "00011111111110001")).toBe(true);
+    expect(solveFSA(nfa, "abaaaabaa")).toBe(true);
   });
 });
