@@ -3,44 +3,42 @@ import { solveFSA } from '../FSAUtils.js';
 
 function createTestMachine()
 {
-  const dfa = new FSA(true);
+  const nfa = new FSA(false);
 
-  // Build DFA...
+  // Build NFA...
   // Example 1_16_a
-  const q1 = dfa.createState("q1");
-  const q2 = dfa.createState("q2");
-  dfa.addTransition(q1,q1,"a");
-  dfa.addTransition(q1,q2,"a");
-  dfa.addTransition(q1,q2,"b");
-  dfa.addTransition(q2,q1,"b");
-  dfa.setFinalState(q1);
+  const q1 = nfa.createState("q1");
+  const q2 = nfa.createState("q2");
+  nfa.addTransition(q1,q1,"a");
+  nfa.addTransition(q1,q2,"a");
+  nfa.addTransition(q1,q2,"b");
+  nfa.addTransition(q2,q1,"b");
+  nfa.setFinalState(q1);
 
-  return dfa;
+  return nfa;
 }
 
 describe("Exercise 1.16.a", () =>
 {
-  const dfa = createTestMachine();
-  test("is a valid DFA", () =>
+  const nfa = createTestMachine();
+  test("is a valid NFA", () =>
   {
-    expect(dfa).toBeDefined();
-    expect(dfa.validate()).toBe(true);
-    expect(dfa.isValid()).toBe(true);
+    expect(nfa).toBeDefined();
+    expect(nfa.validate()).toBe(true);
+    expect(nfa.isValid()).toBe(true);
   });
 
   test("has correct start state", () =>
   {
-    expect(dfa.getStartState().getStateLabel()).toBe("q1");
+    expect(nfa.getStartState().getStateLabel()).toBe("q1");
   });
 
   test("accepts ''", () =>
   {
-    let newDFA = createTestMachine();
-    expect(solveFSA(dfa, "")).toBe(true);
+    expect(solveFSA(nfa, "")).toBe(true);
   });
   test("accepts 'aaaaaaabbaaaaaabb'", () =>
   {
-    let newDFA = createTestMachine();
-    expect(solveFSA(dfa, "aaaaaaabbaaaaaabb")).toBe(true);
+    expect(solveFSA(nfa, "aaaaaaabbaaaaaabb")).toBe(true);
   });
 });

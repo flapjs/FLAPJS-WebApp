@@ -3,56 +3,56 @@ import { solveFSA } from '../FSAUtils.js';
 
 function createTestMachine()
 {
-  const dfa = new FSA(true);
+  const nfa = new FSA(false);
 
-  // Build DFA...
+  // Build nfa...
   // Example 1_30
-  const q1 = dfa.createState("q1");
-  const q2 = dfa.createState("q2");
-  const q3 = dfa.createState("q3");
-  const q4 = dfa.createState("q4");
+  const q1 = nfa.createState("q1");
+  const q2 = nfa.createState("q2");
+  const q3 = nfa.createState("q3");
+  const q4 = nfa.createState("q4");
 
-  dfa.addTransition(q1,q1,"0");
-  dfa.addTransition(q1,q1,"1");
+  nfa.addTransition(q1,q1,"0");
+  nfa.addTransition(q1,q1,"1");
 
-  dfa.addTransition(q1,q2,"1");
-  dfa.addTransition(q2,q3,"0");
-  dfa.addTransition(q2,q3,"1");
-  dfa.addTransition(q3,q4,"0");
-  dfa.addTransition(q3,q4,"1");
-  dfa.setFinalState(q4);
+  nfa.addTransition(q1,q2,"1");
+  nfa.addTransition(q2,q3,"0");
+  nfa.addTransition(q2,q3,"1");
+  nfa.addTransition(q3,q4,"0");
+  nfa.addTransition(q3,q4,"1");
+  nfa.setFinalState(q4);
 
-  return dfa;
+  return nfa;
 }
 
 describe("Example 1.30", () =>
 {
-  const dfa = createTestMachine();
-  test("is a valid DFA", () =>
+  const nfa = createTestMachine();
+  test("is a valid nfa", () =>
   {
-    expect(dfa).toBeDefined();
-    expect(dfa.validate()).toBe(true);
-    expect(dfa.isValid()).toBe(true);
+    expect(nfa).toBeDefined();
+    expect(nfa.validate()).toBe(true);
+    expect(nfa.isValid()).toBe(true);
   });
 
   test("has correct start state", () =>
   {
-    expect(dfa.getStartState().getStateLabel()).toBe("q1");
+    expect(nfa.getStartState().getStateLabel()).toBe("q1");
   });
 
   test("accepts ''", () =>
   {
-    let newDFA = createTestMachine();
-    expect(solveFSA(dfa, "000100")).toBe(true);
+    let newnfa = createTestMachine();
+    expect(solveFSA(nfa, "000100")).toBe(true);
   });
   test("accepts '000100'", () =>
   {
-    let newDFA = createTestMachine();
-    expect(solveFSA(dfa, "00")).toBe(true);
+    let newnfa = createTestMachine();
+    expect(solveFSA(nfa, "00")).toBe(true);
   });
   test("accepts '0011'", () =>
   {
-    let newDFA = createTestMachine();
-    expect(solveFSA(dfa, "0011")).toBe(false);
+    let newnfa = createTestMachine();
+    expect(solveFSA(nfa, "0011")).toBe(false);
   });
 });
