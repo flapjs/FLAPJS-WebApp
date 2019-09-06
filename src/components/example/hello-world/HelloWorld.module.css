@@ -1,0 +1,47 @@
+.helloWorld {
+    outline: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+}
+
+.title {
+    color: black;
+    margin: 0;
+    padding: 0;
+}
+
+.rainbow {
+    background-image:
+        linear-gradient(
+            to left,
+            /* We have twice each color because RED is split in half
+            * to smooth the repeating transition */
+            red,
+            violet,
+            violet,
+            indigo,
+            indigo,
+            blue,
+            blue,
+            green,
+            green,
+            yellow,
+            yellow,
+            orange,
+            orange,
+            red
+        );
+    background-size: 40rem;
+    background-clip: text;
+    background-position: 40rem;
+    color: transparent;
+    animation: rainbowAnimate 1s infinite linear;
+}
+
+@keyframes rainbowAnimate {
+    0% { background-position: 0; }
+    100% { background-position: 40rem; }
+}

@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots HelloWorld custom style 1`] = `
+<HelloWorld
+  style={
+    Object {
+      "backgroundColor": "pink",
+      "border": "5px dotted limegreen",
+    }
+  }
+  title="custom style"
+>
+  <button
+    className="helloWorld"
+    onClick={[Function]}
+  >
+    <h1
+      className="title"
+      style={
+        Object {
+          "backgroundColor": "pink",
+          "border": "5px dotted limegreen",
+        }
+      }
+    >
+      Hello 
+      custom style
+    </h1>
+  </button>
+</HelloWorld>
+`;
+
+exports[`Storyshots HelloWorld playground 1`] = `
+<HelloWorld
+  title="World!"
+>
+  <button
+    className="helloWorld"
+    onClick={[Function]}
+  >
+    <h1
+      className="title"
+    >
+      Hello 
+      World!
+    </h1>
+  </button>
+</HelloWorld>
+`;
+
+exports[`Storyshots HelloWorld with rainbow 1`] = `
+<HelloWorld
+  rainbow={true}
+  title="World!"
+>
+  <button
+    className="helloWorld"
+    onClick={[Function]}
+  >
+    <h1
+      className="title rainbow "
+    >
+      Hello 
+      World!
+    </h1>
+  </button>
+</HelloWorld>
+`;
+
+exports[`Storyshots HelloWorld with title 1`] = `
+<HelloWorld
+  title="home"
+>
+  <button
+    className="helloWorld"
+    onClick={[Function]}
+  >
+    <h1
+      className="title"
+    >
+      Hello 
+      home
+    </h1>
+  </button>
+</HelloWorld>
+`;

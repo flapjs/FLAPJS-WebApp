@@ -1,6 +1,0 @@
-{
-	"hooks": {
-		"pre-commit": "lint-diff HEAD",
-		"pre-push": "npm test"
-	}
-}

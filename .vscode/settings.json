@@ -1,0 +1,6 @@
+{
+    "liveServer.settings.root": "/dist",
+    "css.validate": false,
+    "less.validate": false,
+    "scss.validate": false
+}

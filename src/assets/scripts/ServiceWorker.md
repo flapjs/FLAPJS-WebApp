@@ -1,0 +1,4 @@
+# ServiceWorker
+Hopefully this will help you figure out what the heck the service worker is doing.
+
+Firstly, the service worker is, by default, turned off for development mode. This is achieved by declaring a global variable NODE_ENV, which can be either 'development' or 'production' in `template.html`. Then the install script just checks that it is in the production environment. If you want to debug the service worker, you'll have to manually change the NODE_ENV to production. BE CAREFUL! Once the service worker is enabled, it will install itself and create caches that will persist across reloads. So it WILL MESS UP YOUR DEV ENVIRONMENT IF YOU DON'T CLEAN UP AFTER! When you are done debugging, change the global variable back to what it was previously, unregister the service worker manually in your browser, and clear the service worker cache. Then reload and double check nothing re-attaches themselves.

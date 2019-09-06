@@ -1,8 +1,6 @@
-/node_modules
+/node_modules/
+/out/
 .DS_Store
-
-# Ignore any output files (not distributed)
-/out
 
 # Ignore any logs
 *.log

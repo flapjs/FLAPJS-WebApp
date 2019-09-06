@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Metadata -->
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="theme-color" content="#07889B">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <!-- Web Manifest -->
+        <link rel="manifest" href="./manifest.webmanifest">
+        
+        <!-- Search Metadata (Needs to be short!) -->
+        <meta name="description" content="An intuitive web app to help you explore and construct formal languages and automata with real-time analysis and error checking.">
+        <!-- An intuitive web app to help you explore what it means to be computable. Experiment and construct formal languages from finite automata to Turing machines with real-time analysis and error checking. From its humble beginnings as a small tool built by a determined CSE 105 homework group at UC San Diego inspired by JFLAP, it has continued to still be developed by the students, for the students. -->
+        <meta name="keywords" content="flap,flapjs,FLAPJS,JFLAP,Computation Theory,CSE 105,UCSD">
+
+        <!-- Title -->
+        <title id="window-title">Flap.js - Formal Languages and Automata Package in JavaScript</title>
+
+        <!-- Import Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Overpass+Mono" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Arvo" rel="stylesheet">
+
+<!-- Default Styles -->
+<link inline rel="stylesheet" href="./styles/Default.css">
+
+<!-- Loading Styles -->
+<link inline rel="stylesheet" href="./styles/Loading.css">
+
+    <!-- Styles -->
+    </head>
+
+    <body>
+        <!-- React Root -->
+        <div id="root"></div>
+        
+        <!-- Loading Spinner -->
+        <div class="_center" id="loading">
+            <div class="_spinner"><div></div><div></div><div></div></div>
+        </div>
+
+        <!-- JavaScript Support -->
+        <div class="_center" id="error">
+            <noscript>You need to enable JavaScript to run this app.</noscript>
+        </div>
+
+<!-- Global Variables -->
+<script>
+    // NOTE: ServiceWorker will only be enabled in 'production'.
+    const NODE_ENV = '<%= webpackConfig.mode %>';
+</script>
+
+<!-- Service Worker Install -->
+<script inline src="./scripts/ServiceWorkerInstall.js"></script>
+
+<!-- Exit Warning -->
+<script inline src="./scripts/ExitWarning.js"></script>
+
+        <!-- Library Files -->
+        <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+        <script crossorigin src="https://unpkg.com/prop-types@15.6/prop-types.min.js"></script>
+
+    <!-- Bundles -->
+    </body>
+</html>

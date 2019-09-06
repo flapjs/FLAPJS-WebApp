@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<HelloWorld/> rendering renders [rainbow] correctly 1`] = `
+<button
+  className="helloWorld"
+  onClick={[Function]}
+>
+  <h1
+    className="title rainbow "
+  >
+    Hello 
+    World!
+  </h1>
+</button>
+`;
+
+exports[`<HelloWorld/> rendering renders correctly 1`] = `
+<button
+  className="helloWorld"
+  onClick={[Function]}
+>
+  <h1
+    className="title"
+  >
+    Hello 
+    World!
+  </h1>
+</button>
+`;
