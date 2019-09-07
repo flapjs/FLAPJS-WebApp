@@ -122,6 +122,7 @@ This is only used in the `test` environment in `.babelrc` and in the config file
 
 ## html-webpack-inline-source-only-plugin
 - Allows script (and link) tags to be inlined into the HTML file. This is only used for a couple of specific globally scoped scripts. Other scripts, particularly those larger, should be bundled and loaded asynchronously (through `src` or `href` attributes).
+- I wrote this one... So feel free to find something better.
 - _DEPENDENCY:_ Requires `html-webpack-plugin`.
 
 > **NOTE:** There exists other plugins that claim to do the same thing, such as `html-inline-source-webpack-plugin`, `script-ext-html-webpack-plugin`, and `html-webpack-source-inline-plugin`. However, all inlined scripts would just be injected with all other scripts in random order. None of them support html templates as defined by `html-webpack-plugin`. Therefore, we've actually implemented our own plugin that does just what we want :D This is probably why you don't see this in `package.json`, because we wrote it ourselves. It currently lives in `tools`.
