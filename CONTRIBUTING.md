@@ -1,5 +1,5 @@
 #So you want to contribute?
-Well, your in luck, cause that's what this is for! :D
+Well, you're in luck, cause that's what this is for! :D
 
 Hello people of [insert your year here]! Here at Flap.js we strive to refine our skills as creative programmers and explore new boundaries of computing and collaboration through web development.
 

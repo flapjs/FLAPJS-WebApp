@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Storybook documentation
+- Automated Jest snapshot testing
+- Jest coverage generation
+- VS Code support
+- Style linting
+- PostCSS integration
+- Proper testing before commits
+
+### Changed
+- It's a whole new world! :D
+- Revamped documentation
+- More logical and consistent file organization
+
+### Removed
+- Deprecated CSS module plugins
 
 ## [0.4.3] - 2019-06-04
 ### Added
