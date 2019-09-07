@@ -7,7 +7,7 @@
   "scripts": {
     "start": "webpack-dev-server --env=development --config webpack.config.js",
     "build": "webpack --env=production --config webpack.config.js",
-    "docs": "npm run docs-storybook",
+    "docs": "npm run docs-storybook && npm run docs-coverage",
     "test": "npm run lint && npm run jest",
     "docs-storybook": "build-storybook -c .storybook -o \"docs/storybook\"",
     "docs-coverage": "npm run jest -- --coverage",
