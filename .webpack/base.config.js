@@ -8,7 +8,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 // This is our custom webpack plugin to handle inlining.
-const HtmlWebpackInlineSourceOnlyPlugin = require('../src/util/webpack/html-webpack-inline-source-only-plugin/index.js');
+const HtmlWebpackInlineSourceOnlyPlugin = require('../tools/html-webpack-inline-source-only-plugin/index.js');
 
 const HTML_PAGE_TITLE = 'Flap.js';
 
