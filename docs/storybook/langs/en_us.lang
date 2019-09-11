@@ -1,0 +1,181 @@
+alert.graph.clear = Any unsaved changes will be lost. Are you sure you want to continue?
+alert.window.exit = Any unsaved changes will be lost. Are you sure you want to leave?
+
+message.error.none = Hooray! No more errors!
+message.error.incomplete = Found incomplete transition(s)
+message.error.empty = Found empty transition(s)
+message.error.dupe = Found duplicate transitions
+message.error.missing = Found missing transition(s) for state(s)
+message.warning.unreachable = Found unreachable state(s)
+message.warning.cannotmodify = Sorry, but you cannot change or create new states or edges while in delete mode.
+message.warning.convertNFAToDFA = Caution! After converting to a DFA you will have exponential states.
+
+message.action.locate = Where is it?
+message.action.deleteall = Delete them all.
+message.action.close = Get out of my way!
+message.action.convert = Convert anyway
+message.action.next = Next
+message.workspace.empty = Double-tap to create a node
+message.offline.ready = You are already ready for offline!
+message.offline.failed = You are not ready for offline. Please refresh the page!
+message.offline.nosupport = Sorry, your browser does not support offline mode.
+
+//message.intro.1 = Good Morning! Welcome to the Flap.js Workspace!
+message.intro.2 = If you need help, the '?' button is at the top-right of the screen.
+message.tutorial.1 = ==== Quick Tutorial ==== \n New State: \n - Double Tap \n New Transition / Move: \n - Drag \n Change Symbol / Accept: \n - Tap \n\n Interactive elements will highlight on hover.
+message.help.1 = You need help. Unfortunately, I am not qualified to provide such assistance. Please refer to your local tutor/developer for more information.
+message.help.2 = I see you want help. I'm not sure I want to help you after you so rudely got rid of all my other messages.
+message.help.3 = Thank you for being awesome :3
+
+cursor.actionmode = Action Mode
+cursor.movemode = Move Mode
+
+component.untitled.title = Untitled
+component.testing.title = Testing
+component.overview.title = Description
+component.exporting.title = Exporting
+component.options.title = Options
+component.analysis.title = Analysis
+component.language.title = Language
+
+component.toolbar.title = Toolbar
+component.workspace.title = Workspace
+component.drawer.title = Drawer
+component.notification.title = Notification
+component.transitiontable.title = Transition Table
+component.stateslist.title = States
+component.alphabetlist.title = Alphabet
+component.graph.title = Graph
+component.labeleditor.title = Label Editor
+
+options.category.colors = Colors
+options.category.shortcuts = Shortcuts
+options.category.general = General
+
+//New Colors
+options.--color-accent = Accent Color
+options.--color-primary = Primary Color
+options.--color-primary-text = Text Color
+options.--color-background = Background Color
+options.--color-error = Error Color
+options.--color-success = Success Color
+options.--color-warning = Warning Color
+options.--color-surface = Main Color
+options.--color-surface-text = Text Color
+options.--color-surface-active = Active Color
+options.--color-surface-error = Error Color
+options.--color-surface-success = Success Color
+options.--color-surface-warning = Warning Color
+options.--color-graph-node = Node Color
+options.--color-graph-text = Text Color
+options.--color-graph-select = Select Color
+
+//Toolbar
+options.--color-toolbar-main = Main Color
+options.--color-toolbar-accent = Accent Color
+options.--color-toolbar-text = Text Color
+
+//Drawer
+options.--color-drawer-main = Main
+options.--color-drawer-accent = Accent
+options.--color-drawer-text = Text
+options.--color-drawer-error = Error
+
+//Testing
+options.--color-testing-success = Success
+options.--color-testing-failure = Failure
+options.--color-testing-working = Working
+options.--color-testing-text = Text
+
+//Notification
+options.--color-notification-text = Notification Text
+options.--color-notification-info = Notification Info
+options.--color-notification-error = Notification Error
+options.--color-notification-warning = Notification Warning
+
+//Workspace
+options.--color-graph-node = Graph Node
+options.--color-workspace-text = Workspace Text
+options.--color-workspace-main = Main Color
+
+//Label editor
+options.--color-labeleditor-text = Label Editor Text
+options.--color-labeleditor-main = Label Editor Main
+
+//Viewport
+options.--color-viewport-error = Viewport Delete
+options.--color-viewport-testing = Viewport Testing
+options.--color-viewport-warning = Viewport Warning
+options.--color-highlight-select = Highlight Select
+
+//Color Groups
+options.colorgroup.general = General Colors
+options.colorgroup.surface = Surface Colors
+options.colorgroup.graph = Graph Colors
+
+options.checkerrors = Error Checking
+options.checkerrors.mode.none = None
+options.checkerrors.mode.delayed = Delayed
+options.checkerrors.mode.immediate = Immediate
+
+options.autolabel = Automatic State Labels
+options.skipwelcome = Skip Welcome Page
+options.exitwarning = Disable Exit Warning
+//options.swapinputs = Swap Input Controls
+
+options.testing.stepmode = Step-by-Step Mode
+//options.testing.closure = Transition By Closure
+
+file.untitled = Untitled
+file.export.machine = Save machine for Flap.js
+file.export.jff = Save machine for JFLAP
+file.export.png = Export diagram as PNG
+file.export.jpg = Export diagram as JPG
+file.export.svg = Export diagram as SVG
+file.export.bw = Export diagram in grayscale
+file.export.convertfsa = Save equivalent FA for Flap.js
+
+file.export.machine.hint = Save machine as .json
+file.export.jff.hint = Save machine as .jff
+file.export.png.hint = Export diagram as .png
+file.export.jpg.hint = Export diagram as .jpg
+file.export.svg.hint = Export diagram as .svg
+file.export.bw.hint = Export diagram in grayscale
+
+//testing.placeholder = Test string
+
+//TODO: Actions should probably be labeled by context...
+
+action.testing.runall = Run All Tests
+action.testing.stoprun = Stop
+action.testing.clear = Clear Tests
+action.testing.add = Add Test
+action.testing.import = Import Tests
+action.testing.new = New Test
+action.testing.save = Save Tests
+
+action.overview.convertdfa = Convert To DFA
+action.overview.convertnfa = Convert To NFA
+action.overview.autolayout = Auto-Layout
+
+action.options.changetheme = Customize Theme
+action.options.reset = Reset to Default
+action.toolbar.savemachine = Save Machine File
+action.toolbar.saveimage = Export to Image
+
+action.toolbar.save = Save
+action.toolbar.bug = Report a Bug
+action.toolbar.help = Help
+action.toolbar.newmachine = New
+action.toolbar.uploadmachine = Upload
+action.toolbar.undo = Undo
+action.toolbar.redo = Redo
+action.toolbar.lang = Language
+action.toolbar.changemodule = Change Module
+action.workspace.submit = Submit
+action.workspace.cancel = Cancel
+
+action.toolbar.undo.label = Undo Action
+action.toolbar.redo.label = Redo Action
+action.workspace.submit.label = Submit Change
+action.workspace.cancel.label = Cancel Change

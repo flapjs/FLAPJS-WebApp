@@ -1,0 +1,21 @@
+{
+    "short_name": "Flap.js",
+    "name": "Flap.js",
+    "icons": [
+        {
+            "src": "/images/logo-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/images/logo-512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "/FLAPJS-WebApp/",
+    "background_color": "#3367D6",
+    "display": "standalone",
+    "scope": "/FLAPJS-WebApp/",
+    "theme_color": "#3367D6"
+}

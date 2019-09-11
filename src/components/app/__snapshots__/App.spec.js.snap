@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App/> rendering renders correctly 1`] = `
+<div
+  className="container"
+>
+  <LocalizationProvider
+    localeCode="en"
+  >
+    <nav
+      className="appbar"
+    >
+      <h2>
+        Flap.js
+      </h2>
+      <p>
+        <LocaleString
+          entity="hi"
+          params={Array []}
+        />
+      </p>
+    </nav>
+    <div
+      className="appcontent"
+    >
+      <Workspace
+        renderSideBar={[Function]}
+      />
+    </div>
+  </LocalizationProvider>
+</div>
+`;

@@ -20,5 +20,6 @@ render(App);
 
 if (module.hot)
 {
+    Logger.out(LOGGER_TAG, '...in debug mode for hot-reload...');
     module.hot.accept('./components/app/App.jsx', () => render(App));
 }

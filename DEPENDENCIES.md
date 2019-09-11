@@ -38,6 +38,13 @@ To make sure any future contributor can update the tools we use, we must show ou
 > **SETUP:**
 This increases the `importLoaders` property of `css-loader` by 1.
 
+## file-loader
+- This is used to load any asset files, such as images, languages, etc. This can also be used with dynamic imports to dynamically load resources.
+- For dynamic importing for assets, check this out: https://medium.com/front-end-weekly/webpack-and-dynamic-imports-doing-it-right-72549ff49234
+
+> **SETUP:**
+Add it to the list of loaders in the webpack config and be sure to match the correct file extension for every type of asset.
+
 ## babel
 - This allows us to transpile our source code to other web versions to support older browsers. The reason we chose this is because no other package is as widely supported nor as well-documented as this one.
 - To configure this, it has a config file called `.babelrc`. Sometimes, when reading related documentation on Babel, it tells you to put the options and other properties in the webpack config file itself. This is generally bad practice and you should try to always put it in `.babelrc`, unless it is not feasible (which then means you are doing something extremely unstable and hacky).
@@ -54,6 +61,12 @@ It is added to the presets list in `.babelrc`.
 
 > **SETUP:**
 It is added to the presets list in `.babelrc`.
+
+## babel-eslint
+- This adds support for babel transforms in eslint. This is basically only used to stop eslint from picking on dynamic import statements.
+
+> **SETUP:**
+'babel-eslint' is added as a 'parser' property in `.eslintrc.js`. Then the 'allowImportExportEverywhere' is set to true under 'parserOptions'. And that is it!
 
 ## babel-plugin-react-css-module - NOT USED
 - This is usually used for CSS modules, but css-loader already takes care of this. And this plugin also has a few bugs that are probably never getting fixed. So this information is just here for posterity's sake.
@@ -178,6 +191,9 @@ File resolution for jest tests is also a problem. Currently CSS modules are reso
 
 > **NOTE:**
 Jest tests using mount or shallow do not support using ref. You must either use createNodeMock() provided by React, or some other solution. In addition to changing the specifc test, you also need to add an exception to Storybook for that component as well.
+
+## jest-fetch-mock
+- This allows us to mock and test fetch() calls.
 
 ## babel-jest
 - Allows Babel to recognize Jest tests. Otherwise, Jest cannot use Babel transformations, such as CSS modules.

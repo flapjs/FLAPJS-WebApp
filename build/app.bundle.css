@@ -1,0 +1,122 @@
+.src-components-app-__App\.module__container--JvP_f {
+    display: grid;
+    grid-template-rows: 3rem;
+    width: 100%;
+    height: 100%;
+}
+
+.src-components-app-__App\.module__appbar--19YHx {
+    display: flex;
+    flex-direction: row;
+    background: #333641;
+    width: 100%;
+    height: 3rem;
+    color: white;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+.src-components-app-__App\.module__appbar--19YHx > * {
+    margin: 0 1rem;
+}
+
+.src-components-app-__App\.module__appcontent--2H8I3 {
+    grid-area: 2 / 1;
+    background: black;
+}
+
+.src-components-app-__App\.module__sidetab--1n6Yp {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.src-components-app-__App\.module__tab--2l3Wb {
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    outline: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.src-components-app-__App\.module__tab--2l3Wb:focus {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.src-components-app-__App\.module__sidetab--1n6Yp > .src-components-app-__App\.module__tab--2l3Wb {
+    margin: 0.5rem 0;
+}
+
+.src-components-app-__App\.module__divider--2_ouo {
+    flex: 1;
+}
+
+.icon {
+    background: none;
+    border: none;
+    width: 2rem;
+    height: 2rem;
+}
+
+.src-components-workspace-__Workspace\.module__container--3hZCH {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    --drawer-width: 5rem;
+}
+
+.src-components-workspace-__Workspace\.module__background--2xniB {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.src-components-workspace-__Workspace\.module__foreground--2C-kB {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+.src-components-workspace-__Workspace\.module__viewport--2PB2O {
+    flex: 1;
+}
+
+.src-components-workspace-__Workspace\.module__drawer--2q3Ig {
+    display: none;
+    background: #1D1E22;
+    min-width: 20%;
+    max-width: 100%;
+    width: var(--drawer-width);
+    height: 100%;
+}
+
+.src-components-workspace-__Workspace\.module__drawer--2q3Ig.open {
+    display: block;
+}
+
+.src-components-workspace-__Workspace\.module__sidebar--3xych {
+    background: #333641;
+    width: 2rem;
+    height: 100%;
+    padding: 0 0.5rem;
+    z-index: 100;
+}
+
+.src-components-workspace-__Workspace\.module__handle--3S6v0 {
+    width: 12px;
+    height: 100%;
+    border-left: 2px solid rgba(255, 255, 255, 0.05);
+    border-right: 2px solid rgba(0, 0, 0, 0.4);
+    background: #333641;
+}
+

@@ -58,7 +58,19 @@ module.exports = {
                 test: /\.svg$/,
                 use: [
                     {
-                        loader: '@svgr/webpack'
+                        loader: '@svgr/webpack',
+                    }
+                ]
+            },
+            /** This is to load asset files into chunks while bundling. */
+            {
+                test: /\.(png)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]'
+                        }
                     }
                 ]
             },
@@ -126,7 +138,8 @@ module.exports = {
         new HtmlWebpackInlineSourceOnlyPlugin(HtmlWebpackPlugin),
         new CopyWebpackPlugin([
             { from: './src/assets/metadata/' },
-            { from: './src/assets/images/', to: 'images' }
+            { from: './src/assets/images/', to: 'images' },
+            { from: './src/assets/langs/', to: 'langs' }
         ]),
         new WorkboxWebpackPlugin.InjectManifest({
             swSrc: './src/assets/scripts/ServiceWorker.js',

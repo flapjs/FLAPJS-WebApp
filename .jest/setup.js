@@ -8,3 +8,7 @@ Enzyme.configure({ adapter: new Adapter() });
 // Setup require.context for Storybook
 import registerRequireContextHook from 'babel-plugin-require-context-hook/register';
 registerRequireContextHook();
+
+// Setup jest-fetch-mock
+global.fetch = require('jest-fetch-mock');
+fetch.mockResponse('');

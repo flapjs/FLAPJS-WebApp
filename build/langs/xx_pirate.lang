@@ -1,0 +1,117 @@
+alert.graph.clear = All ye changes be lost! Are ye sure ye wants t' continue?
+alert.window.exit = All ye changes be lost! Are ye sure ye wants t' leave?
+
+message.error.none = Alas! Err's be gone.
+message.error.incomplete = Arrr, matey, found some missing transitions
+message.error.empty = Shiver me timbers! Ye should fix those empty transitions
+message.error.dupe = Yarr! Found these duplicate transitions
+message.error.missing = Fool! Thar be missing transitions fer some states
+message.warning.unreachable = Avast ye! Thar states will soon be shark bait
+message.warning.cannotmodify = Well shave me belly with a rusty razor! Ye know ye can't change states or edges while deletin'.
+message.warning.convertNFAToDFA = Beware! Convertin' thar machine be explodin'!
+
+message.action.locate = Whar be the loot?
+message.action.deleteall = More fer the fishes!
+message.action.close = Get out o' me way, seadog!
+message.action.next = More!
+message.action.convert = Set sail, ye landlubbers!
+message.workspace.empty = Ahoy matey! All hands on deck!
+message.offline.ready = Ye ar' ready for open waters!
+message.offline.failed = Ye ar' not ready for the ocean, me hearty. Do give 'er 'nother try!
+message.offline.nosupport = Arrr! Yer browser be soon swimmin' with the fishies.
+
+//message.intro.1 = Ahoy! Welcome aboard to yer ship, cap'n!
+message.intro.2 = T' find yer new sea legs, look starboard fer yer hat.
+//message.intro.3 = If ye in need o' 'nother helper, drop anchor me hearty and find yerself 'nother matey. Arrr!
+message.tutorial.1 = ==== Yer Ol' Guide ==== \n Using yer rats \n * Action = Right Rat \n * Move = Left Rat \n\n Using yer handy compass \n * Action = Tap-Hold \n * Move = Tap-Drag \n\n State = Double Tap \n Transition = Action-Drag \n Symbol = Any Tap \n\n Interactive elements be colorful when hoverin'.
+message.help.1 = Lookin' fer more swabbers? I bet some 're back at port.
+message.help.2 = Dead men tell no tales. Dead men. Tell no tales.
+message.help.3 = Keep a weather eye open, cap'n!
+
+cursor.actionmode = Plunderin' Time
+cursor.movemode = Sailin' Time
+
+component.untitled.title = Arrr!
+component.testing.title = Parley
+component.overview.title = Swagger
+component.exporting.title = Plunder
+component.options.title = Grog
+component.analysis.title = Mutiny
+component.language.title = Yer speakin'
+
+component.toolbar.title = Jolly Roger
+component.workspace.title = Poop Deck
+component.drawer.title = Cap'n's Cabin
+component.notification.title = Broadside
+component.transitiontable.title = Me Seafarin' Map
+component.stateslist.title = Barrels
+component.alphabetlist.title = Monkeys
+component.graph.title = Ye Ol' Seadog
+component.labeleditor.title = Ye Article
+
+options.category.colors = Ye Colors
+options.category.shortcuts = Ye Cutlass
+options.category.general = Arrr!
+
+options.checkerrors = Savvy?
+options.checkerrors.mode.none = Walk the plank!
+options.checkerrors.mode.delayed = Yo-ho-ho!
+options.checkerrors.mode.immediate = No quarter given!
+
+options.autolabel = Name yer powder monkeys
+options.skipwelcome = Straight t' the sea
+options.exitwarning = Straight t' port
+//options.swapinputs = Hand me yer cutlass
+
+options.testing.stepmode = Swab the deck!
+//options.testing.closure = I reckon's the Kraken
+
+file.untitled = Cap'n's Log
+file.export.machine = Batten down the hatches
+file.export.jff = Strike yer colors
+file.export.png = Yer doubloons 'n jewels
+file.export.jpg = A swig ye rum
+file.export.svg = Fire in the hole
+
+file.export.machine.hint = Save yer charts as .json
+file.export.jff.hint = Save yer charts as .jff
+file.export.png.hint = Export yer charts as .png
+file.export.jpg.hint = Export yer charts as .jpg
+file.export.svg.hint = Export yer charts as .svg
+
+//testing.placeholder = Black Spot
+
+//TODO: Actions should probably be labeled by context...
+
+action.testing.runall = Sing yer sea shanties!
+action.testing.stoprun = Stop!
+action.testing.clear = Feed the fishes!
+action.testing.import = More landlubbers...
+action.testing.save = Save fer 'nother day
+action.testing.add = 'Nother landlubber
+action.testing.new = Raise the anchor!
+
+action.overview.convertdfa = Convert yer charts to DFA
+action.overview.convertnfa = Convert yer charts to NFA
+action.overview.autolayout = To the shipyard!
+
+action.options.changetheme = Change yer colors...
+action.options.reset = Clean yer barnacles
+action.toolbar.savemachine = Keep yer booty safe
+action.toolbar.saveimage = Save yer booty fer later
+
+action.toolbar.save = Save ye booty
+action.toolbar.help = Give ye matey a hand
+action.toolbar.newmachine = Land, ho!
+action.toolbar.uploadmachine = Sail, ho!
+action.toolbar.undo = T' the bow
+action.toolbar.redo = T' the stern
+action.toolbar.lang = Yer speakin' words
+action.toolbar.changemodule = Change yer charts
+action.workspace.submit = Plunder
+action.workspace.cancel = Maroon
+
+action.toolbar.undo.label = Forward t' the bow!
+action.toolbar.redo.label = Bring a spring upon'er!
+action.workspace.submit.label = Plunder it!
+action.workspace.cancel.label = Maroon it!

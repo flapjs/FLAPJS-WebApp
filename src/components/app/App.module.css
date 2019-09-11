@@ -1,31 +1,63 @@
-.appContainer {
-    background: dodgerblue;
+@value APPBAR_HEIGHT: 3rem;
+
+.container {
+    display: grid;
+    grid-template-rows: APPBAR_HEIGHT;
     width: 100%;
     height: 100%;
 }
 
-.toolbar {
-    border: 1px solid white;
+.appbar {
+    display: flex;
+    flex-direction: row;
+    background: #333641;
+    width: 100%;
+    height: APPBAR_HEIGHT;
+    color: white;
+    align-items: center;
+    padding: 0 1rem;
 }
 
-.appContent {
-    width: 1rem;
-    height: 1rem;
-    background: limegreen;
+.appbar > * {
+    margin: 0 1rem;
 }
 
-.appViewport {
-    background: navy;
+.appcontent {
+    grid-area: 2 / 1;
+    background: black;
 }
 
-.appDrawer {
-    background: gold;
+.sidetab {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-.drawerHandle {
-    border: 1px solid gray;
+.tab {
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    outline: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
 }
 
-.drawerContent {
-    background: green;
+.tab:focus {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidetab > .tab {
+    margin: 0.5rem 0;
+}
+
+.divider {
+    flex: 1;
+}
+
+:global(.icon) {
+    background: none;
+    border: none;
+    width: 2rem;
+    height: 2rem;
 }

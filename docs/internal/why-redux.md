@@ -33,7 +33,7 @@ Anyways, from the current project structure, I've come up with what I think we n
 Here's the result of that:
 
 ### Modules
-Modules should use be able to use whatever they want. Therefore we need a way to allow them to use Redux, Context, just singletons, or local state... (currently still figuring this out)
+Modules should be able to use whatever they want. Therefore we need a way to allow them to use Redux, Context, just singletons, or local state... (currently still figuring this out)
 
 ### Notifications
 Notifications should use REDUX
@@ -109,3 +109,4 @@ We will be using Redux. But only for ALL GRAPHING/GRAMMAR functionality. Most co
 // YOU'LL NEED THESE TO IMPLEMENT:
 - https://react-redux.js.org/introduction/quick-start
 - https://alligator.io/react/storybook-with-redux/
+- https://daveceddia.com/redux-tutorial/
