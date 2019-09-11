@@ -1,6 +1,9 @@
+/* global NODE_ENV */
+
 window.addEventListener('beforeunload', (event) => 
 {
     // if (window.shouldExitWarning)
+    if (NODE_ENV === 'production')
     {
         const message = 'alert.warning.exit';
         event = event || window.event;
