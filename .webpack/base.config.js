@@ -53,6 +53,15 @@ module.exports = {
                     { loader: 'babel-loader' }
                 ]
             },
+            /** This is to auto-bundle svg to React components. */
+            {
+                test: /\.svg$/,
+                use: [
+                    {
+                        loader: '@svgr/webpack'
+                    }
+                ]
+            },
             /** This is to bundle LOCAL css module files (these gotta match in 'development.config.js'). */
             {
                 test: /\.module\.css$/,

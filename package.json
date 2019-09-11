@@ -41,6 +41,7 @@
     "@storybook/addon-knobs": "^5.1.9",
     "@storybook/addon-storyshots": "^5.1.9",
     "@storybook/react": "^5.1.9",
+    "@svgr/webpack": "^4.3.2",
     "autoprefixer": "^9.6.1",
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",

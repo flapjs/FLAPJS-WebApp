@@ -282,3 +282,11 @@ Any commands ran by this are specified in its config file. The key is a glob pat
 
 > **SETUP:**
 - It requires its own eslint config file for the `cypress` directory. Refer to `eslint-plugin-cypress` docs for the required contents (we do use their recommended style guide).
+
+## @svgr/webpack
+- This allows auto-transform of SVG files at bundle-time to React components. This way we don't have to write another React component for EVERY SVG file. It also auto-optimizes the svg for us, so WOO!
+
+> **SETUP:**
+Like all file type handling, we add an entry for SVGs in the webpack loader section. You can also specify additional options there. Here's a table of those:
+
+https://www.smooth-code.com/open-source/svgr/docs/options/
