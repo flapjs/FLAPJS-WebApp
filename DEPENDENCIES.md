@@ -195,6 +195,9 @@ Jest tests using mount or shallow do not support using ref. You must either use 
 ## jest-fetch-mock
 - This allows us to mock and test fetch() calls.
 
+> **SETUP:**
+There is setup code to put in the `setup.js` file for Jest. This is simply to declare a global mock of the fetch() function, so it becomes accessible even in the node environment, and provide default mocked data for any fetch calls.
+
 ## babel-jest
 - Allows Babel to recognize Jest tests. Otherwise, Jest cannot use Babel transformations, such as CSS modules.
 
