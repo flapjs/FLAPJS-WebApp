@@ -11,7 +11,7 @@ This includes all scripts or tools used to manage the project (not used within t
 
 > **TL;DR** All scripts or tools to manage the project files.
 
-## dist
+## build
 This includes all production-ready distributed files. These files should never be edited as the directory will always be replaced on build.
 
 > **TL;DR** All output files. DO NOT TOUCH THIS!
