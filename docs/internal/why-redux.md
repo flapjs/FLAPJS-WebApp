@@ -32,12 +32,15 @@ Anyways, from the current project structure, I've come up with what I think we n
 
 Here's the result of that:
 
-Modules should use REDUX?
+### Modules
+Modules should use be able to use whatever they want. Therefore we need a way to allow them to use Redux, Context, just singletons, or local state... (currently still figuring this out)
 
+### Notifications
 Notifications should use REDUX
 - Because it usually deals with the graph itself, like an editor. Therefore it should use the same management system.
 - It is also useful to undo/redo notification actions.
 
+### Themes
 Theme Styles should use MVC / React Context
 - ThemeView, ThemeModel, ThemeController
     - View would be the usage of CSS variables
@@ -45,6 +48,7 @@ Theme Styles should use MVC / React Context
     - Controller would be the color options
     - (React context to change the colors)
 
+### Localization
 Localization should use React Context and a custom Localize Component
 - This is because there are pretty much no interactions that need to be managed here.
 - There is one state and that is the locale. And that is usually only changed in one place too.
@@ -68,6 +72,7 @@ Here's an example implementation:
     </Localization.Provider>
 ```
 
+### Graph and Grammar
 Graph should use REDUX
 - Drawer Editor vs Graph Editor
     - Both dispatch actions to the store
@@ -80,11 +85,10 @@ Graph should use REDUX
 - Why not redux? You get undo/redo for free and it has dev tools.
     - How would you implement position action states? (enhancers)
 
-CONCLUSION:
+## Conclusion
 We will be using Redux. But only for ALL GRAPHING/GRAMMAR functionality. Most component states will still be local or in some sort of manager. Redux is usful only if it is actually beneficial. There is no point to manage the state of the entire app, since the rest of the app don't really interact with each other much. If complexity rises elsewhere, this system would be already in-place to correct it (unless you find a better alternative). Hopefully this helps.
 
 ## Resources
-
 // THESE ARE GOOD ONES:
 - https://learn.co/lessons/react-stores 
 - https://www.freecodecamp.org/news/where-do-i-belong-a-guide-to-saving-react-component-data-in-state-store-static-and-this-c49b335e2a00/
@@ -100,6 +104,7 @@ We will be using Redux. But only for ALL GRAPHING/GRAMMAR functionality. Most co
 - https://redux.js.org/recipes/implementing-undo-history
 - https://reactjs.org/docs/context.html
 - https://redux-docs.netlify.com/basics/usage-with-react
+
 
 // YOU'LL NEED THESE TO IMPLEMENT:
 - https://react-redux.js.org/introduction/quick-start
