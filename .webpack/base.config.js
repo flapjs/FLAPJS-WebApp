@@ -29,7 +29,7 @@ module.exports = {
         // config files would need to be at the root directory.
         // For now, '.' will resolve from execution directory,
         // which the first webpack.config.js is at the root.
-        path: path.resolve('.', 'dist'),
+        path: path.resolve('.', 'build'),
         publicPath: '/',
         filename: '[name].js',
     },

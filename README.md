@@ -190,7 +190,7 @@ To "compile" the scripts for public distribution:
 npm run build
 ```
 
-**Note:** This will bundle all the resources and assets required into `dist`. It will also "uglify" the code to reduce size and apply other optimizations.
+**Note:** This will bundle all the resources and assets required into `build`. It will also "uglify" the code to reduce size and apply other optimizations.
 
 Then, open `index.html` in your web browser. Either by just opening the file itself or running the command:
 
@@ -240,7 +240,7 @@ It is recommended to write only a single `.mjs` file per function. And within ea
 ## Project Structure
 
 ### Entry point
-The entry point for the code is in `src/index.js` (if bundled, this will be referred to by `index.html` through `dist/bundle.js`).
+The entry point for the code is in `src/index.js` (if bundled, this will be referred to by `index.html` through `build/bundle.js`).
 
 This script maintains all session-specific resources. Unlike page-specific details, it handles any actions or mechanics applied globally through the session. More specifically, it handles the rendering loop, the page routing (custom built for efficiency), the update cycle, and the window load and unload events. For future implementations, any events triggered by these actions should be handled here.
 

@@ -137,7 +137,7 @@ Any script or link tag with the `inline` attribute in the generated HTML page by
 - Removes unused files from Webpack in the output directory.
 
 ## copy-webpack-plugin
-- Copies static resource files to the dist folder.
+- Copies static resource files to the build folder.
 - https://github.com/webpack-contrib/copy-webpack-plugin
 
 > **SETUP:**

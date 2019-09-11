@@ -39,7 +39,7 @@ module.exports = merge.smart(base, {
         hot: true,
         open: true,
         overlay: true,
-        contentBase: './dist',
+        contentBase: './build',
         port: 8008,
     },
 });

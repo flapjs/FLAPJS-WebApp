@@ -7,8 +7,8 @@ Here lies the components that form the foundation of Flap.js.
 We are building a web page. So here is our entry point for our clients.
 
 ```bash
-mkdir dist
-touch dist/index.html
+mkdir build
+touch build/index.html
 ```
 
 index.html
@@ -25,7 +25,7 @@ index.html
 </html>
 ```
 
-NOTE: Since index.html should be served to the public, it should be in the dist directory. Any other source files we will write for the app will be placed in the src directory. Further explanation of why we enforce this separation is explained below.
+NOTE: Since index.html should be served to the public, it should be in the build directory. Any other source files we will write for the app will be placed in the src directory. Further explanation of why we enforce this separation is explained below.
 
 We use git for version control. This way, nothing gets lost.
 
@@ -41,7 +41,7 @@ npm init
 
 NOTE: npm will generate a directory `node_modules`, `package.json`, and `package-lock.json` (later). However, node_modules should NOT be pushed remotely since it is usually specific to your machine. Therefore add `/node_modules/` to your `.gitignore` to satisfy this.
 
-We also use Webpack to bundle our many project scripts into manageable files. This will take all the files from the src directory, transform and bundle them, and output the result into the dist directory, next to the `index.html`.
+We also use Webpack to bundle our many project scripts into manageable files. This will take all the files from the src directory, transform and bundle them, and output the result into the build directory, next to the `index.html`.
 
 ```bash
 npm install --save-dev webpack webpack-cli webpack-dev-server
@@ -66,7 +66,7 @@ module.exports = {
         app: './src/main.js'
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'build'),
         publicPath: '/',
         filename: '[name].bundle.js',
     },
@@ -78,7 +78,7 @@ module.exports = {
         hotOnly: true,
         open: true,
         overlay: true,
-        contentBase: './dist',
+        contentBase: './build',
         port: 8008,
     }
 };
