@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DrawerLayout/> rendering renders correctly 1`] = `
+<div
+  className="container"
+  style={
+    Object {
+      "flexDirection": "row",
+    }
+  }
+>
+  <div
+    className="drawer  left open"
+    style={
+      Object {
+        "height": "100%",
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      className="handle"
+      onMouseDown={[Function]}
+      role="presentation"
+    />
+    <div
+      className="content"
+    />
+  </div>
+  <div
+    className="viewport"
+  />
+</div>
+`;

@@ -1,16 +1,16 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import Workspace from './Workspace.jsx';
+import DrawerLayout from './DrawerLayout.jsx';
 
 let wrapper;
 
 beforeEach(() =>
 {
-    wrapper = shallow(<Workspace/>);
+    wrapper = shallow(<DrawerLayout/>);
 });
 
-describe('<Workspace/> rendering', () =>
+describe('<DrawerLayout/> rendering', () =>
 {
     test('renders correctly', () =>
     {
@@ -18,12 +18,12 @@ describe('<Workspace/> rendering', () =>
     });
 });
 
-describe('<Workspace/> interaction', () =>
+describe('<DrawerLayout/> interaction', () =>
 {
     /** I promise I will test you soon... */
 });
 
-describe('<Workspace/> lifecycle', () =>
+describe('<DrawerLayout/> lifecycle', () =>
 {
     /** ...later. */
 });

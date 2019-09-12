@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<WorkspaceLayout/> rendering renders correctly 1`] = `
+<section
+  className="container "
+>
+  <div
+    className="foreground"
+  />
+  <div
+    className="background"
+  />
+</section>
+`;

@@ -19,13 +19,39 @@ exports[`<App/> rendering renders correctly 1`] = `
           params={Array []}
         />
       </p>
+      <button
+        onClick={[Function]}
+      />
     </nav>
     <div
       className="appcontent"
     >
-      <Workspace
-        renderSideBar={[Function]}
-      />
+      <WorkspaceLayout
+        renderBackground={[Function]}
+      >
+        <SideBarLayout
+          renderSideBar={[Function]}
+          side="right"
+        >
+          <DrawerLayout
+            open={false}
+            renderDrawer={[Function]}
+            side="right"
+          >
+            <div
+              style={
+                Object {
+                  "background": "white",
+                  "height": "100%",
+                  "width": "100%",
+                }
+              }
+            >
+              I am content
+            </div>
+          </DrawerLayout>
+        </SideBarLayout>
+      </WorkspaceLayout>
     </div>
   </LocalizationProvider>
 </div>

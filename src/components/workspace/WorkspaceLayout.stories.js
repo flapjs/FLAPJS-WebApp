@@ -3,12 +3,12 @@ import { storiesOf } from '@storybook/react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { propKnobs } from '@flapjs/util/storybook/PropKnobs.js';
 
-import Workspace from './Workspace.jsx';
+import WorkspaceLayout from './WorkspaceLayout.jsx';
 
-storiesOf('Workspace', module)
+storiesOf('WorkspaceLayout', module)
     .addDecorator(withKnobs)
     .add('playground', () => (
-        <Workspace
-            {...propKnobs(Workspace, 'Primary', 3)}
-            {...propKnobs(Workspace, 'HTML Attributes', 0, 3)}/>
+        <WorkspaceLayout
+            {...propKnobs(WorkspaceLayout, 'Primary', 1)}
+            {...propKnobs(WorkspaceLayout, 'HTML Attributes', 0, 1)}/>
     ));

@@ -22,178 +22,224 @@ exports[`Storyshots App playground 1`] = `
             hi
           </LocaleString>
         </p>
+        <button
+          onClick={[Function]}
+        />
       </nav>
       <div
         className="appcontent"
       >
-        <Workspace
-          renderSideBar={[Function]}
+        <WorkspaceLayout
+          renderBackground={[Function]}
         >
           <section
-            className="container"
+            className="container "
           >
             <div
               className="foreground"
             >
-              <nav
-                className="sidebar primary "
+              <SideBarLayout
+                renderSideBar={[Function]}
+                side="right"
               >
                 <div
-                  className="sidetab"
+                  className="container "
+                  style={
+                    Object {
+                      "flexDirection": "row-reverse",
+                    }
+                  }
                 >
-                  <button
-                    className="tab"
-                    onClick={[Function]}
-                  >
-                    <ForwardRef
-                      className="icon"
-                      color="#FFFFFF"
-                    >
-                      <span
-                        className="icon"
-                        color="#FFFFFF"
-                      />
-                    </ForwardRef>
-                  </button>
-                  <button
-                    className="tab"
-                    onClick={[Function]}
-                  >
-                    <ForwardRef
-                      className="icon"
-                      color="#FFFFFF"
-                    >
-                      <span
-                        className="icon"
-                        color="#FFFFFF"
-                      />
-                    </ForwardRef>
-                  </button>
-                  <button
-                    className="tab"
-                    onClick={[Function]}
-                  >
-                    <ForwardRef
-                      className="icon"
-                      color="#FFFFFF"
-                    >
-                      <span
-                        className="icon"
-                        color="#FFFFFF"
-                      />
-                    </ForwardRef>
-                  </button>
                   <div
-                    className="divider"
-                  />
-                  <button
-                    className="tab"
-                    onClick={[Function]}
+                    className="sidebar right"
                   >
-                    <ForwardRef
-                      className="icon"
-                      color="#FFFFFF"
+                    <div
+                      className="sidetab"
                     >
-                      <span
-                        className="icon"
-                        color="#FFFFFF"
+                      <button
+                        className="tab"
+                        onClick={[Function]}
+                      >
+                        <ForwardRef
+                          className="icon"
+                          color="#FFFFFF"
+                        >
+                          <span
+                            className="icon"
+                            color="#FFFFFF"
+                          />
+                        </ForwardRef>
+                      </button>
+                      <button
+                        className="tab"
+                        onClick={[Function]}
+                      >
+                        <ForwardRef
+                          className="icon"
+                          color="#FFFFFF"
+                        >
+                          <span
+                            className="icon"
+                            color="#FFFFFF"
+                          />
+                        </ForwardRef>
+                      </button>
+                      <button
+                        className="tab"
+                        onClick={[Function]}
+                      >
+                        <ForwardRef
+                          className="icon"
+                          color="#FFFFFF"
+                        >
+                          <span
+                            className="icon"
+                            color="#FFFFFF"
+                          />
+                        </ForwardRef>
+                      </button>
+                      <div
+                        className="divider"
                       />
-                    </ForwardRef>
-                  </button>
-                </div>
-              </nav>
-              <div
-                className="viewport"
-              />
-              <div
-                className="drawer open "
-              >
-                <div
-                  className="handle"
-                  onMouseDown={[Function]}
-                  role="presentation"
-                />
-                <div
-                  className="content"
-                />
-              </div>
-              <nav
-                className="sidebar secondary "
-              >
-                <div
-                  className="sidetab"
-                >
-                  <button
-                    className="tab"
-                    onClick={[Function]}
-                  >
-                    <ForwardRef
-                      className="icon"
-                      color="#FFFFFF"
-                    >
-                      <span
-                        className="icon"
-                        color="#FFFFFF"
-                      />
-                    </ForwardRef>
-                  </button>
-                  <button
-                    className="tab"
-                    onClick={[Function]}
-                  >
-                    <ForwardRef
-                      className="icon"
-                      color="#FFFFFF"
-                    >
-                      <span
-                        className="icon"
-                        color="#FFFFFF"
-                      />
-                    </ForwardRef>
-                  </button>
-                  <button
-                    className="tab"
-                    onClick={[Function]}
-                  >
-                    <ForwardRef
-                      className="icon"
-                      color="#FFFFFF"
-                    >
-                      <span
-                        className="icon"
-                        color="#FFFFFF"
-                      />
-                    </ForwardRef>
-                  </button>
+                      <button
+                        className="tab"
+                        onClick={[Function]}
+                      >
+                        <ForwardRef
+                          className="icon"
+                          color="#FFFFFF"
+                        >
+                          <span
+                            className="icon"
+                            color="#FFFFFF"
+                          />
+                        </ForwardRef>
+                      </button>
+                    </div>
+                  </div>
                   <div
-                    className="divider"
-                  />
-                  <button
-                    className="tab"
-                    onClick={[Function]}
+                    className="viewport"
                   >
-                    <ForwardRef
-                      className="icon"
-                      color="#FFFFFF"
+                    <DrawerLayout
+                      open={false}
+                      renderDrawer={[Function]}
+                      side="right"
                     >
-                      <span
-                        className="icon"
-                        color="#FFFFFF"
-                      />
-                    </ForwardRef>
-                  </button>
+                      <div
+                        className="container"
+                        style={
+                          Object {
+                            "flexDirection": "row-reverse",
+                          }
+                        }
+                      >
+                        <div
+                          className="drawer  right"
+                          style={
+                            Object {
+                              "height": "100%",
+                              "width": "100%",
+                            }
+                          }
+                        >
+                          <div
+                            className="handle"
+                            onMouseDown={[Function]}
+                            role="presentation"
+                          />
+                          <div
+                            className="content"
+                          >
+                            <div
+                              style={
+                                Object {
+                                  "height": "100%",
+                                  "width": "100%",
+                                }
+                              }
+                            >
+                              I am content
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          className="viewport"
+                        >
+                          <div
+                            style={
+                              Object {
+                                "background": "white",
+                                "height": "100%",
+                                "width": "100%",
+                              }
+                            }
+                          >
+                            I am content
+                          </div>
+                        </div>
+                      </div>
+                    </DrawerLayout>
+                  </div>
                 </div>
-              </nav>
+              </SideBarLayout>
             </div>
             <div
               className="background"
-            />
+            >
+              <div
+                style={
+                  Object {
+                    "background": "dodgerblue",
+                    "height": "100%",
+                    "width": "100%",
+                  }
+                }
+              />
+            </div>
           </section>
-        </Workspace>
+        </WorkspaceLayout>
       </div>
     </LocalizationProvider>
   </div>
 </App>
+`;
+
+exports[`Storyshots DrawerLayout playground 1`] = `
+<DrawerLayout
+  open={true}
+  side="left"
+>
+  <div
+    className="container"
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <div
+      className="drawer  left open"
+      style={
+        Object {
+          "height": "100%",
+          "width": "100%",
+        }
+      }
+    >
+      <div
+        className="handle"
+        onMouseDown={[Function]}
+        role="presentation"
+      />
+      <div
+        className="content"
+      />
+    </div>
+    <div
+      className="viewport"
+    />
+  </div>
+</DrawerLayout>
 `;
 
 exports[`Storyshots HelloWorld custom style 1`] = `
@@ -281,39 +327,39 @@ exports[`Storyshots HelloWorld with title 1`] = `
 </HelloWorld>
 `;
 
-exports[`Storyshots Workspace playground 1`] = `
-<Workspace>
+exports[`Storyshots SideBarLayout playground 1`] = `
+<SideBarLayout
+  side="left"
+>
+  <div
+    className="container "
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <div
+      className="sidebar left"
+    />
+    <div
+      className="viewport"
+    />
+  </div>
+</SideBarLayout>
+`;
+
+exports[`Storyshots WorkspaceLayout playground 1`] = `
+<WorkspaceLayout>
   <section
-    className="container"
+    className="container "
   >
     <div
       className="foreground"
-    >
-      <nav
-        className="sidebar primary "
-      />
-      <div
-        className="viewport"
-      />
-      <div
-        className="drawer open "
-      >
-        <div
-          className="handle"
-          onMouseDown={[Function]}
-          role="presentation"
-        />
-        <div
-          className="content"
-        />
-      </div>
-      <nav
-        className="sidebar secondary "
-      />
-    </div>
+    />
     <div
       className="background"
     />
   </section>
-</Workspace>
+</WorkspaceLayout>
 `;

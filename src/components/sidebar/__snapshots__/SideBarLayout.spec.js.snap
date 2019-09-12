@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SideBarLayout/> rendering renders correctly 1`] = `
+<div
+  className="container "
+  style={
+    Object {
+      "flexDirection": "row",
+    }
+  }
+>
+  <div
+    className="sidebar left"
+  />
+  <div
+    className="viewport"
+  />
+</div>
+`;
