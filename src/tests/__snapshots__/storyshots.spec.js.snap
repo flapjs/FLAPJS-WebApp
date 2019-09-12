@@ -24,13 +24,16 @@ exports[`Storyshots App playground 1`] = `
         </p>
         <button
           onClick={[Function]}
-        />
+        >
+          OPEN
+        </button>
       </nav>
       <div
         className="appcontent"
       >
         <WorkspaceLayout
           renderBackground={[Function]}
+          renderForeground={[Function]}
         >
           <section
             className="container "
@@ -54,7 +57,7 @@ exports[`Storyshots App playground 1`] = `
                     className="sidebar right"
                   >
                     <div
-                      className="sidetab"
+                      className="sidetab  horizontal"
                     >
                       <button
                         className="tab"
@@ -124,6 +127,14 @@ exports[`Storyshots App playground 1`] = `
                       open={false}
                       renderDrawer={[Function]}
                       side="right"
+                      snapBehavior="range"
+                      snapPoints={
+                        Array [
+                          30,
+                          50,
+                          100,
+                        ]
+                      }
                     >
                       <div
                         className="container"
@@ -138,7 +149,7 @@ exports[`Storyshots App playground 1`] = `
                           style={
                             Object {
                               "height": "100%",
-                              "width": "100%",
+                              "width": "30%",
                             }
                           }
                         >
@@ -153,12 +164,13 @@ exports[`Storyshots App playground 1`] = `
                             <div
                               style={
                                 Object {
+                                  "color": "white",
                                   "height": "100%",
                                   "width": "100%",
                                 }
                               }
                             >
-                              I am content
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in sem magna. Aliquam ultrices convallis cursus. In hac habitasse platea dictumst. Quisque eu tellus magna. Curabitur aliquam luctus ex. Maecenas purus arcu, tincidunt non sapien quis, finibus vestibulum ante. Curabitur vulputate et ligula in congue. Phasellus ac imperdiet libero, sagittis interdum elit. Suspendisse potenti.
                             </div>
                           </div>
                         </div>
@@ -168,13 +180,13 @@ exports[`Storyshots App playground 1`] = `
                           <div
                             style={
                               Object {
-                                "background": "white",
+                                "color": "white",
                                 "height": "100%",
                                 "width": "100%",
                               }
                             }
                           >
-                            I am content
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in sem magna. Aliquam ultrices convallis cursus. In hac habitasse platea dictumst. Quisque eu tellus magna. Curabitur aliquam luctus ex. Maecenas purus arcu, tincidunt non sapien quis, finibus vestibulum ante. Curabitur vulputate et ligula in congue. Phasellus ac imperdiet libero, sagittis interdum elit. Suspendisse potenti.
                           </div>
                         </div>
                       </div>
@@ -208,6 +220,14 @@ exports[`Storyshots DrawerLayout playground 1`] = `
 <DrawerLayout
   open={true}
   side="left"
+  snapBehavior="range"
+  snapPoints={
+    Array [
+      30,
+      50,
+      100,
+    ]
+  }
 >
   <div
     className="container"
@@ -222,7 +242,7 @@ exports[`Storyshots DrawerLayout playground 1`] = `
       style={
         Object {
           "height": "100%",
-          "width": "100%",
+          "width": "30%",
         }
       }
     >

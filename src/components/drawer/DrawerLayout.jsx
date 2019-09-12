@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Style from './DrawerLayout.module.css';
 
+// Out of 100%
+const INITIAL_DRAWER_SIZE = 30;
+
 /**
  * A React component that adds a collapsible and flexible
  * drawer with a viewport. It uses render props to delegate
@@ -14,7 +17,8 @@ class DrawerLayout extends React.Component
         super(props);
 
         this.state = {
-            size: 100,
+            // The size of the drawer, out of 100.
+            size: INITIAL_DRAWER_SIZE,
         };
 
         this.container = React.createRef();
@@ -22,6 +26,11 @@ class DrawerLayout extends React.Component
         this.onDrawerHandleDragBegin = this.onDrawerHandleDragBegin.bind(this);
         this.onDrawerHandleDragMove = this.onDrawerHandleDragMove.bind(this);
         this.onDrawerHandleDragEnd = this.onDrawerHandleDragEnd.bind(this);
+    }
+
+    onWindowResize()
+    {
+
     }
 
     onDrawerHandleDragBegin(e)
@@ -32,10 +41,14 @@ class DrawerLayout extends React.Component
 
     onDrawerHandleDragMove(e)
     {
+        const side = this.props.side;
+        const snapPoints = this.props.snapPoints;
+        const snapBehavior = this.props.snapBehavior;
+        const size = this.state.size;
         const boundingRect = this.container.current.getBoundingClientRect();
 
         let value;
-        switch(this.props.side)
+        switch(side)
         {
             case 'left':
                 value = (e.clientX - boundingRect.left) / boundingRect.width;
@@ -53,8 +66,26 @@ class DrawerLayout extends React.Component
                 throw new Error('Invalid drawer side for layout');
         }
 
+        // Make sure it is within range
         value = Math.min(Math.max(0, value * 100), 100);
-        if (Math.abs(this.state.size - value) > 0.1)
+
+        // Apply snap points
+        switch(snapBehavior)
+        {
+            case 'nearest':
+                value = applySnapPointsNearest(value, snapPoints);
+                break;
+            case 'range': {
+                const horizontal = side === 'left' || side === 'right';
+                value = applySnapPointsWithinRange(value, snapPoints, horizontal ? boundingRect.width : boundingRect.height, 30);
+                break;
+            }
+            default:
+                throw new Error(`Invalid snap behavior '${snapBehavior}'.`);
+        }
+
+        // Only update if it is a significant change
+        if (Math.abs(size - value) > 0.1)
         {
             this.setState({ size: value });
         }
@@ -64,6 +95,18 @@ class DrawerLayout extends React.Component
     {
         document.removeEventListener('mousemove', this.onDrawerHandleDragMove);
         document.removeEventListener('mouseup', this.onDrawerHandleDragEnd);
+    }
+
+    /** @override */
+    componentDidMount()
+    {
+
+    }
+
+    /** @override */
+    componentWillUnmount()
+    {
+
     }
 
     /** @override */
@@ -90,18 +133,22 @@ class DrawerLayout extends React.Component
                         'column-reverse'
         );
 
+        const containerStyle = {
+            flexDirection: containerFlexDirection
+        };
+
         return (
-            <div ref={this.container} className={Style.container}
-                style={{ flexDirection: containerFlexDirection }}>
+            <div ref={this.container}
+                className={Style.container}
+                style={containerStyle}>
                 <div
-                    className={
-                        Style.drawer
+                    className={Style.drawer
                         + ' ' + (props.className || '')
                         + ' ' + side
-                        + (open ? ' open' : '')
-                    }
+                        + (open ? ' open' : '')}
                     style={drawerStyle}>
-                    <div className={Style.handle} role="presentation"
+                    <div className={Style.handle}
+                        role="presentation"
                         onMouseDown={this.onDrawerHandleDragBegin}>
                     </div>
                     <div className={Style.content}>
@@ -116,6 +163,35 @@ class DrawerLayout extends React.Component
     }
 }
 
+function applySnapPointsWithinRange(value, snapPoints, maxValue = 100, range = 15)
+{
+    for(const snapPoint of snapPoints)
+    {
+        if ((Math.abs(value - snapPoint) * 0.01) * maxValue < range)
+        {
+            return snapPoint;
+        }
+    }
+    return value;
+}
+
+function applySnapPointsNearest(value, snapPoints)
+{
+    let minValue = value;
+    let minDistance = Infinity;
+    let distance;
+    for(const snapPoint of snapPoints)
+    {
+        distance = Math.abs(value - snapPoint);
+        if (distance < minDistance)
+        {
+            minDistance = distance;
+            minValue = snapPoint;
+        }
+    }
+    return minValue;
+}
+
 DrawerLayout.propTypes = {
     className: PropTypes.string,
     children: PropTypes.node,
@@ -127,11 +203,17 @@ DrawerLayout.propTypes = {
         'bottom',
     ]),
     renderDrawer: PropTypes.func,
-    renderViewport: PropTypes.func,
+    snapPoints: PropTypes.arrayOf(PropTypes.number),
+    snapBehavior: PropTypes.oneOf([
+        'nearest',
+        'range',
+    ]),
 };
 DrawerLayout.defaultProps = {
     side: 'left',
     open: true,
+    snapPoints: [INITIAL_DRAWER_SIZE, 50, 100],
+    snapBehavior: 'range',
 };
 
 export default DrawerLayout;

@@ -18,15 +18,17 @@ class WorkspaceLayout extends React.Component
     render()
     {
         const props = this.props;
-
+        
+        const renderForeground = props.renderForeground;
         const renderBackground = props.renderBackground;
         
         return (
             <section ref={this.container}
                 className={Style.container + ' ' + (props.className || '')}>
                 <div className={Style.foreground}>
-                    {props.children}
+                    {renderForeground && renderForeground(this)}
                 </div>
+                {props.children}
                 <div className={Style.background}>
                     {renderBackground && renderBackground(this)}
                 </div>
@@ -38,6 +40,7 @@ class WorkspaceLayout extends React.Component
 WorkspaceLayout.propTypes = {
     className: PropTypes.string,
     children: PropTypes.node,
+    renderForeground: PropTypes.func,
     renderBackground: PropTypes.func,
 };
 WorkspaceLayout.defaultProps = {

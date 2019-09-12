@@ -1,5 +1,9 @@
 @value APPBAR_HEIGHT: 3rem;
 
+:global(.resizing) * {
+    transition: none !important;
+}
+
 .container {
     display: grid;
     grid-template-rows: APPBAR_HEIGHT;
@@ -28,8 +32,17 @@
 
 .sidetab {
     display: flex;
-    flex-direction: column;
+    width: 100%;
     height: 100%;
+    align-content: center;
+}
+
+.sidetab:global(.horizontal) {
+    flex-direction: column;
+}
+
+.sidetab:global(.vertical) {
+    flex-direction: row;
 }
 
 .tab {
@@ -46,11 +59,16 @@
     background: rgba(255, 255, 255, 0.1);
 }
 
-.sidetab > .tab {
+.sidetab:global(.horizontal) .tab {
     margin: 0.5rem 0;
 }
 
+.sidetab:global(.vertical) .tab {
+    margin: 0 0.5rem;
+}
+
 .divider {
+    /** TODO: This should disappear if too small. */
     flex: 1;
 }
 

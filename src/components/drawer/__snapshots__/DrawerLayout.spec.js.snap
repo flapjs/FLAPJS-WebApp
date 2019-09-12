@@ -14,7 +14,7 @@ exports[`<DrawerLayout/> rendering renders correctly 1`] = `
     style={
       Object {
         "height": "100%",
-        "width": "100%",
+        "width": "30%",
       }
     }
   >
