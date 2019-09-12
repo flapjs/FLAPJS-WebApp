@@ -9,6 +9,17 @@ import DrawerLayout from '../drawer/DrawerLayout.jsx';
 import SideBarLayout from '../sidebar/SideBarLayout.jsx';
 import { WrenchIcon, RunningManIcon, BarChartIcon } from '../icons/Icons.js';
 
+/*
+import StyleInput from '../theme/sourceStyle/StyleInput.jsx';
+import ComputedStyleInput from '../theme/computedStyle/ComputedStyleInput.jsx';
+<StyleInput ref={this.sourceColor} source={() => this.drawer.current.container.current} name="--drawer-layout-handle" />
+<ComputedStyleInput
+    source={() => this.drawer.current.container.current}
+    name="--drawer-layout-background"
+    compute={this.sourceColor}
+    computeFunction="darken" />
+*/
+
 /**
  * A React component that can do anything you want. :D
  */
@@ -23,6 +34,10 @@ class App extends React.Component
             side: 'right',
             resize: false,
         };
+        
+        this.drawer = React.createRef();
+
+        this.sourceColor = React.createRef();
 
         //Used to manage resize updates
         this._resizeTimeout = null;
@@ -100,7 +115,8 @@ class App extends React.Component
                                 <div style={{background: 'dodgerblue', width: '100%', height: '100%'}}>
                                 </div>}
                             renderForeground={() =>
-                                <SideBarLayout side={this.state.side}
+                                <SideBarLayout
+                                    side={this.state.side}
                                     renderSideBar = {() =>
                                         <div className={Style.sidetab + ' ' + (horizontal ? ' horizontal' : ' vertical')}>
                                             <button className={Style.tab} onClick={() => this.setState({open: true})}>
@@ -118,7 +134,9 @@ class App extends React.Component
                                             </button>
                                         </div>
                                     }>
-                                    <DrawerLayout side={this.state.side}
+                                    <DrawerLayout
+                                        ref={this.drawer}
+                                        side={this.state.side}
                                         open={this.state.open}
                                         renderDrawer = {() =>
                                             <div style={{color: 'white', width: '100%', height: '100%'}}>

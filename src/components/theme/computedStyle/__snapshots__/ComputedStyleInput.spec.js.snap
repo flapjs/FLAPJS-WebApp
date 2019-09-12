@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ComputedStyleInput/> rendering renders correctly 1`] = `
+<StyleInput
+  disabled={false}
+  name=""
+  source={
+    Object {
+      "current": null,
+    }
+  }
+  type="color"
+/>
+`;

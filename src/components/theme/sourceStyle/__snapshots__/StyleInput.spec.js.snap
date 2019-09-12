@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<StyleInput/> rendering renders correctly 1`] = `
+<input
+  disabled={false}
+  onChange={[Function]}
+  type="color"
+  value="#FFFFFF"
+/>
+`;

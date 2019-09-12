@@ -229,6 +229,9 @@ With this, we can disable CSS modules for Jest tests. That means CSS class names
 > **SETUP:**
 To use it, add it to snapshotSerializers array in Jest config file.
 
+## react-test-renderer - NOT USED
+- Although storyshots "says" it needs react-test-renderer, it works fine without it... nothing changed when you install/uninstall it. Not sure what it is for, so it's currently not used.
+
 ## storybook/addon-storyshots
 - Allows automatic test snapshots for every Storybook story. This does require its own `.spec.js` file to be executed by Jest (which currently lives in `src/tests`).
 

@@ -13,7 +13,6 @@
     height: 3rem;
     color: white;
     align-items: center;
-    padding: 0 1rem;
 }
 
 .src-components-app-__App\.module__appbar--19YHx > * {
@@ -60,16 +59,44 @@
     height: 2rem;
 }
 
-.src-components-workspace-__Workspace\.module__container--3hZCH {
+article {
+    width: 100%;
+    height: 100%;
+    background: red;
+}
+
+.src-components-app-__App\.module__vertical--1KUpO {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.src-components-app-__App\.module__maincontent--1hDC6 {
+    flex: 1;
+}
+
+.src-components-app-__App\.module__pane--1gyI_ {
+    width: 100%;
+    height: 100%;
+}
+
+article nav {
+    background: white;
+}
+
+article main {
+    flex: 1;
+    background: blue;
+}
+
+.src-components-workspace-__WorkspaceLayout\.module__container--CLz1g {
     position: relative;
     width: 100%;
     height: 100%;
     overflow: hidden;
-
-    --drawer-width: 5rem;
 }
 
-.src-components-workspace-__Workspace\.module__background--2xniB {
+.src-components-workspace-__WorkspaceLayout\.module__background--1tGj1 {
     position: absolute;
     top: 0;
     left: 0;
@@ -77,7 +104,7 @@
     height: 100%;
 }
 
-.src-components-workspace-__Workspace\.module__foreground--2C-kB {
+.src-components-workspace-__WorkspaceLayout\.module__foreground--19Bj6 {
     display: flex;
     position: absolute;
     top: 0;
@@ -87,36 +114,133 @@
     z-index: 1000;
 }
 
-.src-components-workspace-__Workspace\.module__viewport--2PB2O {
+.src-components-drawer-__DrawerLayout\.module__container--BIhOu {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+.src-components-drawer-__DrawerLayout\.module__viewport--1z2p_ {
     flex: 1;
+    width: 100%;
+    height: 100%;
+
+    /** NOTE: This is not like the other viewports. It likes to hide... */
+    overflow: hidden;
 }
 
-.src-components-workspace-__Workspace\.module__drawer--2q3Ig {
-    display: none;
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
     background: #1D1E22;
-    min-width: 20%;
-    max-width: 100%;
-    width: var(--drawer-width);
+
+    /** Animated properties */
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+}
+
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt .src-components-drawer-__DrawerLayout\.module__content--20PP8 {
+    width: 100%;
     height: 100%;
+    overflow: auto;
 }
 
-.src-components-workspace-__Workspace\.module__drawer--2q3Ig.open {
-    display: block;
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt:not(.open) {
+    /** Forces drawer to exit the flow. */
+    position: absolute;
+
+    /** Animated properties */
+    transition: transform 0.3s ease;
 }
 
-.src-components-workspace-__Workspace\.module__sidebar--3xych {
+/** Sliiiide to the left! */
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.left:not(.open) {
+    transform: translateX(-100%);
+}
+
+/** Sliiiide to the right! */
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.right:not(.open) {
+    transform: translateX(100%);
+}
+
+.src-components-drawer-__DrawerLayout\.module__handle--xgh_c {
+    position: absolute;
+    width: 100%;
+    height: 100%;
     background: #333641;
-    width: 2rem;
-    height: 100%;
-    padding: 0 0.5rem;
-    z-index: 100;
-}
-
-.src-components-workspace-__Workspace\.module__handle--3S6v0 {
-    width: 12px;
-    height: 100%;
     border-left: 2px solid rgba(255, 255, 255, 0.05);
     border-right: 2px solid rgba(0, 0, 0, 0.4);
+    pointer-events: all;
+}
+
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt:not(.open) .src-components-drawer-__DrawerLayout\.module__handle--xgh_c {
+    pointer-events: none;
+}
+
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.left .src-components-drawer-__DrawerLayout\.module__handle--xgh_c {
+    right: 0;
+    width: 12px;
+    transform: translateX(6px);
+}
+
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.right .src-components-drawer-__DrawerLayout\.module__handle--xgh_c {
+    left: 0;
+    width: 12px;
+    transform: translateX(-6px);
+}
+
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.bottom .src-components-drawer-__DrawerLayout\.module__handle--xgh_c {
+    top: 0;
+    height: 12px;
+    transform: translateY(-6px);
+}
+
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.top .src-components-drawer-__DrawerLayout\.module__handle--xgh_c {
+    bottom: 0;
+    height: 12px;
+    transform: translateY(-6px);
+}
+
+.src-components-sidebar-__SideBarLayout\.module__container--IRmyy {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+.src-components-sidebar-__SideBarLayout\.module__sidebar--3QCjY {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
     background: #333641;
+    padding: 0.3rem;
+}
+
+.src-components-sidebar-__SideBarLayout\.module__viewport--YrPLf {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.src-components-sidebar-__SideBarLayout\.module__sidebar--3QCjY.left {
+    width: 2rem;
+}
+
+.src-components-sidebar-__SideBarLayout\.module__sidebar--3QCjY.right {
+    width: 2rem;
+}
+
+.src-components-sidebar-__SideBarLayout\.module__sidebar--3QCjY.top {
+    height: 2rem;
+}
+
+.src-components-sidebar-__SideBarLayout\.module__sidebar--3QCjY.bottom {
+    height: 2rem;
 }
 
