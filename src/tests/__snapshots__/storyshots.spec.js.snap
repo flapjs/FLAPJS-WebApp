@@ -217,49 +217,93 @@ exports[`Storyshots App playground 1`] = `
 `;
 
 exports[`Storyshots DrawerLayout playground 1`] = `
-<DrawerLayout
-  open={true}
-  side="left"
-  snapBehavior="range"
-  snapPoints={
-    Array [
-      30,
-      50,
-      100,
-    ]
-  }
->
+<div>
+  <style>
+    .sb-show-main { margin: 0; }
+  </style>
   <div
-    className="container"
     style={
       Object {
-        "flexDirection": "row",
+        "height": "100vh",
+        "width": "100vw",
       }
     }
   >
-    <div
-      className="drawer  left open"
-      style={
-        Object {
-          "height": "100%",
-          "width": "30%",
-        }
+    <DrawerLayout
+      open={true}
+      renderDrawer={[Function]}
+      side="left"
+      snapBehavior="range"
+      snapPoints={
+        Array [
+          30,
+          50,
+          100,
+        ]
       }
     >
       <div
-        className="handle"
-        onMouseDown={[Function]}
-        role="presentation"
-      />
-      <div
-        className="content"
-      />
-    </div>
-    <div
-      className="viewport"
-    />
+        className="container"
+        style={
+          Object {
+            "flexDirection": "row",
+          }
+        }
+      >
+        <div
+          className="drawer  left open"
+          style={
+            Object {
+              "height": "100%",
+              "width": "30%",
+            }
+          }
+        >
+          <div
+            className="handle"
+            onMouseDown={[Function]}
+            role="presentation"
+          />
+          <div
+            className="content"
+          >
+            <div
+              style={
+                Object {
+                  "color": "white",
+                  "height": "100%",
+                  "width": "100%",
+                }
+              }
+            >
+              I am drawer content. Yippee!!!
+            </div>
+          </div>
+        </div>
+        <div
+          className="viewport"
+        >
+          <div
+            style={
+              Object {
+                "color": "black",
+                "height": "100%",
+                "width": "100%",
+              }
+            }
+          >
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in sem magna. Aliquam ultrices convallis cursus. In hac habitasse platea dictumst. Quisque eu tellus magna. Curabitur aliquam luctus ex. Maecenas purus arcu, tincidunt non sapien quis, finibus vestibulum ante.
+            </p>
+            <p>
+              Curabitur vulputate et ligula in congue. Phasellus ac imperdiet libero, sagittis interdum elit. Suspendisse potenti.
+            </p>
+          </div>
+        </div>
+      </div>
+    </DrawerLayout>
   </div>
-</DrawerLayout>
+</div>
 `;
 
 exports[`Storyshots HelloWorld custom style 1`] = `
@@ -348,38 +392,119 @@ exports[`Storyshots HelloWorld with title 1`] = `
 `;
 
 exports[`Storyshots SideBarLayout playground 1`] = `
-<SideBarLayout
-  side="left"
->
+<div>
+  <style>
+    .sb-show-main { margin: 0; }
+  </style>
   <div
-    className="container "
     style={
       Object {
-        "flexDirection": "row",
+        "height": "100vh",
+        "width": "100vw",
       }
     }
   >
-    <div
-      className="sidebar left"
-    />
-    <div
-      className="viewport"
-    />
+    <SideBarLayout
+      renderSideBar={[Function]}
+      side="left"
+    >
+      <div
+        className="container "
+        style={
+          Object {
+            "flexDirection": "row",
+          }
+        }
+      >
+        <div
+          className="sidebar left"
+        >
+          <div>
+            <button>
+              1
+            </button>
+            <button>
+              2
+            </button>
+            <button>
+              3
+            </button>
+            <button>
+              4
+            </button>
+            <button>
+              5
+            </button>
+          </div>
+        </div>
+        <div
+          className="viewport"
+        >
+          <div
+            style={
+              Object {
+                "color": "black",
+                "height": "100%",
+                "width": "100%",
+              }
+            }
+          >
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in sem magna. Aliquam ultrices convallis cursus. In hac habitasse platea dictumst. Quisque eu tellus magna. Curabitur aliquam luctus ex. Maecenas purus arcu, tincidunt non sapien quis, finibus vestibulum ante.
+            </p>
+            <p>
+              Curabitur vulputate et ligula in congue. Phasellus ac imperdiet libero, sagittis interdum elit. Suspendisse potenti.
+            </p>
+          </div>
+        </div>
+      </div>
+    </SideBarLayout>
   </div>
-</SideBarLayout>
+</div>
 `;
 
 exports[`Storyshots WorkspaceLayout playground 1`] = `
-<WorkspaceLayout>
-  <section
-    className="container "
+<div>
+  <style>
+    .sb-show-main { margin: 0; }
+  </style>
+  <div
+    style={
+      Object {
+        "height": "100vh",
+        "width": "100vw",
+      }
+    }
   >
-    <div
-      className="foreground"
-    />
-    <div
-      className="background"
-    />
-  </section>
-</WorkspaceLayout>
+    <WorkspaceLayout
+      renderBackground={[Function]}
+      renderForeground={[Function]}
+    >
+      <section
+        className="container "
+      >
+        <div
+          className="foreground"
+        >
+          <div
+            style={
+              Object {
+                "background": "dodgerblue",
+              }
+            }
+          >
+            Sed diam est, fermentum et blandit id, blandit ut est. Morbi venenatis interdum magna id feugiat. Nunc vestibulum sit amet massa ut malesuada. Donec non tortor eu ex feugiat finibus et non dolor. Integer in leo lorem. Nam accumsan finibus libero vehicula viverra. Fusce pulvinar sapien in tincidunt fermentum. Quisque vehicula convallis ullamcorper. Etiam luctus volutpat nisi, ut feugiat risus maximus tempus. Donec tincidunt accumsan sem. Donec vitae orci nec nisi scelerisque mollis. Ut fermentum sem eu magna volutpat semper. Suspendisse porta dui sit amet nulla hendrerit tincidunt. Nam eget diam sed libero tincidunt volutpat in non nisl. Cras id venenatis magna, sed facilisis tellus. Morbi lacinia at ante at congue.
+          </div>
+        </div>
+        <div
+          className="background"
+        >
+          <div>
+            Duis imperdiet enim ut augue molestie elementum. In sagittis volutpat rutrum. Cras facilisis libero libero, in tempor ipsum rutrum vitae. Proin congue, odio eu consequat ultricies, lorem tellus blandit ex, a pulvinar ligula felis a nisi. Pellentesque fermentum a metus ac consectetur. In eros dolor, auctor nec elementum vel, iaculis vitae felis. In consectetur aliquam lorem, quis porta turpis molestie a. Quisque consectetur vulputate sem, nec cursus sem aliquet non. Pellentesque diam velit, ornare venenatis elit nec, pretium interdum libero. In vestibulum purus lectus, sit amet condimentum ante pellentesque vitae. Praesent ut tincidunt sapien, eu sollicitudin leo.
+          </div>
+        </div>
+      </section>
+    </WorkspaceLayout>
+  </div>
+</div>
 `;

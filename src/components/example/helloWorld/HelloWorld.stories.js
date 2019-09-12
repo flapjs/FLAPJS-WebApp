@@ -9,7 +9,7 @@ storiesOf('HelloWorld', module)
     .addDecorator(withKnobs)
     .add('playground', () => (
         <HelloWorld
-            {...propKnobs(HelloWorld, 'Primary', 3)}
+            {...propKnobs(HelloWorld, 'Props', 3)}
             {...propKnobs(HelloWorld, 'HTML Attributes', 0, 3)}/>
     ))
     .add('with title', () => (

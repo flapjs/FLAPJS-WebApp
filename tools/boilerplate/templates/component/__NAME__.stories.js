@@ -9,6 +9,6 @@ storiesOf('__NAME__', module)
     .addDecorator(withKnobs)
     .add('playground', () => (
         <__NAME__
-            {...propKnobs(__NAME__, 'Primary', 3)}
+            {...propKnobs(__NAME__, 'Props', 3)}
             {...propKnobs(__NAME__, 'HTML Attributes', 0, 3)}/>
     ));

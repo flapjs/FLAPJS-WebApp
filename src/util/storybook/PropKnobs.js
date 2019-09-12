@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { text, number, boolean, object, /* select */ } from '@storybook/addon-knobs';
+import { text, number, boolean, object, button, /* select */ } from '@storybook/addon-knobs';
 
 // Here's an existing implementation:
 // https://github.com/storybookjs/addon-smart-knobs/blob/master/src/index.js
@@ -8,17 +8,18 @@ function getKnobForPropType(propType)
 {
     switch(propType)
     {
-    case PropTypes.string: return text;
-    case PropTypes.number: return number;
-    case PropTypes.bool: return boolean;
-    case PropTypes.object: return object;
-    case PropTypes.array: return object;
-    case PropTypes.element: return text;
-    case PropTypes.node: return text;
-    // Not sure what this does yet...
-    case PropTypes.func: return (name, value) => value;
-    // Missing enum and union prop types... (use select)
-    default: return text;
+        case PropTypes.string: return text;
+        case PropTypes.number: return number;
+        case PropTypes.bool: return boolean;
+        case PropTypes.object: return object;
+        case PropTypes.array: return object;
+        case PropTypes.node: return text;
+        // You can't possible give it an element...
+        case PropTypes.element: return (name, value, rangeGroupID) => button(name, () => {}, rangeGroupID);
+        // You can't possible give it a function... (yet?)
+        case PropTypes.func: return (name, value, rangeGroupID) => button(name, () => {}, rangeGroupID);
+        // Missing enum and union prop types... (use select)
+        default: return text;
     }
 }
 
@@ -97,7 +98,10 @@ export function propKnobs(elementClass, rangeGroupID, rangeStart = -1, rangeEnd 
 
             let knob = getKnobForPropType(propType);
             // Set the prop... (if the defaultValue is not set, it is left blank)
-            result[propName] = knob(propName, defaultValue, rangeGroupID);
+            if (knob)
+            {
+                result[propName] = knob(propName, defaultValue, rangeGroupID);
+            }
         }
     }
     return result;
