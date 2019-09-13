@@ -31,8 +31,6 @@ AppSideBar.propTypes = {
     children: PropTypes.node,
     // TODO: Fix type.
     direction: PropTypes.string,
-    // TODO: Fix type.
-    app: PropTypes.any,
 };
 
 export default AppSideBar;

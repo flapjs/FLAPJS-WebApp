@@ -65,17 +65,16 @@ class App extends React.Component
                         <AppBar app={this}></AppBar>
                         {/** The entire workspace, including drawers, viewports, playgrounds, etc. */}
                         <AppWorkspace
-                            app={this}
                             /** This shouldn't be here... */
                             drawerOpen={this.state.open}
                             /** The playground the user can edit. This is usually the graph. */
-                            renderPlayground={props => <AppPlayground app={this} {...props}></AppPlayground>}
+                            renderPlayground={props => <AppPlayground {...props}></AppPlayground>}
                             /** The viewport over the playground. This is usually the overlays. */
-                            renderViewport={props => <AppViewport app={this} {...props}> {DeprecatedAppHandler.renderViewport(this)} </AppViewport>}
+                            renderViewport={props => <AppViewport {...props}> {DeprecatedAppHandler.renderViewport(this)} </AppViewport>}
                             /** The sidebar next to the drawer. This is usually the panel tabs. */
-                            renderSideBar={props => <AppSideBar app={this} {...props}></AppSideBar>}
+                            renderSideBar={props => <AppSideBar {...props}></AppSideBar>}
                             /** The drawer. This is usually the drawer panels. */
-                            renderDrawer={props => <AppDrawer app={this} {...props}></AppDrawer>}>
+                            renderDrawer={props => <AppDrawer {...props}></AppDrawer>}>
                         </AppWorkspace>
                     </DeprecatedServiceProviders>
                 </AppServiceProviders>

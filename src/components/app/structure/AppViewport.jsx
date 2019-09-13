@@ -12,8 +12,6 @@ function AppViewport(props)
 }
 AppViewport.propTypes = {
     children: PropTypes.node,
-    // TODO: Fix type.
-    app: PropTypes.any,
 };
 
 export default AppViewport;

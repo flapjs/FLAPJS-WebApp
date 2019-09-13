@@ -42,8 +42,6 @@ function AppDrawer(props)
 AppDrawer.propTypes = {
     className: PropTypes.string,
     children: PropTypes.node,
-    // TODO: Fix type.
-    app: PropTypes.any,
 };
 
 export default AppDrawer;

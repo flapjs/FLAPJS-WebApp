@@ -12,8 +12,6 @@ function AppPlayground(props)
 }
 AppPlayground.propTypes = {
     children: PropTypes.node,
-    // TODO: Fix type.
-    app: PropTypes.any,
 };
 
 export default AppPlayground;

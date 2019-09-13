@@ -56,8 +56,6 @@ AppWorkspace.propTypes = {
     renderSideBar: PropTypes.func,
     renderPlayground: PropTypes.func,
     drawerOpen: PropTypes.bool,
-    // TODO: Fix type.
-    app: PropTypes.any,
 };
 
 export default AppWorkspace;
