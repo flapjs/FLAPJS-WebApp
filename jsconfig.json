@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "baseUrl": "./",
+        "paths": {
+            "@flapjs/*": [
+                "src/*"
+            ]
+        }
+    },
+    "exclude": ["node_modules", "build", "docs", "coverage", "out"]
+}
