@@ -93,18 +93,6 @@ class DrawerLayout extends React.Component
     }
 
     /** @override */
-    componentDidMount()
-    {
-
-    }
-
-    /** @override */
-    componentWillUnmount()
-    {
-
-    }
-
-    /** @override */
     render()
     {
         const props = this.props;

@@ -50,3 +50,8 @@ This includes all tests that do not belong elsewhere. This usually means tests t
 This includes all utility files that do not serve any of the previous purposes.
 
 > **TL;DR** All utility functions usable globally.
+
+### deprecated
+This includes all deprecated code. Try not to use this if you don't have to.
+
+> **TL;DR** All deprecated functions to be avoided at all costs.
