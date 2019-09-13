@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { createContextState } from './NotificationContextState.js';
+import { createContextState } from './HotKeyContextState.js';
 
 // These options serves as a fallback if no provider is created...
 const DEFAULT_CONTEXT_VALUE = createContextState(null);
 
-// Behold...the notification context.
-const NotificationContext = React.createContext(DEFAULT_CONTEXT_VALUE);
+// Behold...the hotkey context.
+const HotKeyContext = React.createContext(DEFAULT_CONTEXT_VALUE);
 
-class NotificationProvider extends React.Component
+class HotKeyProvider extends React.Component
 {
     constructor(props)
     {
@@ -39,23 +39,23 @@ class NotificationProvider extends React.Component
     render()
     {
         return (
-            <NotificationContext.Provider value={this.state}>
+            <HotKeyContext.Provider value={this.state}>
                 {this.props.children}
-            </NotificationContext.Provider>
+            </HotKeyContext.Provider>
         );
     }
 }
-NotificationProvider.propTypes = {
+HotKeyProvider.propTypes = {
     children: PropTypes.node.isRequired,
     //TODO: Fix the type
     manager: PropTypes.any,
 };
-NotificationProvider.defaultProps = {
+HotKeyProvider.defaultProps = {
 };
 
 // ...and it's provider...
-export { NotificationProvider };
+export { HotKeyProvider };
 // ...and its consumers...
-export const NotificationConsumer = NotificationContext.Consumer;
+export const HotKeyConsumer = HotKeyContext.Consumer;
 // Not much use for the context, so it's just a default export.
-export default NotificationContext;
+export default HotKeyContext;

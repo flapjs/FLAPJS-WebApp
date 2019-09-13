@@ -1,0 +1,47 @@
+.hotkey_container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+
+    --color-viewport-back-detail: red;
+    --color-viewport-back: red;
+    --color-viewport-text: red;
+}
+
+.hotkey {
+    flex: 1;
+    padding: 0.2em;
+    border: 1px solid var(--color-viewport-back-detail);
+    border-radius: 0.5em;
+    background: var(--color-viewport-back);
+    color: var(--color-viewport-back-detail);
+    animation-name: hotkey-view-fadein;
+    animation-duration: 0.2s;
+}
+
+.hotkey:global(.active) {
+    color: var(--color-viewport-text);
+    animation-name: hotkey-view-wiggle;
+    animation-duration: 0.3s;
+}
+
+.hotkey_name {
+    float: right;
+    margin-left: 1em;
+    font-weight: bold;
+}
+
+@keyframes hotkey-view-fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes hotkey-view-wiggle {
+    0% { transform: translateX(0); }
+    30% { transform: translateX(2%); }
+    60% { transform: translateX(-2%); }
+    100% { transform: translateX(0); }
+}
