@@ -10,9 +10,7 @@ exports[`Storyshots App playground 1`] = `
     <h2>
       Flap.js
     </h2>
-    <p>
-      hi
-    </p>
+    <p />
     <button
       onClick={[Function]}
     >
@@ -131,132 +129,6 @@ exports[`Storyshots App playground 1`] = `
                           <span
                             className="title"
                           >
-                            Color
-                          </span>
-                          <span
-                            className="icon"
-                          />
-                        </button>
-                      </header>
-                      <main>
-                        <div
-                          className="container"
-                        >
-                          <label
-                            className="title"
-                          >
-                            Primary
-                          </label>
-                          <input
-                            disabled={false}
-                            onChange={[Function]}
-                            type="color"
-                            value=""
-                          />
-                        </div>
-                        <div
-                          className="container"
-                        >
-                          <label
-                            className="title"
-                          >
-                            Primary (Dark)
-                          </label>
-                          <input
-                            disabled={false}
-                            onChange={[Function]}
-                            type="color"
-                            value=""
-                          />
-                        </div>
-                        <div
-                          className="container"
-                        >
-                          <label
-                            className="title"
-                          >
-                            Accent
-                          </label>
-                          <input
-                            disabled={false}
-                            onChange={[Function]}
-                            type="color"
-                            value=""
-                          />
-                        </div>
-                        <div
-                          className="container"
-                        >
-                          <label
-                            className="title"
-                          >
-                            Accent (Dark)
-                          </label>
-                          <input
-                            disabled={false}
-                            onChange={[Function]}
-                            type="color"
-                            value=""
-                          />
-                        </div>
-                        <div
-                          className="container"
-                        >
-                          <label
-                            className="title"
-                          >
-                            Main Content
-                          </label>
-                          <input
-                            disabled={false}
-                            onChange={[Function]}
-                            type="color"
-                            value=""
-                          />
-                        </div>
-                      </main>
-                    </section>
-                    <section
-                      className="container  open"
-                    >
-                      <header>
-                        <button
-                          className="dropdown"
-                          onClick={[Function]}
-                        >
-                          <span
-                            className="title"
-                          >
-                            About
-                          </span>
-                          <span
-                            className="icon"
-                          />
-                        </button>
-                      </header>
-                      <main>
-                        <p>
-                          I am content :D
-                        </p>
-                        <p>
-                          Aenean libero orci, mattis ut ullamcorper eu, scelerisque et augue. Nam egestas vestibulum interdum. Integer ligula nunc, efficitur vitae velit sed, tristique cursus ligula. Aliquam est est, consectetur quis turpis a, luctus ultrices odio. Morbi a feugiat mi. Fusce orci dolor, maximus quis eros non, placerat accumsan tellus. Nam a lectus vitae nisl scelerisque ultrices in vitae erat.
-                        </p>
-                        <p>
-                          Sed auctor, augue non sodales euismod, metus nulla congue ex, sit amet rhoncus metus turpis ut elit. Sed vitae rutrum augue. Etiam dictum ornare tortor sed tristique. Cras quis velit nisl. Nulla rhoncus lacus sit amet interdum consectetur. Pellentesque aliquam consequat vehicula. Sed eu dignissim eros. Donec rhoncus consectetur ante, sit amet pharetra urna tempor sed. In scelerisque ligula mi. Nam gravida maximus ex, consequat ultricies nisi molestie non. Maecenas id semper eros.
-                        </p>
-                      </main>
-                    </section>
-                    <section
-                      className="container  open"
-                    >
-                      <header>
-                        <button
-                          className="dropdown"
-                          onClick={[Function]}
-                        >
-                          <span
-                            className="title"
-                          >
                             Hello World
                           </span>
                           <span
@@ -360,16 +232,18 @@ exports[`Storyshots ComputedStyleInput playground 1`] = `
     Hello.
   </div>
   <input
+    className=""
     disabled={false}
     onChange={[Function]}
     type="color"
-    value=""
+    value={null}
   />
   <input
+    className=""
     disabled={false}
     onChange={[Function]}
     type="color"
-    value=""
+    value={null}
   />
 </div>
 `;
@@ -613,10 +487,11 @@ exports[`Storyshots StyleInput playground 1`] = `
     Hiya.
   </div>
   <input
+    className=""
     disabled={false}
     onChange={[Function]}
     type="color"
-    value=""
+    value={null}
   />
 </div>
 `;

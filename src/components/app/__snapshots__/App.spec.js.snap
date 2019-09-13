@@ -4,10 +4,8 @@ exports[`<App/> rendering renders correctly 1`] = `
 <div
   className="container"
 >
-  <LocalizationProvider
-    localeCode="en"
-  >
-    <nav
+  <AppServiceProviders>
+    <AppBar
       className="appbar"
     >
       <h2>
@@ -24,13 +22,14 @@ exports[`<App/> rendering renders correctly 1`] = `
       >
         OPEN
       </button>
-    </nav>
-    <FlexibleOrientationLayout
-      resizeDelay={300}
-      resizeMediaQuery="(max-width: 500px)"
-    >
-      <Component />
-    </FlexibleOrientationLayout>
-  </LocalizationProvider>
+    </AppBar>
+    <AppWorkspace
+      drawerOpen={true}
+      renderDrawer={[Function]}
+      renderPlayground={[Function]}
+      renderSideBar={[Function]}
+      renderViewport={[Function]}
+    />
+  </AppServiceProviders>
 </div>
 `;
