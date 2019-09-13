@@ -1,0 +1,25 @@
+.notifications_container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    max-height: 100%;
+    overflow-y: scroll;
+    pointer-events: auto;
+
+    /** CSS variables */
+    --color-surface-dark: red;
+    --color-surface-lite: blue;
+    --color-surface-warning-dark: red;
+    --color-surface-warning: red;
+    --color-surface-error-dark: red;
+    --color-surface-error: red;
+    --color-surface-success-dark: red;
+    --color-surface-success: red;
+}
+
+.notifications_container > * {
+    margin: 0.5em;
+    width: 12em;
+    box-shadow: 2px 2px 5px -2px rgba(0, 0, 0, 0.3);
+}

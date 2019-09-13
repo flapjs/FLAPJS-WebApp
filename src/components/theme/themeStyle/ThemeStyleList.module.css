@@ -1,0 +1,13 @@
+.container {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.groupEntry > label {
+    border-bottom: 1px solid white;
+}
+
+.computedEntry {
+    margin-left: 1rem;
+}

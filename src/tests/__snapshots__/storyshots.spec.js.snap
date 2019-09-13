@@ -193,6 +193,20 @@ exports[`Storyshots App playground 1`] = `
                     }
                   }
                 >
+                  <div
+                    className="notifications_container undefined"
+                  >
+                    <div
+                      className="notification_container undefined undefined"
+                    >
+                      <p>
+                        Welcome to Flap.js!
+                      </p>
+                      <button
+                        onClick={[Function]}
+                      />
+                    </div>
+                  </div>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in sem magna. Aliquam ultrices convallis cursus. In hac habitasse platea dictumst. Quisque eu tellus magna. Curabitur aliquam luctus ex. Maecenas purus arcu, tincidunt non sapien quis, finibus vestibulum ante. Curabitur vulputate et ligula in congue. Phasellus ac imperdiet libero, sagittis interdum elit. Suspendisse potenti.
                 </div>
               </div>
@@ -207,11 +221,14 @@ exports[`Storyshots App playground 1`] = `
           style={
             Object {
               "background": "dodgerblue",
+              "fontSize": "4rem",
               "height": "100%",
               "width": "100%",
             }
           }
-        />
+        >
+          I am background text :D
+        </div>
       </div>
     </section>
   </div>
