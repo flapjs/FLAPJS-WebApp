@@ -122,7 +122,7 @@ export function changeLocale(provider, localeCode)
     
     loadLocale(localeCode).then(result =>
     {
-        if (!provider.shouldUpdateLocale) return;
+        if (!provider.shouldUpdateAsync) return;
 
         // When it is done, force a re-render...
         if (!result)
@@ -136,7 +136,7 @@ export function changeLocale(provider, localeCode)
     });
     
     // Force a re-render to show the transition strings...
-    if (!provider.shouldUpdateLocale) return;
+    if (!provider.shouldUpdateAsync) return;
     provider.setState({ localeCode });
 }
 

@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import * as LocalizationHandler from './LocalizationHandler.js';
+import { createContextState } from './LocalizationContextState.js';
 
 // These options serves as a fallback if no provider is created...
-const DEFAULT_CONTEXT_VALUE = createLocalizationContextState(null);
+const DEFAULT_CONTEXT_VALUE = createContextState(null);
 
 // Behold...the localization context.
 const LocalizationContext = React.createContext(DEFAULT_CONTEXT_VALUE);
 
-// ...and it's provider...
 class LocalizationProvider extends React.Component
 {
     constructor(props)
@@ -17,10 +16,10 @@ class LocalizationProvider extends React.Component
         super(props);
 
         // This makes sure that async calls do not modify component after it has been unmounted.
-        this.shouldUpdateLocale = true;
+        this.shouldUpdateAsync = true;
 
         // This should match the expected shape for the consumers.
-        this.state = createLocalizationContextState(this);
+        this.state = createContextState(this);
     }
 
     /** @override */
@@ -33,7 +32,7 @@ class LocalizationProvider extends React.Component
     componentWillUnmount()
     {
         // Don't update this component anymore, cause IT'S DEAD!
-        this.shouldUpdateLocale = false;
+        this.shouldUpdateAsync = false;
     }
 
     /** @override */
@@ -54,17 +53,7 @@ LocalizationProvider.defaultProps = {
     localeCode: DEFAULT_CONTEXT_VALUE.localeCode,
 };
 
-/** Creates a context state. This helps maintain a consistant shape for all localization contexts. */
-function createLocalizationContextState(provider, defaultLocaleCode = '???')
-{
-    return {
-        localeCode: defaultLocaleCode,
-        getLocaleString: LocalizationHandler.getLocaleString.bind(null, provider),
-        hasLocaleString: LocalizationHandler.hasLocaleString.bind(null, provider),
-        changeLocale: LocalizationHandler.changeLocale.bind(null, provider),
-    };
-}
-
+// ...and it's provider...
 export { LocalizationProvider };
 // ...and its consumers...
 export const LocalizationConsumer = LocalizationContext.Consumer;
