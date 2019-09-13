@@ -1,0 +1,206 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App/> rendering renders correctly 1`] = `
+<div
+  className="container"
+>
+  <AppServiceProviders>
+    <DeprecatedServiceProviders
+      app={
+        App {
+          "_notificationManager": NotificationManager {
+            "_layouts": Map {
+              "default" => [Function],
+              "warning" => [Function],
+              "error" => [Function],
+              "success" => [Function],
+              "sequence" => [Function],
+            },
+            "_notificationMap": Map {
+              0 => Notification {
+                "_id": 0,
+                "_layoutID": null,
+                "_message": "Welcome to Flap.js!",
+                "_notificationManager": [Circular],
+                "_props": Object {},
+                "_tags": Array [],
+              },
+            },
+            "_notifications": Array [
+              Notification {
+                "_id": 0,
+                "_layoutID": null,
+                "_message": "Welcome to Flap.js!",
+                "_notificationManager": [Circular],
+                "_props": Object {},
+                "_tags": Array [],
+              },
+            ],
+            "provider": null,
+          },
+          "context": Object {},
+          "props": Object {},
+          "refs": Object {},
+          "setState": [Function],
+          "state": Object {
+            "open": true,
+          },
+          "updater": Updater {
+            "_callbacks": Array [],
+            "_renderer": ReactShallowRenderer {
+              "_context": Object {},
+              "_didScheduleRenderPhaseUpdate": false,
+              "_dispatcher": Object {
+                "readContext": [Function],
+                "useCallback": [Function],
+                "useContext": [Function],
+                "useDebugValue": [Function],
+                "useEffect": [Function],
+                "useImperativeHandle": [Function],
+                "useLayoutEffect": [Function],
+                "useMemo": [Function],
+                "useReducer": [Function],
+                "useRef": [Function],
+                "useState": [Function],
+              },
+              "_element": <App />,
+              "_firstWorkInProgressHook": null,
+              "_forcedUpdate": false,
+              "_instance": [Circular],
+              "_isReRender": false,
+              "_newState": null,
+              "_numberOfReRenders": 0,
+              "_renderPhaseUpdates": null,
+              "_rendered": <div
+                className="container"
+              >
+                <AppServiceProviders>
+                  <DeprecatedServiceProviders
+                    app={[Circular]}
+                  >
+                    <AppBar
+                      app={[Circular]}
+                    />
+                    <AppWorkspace
+                      drawerOpen={true}
+                      renderDrawer={[Function]}
+                      renderPlayground={[Function]}
+                      renderSideBar={[Function]}
+                      renderViewport={[Function]}
+                    />
+                  </DeprecatedServiceProviders>
+                </AppServiceProviders>
+              </div>,
+              "_rendering": false,
+              "_updater": [Circular],
+              "_workInProgressHook": null,
+            },
+          },
+        }
+      }
+    >
+      <AppBar
+        app={
+          App {
+            "_notificationManager": NotificationManager {
+              "_layouts": Map {
+                "default" => [Function],
+                "warning" => [Function],
+                "error" => [Function],
+                "success" => [Function],
+                "sequence" => [Function],
+              },
+              "_notificationMap": Map {
+                0 => Notification {
+                  "_id": 0,
+                  "_layoutID": null,
+                  "_message": "Welcome to Flap.js!",
+                  "_notificationManager": [Circular],
+                  "_props": Object {},
+                  "_tags": Array [],
+                },
+              },
+              "_notifications": Array [
+                Notification {
+                  "_id": 0,
+                  "_layoutID": null,
+                  "_message": "Welcome to Flap.js!",
+                  "_notificationManager": [Circular],
+                  "_props": Object {},
+                  "_tags": Array [],
+                },
+              ],
+              "provider": null,
+            },
+            "context": Object {},
+            "props": Object {},
+            "refs": Object {},
+            "setState": [Function],
+            "state": Object {
+              "open": true,
+            },
+            "updater": Updater {
+              "_callbacks": Array [],
+              "_renderer": ReactShallowRenderer {
+                "_context": Object {},
+                "_didScheduleRenderPhaseUpdate": false,
+                "_dispatcher": Object {
+                  "readContext": [Function],
+                  "useCallback": [Function],
+                  "useContext": [Function],
+                  "useDebugValue": [Function],
+                  "useEffect": [Function],
+                  "useImperativeHandle": [Function],
+                  "useLayoutEffect": [Function],
+                  "useMemo": [Function],
+                  "useReducer": [Function],
+                  "useRef": [Function],
+                  "useState": [Function],
+                },
+                "_element": <App />,
+                "_firstWorkInProgressHook": null,
+                "_forcedUpdate": false,
+                "_instance": [Circular],
+                "_isReRender": false,
+                "_newState": null,
+                "_numberOfReRenders": 0,
+                "_renderPhaseUpdates": null,
+                "_rendered": <div
+                  className="container"
+                >
+                  <AppServiceProviders>
+                    <DeprecatedServiceProviders
+                      app={[Circular]}
+                    >
+                      <AppBar
+                        app={[Circular]}
+                      />
+                      <AppWorkspace
+                        drawerOpen={true}
+                        renderDrawer={[Function]}
+                        renderPlayground={[Function]}
+                        renderSideBar={[Function]}
+                        renderViewport={[Function]}
+                      />
+                    </DeprecatedServiceProviders>
+                  </AppServiceProviders>
+                </div>,
+                "_rendering": false,
+                "_updater": [Circular],
+                "_workInProgressHook": null,
+              },
+            },
+          }
+        }
+      />
+      <AppWorkspace
+        drawerOpen={true}
+        renderDrawer={[Function]}
+        renderPlayground={[Function]}
+        renderSideBar={[Function]}
+        renderViewport={[Function]}
+      />
+    </DeprecatedServiceProviders>
+  </AppServiceProviders>
+</div>
+`;

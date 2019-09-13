@@ -1,14 +1,21 @@
+/* eslint-disable import/first */
 import React from 'react';
 import { shallow } from 'enzyme';
 
+jest.mock('@flapjs/util/MathHelper.js', () => ({
+    __esModule: true,
+    uuid: jest.fn(),
+}));
+
+import { uuid } from '@flapjs/util/MathHelper.js';
 import App from './App.jsx';
 
-// TODO: Remove this "eslint-disable" in the future.
-// eslint-disable-next-line no-unused-vars
 let wrapper;
+let nextUUID = 0;
 
 beforeEach(() =>
 {
+    uuid.mockImplementation(() => nextUUID++);
     wrapper = shallow(<App/>);
 });
 
@@ -16,11 +23,7 @@ describe('<App/> rendering', () =>
 {
     test('renders correctly', () =>
     {
-        // NOTE: This doesn't really do anything other
-        // than tell us what we already know.
-        // We should write a proper test instead.
-        
-        // expect(wrapper).toMatchSnapshot();
+        expect(wrapper).toMatchSnapshot();
     });
 });
 

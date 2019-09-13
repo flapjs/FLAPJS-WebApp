@@ -5,7 +5,7 @@ exports[`Storyshots App playground 1`] = `
   className="container"
 >
   <nav
-    className="appbar"
+    className="appbar "
   >
     <h2>
       Flap.js
@@ -110,6 +110,7 @@ exports[`Storyshots App playground 1`] = `
                   className="content"
                 >
                   <div
+                    className=""
                     style={
                       Object {
                         "color": "white",
@@ -193,6 +194,8 @@ exports[`Storyshots App playground 1`] = `
                     }
                   }
                 >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in sem magna. Aliquam ultrices convallis cursus. In hac habitasse platea dictumst. Quisque eu tellus magna. Curabitur aliquam luctus ex. Maecenas purus arcu, tincidunt non sapien quis, finibus vestibulum ante. Curabitur vulputate et ligula in congue. Phasellus ac imperdiet libero, sagittis interdum elit. Suspendisse potenti.
+                   
                   <div
                     className="notifications_container undefined"
                   >
@@ -207,7 +210,7 @@ exports[`Storyshots App playground 1`] = `
                       />
                     </div>
                   </div>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in sem magna. Aliquam ultrices convallis cursus. In hac habitasse platea dictumst. Quisque eu tellus magna. Curabitur aliquam luctus ex. Maecenas purus arcu, tincidunt non sapien quis, finibus vestibulum ante. Curabitur vulputate et ligula in congue. Phasellus ac imperdiet libero, sagittis interdum elit. Suspendisse potenti.
+                   
                 </div>
               </div>
             </div>
