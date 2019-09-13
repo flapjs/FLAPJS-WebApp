@@ -1,0 +1,27 @@
+.editor_container {
+    position: absolute;
+    display: none;
+    padding: 0.5em;
+    background: var(--color-background-lite);
+    border-radius: 0.5em;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.editor_container:global(.open) {
+    display: block;
+}
+
+.editor_container input,
+.editor_container textarea {
+    outline: none;
+    border: none;
+    background: none;
+    border-bottom: 1px solid black;
+    text-align: center;
+    font-size: 1.5em;
+    width: 4em;
+}
+
+.tray_container {
+    /** Not sure what goes here */
+}

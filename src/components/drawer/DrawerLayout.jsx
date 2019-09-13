@@ -28,11 +28,6 @@ class DrawerLayout extends React.Component
         this.onDrawerHandleDragEnd = this.onDrawerHandleDragEnd.bind(this);
     }
 
-    onWindowResize()
-    {
-
-    }
-
     onDrawerHandleDragBegin(e)
     {
         document.addEventListener('mousemove', this.onDrawerHandleDragMove);

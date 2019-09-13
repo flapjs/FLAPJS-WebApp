@@ -2,3 +2,9 @@ export { default as RunningManIcon } from '@flapjs/assets/icons/running-man.svg'
 export { default as BarChartIcon } from '@flapjs/assets/icons/bar-chart.svg';
 export { default as WrenchIcon } from '@flapjs/assets/icons/wrench.svg';
 export { default as DropdownIcon } from '@flapjs/assets/icons/dropdown.svg';
+export { default as PinpointIcon } from '@flapjs/assets/icons/pinpoint.svg';
+export { default as PencilIcon } from '@flapjs/assets/icons/pencil.svg';
+export { default as MoveIcon } from '@flapjs/assets/icons/move.svg';
+export { default as TrashCanDetailedIcon } from '@flapjs/assets/icons/trash-can-detailed.svg';
+export { default as ZoomInIcon } from '@flapjs/assets/icons/zoom-in.svg';
+export { default as ZoomOutIcon } from '@flapjs/assets/icons/zoom-out.svg';
