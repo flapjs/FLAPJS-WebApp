@@ -95,7 +95,15 @@ class StyleInput extends React.Component
         const element = getElementFromRef(this.props.source);
         const name = this.props.name;
         const style = window.getComputedStyle(element);
-        this.setState({ value: style.getPropertyValue(name) });
+        const value = style.getPropertyValue(name);
+        if (value)
+        {
+            this.setState({ value: value.trim() });
+        }
+        else
+        {
+            this.setState({ value: null });
+        }
     }
 
     /** @override */
@@ -110,7 +118,7 @@ class StyleInput extends React.Component
         
         return (
             <input
-                className={props.className}
+                className={props.className || ''}
                 type={type}
                 value={value}
                 disabled={disabled}

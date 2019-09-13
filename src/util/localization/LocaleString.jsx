@@ -22,13 +22,24 @@ class LocaleString extends React.Component
 
         return (
             <LocalizationConsumer>
-                {context => context.getLocaleString(entity, ...params)}
+                {context =>
+                {
+                    if (!props.children || props.children.length <= 0 || context.hasLocaleString(entity))
+                    {
+                        return context.getLocaleString(entity, ...params);
+                    }
+                    else
+                    {
+                        return props.children;
+                    }
+                }}
             </LocalizationConsumer>
         );
     }
 }
 
 LocaleString.propTypes = {
+    children: PropTypes.string,
     entity: PropTypes.string.isRequired,
     params: PropTypes.arrayOf(PropTypes.string),
 };
