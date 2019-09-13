@@ -42,7 +42,7 @@ function AppWorkspace(props)
                                 </DrawerLayout>
                             </SideBarLayout>
                         }>
-
+                        {props.children}
                     </WorkspaceLayout>
                 );
             }}
@@ -55,8 +55,9 @@ AppWorkspace.propTypes = {
     renderDrawer: PropTypes.func,
     renderSideBar: PropTypes.func,
     renderPlayground: PropTypes.func,
-    drawerRef: PropTypes.any,
     drawerOpen: PropTypes.bool,
+    // TODO: Fix type.
+    app: PropTypes.any,
 };
 
 export default AppWorkspace;
