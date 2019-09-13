@@ -12,3 +12,10 @@ registerRequireContextHook();
 // Setup jest-fetch-mock
 global.fetch = require('jest-fetch-mock');
 fetch.mockResponse('');
+
+// Mock window.getComputedStyle()
+Object.defineProperty(window, 'getComputedStyle', {
+    value: () => ({
+        getPropertyValue(prop) { return ''; }
+    })
+});

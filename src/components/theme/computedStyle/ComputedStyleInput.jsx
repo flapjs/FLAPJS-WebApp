@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import StyleInput from '../sourceStyle/StyleInput.jsx';
 
-import * as ColorHelper from '../ColorHelper.js';
+import { getElementFromRef } from '@flapjs/util/ElementHelper.js';
+import { TinyColor } from '@ctrl/tinycolor';
 
 /**
  * A React component that can compute and control a style
@@ -22,16 +23,7 @@ class ComputedStyleInput extends React.Component
     /** @override */
     componentDidMount()
     {
-        let computeElement;
-        if (typeof this.props.compute === 'function')
-        {
-            computeElement = this.props.compute.call(null);
-        }
-        else
-        {
-            computeElement = this.props.compute.current;
-        }
-
+        const computeElement = getElementFromRef(this.props.compute);
         if (computeElement)
         {
             computeElement.addEventListener('change', this.onComputeChange);
@@ -41,16 +33,7 @@ class ComputedStyleInput extends React.Component
     /** @override */
     componentWillUnmount()
     {
-        let computeElement;
-        if (typeof this.props.compute === 'function')
-        {
-            computeElement = this.props.compute.call(null);
-        }
-        else
-        {
-            computeElement = this.props.compute.current;
-        }
-
+        const computeElement = getElementFromRef(this.props.compute);
         if (computeElement)
         {
             computeElement.removeEventListener('change', this.onComputeChange);
@@ -69,13 +52,13 @@ class ComputedStyleInput extends React.Component
             switch(computeFunction)
             {
                 case 'darken':
-                    this.self.current.setValue(darkenHEX(e.value));
+                    this.self.current.setValue(new TinyColor(e.value).darken(20).toHexString());
                     break;
                 case 'lighten':
-                    this.self.current.setValue(lightenHEX(e.value));
+                    this.self.current.setValue(new TinyColor(e.value).brighten(20).toHexString());
                     break;
                 case 'invert':
-                    this.self.current.setValue(invertHEX(e.value));
+                    this.self.current.setValue(new TinyColor(e.value).complement().toHexString());
                     break;
                 case 'copy':
                     this.self.current.setValue(e.value);
@@ -99,39 +82,9 @@ class ComputedStyleInput extends React.Component
                 name={props.name}
                 type={props.type}
                 disabled={props.disabled}
-                onChange={props.onChange}/>
+                onChange={props.onChange} />
         );
     }
-}
-
-function darkenHEX(hex)
-{
-    //v < 0.15 ? lighten : darken
-    const color = [];
-    const inverted = [];
-    ColorHelper.HEXtoRGB(hex, color);
-    ColorHelper.invertRGB(color, true, inverted);
-    ColorHelper.blendRGB(0.2, color, inverted, color);
-    return ColorHelper.RGBtoHEX(color);
-}
-
-function lightenHEX(hex)
-{
-    //v < 0.15 ? lighten : darken
-    const color = [];
-    const inverted = [];
-    ColorHelper.HEXtoRGB(hex, color);
-    ColorHelper.invertRGB(color, true, inverted);
-    ColorHelper.blendRGB(0.39, color, inverted, color);
-    return ColorHelper.RGBtoHEX(color);
-}
-
-function invertHEX(hex)
-{
-    const color = [];
-    ColorHelper.HEXtoRGB(hex, color);
-    ColorHelper.invertRGB(color, false, color);
-    return ColorHelper.RGBtoHEX(color);
 }
 
 ComputedStyleInput.propTypes = {

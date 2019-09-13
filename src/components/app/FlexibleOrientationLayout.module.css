@@ -1,0 +1,4 @@
+.container:global(.resizing) * {
+    /** Disable transitions while resizing in a flexible orientation layout */
+    transition: none !important;
+}

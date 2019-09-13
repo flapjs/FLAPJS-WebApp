@@ -19,15 +19,19 @@
     margin: 0 1rem;
 }
 
-.src-components-app-__App\.module__appcontent--2H8I3 {
-    grid-area: 2 / 1;
-    background: black;
-}
-
 .src-components-app-__App\.module__sidetab--1n6Yp {
     display: flex;
-    flex-direction: column;
+    width: 100%;
     height: 100%;
+    align-content: center;
+}
+
+.src-components-app-__App\.module__sidetab--1n6Yp.horizontal {
+    flex-direction: column;
+}
+
+.src-components-app-__App\.module__sidetab--1n6Yp.vertical {
+    flex-direction: row;
 }
 
 .src-components-app-__App\.module__tab--2l3Wb {
@@ -44,11 +48,16 @@
     background: rgba(255, 255, 255, 0.1);
 }
 
-.src-components-app-__App\.module__sidetab--1n6Yp > .src-components-app-__App\.module__tab--2l3Wb {
+.src-components-app-__App\.module__sidetab--1n6Yp.horizontal .src-components-app-__App\.module__tab--2l3Wb {
     margin: 0.5rem 0;
 }
 
+.src-components-app-__App\.module__sidetab--1n6Yp.vertical .src-components-app-__App\.module__tab--2l3Wb {
+    margin: 0 0.5rem;
+}
+
 .src-components-app-__App\.module__divider--2_ouo {
+    /** TODO: This should disappear if too small. */
     flex: 1;
 }
 
@@ -59,34 +68,22 @@
     height: 2rem;
 }
 
-article {
-    width: 100%;
-    height: 100%;
-    background: red;
+.icon-button {
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    outline: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
 }
 
-.src-components-app-__App\.module__vertical--1KUpO {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.src-components-app-__App\.module__maincontent--1hDC6 {
-    flex: 1;
-}
-
-.src-components-app-__App\.module__pane--1gyI_ {
-    width: 100%;
-    height: 100%;
-}
-
-article nav {
-    background: white;
-}
-
-article main {
-    flex: 1;
-    background: blue;
+#root {
+    --primary: #333641;
+    --primary-dark: #1D1E22;
+    --accent: #FFD700;
+    --accent-dark: #FFD70088;
+    --content-main: #FFFFFF;
 }
 
 .src-components-workspace-__WorkspaceLayout\.module__container--CLz1g {
@@ -120,6 +117,9 @@ article main {
     flex-direction: row;
     width: 100%;
     height: 100%;
+
+    --drawer-layout-handle: var(--primary, #333641);
+    --drawer-layout-background: var(--primary-dark, #1D1E22);
 }
 
 .src-components-drawer-__DrawerLayout\.module__viewport--1z2p_ {
@@ -136,7 +136,7 @@ article main {
     width: 100%;
     height: 100%;
     z-index: 1000;
-    background: #1D1E22;
+    background: var(--drawer-layout-background);
 
     /** Animated properties */
     transform: translateX(0);
@@ -147,6 +147,28 @@ article main {
     width: 100%;
     height: 100%;
     overflow: auto;
+}
+
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.left .src-components-drawer-__DrawerLayout\.module__content--20PP8,
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.right .src-components-drawer-__DrawerLayout\.module__content--20PP8 {
+    /** It's being blocked by the handle. */
+    margin-left: calc(6px / 2);
+}
+
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.top .src-components-drawer-__DrawerLayout\.module__content--20PP8,
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.bottom .src-components-drawer-__DrawerLayout\.module__content--20PP8 {
+    /** It's being blocked by the handle. */
+    margin-top: calc(6px / 2);
+}
+
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.left,
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.right {
+    min-width: 15rem;
+}
+
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.top,
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.bottom {
+    min-height: 15rem;
 }
 
 .src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt:not(.open) {
@@ -167,14 +189,28 @@ article main {
     transform: translateX(100%);
 }
 
+/** Sliiiide to the top! */
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.top:not(.open) {
+    transform: translateY(-100%);
+}
+
+/** Sliiiide to the bottom! */
+.src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.bottom:not(.open) {
+    transform: translateY(100%);
+}
+
 .src-components-drawer-__DrawerLayout\.module__handle--xgh_c {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: #333641;
+    background: var(--drawer-layout-handle);
     border-left: 2px solid rgba(255, 255, 255, 0.05);
     border-right: 2px solid rgba(0, 0, 0, 0.4);
-    pointer-events: all;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    pointer-events: auto;
 }
 
 .src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt:not(.open) .src-components-drawer-__DrawerLayout\.module__handle--xgh_c {
@@ -183,26 +219,30 @@ article main {
 
 .src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.left .src-components-drawer-__DrawerLayout\.module__handle--xgh_c {
     right: 0;
-    width: 12px;
-    transform: translateX(6px);
+    width: 6px;
+    transform: translateX(calc(6px / 2));
+    cursor: col-resize;
 }
 
 .src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.right .src-components-drawer-__DrawerLayout\.module__handle--xgh_c {
     left: 0;
-    width: 12px;
-    transform: translateX(-6px);
+    width: 6px;
+    transform: translateX(calc(6px / -2));
+    cursor: col-resize;
 }
 
 .src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.bottom .src-components-drawer-__DrawerLayout\.module__handle--xgh_c {
     top: 0;
-    height: 12px;
-    transform: translateY(-6px);
+    height: 6px;
+    transform: translateY(calc(6px / -2));
+    cursor: row-resize;
 }
 
 .src-components-drawer-__DrawerLayout\.module__drawer--2Q7Xt.top .src-components-drawer-__DrawerLayout\.module__handle--xgh_c {
     bottom: 0;
-    height: 12px;
-    transform: translateY(-6px);
+    height: 6px;
+    transform: translateY(calc(6px / -2));
+    cursor: row-resize;
 }
 
 .src-components-sidebar-__SideBarLayout\.module__container--IRmyy {
@@ -242,5 +282,96 @@ article main {
 
 .src-components-sidebar-__SideBarLayout\.module__sidebar--3QCjY.bottom {
     height: 2rem;
+}
+
+.src-components-app-__FlexibleOrientationLayout\.module__container--BGzud.resizing * {
+    /** Disable transitions while resizing in a flexible orientation layout */
+    transition: none !important;
+}
+
+.src-components-panel-pane-__Pane\.module__container--1yslX {
+    margin: 0 1rem;
+    padding: 0.2rem 0;
+
+    /** This is so people have space to scroll OUTSIDE. */
+    padding-right: 1rem;
+
+    --pane-content: var(--content-main, #FFFFFF);
+    --pane-outline: var(--accent-dark, #FFD70088);
+    --pane-outline-important: var(--accent, #FFD700);
+}
+
+.src-components-panel-pane-__Pane\.module__container--1yslX > header {
+    width: 100%;
+    height: 3rem;
+    border-bottom: 4px solid var(--pane-outline);
+}
+
+.src-components-panel-pane-__Pane\.module__container--1yslX > main {
+    display: none;
+    width: 100%;
+    height: 100%;
+    max-width: 60vw;
+    max-height: 60vh;
+    color: var(--pane-content);
+    border-bottom: 4px solid var(--pane-outline-important);
+}
+
+.src-components-panel-pane-__Pane\.module__dropdown--3tLCY {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: var(--pane-content);
+
+    /** Get rid of button default styles. */
+    padding: 0.2rem;
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+}
+
+.src-components-panel-pane-__Pane\.module__dropdown--3tLCY:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.src-components-panel-pane-__Pane\.module__dropdown--3tLCY > .src-components-panel-pane-__Pane\.module__title--31ElX {
+    flex: 1;
+    font-size: 1.2rem;
+    text-align: left;
+}
+
+.src-components-panel-pane-__Pane\.module__container--1yslX > header > .src-components-panel-pane-__Pane\.module__dropdown--3tLCY > .icon {
+    transform: rotate(0);
+}
+
+.src-components-panel-pane-__Pane\.module__container--1yslX.open > header > .src-components-panel-pane-__Pane\.module__dropdown--3tLCY > .icon {
+    transform: rotate(180deg);
+}
+
+.src-components-panel-pane-__Pane\.module__container--1yslX.open > main {
+    display: block;
+    overflow: auto;
+}
+
+.src-components-panel-colorPane-__ColorEntry\.module__container--hz86r {
+    display: flex;
+}
+
+.src-components-panel-colorPane-__ColorEntry\.module__title--3xhAp {
+    text-align: left;
+    flex: 1;
+}
+
+.src-components-panel-colorPane-__ColorSubEntry\.module__container--jLDnb {
+    display: flex;
+    margin-left: 1rem;
+}
+
+.src-components-panel-colorPane-__ColorSubEntry\.module__title--LeDBL {
+    text-align: left;
+    flex: 1;
 }
 

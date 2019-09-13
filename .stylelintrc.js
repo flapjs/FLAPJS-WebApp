@@ -5,6 +5,7 @@ module.exports = {
     'rules': {
         'indentation': 4,
         'color-hex-case': 'upper',
+        'color-hex-length': 'long',
         'function-calc-no-unspaced-operator': true,
         'property-no-vendor-prefix': true,
         'string-quotes': 'single',

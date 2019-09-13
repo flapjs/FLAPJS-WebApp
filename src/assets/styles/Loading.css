@@ -2,7 +2,7 @@
 #loading {
     z-index: 9998;
     pointer-events: none;
-    background: #FFF;
+    background: #FFFFFF;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
@@ -16,7 +16,7 @@
     width: 24px;
     height: 24px;
     margin: 3px;
-    background-color: #333;
+    background-color: #333333;
     border-radius: 50%;
     animation: _spinner-bouncedelay 1.4s 0s infinite ease-in-out both;
 }

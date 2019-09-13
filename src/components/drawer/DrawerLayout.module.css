@@ -8,8 +8,8 @@
     width: 100%;
     height: 100%;
 
-    --drawer-layout-handle: #333641;
-    --drawer-layout-background: #1D1E22;
+    --drawer-layout-handle: var(--primary, #333641);
+    --drawer-layout-background: var(--primary-dark, #1D1E22);
 }
 
 .viewport {
@@ -37,9 +37,18 @@
     width: 100%;
     height: 100%;
     overflow: auto;
+}
 
+.drawer:global(.left) .content,
+.drawer:global(.right) .content {
     /** It's being blocked by the handle. */
-    margin-left: HANDLE_SIZE;
+    margin-left: calc(HANDLE_SIZE / 2);
+}
+
+.drawer:global(.top) .content,
+.drawer:global(.bottom) .content {
+    /** It's being blocked by the handle. */
+    margin-top: calc(HANDLE_SIZE / 2);
 }
 
 .drawer:global(.left),

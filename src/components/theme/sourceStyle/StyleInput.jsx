@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { getElementFromRef } from '@flapjs/util/ElementHelper.js';
+
 /**
  * A React component that can control a style property of a DOM element.
  */
@@ -49,24 +51,20 @@ class StyleInput extends React.Component
         }
     }
 
-    setValue(value, callback = undefined)
+    setValue(value, callback = undefined, updateSource = true)
     {
-        let sourceElement;
-        if (typeof this.props.source === 'function')
-        {
-            sourceElement = this.props.source.call(null);
-        }
-        else
-        {
-            sourceElement = this.props.source.current;
-        }
+        const sourceElement = getElementFromRef(this.props.source);
         const sourceName = this.props.name;
 
         if (this.state.value !== value)
         {
             this.setState({ value }, () =>
             {
-                sourceElement.style.setProperty(sourceName, value);
+                if (updateSource)
+                {
+                    sourceElement.style.setProperty(sourceName, value);
+                }
+
                 if (this.props.onChange) this.props.onChange.call(null, { target: this, value });
                 if (this.eventListeners.length > 0)
                 {
@@ -89,6 +87,15 @@ class StyleInput extends React.Component
     onChange(e)
     {
         this.setValue(e.target.value);
+    }
+
+    /** @override */
+    componentDidMount()
+    {
+        const element = getElementFromRef(this.props.source);
+        const name = this.props.name;
+        const style = window.getComputedStyle(element);
+        this.setState({ value: style.getPropertyValue(name) });
     }
 
     /** @override */

@@ -14,7 +14,7 @@
     "test-commit": "lint-staged",
     "storybook": "start-storybook",
     "stories": "npm run storybook",
-    "jest": "jest --config \".jest/config.js\"",
+    "jest": "jest --config \".jest/config.js\" --runInBand",
     "jest-update": "npm run jest -- --updateSnapshot",
     "lint": "eslint \"src/\" --ext \".js\" --ext \".jsx\" && stylelint \"src/**/*.css\"",
     "boilerplate": "node ./tools/boilerplate/boilerplate.js"
@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/flapjs/FLAPJS-WebApp#readme",
   "dependencies": {
+    "@ctrl/tinycolor": "^2.5.3",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
@@ -68,6 +69,7 @@
     "lint-staged": "^9.2.0",
     "mini-css-extract-plugin": "^0.8.0",
     "postcss-loader": "^3.0.0",
+    "react-test-renpnderer": "^16.9.0",
     "stylelint": "^10.1.0",
     "stylelint-config-standard": "^18.3.0",
     "webpack": "^4.36.1",

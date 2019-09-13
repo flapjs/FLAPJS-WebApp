@@ -1,21 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1568238575489" clover="3.2.0">
-  <project timestamp="1568238575489" name="All files">
-    <metrics statements="196" coveredstatements="119" conditionals="112" coveredconditionals="54" methods="53" coveredmethods="32" elements="361" coveredelements="205" complexity="0" loc="196" ncloc="196" packages="7" files="9" classes="9"/>
+<coverage generated="1568342845379" clover="3.2.0">
+  <project timestamp="1568342845380" name="All files">
+    <metrics statements="363" coveredstatements="215" conditionals="201" coveredconditionals="89" methods="98" coveredmethods="63" elements="662" coveredelements="367" complexity="0" loc="363" ncloc="363" packages="13" files="20" classes="20"/>
     <package name="components.app">
-      <metrics statements="10" coveredstatements="6" conditionals="2" coveredconditionals="2" methods="7" coveredmethods="3"/>
+      <metrics statements="42" coveredstatements="27" conditionals="18" coveredconditionals="7" methods="20" coveredmethods="12"/>
       <file name="App.jsx" path="/Users/Andy/Workspace/Web/flapjs/src/components/app/App.jsx">
-        <metrics statements="10" coveredstatements="6" conditionals="2" coveredconditionals="2" methods="7" coveredmethods="3"/>
-        <line num="17" count="2" type="stmt"/>
-        <line num="23" count="2" type="stmt"/>
-        <line num="25" count="2" type="stmt"/>
-        <line num="35" count="2" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
+        <metrics statements="21" coveredstatements="16" conditionals="6" coveredconditionals="4" methods="14" coveredmethods="8"/>
+        <line num="24" count="2" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="53" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="54" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="86" count="1" type="stmt"/>
+        <line num="87" count="5" type="stmt"/>
+        <line num="135" count="2" type="stmt"/>
+        <line num="138" count="2" type="stmt"/>
+      </file>
+      <file name="FlexibleOrientationLayout.jsx" path="/Users/Andy/Workspace/Web/flapjs/src/components/app/FlexibleOrientationLayout.jsx">
+        <metrics statements="21" coveredstatements="11" conditionals="12" coveredconditionals="3" methods="6" coveredmethods="4"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
-        <line num="59" count="2" type="stmt"/>
-        <line num="62" count="2" type="stmt"/>
+        <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="60" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="83" count="2" type="stmt"/>
+        <line num="89" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.drawer">
+      <metrics statements="60" coveredstatements="19" conditionals="38" coveredconditionals="12" methods="10" coveredmethods="4"/>
+      <file name="DrawerLayout.jsx" path="/Users/Andy/Workspace/Web/flapjs/src/components/drawer/DrawerLayout.jsx">
+        <metrics statements="60" coveredstatements="19" conditionals="38" coveredconditionals="12" methods="10" coveredmethods="4"/>
+        <line num="6" count="3" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
+        <line num="19" count="3" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="26" count="3" type="stmt"/>
+        <line num="27" count="3" type="stmt"/>
+        <line num="28" count="3" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="51" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="73" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="79" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="80" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="88" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="115" count="3" type="stmt"/>
+        <line num="116" count="3" type="stmt"/>
+        <line num="118" count="3" type="stmt"/>
+        <line num="119" count="3" type="stmt"/>
+        <line num="120" count="3" type="stmt"/>
+        <line num="122" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="124" count="3" type="stmt"/>
+        <line num="130" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="136" count="3" type="stmt"/>
+        <line num="140" count="3" type="stmt"/>
+        <line num="168" count="0" type="stmt"/>
+        <line num="170" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="172" count="0" type="stmt"/>
+        <line num="175" count="0" type="stmt"/>
+        <line num="180" count="0" type="stmt"/>
+        <line num="181" count="0" type="stmt"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="185" count="0" type="stmt"/>
+        <line num="186" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="188" count="0" type="stmt"/>
+        <line num="189" count="0" type="stmt"/>
+        <line num="192" count="0" type="stmt"/>
+        <line num="195" count="3" type="stmt"/>
+        <line num="212" count="3" type="stmt"/>
       </file>
     </package>
     <package name="components.example.helloWorld">
@@ -38,47 +139,159 @@
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
     </package>
-    <package name="components.workspace">
-      <metrics statements="33" coveredstatements="18" conditionals="22" coveredconditionals="11" methods="9" coveredmethods="2"/>
-      <file name="Workspace.jsx" path="/Users/Andy/Workspace/Web/flapjs/src/components/workspace/Workspace.jsx">
-        <metrics statements="33" coveredstatements="18" conditionals="22" coveredconditionals="11" methods="9" coveredmethods="2"/>
+    <package name="components.panel.colorPane">
+      <metrics statements="13" coveredstatements="13" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
+      <file name="ColorEntry.jsx" path="/Users/Andy/Workspace/Web/flapjs/src/components/panel/colorPane/ColorEntry.jsx">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+      </file>
+      <file name="ColorPane.jsx" path="/Users/Andy/Workspace/Web/flapjs/src/components/panel/colorPane/ColorPane.jsx">
+        <metrics statements="9" coveredstatements="9" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="60" count="2" type="stmt"/>
+        <line num="69" count="2" type="stmt"/>
+      </file>
+      <file name="ColorSubEntry.jsx" path="/Users/Andy/Workspace/Web/flapjs/src/components/panel/colorPane/ColorSubEntry.jsx">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="14" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.panel.pane">
+      <metrics statements="11" coveredstatements="9" conditionals="4" coveredconditionals="3" methods="4" coveredmethods="2"/>
+      <file name="Pane.jsx" path="/Users/Andy/Workspace/Web/flapjs/src/components/panel/pane/Pane.jsx">
+        <metrics statements="11" coveredstatements="9" conditionals="4" coveredconditionals="3" methods="4" coveredmethods="2"/>
+        <line num="14" count="6" type="stmt"/>
+        <line num="16" count="6" type="stmt"/>
+        <line num="20" count="6" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="36" count="6" type="stmt"/>
+        <line num="37" count="6" type="stmt"/>
+        <line num="39" count="6" type="stmt"/>
+        <line num="41" count="6" type="stmt"/>
+        <line num="61" count="3" type="stmt"/>
+        <line num="69" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.sidebar">
+      <metrics statements="8" coveredstatements="8" conditionals="12" coveredconditionals="9" methods="2" coveredmethods="2"/>
+      <file name="SideBarLayout.jsx" path="/Users/Andy/Workspace/Web/flapjs/src/components/sidebar/SideBarLayout.jsx">
+        <metrics statements="8" coveredstatements="8" conditionals="12" coveredconditionals="9" methods="2" coveredmethods="2"/>
         <line num="12" count="3" type="stmt"/>
+        <line num="18" count="3" type="stmt"/>
+        <line num="20" count="3" type="stmt"/>
+        <line num="22" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="25" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="31" count="3" type="stmt"/>
+        <line num="44" count="3" type="stmt"/>
+        <line num="55" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.theme.computedStyle">
+      <metrics statements="26" coveredstatements="12" conditionals="11" coveredconditionals="3" methods="5" coveredmethods="4"/>
+      <file name="ComputedStyleInput.jsx" path="/Users/Andy/Workspace/Web/flapjs/src/components/theme/computedStyle/ComputedStyleInput.jsx">
+        <metrics statements="26" coveredstatements="12" conditionals="11" coveredconditionals="3" methods="5" coveredmethods="4"/>
+        <line num="16" count="4" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="20" count="4" type="stmt"/>
+        <line num="26" count="4" type="stmt"/>
+        <line num="27" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
+        <line num="37" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="75" count="4" type="stmt"/>
+        <line num="77" count="4" type="stmt"/>
+        <line num="90" count="3" type="stmt"/>
+        <line num="122" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.theme.sourceStyle">
+      <metrics statements="38" coveredstatements="18" conditionals="18" coveredconditionals="1" methods="9" coveredmethods="4"/>
+      <file name="StyleInput.jsx" path="/Users/Andy/Workspace/Web/flapjs/src/components/theme/sourceStyle/StyleInput.jsx">
+        <metrics statements="38" coveredstatements="18" conditionals="18" coveredconditionals="1" methods="9" coveredmethods="4"/>
+        <line num="13" count="9" type="stmt"/>
+        <line num="15" count="9" type="stmt"/>
+        <line num="19" count="9" type="stmt"/>
+        <line num="21" count="9" type="stmt"/>
+        <line num="27" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="63" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="68" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="69" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="95" count="9" type="stmt"/>
+        <line num="96" count="9" type="stmt"/>
+        <line num="97" count="9" type="stmt"/>
+        <line num="98" count="9" type="stmt"/>
+        <line num="104" count="18" type="stmt"/>
+        <line num="105" count="18" type="stmt"/>
+        <line num="107" count="18" type="stmt"/>
+        <line num="108" count="18" type="stmt"/>
+        <line num="109" count="18" type="stmt"/>
+        <line num="111" count="18" type="stmt"/>
+        <line num="122" count="4" type="stmt"/>
+        <line num="139" count="4" type="stmt"/>
+      </file>
+    </package>
+    <package name="components.workspace">
+      <metrics statements="7" coveredstatements="7" conditionals="6" coveredconditionals="6" methods="2" coveredmethods="2"/>
+      <file name="WorkspaceLayout.jsx" path="/Users/Andy/Workspace/Web/flapjs/src/components/workspace/WorkspaceLayout.jsx">
+        <metrics statements="7" coveredstatements="7" conditionals="6" coveredconditionals="6" methods="2" coveredmethods="2"/>
         <line num="14" count="3" type="stmt"/>
         <line num="20" count="3" type="stmt"/>
-        <line num="21" count="3" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
         <line num="23" count="3" type="stmt"/>
-        <line num="24" count="3" type="stmt"/>
         <line num="25" count="3" type="stmt"/>
-        <line num="26" count="3" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="78" count="3" type="stmt"/>
-        <line num="79" count="3" type="stmt"/>
-        <line num="81" count="3" type="stmt"/>
-        <line num="82" count="3" type="stmt"/>
-        <line num="83" count="3" type="stmt"/>
-        <line num="84" count="3" type="stmt"/>
-        <line num="85" count="3" type="stmt"/>
-        <line num="87" count="3" type="stmt"/>
-        <line num="121" count="3" type="stmt"/>
-        <line num="129" count="3" type="stmt"/>
+        <line num="40" count="3" type="stmt"/>
+        <line num="46" count="3" type="stmt"/>
       </file>
     </package>
     <package name="util">
-      <metrics statements="9" coveredstatements="2" conditionals="3" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <metrics statements="12" coveredstatements="5" conditionals="5" coveredconditionals="2" methods="5" coveredmethods="1"/>
+      <file name="ElementHelper.js" path="/Users/Andy/Workspace/Web/flapjs/src/util/ElementHelper.js">
+        <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="3" count="16" type="cond" truecount="2" falsecount="0"/>
+        <line num="5" count="5" type="stmt"/>
+        <line num="9" count="11" type="stmt"/>
+      </file>
       <file name="Logger.js" path="/Users/Andy/Workspace/Web/flapjs/src/util/Logger.js">
         <metrics statements="9" coveredstatements="2" conditionals="3" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="3" count="2" type="stmt"/>
@@ -201,49 +414,54 @@
       </file>
     </package>
     <package name="util.storybook">
-      <metrics statements="40" coveredstatements="24" conditionals="37" coveredconditionals="20" methods="3" coveredmethods="3"/>
+      <metrics statements="42" coveredstatements="28" conditionals="39" coveredconditionals="23" methods="7" coveredmethods="4"/>
+      <file name="Fullscreen.js" path="/Users/Andy/Workspace/Web/flapjs/src/util/storybook/Fullscreen.js">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="3" count="3" type="stmt"/>
+      </file>
       <file name="PropKnobs.js" path="/Users/Andy/Workspace/Web/flapjs/src/util/storybook/PropKnobs.js">
-        <metrics statements="40" coveredstatements="24" conditionals="37" coveredconditionals="20" methods="3" coveredmethods="3"/>
-        <line num="9" count="13" type="cond" truecount="4" falsecount="5"/>
-        <line num="11" count="5" type="stmt"/>
+        <metrics statements="41" coveredstatements="27" conditionals="39" coveredconditionals="23" methods="6" coveredmethods="3"/>
+        <line num="9" count="39" type="cond" truecount="6" falsecount="3"/>
+        <line num="11" count="10" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="19" count="6" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="49" count="6" type="cond" truecount="1" falsecount="1"/>
-        <line num="51" count="0" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="20" count="7" type="stmt"/>
+        <line num="22" count="13" type="stmt"/>
+        <line num="50" count="16" type="cond" truecount="1" falsecount="1"/>
         <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
-        <line num="59" count="6" type="cond" truecount="1" falsecount="1"/>
-        <line num="61" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="60" count="16" type="cond" truecount="1" falsecount="1"/>
         <line num="62" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
-        <line num="68" count="6" type="stmt"/>
-        <line num="70" count="6" type="cond" truecount="3" falsecount="1"/>
-        <line num="72" count="6" type="stmt"/>
-        <line num="73" count="6" type="stmt"/>
-        <line num="75" count="6" type="stmt"/>
-        <line num="76" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="77" count="5" type="cond" truecount="1" falsecount="1"/>
-        <line num="78" count="5" type="cond" truecount="4" falsecount="0"/>
-        <line num="80" count="5" type="stmt"/>
-        <line num="82" count="13" type="stmt"/>
-        <line num="85" count="13" type="cond" truecount="2" falsecount="2"/>
-        <line num="87" count="13" type="stmt"/>
-        <line num="89" count="13" type="cond" truecount="1" falsecount="1"/>
-        <line num="91" count="13" type="stmt"/>
-        <line num="93" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="98" count="13" type="stmt"/>
-        <line num="100" count="13" type="stmt"/>
-        <line num="103" count="5" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="69" count="16" type="stmt"/>
+        <line num="71" count="16" type="cond" truecount="3" falsecount="1"/>
+        <line num="73" count="16" type="stmt"/>
+        <line num="74" count="16" type="stmt"/>
+        <line num="76" count="16" type="stmt"/>
+        <line num="77" count="16" type="cond" truecount="2" falsecount="0"/>
+        <line num="78" count="14" type="cond" truecount="1" falsecount="1"/>
+        <line num="79" count="14" type="cond" truecount="4" falsecount="0"/>
+        <line num="81" count="14" type="stmt"/>
+        <line num="83" count="39" type="stmt"/>
+        <line num="86" count="39" type="cond" truecount="2" falsecount="2"/>
+        <line num="88" count="39" type="stmt"/>
+        <line num="90" count="39" type="cond" truecount="1" falsecount="1"/>
+        <line num="92" count="39" type="stmt"/>
+        <line num="94" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="99" count="39" type="stmt"/>
+        <line num="101" count="39" type="cond" truecount="1" falsecount="1"/>
+        <line num="103" count="39" type="stmt"/>
+        <line num="107" count="14" type="stmt"/>
       </file>
     </package>
   </project>

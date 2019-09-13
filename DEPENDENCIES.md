@@ -229,8 +229,9 @@ With this, we can disable CSS modules for Jest tests. That means CSS class names
 > **SETUP:**
 To use it, add it to snapshotSerializers array in Jest config file.
 
-## react-test-renderer - NOT USED
-- Although storyshots "says" it needs react-test-renderer, it works fine without it... nothing changed when you install/uninstall it. Not sure what it is for, so it's currently not used.
+## react-test-renderer
+- This allows `storybook/addon-storyshots` to properly serialize React components into comparable snapshots.
+- In the past, we have used `enzyme-to-json` to do this, but when doing "deep" mocks, it led to infinite loops. This is probably a bug with either `enzyme` or `enzyme-to-json`, so now we use `react-test-renderer` for storyshots instead. This is the only place `react-test-renderer` is used. `enzyme` is still the preferred testing library.
 
 ## storybook/addon-storyshots
 - Allows automatic test snapshots for every Storybook story. This does require its own `.spec.js` file to be executed by Jest (which currently lives in `src/tests`).
@@ -312,3 +313,6 @@ Any commands ran by this are specified in its config file. The key is a glob pat
 Like all file type handling, we add an entry for SVGs in the webpack loader section. You can also specify additional options there. Here's a table of those:
 
 https://www.smooth-code.com/open-source/svgr/docs/options/
+
+## @ctrl/tinycolor
+- This is a tiny and useful color helper, so we don't have to keep writing our own :P

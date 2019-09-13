@@ -1,0 +1,66 @@
+.container {
+    margin: 0 1rem;
+    padding: 0.2rem 0;
+
+    /** This is so people have space to scroll OUTSIDE. */
+    padding-right: 1rem;
+
+    --pane-content: var(--content-main, #FFFFFF);
+    --pane-outline: var(--accent-dark, #FFD70088);
+    --pane-outline-important: var(--accent, #FFD700);
+}
+
+.container > header {
+    width: 100%;
+    height: 3rem;
+    border-bottom: 4px solid var(--pane-outline);
+}
+
+.container > main {
+    display: none;
+    width: 100%;
+    height: 100%;
+    max-width: 60vw;
+    max-height: 60vh;
+    color: var(--pane-content);
+    border-bottom: 4px solid var(--pane-outline-important);
+}
+
+.dropdown {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: var(--pane-content);
+
+    /** Get rid of button default styles. */
+    padding: 0.2rem;
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+}
+
+.dropdown:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown > .title {
+    flex: 1;
+    font-size: 1.2rem;
+    text-align: left;
+}
+
+.container > header > .dropdown > :global(.icon) {
+    transform: rotate(0);
+}
+
+.container:global(.open) > header > .dropdown > :global(.icon) {
+    transform: rotate(180deg);
+}
+
+.container:global(.open) > main {
+    display: block;
+    overflow: auto;
+}

@@ -5,6 +5,6 @@ exports[`<StyleInput/> rendering renders correctly 1`] = `
   disabled={false}
   onChange={[Function]}
   type="color"
-  value="#FFFFFF"
+  value=""
 />
 `;

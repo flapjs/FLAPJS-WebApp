@@ -25,14 +25,12 @@ exports[`<App/> rendering renders correctly 1`] = `
         OPEN
       </button>
     </nav>
-    <div
-      className="appcontent"
+    <FlexibleOrientationLayout
+      resizeDelay={300}
+      resizeMediaQuery="(max-width: 500px)"
     >
-      <WorkspaceLayout
-        renderBackground={[Function]}
-        renderForeground={[Function]}
-      />
-    </div>
+      <Component />
+    </FlexibleOrientationLayout>
   </LocalizationProvider>
 </div>
 `;
