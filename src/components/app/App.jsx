@@ -6,10 +6,10 @@ import './Theme.css';
 import AppServiceProviders from './structure/AppServiceProviders.jsx';
 import AppBar from './structure/AppBar.jsx';
 import AppWorkspace from './structure/AppWorkspace.jsx';
-import AppDrawer from './structure/AppDrawer.jsx';
-import AppSideBar from './structure/AppSideBar.jsx';
 import AppViewport from './structure/AppViewport.jsx';
 import AppPlayground from './structure/AppPlayground.jsx';
+
+import TabbedPanel from '../panel/TabbedList.jsx';
 
 import DeprecatedServiceProviders from '@flapjs/deprecated/DeprecatedServiceProviders.jsx';
 import * as DeprecatedAppHandler from '@flapjs/deprecated/DeprecatedAppHandler.jsx';
@@ -22,7 +22,7 @@ import * as Theme from './Theme.js';
 */
 
 /**
- * A React component that can do anything you want. :D
+ * A React component that can do anything you want.
  */
 class App extends React.Component
 {
@@ -65,16 +65,33 @@ class App extends React.Component
                         <AppBar app={this}></AppBar>
                         {/** The entire workspace, including drawers, viewports, playgrounds, etc. */}
                         <AppWorkspace
-                            /** This shouldn't be here... */
-                            drawerOpen={this.state.open}
-                            /** The playground the user can edit. This is usually the graph. */
+                            // The playground the user can edit. This is usually the graph.
                             renderPlayground={props => <AppPlayground {...props}></AppPlayground>}
-                            /** The viewport over the playground. This is usually the overlays. */
+                            // The viewport over the playground. This is usually the overlays.
                             renderViewport={props => <AppViewport {...props}> {DeprecatedAppHandler.renderViewport(this)} </AppViewport>}
-                            /** The sidebar next to the drawer. This is usually the panel tabs. */
-                            renderSideBar={props => <AppSideBar {...props}></AppSideBar>}
-                            /** The drawer. This is usually the drawer panels. */
-                            renderDrawer={props => <AppDrawer {...props}></AppDrawer>}>
+                            // This shouldn't be here...
+                            drawerOpen={this.state.open}
+                            // The drawer panel.
+                            panels={[
+                                <TabbedPanel
+                                    key="0"
+                                    title="About me"
+                                    renderTab={() => 'ME'}>
+                                    I am content
+                                </TabbedPanel>,
+                                <TabbedPanel
+                                    key="1"
+                                    title="Something"
+                                    renderTab={() => 'YOU'}>
+                                    Other content
+                                </TabbedPanel>,
+                                <TabbedPanel
+                                    key="2"
+                                    title="Else"
+                                    renderTab={() => 'WEE'}>
+                                    Something else
+                                </TabbedPanel>
+                            ]}>
                         </AppWorkspace>
                     </DeprecatedServiceProviders>
                 </AppServiceProviders>

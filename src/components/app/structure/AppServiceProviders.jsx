@@ -6,6 +6,7 @@ import { LocalizationProvider } from '@flapjs/util/localization/LocalizationCont
 
 function AppServiceProviders(props)
 {
+    // NOTE: Add any additional global service providers here.
     return (
         <LocalizationProvider localeCode="en">
             <ThemeProvider source={() => document.getElementById('root')}>

@@ -9,6 +9,7 @@ class IndexedNodeGraph extends NodeGraph
 {
     /**
      * Create an IndexedNodeGraph with the respective node and edge classes.
+     * 
      * @param {Class} [nodeClass]
      * @param {Class} [edgeClass]
      */
@@ -52,7 +53,7 @@ class IndexedNodeGraph extends NodeGraph
 
     /**
      * Gets the node by its index. The index must be between 0 and the node count.
-     * @param {Number} index 
+     * @param {number} index 
      */
     getNodeByIndex(index)
     {

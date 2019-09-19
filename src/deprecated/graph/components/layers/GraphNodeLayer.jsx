@@ -4,8 +4,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import GraphNodeRenderer from '../../renderer/GraphNodeRenderer.jsx';
-import GraphNodeInputHandler from '../../inputhandler/GraphNodeInputHandler.js';
+import GraphNodeRenderer from '../renderer/GraphNodeRenderer.jsx';
+import GraphNodeInputHandler from '../../controller/inputhandler/GraphNodeInputHandler.js';
 
 class GraphNodeLayer extends React.Component
 {

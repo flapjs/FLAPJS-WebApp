@@ -1,8 +1,8 @@
-import AbstractInputHandler from '../../input/AbstractInputHandler.js';
+import AbstractInputHandler from '@flapjs/deprecated/input/AbstractInputHandler.js';
 import { lerp } from '@flapjs/util/MathHelper.js';
 
-import { EVENT_SOURCE_FORWARD_ENDPOINT, EVENT_SOURCE_EDGE, EVENT_SOURCE_LABEL } from '../renderer/EdgeRenderer.jsx';
-import { EVENT_SOURCE_NODE } from '../renderer/NodeRenderer.jsx';
+import { EVENT_SOURCE_FORWARD_ENDPOINT, EVENT_SOURCE_EDGE, EVENT_SOURCE_LABEL } from '../../components/renderer/EdgeRenderer.jsx';
+import { EVENT_SOURCE_NODE } from '../../components/renderer/NodeRenderer.jsx';
 
 export const GRAPH_EVENT_EDGE_CREATE = 'edge-create';
 export const GRAPH_EVENT_EDGE_DELETE = 'edge-delete';

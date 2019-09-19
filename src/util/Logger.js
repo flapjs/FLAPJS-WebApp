@@ -32,8 +32,9 @@ class Logger
 {
     /**
      * Logs the message.
-     * @param {String} tag The tag that the message belongs to. This is usually the class name.
-     * @param {String} message The message content.
+     * 
+     * @param {string} tag The tag that the message belongs to. This is usually the class name.
+     * @param {string} message The message content.
      */
     static out(tag, message)
     {
@@ -43,8 +44,9 @@ class Logger
 
     /**
      * Logs the error.
-     * @param {String} tag The tag that the message belongs to. This is usually the class name.
-     * @param {String} message The message content.
+     * 
+     * @param {string} tag The tag that the message belongs to. This is usually the class name.
+     * @param {string} message The message content.
      * @param {Error} [err=null] The error message.
      */
     static error(tag, message, err = null)

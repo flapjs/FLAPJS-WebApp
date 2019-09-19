@@ -26,9 +26,10 @@ const IDENTITY_LANGUAGE_MAP = new LanguageMap(new Map(), (entityName) => entityN
 
 /**
  * Checks whether there exists a translated string for the entity in the current locale.
+ * 
  * @param {LocalizationProvider} provider The localization provider to check the locale for. Usually this is bound by the context.
- * @param {String} entityName The unlocalized name to be translated.
- * @returns {Boolean} Whether the entity exists for the current locale.
+ * @param {string} entityName The unlocalized name to be translated.
+ * @returns {boolean} Whether the entity exists for the current locale.
  */
 export function hasLocaleString(provider, entityName)
 {
@@ -52,10 +53,11 @@ export function hasLocaleString(provider, entityName)
 
 /**
  * Get the translated string for the entity name given the current locale.
+ * 
  * @param {LocalizationProvider} provider The localization provider to check the locale for. Usually this is bound by the context.
- * @param {String} entityName The unlocalized name to be translated.
- * @param {...String} args Parameters for the translated string.
- * @returns {String} The translated string.
+ * @param {string} entityName The unlocalized name to be translated.
+ * @param {...string} args Parameters for the translated string.
+ * @returns {string} The translated string.
  */
 export function getLocaleString(provider, entityName, ...args)
 {
@@ -107,8 +109,9 @@ export function getLocaleString(provider, entityName, ...args)
 
 /**
  * Change the current locale.
+ * 
  * @param {LocalizationProvider} provider The localization provider to change. Usually this is bound by the context.
- * @param {String} localeCode The locale code to change to.
+ * @param {string} localeCode The locale code to change to.
  */
 export function changeLocale(provider, localeCode)
 {
@@ -146,8 +149,9 @@ export function changeLocale(provider, localeCode)
  * resolve to null. Otherwise, it will resolve to the locale
  * code loaded. In other words, it will not throw if an error
  * occurs.
- * @param {String} localeCode The locale code to load the language file for.
- * @returns {Promise<String>} The promise callback when loading is finished.
+ * 
+ * @param {string} localeCode The locale code to load the language file for.
+ * @returns {Promise<string>} The promise callback when loading is finished.
  */
 export function loadLocale(localeCode)
 {

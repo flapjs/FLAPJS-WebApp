@@ -1,8 +1,8 @@
-import AbstractInputHandler from '../../input/AbstractInputHandler.js';
+import AbstractInputHandler from '@flapjs/deprecated/input/AbstractInputHandler.js';
 import { lerp } from '@flapjs/util/MathHelper.js';
 
-import { EVENT_SOURCE_START_MARKER } from '../renderer/StartMarkerRenderer.jsx';
-import { EVENT_SOURCE_NODE } from '../renderer/NodeRenderer.jsx';
+import { EVENT_SOURCE_START_MARKER } from '../../components/renderer/StartMarkerRenderer.jsx';
+import { EVENT_SOURCE_NODE } from '../../components/renderer/NodeRenderer.jsx';
 
 export const GRAPH_EVENT_START_MARKER_CHANGE = 'start-marker-change';
 

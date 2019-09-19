@@ -2,7 +2,8 @@ class StyleMap
 {
     /**
      * Creates a StyleMap from the theme file at the url.
-     * @param {String} url The url to fetch the theme file from.
+     *
+     * @param {string} url The url to fetch the theme file from.
      * @returns {StyleMap} The created style map with the parsed file contents.
      */
     static fetchFromURL(url)
@@ -24,7 +25,8 @@ class StyleMap
 
     /**
      * Creates a StyleMap from the file contents.
-     * @param {String} themeFileData The entire theme file content data.
+     *
+     * @param {string} themeFileData The entire theme file content data.
      * @returns {StyleMap} The created style map with the parsed file contents.
      */
     static parse(themeFileData)
@@ -65,6 +67,7 @@ class StyleMap
 
     /**
      * Creates a StyleMap of CSS variables from the element.
+     *
      * @param {Element} element The DOM element to compute from.
      * @returns {StyleMap} The created style map with the parsed file contents.
      */
@@ -88,8 +91,8 @@ class StyleMap
     }
 
     /**
-     * @param {Map<String, String>} entityMapping The entity mapping of entity names to translated strings.
-     * @param {String|Function} defaultValue The default value if no entity could be found.
+     * @param {Map<string, string>} entityMapping The entity mapping of entity names to translated strings.
+     * @param {string|Function} defaultValue The default value if no entity could be found.
      */
     constructor(styleMapping = new Map(), defaultValue = null)
     {
@@ -99,8 +102,9 @@ class StyleMap
 
     /**
      * Whether there exists a style for the current map.
-     * @param {String} styleName The style name to look for.
-     * @returns {Boolean} Whether the style exists in the map.
+     *
+     * @param {string} styleName The style name to look for.
+     * @returns {boolean} Whether the style exists in the map.
      */
     hasStyleName(styleName)
     {
@@ -109,8 +113,9 @@ class StyleMap
 
     /**
      * Gets the value for the style name.
-     * @param {String} styleName The name of the style to get the value for.
-     * @returns {String} The mapped style value.
+     *
+     * @param {string} styleName The name of the style to get the value for.
+     * @returns {string} The mapped style value.
      */
     getStyleValue(styleName)
     {

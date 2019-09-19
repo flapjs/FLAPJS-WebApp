@@ -2,8 +2,8 @@ import { DEFAULT_LABEL_FORMATTER } from './LabelFormatter.js';
 
 import GraphChangeHandler from './GraphChangeHandler.js';
 
-import GraphNode from '../element/GraphNode.js';
-import GraphEdge from '../element/GraphEdge.js';
+import GraphNode from '../model/elements/GraphNode.js';
+import GraphEdge from '../model/elements/GraphEdge.js';
 
 export const GRAPH_EVENT_CLEAR = 'graph-clear';
 

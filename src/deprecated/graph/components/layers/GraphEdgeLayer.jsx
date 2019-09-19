@@ -4,8 +4,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import GraphEdgeRenderer from '../../renderer/GraphEdgeRenderer.jsx';
-import GraphEdgeInputHandler from '../../inputhandler/GraphEdgeInputHandler.js';
+import GraphEdgeRenderer from '../renderer/GraphEdgeRenderer.jsx';
+import GraphEdgeInputHandler from '../../controller/inputhandler/GraphEdgeInputHandler.js';
 
 class GraphEdgeLayer extends React.Component
 {

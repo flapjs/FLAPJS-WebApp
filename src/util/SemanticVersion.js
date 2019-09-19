@@ -5,9 +5,9 @@ const PATCH_INDEX = 2;
 class SemanticVersion
 {
     /**
-     * @param {Number} major the major version value
-     * @param {Number} minor the minor version value
-     * @param {Number} patch the patch version value
+     * @param {number} major The major version value.
+     * @param {number} minor The minor version value.
+     * @param {number} patch The patch version value.
      */
     constructor(major = 0, minor = 0, patch = 0)
     {
@@ -21,8 +21,8 @@ class SemanticVersion
      * it returns true if the other version is newer but within the same major
      * version. Because of how versioning works, order matters!
      * 
-     * @param {SemanticVersion} otherVersion  the version to compare to
-     * @returns {Boolean}                     whether this version can support the other
+     * @param {SemanticVersion} otherVersion  The version to compare to.
+     * @returns {boolean}                     Whether this version can support the other.
      */
     canSupportVersion(otherVersion)
     {

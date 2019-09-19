@@ -2,7 +2,8 @@ class LanguageMap
 {
     /**
      * Creates a LanguageMap from the language file at the url.
-     * @param {String} url The url to fetch the language file from.
+     * 
+     * @param {string} url The url to fetch the language file from.
      * @returns {LanguageMap} The created language map with the parsed file contents.
      */
     static fetchFromURL(url)
@@ -24,7 +25,8 @@ class LanguageMap
 
     /**
      * Creates a LanguageMap from the file contents.
-     * @param {String} languageFileData The entire language file content data.
+     * 
+     * @param {string} languageFileData The entire language file content data.
      * @returns {LanguageMap} The created language map with the parsed file contents.
      */
     static parse(languageFileData)
@@ -64,8 +66,8 @@ class LanguageMap
     }
 
     /**
-     * @param {Map<String, String>} entityMapping The entity mapping of entity names to translated strings.
-     * @param {String|Function} defaultValue The default value if no entity could be found.
+     * @param {Map<string, string>} entityMapping The entity mapping of entity names to translated strings.
+     * @param {string|Function} defaultValue The default value if no entity could be found.
      */
     constructor(entityMapping = new Map(), defaultValue = null)
     {
@@ -75,8 +77,9 @@ class LanguageMap
 
     /**
      * Whether there exists a entity to translated string entry in the map.
-     * @param {String} entityName The entity name to look for.
-     * @returns {Boolean} Whether the entity exists in the map.
+     * 
+     * @param {string} entityName The entity name to look for.
+     * @returns {boolean} Whether the entity exists in the map.
      */
     hasEntityName(entityName)
     {
@@ -85,9 +88,10 @@ class LanguageMap
 
     /**
      * Gets the translated string for the given entity name and parameters.
-     * @param {String} entityName The name of the entity to be translated.
+     * 
+     * @param {string} entityName The name of the entity to be translated.
      * @param  {...any} args Any parameters for the translated entity. 
-     * @returns {String} The translated string, or null if unable to translate.
+     * @returns {string} The translated string, or null if unable to translate.
      */
     getTranslatedString(entityName, ...args)
     {
@@ -111,8 +115,10 @@ class LanguageMap
  * Replaces all instances of '$#', where # is a number, in the string to the
  * corresponding parameter element. The number corresponds directly to the index
  * in the parameter array, therefore it starts at 0.
- * @param {String} string The string to parameterize.
- * @param {Array<String>} params The parameters to insert into the string.
+ * 
+ * @param {string} string The string to parameterize.
+ * @param {Array<string>} params The parameters to insert into the string.
+ * @returns {string} The resultant string.
  */
 function parameterizeString(string, params)
 {

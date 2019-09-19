@@ -4,8 +4,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import StartNodeMarkerRenderer from '../../renderer/StartNodeMarkerRenderer.jsx';
-import IndexedGraphStartMarkerInputHandler from '../../inputhandler/IndexedGraphStartMarkerInputHandler.js';
+import StartNodeMarkerRenderer from '../renderer/StartNodeMarkerRenderer.jsx';
+import IndexedGraphStartMarkerInputHandler from '../../controller/inputhandler/IndexedGraphStartMarkerInputHandler.js';
 
 class IndexedGraphStartMarkerLayer extends React.Component
 {

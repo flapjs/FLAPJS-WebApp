@@ -1,4 +1,4 @@
-import GraphNode from '../element/GraphNode.js';
+import GraphNode from '../model/elements/GraphNode.js';
 
 const DEFAULT_MOVE_MODE_FIRST = true;
 

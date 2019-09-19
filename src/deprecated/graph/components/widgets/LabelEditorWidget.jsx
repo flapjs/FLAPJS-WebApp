@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Style from './LabelEditorWidget.module.css';
 
-import GraphElement from '../../element/GraphElement.js';
-import GraphNode from '../../element/GraphNode.js';
-import GraphEdge from '../../element/GraphEdge.js';
+import GraphElement from '../../model/elements/AbstractGraphElement.js';
+import GraphNode from '../../model/elements/GraphNode.js';
+import GraphEdge from '../../model/elements/GraphEdge.js';
 
 import PatternInput from './pattern/PatternInput.jsx';
 

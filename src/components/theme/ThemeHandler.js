@@ -19,9 +19,10 @@ THEME_MAPPING.set(DEFAULT_THEME_NAME, DEFAULT_STYLE_MAP);
 
 /**
  * Checks whether there exists a value for the style in the current theme.
+ *
  * @param {ThemeProvider} provider The theme provider to check the theme for. Usually this is bound by the context.
- * @param {String} styleName The style name to look for.
- * @returns {Boolean} Whether the style exists for the current theme.
+ * @param {string} styleName The style name to look for.
+ * @returns {boolean} Whether the style exists for the current theme.
  */
 export function hasStyle(provider, styleName)
 {
@@ -45,9 +46,10 @@ export function hasStyle(provider, styleName)
 
 /**
  * Get the value for the style name given the current theme.
+ *
  * @param {ThemeProvider} provider The theme provider to check the theme for. Usually this is bound by the context.
- * @param {String} styleName The style name to get the value for.
- * @returns {String} The style value.
+ * @param {string} styleName The style name to get the value for.
+ * @returns {string} The style value.
  */
 export function getStyle(provider, styleName)
 {
@@ -83,8 +85,9 @@ export function getStyle(provider, styleName)
 
 /**
  * Change the current theme.
+ *
  * @param {ThemeProvider} provider The theme provider to change. Usually this is bound by the context.
- * @param {String} themeName The theme name to change to.
+ * @param {string} themeName The theme name to change to.
  */
 export function changeTheme(provider, themeName)
 {
@@ -122,8 +125,9 @@ export function changeTheme(provider, themeName)
  * resolve to null. Otherwise, it will resolve to the theme
  * name loaded. In other words, it will not throw if an error
  * occurs.
- * @param {String} themeName The theme name to load the theme file for.
- * @returns {Promise<String>} The promise callback when loading is finished.
+ *
+ * @param {string} themeName The theme name to load the theme file for.
+ * @returns {Promise<string>} The promise callback when loading is finished.
  */
 export function loadTheme(themeName)
 {

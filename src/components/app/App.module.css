@@ -21,21 +21,6 @@
     margin: 0 1rem;
 }
 
-.sidetab {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-content: center;
-}
-
-.sidetab:global(.horizontal) {
-    flex-direction: column;
-}
-
-.sidetab:global(.vertical) {
-    flex-direction: row;
-}
-
 .tab {
     padding: 0;
     margin: 0;

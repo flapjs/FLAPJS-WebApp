@@ -1,17 +1,17 @@
-import GraphElement from './GraphElement.js';
+import AbstractGraphElement from './AbstractGraphElement.js';
 
 /**
  * A class that represents the edge elements of a graph.
  * 
  * @see {@link NodeGraph}
- * @extends GraphElement
+ * @extends AbstractGraphElement
  */
-class GraphEdge extends GraphElement
+class GraphEdge extends AbstractGraphElement
 {
     /**
      * Creates a edge with the unique id.
      * 
-     * @param {String} id           The element id for this node.
+     * @param {string} id           The element id for this node.
      * @param {GraphNode} from      The from node of the edge.
      * @param {GraphNode} [to=null] The to node of the edge.
      */
@@ -43,8 +43,9 @@ class GraphEdge extends GraphElement
      * Sets the edge label to the passed-in string.
      *
      * Assumes the label is NOT null.
-     * @param {String} label  The new edge label.
-     * @returns {this}
+     * 
+     * @param {string} label The new edge label.
+     * @returns {GraphEdge} This.
      */
     setEdgeLabel(label)
     {
@@ -130,7 +131,8 @@ class GraphEdge extends GraphElement
     /**
      * Gets the label of the edge. If the edge has no label, it will return an
      * empty string.
-     * @returns {String} The edge's label.
+     * 
+     * @returns {string} The edge's label.
      */
     getEdgeLabel() { return this._label; }
 

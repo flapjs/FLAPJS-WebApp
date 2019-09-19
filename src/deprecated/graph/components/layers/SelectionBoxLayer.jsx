@@ -4,11 +4,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import BoxRenderer from '../../renderer/BoxRenderer.jsx';
+import BoxRenderer from '../renderer/BoxRenderer.jsx';
 import GraphHighlightLayer from './GraphHighlightLayer.jsx';
 
 import SelectionBox from '../../controller/SelectionBox.js';
-import SelectionBoxInputHandler from '../../inputhandler/SelectionBoxInputHandler.js';
+import SelectionBoxInputHandler from '../../controller/inputhandler/SelectionBoxInputHandler.js';
 
 class SelectionBoxLayer extends React.Component
 {

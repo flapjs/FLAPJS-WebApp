@@ -83,9 +83,29 @@ exports[`<App/> rendering renders correctly 1`] = `
                     />
                     <AppWorkspace
                       drawerOpen={true}
-                      renderDrawer={[Function]}
+                      panels={
+                        Array [
+                          <TabbedList
+                            renderTab={[Function]}
+                            title="About me"
+                          >
+                            I am content
+                          </TabbedList>,
+                          <TabbedList
+                            renderTab={[Function]}
+                            title="Something"
+                          >
+                            Other content
+                          </TabbedList>,
+                          <TabbedList
+                            renderTab={[Function]}
+                            title="Else"
+                          >
+                            Something else
+                          </TabbedList>,
+                        ]
+                      }
                       renderPlayground={[Function]}
-                      renderSideBar={[Function]}
                       renderViewport={[Function]}
                     />
                   </DeprecatedServiceProviders>
@@ -177,9 +197,29 @@ exports[`<App/> rendering renders correctly 1`] = `
                       />
                       <AppWorkspace
                         drawerOpen={true}
-                        renderDrawer={[Function]}
+                        panels={
+                          Array [
+                            <TabbedList
+                              renderTab={[Function]}
+                              title="About me"
+                            >
+                              I am content
+                            </TabbedList>,
+                            <TabbedList
+                              renderTab={[Function]}
+                              title="Something"
+                            >
+                              Other content
+                            </TabbedList>,
+                            <TabbedList
+                              renderTab={[Function]}
+                              title="Else"
+                            >
+                              Something else
+                            </TabbedList>,
+                          ]
+                        }
                         renderPlayground={[Function]}
-                        renderSideBar={[Function]}
                         renderViewport={[Function]}
                       />
                     </DeprecatedServiceProviders>
@@ -195,9 +235,29 @@ exports[`<App/> rendering renders correctly 1`] = `
       />
       <AppWorkspace
         drawerOpen={true}
-        renderDrawer={[Function]}
+        panels={
+          Array [
+            <TabbedList
+              renderTab={[Function]}
+              title="About me"
+            >
+              I am content
+            </TabbedList>,
+            <TabbedList
+              renderTab={[Function]}
+              title="Something"
+            >
+              Other content
+            </TabbedList>,
+            <TabbedList
+              renderTab={[Function]}
+              title="Else"
+            >
+              Something else
+            </TabbedList>,
+          ]
+        }
         renderPlayground={[Function]}
-        renderSideBar={[Function]}
         renderViewport={[Function]}
       />
     </DeprecatedServiceProviders>

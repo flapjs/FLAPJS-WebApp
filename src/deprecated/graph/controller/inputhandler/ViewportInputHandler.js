@@ -1,4 +1,4 @@
-import AbstractInputHandler from '../../input/AbstractInputHandler.js';
+import AbstractInputHandler from '@flapjs/deprecated/input/AbstractInputHandler.js';
 
 class ViewportInputHandler extends AbstractInputHandler
 {

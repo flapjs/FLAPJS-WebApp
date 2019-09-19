@@ -1,13 +1,14 @@
 /**
  * Contains utility functions for useful math algorithms.
+ * 
  * @module MathHelper
  */
 
 /**
  * Generates a uuid v4.
  * 
- * @param {Number} a The placeholder (serves for recursion within function).
- * @returns {String} the universally unique id
+ * @param {number} a The placeholder (serves for recursion within function).
+ * @returns {string} The universally unique id.
  */
 export function uuid(a = undefined)
 {
@@ -18,10 +19,10 @@ export function uuid(a = undefined)
 /**
  * Interpolates, or lerps, between 2 values by the specified amount, dt.
  * 
- * @param {Number} a the initial value
- * @param {Number} b the final value
- * @param {Number} dt the amount changed
- * @returns {Number} the interpolated value
+ * @param {number} a The initial value.
+ * @param {number} b The final value.
+ * @param {number} dt The amount changed.
+ * @returns {number} The interpolated value.
  */
 export function lerp(a, b, dt)
 {
@@ -31,8 +32,8 @@ export function lerp(a, b, dt)
 /**
  * Generates a number hash for the string. For an empty string, it will return 0.
  * 
- * @param {String} [value=''] the string to hash
- * @returns {Number} a hash that uniquely identifies the string
+ * @param {string} [value=''] The string to hash.
+ * @returns {number} A hash that uniquely identifies the string.
  */
 export function stringHash(value='')
 {
@@ -47,14 +48,14 @@ export function stringHash(value='')
 /**
  * Calculates the directional vector for the passed-in points.
  * 
- * @param {Number} x1 the x component of the source point
- * @param {Number} y1 the y component of the source point
- * @param {Number} x2 the x component of the destination point
- * @param {Number} y2 the y component of the destination point
- * @param {Number} [dist=1] the distance, or length, of the vector
- * @param {Number} [angleOffset=0] additional angle offset from the calculated direction vector
- * @param {Object} [dst={x: 0, y: 0}] the result
- * @returns {Object} dst
+ * @param {number} x1 The x component of the source point.
+ * @param {number} y1 The y component of the source point.
+ * @param {number} x2 The x component of the destination point.
+ * @param {number} y2 The y component of the destination point.
+ * @param {number} [dist=1] The distance, or length, of the vector.
+ * @param {number} [angleOffset=0] Additional angle offset from the calculated direction vector.
+ * @param {object} [dst={x: 0, y: 0}] The result.
+ * @returns {object} The result dst.
  */
 export function getDirectionalVector(x1, y1, x2, y2, dist=1, angleOffset=0, dst={x: 0, y: 0})
 {
@@ -69,12 +70,12 @@ export function getDirectionalVector(x1, y1, x2, y2, dist=1, angleOffset=0, dst=
 /**
  * Calculates the midpoint between the passed-in points.
  * 
- * @param {Number} x1 the x component of the source point
- * @param {Number} y1 the y component of the source point
- * @param {Number} x2 the x component of the destination point
- * @param {Number} y2 the y component of the destination point
- * @param {Object} [dst={x: 0, y: 0}] the result
- * @returns {Object} dst
+ * @param {number} x1 The x component of the source point.
+ * @param {number} y1 The y component of the source point.
+ * @param {number} x2 The x component of the destination point.
+ * @param {number} y2 The y component of the destination point.
+ * @param {object} [dst={x: 0, y: 0}] The result.
+ * @returns {object} The result dst.
  */
 export function getMidPoint(x1, y1, x2, y2, dst={x: 0, y: 0})
 {

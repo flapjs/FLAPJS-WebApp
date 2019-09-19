@@ -11,7 +11,8 @@ module.exports = {
         'plugin:react/recommended',
         'plugin:import/react',
         'plugin:import/recommended',
-        'plugin:jsx-a11y/recommended'
+        'plugin:jsx-a11y/recommended',
+        'plugin:jsdoc/recommended',
     ],
     'globals': {
         'Atomics': 'readonly',
@@ -29,7 +30,8 @@ module.exports = {
     'plugins': [
         'react',
         'import',
-        'jsx-a11y'
+        'jsx-a11y',
+        'jsdoc'
     ],
     'settings': {
         'react': { 'version': 'detect' },
@@ -41,6 +43,16 @@ module.exports = {
                     // NOTE: This does not resolve for stylelint.
                     ['@flapjs', path.resolve(__dirname, 'src')]
                 ]
+            }
+        },
+        /** For jsdoc */
+        'jsdoc': {
+            'tagNamePreference': {
+                // NOTE: we prefer "extends" over "augments"
+                'augments': {
+                    'message': '@extends is to be used over @augments as it is more evocative of classes than @augments',
+                    'replacement': 'extends'
+                }
             }
         }
     },
@@ -122,6 +134,12 @@ module.exports = {
         }],
         // NOTE: This makes sure that dynamic imports are properly configured for webpack...
         'import/dynamic-import-chunkname': 'error',
+        /** JSDoc */
+        'jsdoc/require-description-complete-sentence': 1,
+        // NOTE: There is an issue with custom-defined classes that would be helpful to use as a type.
+        'jsdoc/no-undefined-types': 0,
+        // NOTE: We really don't want to document every .jsx component function/class in the propTypes AND in jsdocs.
+        'jsdoc/require-jsdoc': 0,
     },
     'overrides': [
         {

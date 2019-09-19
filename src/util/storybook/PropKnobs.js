@@ -25,24 +25,26 @@ function getKnobForPropType(propType)
 
 /**
  * Gets the appropriate knobs based on PropTypes and default values of the React component class.
+ * 
  * @param {Class} elementClass                  The React component class to find prop types
  *                                              from to create the respective knobs.
- * @param {String} [rangeGroupID]               The group id for the evaluated props. This is
+ * @param {string} [rangeGroupID]               The group id for the evaluated props. This is
  *                                              an optional parameter that can be omitted
  *                                              (without placeholder) or set as undefined.
- * @param {Number|Array} [rangeStart=-1]        The start index at which to process the prop types
+ * @param {number|Array} [rangeStart=-1]        The start index at which to process the prop types
  *                                              (by prop type definition order). If negative, it
  *                                              is assumed from the first prop. If an array, this will
  *                                              be treated as a whitelist of prop names and rangeEnd
  *                                              will be treated as the opts parameter instead.
- * @param {Number|Object} [rangeEnd=-1]         The end index at which to process the prop types
+ * @param {number|object} [rangeEnd=-1]         The end index at which to process the prop types
  *                                              (by prop type definition order). If negative, it is
  *                                              assumed to the last prop after the start index. If
  *                                              rangeStart is an array, this will be treated as the
  *                                              opts parameter instead. Later parameters are ignored.
- * @param {Object} [opts]                       Any additional options.
- * @param {Boolean} [opts.defaultOnly=false]    If true, will only show props with default values as
+ * @param {object} [opts]                       Any additional options.
+ * @param {boolean} [opts.defaultOnly=false]    If true, will only show props with default values as
  *                                              defined by defaultProps.
+ * @returns {object}                            The prop knob object.
  */
 export function propKnobs(elementClass, rangeGroupID, rangeStart = -1, rangeEnd = -1, opts)
 {

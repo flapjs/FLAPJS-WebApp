@@ -40,45 +40,23 @@ exports[`Storyshots App playground 1`] = `
             <div
               className="sidetab horizontal"
             >
-              <button
-                className="tab"
-                onClick={[Function]}
-              >
-                <span
-                  className="icon"
-                  color="#FFFFFF"
-                />
-              </button>
-              <button
-                className="tab"
-                onClick={[Function]}
-              >
-                <span
-                  className="icon"
-                  color="#FFFFFF"
-                />
-              </button>
-              <button
-                className="tab"
-                onClick={[Function]}
-              >
-                <span
-                  className="icon"
-                  color="#FFFFFF"
-                />
-              </button>
-              <div
-                className="divider"
-              />
-              <button
-                className="tab"
-                onClick={[Function]}
-              >
-                <span
-                  className="icon"
-                  color="#FFFFFF"
-                />
-              </button>
+              <div>
+                <button
+                  onClick={[Function]}
+                >
+                  ME
+                </button>
+                <button
+                  onClick={[Function]}
+                >
+                  YOU
+                </button>
+                <button
+                  onClick={[Function]}
+                >
+                  WEE
+                </button>
+              </div>
             </div>
           </div>
           <div
@@ -110,76 +88,13 @@ exports[`Storyshots App playground 1`] = `
                   className="content"
                 >
                   <div
-                    className=""
+                    className="container "
                     style={
                       Object {
-                        "color": "white",
-                        "height": "100%",
-                        "width": "100%",
+                        "flexDirection": undefined,
                       }
                     }
-                  >
-                    <section
-                      className="container  open"
-                    >
-                      <header>
-                        <button
-                          className="dropdown"
-                          onClick={[Function]}
-                        >
-                          <span
-                            className="title"
-                          >
-                            Hello World
-                          </span>
-                          <span
-                            className="icon"
-                          />
-                        </button>
-                      </header>
-                      <main>
-                        <p>
-                          I am content :D
-                        </p>
-                        <p>
-                          Aenean libero orci, mattis ut ullamcorper eu, scelerisque et augue. Nam egestas vestibulum interdum. Integer ligula nunc, efficitur vitae velit sed, tristique cursus ligula. Aliquam est est, consectetur quis turpis a, luctus ultrices odio. Morbi a feugiat mi. Fusce orci dolor, maximus quis eros non, placerat accumsan tellus. Nam a lectus vitae nisl scelerisque ultrices in vitae erat.
-                        </p>
-                        <p>
-                          Sed auctor, augue non sodales euismod, metus nulla congue ex, sit amet rhoncus metus turpis ut elit. Sed vitae rutrum augue. Etiam dictum ornare tortor sed tristique. Cras quis velit nisl. Nulla rhoncus lacus sit amet interdum consectetur. Pellentesque aliquam consequat vehicula. Sed eu dignissim eros. Donec rhoncus consectetur ante, sit amet pharetra urna tempor sed. In scelerisque ligula mi. Nam gravida maximus ex, consequat ultricies nisi molestie non. Maecenas id semper eros.
-                        </p>
-                      </main>
-                    </section>
-                    <section
-                      className="container  open"
-                    >
-                      <header>
-                        <button
-                          className="dropdown"
-                          onClick={[Function]}
-                        >
-                          <span
-                            className="title"
-                          >
-                            Nothing To See Here
-                          </span>
-                          <span
-                            className="icon"
-                          />
-                        </button>
-                      </header>
-                      <main>
-                        <p>
-                          I am content :D
-                        </p>
-                        <p>
-                          Aenean libero orci, mattis ut ullamcorper eu, scelerisque et augue. Nam egestas vestibulum interdum. Integer ligula nunc, efficitur vitae velit sed, tristique cursus ligula. Aliquam est est, consectetur quis turpis a, luctus ultrices odio. Morbi a feugiat mi. Fusce orci dolor, maximus quis eros non, placerat accumsan tellus. Nam a lectus vitae nisl scelerisque ultrices in vitae erat.
-                        </p>
-                        <p>
-                          Sed auctor, augue non sodales euismod, metus nulla congue ex, sit amet rhoncus metus turpis ut elit. Sed vitae rutrum augue. Etiam dictum ornare tortor sed tristique. Cras quis velit nisl. Nulla rhoncus lacus sit amet interdum consectetur. Pellentesque aliquam consequat vehicula. Sed eu dignissim eros. Donec rhoncus consectetur ante, sit amet pharetra urna tempor sed. In scelerisque ligula mi. Nam gravida maximus ex, consequat ultricies nisi molestie non. Maecenas id semper eros.
-                        </p>
-                      </main>
-                    </section>
-                  </div>
+                  />
                 </div>
               </div>
               <div

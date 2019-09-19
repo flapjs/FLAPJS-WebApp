@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import GraphHighlightRenderer from '../../renderer/GraphHighlightRenderer.jsx';
+import GraphHighlightRenderer from '../renderer/GraphHighlightRenderer.jsx';
 
 const HIGHLIGHT_OFFSET = 4;
 

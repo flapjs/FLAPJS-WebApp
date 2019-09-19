@@ -1,3 +1,9 @@
+/**
+ * Gets all unreachable nodes from the first node.
+ * 
+ * @param {IndexedNodeGraph} graph The target node graph to compute.
+ * @returns {Array<GraphNode>} The unreachable nodes.
+ */
 export function getUnreachableNodes(graph)
 {
     if (graph.getNodeCount() <= 1) return [];

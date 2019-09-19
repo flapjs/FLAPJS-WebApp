@@ -1,5 +1,5 @@
-import GraphNode from './element/GraphNode.js';
-import GraphEdge from './element/GraphEdge.js';
+import GraphNode from './elements/GraphNode.js';
+import GraphEdge from './elements/GraphEdge.js';
 import { uuid, stringHash } from '@flapjs/util/MathHelper.js';
 
 /**
@@ -9,6 +9,7 @@ class NodeGraph
 {
     /**
      * Create a NodeGraph with the respective node and edge classes.
+     * 
      * @param {Class} [nodeClass=GraphNode] The class that represents a node.
      * @param {Class} [edgeClass=GraphEdge] The class that represents an edge.
      */
@@ -32,7 +33,8 @@ class NodeGraph
 
     /**
      * Checks whether there exists any number of nodes or edges.
-     * @returns {Boolean} Whether the graph is empty.
+     * 
+     * @returns {boolean} Whether the graph is empty.
      */
     isEmpty()
     {
@@ -42,7 +44,8 @@ class NodeGraph
     /**
      * Computes the boundaries of the graph that surrounds all nodes and edges. If
      * the graph is empty, a rectangle at the origin of size 1 is returned.
-     * @returns {Object}    The object which represents the bounding rectangle. It has
+     * 
+     * @returns {object}    The object which represents the bounding rectangle. It has
      *                      the properties: minX, minY, maxX, maxY, width, height.
      */
     getBoundingRect()
@@ -126,9 +129,10 @@ class NodeGraph
     /**
      * Computes a unique and persistent hash code that describes the current
      * state.
-     * @param  {Boolean} [usePosition=true] Whether to consider the positioning as
+     * 
+     * @param  {boolean} [usePosition=true] Whether to consider the positioning as
      *                                      part of the graph's state.
-     * @returns {Number}                    the hash code.
+     * @returns {number}                    The hash code.
      */
     getHashCode(usePosition = true)
     {
@@ -149,10 +153,11 @@ class NodeGraph
 
     /**
      * Create node for graph.
-     * @param  {Number} [x=0]       the initial x position
-     * @param  {Number} [y=0]       the initial y position
-     * @param  {String} [id=null]   the new node id (will be generated if null)
-     * @returns {GraphNdoe}         the new node
+     * 
+     * @param  {number} [x=0]       The initial x position.
+     * @param  {number} [y=0]       The initial y position.
+     * @param  {string} [id=null]   The new node id (will be generated if null).
+     * @returns {GraphNdoe}         The new node.
      */
     createNode(x = 0, y = 0, id = null)
     {
@@ -161,7 +166,8 @@ class NodeGraph
 
     /**
      * Add existing node to the graph. Any edges connected to the node are NOT
-     * deleted in the process. (so pls delete them first.)
+     * deleted in the process (so pls delete them first).
+     * 
      * @param {GraphNode} node The node to be added.
      * @returns {GraphNode} The node that was added to the graph.
      */
@@ -175,7 +181,8 @@ class NodeGraph
     /**
      * Delete node from graph. Any edges whose source is the target node are also
      * deleted.
-     * @param  {GraphNode} node        Target node to be deleted.
+     * 
+     * @param {GraphNode} node Target node to be deleted.
      */
     deleteNode(node)
     {
@@ -240,7 +247,10 @@ class NodeGraph
     /**
      * This is more like addEdge() without adding it to the graph and just returns the result.
      * This should only be called once when completing an edge.
+     * 
      * @deprecated
+     * @param {GraphEdge} edge The edge to format.
+     * @returns {GraphEdge} The formatted edge.
      */
     formatEdge(edge)
     {
@@ -250,10 +260,11 @@ class NodeGraph
     /**
      * Create edge for graph. The id argument can be used to set the id to a
      * pre-defined value instead of generating a new one.
-     * @param  {GraphNode} from                     the source graph node for the edge
-     * @param  {GraphNode|InputPointer} [to=null]   the destination graph node for the edge
-     * @param  {String} [id=null]                   the new edge id (will be generated if null)
-     * @returns {GraphEdge}                         the new edge
+     * 
+     * @param {GraphNode} from                      The source graph node for the edge.
+     * @param {GraphNode|InputPointer} [to=null]    The destination graph node for the edge.
+     * @param {string} [id=null]                    The new edge id (will be generated if null).
+     * @returns {GraphEdge}                         The new edge.
      */
     createEdge(from, to = null, id = null)
     {
@@ -264,8 +275,9 @@ class NodeGraph
      * Add existing edge to the graph.
      * 
      * Assumes that the passed-in edge does not have conflicting id's within this graph.
-     * @param {GraphEdge} edge    the edge to be added.
-     * @returns {GraphEdge}       the edge that was added to the graph.
+     * 
+     * @param {GraphEdge} edge    The edge to be added.
+     * @returns {GraphEdge}       The edge that was added to the graph.
      */
     addEdge(edge)
     {
@@ -277,7 +289,8 @@ class NodeGraph
     /**
      * Delete edge from graph. The from and to nodes of the target edge are not
      * modified.
-     * @param  {GraphEdge} edge      target edge to be deleted.
+     * 
+     * @param {GraphEdge} edge Target edge to be deleted.
      */
     deleteEdge(edge)
     {

@@ -1,10 +1,10 @@
-import Parser from './Parser.js';
-import NodeGraph from './NodeGraph.js';
+import AbstractParser from './AbstractParser.js';
+import NodeGraph from '../NodeGraph.js';
 import SemanticVersion from '@flapjs/util/SemanticVersion.js';
 
-import GraphNode from './element/GraphNode';
-import GraphEdge from './element/GraphEdge.js';
-import QuadraticEdge from './element/QuadraticEdge.js';
+import GraphNode from '../elements/GraphNode';
+import GraphEdge from '../elements/GraphEdge.js';
+import QuadraticEdge from '../elements/QuadraticEdge.js';
 
 export const VERSION_STRING = '1.0.0';
 export const VERSION = SemanticVersion.parse(VERSION_STRING);
@@ -12,7 +12,7 @@ export const VERSION = SemanticVersion.parse(VERSION_STRING);
 /**
  * A class that parses and composes NodeGraph's to and from JSON data.
  */
-class NodeGraphParser extends Parser
+class NodeGraphParser extends AbstractParser
 {
     constructor()
     {
@@ -22,11 +22,11 @@ class NodeGraphParser extends Parser
     }
 
     /**
-	 * @override
-	 * @param  {Object} data         		the graph data to parse
-	 * @param  {NodeGraph} [dst=null]		the target to set parsed graph data
-	 * @return {NodeGraph}            	the result in the passed-in dst
-	 */
+     * @override
+     * @param  {object} data         	    The graph data to parse.
+     * @param  {NodeGraph} [dst=null]		The target to set parsed graph data.
+     * @returns {NodeGraph}                 The result in the passed-in dst.
+     */
     parse(data, dst = null)
     {
         if (typeof data !== 'object')
@@ -53,7 +53,7 @@ class NodeGraphParser extends Parser
             const nodeData = nodeDatas[i];
             if (!nodeData) continue;
 
-            // NOTE: Assumes createNode will maintain order
+            // NOTE: Assumes createNode will maintain order (it will because JavaScript Map's maintain order)
             const node = dst.createNode(nodeData['x'] || 0, nodeData['y'] || 0, nodeData['id']);
             node.setNodeLabel(nodeData['label'] || '');
 
@@ -71,7 +71,7 @@ class NodeGraphParser extends Parser
             if (!sourceNode) continue;
             const destinationNode = nodeIndices.get(edgeData['to']) || null;
 
-            // NOTE: Assumes createEdge will maintain order
+            // NOTE: Assumes createEdge will maintain order (it will because JavaScript Map's maintain order)
             const edge = dst.createEdge(sourceNode, destinationNode, edgeData['id']);
             edge.setEdgeLabel(edgeData['label'] || '');
 
@@ -87,11 +87,11 @@ class NodeGraphParser extends Parser
     }
 
     /**
-	 * @override
-	 * @param  {NodeGraph} target     the graph to compose into data
-	 * @param  {Object} [dst=null]    the object to append graph data
-	 * @return {Object}               the result in the passed-in dst
-	 */
+     * @override
+     * @param {NodeGraph} target    The graph to compose into data.
+     * @param {object} [dst=null]   The object to append graph data.
+     * @returns {object}            The result in the passed-in dst.
+     */
     compose(target, dst = null)
     {
         if (!(target instanceof NodeGraph))
@@ -172,6 +172,13 @@ class NodeGraphParser extends Parser
         return dst;
     }
 
+    /**
+     * Called by parse().
+     * 
+     * @param {object} graphData The graph data to be parsed.
+     * @param {NodeGraph} targetGraph The target graph to parse data to.
+     * @returns {NodeGraph} The targetGraph.
+     */
     onParseGraphCreate(graphData, targetGraph)
     {
         const hasQuad = graphData['quad'] || false;
@@ -186,11 +193,13 @@ class NodeGraphParser extends Parser
         return targetGraph;
     }
 
+    /** Called by parse(), after onParserGraphCreate(). */
     onParseNode(nodeData, targetNode)
     {
         // Nothing else needs to be done :3
     }
 
+    /** Called by parse(), after onParserGraphCreate(). */
     onParseEdge(edgeData, targetEdge)
     {
         if (targetEdge instanceof QuadraticEdge)
@@ -201,21 +210,25 @@ class NodeGraphParser extends Parser
         }
     }
 
+    /** Called by parse(). */
     onParseGraphResult(graphData, targetGraph)
     {
         // Everything is handled so far...
     }
 
+    /** Called by compose(). */
     onComposeGraphCreate(graph, graphData)
     {
         return graphData || {};
     }
 
+    /** Called by compose(). */
     onComposeNode(node, nodeData)
     {
         // Yep. It's all good.
     }
 
+    /** Called by compose(). */
     onComposeEdge(edge, edgeData)
     {
         if (edge instanceof QuadraticEdge)
@@ -228,6 +241,7 @@ class NodeGraphParser extends Parser
         }
     }
 
+    /** Called by compose(). */
     onComposeGraphResult(graph, graphData)
     {
         let hasQuad = false;

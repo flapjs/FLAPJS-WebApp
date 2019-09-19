@@ -272,6 +272,9 @@ This does not include stylelint.
 ## eslint-plugin-jsx-a11y
 - Catches accessibility lint errors. Does not catch ALL of them though. Further testing is required.
 
+## eslint-plugin-jsdoc
+- Helps lint the JSDocs comments we write.
+
 ## stylelint 
 - Catches CSS style lint errors.
 - There is a VS Code plugin for auto-checking stylelint while coding.
