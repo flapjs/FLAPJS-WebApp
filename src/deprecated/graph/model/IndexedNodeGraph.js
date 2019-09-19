@@ -23,7 +23,8 @@ class IndexedNodeGraph extends NodeGraph
     /**
      * Sets the first node, which is at index 0, to the passed-in node. The node must
      * already exist in the graph.
-     * @param {GraphNode} node the node to be first
+     *
+     * @param {GraphNode} node The node to be first.
      */
     setStartNode(node)
     {
@@ -53,6 +54,7 @@ class IndexedNodeGraph extends NodeGraph
 
     /**
      * Gets the node by its index. The index must be between 0 and the node count.
+     *
      * @param {number} index 
      */
     getNodeByIndex(index)

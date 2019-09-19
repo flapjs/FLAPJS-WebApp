@@ -11,7 +11,8 @@ class QuadraticEdge extends GraphEdge
 {
     /**
      * Creates a quadratic edge with the unique id.
-     * @constructor
+     *
+     * @class
      * @param {string} id           The element id for this node.
      * @param {GraphNode} from      The from node of the edge.
      * @param {GraphNode} [to=null] The to node of the edge.
@@ -50,8 +51,9 @@ class QuadraticEdge extends GraphEdge
     }
 
     /**
-     * Set the angle of the curve in radians
-     * @param {number} radians the radians the quadratic should be curved
+     * Set the angle of the curve in radians.
+     *
+     * @param {number} radians The radians the quadratic should be curved.
      * @returns {this}
      */
     setQuadraticRadians(radians)
@@ -61,8 +63,9 @@ class QuadraticEdge extends GraphEdge
     }
 
     /**
-     * Set the distance of the curve from the midpoint
-     * @param {number} length the "height" of the curve
+     * Set the distance of the curve from the midpoint.
+     *
+     * @param {number} length The "height" of the curve.
      * @returns {this}
      */
     setQuadraticLength(length)
@@ -74,8 +77,9 @@ class QuadraticEdge extends GraphEdge
     /**
      * Calculates and sets the quadratic vertex to pass through the position.
      * This will update the radians and length of the curve.
-     * @param {number} x the x coordinate
-     * @param {number} y the y coordinate
+     *
+     * @param {number} x The x coordinate.
+     * @param {number} y The y coordinate.
      * @returns {this}
      */
     setQuadraticByCoords(x, y)

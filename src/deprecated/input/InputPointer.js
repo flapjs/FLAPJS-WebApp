@@ -68,7 +68,7 @@ class InputPointer
     getViewportAdapter() { return this._viewportAdapter; }
 
     /**
-     * The input adapter that controls this pointer's properties
+     * The input adapter that controls this pointer's properties.
      */
     getInputAdapter() { return this._inputAdapter; }
 }

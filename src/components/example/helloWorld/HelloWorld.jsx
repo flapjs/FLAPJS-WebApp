@@ -7,7 +7,7 @@ import Style from './HelloWorld.module.css';
  * it will toggle between rainbow mode. Rainbow mode just changes the color
  * of the title to a rainbow.
  * 
- * Here's a tutorial on the effect: https://w3bits.com/rainbow-text/
+ * Here's a tutorial on the effect: {@link https://w3bits.com/rainbow-text/}.
  */
 class HelloWorld extends React.Component
 {
@@ -24,6 +24,7 @@ class HelloWorld extends React.Component
 
     /**
      * Called when mouse clicks. Used as an event listener for 'click' event.
+     *
      * @param {Event} e The mouse event.
      */
     onClick(e)

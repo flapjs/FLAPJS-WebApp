@@ -17,6 +17,7 @@
     "jest": "jest --config \".jest/config.js\" --runInBand",
     "jest-update": "npm run jest -- --updateSnapshot",
     "lint": "eslint \"src/\" --ext \".js\" --ext \".jsx\" && stylelint \"src/**/*.css\"",
+    "lint-fix": "eslint \"src/\" --ext \".js\" --ext \".jsx\" --fix && stylelint \"src/**/*.css\" --fix",
     "boilerplate": "node ./tools/boilerplate/boilerplate.js"
   },
   "repository": {

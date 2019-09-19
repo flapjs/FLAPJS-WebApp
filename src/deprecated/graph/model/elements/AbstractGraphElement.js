@@ -17,6 +17,7 @@ class AbstractGraphElement
 
     /**
      * Sets the element's id to the passed-in id.
+     *
      * @param {string} elementID  The new id.
      * @returns {this}
      */
@@ -29,6 +30,7 @@ class AbstractGraphElement
     /**
      * Compute the center point of the element and store the result in dst. The
      * properties changed in dst are: x, y.
+     *
      * @param  {object} [dst={x: 0, y: 0}]    The object to store the result.
      * @returns {object}                       The passed-in dst.
      */
@@ -39,18 +41,20 @@ class AbstractGraphElement
     }
 
     /**
-     * A unique identifier for this graph element
+     * A unique identifier for this graph element.
+     *
      * @returns {string} The unique identifier for this element.
      */
     getGraphElementID() { return this._id; }
 
     /**
      * Computes the hash string that represents this element and its current state
-     * uniquely and deterministically. {@link NodeGraph} uses this to compute its
+     * uniquely and deterministically. {@link NodeGraph} Uses this to compute its
      * hash code that distinguishes it from other graphs. The generated string
      * should only be used to differentiate between other objects of the same hash
      * function. In other words, every instance should only be compared to other
      * instances of the same class (or extended class without override).
+     *
      * @param  {boolean} [usePosition=true] Whether to consider positioning as
      *                                      part of the unique state.
      * @returns {string}                     The hash string that represents this

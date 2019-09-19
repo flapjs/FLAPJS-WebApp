@@ -1,5 +1,6 @@
 /**
  * A wrapper for a more intuitive use of LocalStorage.
+ *
  * @module LocalStorage
  */
 const LocalStorage = {

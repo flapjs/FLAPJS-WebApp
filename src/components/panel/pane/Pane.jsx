@@ -5,7 +5,7 @@ import Style from './Pane.module.css';
 import { DropdownIcon } from '../../icons/Icons.js';
 
 /**
- * A React component that can do anything you want. :D
+ * A React component that can do anything you want :D.
  */
 class Pane extends React.Component
 {
