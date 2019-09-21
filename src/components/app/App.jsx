@@ -9,7 +9,7 @@ import AppWorkspace from './structure/AppWorkspace.jsx';
 import AppViewport from './structure/AppViewport.jsx';
 import AppPlayground from './structure/AppPlayground.jsx';
 
-import TabbedPanel from '../panel/TabbedList.jsx';
+import TabbedPanel from '../panel/TabbedPanel.jsx';
 
 import DeprecatedServiceProviders from '@flapjs/deprecated/DeprecatedServiceProviders.jsx';
 import * as DeprecatedAppHandler from '@flapjs/deprecated/DeprecatedAppHandler.jsx';
@@ -32,11 +32,6 @@ class App extends React.Component
 
         // Theme.register(STYLE_REGISTRY);
         DeprecatedAppHandler.initialize(this);
-
-        this.state = {
-            //TODO: This should not be here. It re-renders the ENTIRE app each time...
-            open: true
-        };
     }
 
     /** @override */
@@ -62,15 +57,13 @@ class App extends React.Component
                 <AppServiceProviders>
                     <DeprecatedServiceProviders app={this}>
                         {/** The navigation bar at the top. */}
-                        <AppBar app={this}></AppBar>
+                        <AppBar></AppBar>
                         {/** The entire workspace, including drawers, viewports, playgrounds, etc. */}
                         <AppWorkspace
                             // The playground the user can edit. This is usually the graph.
                             renderPlayground={props => <AppPlayground {...props}></AppPlayground>}
                             // The viewport over the playground. This is usually the overlays.
                             renderViewport={props => <AppViewport {...props}> {DeprecatedAppHandler.renderViewport(this)} </AppViewport>}
-                            // This shouldn't be here...
-                            drawerOpen={this.state.open}
                             // The drawer panel.
                             panels={[
                                 <TabbedPanel

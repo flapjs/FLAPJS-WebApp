@@ -8,7 +8,7 @@ function TabbedPanelSelector(props)
     const { panels, tabIndex, setTabIndex } = props;
 
     // Get all tabs from the panels...
-    const renderTabs = (props) =>
+    const renderTabs = () =>
     {
         const result = [];
         React.Children.forEach(panels, (child, index) =>
@@ -37,14 +37,12 @@ function TabbedPanelSelector(props)
     {
         const children = React.Children.toArray(panels);
 
-        if (tabIndex < 0 || tabIndex >= children.length)
-        {
-            return null;
-        }
-        else
+        if (tabIndex >= 0 && tabIndex < children.length)
         {
             return children[tabIndex];
         }
+
+        return null;
     };
 
     // Give the render functions to someone else to draw...

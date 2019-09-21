@@ -7,11 +7,12 @@ import WorkspaceLayout from '../../workspace/WorkspaceLayout.jsx';
 import SideBarLayout from '../../sidebar/SideBarLayout.jsx';
 import DrawerLayout from '../../drawer/DrawerLayout.jsx';
 
-import DrawerController from '../DrawerController.jsx';
+import TabbedPanelSelector from '../../panel/TabbedPanelSelector.jsx';
+import { DrawerConsumer } from '@flapjs/contexts/drawer/DrawerContext.jsx';
 
 function AppWorkspace(props)
 {
-    const {renderPlayground, renderViewport, panels, drawerOpen, ...otherProps} = props;
+    const {renderPlayground, renderViewport, panels, ...otherProps} = props;
 
     return (
         <FlexibleOrientationLayout>
@@ -31,24 +32,37 @@ function AppWorkspace(props)
                     <WorkspaceLayout
                         renderBackground={() => renderPlayground(newProps)}
                         renderForeground={() =>
-                            <DrawerController panels={panels}>
-                                {(renderTabs, renderPanels) =>
-                                    <SideBarLayout
-                                        side={side}
-                                        renderSideBar = {() =>
-                                            <div className={Style.sidetab + ' ' + direction}>
-                                                {renderTabs(newProps)}
-                                            </div>
-                                        }>
-                                        <DrawerLayout
-                                            side={side}
-                                            open={drawerOpen}
-                                            renderDrawer = {() => renderPanels(newProps)}>
-                                            {renderViewport(newProps)}
-                                        </DrawerLayout>
-                                    </SideBarLayout>
+                            <DrawerConsumer>
+                                {
+                                    (state, dispatch) =>
+                                    {
+                                        return (
+                                            <TabbedPanelSelector
+                                                panels={panels}
+                                                tabIndex={state.tabIndex}
+                                                setTabIndex={tabIndex => dispatch({ type: 'change-tab', value: tabIndex })}>
+                                                {
+                                                    (renderTabs, renderPanels) =>
+                                                        <SideBarLayout
+                                                            side={side}
+                                                            renderSideBar = {() =>
+                                                                <div className={Style.sidetab + ' ' + direction}>
+                                                                    {renderTabs(newProps)}
+                                                                </div>
+                                                            }>
+                                                            <DrawerLayout
+                                                                side={side}
+                                                                open={state.open}
+                                                                renderDrawer = {() => renderPanels(newProps)}>
+                                                                {renderViewport(newProps)}
+                                                            </DrawerLayout>
+                                                        </SideBarLayout>
+                                                }
+                                            </TabbedPanelSelector>
+                                        );
+                                    }
                                 }
-                            </DrawerController>
+                            </DrawerConsumer>
                         }>
                         {props.children}
                     </WorkspaceLayout>

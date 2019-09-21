@@ -3,18 +3,22 @@ import PropTypes from 'prop-types';
 import Style from '../App.module.css';
 
 import LocaleString from '@flapjs/util/localization/LocaleString.jsx';
+import { DrawerDispatchConsumer } from '@flapjs/contexts/drawer/DrawerContext.jsx';
 
 function AppBar(props)
 {
-    const app = props.app;
-
     return (
         <nav className={Style.appbar + ' ' + (props.className || '')}>
             <h2>Flap.js</h2>
             <p><LocaleString entity="hi"/></p>
-            <button onClick={() => app.setState(prev => { return { open: !prev.open }; })}>
-                OPEN
-            </button>
+            <DrawerDispatchConsumer>
+                {
+                    dispatch =>
+                        <button onClick={() => dispatch({ type: 'toggle' })}>
+                            OPEN
+                        </button>
+                }
+            </DrawerDispatchConsumer>
             {props.children}
         </nav>
     );

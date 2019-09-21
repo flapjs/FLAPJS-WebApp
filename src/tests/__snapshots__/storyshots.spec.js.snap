@@ -71,7 +71,7 @@ exports[`Storyshots App playground 1`] = `
               }
             >
               <div
-                className="drawer  right open"
+                className="drawer  right"
                 style={
                   Object {
                     "height": "100%",
@@ -87,14 +87,7 @@ exports[`Storyshots App playground 1`] = `
                 <div
                   className="content"
                 >
-                  <div
-                    className="container "
-                    style={
-                      Object {
-                        "flexDirection": undefined,
-                      }
-                    }
-                  />
+                  I am content
                 </div>
               </div>
               <div

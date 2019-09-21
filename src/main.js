@@ -14,12 +14,16 @@ Logger.out(LOGGER_TAG, `Preparing app for ${NODE_ENV} environment...`);
 // NOTE: __VERSION__ is defined by Webpack with the DefinePlugin.
 Logger.out(LOGGER_TAG, `Loading app version '${__VERSION__}'...`);
 
-function render(Component)
+function render(element)
 {
-    ReactDOM.render(React.createElement(Component), document.getElementById('root'));
+    ReactDOM.render(element, document.getElementById('root'));
 }
 
-render(App);
+render(
+    React.createElement(
+        App, {}
+    )
+);
 
 if (module.hot)
 {

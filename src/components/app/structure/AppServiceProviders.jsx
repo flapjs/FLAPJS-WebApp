@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { ThemeProvider } from '../../theme/ThemeContext.jsx';
 import { LocalizationProvider } from '@flapjs/util/localization/LocalizationContext.jsx';
+import { DrawerProvider } from '@flapjs/contexts/drawer/DrawerContext.jsx';
 
 function AppServiceProviders(props)
 {
@@ -10,7 +11,9 @@ function AppServiceProviders(props)
     return (
         <LocalizationProvider localeCode="en">
             <ThemeProvider source={() => document.getElementById('root')}>
-                {props.children}
+                <DrawerProvider>
+                    {props.children}
+                </DrawerProvider>
             </ThemeProvider>
         </LocalizationProvider>
     );
