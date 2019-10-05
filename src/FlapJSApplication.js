@@ -24,14 +24,14 @@ class FlapJSApplication
 
         // eslint-disable-next-line import/namespace
         const moduleHeader = FlapJSModules[moduleID];
-        return await moduleHeader.fetch();
+        return (await moduleHeader.fetch()).default;
     }
 
     /** @override */
     render()
     {
         const props = {
-            session: this.moduleManager.getCurrentSession(),
+            session: this.moduleManager.getCurrentSession().setApplication(this),
         };
 
         ReactDOM.render(

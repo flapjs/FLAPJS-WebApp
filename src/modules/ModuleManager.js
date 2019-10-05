@@ -28,6 +28,7 @@ class ModuleManager
             try
             {
                 nextModule = await this.application.loadModuleByID(nextModuleID);
+                if (!nextModule) throw new Error('Cannot load null module.');
             }
             catch(e)
             {

@@ -8,6 +8,7 @@ exports[`<App/> rendering renders correctly 1`] = `
     appProps={
       Object {
         "session": ModuleSession {
+          "app": null,
           "id": 0,
           "panels": Array [],
         },
@@ -50,6 +51,7 @@ exports[`<App/> rendering renders correctly 1`] = `
           "context": Object {},
           "props": Object {
             "session": ModuleSession {
+              "app": null,
               "id": 0,
               "panels": Array [],
             },
@@ -78,6 +80,7 @@ exports[`<App/> rendering renders correctly 1`] = `
               "_element": <App
                 session={
                   ModuleSession {
+                    "app": null,
                     "id": 0,
                     "panels": Array [],
                   }
@@ -97,6 +100,7 @@ exports[`<App/> rendering renders correctly 1`] = `
                   appProps={
                     Object {
                       "session": ModuleSession {
+                        "app": null,
                         "id": 0,
                         "panels": Array [],
                       },

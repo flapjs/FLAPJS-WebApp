@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 // import Style from './SessionTitleInput.module.css';
 
 import * as FlapJSModules from '@flapjs/FlapJSModules.js';
+import { SessionConsumer } from '@flapjs/contexts/session/SessionContext.jsx';
 
 /**
  * A React component that can do anything you want.
@@ -27,9 +28,10 @@ class TitleInput extends React.Component
         this.setState({ title: newValue });
     }
 
-    onModuleChange(e)
+    onModuleChange(e, moduleManager)
     {
-        window.alert(e.target.value);
+        const nextModuleID = e.target.value;
+        moduleManager.changeModule(nextModuleID);
     }
 
     renderTitleInput()
@@ -39,7 +41,7 @@ class TitleInput extends React.Component
         );
     } 
 
-    renderModuleOptions(modules)
+    renderModuleOptions(modules, session)
     {
         const result = [];
         for(const moduleID of Object.keys(modules))
@@ -51,7 +53,7 @@ class TitleInput extends React.Component
             );
         }
         return (
-            <select onBlur={this.onModuleChange}>
+            <select onBlur={(e) => this.onModuleChange(e, session.app.getModuleManager())}>
                 {result}
             </select>
         );
@@ -64,7 +66,11 @@ class TitleInput extends React.Component
 
         return (
             <div className={props.className}>
-                {this.renderModuleOptions(FlapJSModules)}
+                <SessionConsumer>
+                    {
+                        session => this.renderModuleOptions(FlapJSModules, session)
+                    }
+                </SessionConsumer>
                 {this.renderTitleInput()}
             </div>
         );

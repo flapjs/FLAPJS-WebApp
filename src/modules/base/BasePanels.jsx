@@ -4,10 +4,12 @@ import TabbedPanel from '@flapjs/components/panel/TabbedPanel.jsx';
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
 import { RunningManIcon, WrenchIcon, BarChartIcon } from '@flapjs/components/icons/Icons.js';
 
+import AboutPanel from './AboutPanel.jsx';
+
 export default [
     <TabbedPanel key="0" title="About me"
         renderTab={(callback, props) => <IconButton key="0" onClick={callback} iconClass={RunningManIcon} {...props}/>}
-        renderPanel={() => 'Panel 1'}/>,
+        renderPanel={() => <AboutPanel/>}/>,
     <TabbedPanel key="1" title="Something"
         renderTab={(callback, props) => <IconButton key="1" onClick={callback} iconClass={WrenchIcon} {...props}/>}
         renderPanel={() => 'Panel 2'}/>,

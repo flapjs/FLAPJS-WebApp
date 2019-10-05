@@ -6,6 +6,13 @@ class ModuleSession
     {
         this.id = id;
         this.panels = [];
+        this.app = null;
+    }
+
+    setApplication(app)
+    {
+        this.app = app;
+        return this;
     }
 
     addPanel(panelElement)
