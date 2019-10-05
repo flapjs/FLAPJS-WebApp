@@ -1,18 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Style from '../App.module.css';
+// import Style from '../App.module.css';
 
-import FlexibleOrientationLayout from '../FlexibleOrientationLayout.jsx';
+import FlexibleOrientationLayout from '../../layout/FlexibleOrientationLayout.jsx';
 import WorkspaceLayout from '../../workspace/WorkspaceLayout.jsx';
-import SideBarLayout from '../../sidebar/SideBarLayout.jsx';
-import DrawerLayout from '../../drawer/DrawerLayout.jsx';
-
-import TabbedPanelSelector from '../../panel/TabbedPanelSelector.jsx';
-import { DrawerConsumer } from '@flapjs/contexts/drawer/DrawerContext.jsx';
 
 function AppWorkspace(props)
 {
-    const {renderPlayground, renderViewport, panels, ...otherProps} = props;
+    const {renderPlayground, renderViewport, renderDrawer, ...otherProps} = props;
 
     return (
         <FlexibleOrientationLayout>
@@ -31,39 +26,10 @@ function AppWorkspace(props)
                 return (
                     <WorkspaceLayout
                         renderBackground={() => renderPlayground(newProps)}
-                        renderForeground={() =>
-                            <DrawerConsumer>
-                                {
-                                    (state, dispatch) =>
-                                    {
-                                        return (
-                                            <TabbedPanelSelector
-                                                panels={panels}
-                                                tabIndex={state.tabIndex}
-                                                setTabIndex={tabIndex => dispatch({ type: 'change-tab', value: tabIndex })}>
-                                                {
-                                                    (renderTabs, renderPanels) =>
-                                                        <SideBarLayout
-                                                            side={side}
-                                                            renderSideBar = {() =>
-                                                                <div className={Style.sidetab + ' ' + direction}>
-                                                                    {renderTabs(newProps)}
-                                                                </div>
-                                                            }>
-                                                            <DrawerLayout
-                                                                side={side}
-                                                                open={state.open}
-                                                                renderDrawer = {() => renderPanels(newProps)}>
-                                                                {renderViewport(newProps)}
-                                                            </DrawerLayout>
-                                                        </SideBarLayout>
-                                                }
-                                            </TabbedPanelSelector>
-                                        );
-                                    }
-                                }
-                            </DrawerConsumer>
-                        }>
+                        renderForeground={() => renderDrawer({
+                            renderViewport: renderViewport.bind(null, newProps),
+                            ...newProps
+                        })}>
                         {props.children}
                     </WorkspaceLayout>
                 );
@@ -73,10 +39,9 @@ function AppWorkspace(props)
 }
 AppWorkspace.propTypes = {
     children: PropTypes.node,
-    renderViewport: PropTypes.func,
-    renderPlayground: PropTypes.func,
-    panels: PropTypes.arrayOf(PropTypes.element),
-    drawerOpen: PropTypes.bool,
+    renderViewport: PropTypes.func.isRequired,
+    renderPlayground: PropTypes.func.isRequired,
+    renderDrawer: PropTypes.func.isRequired,
 };
 
 export default AppWorkspace;

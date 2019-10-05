@@ -4,7 +4,16 @@ exports[`<App/> rendering renders correctly 1`] = `
 <div
   className="container"
 >
-  <AppServiceProviders>
+  <AppServiceProviders
+    appProps={
+      Object {
+        "session": ModuleSession {
+          "id": 0,
+          "panels": Array [],
+        },
+      }
+    }
+  >
     <DeprecatedServiceProviders
       app={
         App {
@@ -17,8 +26,8 @@ exports[`<App/> rendering renders correctly 1`] = `
               "sequence" => [Function],
             },
             "_notificationMap": Map {
-              0 => Notification {
-                "_id": 0,
+              1 => Notification {
+                "_id": 1,
                 "_layoutID": null,
                 "_message": "Welcome to Flap.js!",
                 "_notificationManager": [Circular],
@@ -28,7 +37,7 @@ exports[`<App/> rendering renders correctly 1`] = `
             },
             "_notifications": Array [
               Notification {
-                "_id": 0,
+                "_id": 1,
                 "_layoutID": null,
                 "_message": "Welcome to Flap.js!",
                 "_notificationManager": [Circular],
@@ -39,7 +48,12 @@ exports[`<App/> rendering renders correctly 1`] = `
             "provider": null,
           },
           "context": Object {},
-          "props": Object {},
+          "props": Object {
+            "session": ModuleSession {
+              "id": 0,
+              "panels": Array [],
+            },
+          },
           "refs": Object {},
           "setState": [Function],
           "state": null,
@@ -61,7 +75,14 @@ exports[`<App/> rendering renders correctly 1`] = `
                 "useRef": [Function],
                 "useState": [Function],
               },
-              "_element": <App />,
+              "_element": <App
+                session={
+                  ModuleSession {
+                    "id": 0,
+                    "panels": Array [],
+                  }
+                }
+              />,
               "_firstWorkInProgressHook": null,
               "_forcedUpdate": false,
               "_instance": [Circular],
@@ -72,34 +93,22 @@ exports[`<App/> rendering renders correctly 1`] = `
               "_rendered": <div
                 className="container"
               >
-                <AppServiceProviders>
+                <AppServiceProviders
+                  appProps={
+                    Object {
+                      "session": ModuleSession {
+                        "id": 0,
+                        "panels": Array [],
+                      },
+                    }
+                  }
+                >
                   <DeprecatedServiceProviders
                     app={[Circular]}
                   >
                     <AppBar />
                     <AppWorkspace
-                      panels={
-                        Array [
-                          <TabbedPanel
-                            renderTab={[Function]}
-                            title="About me"
-                          >
-                            I am content
-                          </TabbedPanel>,
-                          <TabbedPanel
-                            renderTab={[Function]}
-                            title="Something"
-                          >
-                            Other content
-                          </TabbedPanel>,
-                          <TabbedPanel
-                            renderTab={[Function]}
-                            title="Else"
-                          >
-                            Something else
-                          </TabbedPanel>,
-                        ]
-                      }
+                      renderDrawer={[Function]}
                       renderPlayground={[Function]}
                       renderViewport={[Function]}
                     />
@@ -116,28 +125,7 @@ exports[`<App/> rendering renders correctly 1`] = `
     >
       <AppBar />
       <AppWorkspace
-        panels={
-          Array [
-            <TabbedPanel
-              renderTab={[Function]}
-              title="About me"
-            >
-              I am content
-            </TabbedPanel>,
-            <TabbedPanel
-              renderTab={[Function]}
-              title="Something"
-            >
-              Other content
-            </TabbedPanel>,
-            <TabbedPanel
-              renderTab={[Function]}
-              title="Else"
-            >
-              Something else
-            </TabbedPanel>,
-          ]
-        }
+        renderDrawer={[Function]}
         renderPlayground={[Function]}
         renderViewport={[Function]}
       />

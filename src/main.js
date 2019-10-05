@@ -2,31 +2,26 @@
 /* global NODE_ENV */
 /* global __VERSION__ */
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Logger from './util/Logger.js';
-import App from './components/app/App.jsx';
+// NOTE: This is for polyfill
+// eslint-disable-next-line import/no-unassigned-import
+import 'core-js/stable';
+// eslint-disable-next-line import/no-unassigned-import
+import 'regenerator-runtime/runtime';
 
-const LOGGER_TAG = 'Main';
+import Logger from './util/Logger.js';
+import FlapJSApplication from './FlapJSApplication.js';
 
 // NOTE: NODE_ENV is defined in `template.html` as a global.
-Logger.out(LOGGER_TAG, `Preparing app for ${NODE_ENV} environment...`);
+Logger.out('Main', `Preparing app for ${NODE_ENV} environment...`);
 // NOTE: __VERSION__ is defined by Webpack with the DefinePlugin.
-Logger.out(LOGGER_TAG, `Loading app version '${__VERSION__}'...`);
+Logger.out('Main', `Loading app version '${__VERSION__}'...`);
 
-function render(element)
-{
-    ReactDOM.render(element, document.getElementById('root'));
-}
+// Initial rendering...
+FlapJSApplication.render();
 
-render(
-    React.createElement(
-        App, {}
-    )
-);
-
+// Debug rendering...
 if (module.hot)
 {
-    Logger.out(LOGGER_TAG, '...in debug mode for hot-reload...');
-    module.hot.accept('./components/app/App.jsx', () => render(App));
+    Logger.out('Main', '...in debug mode for hot-reload...');
+    module.hot.accept('./FlapJSApplication.js', () => FlapJSApplication.render());
 }

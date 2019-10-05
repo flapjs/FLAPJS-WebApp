@@ -1,0 +1,17 @@
+.container {
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    outline: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.icon {
+    color: #FFFFFF;
+    background: none;
+    border: none;
+    width: 2rem;
+    height: 2rem;
+}

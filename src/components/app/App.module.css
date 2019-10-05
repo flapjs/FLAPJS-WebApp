@@ -21,6 +21,11 @@
     margin: 0 1rem;
 }
 
+.apptitle {
+    flex: 1;
+    text-align: center;
+}
+
 .tab {
     padding: 0;
     margin: 0;
@@ -46,21 +51,4 @@
 .divider {
     /** TODO: This should disappear if too small. */
     flex: 1;
-}
-
-:global(.icon) {
-    background: none;
-    border: none;
-    width: 2rem;
-    height: 2rem;
-}
-
-:global(.icon-button) {
-    padding: 0;
-    margin: 0;
-    background: none;
-    border: none;
-    outline: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
 }

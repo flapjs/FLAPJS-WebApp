@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Style from './App.module.css';
-import './Theme.css';
+import './setup/Theme.css';
 
 import AppServiceProviders from './structure/AppServiceProviders.jsx';
 import AppBar from './structure/AppBar.jsx';
 import AppWorkspace from './structure/AppWorkspace.jsx';
 import AppViewport from './structure/AppViewport.jsx';
 import AppPlayground from './structure/AppPlayground.jsx';
-
-import TabbedPanel from '../panel/TabbedPanel.jsx';
+import AppDrawer from './structure/AppDrawer.jsx';
 
 import DeprecatedServiceProviders from '@flapjs/deprecated/DeprecatedServiceProviders.jsx';
 import * as DeprecatedAppHandler from '@flapjs/deprecated/DeprecatedAppHandler.jsx';
@@ -51,10 +50,12 @@ class App extends React.Component
     {
         const props = this.props;
 
+        const session = props.session;
+
         return (
             <div className={Style.container + (props.className || '')}>
                 {/** All service providers. */}
-                <AppServiceProviders>
+                <AppServiceProviders appProps={props}>
                     <DeprecatedServiceProviders app={this}>
                         {/** The navigation bar at the top. */}
                         <AppBar></AppBar>
@@ -64,27 +65,8 @@ class App extends React.Component
                             renderPlayground={props => <AppPlayground {...props}></AppPlayground>}
                             // The viewport over the playground. This is usually the overlays.
                             renderViewport={props => <AppViewport {...props}> {DeprecatedAppHandler.renderViewport(this)} </AppViewport>}
-                            // The drawer panel.
-                            panels={[
-                                <TabbedPanel
-                                    key="0"
-                                    title="About me"
-                                    renderTab={() => 'ME'}>
-                                    I am content
-                                </TabbedPanel>,
-                                <TabbedPanel
-                                    key="1"
-                                    title="Something"
-                                    renderTab={() => 'YOU'}>
-                                    Other content
-                                </TabbedPanel>,
-                                <TabbedPanel
-                                    key="2"
-                                    title="Else"
-                                    renderTab={() => 'WEE'}>
-                                    Something else
-                                </TabbedPanel>
-                            ]}>
+                            // The drawer in the workspace. This is usually the side drawer.
+                            renderDrawer={props => <AppDrawer tabbedPanels={session.panels} {...props}></AppDrawer>}>
                         </AppWorkspace>
                     </DeprecatedServiceProviders>
                 </AppServiceProviders>
@@ -95,8 +77,7 @@ class App extends React.Component
 
 App.propTypes = {
     className: PropTypes.string,
-};
-App.defaultProps = {
+    session: PropTypes.object.isRequired,
 };
 
 export default App;

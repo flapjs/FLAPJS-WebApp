@@ -9,6 +9,7 @@ jest.mock('@flapjs/util/MathHelper.js', () => ({
 
 import { uuid } from '@flapjs/util/MathHelper.js';
 import App from './App.jsx';
+import ModuleSession from '@flapjs/modules/ModuleSession.js';
 
 let wrapper;
 let nextUUID = 0;
@@ -16,7 +17,7 @@ let nextUUID = 0;
 beforeEach(() =>
 {
     uuid.mockImplementation(() => nextUUID++);
-    wrapper = shallow(<App/>);
+    wrapper = shallow(<App session={new ModuleSession()}/>);
 });
 
 describe('<App/> rendering', () =>

@@ -7,14 +7,6 @@ export function downloadText(filename, textData)
     downloadURL(filename, getTextDataURI(textData));
 }
 
-function createBlobFromSVG(svg)
-{
-    const serializer = new XMLSerializer();
-    const svgString = serializer.serializeToString(svg);
-    const blob = new Blob([svgString], { type: 'image/svg+xml' });
-    return blob;
-}
-
 export function downloadImageFromSVG(filename, filetype, svg, width, height)
 {
     const blob = createBlobFromSVG(svg);
@@ -74,6 +66,14 @@ export function downloadURL(filename, url)
 
     element.click();
     document.body.removeChild(element);
+}
+
+function createBlobFromSVG(svg)
+{
+    const serializer = new XMLSerializer();
+    const svgString = serializer.serializeToString(svg);
+    const blob = new Blob([svgString], { type: 'image/svg+xml' });
+    return blob;
 }
 
 function getTextDataURI(data)

@@ -10,12 +10,59 @@ exports[`Storyshots App playground 1`] = `
     <h2>
       Flap.js
     </h2>
-    <p />
-    <button
-      onClick={[Function]}
+    <div
+      className="apptitle"
     >
-      OPEN
-    </button>
+      <select
+        onBlur={[Function]}
+      >
+        <option
+          value="base"
+        >
+          base
+        </option>
+        <option
+          value="node"
+        >
+          node
+        </option>
+        <option
+          value="fa"
+        >
+          fa
+        </option>
+        <option
+          value="re"
+        >
+          re
+        </option>
+        <option
+          value="pda"
+        >
+          pda
+        </option>
+        <option
+          value="cfg"
+        >
+          cfg
+        </option>
+        <option
+          value="tm"
+        >
+          tm
+        </option>
+        <option
+          value="logic"
+        >
+          logic
+        </option>
+      </select>
+      <input
+        onChange={[Function]}
+        type="text"
+        value=""
+      />
+    </div>
   </nav>
   <div
     className="container"
@@ -40,23 +87,14 @@ exports[`Storyshots App playground 1`] = `
             <div
               className="sidetab horizontal"
             >
-              <div>
-                <button
-                  onClick={[Function]}
-                >
-                  ME
-                </button>
-                <button
-                  onClick={[Function]}
-                >
-                  YOU
-                </button>
-                <button
-                  onClick={[Function]}
-                >
-                  WEE
-                </button>
-              </div>
+              <button
+                className="container "
+                onClick={[Function]}
+              >
+                <span
+                  className="icon"
+                />
+              </button>
             </div>
           </div>
           <div
@@ -86,9 +124,7 @@ exports[`Storyshots App playground 1`] = `
                 />
                 <div
                   className="content"
-                >
-                  I am content
-                </div>
+                />
               </div>
               <div
                 className="viewport"

@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// import TabbedList from './TabbedList.jsx';
-
 function TabbedPanelSelector(props)
 {
     const { panels, tabIndex, setTabIndex } = props;
@@ -13,16 +11,19 @@ function TabbedPanelSelector(props)
         const result = [];
         React.Children.forEach(panels, (child, index) =>
         {
+            const onTabClick = () => setTabIndex(index);
             result.push(
-                <button
-                    key={index + ':' + child.props.title}
-                    onClick={() => setTabIndex(index)}>
+                <div key={index + ':' + child.props.title}>
                     {
                         child.props.renderTab
-                            ? child.props.renderTab()
-                            : child.props.title
+                            ? child.props.renderTab(onTabClick)
+                            : (
+                                <button onClick={onTabClick}>
+                                    {child.props.title}
+                                </button>
+                            )
                     }
-                </button>
+                </div>
             );
         });
         return (

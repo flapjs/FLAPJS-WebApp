@@ -1,47 +1,100 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Style from '../App.module.css';
 
-import Pane from '../../panel/pane/Pane.jsx';
+import SideBarLayout from '../../sidebar/SideBarLayout.jsx';
+import DrawerLayout from '../../drawer/DrawerLayout.jsx';
+
+import { DropdownIcon } from '@flapjs/components/icons/Icons.js';
+
+import { DrawerConsumer } from '@flapjs/contexts/drawer/DrawerContext.jsx';
+import IconTab from '@flapjs/components/panel/IconTab.jsx';
+import DrawerExpander from '@flapjs/components/app/structure/expander/DrawerExpander.jsx';
 
 function AppDrawer(props)
 {
+    const {renderViewport, tabbedPanels, side, direction} = props;
+
     return (
-        <div className={props.className || ''} style={{color: 'white', width: '100%', height: '100%'}}>
+        <DrawerConsumer>
             {
-                /*
-                    <ColorPane source={() => document.querySelector('#root')}>
-                    </ColorPane>
-                    <Pane title="About" open={true}>
-                        <p>I am content :D</p>
-                        <ThemeStyleList/>
-                    </Pane>
-                */
+                (state, dispatch) =>
+                {
+                    const tabIndex = state.tabIndex;
+                    const panels = renderPanels(tabbedPanels, tabIndex);
+                    const tabs = renderTabs(tabbedPanels, tabIndex => dispatch({ type: 'change-tab', value: tabIndex }), tabIndex);
+                    
+                    return (
+                        <SideBarLayout
+                            side={side}
+                            renderSideBar = {() =>
+                                <div className={Style.sidetab + ' ' + direction}>
+                                    <DrawerExpander>
+                                        { callback => <IconTab onClick={callback} iconClass={DropdownIcon}/> }
+                                    </DrawerExpander>
+                                    {tabs}
+                                </div>
+                            }>
+                            <DrawerLayout
+                                side={side}
+                                open={state.open}
+                                renderDrawer = {() => panels}>
+                                {renderViewport()}
+                            </DrawerLayout>
+                        </SideBarLayout>
+                    );
+                }
             }
-            <Pane title="Hello World" open={true}>
-                <p>I am content :D</p>
-                <p>
-                    Aenean libero orci, mattis ut ullamcorper eu, scelerisque et augue. Nam egestas vestibulum interdum. Integer ligula nunc, efficitur vitae velit sed, tristique cursus ligula. Aliquam est est, consectetur quis turpis a, luctus ultrices odio. Morbi a feugiat mi. Fusce orci dolor, maximus quis eros non, placerat accumsan tellus. Nam a lectus vitae nisl scelerisque ultrices in vitae erat.
-                </p>
-                <p>
-                    Sed auctor, augue non sodales euismod, metus nulla congue ex, sit amet rhoncus metus turpis ut elit. Sed vitae rutrum augue. Etiam dictum ornare tortor sed tristique. Cras quis velit nisl. Nulla rhoncus lacus sit amet interdum consectetur. Pellentesque aliquam consequat vehicula. Sed eu dignissim eros. Donec rhoncus consectetur ante, sit amet pharetra urna tempor sed. In scelerisque ligula mi. Nam gravida maximus ex, consequat ultricies nisi molestie non. Maecenas id semper eros.
-                </p>
-            </Pane>
-            <Pane title="Nothing To See Here" open={true}>
-                <p>I am content :D</p>
-                <p>
-                    Aenean libero orci, mattis ut ullamcorper eu, scelerisque et augue. Nam egestas vestibulum interdum. Integer ligula nunc, efficitur vitae velit sed, tristique cursus ligula. Aliquam est est, consectetur quis turpis a, luctus ultrices odio. Morbi a feugiat mi. Fusce orci dolor, maximus quis eros non, placerat accumsan tellus. Nam a lectus vitae nisl scelerisque ultrices in vitae erat.
-                </p>
-                <p>
-                    Sed auctor, augue non sodales euismod, metus nulla congue ex, sit amet rhoncus metus turpis ut elit. Sed vitae rutrum augue. Etiam dictum ornare tortor sed tristique. Cras quis velit nisl. Nulla rhoncus lacus sit amet interdum consectetur. Pellentesque aliquam consequat vehicula. Sed eu dignissim eros. Donec rhoncus consectetur ante, sit amet pharetra urna tempor sed. In scelerisque ligula mi. Nam gravida maximus ex, consequat ultricies nisi molestie non. Maecenas id semper eros.
-                </p>
-            </Pane>
-            {props.children}
-        </div>
+        </DrawerConsumer>
     );
 }
 AppDrawer.propTypes = {
-    className: PropTypes.string,
     children: PropTypes.node,
+    renderViewport: PropTypes.func.isRequired,
+    tabbedPanels: PropTypes.arrayOf(PropTypes.element),
+    side: PropTypes.oneOf([
+        'top',
+        'left',
+        'right',
+        'bottom'
+    ]),
+    direction: PropTypes.oneOf([
+        'vertical',
+        'horizontal'
+    ]),
+    orientation: PropTypes.oneOf([
+        'row',
+        'column'
+    ]),
+};
+AppDrawer.defaultProps = {
+    tabbedPanels: [],
+    side: 'right',
+    direction: 'horizontal',
+    orientation: 'row',
 };
 
 export default AppDrawer;
+
+function renderPanels(tabbedPanels, tabIndex = 0)
+{
+    if (tabIndex >= 0 && tabIndex < tabbedPanels.length)
+    {
+        return tabbedPanels[tabIndex].props.renderPanel();
+    }
+    else
+    {
+        return null;
+    }
+}
+
+function renderTabs(tabbedPanels, tabCallback, tabIndex = 0)
+{
+    return tabbedPanels.map((tabbedPanel, index) =>
+    {
+        // NOTE: Currently, there are no props to be give to tabbed panel...
+        const tabbedPanelProps = {};
+        const tabbedPanelCallback = tabCallback.bind(null, index, tabbedPanelProps);
+        return tabbedPanel.props.renderTab(tabbedPanelCallback);
+    });
+}
