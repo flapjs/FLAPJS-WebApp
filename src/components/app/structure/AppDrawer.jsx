@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Style from '../App.module.css';
 
-import SideBarLayout from '@flapjs/components/sidebar/SideBarLayout.jsx';
+import SideBarLayout from '@flapjs/components/sidebar/layout/SideBarLayout.jsx';
 import DrawerLayout from '@flapjs/components/drawer/layout/DrawerLayout.jsx';
 import DrawerExpander from '@flapjs/components/drawer/expander/DrawerExpander.jsx';
 
