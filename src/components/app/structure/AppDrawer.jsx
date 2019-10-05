@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Style from '../App.module.css';
 
-import SideBarLayout from '../../sidebar/SideBarLayout.jsx';
-import DrawerLayout from '../../drawer/DrawerLayout.jsx';
+import SideBarLayout from '@flapjs/components/sidebar/SideBarLayout.jsx';
+import DrawerLayout from '@flapjs/components/drawer/layout/DrawerLayout.jsx';
+import DrawerExpander from '@flapjs/components/drawer/expander/DrawerExpander.jsx';
 
 import { DropdownIcon } from '@flapjs/components/icons/Icons.js';
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
 
 import { DrawerConsumer } from '@flapjs/contexts/drawer/DrawerContext.jsx';
-import DrawerExpander from '@flapjs/components/app/structure/expander/DrawerExpander.jsx';
 
 function AppDrawer(props)
 {
