@@ -32,9 +32,11 @@
   "homepage": "https://github.com/flapjs/FLAPJS-WebApp#readme",
   "dependencies": {
     "@ctrl/tinycolor": "^2.5.3",
+    "core-js": "^3.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "regenerator-runtime": "^0.13.3"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",

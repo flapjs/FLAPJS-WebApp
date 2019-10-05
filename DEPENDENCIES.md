@@ -62,6 +62,14 @@ It is added to the presets list in `.babelrc`.
 > **SETUP:**
 It is added to the presets list in `.babelrc`.
 
+## core-js
+- This allows babel to polyfill features. It used to be part of babel, but now it is separate. Used by `babel`.
+- Sadly, this is required at runtime (not only at bundling).
+
+## regenerator-runtime
+- This allows async/await polyfills. Used by `core-js`.
+- Sadly, this is required at runtime (not only at bundling).
+
 ## babel-eslint
 - This adds support for babel transforms in eslint. This is basically only used to stop eslint from picking on dynamic import statements.
 
@@ -133,6 +141,16 @@ This is only used in the `test` environment in `.babelrc` and in the config file
 - Since the HTML is now generated, it requires we specify a template. This is stored in `./src/assets/template.html`. You can change the template in the webpack config file.
 - https://github.com/jantimon/html-webpack-plugin
 
+## html-webpack-script-attributes-plugin
+- Allows additional attributes for the generated script tags, such as 'async' or 'defer'.
+- I wrote this one... So feel free to find something better.
+- _DEPENDENCY:_ Requires `html-webpack-plugin`.
+
+> **NOTE:** Originally, we used `script-ext-html-webpack-plugin` to handle this. However, it cannot play nicely with `storybook`, since `storybook` requires its own instance of the `html-webpack-plugin` and it doesn't allow us to change that.`html-webpack-source-inline-plugin`. Therefore, we've actually implemented our own plugin that does just what we want :D This is probably why you don't see this in `package.json`, because we wrote it ourselves. It currently lives in `tools`.
+
+> **SETUP:**
+The plugin is added to `webpack`, under `plugins`.
+
 ## html-webpack-inline-source-only-plugin
 - Allows script (and link) tags to be inlined into the HTML file. This is only used for a couple of specific globally scoped scripts. Other scripts, particularly those larger, should be bundled and loaded asynchronously (through `src` or `href` attributes).
 - I wrote this one... So feel free to find something better.
@@ -141,7 +159,7 @@ This is only used in the `test` environment in `.babelrc` and in the config file
 > **NOTE:** There exists other plugins that claim to do the same thing, such as `html-inline-source-webpack-plugin`, `script-ext-html-webpack-plugin`, and `html-webpack-source-inline-plugin`. However, all inlined scripts would just be injected with all other scripts in random order. None of them support html templates as defined by `html-webpack-plugin`. Therefore, we've actually implemented our own plugin that does just what we want :D This is probably why you don't see this in `package.json`, because we wrote it ourselves. It currently lives in `tools`.
 
 > **SETUP:**
-The plugin is added to `webpack`, under `plugins`. Refer to their documentation for more information.
+The plugin is added to `webpack`, under `plugins`.
 
 > **USAGE:**
 Any script or link tag with the `inline` attribute in the generated HTML page by `html-webpack-plugin` will be inlined. Simple as that.
@@ -232,6 +250,9 @@ To use it, add it to snapshotSerializers array in Jest config file.
 ## react-test-renderer
 - This allows `storybook/addon-storyshots` to properly serialize React components into comparable snapshots.
 - In the past, we have used `enzyme-to-json` to do this, but when doing "deep" mocks, it led to infinite loops. This is probably a bug with either `enzyme` or `enzyme-to-json`, so now we use `react-test-renderer` for storyshots instead. This is the only place `react-test-renderer` is used. `enzyme` is still the preferred testing library.
+
+> **NOTICE:**
+The version MUST MATCH the `react` version. Otherwise, you will get an error.
 
 ## storybook/addon-storyshots
 - Allows automatic test snapshots for every Storybook story. This does require its own `.spec.js` file to be executed by Jest (which currently lives in `src/tests`).
