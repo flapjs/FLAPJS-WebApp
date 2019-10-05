@@ -53,7 +53,7 @@ class TitleInput extends React.Component
             );
         }
         return (
-            <select onBlur={(e) => this.onModuleChange(e, session.app.getModuleManager())}>
+            <select onBlur={(e) => this.onModuleChange(e, session.sessionManager)}>
                 {result}
             </select>
         );

@@ -11,7 +11,7 @@ class ModuleManager
         this.defaultModule = defaultModule;
 
         this.currentModule = null;
-        this.currentSession = new ModuleSession();
+        this.currentSession = new ModuleSession(this);
 
         if (this.defaultModule)
         {
@@ -55,7 +55,7 @@ class ModuleManager
         
         if (nextModule)
         {
-            const nextSession = new ModuleSession();
+            const nextSession = new ModuleSession(this);
             if (initializeModule(nextModule, nextSession))
             {
                 this.currentModule = nextModule;

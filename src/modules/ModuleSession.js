@@ -2,27 +2,23 @@ import * as MathHelper from '@flapjs/util/MathHelper.js';
 
 class ModuleSession
 {
-    constructor(id = MathHelper.uuid())
+    constructor(sessionManager = null, id = MathHelper.uuid())
     {
         this.id = id;
         this.panels = [];
-        this.app = null;
-    }
 
-    setApplication(app)
-    {
-        this.app = app;
-        return this;
-    }
-
-    addPanel(panelElement)
-    {
-        this.panels.push(panelElement);
+        this.sessionManager = sessionManager;
     }
 
     reset()
     {
         this.panels.length = 0;
+    }
+
+    addPanel(panelElement)
+    {
+        this.panels.push(panelElement);
+        return this;
     }
 }
 
