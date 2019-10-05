@@ -31,7 +31,7 @@ class FlapJSApplication
     render()
     {
         const props = {
-            session: this.moduleManager.getCurrentSession().setApplication(this),
+            session: this.moduleManager.getCurrentSession(),
         };
 
         ReactDOM.render(
