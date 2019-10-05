@@ -6,9 +6,9 @@ import SideBarLayout from '../../sidebar/SideBarLayout.jsx';
 import DrawerLayout from '../../drawer/DrawerLayout.jsx';
 
 import { DropdownIcon } from '@flapjs/components/icons/Icons.js';
+import IconButton from '@flapjs/components/icons/IconButton.jsx';
 
 import { DrawerConsumer } from '@flapjs/contexts/drawer/DrawerContext.jsx';
-import IconTab from '@flapjs/components/panel/IconTab.jsx';
 import DrawerExpander from '@flapjs/components/app/structure/expander/DrawerExpander.jsx';
 
 function AppDrawer(props)
@@ -30,7 +30,7 @@ function AppDrawer(props)
                             renderSideBar = {() =>
                                 <div className={Style.sidetab + ' ' + direction}>
                                     <DrawerExpander>
-                                        { callback => <IconTab onClick={callback} iconClass={DropdownIcon}/> }
+                                        { callback => <IconButton onClick={callback} iconClass={DropdownIcon}/> }
                                     </DrawerExpander>
                                     {tabs}
                                 </div>

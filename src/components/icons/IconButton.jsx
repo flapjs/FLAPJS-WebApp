@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Style from './IconTab.module.css';
+import Style from './IconButton.module.css';
 
-function IconTab(props)
+function IconButton(props)
 {
     const IconClass = props.iconClass;
 
@@ -14,11 +14,11 @@ function IconTab(props)
         </button>
     );
 }
-IconTab.propTypes = {
+IconButton.propTypes = {
     className: PropTypes.string,
     children: PropTypes.node,
     onClick: PropTypes.func,
     iconClass: PropTypes.elementType,
 };
 
-export default IconTab;
+export default IconButton;
