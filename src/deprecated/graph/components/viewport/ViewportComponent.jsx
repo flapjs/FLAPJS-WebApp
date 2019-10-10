@@ -2,14 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Style from './ViewportComponent.module.css';
 
-import ViewportAdapter from '../../input/ViewportAdapter.js';
-import InputAdapter from '../../input/InputAdapter.js';
+import ViewController from '../../controller/ViewController.js';
 import AbstractInputHandler from '../../input/AbstractInputHandler.js';
 
 const DEFAULT_VIEW_SIZE = 300;
-const SMOOTH_OFFSET_DAMPING = 0.4;
-const MIN_SCALE = 0.1;
-const MAX_SCALE = 10;
 
 class ViewportComponent extends React.Component
 {
@@ -19,47 +15,43 @@ class ViewportComponent extends React.Component
 
         this._ref = React.createRef();
 
-        this._viewportAdapter = new ViewportAdapter()
-            .setMinScale(MIN_SCALE)
-            .setMaxScale(MAX_SCALE)
-            .setOffsetDamping(SMOOTH_OFFSET_DAMPING);
-        this._inputAdapter = new InputAdapter(this._viewportAdapter);
+        this._viewController = new ViewController();
     }
 
     addInputHandler(inputHandler)
     {
         if (!(inputHandler instanceof AbstractInputHandler)) throw new Error('input handler must be an instanceof AbstractInputHandler');
-        this._inputAdapter.addInputHandler(inputHandler);
+        this._viewController.getInputAdapter().addInputHandler(inputHandler);
         return this;
     }
 
     /** @override */
     componentDidMount()
     {
-        this._inputAdapter.initialize(this._ref.current);
+        this._viewController.getInputAdapter().initialize(this._ref.current);
     }
 
     /** @override */
     componentWillUnmount()
     {
-        this._inputAdapter.destroy();
+        this._viewController.getInputAdapter().destroy();
     }
 
     /** @override */
     componentDidUpdate()
     {
-        this._inputAdapter.update();
+        this._viewController.getInputAdapter().update();
     }
 
     getSVGTransformString()
     {
-        const viewport = this._viewportAdapter;
+        const viewport = this._viewController.getViewportAdapter();
         return 'translate(' + viewport.getOffsetX() + ' ' + viewport.getOffsetY() + ')';
     }
 
     getSVGViewBoxString(baseViewSize)
     {
-        const viewport = this._viewportAdapter;
+        const viewport = this._viewController.getViewportAdapter();
         const viewSize = baseViewSize * Math.max(Number.MIN_VALUE, viewport.getScale());
         const halfViewSize = viewSize / 2;
         return (-halfViewSize) + ' ' + (-halfViewSize) + ' ' + viewSize + ' ' + viewSize;
@@ -72,12 +64,12 @@ class ViewportComponent extends React.Component
 
     getInputAdapter()
     {
-        return this._inputAdapter;
+        return this._viewController.getInputAdapter();
     }
 
     getViewportAdapter()
     {
-        return this._inputAdapter.getViewportAdapter();
+        return this._viewController.getViewportAdapter();
     }
 
     /** @override */
