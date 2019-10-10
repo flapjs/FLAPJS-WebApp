@@ -34,7 +34,7 @@ class InputPointer
     }
 
     /**
-     * Returns the position which the input began at. This is mutable.
+     * @returns {object} The position which the input began at. This is mutable.
      */
     getInputEventPosition() { return this._inputpos; }
 
@@ -58,17 +58,23 @@ class InputPointer
     /**
      * The DOM element for which this pointer provides context for; this should be
      * the same element as in the input adapter.
+     * 
+     * @returns {HTMLElement} The DOM element.
      */
     getElement() { return this._element; }
 
     /**
      * The viewport for this pointer operates within; this should be the same
      * viewport as in the input adapter.
+     * 
+     * @returns {ViewportAdapter} The viewport adapter.
      */
     getViewportAdapter() { return this._viewportAdapter; }
 
     /**
      * The input adapter that controls this pointer's properties.
+     * 
+     * @returns {InputAdapter} The input adapter.
      */
     getInputAdapter() { return this._inputAdapter; }
 }

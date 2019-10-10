@@ -43,10 +43,12 @@ class BasePlaygroundLayer extends React.Component
                     {
                         session =>
                             <GraphView
+                                ref={session.graphView}
+                                inputController={session.inputController}
                                 renderGraph={graphView => 
                                     <NodeGraphLayer
                                         inputContext={graphView.getInputContext()}
-                                        inputController={graphView.getInputController()}
+                                        inputController={session.inputController}
                                         graphController={session.graphController}
                                         editable={true}/>}
                                 renderOverlay={graphView => {}}>
