@@ -28,6 +28,12 @@
     z-index: 1000;
     background: var(--drawer-layout-background);
 
+    /**
+     * HACK: Overrides the 'none' for workspace foreground input events.
+     * Refer to WorkspaceLayout for more info.
+     **/
+    pointer-events: auto;
+
     /** Animated properties */
     transform: translateX(0);
     transition: transform 0.3s ease;

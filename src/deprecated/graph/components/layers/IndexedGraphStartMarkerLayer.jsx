@@ -64,7 +64,7 @@ class IndexedGraphStartMarkerLayer extends React.Component
                 {target &&
                     <Renderer
                         node={target}
-                        color={'var(--color-graph-text)'}
+                        color={this.props.color}
                         onMouseOver={onMouseOver}
                         onMouseOut={onMouseOut}
                         pointerEvents={editable && inputController && inputController.hasPointerEvents(target) ? 'all' : 'none'} />}
@@ -80,6 +80,7 @@ IndexedGraphStartMarkerLayer.propTypes = {
     inputContext: PropTypes.any,
     inputPriority: PropTypes.any,
     editable: PropTypes.bool,
+    color: PropTypes.string,
 };
 
 export default IndexedGraphStartMarkerLayer;

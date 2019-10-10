@@ -1,4 +1,4 @@
-importScripts("/precache-manifest.f1fbe1de7a868e9d39e961528ed9f703.js", "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
+importScripts("/precache-manifest.6d8b6e6ffd7296d0c79d1488e3404d59.js", "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 /* eslint-env serviceworker */
 /* global workbox */
@@ -42,7 +42,8 @@ workbox.core.setCacheNameDetails({
 /**
  * The workboxSW.precacheAndRoute() method efficiently caches and responds to
  * requests for URLs in the manifest.
- * See https://goo.gl/S9QRab
+ * 
+ * @see {@link https://goo.gl/S9QRab}
  */
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});

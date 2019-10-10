@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import * as FlapJSModules from './FlapJSModules.js';
 
 import App from './components/app/App.jsx';
-import ModuleManager from './modules/ModuleManager.js';
+import ModuleManager from './session/ModuleManager.js';
 import BaseModule from './modules/base/BaseModule.js';
 
 class FlapJSApplication
@@ -24,12 +24,19 @@ class FlapJSApplication
 
         // eslint-disable-next-line import/namespace
         const moduleHeader = FlapJSModules[moduleID];
+        // DEBUG: This is just to slow down module loading. For testing purposes.
+        await new Promise(resolve => setTimeout(resolve, 3000));
         return (await moduleHeader.fetch()).default;
     }
 
     /** @override */
-    render()
+    render(clearFirst=false)
     {
+        if (clearFirst)
+        {
+            ReactDOM.render(null, this.rootElement);
+        }
+
         const props = {
             session: this.moduleManager.getCurrentSession(),
         };

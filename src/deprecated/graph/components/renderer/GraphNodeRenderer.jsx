@@ -54,8 +54,8 @@ class GraphNodeRenderer extends React.Component
 GraphNodeRenderer.propTypes = {
     // TODO: Fix type
     node: PropTypes.any,
-    fill: PropTypes.color,
-    stroke: PropTypes.color,
+    fill: PropTypes.string,
+    stroke: PropTypes.string,
     onMouseOver: PropTypes.func,
     onMouseOut: PropTypes.func,
     pointerEvents: PropTypes.string,

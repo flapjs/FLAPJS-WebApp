@@ -25,12 +25,12 @@ class WorkspaceLayout extends React.Component
         return (
             <section ref={this.container}
                 className={Style.container + ' ' + (props.className || '')}>
-                <div className={Style.foreground}>
-                    {renderForeground && renderForeground(this)}
-                </div>
-                {props.children}
                 <div className={Style.background}>
                     {renderBackground && renderBackground(this)}
+                </div>
+                {props.children}
+                <div className={Style.foreground}>
+                    {renderForeground && renderForeground(this)}
                 </div>
             </section>
         );

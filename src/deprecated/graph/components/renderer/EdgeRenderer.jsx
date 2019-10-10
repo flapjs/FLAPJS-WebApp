@@ -54,7 +54,7 @@ DefaultEndpointRenderer.propTypes = {
     }),
     length: PropTypes.number,
     angle: PropTypes.number,
-    color: PropTypes.color,
+    color: PropTypes.string,
     onMouseOver: PropTypes.func,
     onMouseOut: PropTypes.func,
     pointerEvents: PropTypes.string,
@@ -107,7 +107,7 @@ DefaultLabelRenderer.propTypes = {
     direction: PropTypes.number,
     labels: PropTypes.arrayOf(PropTypes.string),
     reverse: PropTypes.bool,
-    color: PropTypes.color,
+    color: PropTypes.string,
     onMouseOver: PropTypes.func,
     onMouseOut: PropTypes.func,
     pointerEvents: PropTypes.string,
@@ -262,7 +262,7 @@ class EdgeRenderer extends React.Component
     }
 }
 EdgeRenderer.propTypes = {
-    directed: PropTypes.bool,
+    directed: PropTypes.string,
     forwardEndpointRenderer: PropTypes.func,
     endpointRenderer: PropTypes.func,
     backwardEndpointRenderer: PropTypes.func,
@@ -281,7 +281,7 @@ EdgeRenderer.propTypes = {
     }),
     label: PropTypes.string,
     direction: PropTypes.number,
-    color: PropTypes.color,
+    color: PropTypes.string,
     onMouseOver: PropTypes.func,
     onMouseOut: PropTypes.func,
     pointerEvents: PropTypes.string,

@@ -58,7 +58,7 @@ class GraphEdgeRenderer extends React.Component
 GraphEdgeRenderer.propTypes = {
     // TODO: Fix type
     edge: PropTypes.any,
-    stroke: PropTypes.color,
+    stroke: PropTypes.string,
     onMouseOver: PropTypes.func,
     onMouseOut: PropTypes.func,
     pointerEvents: PropTypes.string,

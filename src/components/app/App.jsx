@@ -5,13 +5,14 @@ import './setup/Theme.css';
 
 import AppServiceProviders from './structure/AppServiceProviders.jsx';
 import AppBar from './structure/AppBar.jsx';
-import AppWorkspace from './structure/AppWorkspace.jsx';
-import AppViewport from './structure/AppViewport.jsx';
-import AppPlayground from './structure/AppPlayground.jsx';
-import AppDrawer from './structure/AppDrawer.jsx';
 
 import DeprecatedServiceProviders from '@flapjs/deprecated/DeprecatedServiceProviders.jsx';
 import * as DeprecatedAppHandler from '@flapjs/deprecated/DeprecatedAppHandler.jsx';
+
+import AppWorkspace from '@flapjs/components/app/structure/AppWorkspace.jsx';
+import AppViewport from '@flapjs/components/app/structure/AppViewport.jsx';
+import AppPlayground from '@flapjs/components/app/structure/AppPlayground.jsx';
+import AppDrawer from '@flapjs/components/app/structure/AppDrawer.jsx';
 
 /*
 import ColorPane from '../panel/colorPane/ColorPane.jsx';
@@ -28,6 +29,8 @@ class App extends React.Component
     constructor(props)
     {
         super(props);
+        
+        this.moduleElement = React.createRef();
 
         // Theme.register(STYLE_REGISTRY);
         DeprecatedAppHandler.initialize(this);
@@ -62,11 +65,21 @@ class App extends React.Component
                         {/** The entire workspace, including drawers, viewports, playgrounds, etc. */}
                         <AppWorkspace
                             // The playground the user can edit. This is usually the graph.
-                            renderPlayground={props => <AppPlayground {...props}></AppPlayground>}
+                            renderPlayground={props =>
+                                <AppPlayground {...props}>
+                                    {session.renders.render('playground')}
+                                </AppPlayground>}
                             // The viewport over the playground. This is usually the overlays.
-                            renderViewport={props => <AppViewport {...props}> {DeprecatedAppHandler.renderViewport(this)} </AppViewport>}
+                            renderViewport={props =>
+                                <AppViewport {...props}>
+                                    {/*DeprecatedAppHandler.renderViewport(this)*/}
+                                    {session.renders.render('viewport')}
+                                </AppViewport>}
                             // The drawer in the workspace. This is usually the side drawer.
-                            renderDrawer={props => <AppDrawer tabbedPanels={session.panels} {...props}></AppDrawer>}>
+                            renderDrawer={props =>
+                                <AppDrawer {...props}>
+                                    {session.renders.render('drawer')}
+                                </AppDrawer>}>
                         </AppWorkspace>
                     </DeprecatedServiceProviders>
                 </AppServiceProviders>

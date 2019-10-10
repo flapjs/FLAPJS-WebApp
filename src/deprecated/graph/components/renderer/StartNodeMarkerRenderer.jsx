@@ -65,7 +65,7 @@ class StartNodeMarkerRenderer extends React.Component
 StartNodeMarkerRenderer.propTypes = {
     // TODO: Fix type
     node: PropTypes.any,
-    color: PropTypes.color,
+    color: PropTypes.string,
     onMouseOver: PropTypes.func,
     onMouseOut: PropTypes.func,
     pointerEvents: PropTypes.string,

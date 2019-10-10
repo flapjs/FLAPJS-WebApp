@@ -20,5 +20,14 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1000;
+
+    /**
+     * HACK: Overrides the input events for workspace foreground.
+     * This let's you actually click background stuff. BUT, you
+     * will need to enable pointer-events for everything that
+     * you want to be able to click. :(
+     *
+     * Refer to DrawerLayer and SideBarLayout for how this is done.
+     **/
+    pointer-events: none;
 }

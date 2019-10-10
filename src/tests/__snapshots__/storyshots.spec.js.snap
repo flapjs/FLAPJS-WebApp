@@ -71,6 +71,13 @@ exports[`Storyshots App playground 1`] = `
       className="container "
     >
       <div
+        className="background"
+      >
+        <div
+          className="container"
+        />
+      </div>
+      <div
         className="foreground"
       >
         <div
@@ -130,51 +137,11 @@ exports[`Storyshots App playground 1`] = `
                 className="viewport"
               >
                 <div
-                  style={
-                    Object {
-                      "color": "white",
-                      "height": "100%",
-                      "width": "100%",
-                    }
-                  }
-                >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in sem magna. Aliquam ultrices convallis cursus. In hac habitasse platea dictumst. Quisque eu tellus magna. Curabitur aliquam luctus ex. Maecenas purus arcu, tincidunt non sapien quis, finibus vestibulum ante. Curabitur vulputate et ligula in congue. Phasellus ac imperdiet libero, sagittis interdum elit. Suspendisse potenti.
-                   
-                  <div
-                    className="notifications_container undefined"
-                  >
-                    <div
-                      className="notification_container undefined undefined"
-                    >
-                      <p>
-                        Welcome to Flap.js!
-                      </p>
-                      <button
-                        onClick={[Function]}
-                      />
-                    </div>
-                  </div>
-                   
-                </div>
+                  className="container"
+                />
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div
-        className="background"
-      >
-        <div
-          style={
-            Object {
-              "background": "dodgerblue",
-              "fontSize": "4rem",
-              "height": "100%",
-              "width": "100%",
-            }
-          }
-        >
-          I am background text :D
         </div>
       </div>
     </section>
@@ -477,6 +444,13 @@ exports[`Storyshots WorkspaceLayout playground 1`] = `
       className="container "
     >
       <div
+        className="background"
+      >
+        <div>
+          Duis imperdiet enim ut augue molestie elementum. In sagittis volutpat rutrum. Cras facilisis libero libero, in tempor ipsum rutrum vitae. Proin congue, odio eu consequat ultricies, lorem tellus blandit ex, a pulvinar ligula felis a nisi. Pellentesque fermentum a metus ac consectetur. In eros dolor, auctor nec elementum vel, iaculis vitae felis. In consectetur aliquam lorem, quis porta turpis molestie a. Quisque consectetur vulputate sem, nec cursus sem aliquet non. Pellentesque diam velit, ornare venenatis elit nec, pretium interdum libero. In vestibulum purus lectus, sit amet condimentum ante pellentesque vitae. Praesent ut tincidunt sapien, eu sollicitudin leo.
+        </div>
+      </div>
+      <div
         className="foreground"
       >
         <div
@@ -487,13 +461,6 @@ exports[`Storyshots WorkspaceLayout playground 1`] = `
           }
         >
           Sed diam est, fermentum et blandit id, blandit ut est. Morbi venenatis interdum magna id feugiat. Nunc vestibulum sit amet massa ut malesuada. Donec non tortor eu ex feugiat finibus et non dolor. Integer in leo lorem. Nam accumsan finibus libero vehicula viverra. Fusce pulvinar sapien in tincidunt fermentum. Quisque vehicula convallis ullamcorper. Etiam luctus volutpat nisi, ut feugiat risus maximus tempus. Donec tincidunt accumsan sem. Donec vitae orci nec nisi scelerisque mollis. Ut fermentum sem eu magna volutpat semper. Suspendisse porta dui sit amet nulla hendrerit tincidunt. Nam eget diam sed libero tincidunt volutpat in non nisl. Cras id venenatis magna, sed facilisis tellus. Morbi lacinia at ante at congue.
-        </div>
-      </div>
-      <div
-        className="background"
-      >
-        <div>
-          Duis imperdiet enim ut augue molestie elementum. In sagittis volutpat rutrum. Cras facilisis libero libero, in tempor ipsum rutrum vitae. Proin congue, odio eu consequat ultricies, lorem tellus blandit ex, a pulvinar ligula felis a nisi. Pellentesque fermentum a metus ac consectetur. In eros dolor, auctor nec elementum vel, iaculis vitae felis. In consectetur aliquam lorem, quis porta turpis molestie a. Quisque consectetur vulputate sem, nec cursus sem aliquet non. Pellentesque diam velit, ornare venenatis elit nec, pretium interdum libero. In vestibulum purus lectus, sit amet condimentum ante pellentesque vitae. Praesent ut tincidunt sapien, eu sollicitudin leo.
         </div>
       </div>
     </section>

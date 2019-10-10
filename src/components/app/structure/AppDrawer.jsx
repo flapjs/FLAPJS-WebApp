@@ -13,7 +13,8 @@ import { DrawerConsumer } from '@flapjs/contexts/drawer/DrawerContext.jsx';
 
 function AppDrawer(props)
 {
-    const {renderViewport, tabbedPanels, side, direction} = props;
+    const {renderViewport, side, direction} = props;
+    const tabbedPanels = React.Children.toArray(props.children);
 
     return (
         <DrawerConsumer>
@@ -51,7 +52,6 @@ function AppDrawer(props)
 AppDrawer.propTypes = {
     children: PropTypes.node,
     renderViewport: PropTypes.func.isRequired,
-    tabbedPanels: PropTypes.arrayOf(PropTypes.element),
     side: PropTypes.oneOf([
         'top',
         'left',
@@ -80,7 +80,7 @@ function renderPanels(tabbedPanels, tabIndex = 0)
 {
     if (tabIndex >= 0 && tabIndex < tabbedPanels.length)
     {
-        return tabbedPanels[tabIndex].props.renderPanel();
+        return tabbedPanels[tabIndex];
     }
     else
     {
@@ -92,9 +92,21 @@ function renderTabs(tabbedPanels, tabCallback, tabIndex = 0)
 {
     return tabbedPanels.map((tabbedPanel, index) =>
     {
-        // NOTE: Currently, there are no props to be give to tabbed panel...
-        const tabbedPanelProps = {};
-        const tabbedPanelCallback = tabCallback.bind(null, index, tabbedPanelProps);
-        return tabbedPanel.props.renderTab(tabbedPanelCallback);
+        // If not a custom element...
+        if (!tabbedPanel.type || typeof tabbedPanel.type === 'string')
+        {
+            return;
+        }
+        // Has a custom tab renderer...
+        else if ('Tab' in tabbedPanel.type)
+        {
+            const tabbedPanelCallback = tabCallback.bind(null, index);
+            return React.createElement(tabbedPanel.type.Tab, { key: tabIndex, onClick: tabbedPanelCallback });
+        }
+        // Use default tab renderer...
+        else
+        {
+            return tabbedPanel.type.name;
+        }
     });
 }

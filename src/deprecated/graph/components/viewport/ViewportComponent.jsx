@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Style from './ViewportComponent.module.css';
 
-import ViewportAdapter from '../ViewportAdapter.js';
-import InputAdapter from '../InputAdapter.js';
-import AbstractInputHandler from '../AbstractInputHandler.js';
+import ViewportAdapter from '../../input/ViewportAdapter.js';
+import InputAdapter from '../../input/InputAdapter.js';
+import AbstractInputHandler from '../../input/AbstractInputHandler.js';
 
 const DEFAULT_VIEW_SIZE = 300;
 const SMOOTH_OFFSET_DAMPING = 0.4;

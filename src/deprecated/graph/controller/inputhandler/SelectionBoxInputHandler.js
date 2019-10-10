@@ -1,4 +1,4 @@
-import AbstractInputHandler from '@flapjs/deprecated/input/AbstractInputHandler.js';
+import AbstractInputHandler from '@flapjs/deprecated/graph/input/AbstractInputHandler.js';
 
 class SelectionBoxInputHandler extends AbstractInputHandler
 {

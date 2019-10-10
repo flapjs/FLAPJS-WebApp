@@ -1,6 +1,5 @@
 .view_container {
-    /* BUGFIX: This stops some super large icons in viewport */
-    font-size: 1em;
+    background: blue;
 }
 
 .view_widget {

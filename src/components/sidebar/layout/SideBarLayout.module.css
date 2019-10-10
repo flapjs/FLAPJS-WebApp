@@ -13,6 +13,12 @@
     z-index: 2000;
     background: #333641;
     padding: 0.3rem;
+
+    /**
+     * HACK: Overrides the 'none' for workspace foreground input events.
+     * Refer to WorkspaceLayout for more info.
+     **/
+    pointer-events: auto;
 }
 
 .viewport {

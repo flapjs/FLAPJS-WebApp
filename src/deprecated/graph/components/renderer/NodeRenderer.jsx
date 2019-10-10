@@ -34,8 +34,8 @@ DefaultNodeShapeRenderer.propTypes = {
         y: PropTypes.number,
     }),
     radius: PropTypes.number,
-    color: PropTypes.color,
-    outline: PropTypes.color,
+    color: PropTypes.string,
+    outline: PropTypes.string,
     onMouseOver: PropTypes.func,
     onMouseOut: PropTypes.func,
     pointerEvents: PropTypes.string,
@@ -59,7 +59,7 @@ DefaultLabelRenderer.propTypes = {
         y: PropTypes.number,
     }),
     label: PropTypes.string,
-    color: PropTypes.color,
+    color: PropTypes.string,
 };
 
 class NodeRenderer extends React.Component
@@ -118,8 +118,8 @@ NodeRenderer.propTypes = {
     }),
     radius: PropTypes.number,
     label: PropTypes.string,
-    color: PropTypes.color,
-    outline: PropTypes.color,
+    color: PropTypes.string,
+    outline: PropTypes.string,
     onMouseOver: PropTypes.func,
     onMouseOut: PropTypes.func,
     pointerEvents: PropTypes.string,

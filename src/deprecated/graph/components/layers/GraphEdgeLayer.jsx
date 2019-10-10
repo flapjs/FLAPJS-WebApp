@@ -59,7 +59,7 @@ class GraphEdgeLayer extends React.Component
                 <Renderer
                     key={edge.getGraphElementID()}
                     edge={edge}
-                    stroke={'var(--color-graph-text)'}
+                    stroke={this.props.stroke}
                     onMouseOver={onMouseOver}
                     onMouseOut={onMouseOut}
                     pointerEvents={editable && inputController && inputController.hasPointerEvents(edge) ? 'all' : 'none'} />
@@ -83,6 +83,7 @@ GraphEdgeLayer.propTypes = {
     edges: PropTypes.any,
     edgeRenderer: PropTypes.any,
     editable: PropTypes.bool,
+    stroke: PropTypes.string,
 };
 
 export default GraphEdgeLayer;

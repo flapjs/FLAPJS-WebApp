@@ -38,7 +38,7 @@ GraphHighlightRenderer.propTypes = {
         x: PropTypes.number,
         y: PropTypes.number,
     }),
-    color: PropTypes.color,
+    color: PropTypes.string,
     radius: PropTypes.number,
 };
 

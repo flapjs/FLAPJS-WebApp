@@ -6,6 +6,8 @@ import Style from './ViewportEditLayer.module.css';
 import TrashCanWidget from '../widgets/TrashCanWidget.jsx';
 import ModeTrayWidget, { MODE_ACTION, MODE_MOVE } from '../widgets/ModeTrayWidget.jsx';
 
+import { RunningManIcon } from '@flapjs/components/icons/Icons.js';
+
 class ViewportEditLayer extends React.Component
 {
     constructor(props)
@@ -20,13 +22,10 @@ class ViewportEditLayer extends React.Component
     onTrashChange(flag)
     {
         this.props.inputController.setTrashMode(flag);
-        if (flag)
+
+        if (this.props.onTrashChange)
         {
-            this.props.session.getApp().getDrawerComponent().setViewportColor('var(--color-viewport-error)');
-        }
-        else
-        {
-            this.props.session.getApp().getDrawerComponent().setViewportColor(null);
+            this.props.onTrashChange(flag);
         }
     }
 
@@ -66,6 +65,7 @@ class ViewportEditLayer extends React.Component
                 className={Style.view_container +
 					' ' + this.props.className}
                 style={this.props.style}>
+                <RunningManIcon color="black"/>
                 <TrashCanWidget className={Style.view_widget}
                     style={{ bottom: 0, right: 0 }}
                     visible={!graph.isEmpty() && viewport &&
@@ -73,8 +73,8 @@ class ViewportEditLayer extends React.Component
                     onChange={this.onTrashChange}
                     onClear={this.onTrashClear} />
                 <ModeTrayWidget className={Style.view_widget}
-                    style={{ bottom: 0, left: 0 }}
-                    visible={inputController}
+                    style={{}}
+                    visible={inputController ? true : false}
                     mode={moveMode}
                     onChange={this.onModeChange} />
                 {this.props.children}
@@ -91,7 +91,7 @@ ViewportEditLayer.propTypes = {
     inputController: PropTypes.any,
     graphController: PropTypes.any,
     viewport: PropTypes.any,
-    session: PropTypes.any,
+    onTrashChange: PropTypes.func,
 };
 
 export default ViewportEditLayer;

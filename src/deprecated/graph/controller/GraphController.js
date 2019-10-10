@@ -60,7 +60,6 @@ class GraphController
 
     destroy()
     {
-
     }
 
     clearGraph()

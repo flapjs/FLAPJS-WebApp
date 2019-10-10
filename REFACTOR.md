@@ -209,3 +209,25 @@ render()
 
 https://daveceddia.com/redux-tutorial/
 https://www.robinwieruch.de/react-web-components
+
+
+
+
+
+Module system
+
+When the app loads, load the empty module for first paint.
+Then load the actual module. EVerything the module controls needs to be
+either through providers or props. NO REFS!
+
+
+
+
+
+
+
+
+
+
+
+

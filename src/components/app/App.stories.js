@@ -4,7 +4,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { propKnobs } from '@flapjs/util/storybook/PropKnobs.js';
 
 import App from './App.jsx';
-import ModuleSession from '@flapjs/modules/ModuleSession.js';
+import ModuleSession from '@flapjs/session/ModuleSession.js';
 
 storiesOf('App', module)
     .addDecorator(withKnobs)

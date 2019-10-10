@@ -71,7 +71,7 @@ StartMarkerRenderer.propTypes = {
     radians: PropTypes.number,
     offset: PropTypes.number,
     size: PropTypes.number,
-    color: PropTypes.color,
+    color: PropTypes.string,
     onMouseOver: PropTypes.func,
     onMouseOut: PropTypes.func,
     pointerEvents: PropTypes.string,

@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Style from './AppPlayground.module.css';
+
 function AppPlayground(props)
 {
     return (
-        <div style={{background: 'dodgerblue', fontSize: '4rem', width: '100%', height: '100%'}}>
-            I am background text :D
+        <div className={Style.container}>
             {props.children}
         </div>
     );

@@ -9,7 +9,7 @@ jest.mock('@flapjs/util/MathHelper.js', () => ({
 
 import { uuid } from '@flapjs/util/MathHelper.js';
 import App from './App.jsx';
-import ModuleSession from '@flapjs/modules/ModuleSession.js';
+import ModuleSession from '@flapjs/session/ModuleSession.js';
 
 let wrapper;
 let nextUUID = 0;

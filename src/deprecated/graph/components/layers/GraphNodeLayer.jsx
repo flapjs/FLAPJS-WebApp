@@ -59,8 +59,8 @@ class GraphNodeLayer extends React.Component
                 <Renderer
                     key={node.getGraphElementID()}
                     node={node}
-                    fill={'var(--color-graph-node)'}
-                    stroke={'var(--color-graph-text)'}
+                    fill={this.props.fill}
+                    stroke={this.props.stroke}
                     onMouseOver={onMouseOver}
                     onMouseOut={onMouseOut}
                     pointerEvents={editable && inputController && inputController.hasPointerEvents(node) ? 'all' : 'none'} />
@@ -83,6 +83,8 @@ GraphNodeLayer.propTypes = {
     nodes: PropTypes.any,
     nodeRenderer: PropTypes.any,
     editable: PropTypes.bool,
+    stroke: PropTypes.string,
+    fill: PropTypes.string,
 };
 
 export default GraphNodeLayer;

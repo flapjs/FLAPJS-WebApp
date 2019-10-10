@@ -44,7 +44,7 @@ BoxRenderer.propTypes = {
     fromY: PropTypes.number,
     toX: PropTypes.number,
     toY: PropTypes.number,
-    color: PropTypes.color,
+    color: PropTypes.string,
 };
 
 export default BoxRenderer;

@@ -5,10 +5,10 @@ exports[`<WorkspaceLayout/> rendering renders correctly 1`] = `
   className="container "
 >
   <div
-    className="foreground"
+    className="background"
   />
   <div
-    className="background"
+    className="foreground"
   />
 </section>
 `;

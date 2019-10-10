@@ -1,4 +1,4 @@
-import AbstractInputHandler from '@flapjs/deprecated/input/AbstractInputHandler.js';
+import AbstractInputHandler from '@flapjs/deprecated/graph/input/AbstractInputHandler.js';
 import { lerp } from '@flapjs/util/MathHelper.js';
 import { EVENT_SOURCE_NODE } from '../../components/renderer/NodeRenderer.jsx';
 

@@ -1,5 +1,5 @@
 import Logger from '@flapjs/util/Logger.js';
-import ModuleSession from '@flapjs/modules/ModuleSession';
+import ModuleSession from './ModuleSession.js';
 
 const LOGGER_TAG = 'ModuleManager';
 
@@ -50,7 +50,7 @@ class ModuleManager
         if (forceRender)
         {
             // Render to terminated application state...
-            this.application.render();
+            this.application.render(true);
         }
         
         if (nextModule)
