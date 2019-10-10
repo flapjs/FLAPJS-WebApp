@@ -104,11 +104,11 @@ class LabelEditorWidget extends React.Component
 
         const target = this._target;
         const targetStyle = this.props.style || {};
-        const viewport = this.props.viewport;
+        const viewController = this.props.viewController;
 
-        if (viewport)
+        if (viewController)
         {
-            const viewportAdapter = this.props.viewport.getViewportAdapter();
+            const viewportAdapter = viewController.getViewportAdapter();
 
             if (target)
             {
@@ -154,7 +154,7 @@ LabelEditorWidget.propTypes = {
     style: PropTypes.object,
     children: PropTypes.node,
     // TODO: fix type.
-    viewport: PropTypes.any,
+    viewController: PropTypes.object.isRequired,
     labelFormatter: PropTypes.any,
     saveOnExit: PropTypes.bool,
 };

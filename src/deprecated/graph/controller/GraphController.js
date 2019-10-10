@@ -12,7 +12,7 @@ class GraphController
     constructor(graph)
     {
         this._graph = graph;
-        this._graphChangeHandler = new GraphChangeHandler();
+        this._graphChangeHandler = new GraphChangeHandler(graph);
 
         this._labelEditor = null;
         this._labelFormatter = null;
@@ -48,18 +48,14 @@ class GraphController
 
     initialize()
     {
+        this._graphChangeHandler.startListening();
     }
 
-    update()
+    terminate()
     {
-        if (this._graphChangeHandler)
-        {
-            this._graphChangeHandler.update(this._graph);
-        }
-    }
-
-    destroy()
-    {
+        this._graphChangeHandler.stopListening();
+        this.clearListeners();
+        this.clearGraph();
     }
 
     clearGraph()

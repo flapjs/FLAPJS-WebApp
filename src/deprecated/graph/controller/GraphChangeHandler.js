@@ -2,14 +2,17 @@ const DEFAULT_REFRESH_TICKS = 10;
 
 class GraphChangeHandler
 {
-    constructor(refreshTicks = DEFAULT_REFRESH_TICKS)
+    constructor(graph, refreshTicks = DEFAULT_REFRESH_TICKS)
     {
+        this._graph = graph;
         this._cachedGraphHash = 0;
 
         this._refreshTicks = refreshTicks;
-        this._elapsedTicks = Infinity;
 
         this._listeners = [];
+
+        this._updateInterval = null;
+        this.update = this.update.bind(this);
     }
 
     addListener(listener)
@@ -33,26 +36,33 @@ class GraphChangeHandler
     clearListeners() { this._listeners.length = 0; }
     getListeners() { return this._listeners; }
 
-    reset()
+    startListening()
     {
-        this._elapsedTicks = 0;
-        this._cachedGraphHash = 0;
+        this._updateInterval = setInterval(this.update, this._refreshTicks);
+        this.update();
     }
 
-    update(graph)
+    stopListening()
     {
-        if (++this._elapsedTicks >= this._refreshTicks)
-        {
-            this._elapsedTicks = 0;
+        clearInterval(this._updateInterval);
+    }
 
-            const graphHash = graph.getHashCode(false);
-            if (graphHash !== this._cachedGraphHash)
+    reset()
+    {
+        this._cachedGraphHash = 0;
+        this.update();
+    }
+
+    update()
+    {
+        const graph = this._graph;
+        const graphHash = graph.getHashCode(false);
+        if (graphHash !== this._cachedGraphHash)
+        {
+            this._cachedGraphHash = graphHash;
+            for (const listener of this._listeners)
             {
-                this._cachedGraphHash = graphHash;
-                for (const listener of this._listeners)
-                {
-                    listener(graph);
-                }
+                listener(graph);
             }
         }
     }

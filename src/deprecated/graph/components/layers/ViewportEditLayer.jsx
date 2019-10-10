@@ -54,7 +54,7 @@ class ViewportEditLayer extends React.Component
     {
         const inputController = this.props.inputController;
         const graphController = this.props.graphController;
-        const viewport = this.props.viewport;
+        const viewController = this.props.viewController;
         const graph = graphController.getGraph();
 
         let moveMode = null;
@@ -62,7 +62,7 @@ class ViewportEditLayer extends React.Component
         {
             if (inputController.isHandlingInput())
             {
-                moveMode = inputController.isMoveMode(viewport.getInputAdapter()) ? MODE_MOVE : MODE_ACTION;
+                moveMode = inputController.isMoveMode(viewController.getInputAdapter()) ? MODE_MOVE : MODE_ACTION;
             }
             else
             {
@@ -77,8 +77,8 @@ class ViewportEditLayer extends React.Component
                 style={this.props.style}>
                 <TrashCanWidget className={Style.view_widget}
                     style={{ bottom: 0, right: 0 }}
-                    visible={!graph.isEmpty() && viewport &&
-						(!viewport.getInputAdapter().isUsingTouch() || !viewport.getInputAdapter().isDragging())}
+                    visible={!graph.isEmpty() && viewController &&
+						(!viewController.getInputAdapter().isUsingTouch() || !viewController.getInputAdapter().isDragging())}
                     onChange={this.onTrashChange}
                     onClear={this.onTrashClear} />
                 <ModeTrayWidget className={Style.view_widget}
@@ -97,6 +97,7 @@ ViewportEditLayer.propTypes = {
     className: PropTypes.string,
     children: PropTypes.node,
     // TODO: Fix types.
+    viewController: PropTypes.any,
     inputController: PropTypes.any,
     graphController: PropTypes.any,
     viewport: PropTypes.any,

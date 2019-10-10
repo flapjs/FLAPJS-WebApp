@@ -1,5 +1,3 @@
-import React from 'react';
-
 import BasePlaygroundLayer from './BasePlaygroundLayer.jsx';
 import BaseViewportLayer from './BaseViewportLayer.jsx';
 import AboutPanel from './AboutPanel.jsx';
@@ -8,6 +6,7 @@ import GraphNode from '@flapjs/deprecated/graph/model/elements/GraphNode.js';
 import QuadraticEdge from '@flapjs/deprecated/graph/model/elements/QuadraticEdge.js';
 import GraphController from '@flapjs/deprecated/graph/controller/GraphController.js';
 import InputController from '@flapjs/deprecated/graph/controller/InputController.js';
+import ViewController from '@flapjs/deprecated/graph/controller/ViewController.js';
 
 const MODULE = {
     id: 'base',
@@ -20,19 +19,27 @@ const MODULE = {
         const graph = new IndexedNodeGraph(GraphNode, QuadraticEdge);
         const graphController = new GraphController(graph);
         const inputController = new InputController();
+        const viewController = new ViewController();
+
+        viewController.initialize();
+        inputController.initialize();
+        graphController.initialize();
 
         graph.createNode();
 
         session.graphController = graphController;
         session.inputController = inputController;
-        session.graphView = React.createRef();
+        session.viewController = viewController;
     },
     onTermination(session)
     {
-        session.graph.clear();
+        session.graphController.terminate();
+        session.inputController.terminate();
+        session.viewController.terminate();
         
         delete session.graphController;
         delete session.inputController;
+        delete session.viewController;
     }
 };
 

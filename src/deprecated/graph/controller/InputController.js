@@ -76,6 +76,14 @@ class InputController
         return this;
     }
 
+    initialize()
+    {
+    }
+
+    terminate()
+    {
+    }
+
     /** @override */
     onPreInputEvent(pointer)
     {

@@ -16,6 +16,21 @@ class ViewController
         this._inputAdapter = new InputAdapter(this._viewportAdapter);
     }
 
+    initialize()
+    {
+
+    }
+
+    terminate()
+    {
+        this._inputAdapter.clearInputHandlers();
+    }
+
+    centerView(x = 0, y = 0)
+    {
+        this._viewportAdapter.setOffset(x, y);
+    }
+
     getInputAdapter()
     {
         return this._inputAdapter;
@@ -23,7 +38,7 @@ class ViewController
 
     getViewportAdapter()
     {
-        return this._inputAdapter.getViewportAdapter();
+        return this._viewportAdapter;
     }
 }
 

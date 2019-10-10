@@ -31,10 +31,7 @@ class BaseViewportLayer extends React.Component
 
     centerView(session)
     {
-        const graphView = session.graphView.current;
-        const viewport = graphView.getViewportComponent();
-        const viewportAdapter = viewport.getViewportAdapter();
-        viewportAdapter.setOffset(0, 0);
+        session.viewController.centerView(0, 0);
     }
 
     /** @override */

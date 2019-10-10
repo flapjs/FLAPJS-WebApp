@@ -45,6 +45,7 @@ class BasePlaygroundLayer extends React.Component
                             <GraphView
                                 ref={session.graphView}
                                 inputController={session.inputController}
+                                viewController={session.viewController}
                                 renderGraph={graphView => 
                                     <NodeGraphLayer
                                         inputContext={graphView.getInputContext()}
