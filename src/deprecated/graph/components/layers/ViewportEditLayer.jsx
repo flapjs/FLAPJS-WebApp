@@ -6,8 +6,6 @@ import Style from './ViewportEditLayer.module.css';
 import TrashCanWidget from '../widgets/TrashCanWidget.jsx';
 import ModeTrayWidget, { MODE_ACTION, MODE_MOVE } from '../widgets/ModeTrayWidget.jsx';
 
-import { RunningManIcon } from '@flapjs/components/icons/Icons.js';
-
 class ViewportEditLayer extends React.Component
 {
     constructor(props)
@@ -27,6 +25,18 @@ class ViewportEditLayer extends React.Component
         {
             this.props.onTrashChange(flag);
         }
+
+        //TODO: Fix this
+        /**
+            If (flag)
+            {
+                this.props.session.getApp().getDrawerComponent().setViewportColor('var(--color-viewport-error)');
+            }.
+            Else
+            {
+                this.props.session.getApp().getDrawerComponent().setViewportColor(null);
+            }.
+         */
     }
 
     onTrashClear()
@@ -65,7 +75,6 @@ class ViewportEditLayer extends React.Component
                 className={Style.view_container +
 					' ' + this.props.className}
                 style={this.props.style}>
-                <RunningManIcon color="black"/>
                 <TrashCanWidget className={Style.view_widget}
                     style={{ bottom: 0, right: 0 }}
                     visible={!graph.isEmpty() && viewport &&
@@ -73,7 +82,7 @@ class ViewportEditLayer extends React.Component
                     onChange={this.onTrashChange}
                     onClear={this.onTrashClear} />
                 <ModeTrayWidget className={Style.view_widget}
-                    style={{}}
+                    style={{ bottom: 0, left: 0 }}
                     visible={inputController ? true : false}
                     mode={moveMode}
                     onChange={this.onModeChange} />

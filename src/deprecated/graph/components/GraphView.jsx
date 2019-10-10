@@ -4,22 +4,29 @@ import PropTypes from 'prop-types';
 import ViewportComponent from './viewport/ViewportComponent.jsx';
 import ViewportInputHandler from '../controller/inputhandler/ViewportInputHandler.js';
 
+import InputContext from '@flapjs/deprecated/graph/input/InputContext.js';
+import InputController from '@flapjs/deprecated/graph/controller/InputController.js';
+
 class GraphView extends React.Component
 {
     constructor(props)
     {
         super(props);
+        
+        this._inputContext = new InputContext();
+        this._inputController = new InputController();
 
         this._viewportComponent = React.createRef();
-        this._viewportInputHandler = new ViewportInputHandler(props.inputController);
+        this._viewportInputHandler = new ViewportInputHandler(this._inputController);
     }
 
     /** @override */
     componentDidMount()
     {
-        const inputContext = this.props.inputContext;
+        const inputContext = this._inputContext;
         const viewport = this._viewportComponent.current;
         const inputAdapter = viewport.getInputAdapter();
+        inputContext.addInputHandler(this._inputController);
         inputContext.addInputHandler(this._viewportInputHandler, 10);
         inputAdapter.bindContext(inputContext);
     }
@@ -27,10 +34,11 @@ class GraphView extends React.Component
     /** @override */
     componentWillUnmount()
     {
-        const inputContext = this.props.inputContext;
+        const inputContext = this._inputContext;
         const viewport = this._viewportComponent.current;
         const inputAdapter = viewport.getInputAdapter();
         inputContext.removeInputHandler(this._viewportInputHandler);
+        inputContext.clearInputHandlers();
         inputAdapter.unbindContext(inputContext);
     }
 
@@ -40,8 +48,8 @@ class GraphView extends React.Component
         this.getViewportAdapter().setOffset(-x, -y);
     }
 
-    getInputController() { return this.props.inputController; }
-    getInputContext() { return this.props.inputContext; }
+    getInputController() { return this._inputController; }
+    getInputContext() { return this._inputContext; }
 
     getViewportComponent() { return this._viewportComponent.current; }
     getInputAdapter() { return this._viewportComponent.current.getInputAdapter(); }
@@ -70,8 +78,6 @@ GraphView.propTypes = {
     id: PropTypes.string,
     style: PropTypes.object,
     className: PropTypes.string,
-    inputContext: PropTypes.object.isRequired,
-    inputController: PropTypes.object.isRequired,
     renderGraph: PropTypes.func,
     renderOverlay: PropTypes.func,
 };
