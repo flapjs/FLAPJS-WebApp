@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 /* eslint-disable no-undef */
-import PDA, { EMPTY_SYMBOL } from '../FSA.js';
-import { solvePDA } from '../FSAUtils.js';
+import PDA, { EMPTY_SYMBOL } from '../PDA.js';
+import { solvePDA } from '../PDAUtils.js';
 
 function createTestMachine()
 {
