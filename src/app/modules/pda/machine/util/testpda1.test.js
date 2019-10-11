@@ -14,9 +14,9 @@ function createTestMachine()
     const q2 = pda.createState("q2");
 
 
-    pda.addTransition(q0, q0, b, EMPTY_SYMBOL, EMPTY_SYMBOL);
-    pda.addTransition(q0, q1, a, EMPTY_SYMBOL, a);
-    pda.addTransition(q1, q2, EMPTY_SYMBOL, a, EMPTY_SYMBOL);
+    pda.addTransition(q0, q0, "b", EMPTY_SYMBOL, EMPTY_SYMBOL);
+    pda.addTransition(q0, q1, "a", EMPTY_SYMBOL, "a");
+    pda.addTransition(q1, q2, EMPTY_SYMBOL, "a", EMPTY_SYMBOL);
     pda.setFinalState(q2);
 
     return pda;
