@@ -43,7 +43,6 @@ class BasePlaygroundLayer extends React.Component
                     {
                         session =>
                             <GraphView
-                                ref={session.graphView}
                                 inputController={session.inputController}
                                 viewController={session.viewController}
                                 renderGraph={graphView => 

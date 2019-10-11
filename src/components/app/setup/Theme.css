@@ -4,4 +4,8 @@
     --accent: #FFD700;
     --accent-dark: #FFD70088;
     --content-main: #FFFFFF;
+    --color-viewport-text: black;
+    --color-viewport-back: white;
+    --color-viewport-error: red;
+    --color-viewport-back-detail: gray;
 }

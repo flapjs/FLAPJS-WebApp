@@ -71,12 +71,9 @@ class ViewportEditLayer extends React.Component
         }
 
         return (
-            <div id={this.props.id}
-                className={Style.view_container +
-					' ' + this.props.className}
-                style={this.props.style}>
+            <>
                 <TrashCanWidget className={Style.view_widget}
-                    style={{ bottom: 0, right: 0 }}
+                    style={{ position: 'absolute', bottom: 0, right: 0 }}
                     visible={!graph.isEmpty() && viewController &&
 						(!viewController.getInputAdapter().isUsingTouch() || !viewController.getInputAdapter().isDragging())}
                     onChange={this.onTrashChange}
@@ -87,7 +84,7 @@ class ViewportEditLayer extends React.Component
                     mode={moveMode}
                     onChange={this.onModeChange} />
                 {this.props.children}
-            </div>
+            </>
         );
     }
 }

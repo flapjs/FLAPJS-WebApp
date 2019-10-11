@@ -1,5 +1,4 @@
 import Logger from '@flapjs/util/Logger.js';
-import ModuleSession from './ModuleSession.js';
 
 const LOGGER_TAG = 'ModuleManager';
 
@@ -9,15 +8,10 @@ class ModuleManager
     {
         this.application = application;
         this.defaultModule = defaultModule;
+        this.currentModule = defaultModule;
 
-        this.currentModule = null;
-        this.currentSession = new ModuleSession(this);
-
-        if (this.defaultModule)
-        {
-            this.currentModule = this.defaultModule;
-            initializeModule(this.currentModule, this.currentSession);
-        }
+        // The context is bound so it can be passed around as a callback...
+        this.changeModule = this.changeModule.bind(this);
     }
 
     async changeModule(nextModuleID, forceRender = true)
@@ -43,8 +37,7 @@ class ModuleManager
 
         if (this.currentModule)
         {
-            terminateModule(this.currentModule, this.currentSession);
-            this.currentModule = null;
+            this.currentModule = this.defaultModule;
         }
 
         if (forceRender)
@@ -55,17 +48,12 @@ class ModuleManager
         
         if (nextModule)
         {
-            const nextSession = new ModuleSession(this);
-            if (initializeModule(nextModule, nextSession))
-            {
-                this.currentModule = nextModule;
-                this.currentSession = nextSession;
+            this.currentModule = nextModule;
 
-                if (forceRender)
-                {
-                    // Render to next application state...
-                    this.application.render();
-                }
+            if (forceRender)
+            {
+                // Render to next application state...
+                this.application.render();
             }
         }
         // Otherwise, it's already rendered correctly.
@@ -74,39 +62,6 @@ class ModuleManager
     getCurrentModule()
     {
         return this.currentModule;
-    }
-
-    getCurrentSession()
-    {
-        return this.currentSession;
-    }
-}
-
-function initializeModule(targetModule, session)
-{
-    try
-    {
-        targetModule.onInitialization(session);
-        return true;
-    }
-    catch(e)
-    {
-        Logger.error(LOGGER_TAG, 'Module failed to initialize.', e);
-        return false;
-    }
-}
-
-function terminateModule(targetModule, session)
-{
-    try
-    {
-        targetModule.onTermination(session);
-        return true;
-    }
-    catch(e)
-    {
-        Logger.error(LOGGER_TAG, 'Module failed to terminate.', e);
-        return false;
     }
 }
 

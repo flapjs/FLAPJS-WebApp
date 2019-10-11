@@ -14,6 +14,7 @@ exports[`Storyshots App playground 1`] = `
       className="apptitle"
     >
       <select
+        defaultValue={null}
         onBlur={[Function]}
       >
         <option

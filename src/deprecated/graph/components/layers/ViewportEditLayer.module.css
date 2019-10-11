@@ -1,7 +1,3 @@
-.view_container {
-    background: blue;
-}
-
 .view_widget {
     position: absolute;
     min-width: 32px;

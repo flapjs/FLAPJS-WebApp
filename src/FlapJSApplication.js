@@ -26,19 +26,21 @@ class FlapJSApplication
         const moduleHeader = FlapJSModules[moduleID];
         // DEBUG: This is just to slow down module loading. For testing purposes.
         await new Promise(resolve => setTimeout(resolve, 3000));
+        // Actually go fetch it now...
         return (await moduleHeader.fetch()).default;
     }
 
     /** @override */
-    render(clearFirst=false)
+    render(nullFirstRender = false)
     {
-        if (clearFirst)
+        if (nullFirstRender)
         {
             ReactDOM.render(null, this.rootElement);
         }
 
         const props = {
-            session: this.moduleManager.getCurrentSession(),
+            module: this.moduleManager.getCurrentModule(),
+            changeModule: this.moduleManager.changeModule,
         };
 
         ReactDOM.render(

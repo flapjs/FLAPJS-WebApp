@@ -10,12 +10,13 @@ import ViewController from '@flapjs/deprecated/graph/controller/ViewController.j
 
 const MODULE = {
     id: 'base',
-    onInitialization(session)
+    renders: {
+        playground: [ BasePlaygroundLayer ],
+        viewport: [ BaseViewportLayer ],
+        drawer: [ AboutPanel ],
+    },
+    load(state)
     {
-        session.renders.add('playground', BasePlaygroundLayer);
-        session.renders.add('viewport', BaseViewportLayer);
-        session.renders.add('drawer', AboutPanel);
-
         const graph = new IndexedNodeGraph(GraphNode, QuadraticEdge);
         const graphController = new GraphController(graph);
         const inputController = new InputController();
@@ -27,19 +28,29 @@ const MODULE = {
 
         graph.createNode();
 
-        session.graphController = graphController;
-        session.inputController = inputController;
-        session.viewController = viewController;
+        state.graphController = graphController;
+        state.inputController = inputController;
+        state.viewController = viewController;
     },
-    onTermination(session)
+    unload(state)
     {
-        session.graphController.terminate();
-        session.inputController.terminate();
-        session.viewController.terminate();
-        
-        delete session.graphController;
-        delete session.inputController;
-        delete session.viewController;
+        state.graphController.terminate();
+        state.inputController.terminate();
+        state.viewController.terminate();
+    },
+    reducer(state, action)
+    {
+        switch(action.type)
+        {
+            case 'set':
+                break;
+            default:
+                throw new Error('Unknown action');
+        }
+    },
+    onSessionDidMount(session)
+    {
+        // Do nothing yet...
     }
 };
 

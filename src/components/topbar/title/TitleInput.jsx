@@ -28,10 +28,10 @@ class TitleInput extends React.Component
         this.setState({ title: newValue });
     }
 
-    onModuleChange(e, moduleManager)
+    onModuleChange(e, changeModuleCallback)
     {
         const nextModuleID = e.target.value;
-        moduleManager.changeModule(nextModuleID);
+        changeModuleCallback(nextModuleID);
     }
 
     renderTitleInput()
@@ -41,7 +41,7 @@ class TitleInput extends React.Component
         );
     } 
 
-    renderModuleOptions(modules, session)
+    renderModuleOptions(modules, currentModuleID, changeModuleCallback)
     {
         const result = [];
         for(const moduleID of Object.keys(modules))
@@ -53,7 +53,7 @@ class TitleInput extends React.Component
             );
         }
         return (
-            <select onBlur={(e) => this.onModuleChange(e, session.sessionManager)}>
+            <select defaultValue={currentModuleID} onBlur={(e) => this.onModuleChange(e, changeModuleCallback)}>
                 {result}
             </select>
         );
@@ -68,7 +68,11 @@ class TitleInput extends React.Component
             <div className={props.className}>
                 <SessionConsumer>
                     {
-                        session => this.renderModuleOptions(FlapJSModules, session)
+                        (state, dispatch) => this.renderModuleOptions(
+                            FlapJSModules,
+                            state.moduleID,
+                            nextModuleID => dispatch({ type: 'change-module', value: nextModuleID })
+                        )
                     }
                 </SessionConsumer>
                 {this.renderTitleInput()}

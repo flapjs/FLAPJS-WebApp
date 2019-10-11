@@ -1,10 +1,10 @@
 import React from 'react';
 
 //import ModeTrayWidget from '@flapjs/deprecated/graph/components/widgets/ModeTrayWidget.jsx';
-// import ViewportEditLayer from '@flapjs/deprecated/graph/components/layers/ViewportEditLayer.jsx';
+import ViewportEditLayer from '@flapjs/deprecated/graph/components/layers/ViewportEditLayer.jsx';
 //import ViewportNavigationLayer from '@flapjs/deprecated/graph/components/layers/ViewportNavigationLayer.jsx';
 //import LabelEditorWidget from '@flapjs/deprecated/graph/components/widgets/LabelEditorWidget.jsx';
-import { SessionConsumer } from '@flapjs/contexts/session/SessionContext.jsx';
+import { SessionStateConsumer } from '@flapjs/contexts/session/SessionContext.jsx';
 
 class BaseViewportLayer extends React.Component
 {
@@ -13,10 +13,12 @@ class BaseViewportLayer extends React.Component
         super(props);
 
         this.state = {
-            trashMode: false
+            trashMode: false,
+            actionMode: true,
         };
 
         this.onTrashChange = this.onTrashChange.bind(this);
+        this.onModeChange = this.onModeChange.bind(this);
     }
 
     onTrashChange()
@@ -25,6 +27,16 @@ class BaseViewportLayer extends React.Component
         {
             return {
                 trashMode: !prev.trashMode
+            };
+        });
+    }
+
+    onModeChange(mode)
+    {
+        this.setState(prev =>
+        {
+            return {
+                actionMode: mode === 'action'
             };
         });
     }
@@ -38,15 +50,21 @@ class BaseViewportLayer extends React.Component
     render()
     {
         return (
-            <SessionConsumer>
+            <SessionStateConsumer>
                 {
-                    session =>
+                    state =>
                     {
-                        session.inputController.setTrashMode(this.state.trashMode);
+                        state.inputController.setTrashMode(this.state.trashMode);
                         return (
                             <>
+                                <ViewportEditLayer
+                                    graphController={state.graphController}
+                                    inputController={state.inputController}
+                                    viewController={state.viewController}
+                                    onTrashChange={this.onTrashChange}
+                                    onModeChange={this.onModeChange}/>
                                 <button onClick={this.onTrashChange}>Delete Mode</button>
-                                <button onClick={() => this.centerView(session)}>Re-Center</button>
+                                <button onClick={() => this.centerView(state)}>Re-Center</button>
                                     {
                                         /*
                                         <ViewportEditLayer
@@ -68,7 +86,7 @@ class BaseViewportLayer extends React.Component
                         );
                     }
                 }
-            </SessionConsumer>
+            </SessionStateConsumer>
         );
     }
 }
