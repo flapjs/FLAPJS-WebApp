@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Style from './ZoomWidget.module.css';
 
-import IconButton from '../../../icon/IconButton.jsx';
+import IconButton from '@flapjs/components/icons/IconButton.jsx';
 import { ZoomInIcon, ZoomOutIcon } from '@flapjs/components/icons/Icons.js';
 
 class ZoomWidget extends React.Component
@@ -32,31 +32,36 @@ class ZoomWidget extends React.Component
     /** @override */
     render()
     {
-        const viewportAdapter = this.props.viewportAdapter;
+        const props = this.props;
+
+        const viewportAdapter = props.viewportAdapter;
         const viewScale = 'x' + (1 / (viewportAdapter.getScale() || 1)).toFixed(2);
 
         return (
-            <div id={this.props.id}
-                className={Style.zoom_container +
-          ' ' + this.props.className}
-                style={this.props.style}>
-                <IconButton className={Style.zoom_button} title="Zoom In" onClick={this.onZoomIn}>
-                    <ZoomInIcon/>
-                </IconButton>
-                <IconButton className={Style.zoom_button} title="Zoom Out" onClick={this.onZoomOut}>
-                    <ZoomOutIcon/>
-                </IconButton>
-                <label className={Style.zoom_label}>{viewScale}</label>
+            <div
+                className={Style.container + ' ' + (props.className || '')}
+                style={props.style}>
+                <IconButton
+                    className={Style.button}
+                    title="Zoom In"
+                    onClick={this.onZoomIn}
+                    iconClass={ZoomInIcon} />
+                <IconButton
+                    className={Style.button}
+                    title="Zoom Out"
+                    onClick={this.onZoomOut}
+                    iconClass={ZoomOutIcon} />
+                <label className={Style.label}>
+                    {viewScale}
+                </label>
             </div>
         );
     }
 }
 ZoomWidget.propTypes = {
-    id: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
-    //TODO: fix type.
-    viewportAdapter: PropTypes.any,
+    viewportAdapter: PropTypes.object.isRequired,
 };
 
 export default ZoomWidget;

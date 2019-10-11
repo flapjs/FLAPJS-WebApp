@@ -1,13 +1,13 @@
-.zoom_container {
+.container {
     display: flex;
     flex-direction: column;
 }
 
-.zoom_button {
+.button {
     margin-bottom: -0.75em;
 }
 
-.zoom_label {
+.label {
     font-size: 0.5em;
     text-align: center;
     margin-top: 0.75em;

@@ -7,6 +7,8 @@ import React from 'react';
 import { SessionConsumer } from '@flapjs/contexts/session/SessionContext.jsx';
 import TrashCanWidget from '@flapjs/deprecated/graph/components/widgets/TrashCanWidget.jsx';
 import ModeTrayWidget from '@flapjs/deprecated/graph/components/widgets/ModeTrayWidget.jsx';
+import ZoomWidget from '@flapjs/deprecated/graph/components/widgets/ZoomWidget.jsx';
+import FocusCenterWidget from '@flapjs/deprecated/graph/components/widgets/FocusCenterWidget.jsx';
 
 class BaseViewportLayer extends React.Component
 {
@@ -62,7 +64,10 @@ class BaseViewportLayer extends React.Component
                                 <ModeTrayWidget style={{ position: 'absolute', bottom: 0, left: 0 }}
                                     value={session.actionMode}
                                     onChange={value => dispatch({ type: 'action-mode', value })}/>
-                                <button onClick={() => this.centerView(session)}>Re-Center</button>
+                                <ZoomWidget style={{ position: 'absolute', top: 0, right: 0 }}
+                                    viewportAdapter={session.viewController.getViewportAdapter()}/>
+                                <FocusCenterWidget style={{ position: 'absolute', top: 64, right: 0 }}
+                                    viewportAdapter={session.viewController.getViewportAdapter()}/>
                                 {
                                     /*
                                     <ViewportEditLayer

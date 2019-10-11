@@ -12,19 +12,16 @@ class ControlledIconButton extends React.Component
     /** @override */
     render()
     {
-        const props = this.props;
+        const {elementRef, className, iconClass, ...otherProps} = this.props;
 
-        const IconClass = props.iconClass;
+        // NOTE: React doesn't like instantiating classes with lower-case, so here is to override that.
+        const IconClass = iconClass;
 
         return (
             <button
-                ref={props.elementRef}
-                className={Style.container + ' ' + (props.className || '')}
-                style={props.style}
-                title={props.title}
-                onClick={props.onClick}
-                onMouseEnter={props.onMouseEnter}
-                onMouseLeave={props.onMouseLeave}>
+                ref={elementRef}
+                className={Style.container + ' ' + (className || '')}
+                {...otherProps}>
                 <IconClass className={Style.icon}/>
             </button>
         );
@@ -32,13 +29,8 @@ class ControlledIconButton extends React.Component
 }
 ControlledIconButton.propTypes = {
     className: PropTypes.string,
-    style: PropTypes.object,
     children: PropTypes.node,
-    title: PropTypes.string,
     elementRef: PropTypes.object,
-    onClick: PropTypes.func,
-    onMouseEnter: PropTypes.func,
-    onMouseLeave: PropTypes.func,
     iconClass: PropTypes.elementType.isRequired,
 };
 

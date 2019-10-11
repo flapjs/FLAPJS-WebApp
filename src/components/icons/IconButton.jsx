@@ -9,7 +9,9 @@ function IconButton(props)
     return (
         <button
             className={Style.container + ' ' + (props.className || '')}
+            style={props.style}
             title={props.title}
+            disabled={props.disabled}
             onClick={props.onClick}
             onMouseEnter={props.onMouseEnter}
             onMouseLeave={props.onMouseLeave}>
@@ -19,7 +21,9 @@ function IconButton(props)
 }
 IconButton.propTypes = {
     className: PropTypes.string,
+    style: PropTypes.object,
     children: PropTypes.node,
+    disabled: PropTypes.bool,
     title: PropTypes.string,
     onClick: PropTypes.func,
     onMouseEnter: PropTypes.func,

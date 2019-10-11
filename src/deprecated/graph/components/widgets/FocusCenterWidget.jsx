@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Style from './FocusCenterWidget.module.css';
 
-import IconButton from '../../../icon/IconButton.jsx';
+import IconButton from '@flapjs/components/icons/IconButton.jsx';
 import { PinpointIcon } from '@flapjs/components/icons/Icons.js';
 
 const OFFSET_EPSILON = 0.1;
@@ -18,35 +17,33 @@ class FocusCenterWidget extends React.Component
 
     onClick(e)
     {
-        const viewportAdapter = this.props.viewportAdapter;
-        viewportAdapter.setOffset(0, 0);
+        this.props.viewportAdapter.setOffset(0, 0);
     }
 
     /** @override */
     render()
     {
-        const viewportAdapter = this.props.viewportAdapter;
+        const props = this.props;
+
+        const viewportAdapter = props.viewportAdapter;
+        const disabled = Math.abs(viewportAdapter.getOffsetX()) < OFFSET_EPSILON
+            && Math.abs(viewportAdapter.getOffsetY()) < OFFSET_EPSILON;
 
         return (
-            <IconButton id={this.props.id}
-                className={Style.center_focus_button +
-                    ' ' + this.props.className}
-                style={this.props.style}
+            <IconButton
+                className={props.className}
+                style={props.style}
                 title={'Center Workspace'}
-                disabled={Math.abs(viewportAdapter.getOffsetX()) < OFFSET_EPSILON &&
-                    Math.abs(viewportAdapter.getOffsetY()) < OFFSET_EPSILON}
-                onClick={this.onClick}>
-                <PinpointIcon />
-            </IconButton>
+                disabled={disabled && false/** TODO: When viewport updates, this should re-render. */}
+                onClick={this.onClick}
+                iconClass={PinpointIcon} />
         );
     }
 }
 FocusCenterWidget.propTypes = {
-    id: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
-    // TODO: fix type.
-    viewportAdapter: PropTypes.any,
+    viewportAdapter: PropTypes.object.isRequired,
 };
 
 export default FocusCenterWidget;
