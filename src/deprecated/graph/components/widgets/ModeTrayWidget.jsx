@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Style from './ModeTrayWidget.module.css';
 
-import IconButton from '../../../icon/IconButton.jsx';
+import IconButton from '@flapjs/components/icons/IconButton.jsx';
 import { PencilIcon, MoveIcon } from '@flapjs/components/icons/Icons.js';
 
-export const MODE_ACTION = 0;
-export const MODE_MOVE = 1;
+export const MODE_ACTION = 'action';
+export const MODE_MOVE = 'move';
 
 class ModeTrayWidget extends React.Component
 {
@@ -15,50 +15,45 @@ class ModeTrayWidget extends React.Component
     /** @override */
     render()
     {
-        const visible = this.props.visible;
-        const mode = this.props.mode;
-        const onChange = this.props.onChange;
+        const props = this.props;
+
+        const visible = props.visible;
+        const value = props.value;
+        const onChange = props.onChange;
+        
         const hide = !visible;
 
         return (
-            <div id={this.props.id}
-                className={Style.tray_container +
-                    (hide ? ' hide ' : '') +
-                    ' ' + this.props.className}
-                style={this.props.style}>
+            <div
+                className={Style.container +
+                    (hide ? ' hide' : '') +
+                    ' ' + (props.className || '')}
+                style={props.style}>
                 <IconButton
-                    className={Style.tray_button
-                        + (mode === MODE_ACTION ? ' active ' : '')}
-                    onClick={() => 
-                    {
-                        if (onChange) onChange(MODE_ACTION);
-                    }}
-                    title={'cursor.actionmode'}>
-                    <PencilIcon />
-                </IconButton>
+                    className={(value === MODE_ACTION ? ' active' : '')}
+                    onClick={() => onChange && onChange(MODE_ACTION)}
+                    title={'cursor.actionmode'}
+                    iconClass={PencilIcon} />
                 <IconButton
-                    className={Style.tray_button
-                        + (mode === MODE_MOVE ? ' active ' : '')}
-                    onClick={() => 
-                    {
-                        if (onChange) onChange(MODE_MOVE);
-                    }}
-                    title={'cursor.movemode'}>
-                    <MoveIcon />
-                </IconButton>
+                    className={(value === MODE_MOVE ? ' active' : '')}
+                    onClick={() => onChange && onChange(MODE_MOVE)}
+                    title={'cursor.movemode'}
+                    iconClass={MoveIcon} />
             </div>
         );
     }
 }
 ModeTrayWidget.propTypes = {
-    id: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
     children: PropTypes.node,
-    // TODO: fix type.
-    mode: PropTypes.any,
     visible: PropTypes.bool,
+    value: PropTypes.oneOf([ MODE_ACTION, MODE_MOVE ]),
     onChange: PropTypes.func,
+};
+ModeTrayWidget.defaultProps = {
+    value: MODE_ACTION,
+    visible: true,
 };
 
 export default ModeTrayWidget;

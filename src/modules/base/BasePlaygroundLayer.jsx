@@ -3,7 +3,7 @@ import React from 'react';
 import GraphView from '@flapjs/deprecated/graph/components/GraphView.jsx';
 
 import NodeGraphLayer from './NodeGraphLayer.jsx';
-import { SessionConsumer } from '@flapjs/contexts/session/SessionContext.jsx';
+import { SessionStateConsumer } from '@flapjs/contexts/session/SessionContext.jsx';
 
 class BasePlaygroundLayer extends React.Component
 {
@@ -38,24 +38,22 @@ class BasePlaygroundLayer extends React.Component
     render()
     {
         return (
-            <>
-                <SessionConsumer>
-                    {
-                        session =>
-                            <GraphView
-                                inputController={session.inputController}
-                                viewController={session.viewController}
-                                renderGraph={graphView => 
-                                    <NodeGraphLayer
-                                        inputContext={graphView.getInputContext()}
-                                        inputController={session.inputController}
-                                        graphController={session.graphController}
-                                        editable={true}/>}
-                                renderOverlay={graphView => {}}>
-                            </GraphView>
-                    }
-                </SessionConsumer>
-            </>
+            <SessionStateConsumer>
+                {
+                    state =>
+                        <GraphView
+                            inputController={state.inputController}
+                            viewController={state.viewController}
+                            renderGraph={graphView => 
+                                <NodeGraphLayer
+                                    inputContext={graphView.getInputContext()}
+                                    inputController={state.inputController}
+                                    graphController={state.graphController}
+                                    editable={true}/>}
+                            renderOverlay={graphView => {}}>
+                        </GraphView>
+                }
+            </SessionStateConsumer>
         );
     }
 }

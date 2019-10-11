@@ -7,6 +7,7 @@ import QuadraticEdge from '@flapjs/deprecated/graph/model/elements/QuadraticEdge
 import GraphController from '@flapjs/deprecated/graph/controller/GraphController.js';
 import InputController from '@flapjs/deprecated/graph/controller/InputController.js';
 import ViewController from '@flapjs/deprecated/graph/controller/ViewController.js';
+import {MODE_MOVE} from '@flapjs/deprecated/graph/components/widgets/ModeTrayWidget.jsx';
 
 const MODULE = {
     id: 'base',
@@ -14,6 +15,23 @@ const MODULE = {
         playground: [ BasePlaygroundLayer ],
         viewport: [ BaseViewportLayer ],
         drawer: [ AboutPanel ],
+    },
+    reducer(state, action)
+    {
+        switch(action.type)
+        {
+            case 'trash-mode':
+                state.inputController.setTrashMode(action.value);
+                return { trashMode: action.value };
+            case 'action-mode':
+                state.inputController.setMoveModeFirst(action.value === MODE_MOVE);
+                return { actionMode: action.value };
+            case 'clear-graph':
+                state.graphController.clearGraph();
+                return { graphHash: state.graphController.getGraph().getHashCode() };
+            default:
+                throw new Error(`Unsupported action ${action}.`);
+        }
     },
     load(state)
     {
@@ -37,16 +55,6 @@ const MODULE = {
         state.graphController.terminate();
         state.inputController.terminate();
         state.viewController.terminate();
-    },
-    reducer(state, action)
-    {
-        switch(action.type)
-        {
-            case 'set':
-                break;
-            default:
-                throw new Error('Unknown action');
-        }
     },
     onSessionDidMount(session)
     {

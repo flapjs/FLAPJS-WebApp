@@ -1,4 +1,4 @@
-.tray_container {
+.container {
     display: flex;
     width: 7em;
     margin: 0.5em;
@@ -8,23 +8,24 @@
     background: var(--color-viewport-back);
 }
 
-.tray_container:global(.hide) {
+.container:global(.hide) {
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
-.tray_button {
+.container button {
     flex: 1;
     padding: 0 0.8em;
+    border-radius: 0;
     border-right: 1px solid var(--color-viewport-text);
     color: var(--color-viewport-back-detail);
 }
 
-.tray_button:last-child {
+.container button:last-child {
     border-right: none;
 }
 
-.tray_button:global(.active) {
+.container button:global(.active) > * {
     color: var(--color-viewport-text);
 }

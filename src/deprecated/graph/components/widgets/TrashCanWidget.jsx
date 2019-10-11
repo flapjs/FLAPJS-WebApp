@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Style from './TrashCanWidget.module.css';
 
-import IconButton from '../../../icon/IconButton.jsx';
+import ControlledIconButton from '@flapjs/components/icons/ControlledIconButton.jsx';
 import { TrashCanDetailedIcon } from '@flapjs/components/icons/Icons.js';
 
 const DOUBLE_TAP_TIME = 250;
@@ -13,7 +13,6 @@ class TrashCanWidget extends React.Component
     {
         super(props);
 
-        this._ref = React.createRef();
         this._buttonElement = React.createRef();
 
         this.state = {
@@ -121,25 +120,25 @@ class TrashCanWidget extends React.Component
     /** @override */
     render()
     {
-        const visible = this.props.visible;
+        const props = this.props;
+        const visible = props.visible;
+        
         const active = this.state.active;
         const hide = !active && !visible;
 
         return (
-            <IconButton ref={this._ref}
-                refButton={this._buttonElement}
-                id={this.props.id}
+            <ControlledIconButton
                 className={Style.trash_container +
                     (active ? ' active ' : '') +
                     (hide ? ' hide ' : '') +
                     ' ' + this.props.className}
-                style={this.props.style}
+                style={props.style}
                 title={'Delete'}
+                elementRef={this._buttonElement}
                 onMouseEnter={this.onMouseEnter}
                 onMouseLeave={this.onMouseLeave}
-                onClick={this.onClick}>
-                <TrashCanDetailedIcon />
-            </IconButton>
+                onClick={this.onClick}
+                iconClass={TrashCanDetailedIcon} />
         );
     }
 }
@@ -150,10 +149,10 @@ TrashCanWidget.propTypes = {
     children: PropTypes.node,
     visible: PropTypes.bool,
     onClear: PropTypes.func,
-    onMouseLeave: PropTypes.func,
-    onMouseEnter: PropTypes.func,
-    onClick: PropTypes.func,
     onChange: PropTypes.func,
+};
+TrashCanWidget.defaultProps = {
+    visible: true
 };
 
 export default TrashCanWidget;
