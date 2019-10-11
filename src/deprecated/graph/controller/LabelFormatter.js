@@ -15,6 +15,16 @@ class LabelFormatter
 
     getDefaultNodeLabel() { return ''; }
     getDefaultEdgeLabel() { return ''; }
+
+    getNodeLabelFormatter()
+    {
+        return this.formatNodeLabel.bind(this);
+    }
+
+    getEdgeLabelFormatter()
+    {
+        return this.formatEdgeLabel.bind(this);
+    } 
 }
 export default LabelFormatter;
 

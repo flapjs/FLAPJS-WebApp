@@ -1,11 +1,12 @@
 const DEFAULT_REFRESH_TICKS = 10;
 
-class GraphChangeHandler
+class ControllerChangeHandler
 {
-    constructor(graph, refreshTicks = DEFAULT_REFRESH_TICKS)
+    constructor(target, hashFunction = target => JSON.stringify(target), refreshTicks = DEFAULT_REFRESH_TICKS)
     {
-        this._graph = graph;
-        this._cachedGraphHash = 0;
+        this._target = target;
+        this._hashFunction = hashFunction;
+        this._cachedHash = 0;
 
         this._refreshTicks = refreshTicks;
 
@@ -55,17 +56,17 @@ class GraphChangeHandler
 
     update()
     {
-        const graph = this._graph;
-        const graphHash = graph.getHashCode(false);
-        if (graphHash !== this._cachedGraphHash)
+        const target = this._target;
+        const targetHash = this._hashFunction(target);
+        if (targetHash !== this._cachedHash)
         {
-            this._cachedGraphHash = graphHash;
+            this._cachedHash = targetHash;
             for (const listener of this._listeners)
             {
-                listener(graph);
+                listener(target, targetHash);
             }
         }
     }
 }
 
-export default GraphChangeHandler;
+export default ControllerChangeHandler;

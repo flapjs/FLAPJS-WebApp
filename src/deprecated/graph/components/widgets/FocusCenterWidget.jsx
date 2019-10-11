@@ -34,7 +34,7 @@ class FocusCenterWidget extends React.Component
                 className={props.className}
                 style={props.style}
                 title={'Center Workspace'}
-                disabled={disabled && false/** TODO: When viewport updates, this should re-render. */}
+                disabled={disabled}
                 onClick={this.onClick}
                 iconClass={PinpointIcon} />
         );

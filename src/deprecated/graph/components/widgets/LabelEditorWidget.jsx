@@ -134,8 +134,8 @@ class LabelEditorWidget extends React.Component
             <div ref={this._ref}
                 id={this.props.id}
                 className={Style.editor_container +
-                    (isEditorOpen ? ' open ' : '') +
-                    ' ' + this.props.className}
+                    (isEditorOpen ? ' open' : '') +
+                    ' ' + (this.props.className || '')}
                 style={targetStyle}>
                 <PatternInput ref={ref => this.inputComponent = ref}
                     submitOnBlur={this.props.saveOnExit}

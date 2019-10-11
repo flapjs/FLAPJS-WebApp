@@ -56,9 +56,35 @@ const MODULE = {
         state.inputController.terminate();
         state.viewController.terminate();
     },
+    // HACK: This forces everything to re-render every time something either in the graph, input, or view changes.
+    // This is pretty bad practice. If something depends on one of those 3 things, they should
+    // register themselves with that controller's change handler.
     onSessionDidMount(session)
     {
-        // Do nothing yet...
+        this._onGraphChange = this.onGraphChange.bind(this, session);
+        this._onInputChange = this.onInputChange.bind(this, session);
+        this._onViewChange = this.onViewChange.bind(this, session);
+        session.state.graphController.getGraphChangeHandler().addListener(this._onGraphChange);
+        session.state.inputController.getChangeHandler().addListener(this._onInputChange);
+        session.state.viewController.getChangeHandler().addListener(this._onViewChange);
+    },
+    onSessionWillUnmount(session)
+    {
+        session.state.graphController.getGraphChangeHandler().removeListener(this._onGraphChange);
+        session.state.inputController.getChangeHandler().removeListener(this._onInputChange);
+        session.state.viewController.getChangeHandler().removeListener(this._onViewChange);
+    },
+    onGraphChange(session, graph, hash)
+    {
+        session.setState({ graphHash: hash });
+    },
+    onViewChange(session, viewport, hash)
+    {
+        session.setState({ viewHash: hash });
+    },
+    onInputChange(session, input, hash)
+    {
+        session.setState({ inputHash: hash });
     }
 };
 

@@ -1,4 +1,6 @@
 import GraphNode from '../model/elements/GraphNode.js';
+import ControllerChangeHandler from './ControllerChangeHandler.js';
+import { stringHash } from '@flapjs/util/MathHelper.js';
 
 const DEFAULT_MOVE_MODE_FIRST = true;
 
@@ -6,6 +8,8 @@ class InputController
 {
     constructor()
     {
+        this._changeHandler = new ControllerChangeHandler(this, target => target.getHashCode());
+
         this._trashMode = false;
         this._nodeOnly = false;
         this._moveModeFirst = DEFAULT_MOVE_MODE_FIRST;
@@ -78,10 +82,12 @@ class InputController
 
     initialize()
     {
+        this._changeHandler.startListening();
     }
 
     terminate()
     {
+        this._changeHandler.stopListening();
     }
 
     /** @override */
@@ -168,6 +174,25 @@ class InputController
     isHandlingInput() { return this._handlingInput; }
 
     getSelectionBox() { return this._selectionBox; }
+    
+    getHashCode()
+    {
+        let string;
+        try
+        {
+            string = JSON.stringify(this);
+        }
+        catch(e)
+        {
+            string = `${Math.random()}`;
+        }
+        return stringHash(string);
+    }
+
+    getChangeHandler()
+    {
+        return this._changeHandler;
+    }
 }
 
 export default InputController;

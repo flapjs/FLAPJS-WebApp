@@ -1,9 +1,8 @@
 import { DEFAULT_LABEL_FORMATTER } from './LabelFormatter.js';
 
-import GraphChangeHandler from './GraphChangeHandler.js';
-
 import GraphNode from '../model/elements/GraphNode.js';
 import GraphEdge from '../model/elements/GraphEdge.js';
+import ControllerChangeHandler from './ControllerChangeHandler.js';
 
 export const GRAPH_EVENT_CLEAR = 'graph-clear';
 
@@ -12,7 +11,7 @@ class GraphController
     constructor(graph)
     {
         this._graph = graph;
-        this._graphChangeHandler = new GraphChangeHandler(graph);
+        this._graphChangeHandler = new ControllerChangeHandler(graph, target => target.getHashCode(false));
 
         this._labelEditor = null;
         this._labelFormatter = null;

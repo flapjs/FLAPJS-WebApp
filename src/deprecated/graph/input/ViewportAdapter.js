@@ -1,3 +1,5 @@
+import { stringHash } from '@flapjs/util/MathHelper.js';
+
 /**
  * Represents and handles the transformations to the interactible viewport of
  * the SVG element.
@@ -102,6 +104,11 @@ class ViewportAdapter
     getMinScale() { return this._minScale; }
     getMaxScale() { return this._maxScale; }
     getElement() { return this._element; }
+
+    getHashCode()
+    {
+        return stringHash(this._offsetX + ':' + this._offsetY + ',' + this._scaleFactor);
+    }
 }
 
 export default ViewportAdapter;

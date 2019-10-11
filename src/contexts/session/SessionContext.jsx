@@ -79,6 +79,11 @@ class SessionProvider extends React.Component
     componentWillUnmount()
     {
         const currentModule = this.props.module;
+        if (currentModule && typeof currentModule.onSessionWillUnmount === 'function')
+        {
+            currentModule.onSessionWillUnmount(this);
+        }
+
         if (currentModule && typeof currentModule.unload === 'function')
         {
             currentModule.unload(this.state);
