@@ -49,40 +49,6 @@ class App extends React.Component
     {
         DeprecatedAppHandler.componentWillUnmount(this);
     }
-
-    renderModuleLayer(currentModule, layerID, renderProps = {})
-    {
-        if (!currentModule || !('renders' in currentModule)) return null;
-
-        const renders = currentModule.renders;
-        if (layerID in renders)
-        {
-            const renderLayer = renders[layerID];
-            if (Array.isArray(renderLayer))
-            {
-                const result = [];
-                for(const layer of renderLayer)
-                {
-                    result.push(React.createElement(layer, renderProps));
-                }
-
-                if (result.length <= 1)
-                {
-                    return result[0];
-                }
-                else
-                {
-                    return result;
-                }
-            }
-            else
-            {
-                return React.createElement(renderLayer, renderProps);
-            }
-        }
-
-        return null;
-    }
     
     /** @override */
     render()
@@ -90,6 +56,7 @@ class App extends React.Component
         const props = this.props;
         const currentModule = props.module;
         const changeModule = props.changeModule;
+        const renderModule = props.renderModule;
 
         return (
             <div className={Style.container + (props.className || '')}>
@@ -104,18 +71,18 @@ class App extends React.Component
                                 // The playground the user can edit. This is usually the graph.
                                 renderPlayground={props =>
                                     <AppPlayground {...props}>
-                                        {this.renderModuleLayer(currentModule, 'playground')}
+                                        {renderModule('playground')}
                                     </AppPlayground>}
                                 // The viewport over the playground. This is usually the overlays.
                                 renderViewport={props =>
                                     <AppViewport {...props}>
                                         {/*DeprecatedAppHandler.renderViewport(this)*/}
-                                        {this.renderModuleLayer(currentModule, 'viewport')}
+                                        {renderModule('viewport')}
                                     </AppViewport>}
                                 // The drawer in the workspace. This is usually the side drawer.
                                 renderDrawer={props =>
                                     <AppDrawer {...props}>
-                                        {this.renderModuleLayer(currentModule, 'drawer')}
+                                        {renderModule('drawer')}
                                     </AppDrawer>}>
                             </AppWorkspace>
                         </DeprecatedServiceProviders>
@@ -130,10 +97,12 @@ App.propTypes = {
     className: PropTypes.string,
     module: PropTypes.object,
     changeModule: PropTypes.func,
+    renderModule: PropTypes.func,
 };
 App.defaultProps = {
     module: null,
-    changeModule: () => Logger.error(LOGGER_TAG, 'Cannot change module - changeModule() is not defined.')
+    changeModule: () => Logger.error(LOGGER_TAG, 'Cannot change module - changeModule() is not defined.'),
+    renderModule: (layerID) => Logger.error(LOGGER_TAG, `Cannot render module layer '${layerID}' - renderModule() is not defined.`)
 };
 
 export default App;

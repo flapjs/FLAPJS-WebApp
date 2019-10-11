@@ -1,3 +1,4 @@
+import React from 'react';
 import Logger from '@flapjs/util/Logger.js';
 
 const LOGGER_TAG = 'ModuleManager';
@@ -12,6 +13,7 @@ class ModuleManager
 
         // The context is bound so it can be passed around as a callback...
         this.changeModule = this.changeModule.bind(this);
+        this.renderModuleLayer = this.renderModuleLayer.bind(this);
     }
 
     async changeModule(nextModuleID, forceRender = true)
@@ -57,6 +59,41 @@ class ModuleManager
             }
         }
         // Otherwise, it's already rendered correctly.
+    }
+
+    renderModuleLayer(layerID, layerProps)
+    {
+        const currentModule = this.currentModule;
+        if (!currentModule || !('renders' in currentModule)) return null;
+
+        const renders = currentModule.renders;
+        if (layerID in renders)
+        {
+            const renderLayer = renders[layerID];
+            if (Array.isArray(renderLayer))
+            {
+                const result = [];
+                for(const layer of renderLayer)
+                {
+                    result.push(React.createElement(layer, layerProps));
+                }
+
+                if (result.length <= 1)
+                {
+                    return result[0];
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            else
+            {
+                return React.createElement(renderLayer, layerProps);
+            }
+        }
+
+        return null;
     }
 
     getCurrentModule()

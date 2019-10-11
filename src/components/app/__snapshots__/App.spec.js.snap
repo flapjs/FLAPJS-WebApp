@@ -13,6 +13,7 @@ exports[`<App/> rendering renders correctly 1`] = `
         Object {
           "changeModule": [Function],
           "module": null,
+          "renderModule": [Function],
         }
       }
     >
@@ -53,6 +54,7 @@ exports[`<App/> rendering renders correctly 1`] = `
             "props": Object {
               "changeModule": [Function],
               "module": null,
+              "renderModule": [Function],
             },
             "refs": Object {},
             "setState": [Function],
@@ -78,6 +80,7 @@ exports[`<App/> rendering renders correctly 1`] = `
                 "_element": <App
                   changeModule={[Function]}
                   module={null}
+                  renderModule={[Function]}
                 />,
                 "_firstWorkInProgressHook": null,
                 "_forcedUpdate": false,
@@ -98,6 +101,7 @@ exports[`<App/> rendering renders correctly 1`] = `
                         Object {
                           "changeModule": [Function],
                           "module": null,
+                          "renderModule": [Function],
                         }
                       }
                     >

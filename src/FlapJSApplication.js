@@ -41,6 +41,7 @@ class FlapJSApplication
         const props = {
             module: this.moduleManager.getCurrentModule(),
             changeModule: this.moduleManager.changeModule,
+            renderModule: this.moduleManager.renderModuleLayer,
         };
 
         ReactDOM.render(
