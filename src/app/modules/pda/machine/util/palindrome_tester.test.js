@@ -53,5 +53,5 @@ describe("Test case 1", () =>
     {
         let pda = createTestMachine();
         expect(solvePDA(pda, EMPTY_SYMBOL)).toBe(true);
-    }, 5000);
+    }, 5);
 });
