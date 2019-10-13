@@ -8,7 +8,6 @@ function createTestMachine()
     const pda = new PDA(true);
 
     // Build PDA...
-    // Example 1_11
     const q0 = pda.createState("q0");
     const q1 = pda.createState("q1");
     const q2 = pda.createState("q2");
