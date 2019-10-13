@@ -49,33 +49,33 @@ describe("Test case 1", () =>
         expect(pda.getStartState().getStateLabel()).toBe("q0");
     });
 
-    test("accepts empty string", () =>
-    {
-        let pda = createTestMachine();
-        expect(solvePDA(pda, EMPTY_SYMBOL)).toBe(true);
-    }, 5);
+    // test("accepts empty string", () =>
+    // {
+    //     let pda = createTestMachine();
+    //     expect(solvePDA(pda, EMPTY_SYMBOL)).toBe(true);
+    // }, 5);
 
-    test("accepts 'a", () =>
-    {
-        let pda = createTestMachine();
-        expect(solvePDA(pda, 'a')).toBe(true);
-    }, 5);
+    // test("accepts 'a", () =>
+    // {
+    //     let pda = createTestMachine();
+    //     expect(solvePDA(pda, 'a')).toBe(true);
+    // }, 5);
 
-    test("accepts 'aba'", () =>
-    {
-        let pda = createTestMachine();
-        expect(solvePDA(pda, 'aba')).toBe(true);
-    }, 5);
+    // test("accepts 'aba'", () =>
+    // {
+    //     let pda = createTestMachine();
+    //     expect(solvePDA(pda, 'aba')).toBe(true);
+    // }, 5);
 
-    test("accepts 'abcba'", () =>
-    {
-        let pda = createTestMachine();
-        expect(solvePDA(pda, 'abcba')).toBe(true);
-    }, 5);
+    // test("accepts 'abcba'", () =>
+    // {
+    //     let pda = createTestMachine();
+    //     expect(solvePDA(pda, 'abcba')).toBe(true);
+    // }, 5);
 
-    test("rejects 'abc'", () =>
-    {
-        let pda = createTestMachine();
-        expect(solvePDA(pda, 'abc')).toBe(false);
-    }, 5);
+    // test("rejects 'abc'", () =>
+    // {
+    //     let pda = createTestMachine();
+    //     expect(solvePDA(pda, 'abc')).toBe(false);
+    // }, 5);
 });

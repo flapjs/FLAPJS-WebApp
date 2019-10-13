@@ -57,4 +57,4 @@ describe("Test case 2", () =>
         let pda = createTestMachine();
         expect(solvePDA(pda, "1000111")).toBe(false);
     });
-}
+})
