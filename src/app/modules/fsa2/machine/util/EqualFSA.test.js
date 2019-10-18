@@ -143,4 +143,9 @@ describe("Testing equivalency between FSAs vs Minimized FSAs", () =>
     expect(result).toBe(true);
   });
 
+  test("see what isLanguage empty is doing.", () => 
+  {
+    const result = isLanguageEmpty(dfa1);
+    console.log(result);
+  }
 });
