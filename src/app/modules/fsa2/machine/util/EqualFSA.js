@@ -54,7 +54,7 @@ function intersectionOfComplement(dfa1, dfa2)
     return intersectDFA(dfa1, inverted);
 }
 
-function isLanguageNotEmpty(dfa)
+export function isLanguageNotEmpty(dfa)
 {
     //Perform BFS from start state. If a final state can be reached, then the language
     //is not empty, and the path is a witness. Else if no final states are ever reached,

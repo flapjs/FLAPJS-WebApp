@@ -1,5 +1,6 @@
 import FSA, { EMPTY_SYMBOL } from '../FSA.js';
 import { isEquivalentFSA, isEquivalentDFA } from '../FSAUtils.js';
+import { isLanguageNotEmpty } from './EqualFSA.js';
 
 describe("Testing equivalency between empty DFA machines", () =>
 {
