@@ -147,5 +147,5 @@ describe("Testing equivalency between FSAs vs Minimized FSAs", () =>
   {
     const result = isLanguageEmpty(dfa1);
     console.log(result);
-  }
+  });
 });
