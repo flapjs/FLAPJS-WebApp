@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Style from '../App.module.css';
+import Style from './AppDrawer.module.css';
 
 import SideBarLayout from '@flapjs/components/sidebar/layout/SideBarLayout.jsx';
 import DrawerLayout from '@flapjs/components/drawer/layout/DrawerLayout.jsx';
@@ -9,7 +9,7 @@ import DrawerExpander from '@flapjs/components/drawer/expander/DrawerExpander.js
 import { DropdownIcon } from '@flapjs/components/icons/Icons.js';
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
 
-import { DrawerConsumer } from '@flapjs/contexts/drawer/DrawerContext.jsx';
+import { DrawerConsumer } from '@flapjs/components/drawer/context/DrawerContext.jsx';
 
 function AppDrawer(props)
 {
@@ -95,13 +95,18 @@ function renderTabs(tabbedPanels, tabCallback, tabIndex = 0)
         // If not a custom element...
         if (!tabbedPanel.type || typeof tabbedPanel.type === 'string')
         {
-            return;
+            return tabbedPanel;
         }
         // Has a custom tab renderer...
         else if ('Tab' in tabbedPanel.type)
         {
+            // Only if tab exists...
+            if (!tabbedPanel.type.Tab) return null;
             const tabbedPanelCallback = tabCallback.bind(null, index);
-            return React.createElement(tabbedPanel.type.Tab, { key: tabIndex, onClick: tabbedPanelCallback });
+            return React.createElement(tabbedPanel.type.Tab, {
+                key: index + ':' + tabbedPanel.type.name,
+                onClick: tabbedPanelCallback
+            });
         }
         // Use default tab renderer...
         else

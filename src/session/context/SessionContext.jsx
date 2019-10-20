@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { uuid } from '@flapjs/util/MathHelper.js';
+
 import Logger from '@flapjs/util/Logger.js';
 const LOGGER_TAG = 'SessionContext';
 
@@ -8,8 +10,8 @@ const LOGGER_TAG = 'SessionContext';
 const SessionStateContext = React.createContext();
 const SessionDispatchContext = React.createContext();
 
-// ...and it's reducer...
-function defaultReducer(state, action)
+// ...and it's fallback reducer (for the one ALWAYS used, refer below)...
+function fallbackReducer(state, action)
 {
     switch(action.type)
     {
@@ -30,7 +32,7 @@ class SessionProvider extends React.Component
         const currentModule = props.module;
 
         let initialState = {};
-        let currentReducer = defaultReducer;
+        let currentReducer = fallbackReducer;
 
         if (currentModule)
         {
@@ -57,6 +59,8 @@ class SessionProvider extends React.Component
         this.state = {
             module: currentModule,
             moduleID: currentModule ? currentModule.id : null,
+            sessionName: 'Untitled',
+            sessionID: uuid(),
             ...initialState
         };
 
@@ -94,7 +98,9 @@ class SessionProvider extends React.Component
     {
         switch(action.type)
         {
-            case 'change-module':
+            case 'changeSessionName':
+                return { sessionName: action.value };
+            case 'changeModuleByID':
                 this.props.changeModule(action.value);
                 break;
             default:
@@ -105,11 +111,11 @@ class SessionProvider extends React.Component
     /** @override */
     render()
     {
-        const props = this.props;
+        const { renderChildren, ...otherProps } = this.props;
         return (
             <SessionStateContext.Provider value={this.state}>
                 <SessionDispatchContext.Provider value={this.dispatch}>
-                    {props.children}
+                    {renderChildren(otherProps)}
                 </SessionDispatchContext.Provider>
             </SessionStateContext.Provider>
         );
@@ -117,8 +123,13 @@ class SessionProvider extends React.Component
 }
 SessionProvider.propTypes = {
     children: PropTypes.node.isRequired,
+    renderChildren: PropTypes.func,
+    changeModule: PropTypes.func,
     module: PropTypes.object,
-    changeModule: PropTypes.func.isRequired,
+};
+SessionProvider.defaultProps = {
+    renderChildren: props => props.children,
+    changeModule: nextModuleID => Logger.error(LOGGER_TAG, `Unable to change module to '${nextModuleID}'- Missing changeModule() callback.`)
 };
 
 // ...and it's consumers...

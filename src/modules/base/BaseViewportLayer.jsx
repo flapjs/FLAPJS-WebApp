@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SessionConsumer } from '@flapjs/contexts/session/SessionContext.jsx';
+import { SessionConsumer } from '@flapjs/session/context/SessionContext.jsx';
 
 import LabelEditorWidget from '@flapjs/deprecated/graph/components/widgets/LabelEditorWidget.jsx';
 import TrashCanWidget from '@flapjs/deprecated/graph/components/widgets/TrashCanWidget.jsx';

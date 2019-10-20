@@ -3,7 +3,7 @@ import React from 'react';
 import GraphView from '@flapjs/deprecated/graph/components/GraphView.jsx';
 
 import NodeGraphLayer from './NodeGraphLayer.jsx';
-import { SessionStateConsumer } from '@flapjs/contexts/session/SessionContext.jsx';
+import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
 
 class BasePlaygroundLayer extends React.Component
 {

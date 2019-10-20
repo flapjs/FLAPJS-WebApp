@@ -61,39 +61,91 @@ class ModuleManager
         // Otherwise, it's already rendered correctly.
     }
 
-    renderModuleLayer(layerID, layerProps)
+    renderModuleLayer(layerID, layerProps = {}, nested = false)
     {
         const currentModule = this.currentModule;
-        if (!currentModule || !('renders' in currentModule)) return null;
 
-        const renders = currentModule.renders;
-        if (layerID in renders)
+        // NOTE: If it is nested, it must return 'children' in props, even if null.
+        if (nested)
         {
-            const renderLayer = renders[layerID];
-            if (Array.isArray(renderLayer))
-            {
-                const result = [];
-                for(const layer of renderLayer)
-                {
-                    result.push(React.createElement(layer, layerProps));
-                }
+            if (!('children' in layerProps)) throw new Error(`Cannot render nested module layer '${layerID}' without children in props.`);
+            const { children, ...providerProps } = layerProps;
 
-                if (result.length <= 1)
+            if (!currentModule || !('renders' in currentModule) || !(layerID in currentModule.renders)) return children;
+            return this.renderModuleProviders(currentModule.renders[layerID], providerProps, children);
+        }
+        else
+        {
+            if (!currentModule || !('renders' in currentModule)) return null;
+    
+            const renders = currentModule.renders;
+            if (layerID in renders)
+            {
+                const renderLayer = renders[layerID];
+                if (nested)
                 {
-                    return result[0];
+                    if (!('children' in layerProps)) throw new Error(`Cannot render nested module layer '${layerID}' without children in props.`);
+                    const { children, ...providerProps } = layerProps;
+                    return this.renderModuleProviders(renderLayer, providerProps, children);
                 }
                 else
                 {
-                    return result;
+                    if (Array.isArray(renderLayer))
+                    {
+                        const result = [];
+                        for(const layer of renderLayer)
+                        {
+                            result.push(React.createElement(layer, layerProps));
+                        }
+        
+                        if (result.length <= 1)
+                        {
+                            return result[0];
+                        }
+                        else
+                        {
+                            return result;
+                        }
+                    }
+                    else
+                    {
+                        return React.createElement(renderLayer, layerProps);
+                    }
                 }
             }
-            else
-            {
-                return React.createElement(renderLayer, layerProps);
-            }
+    
+            return null;
         }
+    }
 
-        return null;
+    renderModuleProviders(providers, providerProps, children)
+    {
+        if (Array.isArray(providers))
+        {
+            let result = null;
+            for(let i = providers.length - 1; i >= 0; --i)
+            {
+                const provider = providers[i];
+
+                if (result)
+                {
+                    result = React.createElement(provider, providerProps, result);
+                }
+                else
+                {
+                    result = React.createElement(provider, providerProps, children);
+                }
+            }
+            return result || children;
+        }
+        else if (providers)
+        {
+            return React.createElement(providers, providerProps, children);
+        }
+        else
+        {
+            return children;
+        }
     }
 
     getCurrentModule()

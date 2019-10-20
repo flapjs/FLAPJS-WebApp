@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { DrawerDispatchConsumer } from '@flapjs/contexts/drawer/DrawerContext.jsx';
+import { DrawerDispatchConsumer } from '@flapjs/components/drawer/context/DrawerContext.jsx';
 
 function DrawerExpander(props)
 {

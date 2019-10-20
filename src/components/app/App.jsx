@@ -13,9 +13,9 @@ import AppWorkspace from '@flapjs/components/app/structure/AppWorkspace.jsx';
 import AppViewport from '@flapjs/components/app/structure/AppViewport.jsx';
 import AppPlayground from '@flapjs/components/app/structure/AppPlayground.jsx';
 import AppDrawer from '@flapjs/components/app/structure/AppDrawer.jsx';
-import { SessionProvider } from '@flapjs/contexts/session/SessionContext.jsx';
+import { SessionProvider } from '@flapjs/session/context/SessionContext.jsx';
 
-import Logger from '@flapjs/util/Logger';
+import Logger from '@flapjs/util/Logger.js';
 const LOGGER_TAG = 'App';
 
 /*
@@ -54,6 +54,7 @@ class App extends React.Component
     render()
     {
         const props = this.props;
+        
         const currentModule = props.module;
         const changeModule = props.changeModule;
         const renderModule = props.renderModule;
@@ -61,11 +62,16 @@ class App extends React.Component
         return (
             <div className={Style.container + (props.className || '')}>
                 {/** All service providers. */}
-                <SessionProvider module={currentModule} changeModule={changeModule}>
+                <SessionProvider
+                    module={currentModule}
+                    changeModule={changeModule}
+                    renderChildren={props => renderModule('provider', props, true)}>
                     <AppServiceProviders appProps={props}>
                         <DeprecatedServiceProviders app={this}>
                             {/** The navigation bar at the top. */}
-                            <AppBar></AppBar>
+                            <AppBar>
+                                {DeprecatedAppHandler.renderAppBar(this)}
+                            </AppBar>
                             {/** The entire workspace, including drawers, viewports, playgrounds, etc. */}
                             <AppWorkspace
                                 // The playground the user can edit. This is usually the graph.
@@ -83,6 +89,7 @@ class App extends React.Component
                                 renderDrawer={props =>
                                     <AppDrawer {...props}>
                                         {renderModule('drawer')}
+                                        {DeprecatedAppHandler.renderDrawer(this)}
                                     </AppDrawer>}>
                             </AppWorkspace>
                         </DeprecatedServiceProviders>
@@ -97,7 +104,7 @@ App.propTypes = {
     className: PropTypes.string,
     module: PropTypes.object,
     changeModule: PropTypes.func,
-    renderModule: PropTypes.func,
+    renderModule: PropTypes.func
 };
 App.defaultProps = {
     module: null,

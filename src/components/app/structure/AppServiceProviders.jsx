@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { ThemeProvider } from '@flapjs/components/theme/ThemeContext.jsx';
 import { LocalizationProvider } from '@flapjs/util/localization/LocalizationContext.jsx';
-import { DrawerProvider } from '@flapjs/contexts/drawer/DrawerContext.jsx';
+import { DrawerProvider } from '@flapjs/components/drawer/context/DrawerContext.jsx';
 
 function AppServiceProviders(props)
 {

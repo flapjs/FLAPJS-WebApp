@@ -26,28 +26,6 @@
     text-align: center;
 }
 
-.tab {
-    padding: 0;
-    margin: 0;
-    background: none;
-    border: none;
-    outline: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-}
-
-.tab:focus {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.sidetab:global(.horizontal) .tab {
-    margin: 0.5rem 0;
-}
-
-.sidetab:global(.vertical) .tab {
-    margin: 0 0.5rem;
-}
-
 .divider {
     /** TODO: This should disappear if too small. */
     flex: 1;

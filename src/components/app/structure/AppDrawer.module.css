@@ -1,0 +1,33 @@
+.sidetab {
+    display: flex;
+}
+
+.sidetab > * {
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    outline: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.sidetab > *:focus {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidetab:global(.horizontal) {
+    flex-direction: column;
+}
+
+.sidetab:global(.vertical) {
+    flex-direction: row;
+}
+
+.sidetab:global(.horizontal) > * {
+    margin: 0.2rem 0;
+}
+
+.sidetab:global(.vertical) > * {
+    margin: 0 0.2rem;
+}

@@ -10,6 +10,7 @@
 
     --drawer-layout-handle: var(--primary, #333641);
     --drawer-layout-background: var(--primary-dark, #1D1E22);
+    --drawer-layout-text: var(--primary-text, #FFFFFF);
 }
 
 .viewport {
@@ -26,6 +27,7 @@
     width: 100%;
     height: 100%;
     z-index: 1000;
+    color: var(--drawer-layout-text);
     background: var(--drawer-layout-background);
 
     /**

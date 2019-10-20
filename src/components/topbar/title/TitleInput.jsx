@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 // import Style from './SessionTitleInput.module.css';
 
 import * as FlapJSModules from '@flapjs/FlapJSModules.js';
-import { SessionConsumer } from '@flapjs/contexts/session/SessionContext.jsx';
+import { SessionConsumer } from '@flapjs/session/context/SessionContext.jsx';
 
 /**
  * A React component that can do anything you want.
@@ -14,18 +14,7 @@ class TitleInput extends React.Component
     {
         super(props);
 
-        this.state = {
-            title: ''
-        };
-
-        this.onTitleChange = this.onTitleChange.bind(this);
         this.onModuleChange = this.onModuleChange.bind(this);
-    }
-
-    onTitleChange(e)
-    {
-        const newValue = e.target.value;
-        this.setState({ title: newValue });
     }
 
     onModuleChange(e, changeModuleCallback)
@@ -34,10 +23,10 @@ class TitleInput extends React.Component
         changeModuleCallback(nextModuleID);
     }
 
-    renderTitleInput()
+    renderTitleInput(title, changeTitle)
     {
         return (
-            <input type="text" value={this.state.title} onChange={this.onTitleChange}/>
+            <input type="text" value={title} onChange={e => changeTitle(e.target.value)}/>
         );
     } 
 
@@ -48,12 +37,12 @@ class TitleInput extends React.Component
         {
             result.push(
                 <option key={moduleID} value={moduleID}>
-                    {moduleID}
+                    {modules[moduleID].name}
                 </option>
             );
         }
         return (
-            <select defaultValue={currentModuleID} onBlur={(e) => this.onModuleChange(e, changeModuleCallback)}>
+            <select defaultValue={currentModuleID} onBlur={e => changeModuleCallback(e.target.value)}>
                 {result}
             </select>
         );
@@ -68,14 +57,21 @@ class TitleInput extends React.Component
             <div className={props.className}>
                 <SessionConsumer>
                     {
-                        (state, dispatch) => this.renderModuleOptions(
-                            FlapJSModules,
-                            state.moduleID,
-                            nextModuleID => dispatch({ type: 'change-module', value: nextModuleID })
+                        (state, dispatch) => (
+                            <>
+                                {this.renderModuleOptions(
+                                    FlapJSModules,
+                                    state.moduleID,
+                                    nextModuleID => dispatch({ type: 'changeModuleByID', value: nextModuleID })
+                                )}
+                                {this.renderTitleInput(
+                                    state.sessionName,
+                                    newTitle => dispatch({ type: 'changeSessionName', value: newTitle })
+                                )}
+                            </>
                         )
                     }
                 </SessionConsumer>
-                {this.renderTitleInput()}
             </div>
         );
     }

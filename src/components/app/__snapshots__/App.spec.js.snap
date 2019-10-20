@@ -7,6 +7,7 @@ exports[`<App/> rendering renders correctly 1`] = `
   <SessionProvider
     changeModule={[Function]}
     module={null}
+    renderChildren={[Function]}
   >
     <AppServiceProviders
       appProps={
@@ -20,6 +21,28 @@ exports[`<App/> rendering renders correctly 1`] = `
       <DeprecatedServiceProviders
         app={
           App {
+            "_exportManager": ExportManager {
+              "_downloaderManager": DownloadManager {
+                "_downloaders": Map {
+                  "text" => Array [
+                    TextDownloader {},
+                  ],
+                  "image" => Array [
+                    SVGImageDownloader {},
+                  ],
+                  "object" => Array [
+                    JSONDownloader {},
+                  ],
+                },
+              },
+              "_exportTypes": Array [],
+              "_exporters": Map {},
+            },
+            "_importManager": ImportManager {
+              "_importers": Map {},
+              "_metaTypes": Map {},
+              "_textUploader": TextUploader {},
+            },
             "_notificationManager": NotificationManager {
               "_layouts": Map {
                 "default" => [Function],
@@ -95,6 +118,7 @@ exports[`<App/> rendering renders correctly 1`] = `
                   <SessionProvider
                     changeModule={[Function]}
                     module={null}
+                    renderChildren={[Function]}
                   >
                     <AppServiceProviders
                       appProps={

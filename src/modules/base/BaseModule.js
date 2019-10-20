@@ -1,20 +1,41 @@
 import BasePlaygroundLayer from './BasePlaygroundLayer.jsx';
 import BaseViewportLayer from './BaseViewportLayer.jsx';
 import AboutPanel from './AboutPanel.jsx';
+
 import IndexedNodeGraph from '@flapjs/deprecated/graph/model/IndexedNodeGraph.js';
 import GraphNode from '@flapjs/deprecated/graph/model/elements/GraphNode.js';
 import QuadraticEdge from '@flapjs/deprecated/graph/model/elements/QuadraticEdge.js';
 import GraphController from '@flapjs/deprecated/graph/controller/GraphController.js';
 import InputController from '@flapjs/deprecated/graph/controller/InputController.js';
 import ViewController from '@flapjs/deprecated/graph/controller/ViewController.js';
-import {MODE_MOVE} from '@flapjs/deprecated/graph/components/widgets/ModeTrayWidget.jsx';
+import { MODE_MOVE } from '@flapjs/deprecated/graph/components/widgets/ModeTrayWidget.jsx';
+
+import NodeGraphExporter from './NodeGraphExporter.js';
+import * as NodeGraphParser from './NodeGraphParser.js';
 
 const MODULE = {
     id: 'base',
+    version: '1.0.0',
     renders: {
         playground: [ BasePlaygroundLayer ],
         viewport: [ BaseViewportLayer ],
         drawer: [ AboutPanel ],
+    },
+    imports: {
+        /*
+        session: SessionImporter,
+        graph: NodalGraphImageExporter,
+        jflap: JFLAPImporter,
+        */
+    },
+    exports: {
+        session: new NodeGraphExporter(NodeGraphParser.JSON),
+        /*
+        graph: NodalGraphExporter,
+        image: PNGExporter,
+        svg: SVGExporter,
+        jflap: JFLAPExporter,
+        */
     },
     reducer(state, action)
     {
@@ -67,6 +88,10 @@ const MODULE = {
         session.state.graphController.getGraphChangeHandler().addListener(this._onGraphChange);
         session.state.inputController.getChangeHandler().addListener(this._onInputChange);
         session.state.viewController.getChangeHandler().addListener(this._onViewChange);
+    },
+    onSessionRestart(session)
+    {
+        // HACK: Not yet implemented.
     },
     onSessionWillUnmount(session)
     {

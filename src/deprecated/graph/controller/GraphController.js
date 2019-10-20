@@ -60,7 +60,7 @@ class GraphController
     clearGraph()
     {
         // FIXME: Get the actual localized version of this string...
-        if (window.confirm('Are you sure you want to clear the graph?'/* I18N.toString('alert.graph.clear') */))
+        // if (window.confirm('Are you sure you want to clear the graph?'/* I18N.toString('alert.graph.clear') */))
         {
             this._graph.clear();
             this.emitGraphEvent(GRAPH_EVENT_CLEAR);
