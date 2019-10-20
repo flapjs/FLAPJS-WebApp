@@ -11,6 +11,7 @@ import ViewController from '@flapjs/deprecated/graph/controller/ViewController.j
 import { MODE_MOVE } from '@flapjs/deprecated/graph/components/widgets/ModeTrayWidget.jsx';
 
 import NodeGraphExporter from './NodeGraphExporter.js';
+import { IMAGE_EXPORTERS } from './NodeGraphImageExporters.js';
 import * as NodeGraphParser from './NodeGraphParser.js';
 
 const MODULE = {
@@ -30,12 +31,7 @@ const MODULE = {
     },
     exports: {
         session: new NodeGraphExporter(NodeGraphParser.JSON),
-        /*
-        graph: NodalGraphExporter,
-        image: PNGExporter,
-        svg: SVGExporter,
-        jflap: JFLAPExporter,
-        */
+        ...IMAGE_EXPORTERS
     },
     reducer(state, action)
     {
@@ -91,7 +87,7 @@ const MODULE = {
     },
     onSessionRestart(session)
     {
-        // HACK: Not yet implemented.
+        // FIXME: Not yet implemented.
     },
     onSessionWillUnmount(session)
     {
