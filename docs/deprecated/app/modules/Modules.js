@@ -32,7 +32,7 @@ Modules['node'] = {
     name: 'Node Graph',
     version: '1.0.0',
     experimental: true,
-    fetch: function (callback) { import(/* webpackChunkName: "module_node" */ 'modules/node/NodeModule.js').then(({ default: _ }) => callback(_)); }
+    fetch: function (callback) { import(/* webpackChunkName: "module_nodegraph" */ 'modules/node/NodeGraphModule.js').then(({ default: _ }) => callback(_)); }
 };
 
 Modules['tree'] = {

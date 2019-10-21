@@ -8,7 +8,7 @@ export const base = {
 export const node = {
     name: 'Node Graph',
     version: '1.0.0',
-    fetch: () => import(/* webpackChunkName: "module_node" */ './modules/node/NodeGraphModule.js')
+    fetch: () => import(/* webpackChunkName: "module_node" */ './modules/node/NodeModule.js')
 };
 
 export const fa = {
