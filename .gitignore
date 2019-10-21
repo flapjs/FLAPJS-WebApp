@@ -2,6 +2,12 @@
 /out/
 .DS_Store
 
+# NOTE: Since we are hosted on git pages, we need
+# to include dist to server our output files. But
+# when we get a real server, we could may be able
+# to ignore it.
+# /dist/
+
 # Ignore any logs
 *.log
 
