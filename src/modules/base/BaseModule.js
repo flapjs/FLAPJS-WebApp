@@ -18,7 +18,7 @@ import UndoManager from '@flapjs/deprecated/undo/UndoManager.js';
 import SafeGraphEventHandler from '@flapjs/modules/base/SafeGraphEventHandler.js';
 
 /*
-import AutoSaveManager from '@flapjs/util/autosave/AutoSaveManager.js';
+import AutoSaveManager from '@flapjs/systems/autosave/AutoSaveManager.js';
 import LocalStorage from '@flapjs/util/storage/LocalStorage.js';
 import NodeGraphSaveHandler from '@flapjs/modules/base/NodeGraphSaveHandler.js';
 import NodeGraphImporter from '@flapjs/modules/base/NodeGraphImporter.js';
