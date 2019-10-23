@@ -16,6 +16,7 @@ import AppDrawer from '@flapjs/components/app/structure/AppDrawer.jsx';
 import { SessionProvider } from '@flapjs/session/context/SessionContext.jsx';
 
 import Logger from '@flapjs/util/Logger.js';
+
 const LOGGER_TAG = 'App';
 
 /*

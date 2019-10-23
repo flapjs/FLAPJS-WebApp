@@ -1,8 +1,0 @@
-.icon-toggle {
-  transition:
-    fill 0.3s ease,
-    transform 0.3s ease;
-}
-.icon-toggle.open {
-  transform: rotate(180deg);
-}

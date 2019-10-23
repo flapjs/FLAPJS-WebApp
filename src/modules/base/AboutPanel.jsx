@@ -1,5 +1,5 @@
 import React from 'react';
-import Pane from '@flapjs/components/panel/pane/Pane.jsx';
+import Pane from '@flapjs/components/drawer/pane/Pane.jsx';
 
 import AboutTab from './AboutTab.jsx';
 

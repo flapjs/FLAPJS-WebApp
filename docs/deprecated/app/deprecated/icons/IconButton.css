@@ -1,9 +1,0 @@
-.icon-button {
-  background: none;
-  border: none;
-  outline: none;
-  padding: 0;
-
-  fill: var(--color-drawer-text);
-  cursor: pointer;
-}

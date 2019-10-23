@@ -6,7 +6,7 @@ import NotificationView from '@flapjs/deprecated/notification/components/Notific
 import { NotificationConsumer } from '@flapjs/deprecated/notification/NotificationContext.jsx';
 import ExportManager from '@flapjs/systems/file/export/ExportManager.js';
 import ImportManager from '@flapjs/systems/file/import/ImportManager.js';
-import ExportPanel from '@flapjs/modules/base/ExportPanel.jsx';
+import ExportPanel from '@flapjs/components/drawer/panels/ExportPanel.jsx';
 
 export function initialize(app)
 {
