@@ -4,8 +4,8 @@ import NotificationManager from '@flapjs/deprecated/notification/NotificationMan
 import * as DefaultNotifications from '@flapjs/deprecated/notification/DefaultNotifications.jsx';
 import NotificationView from '@flapjs/deprecated/notification/components/NotificationView.jsx';
 import { NotificationConsumer } from '@flapjs/deprecated/notification/NotificationContext.jsx';
-import ExportManager from '@flapjs/deprecated/file/export/ExportManager.js';
-import ImportManager from '@flapjs/deprecated/file/import/ImportManager.js';
+import ExportManager from '@flapjs/systems/file/export/ExportManager.js';
+import ImportManager from '@flapjs/systems/file/import/ImportManager.js';
 import ExportPanel from '@flapjs/modules/base/ExportPanel.jsx';
 
 export function initialize(app)

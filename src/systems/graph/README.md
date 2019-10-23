@@ -1,5 +1,12 @@
-05/05/2019
+# Graph
 
+This provides all necessary components, logic, state management, etc to implement a graph editor.
+
+## History
+### 10/13/2019
+Things have been moved around to better reflect their purpose. So all pure data utilities are now under "model", all renderers under "components", etc.
+
+### 05/05/2019
 The old system was hard to change. This should have a better sense of division of responsibility.
 
 The primary component that manages everything for editing a graph is the GraphView. The view is further divided into a graph view (NodeGraphView) and a label editing view (LabelEditorView). More views can be added through the graph editor's children or the corresponding props.

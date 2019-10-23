@@ -1,8 +1,8 @@
-import NodeGraph from '@flapjs/deprecated/graph/model/NodeGraph.js';
+import NodeGraph from '@flapjs/systems/graph/model/NodeGraph.js';
 
-import GraphNode from '@flapjs/deprecated/graph/model/elements/GraphNode.js';
-import GraphEdge from '@flapjs/deprecated/graph/model/elements/GraphEdge.js';
-import QuadraticEdge from '@flapjs/deprecated/graph/model/elements/QuadraticEdge.js';
+import GraphNode from '@flapjs/systems/graph/model/elements/GraphNode.js';
+import GraphEdge from '@flapjs/systems/graph/model/elements/GraphEdge.js';
+import QuadraticEdge from '@flapjs/systems/graph/model/elements/QuadraticEdge.js';
 
 const GRAPH_PARSER_VERSION = '1.0.0';
 

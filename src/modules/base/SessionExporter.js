@@ -1,6 +1,6 @@
 /* global __VERSION__ */
 
-import Exporter from '@flapjs/deprecated/file/export/Exporter.js';
+import Exporter from '@flapjs/systems/file/export/Exporter.js';
 
 class SessionExporter extends Exporter
 {

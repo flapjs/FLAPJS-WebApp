@@ -3,12 +3,12 @@ import BaseViewportLayer from './BaseViewportLayer.jsx';
 import BaseToolbarLayer from './BaseToolbarLayer.jsx';
 import AboutPanel from './AboutPanel.jsx';
 
-import IndexedNodeGraph from '@flapjs/deprecated/graph/model/IndexedNodeGraph.js';
-import GraphNode from '@flapjs/deprecated/graph/model/elements/GraphNode.js';
-import QuadraticEdge from '@flapjs/deprecated/graph/model/elements/QuadraticEdge.js';
-import InputController from '@flapjs/deprecated/graph/controller/InputController.js';
-import ViewController from '@flapjs/deprecated/graph/controller/ViewController.js';
-import { MODE_MOVE } from '@flapjs/deprecated/graph/components/widgets/ModeTrayWidget.jsx';
+import IndexedNodeGraph from '@flapjs/systems/graph/model/IndexedNodeGraph.js';
+import GraphNode from '@flapjs/systems/graph/model/elements/GraphNode.js';
+import QuadraticEdge from '@flapjs/systems/graph/model/elements/QuadraticEdge.js';
+import InputController from '@flapjs/systems/graph/controller/InputController.js';
+import ViewController from '@flapjs/systems/graph/controller/ViewController.js';
+import { MODE_MOVE } from '@flapjs/systems/graph/components/widgets/ModeTrayWidget.jsx';
 
 import NodeGraphController from './NodeGraphController.js';
 import NodeGraphExporter from './NodeGraphExporter.js';

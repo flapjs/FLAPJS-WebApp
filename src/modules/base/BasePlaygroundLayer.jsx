@@ -1,6 +1,6 @@
 import React from 'react';
 
-import GraphView from '@flapjs/deprecated/graph/components/GraphView.jsx';
+import GraphView from '@flapjs/systems/graph/components/GraphView.jsx';
 
 import NodeGraphLayer from './NodeGraphLayer.jsx';
 import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';

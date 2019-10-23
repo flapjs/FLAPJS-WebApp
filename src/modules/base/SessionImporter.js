@@ -1,4 +1,4 @@
-import Importer from '@flapjs/deprecated/file/import/Importer.js';
+import Importer from '@flapjs/systems/file/import/Importer.js';
 
 class SessionImporter extends Importer
 {
