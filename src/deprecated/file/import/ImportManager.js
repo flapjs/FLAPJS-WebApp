@@ -17,7 +17,7 @@ class ImportManager
      * 
      * @param {Importer} importer       The importer associated with the file type.
      * @param {...string} fileTypes     The file type preceded by a dot, such as '.txt' or '.config.json'.
-     * @returns {this}
+     * @returns {this} Self for method-chaining.
      */
     addImporter(importer, ...fileTypes)
     {
@@ -35,7 +35,7 @@ class ImportManager
      * 
      * @param {Importer} importer   The importer to remove.
      * @param {string} fileType     The file type to remove the importer from.
-     * @returns {this}
+     * @returns {this} Self for method-chaining.
      */
     removeImporter(importer, fileType)
     {
@@ -125,9 +125,10 @@ class ImportManager
      * Tries to import the file blob with registered importers.
      * 
      * @param {File} fileBlob The file to import.
+     * @param {Session} session The current session state.
      * @returns {Promise} A Promise that resolves if imported without errors.
      */
-    tryImportFile(fileBlob)
+    tryImportFile(fileBlob, session)
     {
         if (!fileBlob) throw new Error('Unable to import null file');
         if (!(fileBlob instanceof File)) throw new Error('Unable to import object as file');
@@ -138,7 +139,7 @@ class ImportManager
                 const fileName = fileBlob.name;
                 const fileType = getFileExtFromName(fileName);
                 const fileData = result;
-                return this.tryImportFileFromData(fileName, fileType, fileData);
+                return this.tryImportFileFromData(session, fileName, fileType, fileData);
             })
             .catch(err =>
             {
@@ -155,12 +156,13 @@ class ImportManager
      * 
      * For ease of use, this entire chain is done by tryImportFile().
      * 
+     * @param {Session} session The current session state.
      * @param {string} fileName The name of the target file.
      * @param {string} fileType The type of the target file (usually just the file extension).
      * @param {string} fileData The file data to import.
      * @returns {Promise} A Promise that resolves if imported without errors.
      */
-    tryImportFileFromData(fileName, fileType, fileData)
+    tryImportFileFromData(session, fileName, fileType, fileData)
     {
         // Find all valid importers
         const importers = [];
@@ -198,7 +200,7 @@ class ImportManager
         {
             return importers.reduce(
                 (acc, value) => acc.catch(
-                    err => value.src.importFileData(fileName, value.type, fileData)
+                    err => value.src.importFileData(session, fileName, value.type, fileData)
                 ),
                 Promise.reject());
         }

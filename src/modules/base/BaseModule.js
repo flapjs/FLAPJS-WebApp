@@ -1,28 +1,45 @@
 import BasePlaygroundLayer from './BasePlaygroundLayer.jsx';
 import BaseViewportLayer from './BaseViewportLayer.jsx';
+import BaseToolbarLayer from './BaseToolbarLayer.jsx';
 import AboutPanel from './AboutPanel.jsx';
 
 import IndexedNodeGraph from '@flapjs/deprecated/graph/model/IndexedNodeGraph.js';
 import GraphNode from '@flapjs/deprecated/graph/model/elements/GraphNode.js';
 import QuadraticEdge from '@flapjs/deprecated/graph/model/elements/QuadraticEdge.js';
-import GraphController from '@flapjs/deprecated/graph/controller/GraphController.js';
 import InputController from '@flapjs/deprecated/graph/controller/InputController.js';
 import ViewController from '@flapjs/deprecated/graph/controller/ViewController.js';
 import { MODE_MOVE } from '@flapjs/deprecated/graph/components/widgets/ModeTrayWidget.jsx';
 
+import NodeGraphController from './NodeGraphController.js';
 import NodeGraphExporter from './NodeGraphExporter.js';
 import { IMAGE_EXPORTERS } from './NodeGraphImageExporters.js';
 import * as NodeGraphParser from './NodeGraphParser.js';
+import UndoManager from '@flapjs/deprecated/undo/UndoManager.js';
+import SafeGraphEventHandler from '@flapjs/modules/base/SafeGraphEventHandler.js';
+
+/*
+import AutoSaveManager from '@flapjs/util/autosave/AutoSaveManager.js';
+import LocalStorage from '@flapjs/util/storage/LocalStorage.js';
+import NodeGraphSaveHandler from '@flapjs/modules/base/NodeGraphSaveHandler.js';
+import NodeGraphImporter from '@flapjs/modules/base/NodeGraphImporter.js';
+*/
+
+// Import Manager
+// Theme Manager
+// Hotkeys?
+// Tooltips
 
 const MODULE = {
     id: 'base',
     version: '1.0.0',
     renders: {
+        appbar: [ BaseToolbarLayer ],
         playground: [ BasePlaygroundLayer ],
         viewport: [ BaseViewportLayer ],
         drawer: [ AboutPanel ],
     },
     imports: {
+        // session: new NodeGraphImporter(NodeGraphParser.JSON)
         /*
         session: SessionImporter,
         graph: NodalGraphImageExporter,
@@ -32,6 +49,15 @@ const MODULE = {
     exports: {
         session: new NodeGraphExporter(NodeGraphParser.JSON),
         ...IMAGE_EXPORTERS
+    },
+    menus: {
+        file: [
+            // NewMenuOption,
+            // SaveMenuOption,
+        ],
+        view: [
+            // RecenterMenuOption,
+        ]
     },
     reducer(state, action)
     {
@@ -53,22 +79,29 @@ const MODULE = {
     load(state)
     {
         const graph = new IndexedNodeGraph(GraphNode, QuadraticEdge);
-        const graphController = new GraphController(graph);
+        const graphController = new NodeGraphController(graph, state);
         const inputController = new InputController();
         const viewController = new ViewController();
+        const undoManager = new UndoManager(() => new SafeGraphEventHandler(graphController, NodeGraphParser.JSON));
+        // const autoSaveManager = new AutoSaveManager(LocalStorage).registerHandler(new NodeGraphSaveHandler(this));
 
         viewController.initialize();
         inputController.initialize();
         graphController.initialize();
-
-        graph.createNode();
+        // autoSaveManager.initialize();
 
         state.graphController = graphController;
         state.inputController = inputController;
         state.viewController = viewController;
+        state.undoManager = undoManager;
+        // state.autoSaveManager = autoSaveManager;
+
+        graph.createNode();
     },
     unload(state)
     {
+        // state.autoSaveManager.terminate();
+        state.undoManager.clear();
         state.graphController.terminate();
         state.inputController.terminate();
         state.viewController.terminate();

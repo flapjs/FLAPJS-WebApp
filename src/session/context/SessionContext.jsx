@@ -99,7 +99,8 @@ class SessionProvider extends React.Component
         switch(action.type)
         {
             case 'changeSessionName':
-                return { sessionName: action.value };
+                this.setState({ sessionName: action.value });
+                break;
             case 'changeModuleByID':
                 this.props.changeModule(action.value);
                 break;

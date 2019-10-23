@@ -6,30 +6,18 @@ const MAX_HISTORY_LENGTH = 1000;
 
 class UndoManager
 {
-    constructor()
+    constructor(eventHandlerFactory = null)
     {
         this.history = [];
         this.offsetIndex = 0;
 
-        this._handlerFactory = null;
+        this._handlerFactory = eventHandlerFactory;
     }
 
     setEventHandlerFactory(factory)
     {
         this._handlerFactory = factory;
         return this;
-    }
-
-    //DuckType(SessionListener)
-    onSessionStart(session)
-    {
-
-    }
-
-    //DuckType(SessionListener)
-    onSessionStop(session)
-    {
-        this.clear();
     }
 
     captureEvent(...args)

@@ -2,11 +2,9 @@ import Importer from '@flapjs/deprecated/file/import/Importer.js';
 
 class SessionImporter extends Importer
 {
-    constructor(app)
+    constructor()
     {
         super();
-
-        this._app = app;
     }
 
     onParseSession(session, fileData)
@@ -16,7 +14,7 @@ class SessionImporter extends Importer
 
     onPreImportSession(session)
     {
-        session.getApp().getUndoManager().captureEvent();
+        session.undoManager.captureEvent();
     }
 
     onImportSession(session, sessionData)
@@ -26,15 +24,12 @@ class SessionImporter extends Importer
 
     onPostImportSession(session)
     {
-        session.getApp().getUndoManager().captureEvent();
+        session.undoManager.captureEvent();
     }
 
     /** @override */
-    importFileData(fileName, fileType, fileData)
+    importFileData(session, fileName, fileType, fileData)
     {
-        const app = this._app;
-        const session = app.getSession();
-        const currentModule = session.getCurrentModule();
         const result = this.onParseSession(session, fileData);
 
         this.onPreImportSession(session);
@@ -51,11 +46,9 @@ class SessionImporter extends Importer
             projectName = result['_metadata']['name'];
         }
         
-        app.getSession().setProjectName(projectName);
+        session.sessionName = projectName;
 
         this.onPostImportSession(session);
-
-        return currentModule;
     }
 }
 
