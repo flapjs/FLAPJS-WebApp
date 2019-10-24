@@ -145,12 +145,13 @@ describe("Testing equivalency between FSAs vs Minimized FSAs", () =>
   });
 
   const dfa3 = new FSA(true);
-  let q0 = dfa3.createState("q0");
-  let q1 = dfa3.createState("q1");
+  q0 = dfa3.createState("q0");
+  q1 = dfa3.createState("q1");
   dfa3.addTransition(q0, q1, "0");
   dfa3.addTransition(q0, q1, "1");
   dfa3.addTransition(q1, q1, "0");
   dfa3.addTransition(q1, q1, "1");
+  dfa3.setFinalState(q1);
 
   test("see what isLanguage empty is doing.", () => 
   {

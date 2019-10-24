@@ -10,34 +10,51 @@ export function isEquivalentFSA(fsa1, fsa2)
     return isEquivalentDFA(dfa1, dfa2);
 }
 
-export function isEquivalentDFA(dfa1, dfa2)
+export function isEquivalentDFA(dfa1, dfa2, wantWitnessString = false)
 {
     // L(dfa3) = L(dfa1) && !L(dfa2)
     let dfa3 = intersectionOfComplement(dfa1, dfa2);
     if (!dfa3) 
     {
         //console.log("dfa1 and dfa2 use different alphabets");
-        return false;
+        return {
+            value: false,
+            witnessString: ''
+        };
     }
     let dfa3acceptssomething = isLanguageNotEmpty(dfa3);
     if (dfa3acceptssomething) 
     {
-        //console.log(`dfa1 accepts ${dfa3acceptssomething} while dfa2 doesn't`)
-        return false;
+        //console.log(`dfa1 accepts ${dfa3acceptssomething} while dfa2 doesn't`);
+        return {
+            value: false,
+            witnessString: dfa3acceptssomething
+        };
     }
     let dfa4 = intersectionOfComplement(dfa2, dfa1);
     if (!dfa4) 
     {
         //console.log("dfa1 and dfa2 use different alphabets");
-        return false;
+        return {
+            value: false,
+            witnessString: ''
+        };
     }
     let dfa4acceptssometing = isLanguageNotEmpty(dfa4);
     if (dfa4acceptssometing) 
     {
         //console.log(`dfa2 accepts ${dfa4acceptssomething} while dfa1 doesn't`);
-        return false;
+        return {
+            value: false,
+            witnessString: dfa4acceptssometing
+        }; 
     }
-    return true;
+
+    // if the user reached this statement, the two DFA's are equal and we should return {true, ''}
+    return {
+        value: true,
+        witnessString: ''
+    };
     // L(dfa4) = L(dfa2) && !L(dfa1)
 }
 
