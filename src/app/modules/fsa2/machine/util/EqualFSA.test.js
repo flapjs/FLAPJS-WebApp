@@ -1,5 +1,5 @@
 import FSA, { EMPTY_SYMBOL } from '../FSA.js';
-import { isEquivalentFSA, isEquivalentDFA } from '../FSAUtils.js';
+import { isEquivalentFSAWithWitness, isEquivalentFSA, isEquivalentDFA } from '../FSAUtils.js';
 import { isLanguageNotEmpty } from './EqualFSA.js';
 
 describe("Testing equivalency between empty DFA machines", () =>
@@ -8,12 +8,12 @@ describe("Testing equivalency between empty DFA machines", () =>
   const dfa2 = new FSA(true);
   test("is DFA equivalent", () =>
   {
-    const result = isEquivalentDFA(dfa1, dfa2);
+    const result = isEquivalentDFA(dfa1, dfa2).value;
     expect(result).toBe(true);
   });
   test("is FSA equivalent", () =>
   {
-    const result = isEquivalentFSA(dfa1, dfa2);
+    const result = isEquivalentFSAWithWitness(dfa1, dfa2).value;
     expect(result).toBe(true);
   });
 });
@@ -28,7 +28,7 @@ describe("Testing equivalency between itself", () =>
 
   test("is FSA equivalent", () =>
   {
-    const result = isEquivalentFSA(fsa1, fsa1);
+    const result = isEquivalentFSAWithWitness(fsa1, fsa1).value;
     expect(result).toBe(true);
   });
 });
@@ -55,13 +55,13 @@ describe("Testing equivalency between non-empty FSA machines", () =>
 
   test("is similar FSA equivalent", () =>
   {
-    const result = isEquivalentFSA(fsa1, fsa2);
+    const result = isEquivalentFSAWithWitness(fsa1, fsa2).value;
     expect(result).toBe(true);
   });
 
   test("is different symbol FSA equivalent", () =>
   {
-    const result = isEquivalentFSA(fsa1, fsa3);
+    const result = isEquivalentFSAWithWitness(fsa1, fsa3).value;
     expect(result).toBe(false);
   });
 
@@ -108,7 +108,7 @@ describe("Testing equivalency between FSAs vs Minimized FSAs", () =>
 
   test("original vs minimized is equivalent", () =>
   {
-    const result = isEquivalentFSA(dfa1, dfa1min);
+    const result = isEquivalentFSAWithWitness(dfa1, dfa1min).value;
     expect(result).toBe(true);
   });
 
@@ -140,7 +140,7 @@ describe("Testing equivalency between FSAs vs Minimized FSAs", () =>
 
   test("Minimized is removing excess EMPTY_SYMBOL transitions", () =>
   {
-    const result = isEquivalentFSA(fsa1, fsa1min);
+    const result = isEquivalentFSAWithWitness(fsa1, fsa1min).value;
     expect(result).toBe(true);
   });
 

@@ -3,14 +3,25 @@ import { intersectDFA } from './IntersectFSA.js';
 import { invertDFA } from './InvertDFA.js';
 // import FSA from '../FSA.js';
 
+/**
+ * @deprecated
+ * Use isEquivalentFSAWithWitnessString instead.
+ */
 export function isEquivalentFSA(fsa1, fsa2)
+{
+    const dfa1 = fsa1.isDeterministic() ? fsa1 : convertToDFA(fsa1);
+    const dfa2 = fsa2.isDeterministic() ? fsa2 : convertToDFA(fsa2);
+    return isEquivalentDFA(dfa1, dfa2).value;
+}
+
+export function isEquivalentFSAWithWitness(fsa1, fsa2)
 {
     const dfa1 = fsa1.isDeterministic() ? fsa1 : convertToDFA(fsa1);
     const dfa2 = fsa2.isDeterministic() ? fsa2 : convertToDFA(fsa2);
     return isEquivalentDFA(dfa1, dfa2);
 }
 
-export function isEquivalentDFA(dfa1, dfa2, wantWitnessString = false)
+export function isEquivalentDFA(dfa1, dfa2)
 {
     // L(dfa3) = L(dfa1) && !L(dfa2)
     let dfa3 = intersectionOfComplement(dfa1, dfa2);
