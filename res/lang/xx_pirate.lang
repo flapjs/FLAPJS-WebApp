@@ -93,6 +93,7 @@ action.testing.new = Raise the anchor!
 
 action.overview.convertdfa = Convert yer charts to DFA
 action.overview.convertnfa = Convert yer charts to NFA
+action.overview.convertpda = Convert yer charts to PDA
 action.overview.autolayout = To the shipyard!
 
 action.options.changetheme = Change yer colors...

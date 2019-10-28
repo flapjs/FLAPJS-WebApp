@@ -1,0 +1,10 @@
+:local(.analysis_button) {
+  width: 100%;
+  outline: none;
+  cursor: pointer;
+  margin: 0.3em;
+  font-size: 1em;
+  border-radius: 1em;
+  background: var(--color-panel-text-active);
+  color: var(--color-panel-text);
+}

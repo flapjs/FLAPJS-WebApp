@@ -3,7 +3,7 @@ import Style from './AlphabetListView.css';
 
 import AlphabetListElement from './AlphabetListElement.js';
 
-class TerminalListView extends React.Component
+class AlphabetListView extends React.Component
 {
     constructor(props)
     {
@@ -39,17 +39,25 @@ class TerminalListView extends React.Component
     {
         const symbol = element.props.symbol;
         const machineController = this.props.machineController;
+        const content = this.props.content;
 
         if (nextSymbol !== null)
         {
             if (nextSymbol.length > 0)
             {
-                if (!machineController.isSymbol(nextSymbol))
+                if (content == 'terminals' ? !machineController.isSymbol(nextSymbol) : !machineController.isVariable(nextSymbol))
                 {
                     if (symbol)
                     {
                         //None other have the same name. Rename it!
-                        machineController.renameSymbol(symbol, nextSymbol);
+                        if(conent == 'terminals')
+                        {
+                            machineController.renameSymbol(symbol, nextSymbol);
+                        }
+                        else
+                        {
+                            machineController.renameVariable(sybmol, nextSymbol);
+                        }
                     }
                     else
                     {
@@ -65,7 +73,14 @@ class TerminalListView extends React.Component
             else if (symbol)
             {
                 //Delete!
-                machineController.deleteSymbol(symbol);
+                if(conent == 'terminals')
+                {
+                    machineController.deleteSymbol(symbol);
+                }
+                else
+                {
+                    machineController.deleteVariable(symbol);
+                }
             }
         }
 
@@ -79,14 +94,19 @@ class TerminalListView extends React.Component
     onElementChange(e, element, symbol)
     {
         const machineController = this.props.machineController;
+        const conent = this.props.content;
 
         if (symbol.length > 0)
         {
             //If there are more than 1 symbols by the same name,
             //OR if the duplicate symbol found is NOT the same symbol
-            if (machineController.isSymbol(symbol) && symbol !== element.props.symbol)
+            if (content == 'terminals' && machineController.isSymbol(symbol) && symbol !== element.props.symbol)
             {
                 throw new Error('Not a valid symbol');
+            }
+            else if (content == 'variables' && machineController.isVariable(symbol) && symbol !== element.props.symbol)
+            {
+                throw new Error('Not a valid variable');
             }
         }
     }
@@ -108,18 +128,37 @@ class TerminalListView extends React.Component
         return result;
     }
 
+    renderVariableList(machineController, variables)
+    {
+        const result = [];
+        for(const variable of variables)
+        {
+            if(!variable) continue;
+
+            result.push(<AlphabetListElement key={variable}
+                symbol={variable}
+                used={machineController.isUsedVariable(variable)}
+                onFocus={this.onElementFocus}
+                onBlur={this.onElementBlur}
+                onChange={this.onElementChange}/>);
+        }
+        return result;
+    }
+
     /** @override */
     render()
     {
         const machineController = this.props.machineController;
+        const isTerminals = this.props.content == 'terminals';
         const terminals = machineController.getMachineTerminals();
+        const variables = machineController.getMachineVariables();
 
         return (
             <div id={this.props.id}
                 className={Style.list_container}
                 style={this.props.style}>
                 <div className={Style.element_list}>
-                    {this.renderTerminalList(machineController, terminals)}
+                    {isTerminals ? this.renderTerminalList(machineController, terminals) : this.renderVariableList(machineController, variables)}
                     <AlphabetListElement
                         ref={ref=>this.newSymbolComponent=ref}
                         style={{display: this.state.useNewSymbol ? 'block' : 'none'}}
@@ -141,4 +180,4 @@ class TerminalListView extends React.Component
     }
 }
 
-export default TerminalListView;
+export default AlphabetListView;

@@ -40,6 +40,7 @@ import GraphView from 'graph2/components/GraphView.js';
 
 const MODULE_NAME = 'fsa';
 const MODULE_VERSION = '3.0.0';
+const MODULE_LOCALIZED_NAME = 'Finite Automata';
 
 class FSAModule
 {
@@ -210,7 +211,7 @@ class FSAModule
     /** @override */
     getModuleName() { return MODULE_NAME; }
     /** @override */
-    getLocalizedModuleName() { return 'Finite Automata'; }
+    getLocalizedModuleName() { return MODULE_LOCALIZED_NAME; }
     /** @override */
     getApp() { return this._app; }
 }
