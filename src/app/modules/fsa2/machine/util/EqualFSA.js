@@ -21,6 +21,13 @@ export function isEquivalentFSAWithWitness(fsa1, fsa2)
     return isEquivalentDFA(dfa1, dfa2);
 }
 
+/*
+* this function returns an object of the form {value:boolean, witnessString:string}
+* where value is true when two DFAs describe the same language and false otherwise.
+* witnessString is a string that shows one string that demonstrates the non-equivalence
+* of the two machines of our interest. witnessString is set to null when two DFAs are 
+* equivalent or when their alphabet are not the same.
+*/
 export function isEquivalentDFA(dfa1, dfa2)
 {
     // L(dfa3) = L(dfa1) && !L(dfa2)
@@ -30,7 +37,7 @@ export function isEquivalentDFA(dfa1, dfa2)
         //console.log("dfa1 and dfa2 use different alphabets");
         return {
             value: false,
-            witnessString: ''
+            witnessString: null // this means the alphabet of two machines are not the same
         };
     }
     let dfa3acceptssomething = isLanguageNotEmpty(dfa3);
@@ -48,7 +55,7 @@ export function isEquivalentDFA(dfa1, dfa2)
         //console.log("dfa1 and dfa2 use different alphabets");
         return {
             value: false,
-            witnessString: ''
+            witnessString: null // this means these two DFAs have different alphabet
         };
     }
     let dfa4acceptssometing = isLanguageNotEmpty(dfa4);
@@ -64,7 +71,7 @@ export function isEquivalentDFA(dfa1, dfa2)
     // if the user reached this statement, the two DFA's are equal and we should return {true, ''}
     return {
         value: true,
-        witnessString: ''
+        witnessString: null 
     };
     // L(dfa4) = L(dfa2) && !L(dfa1)
 }

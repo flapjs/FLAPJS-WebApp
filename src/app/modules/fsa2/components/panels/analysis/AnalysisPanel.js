@@ -90,7 +90,12 @@ class AnalysisPanel extends React.Component
             }
             else
             {
-                this.setState({ isEqual: false, witnessString: 'Witness: ' + equivalenceResult.witnessString });
+                if(!equivalenceResult.witnessString) {
+                    this.setState({ isEqual: false, witnessString: 'Sorry, the machines have different alphabets' });
+                }
+                else{
+                    this.setState({ isEqual: false, witnessString: 'Witness: ' + equivalenceResult.witnessString });
+                }
             }
         });
     }
