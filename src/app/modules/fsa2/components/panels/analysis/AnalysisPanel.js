@@ -1,6 +1,5 @@
 import React from 'react';
 import Style from './AnalysisPanel.css';
-import StyleTest from '../Testing/TestListView.css';
 import { getUnreachableNodes } from 'graph2/util/NodeGraphUtils.js';
 
 import PanelContainer from 'experimental/panels/PanelContainer.js';
@@ -8,18 +7,19 @@ import PanelSection from 'experimental/panels/PanelSection.js';
 import PanelCheckbox from 'experimental/panels/PanelCheckbox.js';
 import { isEquivalentFSAWithWitness } from 'modules/fsa2/machine/util/EqualFSA';
 import { MACHINE_CONVERSION_LAYOUT_ID, MACHINE_CONVERSION_NOTIFICATION_TAG } from 'modules/fsa2/components/notifications/FSANotifications.js';
-import UploadIcon from 'components/iconset/UploadIcon.js';
-import IconUploadButton from 'experimental/components/IconUploadButton.js';
-import MachineController from '../../../machine/MachineController';
 
-import TextUploader from 'util/file/import/TextUploader.js';
-import FSABuilder from 'modules/fsa2/machine/FSABuilder.js';
+import { createMachineFromFileBlob } from './MachineLoader.js';
 
 class AnalysisPanel extends React.Component
 {
     constructor(props)
     {
         super(props);
+
+        this.state = {
+            isEqual: null,
+            witnessString: ''
+        };
 
         this.optimizeUnreachOption = null;
         this.optimizeRedundOption = null;
@@ -76,42 +76,23 @@ class AnalysisPanel extends React.Component
 
     onEquivalentTest(e)
     {
-        const textUploader = new TextUploader();
-
-        textUploader.uploadFile(e)
-            .then(result =>
+        createMachineFromFileBlob(e).then(result =>
+        {
+            const session = this.props.session;
+            const currentModule = session.getCurrentModule();
+            const machineController = currentModule.getMachineController();
+            const machineBuilder = machineController.getMachineBuilder();
+            const currentMachine = machineBuilder.getMachine();
+            const equivalenceResult = isEquivalentFSAWithWitness(result, currentMachine);
+            if (equivalenceResult.value)
             {
-                const fileName = e.name;
-                const fileData = JSON.parse(result);
-                const machineData = fileData['machineData'];
-
-                const machineBuilder = new FSABuilder();
-                console.log(machineBuilder.getMachine());
-
-                const machineType = machineData.type;
-                if (machineType) machineBuilder.getMachine().setDeterministic(machineType === 'DFA');
-
-                const customSymbols = machineData.symbols;
-                if (customSymbols && Array.isArray(customSymbols))
-                {
-                    machineBuilder.getMachine().clearCustomSymbols();
-                    for(const symbol of customSymbols)
-                    {
-                        machineBuilder.getMachine().setCustomSymbol(symbol);
-                    }
-                }
-
-                
-                const machine = machineBuilder.getMachine();
-                const currentMachine = this.props.machineController.getMachine();
-                console.log(machine, currentMachine);
-                const equivalenceResult = isEquivalentFSAWithWitness(machine, currentMachine);
-                console.log(equivalenceResult);
-            })
-            .catch(err =>
+                this.setState({ isEqual: true, witnessString: '' });
+            }
+            else
             {
-                throw new Error('Failed to import file: ' + err.message);
-            });
+                this.setState({ isEqual: false, witnessString: 'Witness: ' + equivalenceResult.witnessString });
+            }
+        });
     }
 
     onOptimizeMachine(e)
@@ -180,6 +161,20 @@ class AnalysisPanel extends React.Component
                     <input type="file" name="import"
                         className={Style.upload_input}
                         onChange={this.onFileUpload}/>
+                    <div>
+                        <label>
+                            {
+                                this.state.isEqual === null
+                                    ? '-- ??? --'
+                                    : this.state.isEqual
+                                        ? '-- Equivalent --'
+                                        : '-- Not Equivalent --'
+                            }
+                        </label>
+                    </div>
+                    <div>
+                        <label>{this.state.witnessString}</label>
+                    </div>
                 </PanelSection>
             </PanelContainer>
         );
