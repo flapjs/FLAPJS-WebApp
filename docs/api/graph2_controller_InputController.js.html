@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: graph2/controller/InputController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: graph2/controller/InputController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import GraphNode from 'graph2/element/GraphNode.js';
+
+const DEFAULT_MOVE_MODE_FIRST = true;
+
+class InputController
+{
+    constructor()
+    {
+        this._trashMode = false;
+        this._nodeOnly = false;
+        this._moveModeFirst = DEFAULT_MOVE_MODE_FIRST;
+        this._handlingInput = false;
+
+        /*
+            This is the current target for the event. If this is a multi-stage event,
+            such as dragging, then this will only refer to the first target, the source
+            of the event.
+        */
+        this._target = {
+            source: null,
+            type: null
+        };
+
+        /*
+            This is the active target. It can only be manually set by binding source and
+            type through bindActiveTarget(). This allows future input handling to ignore
+            this target for intersection tests, etc.
+
+            NOTE: You must bind AND unbind the active target.
+        */
+        this._activeTarget = {
+            source: null,
+            type: null,
+            input: true
+        };
+
+        /*
+            This is the immediate target under the cursor. Regardless of input event, this
+            will always refer to the element directly intersecting the cursor. The active target
+            with the proper options may be ignored as possible candidates.
+        */
+        this._immediateTarget = {
+            source: null,
+            type: null
+        };
+
+        // This is only used if set.
+        this._selectionBox = null;
+
+        // Although not used here, it is used to connect to components.
+        this.onMouseOver = this.onMouseOver.bind(this);
+        this.onMouseOut = this.onMouseOut.bind(this);
+    }
+
+    setSelectionBox(selectionBox)
+    {
+        this._selectionBox = selectionBox;
+        return this;
+    }
+
+    setTrashMode(flag)
+    {
+        this._trashMode = flag;
+        return this;
+    }
+
+    setNodeEventsOnly(flag)
+    {
+        this._nodeOnly = flag;
+        return this;
+    }
+
+    setMoveModeFirst(flag)
+    {
+        this._moveModeFirst = flag;
+        return this;
+    }
+
+    /** @override */
+    onPreInputEvent(pointer)
+    {
+        this._handlingInput = true;
+
+        this.updateCurrentTarget(this._immediateTarget.source, this._immediateTarget.type);
+        return false;
+    }
+
+    /** @override */
+    onPostInputEvent(pointer)
+    {
+        this.updateCurrentTarget(null, null);
+        this._handlingInput = false;
+    }
+
+    onMouseOver(e)
+    {
+        const target = e.target;
+        const value = target['value'];
+        this._immediateTarget.source = value.source;
+        this._immediateTarget.type = value.type;
+		
+        // Although you can access this, it cannot be a property for "active" targets.
+        // This is because those properties are used for comparison and equality. The
+        // extra data could be used for that, but it's up to you to manage that.
+        this._immediateTarget.data = value;
+    }
+
+    onMouseOut(e)
+    {
+        this._immediateTarget.source = null;
+        this._immediateTarget.type = null;
+
+        this._immediateTarget.data = null;
+    }
+
+    bindActiveTarget(targetSource, targetType, pointerEvent = true)
+    {
+        this._activeTarget.source = targetSource;
+        this._activeTarget.type = targetType;
+        this._activeTarget.input = pointerEvent;
+    }
+
+    unbindActiveTarget()
+    {
+        this._activeTarget.source = null;
+        this._activeTarget.type = null;
+        this._activeTarget.input = false;
+    }
+
+    updateCurrentTarget(targetSource, targetType)
+    {
+        this._target.source = targetSource;
+        this._target.type = targetType;
+    }
+
+    getActiveTargetSource() { return this._activeTarget.source; }
+    getActiveTargetType() { return this._activeTarget.type; }
+    hasActiveTarget() { return this._activeTarget.type !== null; }
+
+    hasPointerEvents(targetSource)
+    {
+        if (this._activeTarget.source === targetSource) return this._activeTarget.input;
+        if (this._nodeOnly) return targetSource instanceof GraphNode;
+        return true;
+    }
+
+    getCurrentTargetSource() { return this._target.source; }
+    getCurrentTargetType() { return this._target.type; }
+    hasCurrentTarget() { return this._target.type !== null; }
+
+    getImmediateTargetSource() { return this._immediateTarget.source; }
+    getImmediateTargetType() { return this._immediateTarget.type; }
+    hasImmediateTarget() { return this._immediateTarget.type !== null; }
+
+    isTrashMode() { return this._trashMode; }
+    isMoveMode(inputAdapter) { return !(this._moveModeFirst ^ !inputAdapter.isAltInput()); }
+    isNodeEventsOnly() { return this._nodeOnly; }
+    isMoveModeFirst() { return this._moveModeFirst; }
+
+    isHandlingInput() { return this._handlingInput; }
+
+    getSelectionBox() { return this._selectionBox; }
+}
+
+export default InputController;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

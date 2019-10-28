@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/fsa2/components/panels/analysis/AnalysisPanel.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/fsa2/components/panels/analysis/AnalysisPanel.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './AnalysisPanel.css';
+
+import { getUnreachableNodes } from 'graph2/util/NodeGraphUtils.js';
+
+import PanelContainer from 'experimental/panels/PanelContainer.js';
+import PanelSection from 'experimental/panels/PanelSection.js';
+import PanelCheckbox from 'experimental/panels/PanelCheckbox.js';
+
+import { MACHINE_CONVERSION_LAYOUT_ID, MACHINE_CONVERSION_NOTIFICATION_TAG }
+    from 'modules/fsa2/components/notifications/FSANotifications.js';
+
+class AnalysisPanel extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this.optimizeUnreachOption = null;
+        this.optimizeRedundOption = null;
+
+        this.onConvertToDFA = this.onConvertToDFA.bind(this);
+        this.onConvertToNFA = this.onConvertToNFA.bind(this);
+        this.onInvertDFA = this.onInvertDFA.bind(this);
+
+        this.onOptimizeMachine = this.onOptimizeMachine.bind(this);
+    }
+
+    onDeleteAllUnreachable(e)
+    {
+        const session = this.props.session;
+        const currentModule = session.getCurrentModule();
+        const graphController = currentModule.getGraphController();
+        const unreachableArray = getUnreachableNodes(graphController.getGraph());
+        graphController.deleteTargetNodes(unreachableArray);
+    }
+
+    onConvertToDFA(e)
+    {
+        const session = this.props.session;
+        const currentModule = session.getCurrentModule();
+        const graphController = currentModule.getGraphController();
+        const machineController = currentModule.getMachineController();
+        const props = { graphController: graphController, machineController: machineController };
+
+        // Will do: machineController.convertMachineTo("DFA");
+        session.getApp().getNotificationManager().pushNotification(
+            I18N.toString('message.warning.convertNFAToDFA'),
+            MACHINE_CONVERSION_LAYOUT_ID, MACHINE_CONVERSION_NOTIFICATION_TAG, props, true
+        );
+    }
+
+    onConvertToNFA(e)
+    {
+        const session = this.props.session;
+        const currentModule = session.getCurrentModule();
+        const machineController = currentModule.getMachineController();
+        machineController.convertMachineTo('NFA');
+    }
+
+    onInvertDFA(e)
+    {
+        const session = this.props.session;
+        const currentModule = session.getCurrentModule();
+        const machineController = currentModule.getMachineController();
+        machineController.invertMachine();
+    }
+
+    onOptimizeMachine(e)
+    {
+        if (this.optimizeUnreachOption.isChecked())
+        {
+            this.onDeleteAllUnreachable(e);
+        }
+    }
+
+    canOptimize()
+    {
+        return (this.optimizeRedundOption &amp;&amp; this.optimizeRedundOption.isChecked()) ||
+            (this.optimizeUnreachOption &amp;&amp; this.optimizeUnreachOption.isChecked());
+    }
+
+    /** @override */
+    render()
+    {
+        const session = this.props.session;
+        const currentModule = session.getCurrentModule();
+        const machineController = currentModule.getMachineController();
+
+        return (
+            &lt;PanelContainer id={this.props.id}
+                className={this.props.className}
+                style={this.props.style}
+                title={AnalysisPanel.TITLE}>
+                &lt;PanelSection title={'Optimizations'} initial={true}>
+                    &lt;PanelCheckbox ref={ref => this.optimizeUnreachOption = ref}
+                        id="opt-unreach" title="Unreachables" value="unreach" />
+                    &lt;PanelCheckbox ref={ref => this.optimizeRedundOption = ref} disabled={true}
+                        id="opt-redund" title="Redundant States" value="redund" />
+                    &lt;button className={Style.analysis_button} onClick={this.onOptimizeMachine} disabled={!this.canOptimize()}>Optimize&lt;/button>
+                    {
+                        machineController.getMachineType() == 'DFA' ?
+                            &lt;button className={Style.analysis_button} onClick={this.onConvertToNFA}>
+                                {I18N.toString('action.overview.convertnfa')}
+                            &lt;/button>
+                            : machineController.getMachineType() == 'NFA' ?
+                                &lt;button className={Style.analysis_button} onClick={this.onConvertToDFA}>
+                                    {I18N.toString('action.overview.convertdfa')}
+                                &lt;/button>
+                                : null
+                    }
+                &lt;/PanelSection>
+                &lt;PanelSection title={'Related Machines'}>
+                    {machineController.getMachineType() === 'DFA' &amp;&amp;
+                        &lt;button className={Style.analysis_button} onClick={this.onInvertDFA}>
+                            {'Flip all accept states'}
+                        &lt;/button>}
+                &lt;/PanelSection>
+            &lt;/PanelContainer>
+        );
+    }
+}
+Object.defineProperty(AnalysisPanel, 'TITLE', {
+    get: function () { return I18N.toString('component.analysis.title'); }
+});
+
+export default AnalysisPanel;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

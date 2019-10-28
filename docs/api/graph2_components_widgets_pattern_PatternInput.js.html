@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: graph2/components/widgets/pattern/PatternInput.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: graph2/components/widgets/pattern/PatternInput.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+
+export const SUBMIT_DELAY = 30;
+export const SUBMIT_KEY = 'Enter';
+export const CANCEL_KEY = 'Escape';
+
+class PatternInput extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this.inputElement = null;
+
+        this.placeholder = '';
+        this.maxLength = 524288;/*This is the default value*/
+        this.multiLine = true;
+        this.formatter = null;
+
+        this._submitTimeout = null;
+        this._submit = props.submitOnBlur;
+        this._skipBlur = false;
+        this._skipSelect = false;
+
+        this.state = {
+            prevValue: '',
+            value: ''
+        };
+
+        this.onChange = this.onChange.bind(this);
+        this.onFocus = this.onFocus.bind(this);
+        this.onBlur = this.onBlur.bind(this);
+        this.onKeyDown = this.onKeyDown.bind(this);
+    }
+
+    setFormatter(formatter)
+    {
+        this.formatter = formatter;
+        return this;
+    }
+
+    setPlaceholder(placeholder)
+    {
+        this.placeholder = placeholder;
+        return this;
+    }
+
+    onFocus(e)
+    {
+        if (this._skipSelect)
+        {
+            this.inputElement.select();
+            this._skipSelect = false;
+        }
+    }
+
+    onBlur(e)
+    {
+        if (!this._submitTimeout)
+        {
+            this._submitTimeout = setTimeout(() => 
+            {
+                this._submitTimeout = null;
+                if (this._skipBlur) return;
+
+                const submit = this._submit;
+                this._submit = this.props.submitOnBlur;
+                if (document.activeElement !== this.inputElement &amp;&amp; submit)
+                {
+                    const value = this.state.value;
+                    if (this.props.onSubmit) this.props.onSubmit(value);
+
+                    this.setState({prevValue: value});
+                }
+                else
+                {
+                    this.setState((prev, props) => 
+                    {
+                        return {value: prev.prevValue};
+                    });
+                }
+
+                if (this.props.onBlur) this.props.onBlur(e);
+            }, SUBMIT_DELAY);
+        }
+    }
+
+    onKeyDown(e)
+    {
+        if (e.key === SUBMIT_KEY)
+        {
+            if (e.shiftKey &amp;&amp; this.multiLine) return;
+
+            this._submit = true;
+            this.inputElement.blur();
+
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        else if (e.key === CANCEL_KEY)
+        {
+            this.setState((prev, props) => 
+            {
+                return {value: prev.prevValue};
+            }, () => 
+            {
+                this._submit = false;
+                this.inputElement.blur();
+            });
+
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+
+    onChange(e)
+    {
+        const target = e.target;
+        const caretPosition = target.selectionStart;
+        let value = target.value;
+        if (this.formatter)
+        {
+            value = this.formatter(value, this.state.value);
+        }
+
+        this.setState({value: value}, () => 
+        {
+            target.selectionEnd = caretPosition;
+        });
+    }
+
+    focus(select=true)
+    {
+        this._skipSelect = select;
+        this.inputElement.focus();
+    }
+
+    ignoreBlur(ignore)
+    {
+        const prev = this._skipBlur;
+        this._skipBlur = ignore;
+        return prev !== ignore;
+    }
+
+    appendValue(string, separator='', format=true)
+    {
+        const value = this.state.value;
+        if (value &amp;&amp; value.length + string.length > this.maxLength) return;
+
+        let result;
+        if (value &amp;&amp; value.length > 0)
+        {
+            result = value + separator + string;
+        }
+        else
+        {
+            result = string;
+        }
+
+        if (format &amp;&amp; this.formatter)
+        {
+            result = this.formatter(result, this.state.value);
+        }
+
+        this.setState((prev, props) => 
+        {
+            return {value: result};
+        });
+    }
+
+    resetValue(string)
+    {
+        this.setState({prevValue: string, value: string});
+    }
+
+    setValue(string, format=true)
+    {
+        let value = string;
+        if (format &amp;&amp; this.formatter)
+        {
+            value = this.formatter(value, this.state.value);
+        }
+        this.setState({value: value});
+    }
+
+    getValue()
+    {
+        return this.state.value;
+    }
+
+    /** @override */
+    render()
+    {
+        const placeholder = this.placeholder;
+        const maxlength = this.maxLength;
+        const multiline = this.multiLine;
+        const disabled = this.props.disabled;
+
+        const value = this.state.value;
+
+        return (
+            &lt;div id={this.props.id}
+                className={this.props.className}
+                style={this.props.style}>
+                {
+                    multiline ?
+                        &lt;textarea ref={ref=>this.inputElement=ref}
+                            type="text" rows="1" spellCheck="false"
+                            disabled={disabled}
+                            placeholder={placeholder}
+                            maxLength={maxlength}
+                            value={value || ''}
+                            onChange={this.onChange}
+                            onFocus={this.onFocus}
+                            onBlur={this.onBlur}
+                            onKeyDown={this.onKeyDown}/>
+                        :
+                        &lt;input ref={ref=>this.inputElement=ref}
+                            type="text" spellCheck="false"
+                            disabled={disabled}
+                            placeholder={placeholder}
+                            maxLength={maxlength}
+                            value={value || ''}
+                            onChange={this.onChange}
+                            onFocus={this.onFocus}
+                            onBlur={this.onBlur}
+                            onKeyDown={this.onKeyDown}/>
+                }
+            &lt;/div>
+        );
+    }
+}
+
+export default PatternInput;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

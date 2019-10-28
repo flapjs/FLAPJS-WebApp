@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: graph2/inputhandler/GraphEdgeInputHandler.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: graph2/inputhandler/GraphEdgeInputHandler.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import AbstractInputHandler from 'util/input/AbstractInputHandler.js';
+import { lerp } from 'util/MathHelper.js';
+
+import { EVENT_SOURCE_FORWARD_ENDPOINT, EVENT_SOURCE_EDGE, EVENT_SOURCE_LABEL } from 'graph2/renderer/EdgeRenderer.js';
+import { EVENT_SOURCE_NODE } from 'graph2/renderer/NodeRenderer.js';
+
+export const GRAPH_EVENT_EDGE_CREATE = 'edge-create';
+export const GRAPH_EVENT_EDGE_DELETE = 'edge-delete';
+export const GRAPH_EVENT_EDGE_LABEL_CHANGE = 'edge-label-change';
+export const GRAPH_EVENT_EDGE_TO_CHANGE = 'edge-to-change';
+export const GRAPH_EVENT_EDGE_QUAD_CHANGE = 'edge-quad-change';
+export const GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE = 'error-edge-edit-while-delete';
+
+const EDGE_POSITION_INTERPOLATION_DELTA = 0.6;
+
+class GraphEdgeInputHandler extends AbstractInputHandler
+{
+    constructor(inputController, graphController)
+    {
+        super();
+
+        this._inputController = inputController;
+        this._graphController = graphController;
+
+        this._cachedEdgeQuads = {
+            radians: 0,
+            length: 0
+        };
+        this._cachedEdgeTo = null;
+        this._cachedPointer = { x: 0, y: 0 };
+        this._newEdge = false;
+
+        this._shouldDeleteEdgePlaceholder = false;
+        this._shouldDeleteEdgeWithEmptyLabel = false;
+    }
+
+    setShouldDeleteEdgePlaceholder(flag)
+    {
+        this._shouldDeleteEdgePlaceholder = flag;
+        return this;
+    }
+
+    setShouldDeleteEdgeWithEmptyLabel(flag)
+    {
+        this._shouldDeleteEdgeWithEmptyLabel = flag;
+        return this;
+    }
+
+    /** @override */
+    onInputEvent(pointer)
+    {
+        const inputController = this._inputController;
+        const currentTargetType = inputController.getCurrentTargetType();
+
+        if (inputController.isTrashMode())
+        {
+            if (currentTargetType === EVENT_SOURCE_EDGE ||
+                currentTargetType === EVENT_SOURCE_FORWARD_ENDPOINT ||
+                currentTargetType === EVENT_SOURCE_LABEL)
+            {
+                const currentTargetSource = inputController.getCurrentTargetSource();
+                const graphController = this._graphController;
+                graphController.getGraph().deleteEdge(currentTargetSource);
+                graphController.emitGraphEvent(GRAPH_EVENT_EDGE_DELETE, {target: currentTargetSource});
+                return true;
+            }
+        }
+
+        if (currentTargetType === EVENT_SOURCE_LABEL || currentTargetType === EVENT_SOURCE_EDGE)
+        {
+            const currentTargetSource = inputController.getCurrentTargetSource();
+            const graphController = this._graphController;
+            graphController.openLabelEditor(currentTargetSource, currentTargetSource.getEdgeLabel(),
+                (target, value, hasChanged) => 
+                {
+                    if (this._shouldDeleteEdgeWithEmptyLabel &amp;&amp; !value)
+                    {
+                        graphController.getGraph().deleteEdge(currentTargetSource);
+                        graphController.emitGraphEvent(GRAPH_EVENT_EDGE_DELETE, {target: currentTargetSource});
+                    }
+                    else if (hasChanged)
+                    {
+                        graphController.emitGraphEvent(GRAPH_EVENT_EDGE_LABEL_CHANGE, {target: currentTargetSource});
+                    }
+                });
+            return true;
+        }
+
+        return false;
+    }
+
+    /** @override */
+    onAltInputEvent(pointer)
+    {
+        return this.onInputEvent(pointer);
+    }
+
+    /** @override */
+    onDragStart(pointer)
+    {
+        const inputController = this._inputController;
+        if (inputController.hasActiveTarget()) return false;
+        if (inputController.isTrashMode())
+        {
+            //Don't delete stuff if moving...
+            this._graphController.emitGraphEvent(GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE);
+            return false;
+        }
+
+        const currentTargetType = inputController.getCurrentTargetType();
+        if (!inputController.isMoveMode(pointer.getInputAdapter()) &amp;&amp; currentTargetType === EVENT_SOURCE_NODE)
+        {
+            const graphController = this._graphController;
+            const graph = graphController.getGraph();
+
+            const currentTargetSource = inputController.getCurrentTargetSource();
+
+            this._cachedEdgeQuads.radians = 0;
+            this._cachedEdgeQuads.length = 0;
+            this._cachedEdgeTo = null;
+            this._newEdge = true;
+            this._cachedPointer.x = pointer.x;
+            this._cachedPointer.y = pointer.y;
+
+            const targetEdge = graph.createEdge(currentTargetSource, this._cachedPointer);
+
+            inputController.bindActiveTarget(targetEdge, EVENT_SOURCE_FORWARD_ENDPOINT, false);
+            inputController.setNodeEventsOnly(true);
+            return true;
+        }
+        else if (currentTargetType === EVENT_SOURCE_FORWARD_ENDPOINT)
+        {
+            const currentTargetSource = inputController.getCurrentTargetSource();
+
+            this._cachedEdgeQuads.radians = currentTargetSource.getQuadraticRadians();
+            this._cachedEdgeQuads.length = currentTargetSource.getQuadraticLength();
+            this._cachedEdgeTo = currentTargetSource.getEdgeTo();
+            this._newEdge = false;
+            this._cachedPointer.x = pointer.x;
+            this._cachedPointer.y = pointer.y;
+
+            currentTargetSource.setQuadraticRadians(0);
+            currentTargetSource.setQuadraticLength(0);
+            currentTargetSource.setEdgeTo(this._cachedPointer);
+
+            inputController.bindActiveTarget(currentTargetSource, currentTargetType, false);
+            inputController.setNodeEventsOnly(true);
+            return true;
+        }
+        else if (currentTargetType === EVENT_SOURCE_EDGE)
+        {
+            const currentTargetSource = inputController.getCurrentTargetSource();
+
+            this._cachedEdgeQuads.radians = currentTargetSource.getQuadraticRadians();
+            this._cachedEdgeQuads.length = currentTargetSource.getQuadraticLength();
+            this._cachedEdgeTo = currentTargetSource.getEdgeTo();
+            this._newEdge = false;
+            this._cachedPointer.x = pointer.x;
+            this._cachedPointer.y = pointer.y;
+
+            inputController.bindActiveTarget(currentTargetSource, currentTargetType, false);
+            return true;
+        }
+
+        return false;
+    }
+
+    /** @override */
+    onDragMove(pointer)
+    {
+        const inputController = this._inputController;
+        const targetSource = inputController.getActiveTargetSource();
+        const targetType = inputController.getActiveTargetType();
+
+        if (targetType === EVENT_SOURCE_EDGE)
+        {
+            targetSource.setQuadraticByCoords(pointer.x, pointer.y);
+        }
+        else if (targetType === EVENT_SOURCE_FORWARD_ENDPOINT)
+        {
+            this.handleDragMoveForEndpoint(targetSource, targetType, pointer, inputController);
+        }
+    }
+
+    handleDragMoveForEndpoint(targetSource, targetType, pointer, inputController)
+    {
+        const immediateTargetType = inputController.getImmediateTargetType();
+        if (immediateTargetType === EVENT_SOURCE_NODE)
+        {
+            const immediateTargetSource = inputController.getImmediateTargetSource();
+            
+            // Restore the previously cached edge quadratics
+            if (targetSource.getEdgeTo() === this._cachedEdgeTo)
+            {
+                targetSource.setQuadraticRadians(this._cachedEdgeQuads.radians);
+                targetSource.setQuadraticLength(this._cachedEdgeQuads.length);
+            }
+            // Angle the self-loop edge towards the pointer
+            else if (targetSource.getEdgeFrom() === immediateTargetSource)
+            {
+                const from = targetSource.getEdgeFrom();
+                const dx = from.x - pointer.x;
+                const dy = from.y - pointer.y;
+                const radians = Math.PI + Math.atan2(dy, dx);
+                targetSource.setQuadraticRadians(radians);
+                targetSource.setEdgeTo(immediateTargetSource);
+            }
+            else
+            {
+                targetSource.setQuadraticRadians(0);
+                targetSource.setQuadraticLength(0);
+                targetSource.setEdgeTo(immediateTargetSource);
+            }
+        }
+        else
+        {
+            this._cachedPointer.x = lerp(this._cachedPointer.x, pointer.x, EDGE_POSITION_INTERPOLATION_DELTA);
+            this._cachedPointer.y = lerp(this._cachedPointer.y, pointer.y, EDGE_POSITION_INTERPOLATION_DELTA);
+
+            if (targetSource.getEdgeTo() !== this._cachedPointer)
+            {
+                targetSource.setQuadraticRadians(0);
+                targetSource.setQuadraticLength(0);
+
+                targetSource.setEdgeTo(this._cachedPointer);
+            }
+        }
+    }
+
+    /** @override */
+    onDragStop(pointer)
+    {
+        const inputController = this._inputController;
+        const targetSource = inputController.getActiveTargetSource();
+        const targetType = inputController.getActiveTargetType();
+        const isNewEdge = this._newEdge;
+
+        inputController.unbindActiveTarget();
+        if (targetType === EVENT_SOURCE_FORWARD_ENDPOINT)
+        {
+            inputController.setNodeEventsOnly(false);
+        }
+
+        const graphController = this._graphController;
+        if (inputController.isTrashMode())
+        {
+            graphController.getGraph().deleteEdge(targetSource);
+            graphController.emitGraphEvent(GRAPH_EVENT_EDGE_DELETE, {target: targetSource});
+            return;
+        }
+
+        if (targetType === EVENT_SOURCE_EDGE)
+        {
+            graphController.emitGraphEvent(GRAPH_EVENT_EDGE_QUAD_CHANGE, {target: targetSource});
+        }
+        else
+        {
+            const edgeTo = targetSource.getEdgeTo();
+            if (!edgeTo || edgeTo === this._cachedPointer)
+            {
+                if (this._shouldDeleteEdgePlaceholder)
+                {
+                    graphController.getGraph().deleteEdge(targetSource);
+                    graphController.emitGraphEvent(GRAPH_EVENT_EDGE_DELETE, {target: targetSource});
+                    return;
+                }
+                else
+                {
+                    targetSource.setEdgeTo(null);
+
+                    if (isNewEdge)
+                    {
+                        const labelFormatter = graphController.getLabelFormatter();
+                        if (labelFormatter)
+                        {
+                            targetSource.setEdgeLabel(labelFormatter.getDefaultEdgeLabel());
+                        }
+                        graphController.emitGraphEvent(GRAPH_EVENT_EDGE_CREATE, {target: targetSource});
+                    }
+                    else
+                    {
+                        graphController.emitGraphEvent(GRAPH_EVENT_EDGE_TO_CHANGE, {target: targetSource});
+                    }
+                }
+            }
+            else if (edgeTo !== this._cachedEdgeTo)
+            {
+                const labelFormatter = graphController.getLabelFormatter();
+                if (isNewEdge &amp;&amp; labelFormatter)
+                {
+                    targetSource.setEdgeLabel(labelFormatter.getDefaultEdgeLabel());
+                }
+                graphController.openLabelEditor(targetSource, isNewEdge ? null : targetSource.getEdgeLabel(),
+                    (target, value, hasChanged) => 
+                    {
+                        if (this._shouldDeleteEdgeWithEmptyLabel &amp;&amp; !value)
+                        {
+                            graphController.getGraph().deleteEdge(targetSource);
+                            graphController.emitGraphEvent(GRAPH_EVENT_EDGE_DELETE, {target: targetSource});
+                        }
+                        else if (isNewEdge)
+                        {
+                            graphController.emitGraphEvent(GRAPH_EVENT_EDGE_CREATE, {target: targetSource});
+                        }
+                        else if (hasChanged)
+                        {
+                            graphController.emitGraphEvent(GRAPH_EVENT_EDGE_TO_CHANGE, {target: targetSource});
+                        }
+                    });
+            }
+        }
+    }
+}
+
+export default GraphEdgeInputHandler;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

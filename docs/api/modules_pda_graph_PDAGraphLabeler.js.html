@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/pda/graph/PDAGraphLabeler.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/pda/graph/PDAGraphLabeler.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import AbstractGraphLabeler from 'graph2/AbstractGraphLabeler.js';
+
+import
+{
+    EMPTY_CHAR,
+    LINE_SEPARATOR,
+    SYMBOL_SEPARATOR,
+    READ_SEPARATOR,
+    POP_SEPARATOR
+} from './element/PDAEdge.js';
+
+const DEFAULT_NODE_LABEL_PREFIX = 'q';
+
+class PDAGraphLabeler extends AbstractGraphLabeler
+{
+    constructor()
+    {
+        super();
+
+        this._prefix = DEFAULT_NODE_LABEL_PREFIX;
+        this._graphController = null;
+    }
+
+    setGraphController(graphController)
+    {
+        this._graphController = graphController;
+        return this;
+    }
+
+    setDefaultNodeLabelPrefix(prefix)
+    {
+        this._prefix = prefix;
+    }
+
+    getDefaultNodeLabelPrefix()
+    {
+        return this._prefix;
+    }
+
+    /** @override */
+    getDefaultNodeLabel()
+    {
+        if (!this._graphController.shouldAutoRenameNodes())
+        {
+            return this.getDefaultNodeLabelPrefix();
+        }
+        else
+        {
+            const graph = this._graphController.getGraph();
+            const otherNodes = [];
+            let nodeIndex = 0;
+
+            const startNode = graph.getStartNode();
+            if (startNode &amp;&amp; startNode.getNodeCustom()) nodeIndex = 1;
+
+            let newNodeLabel = this.getDefaultNodeLabelPrefix() + nodeIndex;
+            while (graph.getNodesByLabel(newNodeLabel, otherNodes).length > 0)
+            {
+                otherNodes.length = 0;
+                ++nodeIndex;
+                newNodeLabel = this.getDefaultNodeLabelPrefix() + nodeIndex;
+            }
+
+            return newNodeLabel;
+        }
+    }
+
+    /** @override */
+    getDefaultEdgeLabel()
+    {
+        return '';
+    }
+
+    /** @override */
+    getNodeLabelFormatter()
+    {
+        return (string) => string || '';
+    }
+
+    /** @override */
+    getEdgeLabelFormatter()
+    {
+        return edgeLabelFormatter;
+    }
+}
+
+function isValidSymbol(symbol)
+{
+    return symbol.length === 1 &amp;&amp;
+        symbol !== LINE_SEPARATOR &amp;&amp;
+        symbol !== SYMBOL_SEPARATOR &amp;&amp;
+        symbol !== READ_SEPARATOR &amp;&amp;
+        symbol !== POP_SEPARATOR;
+}
+
+function edgeLabelFormatter(string, allowNull = false)
+{
+    const lines = string.split(LINE_SEPARATOR);
+    const result = new Set();
+    const length = lines.length;
+
+    let symbols;
+    let symbolLength = 0;
+    for (let i = 0; i &lt; length; ++i)
+    {
+        symbols = lines[i].trim().split('');
+        symbolLength = symbols.length;
+
+        if (symbolLength &lt;= 0)
+        {
+            result.add('');
+            continue;
+        }
+
+        let readSymbol = null;
+        let popSymbol = null;
+        let pushSymbol = null;
+        let symbol = null;
+
+        for (let j = 0; j &lt; symbolLength; ++j)
+        {
+            if (readSymbol === null)
+            {
+                symbol = symbols[j].trim();
+                if (isValidSymbol(symbol))
+                {
+                    readSymbol = symbol;
+                    if (j + 1 &lt; symbolLength &amp;&amp; (symbols[j + 1] === READ_SEPARATOR || symbols[j + 1] === SYMBOL_SEPARATOR))
+                    {
+                        ++j;
+                    }
+                }
+            }
+            else if (popSymbol === null)
+            {
+                symbol = symbols[j].trim();
+                if (isValidSymbol(symbol))
+                {
+                    popSymbol = symbol;
+                    if (j + 1 &lt; symbolLength &amp;&amp; (symbols[j + 1] === POP_SEPARATOR || symbols[j + 1] === SYMBOL_SEPARATOR))
+                    {
+                        ++j;
+                    }
+                }
+            }
+            else if (pushSymbol === null)
+            {
+                symbol = symbols[j].trim();
+                if (isValidSymbol(symbol))
+                {
+                    pushSymbol = symbol;
+                    break;
+                }
+            }
+        }
+
+        if (readSymbol === null)
+        {
+            result.add('');
+        }
+        else if (popSymbol === null)
+        {
+            result.add(readSymbol + READ_SEPARATOR);
+        }
+        else if (pushSymbol === null)
+        {
+            result.add(readSymbol + READ_SEPARATOR + popSymbol + POP_SEPARATOR);
+        }
+        else
+        {
+            result.add(readSymbol + READ_SEPARATOR + popSymbol + POP_SEPARATOR + pushSymbol);
+        }
+    }
+
+    //If it is an empty string...
+    if (result.size &lt;= 0) return allowNull ? null : EMPTY_CHAR;
+    return Array.from(result).join(LINE_SEPARATOR);
+}
+
+export default PDAGraphLabeler;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

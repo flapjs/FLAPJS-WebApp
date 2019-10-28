@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: graph2/components/widgets/LabelEditorWidget.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: graph2/components/widgets/LabelEditorWidget.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './LabelEditorWidget.css';
+
+import GraphElement from 'graph2/element/GraphElement.js';
+import GraphNode from 'graph2/element/GraphNode.js';
+import GraphEdge from 'graph2/element/GraphEdge.js';
+
+import PatternInput from 'graph2/components/widgets/pattern/PatternInput.js';
+
+class LabelEditorWidget extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this._ref = React.createRef();
+        this.inputComponent = null;
+
+        this.state = {
+            open: false
+        };
+
+        this._target = null;
+        this._targetCallback = null;
+
+        this.onInputSubmit = this.onInputSubmit.bind(this);
+        this.onInputBlur = this.onInputBlur.bind(this);
+    }
+
+    openEditor(graphElement, defaultValue = null, onSubmit = null, onCancel = null)
+    {
+        if (!(graphElement instanceof GraphElement))
+            throw new Error('Can only open editor for GraphElements');
+
+        this._target = graphElement;
+        this._targetOnSubmit = onSubmit;
+        this._targetOnCancel = onCancel;
+
+        if (graphElement instanceof GraphNode)
+        {
+            const formatter = this.props.labelFormatter.getNodeLabelFormatter();
+            this.inputComponent.setFormatter(formatter);
+        }
+        else if (graphElement instanceof GraphEdge)
+        {
+            const formatter = this.props.labelFormatter.getEdgeLabelFormatter();
+            this.inputComponent.setFormatter(formatter);
+        }
+
+        this.setState({ open: true }, () =>
+        {
+            this.inputComponent.resetValue(defaultValue || '');
+            this.inputComponent.focus();
+        });
+    }
+
+    closeEditor()
+    {
+        this._target = null;
+        this._targetOnSubmit = null;
+        this._targetOnCancel = null;
+
+        this.inputComponent.setFormatter(null);
+
+        this.setState({ open: false });
+    }
+
+    isEditorOpen()
+    {
+        return this.state.open;
+    }
+
+    getTarget()
+    {
+        return this._target;
+    }
+
+    onInputSubmit(value)
+    {
+        if (this._targetOnSubmit)
+        {
+            this._targetOnSubmit(this._target, value);
+            //Don't handle cancel callbacks...
+            this._targetOnCancel = null;
+        }
+    }
+
+    onInputBlur(e)
+    {
+        if (this._targetOnCancel)
+        {
+            this._targetOnCancel(this._target);
+            //Don't handle submit callbacks...
+            this._targetOnSubmit = null;
+        }
+        this.closeEditor();
+    }
+
+    /** @override */
+    render()
+    {
+        const isEditorOpen = this.state.open;
+
+        const target = this._target;
+        const targetStyle = this.props.style || {};
+        const viewport = this.props.viewport;
+
+        if (viewport)
+        {
+            const viewportAdapter = this.props.viewport.getViewportAdapter();
+
+            if (target)
+            {
+                const center = target.getCenterPoint();
+                const element = viewportAdapter.getElement();
+                const parentClientRect = element.getBoundingClientRect();
+                const screenPos = transformViewToScreen(
+                    element,
+                    center.x + viewportAdapter.getOffsetX(),
+                    center.y + viewportAdapter.getOffsetY()
+                );
+                const x = screenPos.x;
+                const y = screenPos.y;
+                const offsetX = -(this._ref.current.offsetWidth / 2) - parentClientRect.left;
+                const offsetY = -(this._ref.current.offsetHeight / 2) - parentClientRect.top;
+
+                targetStyle['top'] = (y + offsetY) + 'px';
+                targetStyle['left'] = (x + offsetX) + 'px';
+            }
+        }
+
+        return (
+            &lt;div ref={this._ref}
+                id={this.props.id}
+                className={Style.editor_container +
+                    (isEditorOpen ? ' open ' : '') +
+                    ' ' + this.props.className}
+                style={targetStyle}>
+                &lt;PatternInput ref={ref => this.inputComponent = ref}
+                    submitOnBlur={this.props.saveOnExit}
+                    onSubmit={this.onInputSubmit}
+                    onBlur={this.onInputBlur} />
+                &lt;div className={Style.tray_container}>
+                    {this.props.children}
+                &lt;/div>
+            &lt;/div>
+        );
+    }
+}
+
+function transformViewToScreen(svg, x, y)
+{
+    const ctm = svg.getScreenCTM();
+    return {
+        x: (x * ctm.a) + ctm.e,
+        y: (y * ctm.d) + ctm.f
+    };
+}
+
+export default LabelEditorWidget;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

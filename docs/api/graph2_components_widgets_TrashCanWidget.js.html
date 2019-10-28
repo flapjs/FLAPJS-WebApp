@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: graph2/components/widgets/TrashCanWidget.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: graph2/components/widgets/TrashCanWidget.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './TrashCanWidget.css';
+
+import IconButton from 'experimental/components/IconButton.js';
+import TrashCanDetailedIcon from 'components/iconset/TrashCanDetailedIcon.js';
+
+const DOUBLE_TAP_TIME = 250;
+
+class TrashCanWidget extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this._ref = React.createRef();
+        this._buttonElement = React.createRef();
+
+        this.state = {
+            active: false,
+            forceActive: false
+        };
+
+        this._doubleTapTimeout = null;
+
+        this.onMouseEnter = this.onMouseEnter.bind(this);
+        this.onMouseLeave = this.onMouseLeave.bind(this);
+        this.onClick = this.onClick.bind(this);
+
+        // This is kinda a hack to lose trash mode focus...
+        this.onAnyMouseDownNotConsumed = this.onAnyMouseDownNotConsumed.bind(this);
+    }
+
+    onMouseEnter(e)
+    {
+        if (this.state.forceActive) return;
+
+        this.setState({ active: true }, () =>
+        {
+            const onChange = this.props.onChange;
+            if (onChange) onChange(true);
+        });
+    }
+
+    onMouseLeave(e)
+    {
+        if (this.state.forceActive) return;
+
+        this.setState({ active: false }, () =>
+        {
+            const onChange = this.props.onChange;
+            if (onChange) onChange(false);
+        });
+    }
+
+    onClick(e)
+    {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (this._doubleTapTimeout)
+        {
+            // This is a double tap!
+            clearTimeout(this._doubleTapTimeout);
+            this._doubleTapTimeout = null;
+
+            this.setState({ active: false, forceActive: false }, () =>
+            {
+                const onClear = this.props.onClear;
+                if (onClear) onClear();
+                const onChange = this.props.onChange;
+                if (onChange) onChange(false);
+            });
+        }
+        else
+        {
+            // This is a single tap!
+            this.setState((prev, props) =>
+            {
+                const result = !prev.forceActive;
+
+                this._doubleTapTimeout = setTimeout(() =>
+                {
+                    this._doubleTapTimeout = null;
+                }, DOUBLE_TAP_TIME);
+
+                if (result)
+                {
+                    document.documentElement.addEventListener('mousedown', this.onAnyMouseDownNotConsumed);
+                }
+
+                return {
+                    active: result,
+                    forceActive: result
+                };
+            }, () =>
+            {
+                const onChange = this.props.onChange;
+                if (onChange) onChange(this.state.active);
+            });
+        }
+    }
+
+    onAnyMouseDownNotConsumed(e)
+    {
+        if (this.state.forceActive &amp;&amp; this._buttonElement.current !== e.target)
+        {
+            e.stopPropagation();
+            e.preventDefault();
+
+            document.documentElement.removeEventListener('mousedown', this.onAnyMouseDownNotConsumed);
+            
+            this.setState({ active: false, forceActive: false }, () =>
+            {
+                const onChange = this.props.onChange;
+                if (onChange) onChange(false);
+            });
+        }
+    }
+
+    /** @override */
+    render()
+    {
+        const visible = this.props.visible;
+        const active = this.state.active;
+        const hide = !active &amp;&amp; !visible;
+
+        return (
+            &lt;IconButton ref={this._ref}
+                refButton={this._buttonElement}
+                id={this.props.id}
+                className={Style.trash_container +
+                    (active ? ' active ' : '') +
+                    (hide ? ' hide ' : '') +
+                    ' ' + this.props.className}
+                style={this.props.style}
+                title={'Delete'}
+                onMouseEnter={this.onMouseEnter}
+                onMouseLeave={this.onMouseLeave}
+                onClick={this.onClick}>
+                &lt;TrashCanDetailedIcon />
+            &lt;/IconButton>
+        );
+    }
+}
+
+export default TrashCanWidget;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

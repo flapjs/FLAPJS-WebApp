@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: util/file/export/DownloadManager.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: util/file/export/DownloadManager.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import TextDownloader from './TextDownloader.js';
+import SVGImageDownloader from './SVGImageDownloader.js';
+import JSONDownloader from './JSONDownloader.js';
+
+class DownloadManager
+{
+    constructor()
+    {
+        this._downloaders = new Map();
+
+        this.addDownloader(new TextDownloader(), 'text');
+        this.addDownloader(new SVGImageDownloader(), 'image');
+        this.addDownloader(new JSONDownloader(), 'object');
+    }
+
+    /**
+     * Add downloader for the download type(s). If there are multiple downloaders sharing the same type, they will be
+     * given a chance to process in the order they were registered.
+     * 
+     * @param {Downloader} downloader       the downloader associated with the download type
+     * @param {...String} downloadTypes     the download type preceded by a dot, such as '.txt' or '.config.json'
+     * @returns {this}
+     */
+    addDownloader(downloader, ...downloadTypes)
+    {
+        for (const downloadType of downloadTypes)
+        {
+            if (this._downloaders.has(downloadType))
+            {
+                this._downloaders.get(downloadType).push(downloader);
+            }
+            else
+            {
+                this._downloaders.set(downloadType, [downloader]);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Remove downloader for the download type. If the downloader is the last for the download
+     * type, the download type is removed as an available downloadable download type.
+     * 
+     * @param {Downloader} downloader   the downloader to remove
+     * @param {String} downloadType     the download type to remove the downloader from
+     * @returns {this}
+     */
+    removeDownloader(downloader, downloadType)
+    {
+        if (this._downloaders.has(downloadType))
+        {
+            const downloaders = this._downloaders.get(downloadType);
+            downloaders.splice(downloaders.indexOf(downloader), 1);
+            if (downloaders.length &lt;= 0)
+            {
+                this._downloaders.delete(downloadType);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Removes all downloaders for the download type. Essentially, the download type will no longer
+     * be an option for downloading.
+     * 
+     * @param {String} downloadType the download type to remove all downloaders
+     */
+    clearDownloadersByDownloadType(downloadType)
+    {
+        this._downloaders.delete(downloadType);
+    }
+
+    /**
+     * Removes all downloaders and download types.
+     */
+    clear()
+    {
+        this._downloaders.clear();
+    }
+
+    /**
+     * Tries to download the export data with registered downloaders.
+     * 
+     * @param {String} fileName the name of the exported file
+     * @param {String} downloadType the type of file data (NOT the file extension)
+     * @param {String} fileData the file data to download
+     * @param {Object} opts any additional arguments to pass to the downloader
+     * @returns {Promise} a Promise that resolves if downloaded without errors
+     */
+    tryDownloadFile(fileName, downloadType, fileData, opts)
+    {
+        // Find all valid downloaders
+        const downloaders = this.getDownloadersByDownloadType(downloadType);
+
+        // Try to download them ...
+        if (downloaders &amp;&amp; downloaders.length > 0)
+        {
+            return downloaders.reduce(
+                (acc, value) => acc.catch(
+                    e => value.downloadFile(fileName, downloadType, fileData, opts)
+                ),
+                Promise.reject());
+        }
+        else
+        {
+            throw new Error('No valid downloaders found for download type');
+        }
+    }
+
+    /**
+     * Gets the associated downloaders (in order) for the download type.
+     * 
+     * @param {String} downloadType the downloaders' download type
+     * @returns {Array.&lt;Downloader>} a mutable array of downloaders
+     */
+    getDownloadersByDownloadType(downloadType)
+    {
+        return this._downloaders.get(downloadType);
+    }
+
+    /**
+     * Gets all available download types with downloaders.
+     * 
+     * @returns {Iterable.&lt;String>} a collection of download types
+     */
+    getDownloadTypes() { return this._downloaders.keys(); }
+
+    /**
+     * @returns {Boolean} whether there are available downloaders of any download type
+     */
+    isEmpty() { return this._downloaders.size &lt;= 0; }
+}
+
+export default DownloadManager;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

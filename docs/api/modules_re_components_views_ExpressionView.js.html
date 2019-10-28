@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/re/components/views/ExpressionView.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/re/components/views/ExpressionView.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import Style from './ViewportView.css';
+import ExpressionViewStyle from './ExpressionView.css';
+
+import {EMPTY, CONCAT, UNION, KLEENE, SIGMA, EMPTY_SET, PLUS} from 'modules/re/machine/RE.js';
+
+const UNION_CHAR = '\u222A';
+
+class ExpressionView extends React.Component
+{
+    constructor(props)
+    {
+        super(props);
+
+        this._inputElement = null;
+
+        this.onInputChange = this.onInputChange.bind(this);
+        this.onClick = this.onClick.bind(this);
+    }
+
+    onInputChange(e)
+    {
+        const session = this.props.session;
+        const currentModule = session.getCurrentModule();
+        const machineController = currentModule.getMachineController();
+
+        const value = e.target.value;
+        const result = value.replace(new RegExp(UNION_CHAR, 'g'), UNION);
+
+        machineController.setMachineExpression(result);
+        session.getApp().getUndoManager().captureEvent();
+    }
+
+    onClick(e)
+    {
+        const session = this.props.session;
+        const currentModule = session.getCurrentModule();
+        const machineController = currentModule.getMachineController();
+        const cursorPos = this._inputElement.selectionStart;
+
+        const scope = machineController._parser.scopeFromSpaceIndexing(machineController.getMachine(), cursorPos);
+        this._inputElement.setSelectionRange(scope[0][0], scope[1][1]);
+    }
+
+    _appendSymbol(machineController, symbol)
+    {
+        const session = this.props.session;
+        const currentExpression = machineController.getMachineExpression();
+        const cursorPos = this._inputElement.selectionStart;
+        const newExpression = currentExpression.slice(0, cursorPos) + symbol + currentExpression.slice(cursorPos);
+        machineController.setMachineExpression(newExpression);
+        session.getApp().getUndoManager().captureEvent();
+        this._inputElement.focus();
+    }
+
+    /** @override */
+    render()
+    {
+        const session = this.props.session;
+        const currentModule = session.getCurrentModule();
+        const machineController = currentModule.getMachineController();
+        const terminals = machineController.getMachineTerminals();
+        const error = !machineController.getMachine().isValid();
+
+        const readableValue = machineController.getMachineExpression().replace(new RegExp(UNION, 'g'), UNION_CHAR);
+
+        return (
+            &lt;div id={this.props.id}
+                className={Style.view_pane +
+          ' ' + this.props.className}
+                style={this.props.style}>
+                &lt;div className={Style.view_widget + ' ' +
+          ExpressionViewStyle.expression + ' ' +
+          (error ? 'error' : '')}>
+                    &lt;input ref={ref=>this._inputElement=ref} value={readableValue} onChange={this.onInputChange} onClick={this.onClick}/>
+                &lt;/div>
+                &lt;div className={Style.view_widget + ' ' + ExpressionViewStyle.expression_tray + ' ' + ExpressionViewStyle.tray_important}>
+                    &lt;button title="Epsilon"       onClick={() => {this._appendSymbol(machineController, EMPTY);}}>{EMPTY}&lt;/button>
+                    &lt;button title="Union"         onClick={() => {this._appendSymbol(machineController, UNION);}}>{UNION_CHAR}&lt;/button>
+                    &lt;button title="Concat"        onClick={() => {this._appendSymbol(machineController, CONCAT);}}>{CONCAT}&lt;/button>
+                    &lt;button title="Kleene Star"   onClick={() => {this._appendSymbol(machineController, KLEENE);}}>{KLEENE}&lt;/button>
+                    &lt;button title="Kleene Plus"   onClick={() => {this._appendSymbol(machineController, PLUS);}}>{PLUS}&lt;/button>
+                    &lt;button title="Sigma"         onClick={() => {this._appendSymbol(machineController, SIGMA);}}>{SIGMA}&lt;/button>
+                    &lt;button title="Empty Set"     onClick={() => {this._appendSymbol(machineController, EMPTY_SET);}}>{EMPTY_SET}&lt;/button>
+                &lt;/div>
+
+                &lt;div className={Style.view_widget + ' ' + ExpressionViewStyle.expression_tray + ' ' + ExpressionViewStyle.tray_symbol}>
+                    {terminals.map(e => 
+                    {
+                        return (
+                            &lt;button key={e} onClick={() => {this._appendSymbol(machineController, e);}}>{e}&lt;/button>
+                        );
+                    })}
+                &lt;/div>
+            &lt;/div>
+        );
+    }
+}
+
+export default ExpressionView;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

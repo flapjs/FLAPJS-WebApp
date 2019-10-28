@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Flap.js</h1>
+<p><em>Formal Languages and Automata Package</em></p>
+<p><a href="https://travis-ci.org/flapjs/FLAPJS-WebApp"><img src="https://travis-ci.org/flapjs/FLAPJS-WebApp.svg?branch=master" alt="Build Status"></a></p>
+<blockquote>
+<p>By the students. For the students.</p>
+</blockquote>
+<p>ANNOUNCEMENT: We are always looking for interested contributors and new members for the team! If you have any interest in web development, UI/UX design, computation theory, or general graphing systems, please contact us. We encourage you to play around with our repo and try out its features! (For more info, go to the bottom of this page.)</p>
+<hr>
+<h2>Purpose</h2>
+<p>To make a program that is more accessible and intuitive to use, so we can all become a <a href="http://www.jflap.org/">JFLAP</a>-free homework group for Professor Minnes’s class (CSE 105).</p>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#features">Features</a></li>
+<li><a href="#setting-up-the-workspace">Getting Started</a></li>
+<li><a href="#running-the-program">Running the Program</a></li>
+<li><a href="#testing-the-machine-functions">Testing the Machine Functions</a></li>
+<li><a href="#project-structure">Project Structure</a>
+<ul>
+<li><a href="#entry-point">Entry Point</a></li>
+<li><a href="#pages">Pages</a></li>
+<li><a href="#app-page">App Page</a></li>
+<li><a href="#graph-pipeline">Graph Pipeline</a>
+<ul>
+<li><a href="#nodegraph">NodeGraph</a></li>
+<li><a href="#machines">Machines</a></li>
+<li><a href="#graphrenderer">GraphRenderer</a></li>
+</ul>
+</li>
+<li><a href="#inputcontroller">InputController</a></li>
+<li><a href="#auto-saving">Auto-Saving</a></li>
+<li><a href="#event-history">Event History</a></li>
+<li><a href="#eventable">Eventable</a></li>
+<li><a href="#notificationsystem">NotificationSystem</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>Compatibility</h2>
+<ul>
+<li>[x] Windows</li>
+<li>[x] Mac</li>
+<li>[x] Android</li>
+<li>[x] iOS</li>
+<li>[ ] All major browsers
+<ul>
+<li>[x] Chrome</li>
+<li>[x] Firefox</li>
+<li>[ ] Edge</li>
+<li>[x] Safari</li>
+<li>[ ] Opera</li>
+</ul>
+</li>
+</ul>
+<p>(It may work on other unchecked platforms, though it is completely tested)</p>
+<h2>Features</h2>
+<h3>1.0.0 (Future)</h3>
+<ul>
+<li>[ ] Set construction scripting language</li>
+<li>[ ] Turing Machine</li>
+<li>[ ] Formal Definition summary
+<ul>
+<li>[ ] Tape Symbols</li>
+<li>[ ] q_acc</li>
+<li>[ ] q_rej</li>
+</ul>
+</li>
+<li>[ ] Tape testing
+<ul>
+<li>[ ] TM</li>
+</ul>
+</li>
+</ul>
+<h3>0.4.1</h3>
+<ul>
+<li>[x] Theme presets</li>
+<li>[ ] Context-Free Grammars</li>
+<li>[ ] StepTracer design</li>
+<li>[ ] Cross-window operations</li>
+<li>[x] Automatic build pipeline with TravisCI</li>
+</ul>
+<h3>0.3.4</h3>
+<ul>
+<li>[x] Pushdown Automata</li>
+<li>[x] Regular Expressions</li>
+<li>[x] Hotkey system</li>
+<li>[x] New UI design</li>
+</ul>
+<h3>0.2.0</h3>
+<ul>
+<li>[x] Module system</li>
+<li>[x] Graph optimizations</li>
+<li>[x] Bug reporting</li>
+<li>[x] Generic nodal graphing mode</li>
+</ul>
+<h3>0.1.0</h3>
+<ul>
+<li>[x] Deterministic Finite Automata</li>
+<li>[x] Nondeterministic Finite Automata</li>
+<li>[x] Nodal graphing
+<ul>
+<li>[x] Basic layout</li>
+<li>[x] Node editing</li>
+<li>[x] Edge editing</li>
+<li>[x] Label editing</li>
+<li>[x] Formal Definition summary
+<ul>
+<li>[x] States</li>
+<li>[x] Symbols</li>
+<li>[x] Transitions</li>
+<li>[x] Start State</li>
+<li>[x] Final States</li>
+</ul>
+</li>
+<li>[x] String testing
+<ul>
+<li>[x] DFA</li>
+<li>[x] NFA</li>
+</ul>
+</li>
+<li>[x] Export to image</li>
+<li>[x] Circular auto-layout</li>
+<li>[x] Step-By-Step mode</li>
+</ul>
+</li>
+<li>[x] User-defined themes</li>
+<li>[x] Autosave system</li>
+<li>[x] Custom language</li>
+<li>[x] Offline capabilities</li>
+</ul>
+<p>NOTE: Check out our CHANGELOG for more information!</p>
+<hr>
+<h2>Getting Started</h2>
+<h3>Installing <a href="https://nodejs.org/en/">Node.js</a></h3>
+<p>This is required to test the program. Just get the current version and install it.</p>
+<h3>Installing <a href="https://git-scm.com/">Git</a></h3>
+<p>This is required to edit the program remotely. Just get the current version and install it. The repository is hosted at <a href="https://github.com/andykuo1/flapjs">GitHub</a>.</p>
+<h3>Installing <a href="https://nodejs.org/en/">Atom.io</a></h3>
+<p>This is not required, but recommended (by me). Just get the current version and install it.</p>
+<p>Otherwise, you just need a text editor to write JavaScript, HTML, and CSS.</p>
+<p><strong>Note:</strong> Be sure to get the compatible versions for your operating system.</p>
+<h4>Recommended Atom Packages</h4>
+<ul>
+<li><a href="https://teletype.atom.io/">Teletype</a>
+<ul>
+<li>A pair programming package for collaborative programming in real-time.</li>
+</ul>
+</li>
+<li><a href="https://atom.io/packages/platformio-ide-terminal">PlatformIO IDE Terminal</a>
+<ul>
+<li>An integrated terminal for the <code>Atom.io</code> editor. Allows you easy access to run commands.</li>
+</ul>
+</li>
+</ul>
+<h3>Getting the remote repository</h3>
+<p>Open a command line or terminal and enter a directory to where to copy the project repository. This can be anywhere in your local file system (like your home directory). For example:</p>
+<pre class="prettyprint source"><code>cd ~/
+</code></pre>
+<p>Then, clone the <a href="https://github.com/JFLAP/JFLAP-WebApp.git">repo</a> to the directory.</p>
+<pre class="prettyprint source"><code>git clone https://github.com/JFLAP/JFLAP-WebApp.git
+</code></pre>
+<p>Navigate into the directory of the repository.</p>
+<pre class="prettyprint source"><code>cd JFLAP-WebApp
+</code></pre>
+<p>To ensure and verify the state of the repository enter the following command:</p>
+<pre class="prettyprint source"><code>git status
+</code></pre>
+<h3>Installing dependencies</h3>
+<p>Open a command line or terminal and enter into the project directory. This should be where you've copied the remote repository. Following the previous example:</p>
+<pre class="prettyprint source"><code>cd ~/JFLAP-WebApp
+</code></pre>
+<p>If you want to inspect the contents of this directory, it should contain the project files, such as <code>package.json</code>.</p>
+<p>Then run the following command:</p>
+<pre class="prettyprint source"><code>npm install
+</code></pre>
+<p>This should automatically start installing the dependencies (as listed in <code>package.json</code>). After it finishes, it should create a directory called <code>node_modules</code>, which contains all required dependencies.</p>
+<p><strong>Note:</strong> The <code>node_modules</code> directory sometimes contains files unique to each platform so this directory SHOULD NOT be committed to the repository.</p>
+<p><strong>Note:</strong> If a <code>package-lock.json</code> is created, it should be committed to the repo. It should not be ignored.</p>
+<p>After that, the project is ready to run. <em>Happy coding!</em></p>
+<hr>
+<h2>Running the Program</h2>
+<p>After saving any changes to a file, open a command line or terminal and enter into the project directory.</p>
+<p><strong>Note:</strong> If using the recommended <code>Atom.io</code> package, the in-editor terminal is automatically opened at the project directory. (No need to <code>cd</code> every time!)</p>
+<h3>Production Build</h3>
+<p>To &quot;compile&quot; the scripts for public distribution:</p>
+<pre class="prettyprint source"><code>npm run build
+</code></pre>
+<p><strong>Note:</strong> This will bundle all the resources and assets required into <code>dist</code>. It will also &quot;uglify&quot; the code to reduce size and apply other optimizations.</p>
+<p>Then, open <code>index.html</code> in your web browser. Either by just opening the file itself or running the command:</p>
+<pre class="prettyprint source"><code>open index.html
+</code></pre>
+<h3>Development Build</h3>
+<p>Another way to quickly run, or test, the program:</p>
+<pre class="prettyprint source"><code>npm start
+</code></pre>
+<p>This will run all appropriate commands to bundle and build the program, then will run it in your default web browser. It is also hot loaded and in development mode, so changes will be reflected on save and debug messages are more human-readable.</p>
+<p><strong>Note:</strong> Running this way will start a local server on the machine at default port <code>3000</code>, or what is defined in <code>webpack.config.js</code>. Therefore, only one instance of the server can be open at one time (but as many clients as you want).</p>
+<h2>Testing the Machine Functions</h2>
+<p>Tests are currently written in individual <code>.mjs</code> scripts located in the directory <code>debug</code> (<strong>not</strong> <code>.js</code>). These test scripts will be dynamically loaded when running the tester.</p>
+<p><strong>Note:</strong> Like other test environments, asserts and similar functionality can be found in <code>Tester.js</code>.</p>
+<p>Similar to running the main program, after saving any changes to a machine or machine function file, open a command line or terminal and enter into the project directory. Then execute:</p>
+<pre class="prettyprint source"><code>npm test
+</code></pre>
+<p>This will load all test written in <code>debug</code> and compute them. Once complete, the tester will report test results, successes, and failures.</p>
+<p>It is recommended to write only a single <code>.mjs</code> file per function. And within each file, divide each test case by a local block. This is to ensure local variables do not contaminate other tests. For example:</p>
+<pre class="prettyprint source"><code>//Test empty
+{
+  console.log(&quot;Testing empty...&quot;);
+  ...
+  console.log(&quot;Finished testing empty.&quot;);
+}
+</code></pre>
+<p><strong>Note:</strong> If a test runs into any errors or failures, any outputs gathered during computation are outputted in the order they occur, therefore <code>console.log</code> should print in the order expected. If a test was successful, all test output is consumed and not printed.</p>
+<hr>
+<h2>Project Structure</h2>
+<h3>Entry point</h3>
+<p>The entry point for the code is in <code>src/index.js</code> (if bundled, this will be referred to by <code>index.html</code> through <code>dist/bundle.js</code>).</p>
+<p>This script maintains all session-specific resources. Unlike page-specific details, it handles any actions or mechanics applied globally through the session. More specifically, it handles the rendering loop, the page routing (custom built for efficiency), the update cycle, and the window load and unload events. For future implementations, any events triggered by these actions should be handled here.</p>
+<p>For static constants that persist throughout the program, these are kept in <code>config.js</code>. You must import the script to use these constants; they are not global (nor should they be).</p>
+<p><strong>Note:</strong> Most <code>React</code> code will be handled in their own page handlers, as the UI are page-specific. This script should only manage which page handler to update and render, and any other session setup.</p>
+<h3>Pages</h3>
+<p>Subsequently, all pages are handled by their own page-specific scripts and should be in their own directory. A page should be treated like a typical HTML page; it is given complete control over the current page state and should be able to &quot;link&quot;, or route, to other pages. For example, the app page is located in the <code>App</code> directory, with its respective <code>App.js</code> to handle all those page-specific resources. Most, if not all, <code>React</code> components should be handled here.</p>
+<h4>Component structure</h4>
+<p><code>React</code> components are first divided into pages. There are currently 3 pages: <code>App</code>, <code>HomePage</code>, and <code>Page404</code>. Each are with their own respective directories with a matching <code>.js</code> file (and also usually a <code>.css</code> file).</p>
+<p>Within these directories are further subsections of components that make up the page. This structure is up to the developer to maintain, since each page should never call cross-page functionality. If this function is required by more than one page, it should be either a <code>util</code> function or another script entirely; it should not be kept in the page's directory.</p>
+<p><em><strong>Note:</strong> Be careful with class names. Currently CSS stylings are still applied globally. Therefore, do not style <code>body</code> or <code>button</code> directly. <strong>Use unique class names.</strong></em></p>
+<h4>Creating a Page</h4>
+<p>Simply create a <code>React</code> component, preferably in its own directory under <code>/pages</code>, and connect it to the router.</p>
+<p>To enable hot-loading:</p>
+<pre class="prettyprint source"><code>import React from 'react';
+import { hot } from 'react-hot-loader';
+
+class CustomPage extends React.Component
+{
+  ...
+}
+
+//For hotloading this class
+export default hot(module)(CustomPage);
+</code></pre>
+<h4>Adding another Page to the Router</h4>
+<p>Pages are referred to by their id listed in <code>index.js</code>, as mapped in the array <code>PAGES</code>. The id refers to the actual link the user will use to get to the page under the website's domain. The value of the entry is a reference to the <code>React</code> component that will serve as the page handler. These can be imported above. Any directories not mapped (therefore unknown) will be routed to a 404 page.</p>
+<h4>Routing to another Page</h4>
+<p>Each page is passed a reference to the router object. To route to another page, simply change <code>this.props.router.pathname</code> to the page id (as specified in the <code>PAGES</code> mapping). The next render step will then re-render to the specified page.</p>
+<h3>App Page</h3>
+<p>The App page handles the graphing workspace of the website. The page itself only handles workspace-specific that are also session-specific details, such as the graph pipeline, event history, input controllers, auto-saving, error checking, notification system, and other related systems. Resources that change within the lifetime of the workspace session should be handled by its children.</p>
+<h4>Component structure</h4>
+<p>This page is further divided into 4 sections: the toolbar, the drawer, the viewport, and the workspace.</p>
+<h5>Toolbar</h5>
+<p>The toolbar contains all the quick tray icons and is always above all content and easily accessible from the user for quick actions. These include starting a new workspace, saving, exporting, etc. The help button is also available here.</p>
+<p>Many of the buttons that serve a singular function have its functionality directly included within the component themselves. However, certain features that are more involved or are used elsewhere are kept as <code>util</code> functions or separate external scripts.</p>
+<h5>Drawer</h5>
+<p>The drawer contains all the collapsible, tabbable panels hidden on the side. It can be expanded through the expand arrow or by clicking the tab itself. The size of the panel itself can be adjusted by the user. It will display the currently selected of the various available panels.</p>
+<p>Each panel will handle its own contents, while the drawer serves as a simple &quot;router&quot; to determine which panel to display. It will also handle any manipulations to the drawer container.</p>
+<p>Currently, the drawer contains 4 tabs: <code>Testing</code>, <code>Definition</code>, <code>Exporting</code>, and <code>Options</code>. Most of these panels are self-contained, with the exception of the <code>Testing</code> panel.</p>
+<h6>Testing</h6>
+<p>The <code>Testing</code> panel is managed by a <code>TestingManager</code>. This is so testing data persists between workspace changes. In other words, the <code>Testing</code> panel renders the data found in <code>TestingManager</code>. Most of the testing functionality is derived from machine functions.</p>
+<h5>Viewport</h5>
+<p>The viewport is the top layer of the workspace. It fills the interactable area for the workspace, but does not handle any input events for it. Instead, it holds any <code>React</code> or DOM element overlays on the workspace, such as the <code>LabelEditor</code> or the <code>TrashCan</code>.</p>
+<p>This serves as an overlay layer for the workspace.</p>
+<h5>Workspace</h5>
+<p>The workspace is the <code>React</code> component responsible for the rendered graph content. Nodes, edges, and other graph elements can be created, deleted, or edited on this layer.</p>
+<p>All graph elements are rendered and manipulated here. The <code>InputController</code> will also listen on this layer for input events.</p>
+<p><strong>Note:</strong> Input events, although ignored by the viewport, can be blocked by elements on the viewport. These input events are not handled by InputController and instead will be handled by the target component.</p>
+<h3>Graph Pipeline</h3>
+<p>There are 3 representations of a graph, with each abstracting from the user interface, the computation, and the rendering.</p>
+<h4>NodeGraph</h4>
+<p>The first layer directly manipulated by the user is the <code>NodeGraph</code>. It can represent any graph that contains nodes and edges with labels (including DFAs, PDAs, TMs, etc).</p>
+<p>The purpose of this layer is to serve as the interface between user intention and graph representation. Although the graph <em>can</em> represent any nodal graph, it does not mean it <em>should</em> in the final output. However, these restrictions should be handled by the input controller or other handlers listening to its events to ensure logical and effective manipulation and also separation of responsibility.</p>
+<p>The <code>NodeGraph</code> is comprised of <code>GraphNode</code> and <code>GraphEdge</code> objects, each with its own position, labels, and other properties to decorate a graph. The labels are just strings, and are not enforced to any format (as suggested earlier, formatting and other rules should be applied by other handlers).</p>
+<p>Available events to listen for are listed at the top of <code>NodeGraph.js</code>.</p>
+<h4>Machines</h4>
+<p>This layer represents the mathematical definitions of the graph. Therefore, it provides functionality such as <code>getAlphabet</code> or <code>doClosureTransition</code> but are also specific to its machine type.</p>
+<p>In each machine, named by their machine type (i.e. <code>DFA.js</code>, <code>NFA.js</code>, <code>FSA.js</code>), it will always maintain a valid state. Any changes that violate these rules should throw errors. This is to enforce proper construction for user and developer manipulation.</p>
+<p>For symbol representation, these are maintained in <code>Symbols.js</code>. When considering the character representation in computing a machine, use these constants to allow easy change of symbols. For example, the empty transition, as represented by a lambda or an epsilon, is referred to as: <code>Symbols.EMPTY</code>. Other symbols can be added to the script.</p>
+<h5>MachineBuilder</h5>
+<p>In order to facilitate responses to these erroneous constructions, a <code>MachineBuilder</code> is used. The current valid machine of the workspace is maintained by a builder (i.e. <code>FSABuilder.js</code>) in <code>App</code> and derived from the <code>NodeGraph</code>. Its purpose is to enforce the rules of the machine on the user interactions. Actions and changes that violate these rules, or, in other words, throw errors, should either be reverted or be notified to the user through the builder. The machine is continually &quot;rebuilt&quot; by the builder on graph changes and therefore should have its content always in sync with the user's graph. Any custom rules should be implemented here.</p>
+<p><strong>Note:</strong> If certain actions or changes would result in critical errors, such as violating universal graph rules, then it should be implemented in the input controller to consume the action before it is performed.</p>
+<p><strong>Note:</strong> Expensive error-checking should be checked on intervals rather than only on change in order to save computation costs. Since these errors will not provide immediate feedback, the actions should not be reverted, but rather the user should be notified of the error instead. This also suggests that the output machine may not always be in sync with the graph. However, this is fine, since other functionality dependent on a machine expects a <em>valid</em> graph and therefore should be disabled if this occurs.</p>
+<p><strong>Note:</strong> This representation loses the graphical data that allows it to be reconstructed back into its original <code>NodeGraph</code>, such as position or direction. Although mathematically similar, both are structurally different, which enables both to effectively serve their unique functions.</p>
+<h5>Machine functions</h5>
+<p>Certain functionality that requires non-negligible computation time are divided into machine-specific <code>util</code> functions. These include <code>convertNFA</code>, <code>minimizeFSA</code>, <code>solveNFA</code>, etc. These are often called by specific actions or buttons within the panels and other areas and will should only calculate on machines (not <code>NodeGraph</code>).</p>
+<p>Each is stored in their own script and can be tested separately from the main program. Refer to <a href="#testing-the-machine-functions">Testing the Machine Functions</a> for more information on how to test them.</p>
+<h4>GraphRenderer</h4>
+<p>This final layer evaluates the <code>NodeGraph</code> and constructs a renderable structure to display to the user. In other words, this is the <code>React</code> component representation of <code>NodeGraph</code>. Because of this abstraction, the graph could be rendered in <code>Canvas</code> or other rendering systems if required. Currently, the individual elements are rendered onto the workspace in <code>SVG</code> for scalability.</p>
+<h3>InputAdapter</h3>
+<p>This handles all complex input manipulations of the graph workspace. All raw input (i.e. <code>onTouchStart</code>, <code>onMouseDown</code>) are first evaluated by <code>InputAdapter.js</code> into more abstract actions. Both touch and mouse actions are converted to abstracted input actions to simplify input logic.</p>
+<h4>InputController</h4>
+<p>These input actions (i.e. <code>onDragStart</code>, <code>onInputAction</code>) are then handled by <code>InputController.js</code>, which applies context-specific actions to the elements in the <code>NodeGraph</code>. In addition to the controller handling the input action events, it also emits events for external handlers to listen and respond to.</p>
+<p>Available events to listen for are listed at the top of <code>InputController.js</code>.</p>
+<p><strong>Note:</strong> Certain groups of actions, such as selection, are handled by external handlers. This serves only to produce more organized code.</p>
+<h4>GraphPointer</h4>
+<p>The position, timing, initial state, and target are kept in a <code>GraphPointer</code>. Its most used contents are often passed as arguments to the event functions, but it can also be accessed through the controller by <code>this.pointer</code>. Refer to <code>GraphPointer.js</code> for more details.</p>
+<h3>Auto-Saving</h3>
+<p>This is maintained by <code>AutoSaver.js</code>. The script will intermittently save on defined interval to local storage on the local system. This is handled by the browser and is specific to the browser. It is only initialized on component mount in <code>App.js</code>, and then it will update itself.</p>
+<h3>Event History</h3>
+<p>This is maintained by <code>EventHistory.js</code>. The script will record all non-negligible events fired by <code>GraphInputController.js</code> and <code>NodeGraph.js</code>. On user request, the log is cleared, decreased, or increased.</p>
+<h3>Eventable</h3>
+<p>This is a mixin class that enables emit/listen functionality for a class. It is currently used by <code>NodeGraph.js</code> and <code>GraphInputController.js</code>.</p>
+<p>To fire an event:</p>
+<pre class="prettyprint source"><code>this.emit(&quot;eventName&quot;, argument1, argument2, ...);
+</code></pre>
+<p>To listen to an event:</p>
+<pre class="prettyprint source"><code>someHandler.on(&quot;eventName&quot;, (argument1, ...) => {
+  //Some code here
+});
+</code></pre>
+<p>To include <code>Eventable.js</code> in a class:</p>
+<pre class="prettyprint source"><code>import Eventable from 'util/Eventable.js';
+class SomeClass extends SomeOtherClass
+{
+  ...
+}
+Eventable.mixin(SomeClass);
+</code></pre>
+<h3>Notification System</h3>
+<p><code>NotificationSystem.js</code> handles all notifications that are reported by other various components to the user. The messages can be grouped and searched by tags and sorted into various levels: <code>ERROR</code>, <code>WARNING</code>, <code>DEBUG</code>, <code>INFO</code>. Each message can also be dynamically altered by external handlers.</p>
+<h3>Conclusion</h3>
+<p>If you have any more questions, please contact any Flap.js dev team member.</p>
+<p>Or, you can contact me:
+andykuo1supergreen@gmail.com
+(Please begin the subject with 'Flap.js - ')</p>
+<p>Thank you for reading me!</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-FileHelper.html">FileHelper</a></li><li><a href="module-LocalStorage.html">LocalStorage</a></li><li><a href="module-MathHelper.html">MathHelper</a></li><li><a href="module-SessionStorage.html">SessionStorage</a></li><li><a href="module-URLHelper.html">URLHelper</a></li><li><a href="module-UserUtil.html">UserUtil</a></li></ul><h3>Classes</h3><ul><li><a href="AbstractInputHandler.html">AbstractInputHandler</a></li><li><a href="ASTNode.html">ASTNode</a></li><li><a href="DrawerView.html">DrawerView</a></li><li><a href="Exporter.html">Exporter</a></li><li><a href="FSAExporter.html">FSAExporter</a></li><li><a href="FSAImporter.html">FSAImporter</a></li><li><a href="GraphEdge.html">GraphEdge</a></li><li><a href="GraphElement.html">GraphElement</a></li><li><a href="GraphNode.html">GraphNode</a></li><li><a href="IndexedNodeGraph.html">IndexedNodeGraph</a></li><li><a href="InputAdapter.html">InputAdapter</a></li><li><a href="InputPointer.html">InputPointer</a></li><li><a href="JFLAPGraphParser.html">JFLAPGraphParser</a></li><li><a href="NodeGraph.html">NodeGraph</a></li><li><a href="NodeGraphParser.html">NodeGraphParser</a></li><li><a href="Parser.html">Parser</a></li><li><a href="PDAExporter.html">PDAExporter</a></li><li><a href="PDAImporter.html">PDAImporter</a></li><li><a href="QuadraticEdge.html">QuadraticEdge</a></li><li><a href="SemanticVersion.html">SemanticVersion</a></li><li><a href="StateNotificationLayout.html">StateNotificationLayout</a></li><li><a href="ViewportAdapter.html">ViewportAdapter</a></li></ul><h3>Global</h3><ul><li><a href="global.html#formatEdge">formatEdge</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Tue Jun 04 2019 10:01:37 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
