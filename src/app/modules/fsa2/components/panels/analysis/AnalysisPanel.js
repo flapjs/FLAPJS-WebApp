@@ -76,28 +76,35 @@ class AnalysisPanel extends React.Component
 
     onEquivalentTest(e)
     {
-        createMachineFromFileBlob(e).then(result =>
-        {
-            const session = this.props.session;
-            const currentModule = session.getCurrentModule();
-            const machineController = currentModule.getMachineController();
-            const machineBuilder = machineController.getMachineBuilder();
-            const currentMachine = machineBuilder.getMachine();
-            const equivalenceResult = isEquivalentFSAWithWitness(result, currentMachine);
-            if (equivalenceResult.value)
+        createMachineFromFileBlob(e)
+            .then(result =>
             {
-                this.setState({ isEqual: true, witnessString: '' });
-            }
-            else
+                const session = this.props.session;
+                const currentModule = session.getCurrentModule();
+                const machineController = currentModule.getMachineController();
+                const machineBuilder = machineController.getMachineBuilder();
+                const currentMachine = machineBuilder.getMachine();
+                const equivalenceResult = isEquivalentFSAWithWitness(result, currentMachine);
+                if (equivalenceResult.value)
+                {
+                    this.setState({ isEqual: true, witnessString: '' });
+                }
+                else
+                {
+                    if(!equivalenceResult.witnessString)
+                    {
+                        this.setState({ isEqual: false, witnessString: 'Sorry, the machines have different alphabets' });
+                    }
+                    else
+                    {
+                        this.setState({ isEqual: false, witnessString: 'Witness: ' + equivalenceResult.witnessString });
+                    }
+                }
+            })
+            .catch(err =>
             {
-                if(!equivalenceResult.witnessString) {
-                    this.setState({ isEqual: false, witnessString: 'Sorry, the machines have different alphabets' });
-                }
-                else{
-                    this.setState({ isEqual: false, witnessString: 'Witness: ' + equivalenceResult.witnessString });
-                }
-            }
-        });
+                this.setState({ isEqual: null, witnessString: err.message });
+            });
     }
 
     onOptimizeMachine(e)

@@ -6,7 +6,7 @@ import FSA from 'modules/fsa2/machine/FSA.js';
 
 export function createMachineFromFileBlob(fileBlob)
 {
-    return new Promise(resolve =>
+    return new Promise((resolve, reject) =>
     {
         new TextUploader().uploadFile(fileBlob)
             .then(result =>
@@ -29,10 +29,6 @@ export function createMachineFromFileBlob(fileBlob)
                 {
                     resolve(null);
                 }
-            })
-            .catch(err =>
-            {
-                throw new Error('Failed to import file: ' + err.message);
             });
     });
 }
