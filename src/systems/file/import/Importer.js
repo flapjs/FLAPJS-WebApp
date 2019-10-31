@@ -16,5 +16,10 @@ class Importer
     }
     
     getDataType() { return 'text'; }
+
+    getFileTypes()
+    {
+        throw new Error('Importer must define accepted file types by overriding getFileTypes().');
+    }
 }
 export default Importer;

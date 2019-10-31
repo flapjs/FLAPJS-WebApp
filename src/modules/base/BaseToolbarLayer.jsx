@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
-
 class BaseToolbarLayer extends React.Component
 {
     constructor(props)
@@ -13,16 +11,7 @@ class BaseToolbarLayer extends React.Component
     render()
     {
         return (
-            <SessionStateConsumer>
-                {
-                    state => (
-                        <>
-                        <button onClick={() => state.undoManager.undo()}>Undo</button>
-                        <button onClick={() => state.undoManager.redo()}>Redo</button>
-                        </>
-                    )
-                }
-            </SessionStateConsumer>
+            null
         );
     }
 }

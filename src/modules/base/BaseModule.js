@@ -16,6 +16,7 @@ import { IMAGE_EXPORTERS } from './NodeGraphImageExporters.js';
 import * as NodeGraphParser from './NodeGraphParser.js';
 import UndoManager from '@flapjs/deprecated/undo/UndoManager.js';
 import SafeGraphEventHandler from '@flapjs/modules/base/SafeGraphEventHandler.js';
+import NodeGraphImporter from '@flapjs/modules/base/NodeGraphImporter.js';
 
 /*
 import AutoSaveManager from '@flapjs/systems/autosave/AutoSaveManager.js';
@@ -38,14 +39,9 @@ const MODULE = {
         viewport: [ BaseViewportLayer ],
         drawer: [ AboutPanel ],
     },
-    imports: {
-        // session: new NodeGraphImporter(NodeGraphParser.JSON)
-        /*
-        session: SessionImporter,
-        graph: NodalGraphImageExporter,
-        jflap: JFLAPImporter,
-        */
-    },
+    imports: [
+        new NodeGraphImporter(NodeGraphParser.JSON, [ '.fa.json', '.fsa.json' ])
+    ],
     exports: {
         session: new NodeGraphExporter(NodeGraphParser.JSON),
         ...IMAGE_EXPORTERS

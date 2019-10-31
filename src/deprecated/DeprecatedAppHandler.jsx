@@ -7,55 +7,89 @@ import { NotificationConsumer } from '@flapjs/deprecated/notification/Notificati
 import ExportManager from '@flapjs/systems/file/export/ExportManager.js';
 import ImportManager from '@flapjs/systems/file/import/ImportManager.js';
 import ExportPanel from '@flapjs/components/drawer/panels/ExportPanel.jsx';
+import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
 
-export function initialize(app)
+export function initialize(session)
 {
-    app._notificationManager = new NotificationManager();
-    app._importManager = new ImportManager();
+    const currentModule = session.module;
 
-    app._exportManager = new ExportManager();
-    const currentModule = app.props.module;
+    session.notificationManager = new NotificationManager();
+    session.importManager = new ImportManager();
+    session.exportManager = new ExportManager();
+
     if (currentModule)
     {
-        if (currentModule.exports)
+        if (Array.isArray(currentModule.imports))
+        {
+            for(const importer of currentModule.imports)
+            {
+                session.importManager.addImporter(importer, ...importer.getFileTypes());
+            } 
+        }
+
+        if (typeof currentModule.exports === 'object')
         {
             for(const exportType of Object.keys(currentModule.exports))
             {
-                app._exportManager.registerExporter(currentModule.exports[exportType], exportType);
+                session.exportManager.registerExporter(currentModule.exports[exportType], exportType);
             }
         }
     }
 }
 
-export function componentDidMount(app)
+export function componentDidMount(session)
 {
-    app._notificationManager.pushNotification('Welcome to Flap.js!');
+    session.notificationManager.pushNotification('Welcome to Flap.js!');
 
-    DefaultNotifications.initialize(app._notificationManager);
+    DefaultNotifications.initialize(session.notificationManager);
 }
 
-export function componentWillUnmount(app)
+export function componentWillUnmount(session)
 {
-    app._exportManager.clear();
-    app._importManager.clear();
-    DefaultNotifications.terminate(app._notificationManager);
+    session.exportManager.clear();
+    session.importManager.clear();
+    DefaultNotifications.terminate(session.notificationManager);
 }
 
-export function renderAppBar(app)
+export function renderAppBar()
 {
     return (
-        null
+        <SessionStateConsumer>
+            {
+                session => (
+                    <>
+                    <button onClick={() => session.undoManager.undo()}>Undo</button>
+                    <button onClick={() => session.undoManager.redo()}>Redo</button>
+                    <input type="file" name="import" onChange={e =>
+                    {
+                        const files = e.target.files;
+                        if (files.length > 0)
+                        {
+                            session.importManager.tryImportFile(files[0], session);
+                
+                            //Makes sure you can upload the same file again.
+                            e.target.value = '';
+                        }
+                    }}/>
+                    </>
+                )
+            }
+        </SessionStateConsumer>
     );
 }
 
-export function renderDrawer(app)
+export function renderDrawer()
 {
     return (
-        <ExportPanel exportManager={app._exportManager}/>
+        <SessionStateConsumer>
+            {
+                session => <ExportPanel exportManager={session.exportManager}/>
+            }
+        </SessionStateConsumer>
     );
 }
 
-export function renderViewport(app)
+export function renderViewport()
 {
     return (
         <NotificationConsumer>

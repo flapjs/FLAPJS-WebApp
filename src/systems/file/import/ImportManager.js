@@ -17,7 +17,7 @@ class ImportManager
      * 
      * @param {Importer} importer       The importer associated with the file type.
      * @param {...string} fileTypes     The file type preceded by a dot, such as '.txt' or '.config.json'.
-     * @returns {this} Self for method-chaining.
+     * @returns {this}                  Self for method-chaining.
      */
     addImporter(importer, ...fileTypes)
     {
@@ -35,7 +35,7 @@ class ImportManager
      * 
      * @param {Importer} importer   The importer to remove.
      * @param {string} fileType     The file type to remove the importer from.
-     * @returns {this} Self for method-chaining.
+     * @returns {this}              Self for method-chaining.
      */
     removeImporter(importer, fileType)
     {

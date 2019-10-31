@@ -25,58 +25,6 @@ exports[`<App/> rendering renders correctly 1`] = `
       <DeprecatedServiceProviders
         app={
           App {
-            "_exportManager": ExportManager {
-              "_downloaderManager": DownloadManager {
-                "_downloaders": Map {
-                  "text" => Array [
-                    TextDownloader {},
-                  ],
-                  "image" => Array [
-                    SVGImageDownloader {},
-                  ],
-                  "object" => Array [
-                    JSONDownloader {},
-                  ],
-                },
-              },
-              "_exportTypes": Array [],
-              "_exporters": Map {},
-            },
-            "_importManager": ImportManager {
-              "_importers": Map {},
-              "_metaTypes": Map {},
-              "_textUploader": TextUploader {},
-            },
-            "_notificationManager": NotificationManager {
-              "_layouts": Map {
-                "default" => [Function],
-                "warning" => [Function],
-                "error" => [Function],
-                "success" => [Function],
-                "sequence" => [Function],
-              },
-              "_notificationMap": Map {
-                0 => Notification {
-                  "_id": 0,
-                  "_layoutID": null,
-                  "_message": "Welcome to Flap.js!",
-                  "_notificationManager": [Circular],
-                  "_props": Object {},
-                  "_tags": Array [],
-                },
-              },
-              "_notifications": Array [
-                Notification {
-                  "_id": 0,
-                  "_layoutID": null,
-                  "_message": "Welcome to Flap.js!",
-                  "_notificationManager": [Circular],
-                  "_props": Object {},
-                  "_tags": Array [],
-                },
-              ],
-              "provider": null,
-            },
             "context": Object {},
             "moduleSessionHandler": ModuleSessionHandler {
               "changeModuleCallback": [Function],
@@ -105,13 +53,16 @@ exports[`<App/> rendering renders correctly 1`] = `
                   "useCallback": [Function],
                   "useContext": [Function],
                   "useDebugValue": [Function],
+                  "useDeferredValue": [Function],
                   "useEffect": [Function],
                   "useImperativeHandle": [Function],
                   "useLayoutEffect": [Function],
                   "useMemo": [Function],
                   "useReducer": [Function],
                   "useRef": [Function],
+                  "useResponder": [Function],
                   "useState": [Function],
+                  "useTransition": [Function],
                 },
                 "_element": <App
                   changeModule={[Function]}
@@ -149,7 +100,11 @@ exports[`<App/> rendering renders correctly 1`] = `
                       <DeprecatedServiceProviders
                         app={[Circular]}
                       >
-                        <AppBar />
+                        <AppBar>
+                          <SessionStateConsumer>
+                            [Function]
+                          </SessionStateConsumer>
+                        </AppBar>
                         <AppWorkspace
                           renderDrawer={[Function]}
                           renderPlayground={[Function]}
@@ -167,7 +122,11 @@ exports[`<App/> rendering renders correctly 1`] = `
           }
         }
       >
-        <AppBar />
+        <AppBar>
+          <SessionStateConsumer>
+            <Component />
+          </SessionStateConsumer>
+        </AppBar>
         <AppWorkspace
           renderDrawer={[Function]}
           renderPlayground={[Function]}

@@ -2,6 +2,10 @@ import TextDownloader from './TextDownloader.js';
 import SVGImageDownloader from './SVGImageDownloader.js';
 import JSONDownloader from './JSONDownloader.js';
 
+/**
+ * Used by ExportManager to manage download types. This handles the file/data type, whereas
+ * export handles the kind of content represented by that data.
+ */
 class DownloadManager
 {
     constructor()
@@ -19,7 +23,7 @@ class DownloadManager
      * 
      * @param {Downloader} downloader       The downloader associated with the download type.
      * @param {...string} downloadTypes     The download type preceded by a dot, such as '.txt' or '.config.json'.
-     * @returns {this}
+     * @returns {this}                      Self for method-chaining.
      */
     addDownloader(downloader, ...downloadTypes)
     {
@@ -43,7 +47,7 @@ class DownloadManager
      * 
      * @param {Downloader} downloader   The downloader to remove.
      * @param {string} downloadType     The download type to remove the downloader from.
-     * @returns {this}
+     * @returns {this}                  Self for method-chaining.
      */
     removeDownloader(downloader, downloadType)
     {

@@ -39,19 +39,16 @@ class App extends React.Component
         this.moduleSessionHandler = new ModuleSessionHandler(props.module, props.changeModule);
 
         // Theme.register(STYLE_REGISTRY);
-        DeprecatedAppHandler.initialize(this);
     }
 
     /** @override */
     componentDidMount()
     {
-        DeprecatedAppHandler.componentDidMount(this);
     }
 
     /** @override */
     componentWillUnmount()
     {
-        DeprecatedAppHandler.componentWillUnmount(this);
     }
     
     /** @override */
@@ -75,7 +72,7 @@ class App extends React.Component
                         <DeprecatedServiceProviders app={this}>
                             {/** The navigation bar at the top. */}
                             <AppBar>
-                                {DeprecatedAppHandler.renderAppBar(this)}
+                                {DeprecatedAppHandler.renderAppBar()}
                                 {renderModule('appbar')}
                             </AppBar>
                             {/** The entire workspace, including drawers, viewports, playgrounds, etc. */}
@@ -95,7 +92,7 @@ class App extends React.Component
                                 renderDrawer={props =>
                                     <AppDrawer {...props}>
                                         {renderModule('drawer')}
-                                        {DeprecatedAppHandler.renderDrawer(this)}
+                                        {DeprecatedAppHandler.renderDrawer()}
                                     </AppDrawer>}>
                             </AppWorkspace>
                         </DeprecatedServiceProviders>

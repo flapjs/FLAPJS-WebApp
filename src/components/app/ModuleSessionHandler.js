@@ -1,3 +1,5 @@
+import * as DeprecatedAppHandler from '@flapjs/deprecated/DeprecatedAppHandler.jsx';
+
 import Logger from '@flapjs/util/Logger.js';
 const LOGGER_TAG = 'ModuleSessionHandler';
 
@@ -21,6 +23,8 @@ class ModuleSessionHandler
 
     onLoad(session)
     {
+        DeprecatedAppHandler.initialize(session);
+
         const currentModule = this.module;
 
         if (currentModule)
@@ -44,6 +48,8 @@ class ModuleSessionHandler
 
     onDidMount(sessionProvider)
     {
+        DeprecatedAppHandler.componentDidMount(sessionProvider.state);
+
         const currentModule = this.module;
 
         if (currentModule && typeof currentModule.onSessionDidMount === 'function')
@@ -60,6 +66,8 @@ class ModuleSessionHandler
         {
             currentModule.onSessionWillUnmount(sessionProvider);
         }
+
+        DeprecatedAppHandler.componentWillUnmount(sessionProvider.state);
     }
 
     onUnload(session)

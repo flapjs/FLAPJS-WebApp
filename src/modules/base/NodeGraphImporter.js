@@ -2,12 +2,14 @@ import SessionImporter from '@flapjs/modules/base/SessionImporter.js';
 
 class NodeGraphImporter extends SessionImporter
 {
-    constructor(jsonGraphParser)
+    constructor(jsonGraphParser, fileTypes = [])
     {
         super();
 
         this._graphParser = jsonGraphParser;
         this._prevGraphHash = 0;
+
+        this._fileTypes = fileTypes;
     }
 
     /** @override */
@@ -52,6 +54,12 @@ class NodeGraphImporter extends SessionImporter
             // TODO: this should not be here
             session.undoManager.captureEvent();
         }
+    }
+
+    /** @override */
+    getFileTypes()
+    {
+        return this._fileTypes;
     }
 }
 

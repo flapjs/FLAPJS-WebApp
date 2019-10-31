@@ -1,5 +1,6 @@
 import DownloadManager from './DownloadManager.js';
 
+/** Used to manage exporters by the app. */
 class ExportManager
 {
     constructor()
@@ -17,7 +18,7 @@ class ExportManager
      * 
      * @param {Exporter} exporter       The exporter associated with the export type.
      * @param {...string} exportTypes   The export type for the exporter (NOT the same as file type).
-     * @returns {this}
+     * @returns {this}                  Self for method-chaining.
      */
     registerExporter(exporter, ...exportTypes)
     {
