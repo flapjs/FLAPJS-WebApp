@@ -109,7 +109,7 @@ class FSABuilder extends AbstractMachineBuilder
             //For duplicate transitions
             nodeOutgoings.set(state, new Map());
         }
-
+        
         for (const edge of graphEdges)
         {
             const srcNode = edge.getEdgeFrom();
@@ -247,7 +247,7 @@ class FSABuilder extends AbstractMachineBuilder
         if (errors.length <= 0)
         {
             //Errors should be empty
-            return this._machine;
+            return dst;
         }
         else
         {

@@ -1,11 +1,11 @@
 {
     "*.js|*.jsx": [
-        "eslint --fix",
+        "npm run lint-js -- --fix",
         "git add",
         "jest --config \".jest/config.js\" --bail --findRelatedTests"
     ],
     "*.css": [
-        "stylelint --fix",
+        "npm run lint-css -- --fix",
         "git add"
     ]
 }

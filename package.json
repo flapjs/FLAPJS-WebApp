@@ -16,8 +16,10 @@
     "stories": "npm run storybook",
     "jest": "jest --config \".jest/config.js\" --runInBand",
     "jest-update": "npm run jest -- --updateSnapshot",
-    "lint": "eslint \"src/\" --ext \".js\" --ext \".jsx\" && stylelint \"src/**/*.css\"",
-    "lint-fix": "eslint \"src/\" --ext \".js\" --ext \".jsx\" --fix && stylelint \"src/**/*.css\" --fix",
+    "lint": "npm run lint-js && npm run lint-css",
+    "lint-fix": "npm run lint-js -- --fix && npm run lint-css -- --fix",
+    "lint-js": "eslint \"src/\" --ext \".js\" --ext \".jsx\"",
+    "lint-css": "stylelint \"src/**/*.css\"",
     "boilerplate": "node ./tools/boilerplate/boilerplate.js"
   },
   "repository": {

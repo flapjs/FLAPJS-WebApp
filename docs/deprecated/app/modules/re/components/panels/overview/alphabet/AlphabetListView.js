@@ -24,7 +24,7 @@ class TerminalListView extends React.Component
     onElementAdd(e)
     {
     //Create a new alphabet element...
-        this.setState({useNewSymbol: true}, () => 
+        this.setState({useNewSymbol: true}, () =>
         {
             this.newSymbolComponent.focus();
         });

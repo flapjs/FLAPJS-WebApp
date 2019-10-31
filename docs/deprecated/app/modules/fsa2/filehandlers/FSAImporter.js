@@ -44,7 +44,7 @@ class FSAImporter extends SessionImporter
 
         this._graphParser.parse(sessionData['graphData'], graph);
 
-        loadMachineFromData(currentModule, graphController, machineController, sessionData['machineData']);
+        loadMachineFromData(graphController, machineController, sessionData['machineData']);
     }
 
     /** @override */
@@ -72,7 +72,7 @@ class FSAImporter extends SessionImporter
  * @param  {MachineController} machineController    the controller for the machine to be constructed
  * @param  {Object} machineData                     the machine data to be parsed
  */
-function loadMachineFromData(graphController, machineController, machineData)
+export function loadMachineFromData(graphController, machineController, machineData)
 {
     const machineType = machineData.type;
     if (machineType) machineController.setMachineType(machineType);
@@ -85,10 +85,14 @@ function loadMachineFromData(graphController, machineController, machineData)
             machineController.addCustomSymbol(symbol);
         }
     }
-    const statePrefix = machineData.statePrefix;
-    if (statePrefix)
+
+    if (graphController)
     {
-        graphController.getGraphLabeler().setDefaultNodeLabelPrefix(statePrefix);
+        const statePrefix = machineData.statePrefix;
+        if (statePrefix)
+        {
+            graphController.getGraphLabeler().setDefaultNodeLabelPrefix(statePrefix);
+        }
     }
 }
 

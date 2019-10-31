@@ -21,6 +21,14 @@ Modules['re'] = {
     fetch: function (callback) { import(/* webpackChunkName: "module_re" */ 'modules/re/REModule.js').then(({ default: _ }) => callback(_)); }
 };
 
+Modules['cfg'] = {
+    name: 'Context Free Grammar',
+    version: '1.0.0',
+    experimental: true,
+    disabled: true,
+    fetch: function (callback)  { import(/* webpackChunkName: "module_cfg" */ 'modules/cfg/CFGModule.js').then(({ default: _ }) => callback(_)); }
+};
+
 Modules['tm'] = {
     name: 'Turing Machine',
     version: '1.0.0',
@@ -32,7 +40,7 @@ Modules['node'] = {
     name: 'Node Graph',
     version: '1.0.0',
     experimental: true,
-    fetch: function (callback) { import(/* webpackChunkName: "module_nodegraph" */ 'modules/node/NodeGraphModule.js').then(({ default: _ }) => callback(_)); }
+    fetch: function (callback) { import(/* webpackChunkName: "module_nodegraph" */ 'modules/nodegraph/NodeGraphModule.js').then(({ default: _ }) => callback(_)); }
 };
 
 Modules['tree'] = {

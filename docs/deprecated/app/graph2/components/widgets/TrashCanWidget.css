@@ -1,0 +1,29 @@
+:local(.trash_container) {
+  width: 4em;
+  height: 4em;
+  padding: 0.5em;
+
+  cursor: pointer;
+
+  color: var(--color-viewport-text);
+  border-radius: 1em;
+
+  opacity: 1;
+  transition: opacity 0.3s ease,
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+:local(.trash_container).active {
+  color: var(--color-viewport-error);
+  background-color: var(--color-viewport-back);
+}
+:local(.trash_container).hide {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+:local(.trash_container) > * {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
