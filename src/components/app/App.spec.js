@@ -16,7 +16,7 @@ let nextUUID = 0;
 beforeEach(() =>
 {
     uuid.mockImplementation(() => nextUUID++);
-    wrapper = shallow(<App />);
+    wrapper = shallow(<App renderModule={() => {}}/>);
 });
 
 describe('<App/> rendering', () =>
