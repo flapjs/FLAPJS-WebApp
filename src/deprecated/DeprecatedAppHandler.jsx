@@ -81,11 +81,7 @@ export function renderAppBar()
 export function renderDrawer()
 {
     return (
-        <SessionStateConsumer>
-            {
-                session => <ExportPanel exportManager={session.exportManager}/>
-            }
-        </SessionStateConsumer>
+        <ExportPanel />
     );
 }
 

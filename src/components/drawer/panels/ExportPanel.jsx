@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import ExportTab from './ExportTab.jsx';
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
@@ -16,7 +15,7 @@ class ExportPanel extends React.Component
 
     renderExportOption(exportType, session)
     {
-        const exportManager = this.props.exportManager;
+        const exportManager = session.exportManager;
         const exporter = exportManager.getExporterByExportType(exportType);
         if (!(exporter instanceof SessionExporter)) return null;
 
@@ -33,11 +32,6 @@ class ExportPanel extends React.Component
     /** @override */
     render()
     {
-        const props = this.props;
-
-        const exportManager = props.exportManager;
-        const exportTypes = exportManager.getExportTypes();
-        
         return (
             <>
                 <h2>Exporting</h2>
@@ -45,7 +39,7 @@ class ExportPanel extends React.Component
                     {
                         session => (
                             <ul>
-                                {exportTypes.map(exportType => this.renderExportOption(exportType, session))}
+                                {session.exportManager.getExportTypes().map(exportType => this.renderExportOption(exportType, session))}
                             </ul>
                         )
                     }
@@ -55,8 +49,5 @@ class ExportPanel extends React.Component
     }
 }
 ExportPanel.Tab = ExportTab;
-ExportPanel.propTypes = {
-    exportManager: PropTypes.object.isRequired
-};
 
 export default ExportPanel;

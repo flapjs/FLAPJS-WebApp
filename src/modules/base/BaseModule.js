@@ -25,7 +25,6 @@ import NodeGraphSaveHandler from '@flapjs/modules/base/NodeGraphSaveHandler.js';
 import NodeGraphImporter from '@flapjs/modules/base/NodeGraphImporter.js';
 */
 
-// Import Manager
 // Theme Manager
 // Hotkeys?
 // Tooltips
