@@ -147,7 +147,15 @@ module.exports = {
         new CopyWebpackPlugin([
             { from: './src/assets/metadata/' },
             { from: './src/assets/images/', to: 'images' },
-            { from: './src/assets/langs/', to: 'langs' }
+            { from: './src/assets/langs/', to: 'langs' },
+            // NOTE: All self-hosted libs should be copied from here to build.
+            { from: './src/assets/libs/', to: 'libs' },
+            // NOTE: Most of the scripts and styles are already inlined, so
+            // this is just for externally loaded scripts.
+            { from: './src/assets/scripts/', to: 'scripts' },
+            { from: './src/assets/styles/', to: 'styles' },
+            // NOTE: Icons are loaded and inlined into bundles automatically.
+            // { from: './src/assets/icons/', to: 'icons' },
         ]),
         new WorkboxWebpackPlugin.InjectManifest({
             swSrc: './src/assets/scripts/ServiceWorker.js',

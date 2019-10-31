@@ -29,8 +29,7 @@ class FlapJSApplication
         // Actually go fetch it now...
         return (await moduleHeader.fetch()).default;
     }
-
-    /** @override */
+    
     render(nullFirstRender = false)
     {
         if (nullFirstRender)

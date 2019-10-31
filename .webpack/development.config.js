@@ -40,6 +40,6 @@ module.exports = merge.smart(base, {
         open: true,
         overlay: true,
         contentBase: './build',
-        port: 8008,
+        port: 8004,
     },
 });
