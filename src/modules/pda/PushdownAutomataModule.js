@@ -1,13 +1,23 @@
 const MODULE = {
     id: 'pda',
-    onInitialization(session)
+    version: '1.0.0',
+    renders: {},
+    imports: [],
+    exports: {},
+    reducer(state, action)
     {
-        
+        switch(action.type)
+        {
+            default:
+                throw new Error(`Unsupported action ${action}.`);
+        }
     },
-    onTermination(session)
+    load(session)
+    {
+    },
+    unload(session)
     {
     }
 };
 
 export default MODULE;
-
