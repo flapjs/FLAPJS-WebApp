@@ -15,8 +15,9 @@ import AppPlayground from '@flapjs/components/app/structure/AppPlayground.jsx';
 import AppDrawer from '@flapjs/components/app/structure/AppDrawer.jsx';
 import { SessionProvider } from '@flapjs/session/context/SessionContext.jsx';
 
-import Logger from '@flapjs/util/Logger.js';
+import ModuleSessionHandler from './ModuleSessionHandler.js';
 
+import Logger from '@flapjs/util/Logger.js';
 const LOGGER_TAG = 'App';
 
 /*
@@ -34,6 +35,8 @@ class App extends React.Component
     constructor(props)
     {
         super(props);
+
+        this.moduleSessionHandler = new ModuleSessionHandler(props.module, props.changeModule);
 
         // Theme.register(STYLE_REGISTRY);
         DeprecatedAppHandler.initialize(this);
@@ -55,18 +58,19 @@ class App extends React.Component
     render()
     {
         const props = this.props;
-        
-        const currentModule = props.module;
-        const changeModule = props.changeModule;
+
         const renderModule = props.renderModule;
 
         return (
             <div className={Style.container + (props.className || '')}>
                 {/** All service providers. */}
                 <SessionProvider
-                    module={currentModule}
-                    changeModule={changeModule}
-                    renderChildren={props => renderModule('provider', props, true)}>
+                    renderChildren={props => renderModule('provider', props, true)}
+                    reducer={this.moduleSessionHandler.reducer}
+                    onLoad={this.moduleSessionHandler.onLoad}
+                    onDidMount={this.moduleSessionHandler.onDidMount}
+                    onWillUnmount={this.moduleSessionHandler.onWillUnmount}
+                    onUnload={this.moduleSessionHandler.onUnload}>
                     <AppServiceProviders appProps={props}>
                         <DeprecatedServiceProviders app={this}>
                             {/** The navigation bar at the top. */}

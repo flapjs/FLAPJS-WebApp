@@ -5,9 +5,13 @@ exports[`<App/> rendering renders correctly 1`] = `
   className="container"
 >
   <SessionProvider
-    changeModule={[Function]}
-    module={null}
+    onDidMount={[Function]}
+    onLoad={[Function]}
+    onUnload={[Function]}
+    onWillUnmount={[Function]}
+    reducer={[Function]}
     renderChildren={[Function]}
+    state={Object {}}
   >
     <AppServiceProviders
       appProps={
@@ -74,6 +78,15 @@ exports[`<App/> rendering renders correctly 1`] = `
               "provider": null,
             },
             "context": Object {},
+            "moduleSessionHandler": ModuleSessionHandler {
+              "changeModuleCallback": [Function],
+              "module": null,
+              "onDidMount": [Function],
+              "onLoad": [Function],
+              "onUnload": [Function],
+              "onWillUnmount": [Function],
+              "reducer": [Function],
+            },
             "props": Object {
               "changeModule": [Function],
               "module": null,
@@ -116,9 +129,13 @@ exports[`<App/> rendering renders correctly 1`] = `
                   className="container"
                 >
                   <SessionProvider
-                    changeModule={[Function]}
-                    module={null}
+                    onDidMount={[Function]}
+                    onLoad={[Function]}
+                    onUnload={[Function]}
+                    onWillUnmount={[Function]}
+                    reducer={[Function]}
                     renderChildren={[Function]}
+                    state={Object {}}
                   >
                     <AppServiceProviders
                       appProps={

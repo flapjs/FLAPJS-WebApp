@@ -3,24 +3,9 @@ import PropTypes from 'prop-types';
 
 import { uuid } from '@flapjs/util/MathHelper.js';
 
-import Logger from '@flapjs/util/Logger.js';
-const LOGGER_TAG = 'SessionContext';
-
 // Behold...the session context.
 const SessionStateContext = React.createContext();
 const SessionDispatchContext = React.createContext();
-
-// ...and it's fallback reducer (for the one ALWAYS used, refer below)...
-function fallbackReducer(state, action)
-{
-    switch(action.type)
-    {
-        case 'set':
-            return { [action.key]: action.value };
-        default:
-            throw new Error(`Unsupported reducer action '${action}'.`);
-    }
-}
 
 // ...and it's provider...
 class SessionProvider extends React.Component
@@ -29,83 +14,61 @@ class SessionProvider extends React.Component
     {
         super(props);
 
-        const currentModule = props.module;
-
-        let initialState = {};
-        let currentReducer = fallbackReducer;
-
-        if (currentModule)
+        // Load default app-defined state...
+        if (typeof props.onLoad === 'function')
         {
-            try
-            {
-                if (typeof currentModule.load === 'function')
-                {
-                    initialState = currentModule.load(initialState) || initialState;
-                }
-            }
-            catch(e)
-            {
-                initialState = {};
-                Logger.error(LOGGER_TAG, 'Module failed initialize state.', e);
-            }
-
-            if (typeof currentModule.reducer === 'function')
-            {
-                currentReducer = currentModule.reducer;
-            }
+            props.onLoad(props.state);
         }
 
         // This should match the expected shape for the consumers.
         this.state = {
-            module: currentModule,
-            moduleID: currentModule ? currentModule.id : null,
             sessionName: 'Untitled',
             sessionID: uuid(),
-            ...initialState
+            ...props.state
         };
 
         // This should match the expected interface for the consumers.
-        this.reducer = currentReducer;
         this.dispatch = this.dispatch.bind(this);
     }
 
     /** @override */
     componentDidMount()
     {
-        const currentModule = this.props.module;
-        if (currentModule && typeof currentModule.onSessionDidMount === 'function')
+        if (typeof this.props.onDidMount === 'function')
         {
-            currentModule.onSessionDidMount(this);
+            this.props.onDidMount(this);
         }
     }
 
     /** @override */
     componentWillUnmount()
     {
-        const currentModule = this.props.module;
-        if (currentModule && typeof currentModule.onSessionWillUnmount === 'function')
+        if (typeof this.props.onWillUnmount === 'function')
         {
-            currentModule.onSessionWillUnmount(this);
+            this.props.onWillUnmount(this);
         }
 
-        if (currentModule && typeof currentModule.unload === 'function')
+        if (typeof this.props.onUnload === 'function')
         {
-            currentModule.unload(this.state);
+            this.props.onUnload(this.state);
         }
     }
 
     dispatch(action)
     {
+        let result;
         switch(action.type)
         {
             case 'changeSessionName':
-                this.setState({ sessionName: action.value });
-                break;
-            case 'changeModuleByID':
-                this.props.changeModule(action.value);
+                result = { sessionName: action.value };
                 break;
             default:
-                this.setState(this.reducer(this.state, action));
+                result = this.props.reducer(this.state, action);
+        }
+
+        if (result)
+        {
+            this.setState(result);
         }
     }
 
@@ -125,13 +88,30 @@ class SessionProvider extends React.Component
 SessionProvider.propTypes = {
     children: PropTypes.node.isRequired,
     renderChildren: PropTypes.func,
-    changeModule: PropTypes.func,
-    module: PropTypes.object,
+    state: PropTypes.object,
+    reducer: PropTypes.func,
+    onLoad: PropTypes.func,
+    onDidMount: PropTypes.func,
+    onWillUnmount: PropTypes.func,
+    onUnload: PropTypes.func,
 };
 SessionProvider.defaultProps = {
     renderChildren: props => props.children,
-    changeModule: nextModuleID => Logger.error(LOGGER_TAG, `Unable to change module to '${nextModuleID}'- Missing changeModule() callback.`)
+    state: {},
+    reducer: fallbackReducer
 };
+
+// ...and it's fallback reducer (for the one ALWAYS used, refer below)...
+function fallbackReducer(state, action)
+{
+    switch(action.type)
+    {
+        case 'set':
+            return { [action.key]: action.value };
+        default:
+            throw new Error(`Unsupported reducer action '${action}'.`);
+    }
+}
 
 // ...and it's consumers...
 function SessionConsumer(props)
