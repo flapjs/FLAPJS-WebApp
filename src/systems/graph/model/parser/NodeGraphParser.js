@@ -193,13 +193,23 @@ class NodeGraphParser extends AbstractParser
         return targetGraph;
     }
 
-    /** Called by parse(), after onParserGraphCreate(). */
+    /**
+     * Called by parse(), after onParserGraphCreate().
+     *
+     * @param nodeData
+     * @param targetNode
+     */
     onParseNode(nodeData, targetNode)
     {
         // Nothing else needs to be done :3
     }
 
-    /** Called by parse(), after onParserGraphCreate(). */
+    /**
+     * Called by parse(), after onParserGraphCreate().
+     *
+     * @param edgeData
+     * @param targetEdge
+     */
     onParseEdge(edgeData, targetEdge)
     {
         if (targetEdge instanceof QuadraticEdge)
@@ -210,25 +220,45 @@ class NodeGraphParser extends AbstractParser
         }
     }
 
-    /** Called by parse(). */
+    /**
+     * Called by parse().
+     *
+     * @param graphData
+     * @param targetGraph
+     */
     onParseGraphResult(graphData, targetGraph)
     {
         // Everything is handled so far...
     }
 
-    /** Called by compose(). */
+    /**
+     * Called by compose().
+     *
+     * @param graph
+     * @param graphData
+     */
     onComposeGraphCreate(graph, graphData)
     {
         return graphData || {};
     }
 
-    /** Called by compose(). */
+    /**
+     * Called by compose().
+     *
+     * @param node
+     * @param nodeData
+     */
     onComposeNode(node, nodeData)
     {
         // Yep. It's all good.
     }
 
-    /** Called by compose(). */
+    /**
+     * Called by compose().
+     *
+     * @param edge
+     * @param edgeData
+     */
     onComposeEdge(edge, edgeData)
     {
         if (edge instanceof QuadraticEdge)
@@ -241,7 +271,12 @@ class NodeGraphParser extends AbstractParser
         }
     }
 
-    /** Called by compose(). */
+    /**
+     * Called by compose().
+     *
+     * @param graph
+     * @param graphData
+     */
     onComposeGraphResult(graph, graphData)
     {
         let hasQuad = false;

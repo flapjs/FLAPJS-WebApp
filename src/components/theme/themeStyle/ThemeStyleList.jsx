@@ -7,7 +7,11 @@ import ThemeStyleGroup from './ThemeStyleGroup.jsx';
 import StyleInput from '../sourceStyle/StyleInput.jsx';
 import ComputedStyleInput from '../computedStyle/ComputedStyleInput.jsx';
 
-/** Accepts a function as its only child to render each style entry. */
+/**
+ * Accepts a function as its only child to render each style entry.
+ *
+ * @param props
+ */
 function ThemeStyleList(props)
 {
     const sourceStyleRefs = new Map();

@@ -1,4 +1,9 @@
-/** Creates a context state. This helps maintain a consistant shape for all hotkey contexts. */
+/**
+ * Creates a context state. This helps maintain a consistant shape for all hotkey contexts.
+ *
+ * @param provider
+ * @param manager
+ */
 export function createContextState(provider, manager)
 {
     if (manager) manager.bindProviderContext(provider);

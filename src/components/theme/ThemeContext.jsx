@@ -84,7 +84,13 @@ ThemeProvider.defaultProps = {
     themeName: DEFAULT_CONTEXT_VALUE.themeName,
 };
 
-/** Creates a context state. This helps maintain a consistant shape for all theme contexts. */
+/**
+ * Creates a context state. This helps maintain a consistant shape for all theme contexts.
+ *
+ * @param provider
+ * @param source
+ * @param defaultThemeName
+ */
 function createThemeContextState(provider, source, defaultThemeName = 'default')
 {
     const element = source ? ElementHelper.getElementFromRef(source) : null;

@@ -92,6 +92,7 @@ class StyleMap
 
     /**
      * @param {Map<string, string>} entityMapping The entity mapping of entity names to translated strings.
+     * @param styleMapping
      * @param {string|Function} defaultValue The default value if no entity could be found.
      */
     constructor(styleMapping = new Map(), defaultValue = null)

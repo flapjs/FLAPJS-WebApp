@@ -12,7 +12,13 @@ class StyleRegistry
         this.active = active;
     }
 
-    /** Registers a style entry. Order of registration does matter. */
+    /**
+     * Registers a style entry. Order of registration does matter.
+     *
+     * @param name
+     * @param type
+     * @param group
+     */
     registerStyle(name, type='color', group='default')
     {
         if (this.active)
@@ -35,7 +41,15 @@ class StyleRegistry
         return styleEntry;
     }
 
-    /** Registers a computed style entry. Must be called AFTER the registered compute style name. */
+    /**
+     * Registers a computed style entry. Must be called AFTER the registered compute style name.
+     *
+     * @param name
+     * @param computeName
+     * @param computeFunction
+     * @param type
+     * @param group
+     */
     registerComputedStyle(name, computeName, computeFunction='copy', type='color', group='default')
     {
         if (this.active)

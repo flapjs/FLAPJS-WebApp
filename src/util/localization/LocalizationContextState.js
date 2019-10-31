@@ -1,6 +1,11 @@
 import * as LocalizationHandler from './LocalizationHandler.js';
 
-/** Creates a context state. This helps maintain a consistant shape for all localization contexts. */
+/**
+ * Creates a context state. This helps maintain a consistant shape for all localization contexts.
+ *
+ * @param provider
+ * @param defaultLocaleCode
+ */
 export function createContextState(provider, defaultLocaleCode = '???')
 {
     return {
