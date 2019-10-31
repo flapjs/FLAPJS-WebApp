@@ -18,12 +18,9 @@ import UndoManager from '@flapjs/deprecated/undo/UndoManager.js';
 import SafeGraphEventHandler from '@flapjs/modules/base/SafeGraphEventHandler.js';
 import NodeGraphImporter from '@flapjs/modules/base/NodeGraphImporter.js';
 
-/*
 import AutoSaveManager from '@flapjs/systems/autosave/AutoSaveManager.js';
 import LocalStorage from '@flapjs/util/storage/LocalStorage.js';
 import NodeGraphSaveHandler from '@flapjs/modules/base/NodeGraphSaveHandler.js';
-import NodeGraphImporter from '@flapjs/modules/base/NodeGraphImporter.js';
-*/
 
 // Theme Manager
 // Hotkeys?
@@ -39,7 +36,7 @@ const MODULE = {
         drawer: [ AboutPanel ],
     },
     imports: [
-        new NodeGraphImporter(NodeGraphParser.JSON, [ '.fa.json', '.fsa.json' ])
+        new NodeGraphImporter(NodeGraphParser.JSON, [ '.json', '.base.json', '.fa.json', '.fsa.json' ])
     ],
     exports: {
         session: new NodeGraphExporter(NodeGraphParser.JSON),
@@ -71,69 +68,70 @@ const MODULE = {
                 throw new Error(`Unsupported action ${action}.`);
         }
     },
-    load(state)
+    load(session)
     {
         const graph = new IndexedNodeGraph(GraphNode, QuadraticEdge);
-        const graphController = new NodeGraphController(graph, state);
+        const graphController = new NodeGraphController(graph, session);
         const inputController = new InputController();
         const viewController = new ViewController();
         const undoManager = new UndoManager(() => new SafeGraphEventHandler(graphController, NodeGraphParser.JSON));
-        // const autoSaveManager = new AutoSaveManager(LocalStorage).registerHandler(new NodeGraphSaveHandler(this));
+        const autoSaveManager = new AutoSaveManager(LocalStorage)
+            .registerHandler(new NodeGraphSaveHandler(session, session.importManager, session.exportManager));
 
         viewController.initialize();
         inputController.initialize();
         graphController.initialize();
-        // autoSaveManager.initialize();
+        autoSaveManager.initialize();
 
-        state.graphController = graphController;
-        state.inputController = inputController;
-        state.viewController = viewController;
-        state.undoManager = undoManager;
-        // state.autoSaveManager = autoSaveManager;
+        session.graphController = graphController;
+        session.inputController = inputController;
+        session.viewController = viewController;
+        session.undoManager = undoManager;
+        session.autoSaveManager = autoSaveManager;
 
         graph.createNode();
     },
-    unload(state)
+    unload(session)
     {
-        // state.autoSaveManager.terminate();
-        state.undoManager.clear();
-        state.graphController.terminate();
-        state.inputController.terminate();
-        state.viewController.terminate();
+        session.autoSaveManager.terminate();
+        session.undoManager.clear();
+        session.graphController.terminate();
+        session.inputController.terminate();
+        session.viewController.terminate();
     },
     // HACK: This forces everything to re-render every time something either in the graph, input, or view changes.
     // This is pretty bad practice. If something depends on one of those 3 things, they should
     // register themselves with that controller's change handler.
-    onSessionDidMount(session)
+    onSessionDidMount(sessionProvider)
     {
-        this._onGraphChange = this.onGraphChange.bind(this, session);
-        this._onInputChange = this.onInputChange.bind(this, session);
-        this._onViewChange = this.onViewChange.bind(this, session);
-        session.state.graphController.getGraphChangeHandler().addListener(this._onGraphChange);
-        session.state.inputController.getChangeHandler().addListener(this._onInputChange);
-        session.state.viewController.getChangeHandler().addListener(this._onViewChange);
+        this._onGraphChange = this.onGraphChange.bind(this, sessionProvider);
+        this._onInputChange = this.onInputChange.bind(this, sessionProvider);
+        this._onViewChange = this.onViewChange.bind(this, sessionProvider);
+        sessionProvider.state.graphController.getGraphChangeHandler().addListener(this._onGraphChange);
+        sessionProvider.state.inputController.getChangeHandler().addListener(this._onInputChange);
+        sessionProvider.state.viewController.getChangeHandler().addListener(this._onViewChange);
     },
-    onSessionRestart(session)
+    onSessionRestart(sessionProvider)
     {
         // FIXME: Not yet implemented.
     },
-    onSessionWillUnmount(session)
+    onSessionWillUnmount(sessionProvider)
     {
-        session.state.graphController.getGraphChangeHandler().removeListener(this._onGraphChange);
-        session.state.inputController.getChangeHandler().removeListener(this._onInputChange);
-        session.state.viewController.getChangeHandler().removeListener(this._onViewChange);
+        sessionProvider.state.graphController.getGraphChangeHandler().removeListener(this._onGraphChange);
+        sessionProvider.state.inputController.getChangeHandler().removeListener(this._onInputChange);
+        sessionProvider.state.viewController.getChangeHandler().removeListener(this._onViewChange);
     },
-    onGraphChange(session, graph, hash)
+    onGraphChange(sessionProvider, graph, hash)
     {
-        session.setState({ graphHash: hash });
+        sessionProvider.setState({ graphHash: hash });
     },
-    onViewChange(session, viewport, hash)
+    onViewChange(sessionProvider, viewport, hash)
     {
-        session.setState({ viewHash: hash });
+        sessionProvider.setState({ viewHash: hash });
     },
-    onInputChange(session, input, hash)
+    onInputChange(sessionProvider, input, hash)
     {
-        session.setState({ inputHash: hash });
+        sessionProvider.setState({ inputHash: hash });
     }
 };
 

@@ -1,4 +1,7 @@
-import AbstractAutoSaveHandler from '@flapjs/deprecated/autosave/AbstractAutoSaveHandler';
+import AbstractAutoSaveHandler from '@flapjs/deprecated/autosave/AbstractAutoSaveHandler.js';
+
+import Logger from '@flapjs/util/Logger.js';
+const LOGGER_TAG = 'NodeGraphSaveHandler';
 
 class NodeGraphSaveHandler extends AbstractAutoSaveHandler
 {
@@ -14,19 +17,19 @@ class NodeGraphSaveHandler extends AbstractAutoSaveHandler
     /** @override */
     onAutoSaveLoad(dataStorage)
     {
-        const currentModule = this._session.module;
-        const currentModuleID = currentModule.id;
+        const currentModuleID = this._session.moduleID;
 
         const data = dataStorage.getDataAsObject('graph-' + currentModuleID);
         if (data)
         {
             try
             {
-                this.importManager.tryImportFileFromData(this._session, '', '.json', data);
+                this._importManager.tryImportFileFromData(this._session, '', '.json', data);
             }
             catch(e)
             {
                 // Ignore error
+                Logger.error(LOGGER_TAG, 'Unable to auto load graph', e);
             }
         }
     }
@@ -47,6 +50,7 @@ class NodeGraphSaveHandler extends AbstractAutoSaveHandler
         catch(e)
         {
             // Ignore error
+            Logger.error(LOGGER_TAG, 'Unable to auto save graph', e);
         }
     }
 

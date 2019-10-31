@@ -23,10 +23,13 @@ class ModuleSessionHandler
 
     onLoad(session)
     {
-        DeprecatedAppHandler.initialize(session);
-
         const currentModule = this.module;
 
+        session.module = currentModule;
+        session.moduleID = currentModule ? currentModule.id : null;
+
+        DeprecatedAppHandler.initialize(session);
+        
         if (currentModule)
         {
             try
@@ -41,9 +44,6 @@ class ModuleSessionHandler
                 Logger.error(LOGGER_TAG, 'Module failed initialize state.', e);
             }
         }
-
-        session.module = currentModule;
-        session.moduleID = currentModule ? currentModule.id : null;
     }
 
     onDidMount(sessionProvider)
