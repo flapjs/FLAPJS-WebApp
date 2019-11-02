@@ -1,7 +1,13 @@
+import OverviewPanel from './components/panels/OverviewPanel.jsx';
+import AnalysisPanel from './components/panels/AnalysisPanel.jsx';
+import TestingPanel from './components/panels/TestingPanel.jsx';
+
 const MODULE = {
     id: 'pda',
     version: '1.0.0',
-    renders: {},
+    renders: {
+        drawer: [ OverviewPanel, AnalysisPanel, TestingPanel ]
+    },
     imports: [],
     exports: {},
     reducer(state, action)

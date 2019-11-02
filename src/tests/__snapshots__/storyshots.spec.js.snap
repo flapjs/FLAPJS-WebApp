@@ -3,7 +3,179 @@
 exports[`Storyshots App playground 1`] = `
 <div
   className="container"
-/>
+>
+  <nav
+    className="appbar "
+  >
+    <h2>
+      Flap.js
+    </h2>
+    <div
+      className="apptitle"
+    >
+      <select
+        defaultValue={null}
+        onBlur={[Function]}
+      >
+        <option
+          value="base"
+        >
+          Default
+        </option>
+        <option
+          value="node"
+        >
+          Node Graph
+        </option>
+        <option
+          value="fa"
+        >
+          Finite Automata
+        </option>
+        <option
+          value="re"
+        >
+          Regular Expression
+        </option>
+        <option
+          value="pda"
+        >
+          Pushdown Automata
+        </option>
+        <option
+          value="cfg"
+        >
+          Context-Free Grammar
+        </option>
+        <option
+          value="tm"
+        >
+          Turing Machine
+        </option>
+        <option
+          value="logic"
+        >
+          Logic Circuit
+        </option>
+      </select>
+      <input
+        onChange={[Function]}
+        type="text"
+        value="Untitled"
+      />
+    </div>
+    <button
+      onClick={[Function]}
+    >
+      Undo
+    </button>
+    <button
+      onClick={[Function]}
+    >
+      Redo
+    </button>
+    <input
+      name="import"
+      onChange={[Function]}
+      type="file"
+    />
+  </nav>
+  <div
+    className="container"
+  >
+    <section
+      className="container "
+    >
+      <div
+        className="background"
+      >
+        <div
+          className="container"
+        />
+      </div>
+      <div
+        className="foreground"
+      >
+        <div
+          className="container "
+          style={
+            Object {
+              "flexDirection": "row-reverse",
+            }
+          }
+        >
+          <div
+            className="sidebar right"
+          >
+            <div
+              className="sidetab horizontal"
+            >
+              <button
+                className="container "
+                onClick={[Function]}
+              >
+                <span
+                  className="icon"
+                />
+              </button>
+              <button
+                className="container "
+                onClick={[Function]}
+              >
+                <span
+                  className="icon"
+                />
+              </button>
+            </div>
+          </div>
+          <div
+            className="viewport"
+          >
+            <div
+              className="container"
+              style={
+                Object {
+                  "flexDirection": "row-reverse",
+                }
+              }
+            >
+              <div
+                className="drawer  right"
+                style={
+                  Object {
+                    "height": "100%",
+                    "width": "30%",
+                  }
+                }
+              >
+                <div
+                  className="handle"
+                  onMouseDown={[Function]}
+                  role="presentation"
+                />
+                <div
+                  className="content"
+                >
+                  <h2>
+                    Exporting
+                  </h2>
+                  <ul />
+                </div>
+              </div>
+              <div
+                className="viewport"
+              >
+                <div
+                  className="container"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
 `;
 
 exports[`Storyshots ComputedStyleInput playground 1`] = `

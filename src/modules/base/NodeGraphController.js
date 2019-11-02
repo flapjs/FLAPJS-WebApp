@@ -9,11 +9,17 @@ export const TRASH_EDITING_NOTIFICATION_TAG = 'tryCreateWhileTrash';
 
 class NodeGraphController extends GraphController
 {
-    constructor(graph, session)
+    constructor(graph)
     {
         super(graph);
 
+        this.session = null;
+    }
+
+    setSession(session)
+    {
         this.session = session;
+        return this;
     }
 
     /** @override */
@@ -35,8 +41,6 @@ class NodeGraphController extends GraphController
                 this.session.undoManager.captureEvent();
         }
     }
-	
-    getApp() { return this._app; }
 }
 
 export default NodeGraphController;

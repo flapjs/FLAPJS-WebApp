@@ -29,6 +29,14 @@ import NodeGraphSaveHandler from '@flapjs/modules/base/NodeGraphSaveHandler.js';
 const MODULE = {
     id: 'base',
     version: '1.0.0',
+    services: {
+        /*
+        undo: {
+            component: UndoManagerPro,
+            props: {}
+        }
+        */
+    },
     renders: {
         appbar: [ BaseToolbarLayer ],
         playground: [ BasePlaygroundLayer ],
@@ -70,6 +78,7 @@ const MODULE = {
     },
     load(session)
     {
+        // console.log("LOAD");
         const graph = new IndexedNodeGraph(GraphNode, QuadraticEdge);
         const graphController = new NodeGraphController(graph, session);
         const inputController = new InputController();
@@ -93,6 +102,7 @@ const MODULE = {
     },
     unload(session)
     {
+        // console.log("UNLOAD");
         session.autoSaveManager.terminate();
         session.undoManager.clear();
         session.graphController.terminate();
@@ -104,6 +114,7 @@ const MODULE = {
     // register themselves with that controller's change handler.
     onSessionDidMount(sessionProvider)
     {
+        // console.log("MOUNT");
         this._onGraphChange = this.onGraphChange.bind(this, sessionProvider);
         this._onInputChange = this.onInputChange.bind(this, sessionProvider);
         this._onViewChange = this.onViewChange.bind(this, sessionProvider);
@@ -117,6 +128,7 @@ const MODULE = {
     },
     onSessionWillUnmount(sessionProvider)
     {
+        // console.log("UNMOUNT");
         sessionProvider.state.graphController.getGraphChangeHandler().removeListener(this._onGraphChange);
         sessionProvider.state.inputController.getChangeHandler().removeListener(this._onInputChange);
         sessionProvider.state.viewController.getChangeHandler().removeListener(this._onViewChange);
