@@ -69,10 +69,10 @@ class ModuleManager
         if (nested)
         {
             if (!('children' in layerProps)) throw new Error(`Cannot render nested module layer '${layerID}' without children in props.`);
-            const { children, ...providerProps } = layerProps;
+            const { children, ...componentProps } = layerProps;
 
             if (!currentModule || !('renders' in currentModule) || !(layerID in currentModule.renders)) return children;
-            return this.renderModuleProviders(currentModule.renders[layerID], providerProps, children);
+            return ModuleManager.renderNestedComponentEntries(currentModule.renders[layerID], componentProps, children);
         }
         else
         {
@@ -82,68 +82,115 @@ class ModuleManager
             if (layerID in renders)
             {
                 const renderLayer = renders[layerID];
-                if (nested)
-                {
-                    if (!('children' in layerProps)) throw new Error(`Cannot render nested module layer '${layerID}' without children in props.`);
-                    const { children, ...providerProps } = layerProps;
-                    return this.renderModuleProviders(renderLayer, providerProps, children);
-                }
-                else
-                {
-                    if (Array.isArray(renderLayer))
-                    {
-                        const result = [];
-                        for(const layer of renderLayer)
-                        {
-                            result.push(React.createElement(layer, layerProps));
-                        }
-        
-                        if (result.length <= 1)
-                        {
-                            return result[0];
-                        }
-                        else
-                        {
-                            return result;
-                        }
-                    }
-                    else
-                    {
-                        return React.createElement(renderLayer, layerProps);
-                    }
-                }
+                return ModuleManager.renderComponentEntries(renderLayer, layerProps);
             }
     
             return null;
         }
     }
 
-    renderModuleProviders(providers, providerProps, children)
+    static renderComponentEntry(componentEntry, componentProps, children = undefined)
     {
-        if (Array.isArray(providers))
+        // Render entries: { component: ComponentClass, props: {...} }
+        if (typeof componentEntry === 'object')
         {
-            let result = null;
-            for(let i = providers.length - 1; i >= 0; --i)
-            {
-                const provider = providers[i];
+            return React.createElement(componentEntry.component, { ...componentProps, ...componentEntry.props }, children);
+        }
+        // Render entries: ComponentClass
+        else if (typeof componentEntry === 'function')
+        {
+            return React.createElement(componentEntry, componentProps, children);
+        }
+        // Render entries: null / undefined
+        else
+        {
+            return null;
+        }
+    }
 
-                if (result)
+    static renderComponentEntries(componentClasses, componentProps = {})
+    {
+        if (Array.isArray(componentClasses))
+        {
+            const result = [];
+            for(const component of componentClasses)
+            {
+                const element = ModuleManager.renderComponentEntry(component, componentProps);
+                if (element)
                 {
-                    result = React.createElement(provider, providerProps, result);
-                }
-                else
-                {
-                    result = React.createElement(provider, providerProps, children);
+                    result.push(element);
                 }
             }
-            return result || children;
+
+            if (result.length <= 1)
+            {
+                return result[0];
+            }
+            else
+            {
+                return result;
+            }
         }
-        else if (providers)
+        else if (componentClasses)
         {
-            return React.createElement(providers, providerProps, children);
+            return ModuleManager.renderComponentEntry(componentClasses, componentProps);
         }
         else
         {
+            return null;
+        }
+    }
+
+    static renderNestedComponentEntries(componentClasses, componentProps, children)
+    {
+        if (Array.isArray(componentClasses))
+        {
+            let result = null;
+            for(let i = componentClasses.length - 1; i >= 0; --i)
+            {
+                const componentClass = componentClasses[i];
+                result = ModuleManager.renderComponentEntry(componentClass, componentProps, result || children);
+            }
+            return result || children;
+        }
+        else if (typeof componentClasses === 'function')
+        {
+            return ModuleManager.renderComponentEntry(componentClasses, componentProps, children);
+        }
+        else
+        {
+            return children;
+        }
+    }
+
+    static renderServices(services, serviceProps, children, callback)
+    {
+        let serviceRefs = {};
+        if (typeof services === 'object')
+        {
+            let result = null;
+            for(const serviceKey of Object.keys(services))
+            {
+                const service = services[serviceKey];
+                const ref = React.createRef();
+                serviceRefs[serviceKey] = ref;
+
+                if (result)
+                {
+                    result = React.createElement(service, { ref, ...serviceProps}, result);
+                }
+                else
+                {
+                    result = React.createElement(service, { ref, ...serviceProps }, children);
+                }
+            }
+
+            callback(serviceRefs);
+            return result || children;
+        }
+        else
+        {
+            callback(serviceRefs);
             return children;
         }
     }

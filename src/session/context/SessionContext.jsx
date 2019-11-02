@@ -75,11 +75,10 @@ class SessionProvider extends React.Component
     /** @override */
     render()
     {
-        const { renderChildren, ...otherProps } = this.props;
         return (
             <SessionStateContext.Provider value={this.state}>
                 <SessionDispatchContext.Provider value={this.dispatch}>
-                    {renderChildren(otherProps)}
+                    {this.props.children}
                 </SessionDispatchContext.Provider>
             </SessionStateContext.Provider>
         );
@@ -87,7 +86,6 @@ class SessionProvider extends React.Component
 }
 SessionProvider.propTypes = {
     children: PropTypes.node.isRequired,
-    renderChildren: PropTypes.func,
     state: PropTypes.object,
     reducer: PropTypes.func,
     onLoad: PropTypes.func,
@@ -96,7 +94,6 @@ SessionProvider.propTypes = {
     onUnload: PropTypes.func,
 };
 SessionProvider.defaultProps = {
-    renderChildren: props => props.children,
     state: {},
     reducer: fallbackReducer
 };
