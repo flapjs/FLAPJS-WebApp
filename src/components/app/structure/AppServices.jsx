@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import AppServiceProviders from '@flapjs/components/app/structure/AppServiceProviders.jsx';
 import DeprecatedServiceProviders from '@flapjs/deprecated/DeprecatedServiceProviders.jsx';
 
+import { ThemeProvider } from '@flapjs/components/theme/ThemeContext.jsx';
+import { LocalizationProvider } from '@flapjs/util/localization/LocalizationContext.jsx';
+import { DrawerProvider } from '@flapjs/components/drawer/context/DrawerContext.jsx';
 import { SessionProvider } from '@flapjs/session/context/SessionContext.jsx';
 
 import ModuleSessionHandler from '@flapjs/components/app/ModuleSessionHandler.js';
-import ModuleManager from '@flapjs/session/ModuleManager.js';
 
 class AppServices extends React.Component
 {
@@ -80,29 +81,6 @@ class AppServices extends React.Component
         this.moduleServices.length = 0;
     }
 
-    /**
-     * @deprecated
-     * @param currentModule
-     * @param children
-     * @param callback
-     */
-    renderModuleServices(currentModule, children, callback)
-    {
-        let result = children;
-
-        if (currentModule && typeof currentModule.services === 'object')
-        {
-            result = ModuleManager.renderServices(
-                currentModule.services,
-                {},
-                children,
-                serviceRefs => this.moduleServiceRefs = { session: this.moduleSession, ...serviceRefs }
-            );
-        }
-
-        return result;
-    }
-
     /** @override */
     render()
     {
@@ -111,19 +89,23 @@ class AppServices extends React.Component
         const app = props.app;
 
         return (
-            <SessionProvider
-                ref={this.moduleSession}
-                reducer={this.moduleSessionHandler.reducer}
-                onLoad={this.onSessionLoad}
-                onDidMount={this.onSessionDidMount}
-                onWillUnmount={this.onSessionWillUnmount}
-                onUnload={this.onSessionUnload}>
-                <AppServiceProviders appProps={app.props}>
-                    <DeprecatedServiceProviders app={app}>
-                        {props.children}
-                    </DeprecatedServiceProviders>
-                </AppServiceProviders>
-            </SessionProvider>
+            <LocalizationProvider localeCode="en">
+                <ThemeProvider source={() => document.getElementById('root')}>
+                    <DrawerProvider>
+                        <SessionProvider
+                            ref={this.moduleSession}
+                            reducer={this.moduleSessionHandler.reducer}
+                            onLoad={this.onSessionLoad}
+                            onDidMount={this.onSessionDidMount}
+                            onWillUnmount={this.onSessionWillUnmount}
+                            onUnload={this.onSessionUnload}>
+                            <DeprecatedServiceProviders app={app}>
+                                {props.children}
+                            </DeprecatedServiceProviders>
+                        </SessionProvider>
+                    </DrawerProvider>
+                </ThemeProvider>
+            </LocalizationProvider>
         );
     }
 }
