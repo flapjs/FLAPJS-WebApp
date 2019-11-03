@@ -15,7 +15,7 @@ class NodalGraphExporter extends SessionExporter
     {
         const graphController = session.graphController;
         const graph = graphController.getGraph();
-        const graphData = this._graphParser.objectify(graph);
+        const graphData = this._graphParser.compose(graph);
 
         dst['graphData'] = graphData;
     }

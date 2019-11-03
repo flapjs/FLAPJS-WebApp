@@ -9,7 +9,7 @@ class SafeUndoNodeGraphEventHandler extends AbstractEventHandler
         this._graphController = graphController;
         this._graphParser = graphParser;
 
-        this._graphData = this._graphParser.compose(graphController.getGraph());
+        this._graphData = graphParser.compose(graphController.getGraph());
     }
 
     /** @override */

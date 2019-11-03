@@ -20,6 +20,10 @@ import IndexedNodeGraph from '@flapjs/systems/graph/model/IndexedNodeGraph.js';
 import GraphNode from '@flapjs/systems/graph/model/elements/GraphNode.js';
 import QuadraticEdge from '@flapjs/systems/graph/model/elements/QuadraticEdge.js';
 
+import ExportService from '@flapjs/services/ExportService.js';
+import ImportService from '@flapjs/services/ImportService.js';
+import NotificationService from '@flapjs/services/NotificationService.js';
+
 // Theme Manager
 // Hotkeys?
 // Tooltips
@@ -27,10 +31,14 @@ import QuadraticEdge from '@flapjs/systems/graph/model/elements/QuadraticEdge.js
 const MODULE = {
     id: 'base',
     version: '1.0.0',
+    // TODO: Order is not guaranteed. This should probably be an array instead.
     services: {
-        autoSaveService: AutoSaveService,
+        exportService: ExportService,
+        importService: ImportService,
+        notificationService: NotificationService,
         undoService: UndoService,
         graphService: GraphService,
+        autoSaveService: AutoSaveService,
     },
     renders: {
         appbar: [ ],
@@ -38,9 +46,11 @@ const MODULE = {
         viewport: [ BaseViewportLayer ],
         drawer: [ AboutPanel ],
     },
+    // TODO: These should be defined in preload instead...
     imports: [
         new NodeGraphImporter(NodeGraphParser.JSON, [ '.json', '.base.json', '.fa.json', '.fsa.json' ])
     ],
+    // TODO: These should be defined in preload instead...
     exports: {
         session: new NodeGraphExporter(NodeGraphParser.JSON),
         ...IMAGE_EXPORTERS
@@ -84,6 +94,7 @@ const MODULE = {
         // This is called after all services have been created AND loaded, but before they are rendered.
         // This is usually where you load the state for the services or session.
         session.graphService.graph.createNode();
+        session.notificationService.notificationManager.pushNotification('Welcome to Flap.js!');
     },
     unload(session)
     {

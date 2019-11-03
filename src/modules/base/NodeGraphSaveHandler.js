@@ -14,7 +14,7 @@ class NodeGraphSaveHandler extends SessionSaver
         const data = dataStorage.getDataAsObject('graph-' + currentModuleID);
         if (data)
         {
-            this._importManager.tryImportFileFromData(session, '', '.json', data);
+            session.importManager.tryImportFileFromData(session, '', '.json', data);
         }
     }
 
@@ -22,7 +22,7 @@ class NodeGraphSaveHandler extends SessionSaver
     onSessionSave(session, dataStorage)
     {
         const currentModuleID = session.moduleID;
-        this._exportManager.tryExportTargetToData('session', session)
+        session.exportManager.tryExportTargetToData('session', session)
             .then(result =>
             {
                 dataStorage.setDataAsObject('graph-' + currentModuleID, result.data);
