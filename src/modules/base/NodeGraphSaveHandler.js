@@ -1,4 +1,4 @@
-import SessionSaver from './SessionSaver.js';
+import SessionSaver from '@flapjs/session/helper/SessionSaver.js';
 
 class NodeGraphSaveHandler extends SessionSaver
 {

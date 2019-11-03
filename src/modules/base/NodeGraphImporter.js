@@ -1,4 +1,4 @@
-import SessionImporter from '@flapjs/modules/base/SessionImporter.js';
+import SessionImporter from '@flapjs/session/helper/SessionImporter.js';
 
 class NodeGraphImporter extends SessionImporter
 {

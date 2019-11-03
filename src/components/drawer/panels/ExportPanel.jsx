@@ -4,7 +4,7 @@ import ExportTab from './ExportTab.jsx';
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
 import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
 
-import SessionExporter from '@flapjs/modules/base/SessionExporter.js';
+import SessionExporter from '@flapjs/session/helper/SessionExporter.js';
 
 class ExportPanel extends React.Component
 {
