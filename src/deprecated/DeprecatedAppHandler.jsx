@@ -6,21 +6,6 @@ import { NotificationConsumer } from '@flapjs/deprecated/notification/Notificati
 import ExportPanel from '@flapjs/components/drawer/panels/ExportPanel.jsx';
 import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
 
-export function initialize(session)
-{
-    
-}
-
-export function componentDidMount(session)
-{
-    session.notificationManager.pushNotification('Welcome to Flap.js!');
-}
-
-export function componentWillUnmount(session)
-{
-    
-}
-
 export function renderAppBar()
 {
     return (

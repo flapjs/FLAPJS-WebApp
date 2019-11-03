@@ -9,6 +9,13 @@ class ExportService extends AbstractService
         super();
         
         this.exportManager = new ExportManager();
+        this.exports = {};
+    }
+
+    setExports(moduleExports)
+    {
+        this.exports = moduleExports;
+        return this;
     }
 
     /** @override */
@@ -16,16 +23,13 @@ class ExportService extends AbstractService
     {
         super.load(session);
 
-        const currentModule = session.module;
-        if (currentModule && typeof currentModule.exports === 'object')
+        for(const exportType of Object.keys(this.exports))
         {
-            for(const exportType of Object.keys(currentModule.exports))
-            {
-                this.exportManager.registerExporter(currentModule.exports[exportType], exportType);
-            }
+            this.exportManager.registerExporter(this.exports[exportType], exportType);
         }
 
         session.exportManager = this.exportManager;
+
         return this;
     }
 
@@ -35,8 +39,10 @@ class ExportService extends AbstractService
         super.unload(session);
 
         this.exportManager.clear();
+        this.exports = {};
 
         delete session.exportManager;
+
         return this;
     }
 }

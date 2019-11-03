@@ -46,15 +46,6 @@ const MODULE = {
         viewport: [ BaseViewportLayer ],
         drawer: [ AboutPanel ],
     },
-    // TODO: These should be defined in preload instead...
-    imports: [
-        new NodeGraphImporter(NodeGraphParser.JSON, [ '.json', '.base.json', '.fa.json', '.fsa.json' ])
-    ],
-    // TODO: These should be defined in preload instead...
-    exports: {
-        session: new NodeGraphExporter(NodeGraphParser.JSON),
-        ...IMAGE_EXPORTERS
-    },
     menus: {
         file: [
             // NewMenuOption,
@@ -85,6 +76,12 @@ const MODULE = {
     {
         // This is called after all services have been created, but before they are loaded.
         // This is usually where you setup the session to be loaded correctly (instead of passing args to constructor).
+        session.importService.addImporter(new NodeGraphImporter(NodeGraphParser.JSON, [ '.json', '.base.json', '.fa.json', '.fsa.json' ]));
+        session.exportService
+            .setExports({
+                session: new NodeGraphExporter(NodeGraphParser.JSON),
+                ...IMAGE_EXPORTERS
+            });
         session.graphService.setGraph(new IndexedNodeGraph(GraphNode, QuadraticEdge));
         session.undoService.setEventHandlerFactory(() => new SafeUndoNodeGraphEventHandler(session.graphController, NodeGraphParser.JSON));
         session.autoSaveService.setAutoSaveHandler(new NodeGraphSaveHandler(session));

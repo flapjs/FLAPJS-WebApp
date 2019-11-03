@@ -9,6 +9,13 @@ class ImportService extends AbstractService
         super();
         
         this.importManager = new ImportManager();
+        this.importers = [];
+    }
+
+    addImporter(importer)
+    {
+        this.importers.push(importer);
+        return this;
     }
 
     /** @override */
@@ -16,19 +23,13 @@ class ImportService extends AbstractService
     {
         super.load(session);
 
-        const currentModule = session.module;
-        if (currentModule)
+        for(const importer of this.importers)
         {
-            if (Array.isArray(currentModule.imports))
-            {
-                for(const importer of currentModule.imports)
-                {
-                    this.importManager.addImporter(importer, ...importer.getFileTypes());
-                } 
-            }
+            this.importManager.addImporter(importer, ...importer.getFileTypes());
         }
 
         session.importManager = this.importManager;
+
         return this;
     }
 
@@ -38,8 +39,10 @@ class ImportService extends AbstractService
         super.unload(session);
 
         this.importManager.clear();
+        this.importers.length = 0;
 
         delete session.importManager;
+
         return this;
     }
 }
