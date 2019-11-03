@@ -29,6 +29,14 @@ class App extends React.Component
         super(props);
 
         Logger.out(LOGGER_TAG, '...constructing app...');
+        /**
+         * Data should be managed outside of the render function. BEFORE the providers are created.
+         * 
+         * Data Store => Where data is instantiated, destroyed, and updated
+         * Context => The connection points between data and components.
+         * 
+         * That means, Stores should be created first. Then contexts should take a store as props.
+         */
     }
 
     /** @override */

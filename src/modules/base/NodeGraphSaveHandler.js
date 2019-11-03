@@ -1,63 +1,32 @@
-import AbstractAutoSaveHandler from '@flapjs/deprecated/autosave/AbstractAutoSaveHandler.js';
+import SessionSaver from './SessionSaver.js';
 
-import Logger from '@flapjs/util/Logger.js';
-const LOGGER_TAG = 'NodeGraphSaveHandler';
-
-class NodeGraphSaveHandler extends AbstractAutoSaveHandler
+class NodeGraphSaveHandler extends SessionSaver
 {
-    constructor(session, importManager, exportManager)
+    constructor(session)
     {
-        super();
-        
-        this._session = session;
-        this._importManager = importManager;
-        this._exportManager = exportManager;
+        super(session);
     }
 
     /** @override */
-    onAutoSaveLoad(dataStorage)
+    onSessionLoad(session, dataStorage)
     {
-        const currentModuleID = this._session.moduleID;
-
+        const currentModuleID = session.moduleID;
         const data = dataStorage.getDataAsObject('graph-' + currentModuleID);
         if (data)
         {
-            try
-            {
-                this._importManager.tryImportFileFromData(this._session, '', '.json', data);
-            }
-            catch(e)
-            {
-                // Ignore error
-                Logger.error(LOGGER_TAG, 'Unable to auto load graph', e);
-            }
+            this._importManager.tryImportFileFromData(session, '', '.json', data);
         }
     }
 
     /** @override */
-    onAutoSaveUpdate(dataStorage)
+    onSessionSave(session, dataStorage)
     {
-        const currentModuleID = this._session.moduleID;
-
-        try
-        {
-            this._exportManager.tryExportTargetToData('session', this._session)
-                .then(result =>
-                {
-                    dataStorage.setDataAsObject('graph-' + currentModuleID, result.data);
-                });
-        }
-        catch(e)
-        {
-            // Ignore error
-            Logger.error(LOGGER_TAG, 'Unable to auto save graph', e);
-        }
-    }
-
-    /** @override */
-    onAutoSaveUnload(dataStorage)
-    {
-        //Don't do anything...
+        const currentModuleID = session.moduleID;
+        this._exportManager.tryExportTargetToData('session', session)
+            .then(result =>
+            {
+                dataStorage.setDataAsObject('graph-' + currentModuleID, result.data);
+            });
     }
 }
 

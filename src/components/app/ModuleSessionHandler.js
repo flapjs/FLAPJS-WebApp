@@ -14,11 +14,35 @@ class ModuleSessionHandler
         this.module = currentModule;
         this.changeModuleCallback = changeModuleCallback;
 
+        this.onPreLoad = this.onPreLoad.bind(this);
         this.onLoad = this.onLoad.bind(this);
         this.onDidMount = this.onDidMount.bind(this);
         this.onWillUnmount = this.onWillUnmount.bind(this);
         this.onUnload = this.onUnload.bind(this);
         this.reducer = this.reducer.bind(this);
+    }
+
+    onPreLoad(session)
+    {
+        const currentModule = this.module;
+
+        session.module = currentModule;
+        session.moduleID = currentModule ? currentModule.id : null;
+
+        if (currentModule)
+        {
+            try
+            {
+                if (typeof currentModule.preload === 'function')
+                {
+                    currentModule.preload(session);
+                }
+            }
+            catch(e)
+            {
+                Logger.error(LOGGER_TAG, 'Module failed setup session.', e);
+            }
+        }
     }
 
     onLoad(session)
