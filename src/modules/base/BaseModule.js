@@ -13,7 +13,7 @@ import AutoSaveService from './service/AutoSaveService.js';
 import NodeGraphSaveHandler from '@flapjs/modules/base/NodeGraphSaveHandler';
 
 import UndoService from './service/UndoService.js';
-import SafeGraphEventHandler from '@flapjs/modules/base/SafeGraphEventHandler.js';
+import SafeUndoNodeGraphEventHandler from '@flapjs/systems/graph/controller/SafeUndoNodeGraphEventHandler.js';
 
 import GraphService from './service/GraphService.js';
 import IndexedNodeGraph from '@flapjs/systems/graph/model/IndexedNodeGraph.js';
@@ -74,7 +74,7 @@ const MODULE = {
     preload(session)
     {
         session.graphService.setGraph(new IndexedNodeGraph(GraphNode, QuadraticEdge));
-        session.undoService.setEventHandlerFactory(() => new SafeGraphEventHandler(session.graphController, NodeGraphParser.JSON));
+        session.undoService.setEventHandlerFactory(() => new SafeUndoNodeGraphEventHandler(session.graphController, NodeGraphParser.JSON));
         session.autoSaveService.setAutoSaveHandler(new NodeGraphSaveHandler(session));
     },
     load(session)
