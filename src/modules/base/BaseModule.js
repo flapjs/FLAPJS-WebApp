@@ -73,12 +73,16 @@ const MODULE = {
     },
     preload(session)
     {
+        // This is called after all services have been created, but before they are loaded.
+        // This is usually where you setup the session to be loaded correctly (instead of passing args to constructor).
         session.graphService.setGraph(new IndexedNodeGraph(GraphNode, QuadraticEdge));
         session.undoService.setEventHandlerFactory(() => new SafeUndoNodeGraphEventHandler(session.graphController, NodeGraphParser.JSON));
         session.autoSaveService.setAutoSaveHandler(new NodeGraphSaveHandler(session));
     },
     load(session)
     {
+        // This is called after all services have been created AND loaded, but before they are rendered.
+        // This is usually where you load the state for the services or session.
         session.graphService.graph.createNode();
     },
     unload(session)
