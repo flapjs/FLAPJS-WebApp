@@ -63,6 +63,19 @@ export class Rule
     {
         return stringHash(this._lhs + '->' + this._rhs);
     }
+
+    /**
+     * Compare if two Rules are equal, two rules are equal if and only if there LHF are equal
+     * and RHS are equal
+     * @param {Rule} firstRule the first rule to be compared.
+     * @param {Rule} secondRule the second rule to be compared.
+     * @return {boolean} true if two Rules are equal, false otherwise.
+     */
+    isEqual(firstRule, secondRule) 
+    {
+        return (firstRule._lhs === secondRule._lhs) && 
+               (firstRule._rhs === secondRule._rhs);
+    }
 }
 
 /**
@@ -152,15 +165,30 @@ class CFG
         //TODO Check if its a proper CFG(unreachable symbols, cycles, etc)????? Ehhhh?
         return this.isValid();
     }
+
+    /**
+     * TODO: Check if this CFG is a valid CFG, current version only returns if the CFG is error free.
+     * @return {boolean} true if the CFG is valid, false otherwise.
+     */
     isValid()
     {
         return this._errors.length == 0;
     }
+
+    /**
+     * Return the errors the current CFG has, in the form of an array.
+     * @return {Array} the errors of the current CFG.
+     */
     getErrors()
     {
         return this._errors;
     }
 
+    /**
+     * Check if a Rule is valid. A rule is valid if it has only one variable on the LHS, and 
+     * the RHS contains rules and variables within the CFG. 
+     * @param {Rule} rule the Rule to check.
+     */
     isRuleValid(rule)
     {
         //LHS is size 1 and is a variable
@@ -181,6 +209,7 @@ class CFG
     /**
      * Replace all rules with multiple substitutions, like S -> a | b,
      * into multiple rules with each substitution it's own rule: S -> a and S -> b
+     * @param {boolean} changeCFG if set to true will modify the parameter CFG itself.
      */
     separateRulesBySubstitutions(changeCFG=false)
     {
@@ -197,15 +226,15 @@ class CFG
     }
 
     /**
-     * @param {Rule} rule   rule to insert into CFG.
      * rule can have a RHS with pipes to represent multiple substitutions
      *      e.g. S -> a | b
      * Also, every rule that is added, the LHS is added to varaibles, and for the RHS,
      * characters that aren't pipes, EMPTY, or Variables are added to Terminals
      *
      * NOTE, this means there is the potential to add intended Variables as Terminals if they
-     * are on the rhs of a rule before they get their own rule where they are on the LHS, this
+     * are on the RHS of a rule before they get their own rule where they are on the LHS, this
      * is why we will remove the LHS variable from terminals for every newly added rule
+     * @param {Rule} rule  rule to insert into CFG.
      */
     addRule(rule)
     {
@@ -223,70 +252,153 @@ class CFG
         }
         this._rules.push(rule);
     }
+
+    /**
+     * Check if the CFG contains a certain rule. 
+     * @param {Rule} rule true if the rule is in the CFG, false otherwise.
+     */
     hasRule(rule)
     {
-        return this._rules.includes(rule);
+        // do a deep copy, looping this._rules and call isEqual
+        for(let existingRule of this._rules) 
+        {
+            if(existingRule.isEqual(rule)) 
+            {
+                return true;
+            }
+        }
+        return false;
     }
+
+    /**
+     * Get the set of Rules of this CFG.
+     * @return {Array} the set of Rules of this CFG. 
+     */
     getRules()
     {
         return this._rules;
     }
+
+    /**
+     * Clear the set of Rules of this CFG.
+     */
     clearRules()
     {
         this._rules.length = 0;
     }
 
+    /**
+     * Add a variable to the set of variables. 
+     * @param {String} x the variable to add to the set of variables.
+     */
     addVariable(x)
     {
         this._variables.add(x);
     }
+
+    /**
+     * Remove a variable from the set of variables.
+     * @param {String} x the variable to remove from the set of variables.
+     */
     removeVariable(x)
     {
         this._variables.delete(x);
     }
+
+    /**
+     * Check if a variable exists in the set of variables.
+     * @param {String} x the variable to check.
+     * @return {boolean} true if the variable is in the grammar, false otherwise.
+     */
     hasVariable(x)
     {
         return this._variables.has(x);
     }
+
+    /**
+     * Get the set of variables of this grammar.
+     * @return {Set} the set of variables of this grammar.
+     */
     getVariables()
     {
         return this._variables;
     }
+
+    /**
+     * Clear the set of variables of this grammar.
+     */
     clearVariables()
     {
         this._variables.clear();
     }
 
+    /**
+     * Add a terminal to the set of terminals of this grammar.
+     * @param {String} x the terminal to add to the grammar.
+     */
     addTerminal(x)
     {
         this._terminals.add(x);
     }
+
+    /**
+     * Remove a terminal from the set of terminals of this grammar.
+     * @param {String} x the terminal to remove from the grammar.
+     */
     removeTerminal(x)
     {
         this._variables.delete(x);
     }
+
+    /**
+     * Check if a terminal is in the set of terminals of this grammar.
+     * @param {String} x the terminal to check for.
+     * @return {Boolean} true if the terminal is in the grammar, false otherwise.
+     */
     hasTerminal(x)
     {
         return this._terminals.has(x);
     }
+
+    /**
+     * Get the set of terminals of this grammar.
+     * @return {Set} the set of terminals of this grammar.
+     */
     getTerminals()
     {
         return this._terminals;
     }
+
+    /**
+     * Clear the set of terminals of this grammar.
+     */
     clearTerminals()
     {
         this._terminals.clear();
     }
 
+    /**
+     * Set the start variable of the grammar.
+     * @param {String} x set the start variable of the grammar.
+     */
     setStartVariable(x)
     {
         this._startVariable = x;
     }
+
+    /**
+     * Get the start variable of the grammar.
+     * @return {String} the start variable of the grammar.
+     */
     getStartVariable()
     {
         return this._startVariable;
     }
 
+    /**
+     * Return the hash code specific to the current grammar. The hash code
+     * is computed based on the four elements of a grammar.
+     */
     getHashCode()
     {
         let string = '';
