@@ -1,6 +1,5 @@
 import BasePlaygroundLayer from './BasePlaygroundLayer.jsx';
 import BaseViewportLayer from './BaseViewportLayer.jsx';
-import BaseToolbarLayer from './BaseToolbarLayer.jsx';
 import AboutPanel from './AboutPanel.jsx';
 
 import IndexedNodeGraph from '@flapjs/systems/graph/model/IndexedNodeGraph.js';
@@ -38,7 +37,7 @@ const MODULE = {
         */
     },
     renders: {
-        appbar: [ BaseToolbarLayer ],
+        appbar: [ ],
         playground: [ BasePlaygroundLayer ],
         viewport: [ BaseViewportLayer ],
         drawer: [ AboutPanel ],
