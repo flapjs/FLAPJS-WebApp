@@ -9,13 +9,13 @@ import { IMAGE_EXPORTERS } from './NodeGraphImageExporters.js';
 import * as NodeGraphParser from './NodeGraphParser.js';
 import NodeGraphImporter from '@flapjs/modules/base/NodeGraphImporter.js';
 
-import AutoSaveService from './service/AutoSaveService.js';
+import AutoSaveService from '@flapjs/services/AutoSaveService.js';
 import NodeGraphSaveHandler from '@flapjs/modules/base/NodeGraphSaveHandler';
 
-import UndoService from './service/UndoService.js';
+import UndoService from '@flapjs/services/UndoService.js';
 import SafeUndoNodeGraphEventHandler from '@flapjs/systems/graph/controller/SafeUndoNodeGraphEventHandler.js';
 
-import GraphService from './service/GraphService.js';
+import GraphService from '@flapjs/services/GraphService.js';
 import IndexedNodeGraph from '@flapjs/systems/graph/model/IndexedNodeGraph.js';
 import GraphNode from '@flapjs/systems/graph/model/elements/GraphNode.js';
 import QuadraticEdge from '@flapjs/systems/graph/model/elements/QuadraticEdge.js';
