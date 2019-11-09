@@ -21,6 +21,17 @@ export class Rule
         this._rhs = rhs.replace(/\s/g,'');
     }
 
+    /**
+     * Creaet a deep copy of the calling Rule.
+     * @param {Rule} other the Rule to copy from.
+     * @return {Rule} a new object equivalent to the calling Rule.
+     */
+    copyFromRule({_lhs: lhs, _rhs: rhs}) 
+    {
+        this._lhs = lhs;
+        this._rhs = rhs;
+    }
+
     setLHS(x)
     {
         this._lhs = x.replace(/\s/g,'');
@@ -65,16 +76,15 @@ export class Rule
     }
 
     /**
-     * Compare if two Rules are equal, two rules are equal if and only if there LHF are equal
-     * and RHS are equal
-     * @param {Rule} firstRule the first rule to be compared.
-     * @param {Rule} secondRule the second rule to be compared.
+     * Compare if the calling object and another Rule are equal, two rules are equal 
+     * if and only if there LHF are equal and RHS are equal. 
+     * @param {Rule} other the other rule to be compared.
      * @return {boolean} true if two Rules are equal, false otherwise.
      */
-    isEqual(firstRule, secondRule) 
+    isEqual(other) 
     {
-        return (firstRule._lhs === secondRule._lhs) && 
-               (firstRule._rhs === secondRule._rhs);
+        return (this._lhs === this._lhs) && 
+               (other._rhs === other._rhs);
     }
 }
 
@@ -98,6 +108,31 @@ class CFG
         this._rules = rules;
         this._startVariable = startVariable;
         this._errors = [];
+    }
+
+    /**
+     * Create a CFG from another CFG, this is a deep copy.
+     * @param {CFG} another the CFG to copy from
+     * @return {CFG} a new CFG having exactly the same content as the input CFG. 
+     */
+    copyFromCFG({ _variables : variables, _terminals : terminals, _rules : rules, 
+        _startVariable: startVariable, _errors: errors }) 
+    {
+        this._variables = new Set(variables);
+        this._terminals = new Set(terminals);
+        this._rules = [];
+        for (let rule of rules) 
+        {
+            let newRule = new Rule();
+            newRule.copyFromRule(rule);
+            this._rules.push(newRule);
+        }
+        this._startVariable = new String(startVariable);
+        this._errors = [];
+        for (let error of errors) 
+        {
+            this._errors.push(new Error(error.message));
+        }
     }
 
     /**

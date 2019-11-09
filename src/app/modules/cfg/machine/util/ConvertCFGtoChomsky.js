@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import CFG from '../CFG.js';
 import Rule from '../CFG.js';
 
@@ -27,7 +28,8 @@ export function convertCFGtoChomsky(CFG)
     * 
     * We will build a method for each of the four steps.
     */
-    let result = newStartVariable(CFG);
+    let result = CFG.separateRulesBySubstitutions();
+    result = newStartVariable(result);
     result = eliminateEpsilonRules(result);
     result = eliminateUnitRules(result);
     result = cleanUp(result);    
@@ -37,17 +39,26 @@ export function convertCFGtoChomsky(CFG)
 /**
  * Step one in the conversion of a CFG to its Chomsky normal form. Set a 
  * new start variable so a start variable will never appear on RHS of a rule.
+ * Note that this function does not change it's parameter, it creates a 
+ * new copy in which changes are made.
  * @param {CFG} CFG the CFG to be processed.
  * @return {CFG} the CFG after setting a new start variable.
  */
 function newStartVariable(CFG) 
 {
     let newCFG = new CFG(CFG);
-    newCFG.addRule(new Rule('S_0', CFG.getStartVariable()));
-    newCFG.setStartVariable('S_0');
+    newCFG.addRule(new Rule('S_New', CFG.getStartVariable()));
+    newCFG.setStartVariable('S_New');
     return newCFG;
 }
 
+/**
+ * Step two in the conversion of a CFG to its Chomsky normal form. This step
+ * eliminate all the epsilon rules in the CFG, and add new Rules for every 
+ * eliminated rules. This can potentially lead to exponential blow.
+ * @param {CFG} CFG the CFG to be processed.
+ * @return {CFG} An equivalent CFG free of any epsilon rules.
+ */
 function eliminateEpsilonRules(CFG) 
 {
     return;
