@@ -39,7 +39,7 @@ class ExportPanel extends React.Component
                     {
                         session => (
                             <ul>
-                                {session.exportManager.getExportTypes().map(exportType => this.renderExportOption(exportType, session))}
+                                {session.exportManager && session.exportManager.getExportTypes().map(exportType => this.renderExportOption(exportType, session))}
                             </ul>
                         )
                     }
