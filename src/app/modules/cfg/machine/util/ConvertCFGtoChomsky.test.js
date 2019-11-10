@@ -3,7 +3,7 @@ import { solvePDA } from 'modules/pda/machine/PDAUtils.js';
 import {convertToPDA} from './ConvertCFG.js';
 import CFG, {Rule, PIPE} from '../CFG.js';
 import { EMPTY } from 'modules/re/machine/RE.js';
-import { newStartVariable } from './ConvertCFGtoChomsky.js';
+import { newStartVariable, eliminateEpsilonVariable } from './ConvertCFGtoChomsky.js';
 import { getConsoleOutput } from '@jest/console';
 
 describe('Testing indicesOf() method of Rule', () => {
@@ -20,6 +20,44 @@ describe('Testing indicesOf() method of Rule', () => {
     test('Testing the Rule \'A -> A_1A_2A_3A_11A_1A_2\'', () => {
         expect(rule3.indicesOf('A_1')).toEqual([0, 13]);
     }); 
+});
+
+describe("Testing eliminateEpsilonVariable() function of ConvertCFGtoChomsky", () => 
+{
+    let rule = new Rule('A', 'bAbAb');
+    let addedRules = eliminateEpsilonVariable(rule, 'A');
+    let expectedResult = [
+        new Rule('A', 'bbb'),
+        new Rule('A', 'bbAb'),
+        new Rule('A', 'bAbb'),
+    ];
+    test('Testing the rules added after removing \'A\' from \'bAbAb\'', () => 
+    {
+        expect(addedRules).toStrictEqual(expectedResult);
+    });
+    rule = new Rule('S_New', 'bA_1A_2bA_12bA_1A_1bA_1');
+    addedRules = eliminateEpsilonVariable(rule, 'A_1');
+    expectedResult = [
+        new Rule('S_New', 'bA_2bA_12bb'), // 0000
+        new Rule('S_New', 'bA_2bA_12bbA_1'), // 0001
+        new Rule('S_New', 'bA_2bA_12bA_1b'), // 0010
+        new Rule('S_New', 'bA_2bA_12bA_1bA_1'), // 0011
+        new Rule('S_New', 'bA_2bA_12bA_1b'), // 0100
+        new Rule('S_New', 'bA_2bA_12bA_1bA_1'), // 0101
+        new Rule('S_New', 'bA_2bA_12bA_1A_1b'), // 0110
+        new Rule('S_New', 'bA_2bA_12bA_1A_1bA_1'), // 0111
+        new Rule('S_New', 'bA_1A_2bA_12bb'), // 1000
+        new Rule('S_New', 'bA_1A_2bA_12bbA_1'), // 1001
+        new Rule('S_New', 'bA_1A_2bA_12bA_1b'), // 1010
+        new Rule('S_New', 'bA_1A_2bA_12bA_1bA_1'), // 1011
+        new Rule('S_New', 'bA_1A_2bA_12bA_1b'), // 1100
+        new Rule('S_New', 'bA_1A_2bA_12bA_1bA_1'), // 1101
+        new Rule('S_New', 'bA_1A_2bA_12bA_1A_1b'), // 1110
+    ];
+    test('Testing the rules added after removing \'A_1\' from \'bA_1A_2bA_12bA_1A_1bA_1\'', () => 
+    {
+        expect(addedRules).toStrictEqual(expectedResult);
+    });
 });
 
 describe('Testing copy constructor of CFG', () => {
@@ -86,7 +124,7 @@ describe('Testing copy constructor of CFG', () => {
     });
 });
 
-describe('Testing function newStartVariable()', () => {
+describe('Testing newStartVariable() function of ConvertCFGtoChomsky', () => {
     let variables = new Set(['A', 'B']);
     let terminals = new Set(['a', 'b']);
     let rule1 = new Rule('A', 'a');

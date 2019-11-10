@@ -88,24 +88,7 @@ function eliminateEpsilonRules(cfg)
             for(let otherRules of ruleRemoved)             
             {
                 let indices = otherRules.indicesOf(rule.getLHS());
-                if(indices.length) // not empty
-                {
-                    for(let i = 0; i < (2**indices.length); i++)
-                    {
-                        let iInBinary = i.toString(2)
-                            .padStart(indices.length, '0'); 
 
-                        // work in the reverse order so don't encounter index issue
-                        let tempNewRule = otherRules.getRHS().slice();
-                        for(let j = iInBinary.length - 1; j >= 0; j--)
-                        {
-                            if(iInBinary[j] === '0')
-                            {
-                                tempNewRule = tempNewRule.slice(0, indices);
-                            }
-                        }
-                    }
-                }
             }
             rulesProcessed[rule] = true; // mark it as done
         }
@@ -128,13 +111,40 @@ function eliminateEpsilonRules(cfg)
  * another (2^n-1) rules, not counting the rule we started with. 
  * @param {Rule} rule the rule from which the variable is removed
  * @param {String} variable the variable to remove
- * @return {Rule} a new rule from which each occurrence of the
- *                variable are eliminated 
+ * @return {Array} a new rule from which each occurrence of the
+ *                 variable are eliminated, empty if this rule doesn't
+ *                 contain variable.
  */
-export function eliminateVariableWithIndices(rule, variable) 
+export function eliminateEpsilonVariable(rule, variable) 
 {
+    let indices = rule.indicesOf(variable);
+    let addedRules = [];
+    if(indices.length) // not empty
+    {
+        // 2**indices.length because of the exponential explosion as explained
+        // in function header and -1 because we don't want string of all 1's
+        for(let i = 0; i < (2**indices.length - 1); i++)
+        {
+            // convert to binary, pad to indices.length(), each 
+            // binary string encode a specific the occurrence of variable
+            let iInBinary = i.toString(2).padStart(indices.length, '0'); 
 
+            // work in the reverse order so we don't encounter index issue
+            let tempNewRuleRHS = rule.getRHS().slice();
+            for(let j = iInBinary.length - 1; j >= 0; j--)
+            {
+                if(iInBinary[j] === '0')
+                {
+                    tempNewRuleRHS = tempNewRuleRHS.slice(0, indices[j]) + 
+                                  tempNewRuleRHS.slice(indices[j] + variable.length);
+                }
+            }
+            addedRules.push(new Rule(rule.getLHS(), tempNewRuleRHS));
+        }
+    }
+    return addedRules;
 }
+
 function eliminateUnitRules(cfg)
 {
     return;
