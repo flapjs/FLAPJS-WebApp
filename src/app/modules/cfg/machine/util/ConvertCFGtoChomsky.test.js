@@ -31,7 +31,7 @@ describe("Testing eliminateEpsilonVariable() function of ConvertCFGtoChomsky", (
         new Rule('A', 'bbAb'),
         new Rule('A', 'bAbb'),
     ];
-    test('Testing the rules added after removing \'A\' from \'bAbAb\'', () => 
+    test('Testing the rules added after removing \'A\' from \'A -> bAbAb\'', () => 
     {
         expect(addedRules).toStrictEqual(expectedResult);
     });
@@ -54,7 +54,32 @@ describe("Testing eliminateEpsilonVariable() function of ConvertCFGtoChomsky", (
         new Rule('S_New', 'bA_1A_2bA_12bA_1bA_1'), // 1101
         new Rule('S_New', 'bA_1A_2bA_12bA_1A_1b'), // 1110
     ];
-    test('Testing the rules added after removing \'A_1\' from \'bA_1A_2bA_12bA_1A_1bA_1\'', () => 
+    test('Testing the rules added after removing \'A_1\' from \'S_New -> bA_1A_2bA_12bA_1A_1bA_1\'', () => 
+    {
+        expect(addedRules).toStrictEqual(expectedResult);
+    });
+    // this one should return an empty array since there is no variable 'B' in the rule
+    addedRules = eliminateEpsilonVariable(rule, 'B');
+    expectedResult = [];
+    test('Testing the rules added after removing \'B\' from \'S_New -> bA_1A_2bA_12bA_1A_1bA_1\'', () => 
+    {
+        expect(addedRules).toStrictEqual(expectedResult);
+    });
+    // this one should return an empty array since A -> epsilon was already eliminated
+    rule = new Rule('A', 'B');
+    addedRules = eliminateEpsilonVariable(rule, 'B', true);
+    expectedResult = [];
+    test('Testing the rules added after removing \'B\' from \'A -> B\', under the \
+assumption that A -> epsilon was already eliminated', () => 
+    {
+        expect(addedRules).toStrictEqual(expectedResult);
+    });
+    // this one should return [A -> EMPTY]
+    rule = new Rule('A', 'B');
+    addedRules = eliminateEpsilonVariable(rule, 'B', false);
+    expectedResult = [new Rule('A', EMPTY)];
+    test('Testing the rules added after removing \'B\' from \'A -> B\', under the \
+assumption that A -> epsilon was not eliminated', () => 
     {
         expect(addedRules).toStrictEqual(expectedResult);
     });

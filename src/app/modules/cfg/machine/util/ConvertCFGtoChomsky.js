@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import CFG from '../CFG.js';
 import {Rule} from '../CFG.js';
+import { EMPTY } from 'modules/re/machine/RE.js';
 
 /**
  * Convert a CFG into Chomksy normal form.
@@ -70,35 +71,58 @@ function eliminateEpsilonRules(cfg)
     let newCFG = new CFG();
     newCFG.copyFromCFG(cfg);
 
-    let rulesProcessed = newCFG._Rules.reduce((acc, cur) => 
+    let variablesEliminated = newCFG._rules.reduce((acc, cur) => 
     {
-        if (!acc[cur]) 
-        {
-            acc[cur] = false;
-        }
+        acc[cur.getLHS()] = false;
         return acc;
-    }, {}); // to prevent working on processed rules again
+    }, {}); // to prevent working on eliminated variable again
 
     // loop through newCFG._Rules to remove epsilon rules
-    for(let rule of newCFG._Rules) 
+    for(let rule of newCFG._rules) 
     {
-        if(rule.isEpsilon()) 
+        if(rule.isEpsilon() && !variablesEliminated[rule.getLHS()]) 
         {
             let ruleRemoved = newCFG.removeRule(rule);
-            for(let otherRules of ruleRemoved)             
+
+            // check if the LHS variable has this epsilon rule as it's only rule
+            let hasOnlyEpsilon = true;
+            for(let temp of newCFG._rules) 
             {
-                let indices = otherRules.indicesOf(rule.getLHS());
-
+                if(!temp.getLHS().localeCompare(rule.getLHS()) &&
+                    temp.getRHS().localeCompare(rule.getRHS()))
+                {
+                    hasOnlyEpsilon = false;
+                }
             }
-            rulesProcessed[rule] = true; // mark it as done
+
+            for(let otherRule of ruleRemoved)             
+            {
+                // if LHS variable has this epsilon rule as it's only rule, 
+                // just remove all occurence of rule's LHS in otherRule
+                if(hasOnlyEpsilon)
+                {
+                    newCFG._rules.push(otherRule.getRHS().replace(new RegExp(rule.getLHS(), 'g'), ''));
+                }
+                else
+                {
+                    let addedRules = eliminateEpsilonVariable(otherRule, rule.getLHS(),
+                        variablesEliminated[otherRule.getLHS()]);
+                    newCFG._rules = newCFG._rules.concat(addedRules);
+                }
+            }
+            variablesEliminated[rule.getLHS()] = true; // mark it as done
+            // remove the LHS variable from the set of variables if it only has
+            // this epsilpn rule
+            if(hasOnlyEpsilon)
+            {
+                newCFG._variables = newCFG._variables.filter((cur) => 
+                {
+                    return cur.localeCompare(rule.getLHS());
+                });
+            }
         }
-
-        // TODO: do a clean up on the grammar: that is, to remove 
-        // terminals from the set of terminals if it has no rules
-        // anymore
-
     }
-    return;
+    return newCFG;
 }
 
 
@@ -111,12 +135,27 @@ function eliminateEpsilonRules(cfg)
  * another (2^n-1) rules, not counting the rule we started with. 
  * @param {Rule} rule the rule from which the variable is removed
  * @param {String} variable the variable to remove
+ * @param {boolean} LHSeliminated true if the LHS of this rule had a 
+ *                  rule LHS -> epsilon and it was already, this prevent
+ *                  this process from adding LHS -> epsilon again. However,
+ *                  if false, we will add LHS -> epsilon this rule is
+ *                  LHS -> variable.
  * @return {Array} a new rule from which each occurrence of the
  *                 variable are eliminated, empty if this rule doesn't
  *                 contain variable.
  */
-export function eliminateEpsilonVariable(rule, variable) 
+export function eliminateEpsilonVariable(rule, variable, LHSeliminated = false) 
 {
+    // When the rule is LHS -> variable
+    if(!rule.getRHS().localeCompare(variable))
+    {
+        if(LHSeliminated) 
+        {
+            return [];
+        }
+        return [new Rule(rule.getLHS().slice(), EMPTY)];
+    }
+
     let indices = rule.indicesOf(variable);
     let addedRules = [];
     if(indices.length) // not empty
