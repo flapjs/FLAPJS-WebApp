@@ -3,5 +3,6 @@
     "css.validate": false,
     "less.validate": false,
     "scss.validate": false,
-    "javascript.preferences.quoteStyle": "single"
+    "javascript.preferences.quoteStyle": "single",
+    "eslint.autoFixOnSave": true
 }
