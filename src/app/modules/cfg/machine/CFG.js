@@ -1,5 +1,6 @@
 import { guid, stringHash } from 'util/MathHelper.js';
 import { EMPTY } from 'modules/re/machine/RE.js';
+import { getConsoleOutput } from '@jest/console';
 
 export const PIPE = '|';
 
@@ -83,8 +84,52 @@ export class Rule
      */
     isEqual(other) 
     {
-        return (this._lhs === this._lhs) && 
-               (other._rhs === other._rhs);
+        return (!this._lhs.localeCompare(other._lhs)) && 
+               (!this._rhs.localeCompare(other._rhs));
+    }
+
+    /**
+     * Check if this rule is a epsilon rule, which means the RHS of the rule is 
+     * empty string.
+     * @return {boolean} true if the rule is an epsilon rule and false otherwise
+     */
+    isEpsilon() 
+    {
+        return (this._rhs === EMPTY);
+    }
+
+    /**
+     * Find all occurence  
+     * @param {String} symbol the symbol to check.
+     * @return {Arary} An Arrray of indices of the occurrence of the given symbol,
+     *                 if the symbol doesn't occur in the Rule, Array is empty.
+     * TODO: possible issue, miscounted A_12 as an occurence of A_1, must find other
+     * ways to solve this such as using a delimiter. For now I will assume all the 
+     * symbols are of the form [a-Z][0-9]*
+     */
+    indicesOf(symbol)
+    {
+        let string = this._rhs;
+        let indices = [];
+        for(let index = string.indexOf(symbol); index !== -1;)
+        {
+            // this prevents the next if statement from indexOutOfBounds error
+            if((index + symbol.length) === this._rhs.length) 
+            {
+                indices.push(string.length - symbol.length);
+                break;
+            }
+            // if the character immediately after this symbol is a number, I will
+            // assume this string is another symbol whose prefix is 'symbol'
+            if(isNaN(string[index + symbol.length])) 
+            {
+                indices.push(index);
+                // then record this index, and modify string
+            }
+            // look for the next occurrence anyway
+            index = string.indexOf(symbol, index + symbol.length);
+        }
+        return indices;
     }
 }
 
@@ -289,12 +334,24 @@ class CFG
     }
 
     /**
+     * Remove a certain rule from our grammar.
+     * @param {Rule} rule the rule to remove.
+     */
+    removeRule(rule) 
+    {
+        // use a filter function to filter out the rule
+        this._rules = this._rules.filter((cur) => {
+            return !cur.isEqual(rule);
+        });
+    }
+
+    /**
      * Check if the CFG contains a certain rule. 
      * @param {Rule} rule true if the rule is in the CFG, false otherwise.
      */
     hasRule(rule)
     {
-        // do a deep copy, looping this._rules and call isEqual
+        // do a deep comparison, looping this._rules and call isEqual
         for(let existingRule of this._rules) 
         {
             if(existingRule.isEqual(rule)) 

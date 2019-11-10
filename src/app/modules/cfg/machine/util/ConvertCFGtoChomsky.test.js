@@ -3,14 +3,24 @@ import { solvePDA } from 'modules/pda/machine/PDAUtils.js';
 import {convertToPDA} from './ConvertCFG.js';
 import CFG, {Rule, PIPE} from '../CFG.js';
 import { EMPTY } from 'modules/re/machine/RE.js';
+import { newStartVariable } from './ConvertCFGtoChomsky.js';
+import { getConsoleOutput } from '@jest/console';
 
-function testSolvePDA(machine, testString, expectedResult=true)
-{
-  test("test string \'" + testString + "\'", () => {
-    expect(solvePDA(machine, testString)).toBe(expectedResult);
-  });
-}
+describe('Testing indicesOf() method of Rule', () => {
+    let rule1 = new Rule('A', 'A_1A_2A_3A_1A_11');
+    let rule2 = new Rule('A', 'A_1A_2A_3A_11A_1');
+    let rule3 = new Rule('A', 'A_1A_2A_3A_11A_1A_2');
 
+    test('Testing the Rule \'A -> A_1A_2A_3A_1A_11\'', () => {
+        expect(rule1.indicesOf('A_1')).toEqual([0, 9]);
+    });
+    test('Testing the Rule \'A -> A_1A_2A_3A_11A_1\'', () => {
+        expect(rule2.indicesOf('A_1')).toEqual([0, 13]);
+    }); 
+    test('Testing the Rule \'A -> A_1A_2A_3A_11A_1A_2\'', () => {
+        expect(rule3.indicesOf('A_1')).toEqual([0, 13]);
+    }); 
+});
 
 describe('Testing copy constructor of CFG', () => {
     const variables = new Set(["S"]);
@@ -76,71 +86,36 @@ describe('Testing copy constructor of CFG', () => {
     });
 });
 
-describe("Testing CFG: \'{ a^nb^n | n>=0 }\' (Same thing but with PIPEd rule)", () => {
-    const variables = new Set(["S"]);
-    const terminals = new Set(["a", "b"]);
-    const r1 = new Rule("S", `aSb ${PIPE} ${EMPTY}`);  // S -> aSb | EMPTY
-    const startVariable = "S";
+describe('Testing function newStartVariable()', () => {
+    let variables = new Set(['A', 'B']);
+    let terminals = new Set(['a', 'b']);
+    let rule1 = new Rule('A', 'a');
+    let rule2 = new Rule('B', 'bAb');
+    let cfg = new CFG(variables, terminals, [rule1, rule2], 'B');
 
-    const cfg = new CFG(variables, terminals, [r1], startVariable);
-    const machine = convertToPDA(cfg);
+    let result = newStartVariable(cfg);
 
-    //Test strings
-    testSolvePDA(machine, "a", false);
-    testSolvePDA(machine, "b", false);
-    testSolvePDA(machine, "aab", false);
-    testSolvePDA(machine, "bbaa", false);
-    testSolvePDA(machine, "aabbb", false);
-    testSolvePDA(machine, "aaabbb", true);
-    testSolvePDA(machine, "ab", true);
-    testSolvePDA(machine, "", true);
-    testSolvePDA(machine, "aaaaabbbbb", true);
-});
-
-
-describe("Testing CFG: \'{ 0^i1^j0^k | i==j || j==k }\'PIPED", () => {
-    const variables = new Set(["S", "A", "B", "C"]);
-    const terminals = new Set(["0", "1"]);
-    const r1 = new Rule("S", `AC ${PIPE} CB`);          // S -> AC | CD
-    const r2 = new Rule("A", `0A1 ${PIPE} ${EMPTY}`);   // A -> 0A1 | EMPTY
-    const r3 = new Rule("B", `1B0 ${PIPE} ${EMPTY}`);   // B -> 1B0 | EMPTY
-    const r4 = new Rule("C", `0C ${PIPE} ${EMPTY}`);    // C -> 0C | EMPTY
-    const startVariable = "S";
-
-    const cfg = new CFG(variables, terminals, [r1, r2, r3, r4], startVariable);
-    const machine = convertToPDA(cfg);
-
-    //Test strings
-    testSolvePDA(machine, "1", false);
-    testSolvePDA(machine, "011000", false);
-    testSolvePDA(machine, "111", false);
-    testSolvePDA(machine, "00100", false);
-    testSolvePDA(machine, "0", true);
-    testSolvePDA(machine, "000", true);
-    testSolvePDA(machine, "00110", true);
-    testSolvePDA(machine, "00111000", true);
-    testSolvePDA(machine, "", true);
-    testSolvePDA(machine, "000111000", true);
-});
-
-
-describe("Testing CFG: \'{ w E {0, 1}* | # of 1's == # of 0's }\'", () => {
-    const variables = new Set(["S"]);
-    const terminals = new Set(["0", "1"]);
-    const r1 = new Rule("S", `0S1S ${PIPE} 1S0S ${PIPE} ${EMPTY}`)
-    const startVariable = "S";
-
-    const cfg = new CFG(variables, terminals, [r1], startVariable);
-    const machine = convertToPDA(cfg);
-
-    //Test strings
-    testSolvePDA(machine, "1", false);
-    testSolvePDA(machine, "011000", false);
-    testSolvePDA(machine, "111", false);
-    testSolvePDA(machine, "001001", false);
-    testSolvePDA(machine, "0", false);
-    testSolvePDA(machine, "001011", true);
-    testSolvePDA(machine, "01010101010101", true);
-    testSolvePDA(machine, "", true);
-    testSolvePDA(machine, "0101010011", true);
+    test('Test if result\'s start variable is S_New', () => {
+        expect(result.getStartVariable().localeCompare('S_New')).toBe(0);
+    });
+    test('Test if result has the rule \'S_New -> B\'', () => {
+        expect(result.hasRule(new Rule('S_New', 'B'))).toBe(true);
+    });
+    test('Test if result has the rule \'B -> bAb\'', () => {
+        expect(result.hasRule(new Rule('B', 'bAb'))).toBe(true);
+    });
+    test('Test if result has the rule \'A -> a\'', () => {
+        expect(result.hasRule(new Rule('A', 'a'))).toBe(true);
+    });
+    // again, we want to ensure this function is pure
+    test('Test if the previous cfg stays unchanged', () => {
+        expect(cfg.getStartVariable().localeCompare('B')).toBe(0);
+        expect(cfg.hasRule(new Rule('S_New', 'B'))).toBe(false);
+        expect(cfg.hasRule(new Rule('B', 'bAb'))).toBe(true);
+    });
+    test('Test isEqual of Rule', () => {
+        let r1 = new Rule('A', 'B');
+        let r2 = new Rule('B', 'A');
+        expect(r1.isEqual(r2)).toBe(false);
+    });
 });
