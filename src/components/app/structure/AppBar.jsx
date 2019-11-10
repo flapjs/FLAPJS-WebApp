@@ -4,13 +4,15 @@ import Style from '../App.module.css';
 
 // import LocaleString from '@flapjs/util/localization/LocaleString.jsx';
 import TitleInput from '@flapjs/components/topbar/title/TitleInput.jsx';
+import Toolbar from '@flapjs/components/topbar/toolbar/Toolbar.jsx';
 
-function AppBar(props)
+function AppBar(props) 
 {
     return (
         <nav className={Style.appbar + ' ' + (props.className || '')}>
             <h2>Flap.js</h2>
             <TitleInput className={Style.apptitle} changeModule={props.changeModule}></TitleInput>
+            <Toolbar></Toolbar>
             {props.children}
         </nav>
     );
