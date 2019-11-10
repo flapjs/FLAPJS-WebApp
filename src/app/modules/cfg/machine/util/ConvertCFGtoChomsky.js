@@ -65,12 +65,11 @@ export function newStartVariable(cfg)
  * @param {CFG} CFG the CFG to be processed.
  * @return {CFG} An equivalent CFG free of any epsilon rules.
  */
-function eliminateEpsilonRules(cfg) 
+export function eliminateEpsilonRules(cfg) 
 {
     // copy construct a new CFG
     let newCFG = new CFG();
     newCFG.copyFromCFG(cfg);
-
     let variablesEliminated = newCFG._rules.reduce((acc, cur) => 
     {
         acc[cur.getLHS()] = false;
@@ -78,36 +77,62 @@ function eliminateEpsilonRules(cfg)
     }, {}); // to prevent working on eliminated variable again
 
     // loop through newCFG._Rules to remove epsilon rules
-    for(let rule of newCFG._rules) 
+    //debugger;
+    let rule = newCFG.findEpsilonRule();
+    while(rule) 
     {
-        if(rule.isEpsilon() && !variablesEliminated[rule.getLHS()]) 
+        // console.log('Now we are processing ' + rule + ' of CFG: ' + newCFG._rules);
+        // debugger;
+        newCFG.removeRule(rule); // remove this epsilon rule regardless whether it was processed
+        if(!variablesEliminated[rule.getLHS()]) 
         {
-            let ruleRemoved = newCFG.removeRule(rule);
-
             // check if the LHS variable has this epsilon rule as it's only rule
             let hasOnlyEpsilon = true;
-            for(let temp of newCFG._rules) 
+            for(const temp of newCFG._rules) 
             {
                 if(!temp.getLHS().localeCompare(rule.getLHS()) &&
                     temp.getRHS().localeCompare(rule.getRHS()))
                 {
                     hasOnlyEpsilon = false;
+                    break; // once we find another rule
                 }
             }
 
-            for(let otherRule of ruleRemoved)             
+            for(const otherRule of newCFG._rules)             
             {
                 // if LHS variable has this epsilon rule as it's only rule, 
                 // just remove all occurence of rule's LHS in otherRule
                 if(hasOnlyEpsilon)
                 {
-                    newCFG._rules.push(otherRule.getRHS().replace(new RegExp(rule.getLHS(), 'g'), ''));
+                    let rulesWithoutThisLHS = new Rule(otherRule.getLHS(), 
+                        otherRule.getRHS().replace(new RegExp(rule.getLHS(), 'g'), ''));
+                    // if otherRule is free of LHS variable, don't push to cause infinite loop
+                    if (rulesWithoutThisLHS.getRHS().length !== otherRule.getRHS().length)
+                    {
+                        newCFG._rules.push(rulesWithoutThisLHS);
+                    }
                 }
                 else
                 {
-                    let addedRules = eliminateEpsilonVariable(otherRule, rule.getLHS(),
+                    let rulesToAdd = eliminateEpsilonVariable(otherRule, rule.getLHS(),
                         variablesEliminated[otherRule.getLHS()]);
-                    newCFG._rules = newCFG._rules.concat(addedRules);
+                    // Want to remove duplicate rules here to avoid infinite loop and 
+                    // increase performance
+                    let cleanedRulesToAdd = [];
+                    for(const candidateRule of rulesToAdd)
+                    {
+                        if(!newCFG.hasRule(candidateRule))
+                        {
+                            cleanedRulesToAdd.push(candidateRule);
+                        }
+                    }
+
+                    // has to manually push here, concat won't work since it does not mutate 
+                    // _rules directly, which is what we want here
+                    for(const cleanCandidate of cleanedRulesToAdd)
+                    {
+                        newCFG._rules.push(cleanCandidate);
+                    }
                 }
             }
             variablesEliminated[rule.getLHS()] = true; // mark it as done
@@ -115,13 +140,18 @@ function eliminateEpsilonRules(cfg)
             // this epsilpn rule
             if(hasOnlyEpsilon)
             {
-                newCFG._variables = newCFG._variables.filter((cur) => 
+                let success = newCFG._variables.delete(rule.getLHS());
+                if(!success) 
                 {
-                    return cur.localeCompare(rule.getLHS());
-                });
+                    newCFG._errors.push(new Error('Failed to remove a variable from the set of variables.'));
+                }
             }
         }
+        // if the epsilon rule was processed before, we don't do anything and proceed to find the next epsilon rule
+        rule = newCFG.findEpsilonRule();
     }
+    // finally, remove epsilon from the set of terminals
+    newCFG._terminals.delete(EMPTY);
     return newCFG;
 }
 

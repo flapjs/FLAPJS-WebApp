@@ -347,6 +347,23 @@ class CFG
     }
 
     /**
+     * Try to find an epsilon rule in the grammar, or return null if none 
+     * found.
+     * @return {Rule} An epsilon rule in the grammar, or null if none found
+     */
+    findEpsilonRule()
+    {
+        for(let rule of this._rules) 
+        {
+            if(rule.isEpsilon())
+            {
+                return rule;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Check if the CFG contains a certain rule. 
      * @param {Rule} rule true if the rule is in the CFG, false otherwise.
      */
