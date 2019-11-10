@@ -25,7 +25,7 @@ class FlapJSApplication
         // eslint-disable-next-line import/namespace
         const moduleHeader = FlapJSModules[moduleID];
         // DEBUG: This is just to slow down module loading. For testing purposes.
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        // await new Promise(resolve => setTimeout(resolve, 3000));
         // Actually go fetch it now...
         return (await moduleHeader.fetch()).default;
     }
