@@ -14,6 +14,7 @@ class ModuleSessionHandler
 
         this.onPreLoad = this.onPreLoad.bind(this);
         this.onLoad = this.onLoad.bind(this);
+        this.onPostLoad = this.onPostLoad.bind(this);
         this.onDidMount = this.onDidMount.bind(this);
         this.onWillUnmount = this.onWillUnmount.bind(this);
         this.onUnload = this.onUnload.bind(this);
@@ -24,9 +25,11 @@ class ModuleSessionHandler
     {
         const currentModule = this.module;
 
+        // Prepare session for module...
         session.module = currentModule;
         session.moduleID = currentModule ? currentModule.id : null;
 
+        // Handle listeners...
         if (currentModule)
         {
             try
@@ -47,9 +50,7 @@ class ModuleSessionHandler
     {
         const currentModule = this.module;
 
-        session.module = currentModule;
-        session.moduleID = currentModule ? currentModule.id : null;
-        
+        // Handle listeners...
         if (currentModule)
         {
             try
@@ -57,6 +58,27 @@ class ModuleSessionHandler
                 if (typeof currentModule.load === 'function')
                 {
                     currentModule.load(session);
+                }
+            }
+            catch(e)
+            {
+                Logger.error(LOGGER_TAG, 'Module failed initialize state.', e);
+            }
+        }
+    }
+
+    onPostLoad(session)
+    {
+        const currentModule = this.module;
+
+        // Handle listeners...
+        if (currentModule)
+        {
+            try
+            {
+                if (typeof currentModule.load === 'function')
+                {
+                    currentModule.postload(session);
                 }
             }
             catch(e)

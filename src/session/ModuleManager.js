@@ -37,16 +37,7 @@ class ModuleManager
             nextModule = this.defaultModule;
         }
 
-        if (this.currentModule)
-        {
-            this.currentModule = this.defaultModule;
-        }
-
-        if (forceRender)
-        {
-            // Render to terminated application state...
-            this.application.render(true);
-        }
+        if (this.currentModule) this.currentModule = this.defaultModule;
         
         if (nextModule)
         {
@@ -94,7 +85,10 @@ class ModuleManager
         // Render entries: { component: ComponentClass, props: {...} }
         if (typeof componentEntry === 'object')
         {
-            return React.createElement(componentEntry.component, { ...componentProps, ...componentEntry.props }, children);
+            return React.createElement(componentEntry.component, {
+                ...componentProps,
+                ...componentEntry.props
+            }, children);
         }
         // Render entries: ComponentClass
         else if (typeof componentEntry === 'function')
@@ -113,9 +107,14 @@ class ModuleManager
         if (Array.isArray(componentClasses))
         {
             const result = [];
-            for(const component of componentClasses)
+            const length = componentClasses.length;
+            for(let i = 0; i < length; ++i)
             {
-                const element = ModuleManager.renderComponentEntry(component, componentProps);
+                const component = componentClasses[i];
+                const element = ModuleManager.renderComponentEntry(component, {
+                    key: i + ':' + component.name,
+                    ...componentProps
+                });
                 if (element)
                 {
                     result.push(element);

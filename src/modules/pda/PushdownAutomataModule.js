@@ -5,11 +5,10 @@ import TestingPanel from './components/panels/TestingPanel.jsx';
 const MODULE = {
     id: 'pda',
     version: '1.0.0',
+    services: {},
     renders: {
         drawer: [ OverviewPanel, AnalysisPanel, TestingPanel ]
     },
-    imports: [],
-    exports: {},
     reducer(state, action)
     {
         switch(action.type)

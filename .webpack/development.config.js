@@ -41,5 +41,6 @@ module.exports = merge.smart(base, {
         overlay: true,
         contentBase: './build',
         port: 8004,
+        https: true,
     },
 });

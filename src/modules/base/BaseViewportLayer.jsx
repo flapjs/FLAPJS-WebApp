@@ -82,7 +82,7 @@ class BaseViewportLayer extends React.Component
                                     viewportAdapter={session.viewController.getViewportAdapter()}/>
                                 <FocusCenterWidget style={{ position: 'absolute', top: 64, right: 0 }}
                                     viewportAdapter={session.viewController.getViewportAdapter()}/>
-                                <LabelEditorWidget ref={ref => session.graphController.setLabelEditor(ref)}
+                                <LabelEditorWidget ref={ref => session.graphController && session.graphController.setLabelEditor(ref)}
                                     labelFormatter={session.graphController.getLabelFormatter()}
                                     viewController={session.viewController}
                                     saveOnExit={true}>

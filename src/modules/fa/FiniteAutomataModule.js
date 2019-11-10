@@ -1,9 +1,18 @@
+import AnalysisPanel from '@flapjs/modules/fa/components/panels/AnalysisPanel.jsx';
+import TestingPanel from '@flapjs/modules/fa/components/panels/TestingPanel.jsx';
+import OverviewPanel from '@flapjs/modules/fa/components/panels/OverviewPanel.jsx';
+
 const MODULE = {
     id: 'fa',
     version: '1.0.0',
-    renders: {},
-    imports: [],
-    exports: {},
+    services: {},
+    renders: {
+        drawer: [
+            OverviewPanel,
+            TestingPanel,
+            AnalysisPanel
+        ]
+    },
     reducer(state, action)
     {
         switch(action.type)
