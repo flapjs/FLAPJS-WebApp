@@ -19,7 +19,27 @@ class Toolbar extends React.Component
                     id: 0,
                     title: 'New',
                     selected: false,
-                    key: 'file'
+                    key: 'file',
+                    dropdown: [
+                        {
+                            id: 3,
+                            title: 'DFA',
+                            selected: false,
+                            key: 'file/new'
+                        },
+                        {
+                            id: 4,
+                            title: 'NFA',
+                            selected: false,
+                            key: 'file/new'
+                        },
+                        {
+                            id: 5,
+                            title: 'PDA',
+                            selected: false,
+                            key: 'file/new'
+                        }
+                    ]
                 },
                 {
                     id: 1,
