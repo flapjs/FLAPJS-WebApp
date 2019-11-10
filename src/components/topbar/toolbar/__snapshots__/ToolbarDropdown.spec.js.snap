@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ToolbarDropdown/> rendering renders correctly 1`] = `
+<div>
+  <button
+    className="dd-header"
+    onClick={[Function]}
+  >
+    <div
+      className="dd-header-title"
+    />
+  </button>
+</div>
+`;

@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Toolbar/> rendering renders correctly 1`] = `
+<div>
+  <ToolbarDropdown
+    list={
+      Array [
+        Object {
+          "dropdown": Array [
+            Object {
+              "id": 3,
+              "key": "file/new",
+              "selected": false,
+              "title": "DFA",
+            },
+            Object {
+              "id": 4,
+              "key": "file/new",
+              "selected": false,
+              "title": "NFA",
+            },
+            Object {
+              "id": 5,
+              "key": "file/new",
+              "selected": false,
+              "title": "PDA",
+            },
+          ],
+          "id": 0,
+          "key": "file",
+          "selected": false,
+          "title": "New",
+        },
+        Object {
+          "id": 1,
+          "key": "file",
+          "selected": false,
+          "title": "Open",
+        },
+        Object {
+          "id": 2,
+          "key": "file",
+          "selected": false,
+          "title": "Save",
+        },
+      ]
+    }
+    title="File"
+    toggleItem={[Function]}
+  />
+</div>
+`;

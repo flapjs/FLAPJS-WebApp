@@ -462,6 +462,36 @@ exports[`Storyshots StyleInput playground 1`] = `
 </div>
 `;
 
+exports[`Storyshots Toolbar playground 1`] = `
+<div>
+  <div>
+    <button
+      className="dd-header"
+      onClick={[Function]}
+    >
+      <div
+        className="dd-header-title"
+      >
+        File
+      </div>
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots ToolbarDropdown playground 1`] = `
+<div>
+  <button
+    className="dd-header"
+    onClick={[Function]}
+  >
+    <div
+      className="dd-header-title"
+    />
+  </button>
+</div>
+`;
+
 exports[`Storyshots WorkspaceLayout playground 1`] = `
 <div>
   <style>

@@ -74,12 +74,21 @@ class ToolbarDropdown extends React.Component
                 <ul className="dd-list">
                     {props.list.map((item) => (
                         <li key={item.id}>
-                            <button
-                                className="dd-list-item"
-                                onClick={() => {props.toggleItem(item.id, item.key);}}>
-                                {item.title}
-                                {item.selected && <p>x</p>}
-                            </button>
+                            {
+                                item.dropdown ?
+                                    <ToolbarDropdown
+                                        title={item.title}
+                                        list={item.dropdown}
+                                        toggleItem={props.toggleItem}
+                                    />
+                                    :
+                                    <button
+                                        className="dd-list-item"
+                                        onClick={() => {props.toggleItem(item.id, item.key);}}>
+                                        {item.title}
+                                        {item.selected && <p>x</p>}
+                                    </button>
+                            }
                         </li>
                     ))}
                 </ul>}
