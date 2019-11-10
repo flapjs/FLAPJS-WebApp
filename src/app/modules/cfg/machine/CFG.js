@@ -1,6 +1,6 @@
 import { guid, stringHash } from 'util/MathHelper.js';
 import { EMPTY } from 'modules/re/machine/RE.js';
-import { getConsoleOutput } from '@jest/console';
+//import { getConsoleOutput } from '@jest/console';
 
 export const PIPE = '|';
 
@@ -340,7 +340,8 @@ class CFG
     removeRule(rule) 
     {
         // use a filter function to filter out the rule
-        this._rules = this._rules.filter((cur) => {
+        this._rules = this._rules.filter((cur) => 
+        {
             return !cur.isEqual(rule);
         });
     }

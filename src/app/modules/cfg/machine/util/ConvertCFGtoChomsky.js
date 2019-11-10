@@ -70,7 +70,8 @@ function eliminateEpsilonRules(cfg)
     let newCFG = new CFG();
     newCFG.copyFromCFG(cfg);
 
-    let rulesProcessed = newCFG._Rules.reduce((acc, cur) => {
+    let rulesProcessed = newCFG._Rules.reduce((acc, cur) => 
+    {
         if (!acc[cur]) 
         {
             acc[cur] = false;
@@ -100,11 +101,7 @@ function eliminateEpsilonRules(cfg)
                         {
                             if(iInBinary[j] === '0')
                             {
-                               tempNewRule = tempNewRule.slice(0, indices) 
-                            }
-                            else
-                            {
-
+                                tempNewRule = tempNewRule.slice(0, indices);
                             }
                         }
                     }
