@@ -51,30 +51,36 @@ class AnalysisPanel extends React.Component
     {
         return (
             <>
-                <h1>Analysis</h1>
+                <header>
+                    <h1>Analysis</h1>
+                </header>
                 <Pane title="Equivalent Conversions">
                     <ul>
                         <li>
-                            <button>Perform selected optimizations</button>
                             <ul>
                                 <li>
-                                    <label htmlFor="analysisOptimizationUnreachable">
-                                        Remove unreachable states
-                                    </label>
                                     <input id="analysisOptimizationUnreachable"
                                         type="checkbox"
                                         value={this.state.optimizeUnreachable}
                                         onChange={this.onChangeOptimizeUnreachable} />
+                                    <label htmlFor="analysisOptimizationUnreachable">
+                                        Remove unreachable states
+                                    </label>
                                 </li>
                                 <li>
-                                    <label htmlFor="analysisOptimizationRedundant">
-                                        Remove redundant empty transitions
-                                    </label>
                                     <input id="analysisOptimizationRedundant"
                                         type="checkbox"
                                         disabled={true}
                                         value={this.state.optimizeRedundant}
                                         onChange={this.onChangeOptimizeRedundant}/>
+                                    <label htmlFor="analysisOptimizationRedundant">
+                                        Remove redundant empty transitions
+                                    </label>
+                                </li>
+                                <li>
+                                    <button>
+                                        Perform selected optimizations
+                                    </button>
                                 </li>
                             </ul>
                         </li>

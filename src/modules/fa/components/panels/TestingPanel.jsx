@@ -17,9 +17,32 @@ class TestingPanel extends React.Component
     render()
     {
         return (
-            <Pane>
-                Hello!
+            <>
+            <header>
+                <h1>Testing</h1>
+            </header>
+            <Pane title="String Tests">
+                <section>
+                    <button>
+                        New String Tests
+                    </button>
+                    <button>
+                        Load String Tests
+                    </button>
+                    <button>
+                        Export String Tests
+                    </button>
+                </section>
             </Pane>
+            <Pane title="Validation">
+                <p>
+                    <label htmlFor="testingErrorCheck">
+                        Real-time error checking
+                    </label>
+                    <input id="testingErrorCheck" type="checkbox"/>
+                </p>
+            </Pane>
+            </>
         );
     }
 }

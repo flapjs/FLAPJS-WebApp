@@ -26,7 +26,6 @@ const MODULE = {
         undoService: UndoService,
         graphService: GraphService,
         autoSaveService: AutoSaveService
-
     },
     renders: {
         drawer: [
