@@ -1,14 +1,14 @@
 /**
  * A wrapper for a more intuitive use of SessionStorage.
- *
- * @module SessionStorage
  */
-const SessionStorage = {
+class SessionStorage
+{
     clear()
     {
         if (!this.isSupported()) return;
         sessionStorage.clear();
-    },
+    }
+
     setData(key, value)
     {
         if (!this.isSupported()) return;
@@ -39,12 +39,14 @@ const SessionStorage = {
         {
             sessionStorage.removeItem(key);
         }
-    },
+    }
+
     getData(key, defaultValue=null)
     {
         if (!this.isSupported()) return defaultValue;
         return sessionStorage.getItem(key) || defaultValue;
-    },
+    }
+
     setDataAsObject(key, objectValue)
     {
         try
@@ -63,7 +65,8 @@ const SessionStorage = {
             // eslint-disable-next-line no-console
             console.error(e);
         }
-    },
+    }
+
     getDataAsObject(key, defaultValue=null)
     {
         const result = this.getData(key, null);
@@ -84,11 +87,13 @@ const SessionStorage = {
         {
             return defaultValue;
         }
-    },
+    }
+
     isSupported()
     {
         return typeof sessionStorage !== 'undefined';
     }
-};
+}
 
-export default SessionStorage;
+const INSTANCE = new SessionStorage();
+export default INSTANCE;

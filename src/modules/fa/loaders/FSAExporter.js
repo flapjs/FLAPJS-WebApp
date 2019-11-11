@@ -16,7 +16,8 @@ class FSAExporter extends SessionExporter
     /** @override */
     onExportSession(session, dst)
     {
-        const currentModule = session.getCurrentModule();
+        /*
+        const currentModule = session.module;
         const graphController = currentModule.getGraphController();
         const machineController = currentModule.getMachineController();
         const graph = graphController.getGraph();
@@ -28,6 +29,7 @@ class FSAExporter extends SessionExporter
             symbols: machineController.getCustomSymbols(),
             statePrefix: graphController.getGraphLabeler().getDefaultNodeLabelPrefix()
         };
+        */
     }
 
     /** @override */

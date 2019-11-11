@@ -1,7 +1,9 @@
 import React from 'react';
-import Logger from '@flapjs/util/Logger.js';
 
+import Logger from '@flapjs/util/Logger.js';
 const LOGGER_TAG = 'ModuleManager';
+
+export const EVENT_ON_CHANGE_MODULE = 'changemodule';
 
 class ModuleManager
 {
@@ -14,6 +16,8 @@ class ModuleManager
         // The context is bound so it can be passed around as a callback...
         this.changeModule = this.changeModule.bind(this);
         this.renderModuleLayer = this.renderModuleLayer.bind(this);
+
+        this.eventListeners = new Map();
     }
 
     async changeModule(nextModuleID, forceRender = true)
@@ -49,7 +53,9 @@ class ModuleManager
                 this.application.render();
             }
         }
+        
         // Otherwise, it's already rendered correctly.
+        this.emitEvent(EVENT_ON_CHANGE_MODULE, nextModuleID);
     }
 
     renderModuleLayer(layerID, layerProps = {}, nested = false)
@@ -197,6 +203,47 @@ class ModuleManager
     getCurrentModule()
     {
         return this.currentModule;
+    }
+
+    emitEvent(event, ...values)
+    {
+        if (this.eventListeners.has(event))
+        {
+            for(const listener of this.eventListeners.get(event))
+            {
+                listener.apply(null, values);
+            }
+        }
+    }
+
+    addEventListener(event, callback)
+    {
+        let result;
+        if (!this.eventListeners.has(event))
+        {
+            this.eventListeners.set(event, result = []);
+        }
+        else
+        {
+            result = this.eventListeners.get(event);
+        }
+        result.push(callback);
+        return this;
+    }
+
+    removeEventListener(event, callback)
+    {
+        if (this.eventListeners.has(event))
+        {
+            const listeners = this.eventListeners.get(event);
+            listeners.splice(listeners.indexOf(callback), 1);
+        }
+        return this;
+    }
+
+    getEventListeners(event)
+    {
+        return this.eventListeners.get(event);
     }
 }
 
