@@ -66,6 +66,8 @@ export class Rule
         return subRules;
     }
 
+    // Note: Please do not modify toString() to return String object, will crash
+    // convertCFGtoChomsky module
     toString()
     {
         return this._lhs + '->' + this._rhs;
@@ -172,7 +174,7 @@ class CFG
             newRule.copyFromRule(rule);
             this._rules.push(newRule);
         }
-        this._startVariable = new String(startVariable);
+        this._startVariable = startVariable;
         this._errors = [];
         for (let error of errors) 
         {
@@ -190,6 +192,48 @@ class CFG
         this.clearRules();
         this._startVariable = '';
         this._errors.length = 0;
+    }
+
+    /**
+     * Clean up the CFG, including removing duplicate rules, removing variables that has
+     * no rules anymore, and terminals that doesn't appear in any rule anymore. Also,
+     * if the grammar is empty, clear() it.
+     */
+    cleanUp()
+    {
+        // grammar empty
+        if(!rule.length) 
+        {
+            this.clear();
+        }
+
+        // to remove duplicate rules, we make use of the toString method and Set data Structure.
+        let rule = this._rules.map((cur) => 
+        {
+            return cur.toString();
+        });
+        rule = new Set(rule);
+        rule = Array.from(rule); // convert back to array
+        this._rules = rule.map((cur) => 
+        {
+            let temp = cur.split('->');
+            // if the RHS is '', we make it EMPTY
+            if(!temp[1].length)
+            {
+                temp[1] = EMPTY;
+            }
+            return new Rule(temp[0], temp[1]);
+        });
+
+        // remove variables that doesn't have any production rules, i.e. only keep LHS of all rules
+        let variables = rule.map((cur) => 
+        {
+            return cur.split('->')[0];
+        });
+        this._variables = new Set(variables);
+
+        // TODO: remove any lingering terminals, hard to do at this point because it is not clear how 
+        // to idenitify a terminal
     }
 
     /**

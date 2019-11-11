@@ -77,75 +77,46 @@ export function eliminateEpsilonRules(cfg)
     }, {}); // to prevent working on eliminated variable again
 
     // loop through newCFG._Rules to remove epsilon rules
-    //debugger;
     let rule = newCFG.findEpsilonRule();
     while(rule) 
     {
         // console.log('Now we are processing ' + rule + ' of CFG: ' + newCFG._rules);
-        // debugger;
-        newCFG.removeRule(rule); // remove this epsilon rule regardless whether it was processed
-        if(!variablesEliminated[rule.getLHS()]) 
+        newCFG.removeRule(rule); 
+
+        if (!variablesEliminated[rule.getLHS()]) 
         {
-            // check if the LHS variable has this epsilon rule as it's only rule
-            let hasOnlyEpsilon = true;
-            for(const temp of newCFG._rules) 
+            let pureEpsilonRule = removePureEpsilonRule(newCFG, rule);
+            if (pureEpsilonRule) 
             {
-                if(!temp.getLHS().localeCompare(rule.getLHS()) &&
-                    temp.getRHS().localeCompare(rule.getRHS()))
-                {
-                    hasOnlyEpsilon = false;
-                    break; // once we find another rule
-                }
+                variablesEliminated[rule.getLHS()] = true; // mark it as processed
+                rule = newCFG.findEpsilonRule();
+                continue;
             }
 
-            for(const otherRule of newCFG._rules)             
+            for (const otherRule of newCFG._rules) 
             {
-                // if LHS variable has this epsilon rule as it's only rule, 
-                // just remove all occurence of rule's LHS in otherRule
-                if(hasOnlyEpsilon)
+                let rulesToAdd = eliminateEpsilonVariable(otherRule, rule.getLHS(),
+                    variablesEliminated[otherRule.getLHS()]);
+                // Want to remove duplicate rules here to avoid infinite loop and 
+                // increase performance
+                let cleanRulesToAdd = [];
+                for (const candidateRule of rulesToAdd) 
                 {
-                    let rulesWithoutThisLHS = new Rule(otherRule.getLHS(), 
-                        otherRule.getRHS().replace(new RegExp(rule.getLHS(), 'g'), ''));
-                    // if otherRule is free of LHS variable, don't push to cause infinite loop
-                    if (rulesWithoutThisLHS.getRHS().length !== otherRule.getRHS().length)
+                    // A -> '' should be A -> EMPTY
+                    if (candidateRule.getRHS().length === 0 
+                        && !variablesEliminated[candidateRule.getLHS()]) 
                     {
-                        newCFG._rules.push(rulesWithoutThisLHS);
+                        cleanRulesToAdd.push(new Rule(candidateRule.getLHS(), EMPTY));
+                        continue;
+                    }
+                    if (!newCFG.hasRule(candidateRule)) 
+                    {
+                        cleanRulesToAdd.push(candidateRule);
                     }
                 }
-                else
-                {
-                    let rulesToAdd = eliminateEpsilonVariable(otherRule, rule.getLHS(),
-                        variablesEliminated[otherRule.getLHS()]);
-                    // Want to remove duplicate rules here to avoid infinite loop and 
-                    // increase performance
-                    let cleanedRulesToAdd = [];
-                    for(const candidateRule of rulesToAdd)
-                    {
-                        if(!newCFG.hasRule(candidateRule))
-                        {
-                            cleanedRulesToAdd.push(candidateRule);
-                        }
-                    }
-
-                    // has to manually push here, concat won't work since it does not mutate 
-                    // _rules directly, which is what we want here
-                    for(const cleanCandidate of cleanedRulesToAdd)
-                    {
-                        newCFG._rules.push(cleanCandidate);
-                    }
-                }
+                newCFG._rules = newCFG._rules.concat(cleanRulesToAdd);
             }
-            variablesEliminated[rule.getLHS()] = true; // mark it as done
-            // remove the LHS variable from the set of variables if it only has
-            // this epsilpn rule
-            if(hasOnlyEpsilon)
-            {
-                let success = newCFG._variables.delete(rule.getLHS());
-                if(!success) 
-                {
-                    newCFG._errors.push(new Error('Failed to remove a variable from the set of variables.'));
-                }
-            }
+            variablesEliminated[rule.getLHS()] = true; // mark it as processed
         }
         // if the epsilon rule was processed before, we don't do anything and proceed to find the next epsilon rule
         rule = newCFG.findEpsilonRule();
@@ -212,6 +183,53 @@ export function eliminateEpsilonVariable(rule, variable, LHSeliminated = false)
         }
     }
     return addedRules;
+}
+
+/**
+ * This function deal with the special case where 'rule' is the only rule of 
+ * its variable. That is, 'rule' is of the form A -> epsilon where the variable
+ * A has no other production rules. 
+ * @param {CFG} cfg the cfg whose rules are checked and possibly eliminated.
+ * @param {Rule} rule the rule to check.
+ * @return {boolean} true if rule is the only rule of its variable, false otherwise
+ */
+function removePureEpsilonRule(cfg, rule) 
+{
+    // check if the LHS variable has this epsilon rule as it's only rule
+    let hasOnlyEpsilon = true;
+    for (const temp of cfg._rules) 
+    {
+        if (!temp.getLHS().localeCompare(rule.getLHS()) &&
+            temp.getRHS().localeCompare(rule.getRHS())) 
+        {
+            hasOnlyEpsilon = false;
+            break; // once we find another rule
+        }
+    }
+
+    if(!hasOnlyEpsilon) 
+    {
+        return hasOnlyEpsilon; // false
+    }
+
+    // in this case, it is safe to clear the variable from the RHS of 
+    // all rules in the grammar
+    cfg._rules = cfg._rules.map((cur) => 
+    {
+        let variableToClear = rule.getLHS();
+        let newRHS = cur.getRHS()
+            .replace(new RegExp(variableToClear, 'g'), '');
+        if(!newRHS.length) // '' should transform to EMPTY
+        {
+            newRHS = EMPTY;
+        }
+        return new Rule(cur.getLHS(), newRHS);
+    });
+
+    // and also remove the variable from the grammar since it has 
+    // no rule anymore
+    cfg._variables.delete(rule.getLHS());
+    return hasOnlyEpsilon;
 }
 
 function eliminateUnitRules(cfg)

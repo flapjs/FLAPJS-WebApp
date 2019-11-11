@@ -7,6 +7,31 @@ import { newStartVariable, eliminateEpsilonVariable, eliminateEpsilonRules } fro
 import { getConsoleOutput } from '@jest/console';
 import { start } from 'repl';
 
+// use Rule.toString() to construct a set and then strict equal
+function testCFGEqual(cfg1, cfg2) 
+{
+    expect(cfg1._variables).toStrictEqual(cfg2._variables);
+    expect(cfg1._terminals).toStrictEqual(cfg2._terminals);
+    expect(cfg1._startVariable).toStrictEqual(cfg2._startVariable);
+    expect(cfg1._errors).toStrictEqual(cfg2._errors); // maybe no
+
+    let rule1 = cfg1._rules;
+    let rule2 = cfg2._rules;
+    rule1 = rule1.map((cur) => {
+        return cur.toString();
+    });
+    rule2 = rule2.map((cur) => {
+        return cur.toString();
+    });
+
+    // then construct sets and use sets strictEqual
+    rule1 = new Set(rule1);
+    rule2 = new Set(rule2);
+    //console.log(rule1);
+    //console.log(rule2);
+    expect(rule1).toStrictEqual(rule2);
+}
+
 describe('Testing removeRule() method of CFG', () => {
     let variables = new Set(['A', 'B']);
     let terminals = new Set(['a', 'b']);
@@ -111,7 +136,7 @@ describe('Testing eliminateEpsilonRules() function of ConvertCFGtoChomsky', () =
 {
     // start with a rather small grammar
     let variables = new Set(['A', 'B']);
-    let terminals = new Set(['a', 'b']);
+    let terminals = new Set(['a', 'b', EMPTY]);
     let rule = [
         new Rule('A', EMPTY),
         new Rule('B', 'bAbAbAb'),
@@ -120,12 +145,11 @@ describe('Testing eliminateEpsilonRules() function of ConvertCFGtoChomsky', () =
     let startVariable = 'A';
     let cfg = new CFG(variables, terminals, rule, startVariable);
 
-    test('Testing on a simple grammar where \'A -> EMPTY\' is the only rule of A', () => {
+    test('Testing the grammar {A -> epsilon, B -> bAbAbAb | AbAbA}', () => {
         let result = eliminateEpsilonRules(cfg);
         variables = new Set(['B']);
+        terminals = new Set(['a', 'b']);
         rule = [
-            new Rule('B', 'bAbAbAb'),
-            new Rule('B', 'AbAbA'),
             new Rule('B', 'bbbb'),
             new Rule('B', 'bb')
         ];
@@ -135,20 +159,19 @@ describe('Testing eliminateEpsilonRules() function of ConvertCFGtoChomsky', () =
 
     test('Testing on the same grammar as the previous test, but with order of rules switched', () => {
         variables = new Set(['B']);
-        rule = [
+        terminals = new Set(['a', 'b']);
+        let rule = [
             new Rule('B', 'bAbAbAb'),
-            new Rule('B', 'AbAbA'),
+            new Rule('A', EMPTY),
+            new Rule('B', 'AbAbA')
+        ];
+        cfg = new CFG(variables, terminals, rule, startVariable);
+        rule = [
             new Rule('B', 'bbbb'),
             new Rule('B', 'bb')
         ];
-        let expectedResult = new CFG(variables, terminals, rule, startVariable);
-        variables = new Set(['A', 'B']);
-        rule = [
-            new Rule('B', 'AbAbA'),
-            new Rule('B', 'bAbAbAb'),
-            new Rule('A', EMPTY)
-        ];
         let result = eliminateEpsilonRules(cfg);
+        let expectedResult = new CFG(variables, terminals, rule, startVariable);
         expect(result).toStrictEqual(expectedResult);
     });
 
@@ -169,8 +192,75 @@ describe('Testing eliminateEpsilonRules() function of ConvertCFGtoChomsky', () =
         cfg = new CFG(variables, terminals, rule, startVariable);
         let result = eliminateEpsilonRules(cfg);
         terminals.delete(EMPTY);
-        console.log(result);
-        expect(result).toBe(false);
+        rule = [
+            new Rule('S', 'ASA'),
+            new Rule('S', 'aB'),
+            new Rule('S', 'a'),
+            new Rule('S', 'SA'),
+            new Rule('S', 'AS'),
+            new Rule('S', 'S'),
+            new Rule('A', 'B'),
+            new Rule('A', 'S'),
+            new Rule('B', 'b'),
+        ];
+        let expectedResult = new CFG(variables, terminals, rule, startVariable);
+        testCFGEqual(result, expectedResult);
+    });
+
+    test('Testing the grammar {S -> BABA, A -> aA | epsilon, ' +
+        'B -> bB | epsilon}', () => {
+        variables = new Set(['S', 'A', 'B']);
+        terminals = new Set(['a', 'b', EMPTY]);
+        startVariable = 'S';
+        rule = [
+            new Rule('S', 'BABA'),
+            new Rule('A', 'aA'),
+            new Rule('A', EMPTY),
+            new Rule('B', 'bB'),
+            new Rule('B', EMPTY)
+        ];
+        cfg = new CFG(variables, terminals, rule, startVariable);
+        let result = eliminateEpsilonRules(cfg);
+
+        terminals = new Set(['a', 'b']);
+        rule = [
+            new Rule('A', 'aA'),
+            new Rule('A', 'a'),
+            new Rule('B', 'bB'),
+            new Rule('B', 'b'),
+            new Rule('S', 'BABA'),
+            new Rule('S', 'BAB'),
+            new Rule('S', 'BBA'),
+            new Rule('S', 'BB'),
+            new Rule('S', 'BAA'),
+            new Rule('S', 'ABA'),
+            new Rule('S', 'AA'),
+            new Rule('S', 'BA'),
+            new Rule('S', 'A'),
+            new Rule('S', 'AB'),
+            new Rule('S', 'B'),
+        ];
+        let expectedResult = new CFG(variables, terminals, rule, startVariable);
+        testCFGEqual(result, expectedResult);
+    });
+
+    test('Testing the grammar {S -> AA,  A -> epsilon}', () => 
+    {
+        debugger;
+        variables = new Set(['S', 'A']);
+        terminals = new Set([EMPTY]);
+        startVariable = 'S';
+        rule = [
+            new Rule('S', 'AA'),
+            new Rule('A', EMPTY)
+        ];
+        cfg = new CFG(variables, terminals, rule, startVariable);
+        let result = eliminateEpsilonRules(cfg);
+        variables = new Set();
+        terminals = new Set();
+        rule = [];
+        let expectedResult = new CFG(variables, terminals, rule, startVariable);
+        expect(result).toStrictEqual(expectedResult);
     });
 });
 
