@@ -39,6 +39,14 @@ export function convertCFGtoChomsky(cfg)
     return ChomksyNormalForm;
 }
 
+/***************************************************************************
+ *                                                                         * 
+ *                                                                         *
+ *                   Step One: add new start Variable                      *
+ *                                                                         *
+ *                                                                         *
+ ***************************************************************************/
+
 /**
  * Step one in the conversion of a CFG to its Chomsky normal form. Set a 
  * new start variable so a start variable will never appear on RHS of a rule.
@@ -58,10 +66,22 @@ export function newStartVariable(cfg)
     return newCFG;
 }
 
+/***************************************************************************
+ *                                                                         * 
+ *                                                                         *
+ *                Step Two: eliminate all epsilon rules                    *
+ *                          i.e. rules of the form:                        *
+ *                          A -> epsilon                                   *
+ *                                                                         *
+ *                                                                         *
+ ***************************************************************************/
+
 /**
  * Step two in the conversion of a CFG to its Chomsky normal form. This step
  * eliminate all the epsilon rules in the CFG, and add new Rules for every 
- * eliminated rules. This can potentially lead to exponential blow.
+ * eliminated rules. This can potentially lead to exponential explosion.
+ * Note: this function is pure, it does not change the argument, but instead
+ * return a new CFG which has the changes.
  * @param {CFG} CFG the CFG to be processed.
  * @return {CFG} An equivalent CFG free of any epsilon rules.
  */
@@ -74,7 +94,7 @@ export function eliminateEpsilonRules(cfg)
     {
         acc[cur.getLHS()] = false;
         return acc;
-    }, {}); // to prevent working on eliminated variable again
+    }, Object.create(null)); // to prevent working on eliminated variable again
 
     // loop through newCFG._Rules to remove epsilon rules
     let rule = newCFG.findEpsilonRule();
@@ -219,9 +239,74 @@ function removePureEpsilonRule(cfg, rule)
     return hasOnlyEpsilon;
 }
 
+/***************************************************************************
+ *                                                                         * 
+ *                                                                         *
+ *                Step Two: eliminate all unit rules                       *
+ *                          i.e. rules of the form:                        *
+ *                          A -> B, where B is a variable                  *
+ *                                                                         *
+ *                                                                         *
+ ***************************************************************************/
+
+/**
+ * Step three in the conversion of a grammar to its chomsky normal form. In 
+ * this step we remove all unit rules from the grammar, where a unit rule is
+ * a rule of the form:
+ * A -> B, where B is a variable.
+ * Note: this function is pure, it does not change the argument, but instead
+ * return a new CFG which has the changes.
+ * @param {CFG} cfg the CFG to be processed.
+ * @return {CFG} an equivalent CFG free of unit rules.
+ */
 function eliminateUnitRules(cfg)
 {
-    return;
+    // to ensure the function is pure
+    let newCFG = new CFG();
+    newCFG.copyFromCFG(cfg);
+
+    let rules = newCFG._rules.map((cur) => 
+    {
+        return cur.toString();
+    }); // array of rules in string form
+    let unitRulesEliminated = rules.reduce((acc, cur) => {
+        if(!acc[cur])
+        {
+            acc[cur] = false;
+        }
+        return acc;
+    }, Object.create(null)); // keep track of unit rules eliminated
+
+    let unitRule = newCFG.findUnitRule(); // A -> B
+    while(unitRule) 
+    {
+        newCFG.removeRule(unitRule); // remove this unit rule from the grammar
+        // process only if it was not processed
+        if(!unitRulesEliminated[unitRule.toString])
+        {
+            // gather all rules that are produced by unitRule.RHS(), i.e.
+            // rules of the form B -> u, u a string of variables and terminals
+            let rulesProducedByVariable = newCFG._rules.filter((cur) => 
+            {
+                return !cur.getLHS().localeCompare(unitRule.getRHS());
+            });
+
+            // add A -> u unless A -> u is a unit rule previously removed
+            for(let rule in rulesProducedByVariable)
+            {
+                let ruleToAdd = new Rule(unitRule.getLHS(), rule.getRHS());
+                if(!unitRulesEliminated[ruleToAdd.toString()])
+                {
+                    newCFG.addRule(ruleToAdd);
+                }
+            }
+
+            unitRulesEliminated[unitRule.toString()] = true; // mark it as processed
+        }
+
+        unitRule.newCFG.findUnitRule();
+    }
+    return newCFG;
 }
 
 function cleanUp(cfg)

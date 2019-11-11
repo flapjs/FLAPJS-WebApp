@@ -408,6 +408,24 @@ class CFG
     }
 
     /**
+     * Try to find an unit rule in the grammar, or return null if none 
+     * found.
+     * @return {Rule} An unit rule in the grammar, or null if none found
+     */
+    findUnitRule()
+    {
+        for(let rule of this._rules) 
+        {
+            if(this.getVariables.has(rule.RHS()))
+            {
+                return rule;
+            }
+        }
+        return null;
+    }
+
+
+    /**
      * Check if the CFG contains a certain rule. 
      * @param {Rule} rule true if the rule is in the CFG, false otherwise.
      */
