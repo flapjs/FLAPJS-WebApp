@@ -202,7 +202,7 @@ class CFG
     cleanUp()
     {
         // grammar empty
-        if(!rule.length) 
+        if(!this._rules.length) 
         {
             this.clear();
         }

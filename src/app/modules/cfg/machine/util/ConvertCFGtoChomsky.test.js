@@ -221,6 +221,7 @@ describe('Testing eliminateEpsilonRules() function of ConvertCFGtoChomsky', () =
         ];
         cfg = new CFG(variables, terminals, rule, startVariable);
         let result = eliminateEpsilonRules(cfg);
+        // console.log(result);
 
         terminals = new Set(['a', 'b']);
         rule = [

@@ -97,24 +97,9 @@ export function eliminateEpsilonRules(cfg)
             {
                 let rulesToAdd = eliminateEpsilonVariable(otherRule, rule.getLHS(),
                     variablesEliminated[otherRule.getLHS()]);
-                // Want to remove duplicate rules here to avoid infinite loop and 
-                // increase performance
-                let cleanRulesToAdd = [];
-                for (const candidateRule of rulesToAdd) 
-                {
-                    // A -> '' should be A -> EMPTY
-                    if (candidateRule.getRHS().length === 0 
-                        && !variablesEliminated[candidateRule.getLHS()]) 
-                    {
-                        cleanRulesToAdd.push(new Rule(candidateRule.getLHS(), EMPTY));
-                        continue;
-                    }
-                    if (!newCFG.hasRule(candidateRule)) 
-                    {
-                        cleanRulesToAdd.push(candidateRule);
-                    }
-                }
-                newCFG._rules = newCFG._rules.concat(cleanRulesToAdd);
+                newCFG._rules = newCFG._rules.concat(rulesToAdd);
+                // do a clean up at this point to remove duplicate rules
+                newCFG.cleanUp();
             }
             variablesEliminated[rule.getLHS()] = true; // mark it as processed
         }
@@ -175,6 +160,8 @@ export function eliminateEpsilonVariable(rule, variable, LHSeliminated = false)
             {
                 if(iInBinary[j] === '0')
                 {
+                    // effectively create the string RHS[0, indices[j]-1] + 
+                    // RHS[indices[j] + variable.length, end] 
                     tempNewRuleRHS = tempNewRuleRHS.slice(0, indices[j]) + 
                                   tempNewRuleRHS.slice(indices[j] + variable.length);
                 }
