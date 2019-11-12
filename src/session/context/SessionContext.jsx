@@ -62,6 +62,8 @@ class SessionProvider extends React.Component
             case 'changeSessionName':
                 result = { sessionName: action.value };
                 break;
+            case 'setState':
+                return action.value;
             default:
                 result = this.props.reducer(this.state, action);
         }
@@ -101,13 +103,7 @@ SessionProvider.defaultProps = {
 // ...and it's fallback reducer (for the one ALWAYS used, refer below)...
 function fallbackReducer(state, action)
 {
-    switch(action.type)
-    {
-        case 'set':
-            return { [action.key]: action.value };
-        default:
-            throw new Error(`Unsupported reducer action '${action}'.`);
-    }
+    return { [action.type]: action.value };
 }
 
 // ...and it's consumers...

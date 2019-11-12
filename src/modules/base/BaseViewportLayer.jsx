@@ -14,27 +14,27 @@ class BaseViewportLayer extends React.Component
     {
         super(props);
 
-        this.state = {
-            actionMode: true,
-        };
-
-        this.onTrashClear = this.onTrashClear.bind(this);
-        this.onModeChange = this.onModeChange.bind(this);
+        this.onTrashModeClick = this.onTrashModeClick.bind(this);
+        this.onClearGraphClick = this.onClearGraphClick.bind(this);
+        this.onActionModeClick = this.onActionModeClick.bind(this);
     }
 
-    onTrashClear(session)
+    onTrashModeClick(session, dispatch, value)
     {
-
+        session.inputController.setTrashMode(value);
+        dispatch({ type: 'setState', value: { trashMode: value } });
     }
 
-    onModeChange(mode)
+    onClearGraphClick(session, dispatch)
     {
-        this.setState(prev =>
-        {
-            return {
-                actionMode: mode === 'action'
-            };
-        });
+        session.graphController.clearGraph();
+        dispatch({ type: 'setState', value: { graphHash: session.graphController.getGraph().getHashCode() } });
+    }
+
+    onActionModeClick(session, dispatch, value)
+    {
+        session.inputController.setMoveModeFirst(value === MODE_MOVE);
+        dispatch({ type: 'setState', value: { actionMode: value } });
     }
 
     centerView(session)
@@ -57,7 +57,7 @@ class BaseViewportLayer extends React.Component
                                 !viewController.getInputAdapter().isUsingTouch()
                                 || !viewController.getInputAdapter().isDragging()
                             );
-                        
+
                         const inputController = session.inputController;
                         let actionMode;
                         if (inputController.isHandlingInput())
@@ -72,16 +72,16 @@ class BaseViewportLayer extends React.Component
                         return (
                             <>
                                 <TrashCanWidget style={{ position: 'absolute', bottom: 0, right: 0 }}
-                                    onChange={value => dispatch({ type: 'trash-mode', value })}
-                                    onClear={() => dispatch({ type: 'clear-graph' })}
+                                    onChange={value => this.onTrashModeClick(session, dispatch, value)}
+                                    onClear={() => this.onClearGraphClick(session, dispatch)}
                                     visible={visible} />
                                 <ModeTrayWidget style={{ position: 'absolute', bottom: 0, left: 0 }}
                                     value={actionMode}
-                                    onChange={value => dispatch({ type: 'action-mode', value })}/>
+                                    onChange={value => this.onActionModeClick(session, dispatch, value)} />
                                 <ZoomWidget style={{ position: 'absolute', top: 0, right: 0 }}
-                                    viewportAdapter={session.viewController.getViewportAdapter()}/>
+                                    viewportAdapter={session.viewController.getViewportAdapter()} />
                                 <FocusCenterWidget style={{ position: 'absolute', top: 64, right: 0 }}
-                                    viewportAdapter={session.viewController.getViewportAdapter()}/>
+                                    viewportAdapter={session.viewController.getViewportAdapter()} />
                                 <LabelEditorWidget ref={ref => session.graphController && session.graphController.setLabelEditor(ref)}
                                     labelFormatter={session.graphController.getLabelFormatter()}
                                     viewController={session.viewController}

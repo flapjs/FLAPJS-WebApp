@@ -8,12 +8,11 @@ class AutoSaveService extends AbstractService
     {
         super();
         this.autoSaveManager = new AutoSaveManager(LocalStorage);
-        this.autoSaveHandler = null;
     }
 
-    setAutoSaveHandler(autoSaveHandler)
+    registerAutoSaveHandler(autoSaveHandler)
     {
-        this.autoSaveHandler = autoSaveHandler;
+        this.autoSaveManager.registerHandler(autoSaveHandler);
         return this;
     }
 
@@ -22,7 +21,6 @@ class AutoSaveService extends AbstractService
     {
         super.load(session);
 
-        if (this.autoSaveHandler) this.autoSaveManager.registerHandler(this.autoSaveHandler);
         this.autoSaveManager.initialize();
 
         session.autoSaveManager = this.autoSaveManager;
@@ -33,9 +31,9 @@ class AutoSaveService extends AbstractService
     unload(session)
     {
         super.unload(session);
-        
-        if (this.autoSaveHandler) this.autoSaveManager.unregisterHandler(this.autoSaveHandler);
+
         this.autoSaveManager.terminate();
+        this.autoSaveManager.clearHandlers();
 
         delete session.autoSaveManager;
         return this;

@@ -76,7 +76,7 @@ class ModuleSessionHandler
         {
             try
             {
-                if (typeof currentModule.load === 'function')
+                if (typeof currentModule.postload === 'function')
                 {
                     currentModule.postload(session);
                 }

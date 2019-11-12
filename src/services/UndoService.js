@@ -9,12 +9,11 @@ class UndoService extends AbstractService
         super();
 
         this.undoManager = new UndoManager();
-        this.eventHandlerFactory = null;
     }
 
     setEventHandlerFactory(eventHandlerFactory)
     {
-        this.eventHandlerFactory = eventHandlerFactory;
+        this.undoManager.setEventHandlerFactory(eventHandlerFactory);
         return this;
     }
 
@@ -22,8 +21,6 @@ class UndoService extends AbstractService
     load(session)
     {
         super.load(session);
-
-        if (this.eventHandlerFactory) this.undoManager.setEventHandlerFactory(this.eventHandlerFactory);
 
         session.undoManager = this.undoManager;
         return this;
@@ -34,7 +31,7 @@ class UndoService extends AbstractService
     {
         super.unload(session);
         
-        if (this.eventHandlerFactory) this.undoManager.setEventHandlerFactory(null);
+        this.undoManager.setEventHandlerFactory(null);
         this.undoManager.clear();
 
         delete session.undoManager;

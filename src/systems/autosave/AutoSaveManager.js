@@ -38,6 +38,11 @@ class AutoSaveManager
         return this;
     }
 
+    clearHandlers()
+    {
+        this._handlers.length = 0;
+    }
+
     initialize()
     {
         if (!this._storage.isSupported()) return;

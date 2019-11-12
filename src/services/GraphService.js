@@ -1,8 +1,10 @@
 import AbstractService from './AbstractService.js';
 
-import NodeGraphController from '@flapjs/modules/base/NodeGraphController.js';
 import InputController from '@flapjs/systems/graph/controller/InputController.js';
 import ViewController from '@flapjs/systems/graph/controller/ViewController.js';
+
+import SafeUndoNodeGraphEventHandler from '@flapjs/systems/graph/controller/SafeUndoNodeGraphEventHandler.js';
+import GraphAutoSaveHandler from '@flapjs/systems/graph/controller/GraphAutoSaveHandler.js';
 
 class GraphService extends AbstractService
 {
@@ -11,6 +13,12 @@ class GraphService extends AbstractService
         super();
 
         this.graph = null;
+        this.graphParser = null;
+        this.graphControllerClass = null;
+
+        this._autoSaveService = null;
+        this._undoService = null;
+
         this.graphController = null;
         this.inputController = new InputController();
         this.viewController = new ViewController();
@@ -26,12 +34,39 @@ class GraphService extends AbstractService
         return this;
     }
 
+    setGraphParser(graphParser)
+    {
+        this.graphParser = graphParser;
+        return this;
+    }
+
+    setGraphControllerClass(graphControllerClass)
+    {
+        this.graphControllerClass = graphControllerClass;
+        return this;
+    }
+
+    extendAutoSaveService(autoSaveService)
+    {
+        this._autoSaveService = autoSaveService;
+        return this;
+    }
+
+    extendUndoService(undoService)
+    {
+        this._undoService = undoService;
+        return this;
+    }
+
     /** @override */
     load(session)
     {
         super.load(session);
 
-        this.graphController = new NodeGraphController(this.graph);
+        if (!this.graph) throw new Error('Mising graph - must call setGraph() before session load()');
+        if (!this.graphControllerClass) throw new Error('Mising graph controller class - must call setGraphControllerClass() before session load()');
+
+        this.graphController = new (this.graphControllerClass)(this.graph);
         this.graphController.setSession(session);
 
         this.viewController.initialize();
@@ -41,6 +76,16 @@ class GraphService extends AbstractService
         session.graphController = this.graphController;
         session.inputController = this.inputController;
         session.viewController = this.viewController;
+
+        if (this.graphParser)
+        {
+            if (this._undoService) this._undoService.undoManager.setEventHandlerFactory(() => new SafeUndoNodeGraphEventHandler(this.graphController, this.graphParser));
+            if (this._autoSaveService) this._autoSaveService.registerAutoSaveHandler(new GraphAutoSaveHandler(session));
+        }
+        else if (this._undoService || this._autoSaveService)
+        {
+            throw new Error('Mising graph parser for extended services - must call setGraphParser() before session load()');
+        }
         
         return this;
     }
