@@ -1,12 +1,14 @@
-import AnalysisPanel from '@flapjs/modules/fa/components/panels/AnalysisPanel.jsx';
-import TestingPanel from '@flapjs/modules/fa/components/panels/TestingPanel.jsx';
-import OverviewPanel from '@flapjs/modules/fa/components/panels/OverviewPanel.jsx';
 import ExportService from '@flapjs/services/ExportService.js';
 import ImportService from '@flapjs/services/ImportService.js';
 import NotificationService from '@flapjs/services/NotificationService.js';
 import UndoService from '@flapjs/services/UndoService.js';
 import GraphService from '@flapjs/services/GraphService.js';
 import AutoSaveService from '@flapjs/services/AutoSaveService.js';
+
+import AnalysisPanel from '@flapjs/modules/fa/components/panels/AnalysisPanel.jsx';
+import TestingPanel from '@flapjs/modules/fa/components/panels/TestingPanel.jsx';
+import OverviewPanel from '@flapjs/modules/fa/components/panels/OverviewPanel.jsx';
+
 import FSAGraph from '@flapjs/modules/fa/graph/FSAGraph.js';
 import FSAGraphController from '@flapjs/modules/fa/graph/FSAGraphController.js';
 import FSAPlaygroundLayer from '@flapjs/modules/fa/components/layers/FSAPlaygroundLayer.jsx';
