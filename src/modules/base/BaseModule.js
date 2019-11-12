@@ -4,21 +4,17 @@ import AboutPanel from './AboutPanel.jsx';
 
 import NodeGraphExporter from './NodeGraphExporter.js';
 import { IMAGE_EXPORTERS } from './NodeGraphImageExporters.js';
-import * as NodeGraphParser from './NodeGraphParser.js';
 import NodeGraphImporter from '@flapjs/modules/base/NodeGraphImporter.js';
 
 import AutoSaveService from '@flapjs/services/AutoSaveService.js';
 import UndoService from '@flapjs/services/UndoService.js';
-
 import GraphService from '@flapjs/services/GraphService.js';
-import IndexedNodeGraph from '@flapjs/systems/graph/model/IndexedNodeGraph.js';
-import GraphNode from '@flapjs/systems/graph/model/elements/GraphNode.js';
-import QuadraticEdge from '@flapjs/systems/graph/model/elements/QuadraticEdge.js';
-
 import ExportService from '@flapjs/services/ExportService.js';
 import ImportService from '@flapjs/services/ImportService.js';
 import NotificationService from '@flapjs/services/NotificationService.js';
-import NodeGraphController from '@flapjs/modules/base/NodeGraphController.js';
+
+import BaseGraphController from './BaseGraphController.js';
+import { INSTANCE as NODE_PARSER } from '@flapjs/systems/graph/model/parser/NodeGraphParser.js';
 
 // Theme Manager
 // Hotkeys?
@@ -68,18 +64,17 @@ const MODULE = {
         // This is usually where you setup the session to be loaded correctly (instead of passing args to constructor).
         session.importService
             .addImporter(
-                new NodeGraphImporter(NodeGraphParser.JSON,
+                new NodeGraphImporter(NODE_PARSER,
                     [ '.json', '.base.json', '.fa.json', '.fsa.json' ])
             );
         session.exportService
             .setExports({
-                session: new NodeGraphExporter(NodeGraphParser.JSON),
+                session: new NodeGraphExporter(NODE_PARSER),
                 ...IMAGE_EXPORTERS
             });
         session.graphService
-            .setGraph(new IndexedNodeGraph(GraphNode, QuadraticEdge))
-            .setGraphParser(NodeGraphParser.JSON)
-            .setGraphControllerClass(NodeGraphController)
+            .setGraphParser(NODE_PARSER)
+            .setGraphControllerClass(BaseGraphController)
             .enableAutoSaveServiceFeatures(session.autoSaveService)
             .enableUndoServiceFeatures(session.undoService);
     },
@@ -87,7 +82,7 @@ const MODULE = {
     {
         // This is called after all services have been created AND loaded, but before they are rendered.
         // This is usually where you load the state for the services or session.
-        session.graphService.graph.createNode();
+        session.graphController.getGraph().createNode();
         session.notificationService.notificationManager.pushNotification('Welcome to Flap.js!');
     },
     unload(session)

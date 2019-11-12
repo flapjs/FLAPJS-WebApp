@@ -11,6 +11,7 @@ import { SYMBOL_SEPARATOR } from './element/FSAEdge.js';
 
 // This really shouldn't be here....
 import GraphLayout from './GraphLayout.js';
+import FSAGraph from '@flapjs/modules/fa/graph/FSAGraph';
 
 export const TRASH_EDITING_NOTIFICATION_TAG = 'tryCreateWhileTrash';
 
@@ -20,9 +21,9 @@ const NODE_SPAWN_RADIUS = 64;
 
 class FSAGraphController extends GraphController
 {
-    constructor(graph)
+    constructor()
     {
-        super(graph);
+        super(new FSAGraph());
 
         this.session = null;
 

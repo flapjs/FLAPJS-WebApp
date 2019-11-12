@@ -1,5 +1,9 @@
 import GraphController from '@flapjs/systems/graph/controller/GraphController.js';
 
+import IndexedNodeGraph from '@flapjs/systems/graph/model/IndexedNodeGraph.js';
+import GraphNode from '@flapjs/systems/graph/model/elements/GraphNode.js';
+import QuadraticEdge from '@flapjs/systems/graph/model/elements/QuadraticEdge.js';
+
 import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE } from '@flapjs/systems/graph/controller/inputhandler/GraphNodeInputHandler.js';
 import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE } from '@flapjs/systems/graph/controller/inputhandler/GraphEdgeInputHandler.js';
 
@@ -7,11 +11,11 @@ import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE } from '@flapjs/systems/graph/contro
 
 export const TRASH_EDITING_NOTIFICATION_TAG = 'tryCreateWhileTrash';
 
-class NodeGraphController extends GraphController
+class BaseGraphController extends GraphController
 {
-    constructor(graph)
+    constructor()
     {
-        super(graph);
+        super(new IndexedNodeGraph(GraphNode, QuadraticEdge));
 
         this.session = null;
     }
@@ -43,4 +47,4 @@ class NodeGraphController extends GraphController
     }
 }
 
-export default NodeGraphController;
+export default BaseGraphController;

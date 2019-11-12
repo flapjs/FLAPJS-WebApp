@@ -12,7 +12,6 @@ class GraphService extends AbstractService
     {
         super();
 
-        this.graph = null;
         this.graphParser = null;
         this.graphControllerClass = null;
 
@@ -26,12 +25,6 @@ class GraphService extends AbstractService
         this._onGraphControllerChange = null;
         this._onInputControllerChange = null;
         this._onViewControllerChange = null;
-    }
-
-    setGraph(graph)
-    {
-        this.graph = graph;
-        return this;
     }
 
     setGraphParser(graphParser)
@@ -63,10 +56,9 @@ class GraphService extends AbstractService
     {
         super.load(session);
 
-        if (!this.graph) throw new Error('Mising graph - must call setGraph() before session load()');
         if (!this.graphControllerClass) throw new Error('Mising graph controller class - must call setGraphControllerClass() before session load()');
 
-        this.graphController = new (this.graphControllerClass)(this.graph);
+        this.graphController = new (this.graphControllerClass)();
         this.graphController.setSession(session);
 
         this.viewController.initialize();
@@ -129,7 +121,9 @@ class GraphService extends AbstractService
     {
         super.unload(session);
 
-        this.graph = null;
+        this._undoService = null;
+        this._autoSaveService = null;
+
         this.graphController.terminate();
         this.inputController.terminate();
         this.viewController.terminate();

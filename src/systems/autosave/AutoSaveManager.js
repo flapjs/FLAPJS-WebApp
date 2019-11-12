@@ -60,8 +60,8 @@ class AutoSaveManager
 
         this.unload();
         this._init = false;
-        this._handlers.length = 0;
         this._storage = null;
+        this.clearHandlers();
     }
 
     onIntervalUpdate()

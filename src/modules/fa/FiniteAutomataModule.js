@@ -9,7 +9,6 @@ import AnalysisPanel from '@flapjs/modules/fa/components/panels/AnalysisPanel.js
 import TestingPanel from '@flapjs/modules/fa/components/panels/TestingPanel.jsx';
 import OverviewPanel from '@flapjs/modules/fa/components/panels/OverviewPanel.jsx';
 
-import FSAGraph from '@flapjs/modules/fa/graph/FSAGraph.js';
 import FSAGraphController from '@flapjs/modules/fa/graph/FSAGraphController.js';
 import FSAPlaygroundLayer from '@flapjs/modules/fa/components/layers/FSAPlaygroundLayer.jsx';
 import FSAViewportLayer from '@flapjs/modules/fa/components/layers/FSAViewportLayer.jsx';
@@ -21,6 +20,7 @@ import JFFExporter from '@flapjs/modules/fa/loaders/JFFExporter.js';
 import FSAImporter from '@flapjs/modules/fa/loaders/FSAImporter.js';
 import FSAExporter from '@flapjs/modules/fa/loaders/FSAExporter';
 import { IMAGE_EXPORTERS } from '../base/NodeGraphImageExporters.js';
+// import FSAMachineController from '@flapjs/modules/fa/FSAMachineController.js';
 
 const MODULE = {
     id: 'fa',
@@ -67,9 +67,9 @@ const MODULE = {
                 ...IMAGE_EXPORTERS
             });
         session.graphService
-            .setGraph(new FSAGraph())
             .setGraphParser(FSA_PARSER)
             .setGraphControllerClass(FSAGraphController)
+            // .setMachineControllerClass(FSAMachineController)
             .enableAutoSaveServiceFeatures(session.autoSaveService)
             .enableUndoServiceFeatures(session.undoService);
     },
@@ -77,7 +77,7 @@ const MODULE = {
     {
         // This is called after all services have been created AND loaded, but before they are rendered.
         // This is usually where you load the state for the services or session.
-        session.graphService.graph.createNode();
+        session.graphController.getGraph().createNode();
         session.notificationService.notificationManager.pushNotification('Welcome to Flap.js!');
     },
     unload(session)

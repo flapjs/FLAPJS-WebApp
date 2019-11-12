@@ -196,8 +196,8 @@ class NodeGraphParser extends AbstractParser
     /**
      * Called by parse(), after onParserGraphCreate().
      *
-     * @param nodeData
-     * @param targetNode
+     * @param {object} nodeData The node data.
+     * @param {Node} targetNode The target graph node.
      */
     onParseNode(nodeData, targetNode)
     {
@@ -207,8 +207,8 @@ class NodeGraphParser extends AbstractParser
     /**
      * Called by parse(), after onParserGraphCreate().
      *
-     * @param edgeData
-     * @param targetEdge
+     * @param {object} edgeData The edge data.
+     * @param {Edge} targetEdge The target graph edge.
      */
     onParseEdge(edgeData, targetEdge)
     {
@@ -223,8 +223,8 @@ class NodeGraphParser extends AbstractParser
     /**
      * Called by parse().
      *
-     * @param graphData
-     * @param targetGraph
+     * @param {object} graphData The graph data.
+     * @param {NodeGraph} targetGraph The target graph.
      */
     onParseGraphResult(graphData, targetGraph)
     {
@@ -234,8 +234,9 @@ class NodeGraphParser extends AbstractParser
     /**
      * Called by compose().
      *
-     * @param graph
-     * @param graphData
+     * @param {NodeGraph} graph The graph to compose.
+     * @param {object} graphData The destination graph data.
+     * @returns {object} The composed graph data.
      */
     onComposeGraphCreate(graph, graphData)
     {
@@ -293,4 +294,5 @@ class NodeGraphParser extends AbstractParser
     }
 }
 
+export const INSTANCE = new NodeGraphParser();
 export default NodeGraphParser;

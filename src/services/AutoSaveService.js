@@ -33,7 +33,6 @@ class AutoSaveService extends AbstractService
         super.unload(session);
 
         this.autoSaveManager.terminate();
-        this.autoSaveManager.clearHandlers();
 
         delete session.autoSaveManager;
         return this;
