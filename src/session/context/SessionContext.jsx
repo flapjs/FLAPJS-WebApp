@@ -1,7 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { uuid } from '@flapjs/util/MathHelper.js';
+/**
+ * SessionContext is only the interface "holder" of the information.
+ * It should not manage, handle, or keep any of the data. That should
+ * be delegated elsewhere. Hence, why SessionProvider only takes a
+ * 'state' as a prop to begin as the initial state for the session and
+ * 'reducer' as a function to change the state (that will cause a re-render).
+ * 
+ * Ideally, this should only be changed at the start and end of a module.
+ * Any changes within a module, such as a graph or a drawer, should be delegated
+ * to another provider nested under this one. It could even be dependent on this.
+ * 
+ * This way, SessionProvider is only an interface between the data and
+ * rendering model for a module.
+ */
 
 // Behold...the session context.
 const SessionStateContext = React.createContext();
@@ -10,48 +23,21 @@ const SessionDispatchContext = React.createContext();
 // ...and it's provider...
 class SessionProvider extends React.Component
 {
+    /** @override */
+    static getDerivedStateFromProps(props, state)
+    {
+        return { ...props.state };
+    }
+
     constructor(props)
     {
         super(props);
 
-        // Load default app-defined state...
-        if (typeof props.onLoad === 'function')
-        {
-            props.onLoad(props.state);
-        }
-
         // This should match the expected shape for the consumers.
-        this.state = {
-            sessionName: 'Untitled',
-            sessionID: uuid(),
-            ...props.state
-        };
+        this.state = { ...props.state };
 
         // This should match the expected interface for the consumers.
         this.dispatch = this.dispatch.bind(this);
-    }
-
-    /** @override */
-    componentDidMount()
-    {
-        if (typeof this.props.onDidMount === 'function')
-        {
-            this.props.onDidMount(this);
-        }
-    }
-
-    /** @override */
-    componentWillUnmount()
-    {
-        if (typeof this.props.onWillUnmount === 'function')
-        {
-            this.props.onWillUnmount(this);
-        }
-
-        if (typeof this.props.onUnload === 'function')
-        {
-            this.props.onUnload(this.state);
-        }
     }
 
     dispatch(action)
@@ -90,10 +76,6 @@ SessionProvider.propTypes = {
     children: PropTypes.node.isRequired,
     state: PropTypes.object,
     reducer: PropTypes.func,
-    onLoad: PropTypes.func,
-    onDidMount: PropTypes.func,
-    onWillUnmount: PropTypes.func,
-    onUnload: PropTypes.func,
 };
 SessionProvider.defaultProps = {
     state: {},

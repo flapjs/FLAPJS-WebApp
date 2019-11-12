@@ -14,7 +14,6 @@ exports[`Storyshots App playground 1`] = `
       className="apptitle"
     >
       <select
-        defaultValue={null}
         onBlur={[Function]}
       >
         <option
@@ -61,7 +60,6 @@ exports[`Storyshots App playground 1`] = `
       <input
         onChange={[Function]}
         type="text"
-        value="Untitled"
       />
     </div>
     <button

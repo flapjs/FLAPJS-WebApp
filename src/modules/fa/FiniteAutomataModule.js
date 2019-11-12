@@ -25,14 +25,14 @@ import { IMAGE_EXPORTERS } from '../base/NodeGraphImageExporters.js';
 const MODULE = {
     id: 'fa',
     version: '1.0.0',
-    services: {
-        exportService: ExportService,
-        importService: ImportService,
-        notificationService: NotificationService,
-        undoService: UndoService,
-        graphService: GraphService,
-        autoSaveService: AutoSaveService
-    },
+    services: [
+        ExportService,
+        ImportService,
+        NotificationService,
+        UndoService,
+        GraphService,
+        AutoSaveService,
+    ],
     renders: {
         playground: [ FSAPlaygroundLayer ],
         viewport: [ FSAViewportLayer ],

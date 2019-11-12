@@ -15,6 +15,8 @@ class FlapJSApplication
         this.rootElement = rootElement;
         this.moduleManager = new ModuleManager(this, BaseModule);
         this.moduleSaver = new ModuleSaver();
+
+        this.handleChangeModule = this.handleChangeModule.bind(this);
     }
 
     async loadModuleByID(moduleID)
@@ -38,8 +40,14 @@ class FlapJSApplication
         if (this.moduleSaver.hasPreviousModuleID())
         {
             const prevModuleID = this.moduleSaver.loadFromPreviousModuleID();
-            await this.moduleManager.changeModule(prevModuleID);
+            const prevModule = await this.loadModuleByID(prevModuleID);
+            await this.moduleManager.changeModule(prevModule);
         }
+        else
+        {
+            await this.moduleManager.changeModule(BaseModule);
+        }
+        
         // Save the module to storage, if it changes...
         this.moduleManager.addEventListener(EVENT_ON_CHANGE_MODULE,
             nextModuleID => this.moduleSaver.saveToPreviousModuleID(nextModuleID));
@@ -52,8 +60,9 @@ class FlapJSApplication
     {
         const props = {
             module: this.moduleManager.getCurrentModule(),
-            changeModule: this.moduleManager.changeModule,
-            renderModule: this.moduleManager.renderModuleLayer,
+            session: this.moduleManager.getCurrentSession(),
+            reducer: this.moduleManager.getCurrentReducer(),
+            changeModule: this.handleChangeModule,
         };
 
         ReactDOM.render(
@@ -62,6 +71,13 @@ class FlapJSApplication
             ),
             this.rootElement
         );
+    }
+    
+    handleChangeModule(nextModuleID)
+    {
+        this.loadModuleByID(nextModuleID)
+            .then(nextModule => this.moduleManager.changeModule(nextModule))
+            .then(() => this.render());
     }
 
     getRenderRootElement()

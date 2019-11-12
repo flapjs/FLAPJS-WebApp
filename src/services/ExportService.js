@@ -4,6 +4,8 @@ import ExportManager from '@flapjs/systems/file/export/ExportManager.js';
 
 class ExportService extends AbstractService
 {
+    static get SERVICE_KEY() { return 'exportService'; }
+
     constructor()
     {
         super();

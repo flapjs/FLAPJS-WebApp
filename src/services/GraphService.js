@@ -8,6 +8,8 @@ import GraphAutoSaveHandler from '@flapjs/systems/graph/controller/GraphAutoSave
 
 class GraphService extends AbstractService
 {
+    static get SERVICE_KEY() { return 'graphService'; }
+    
     constructor()
     {
         super();

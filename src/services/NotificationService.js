@@ -5,6 +5,8 @@ import * as DefaultNotifications from '@flapjs/deprecated/notification/DefaultNo
 
 class NotificationService extends AbstractService
 {
+    static get SERVICE_KEY() { return 'notificationService'; }
+    
     constructor()
     {
         super();

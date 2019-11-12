@@ -4,6 +4,8 @@ import UndoManager from '@flapjs/systems/undo/UndoManager.js';
 
 class UndoService extends AbstractService
 {
+    static get SERVICE_KEY() { return 'undoService'; }
+    
     constructor()
     {
         super();

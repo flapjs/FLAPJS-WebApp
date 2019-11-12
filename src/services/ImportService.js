@@ -4,6 +4,8 @@ import ImportManager from '@flapjs/systems/file/import/ImportManager.js';
 
 class ImportService extends AbstractService
 {
+    static get SERVICE_KEY() { return 'importService'; }
+    
     constructor()
     {
         super();

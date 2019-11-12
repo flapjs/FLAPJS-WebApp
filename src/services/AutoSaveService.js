@@ -4,6 +4,8 @@ import LocalStorage from '@flapjs/util/storage/LocalStorage';
 
 class AutoSaveService extends AbstractService
 {
+    static get SERVICE_KEY() { return 'autoSaveService'; }
+
     constructor()
     {
         super();

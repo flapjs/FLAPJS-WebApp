@@ -23,15 +23,14 @@ import { INSTANCE as NODE_PARSER } from '@flapjs/systems/graph/model/parser/Node
 const MODULE = {
     id: 'base',
     version: '1.0.0',
-    // TODO: Order is not guaranteed. This should probably be an array instead.
-    services: {
-        exportService: ExportService,
-        importService: ImportService,
-        notificationService: NotificationService,
-        undoService: UndoService,
-        graphService: GraphService,
-        autoSaveService: AutoSaveService,
-    },
+    services: [
+        ExportService,
+        ImportService,
+        NotificationService,
+        UndoService,
+        GraphService,
+        AutoSaveService,
+    ],
     renders: {
         appbar: [ ],
         playground: [ BasePlaygroundLayer ],
