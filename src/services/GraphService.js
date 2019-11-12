@@ -23,9 +23,9 @@ class GraphService extends AbstractService
         this.inputController = new InputController();
         this.viewController = new ViewController();
 
-        this._onGraphChange = null;
-        this._onInputChange = null;
-        this._onViewChange = null;
+        this._onGraphControllerChange = null;
+        this._onInputControllerChange = null;
+        this._onViewControllerChange = null;
     }
 
     setGraph(graph)
@@ -99,12 +99,12 @@ class GraphService extends AbstractService
         // graph, input, or view changes.
         // This is pretty bad practice. If something depends on one of those 3 things,
         // they should register themselves with that controller's change handler.
-        this._onGraphChange = this.onGraphChange.bind(this, sessionProvider);
-        this._onInputChange = this.onInputChange.bind(this, sessionProvider);
-        this._onViewChange = this.onViewChange.bind(this, sessionProvider);
-        sessionProvider.state.graphController.getGraphChangeHandler().addListener(this._onGraphChange);
-        sessionProvider.state.inputController.getChangeHandler().addListener(this._onInputChange);
-        sessionProvider.state.viewController.getChangeHandler().addListener(this._onViewChange);
+        this._onGraphControllerChange = this.onGraphControllerChange.bind(this, sessionProvider);
+        this._onInputControllerChange = this.onInputControllerChange.bind(this, sessionProvider);
+        this._onViewControllerChange = this.onViewControllerChange.bind(this, sessionProvider);
+        sessionProvider.state.graphController.getChangeHandler().addChangeListener(this._onGraphControllerChange);
+        sessionProvider.state.inputController.getChangeHandler().addChangeListener(this._onInputControllerChange);
+        sessionProvider.state.viewController.getChangeHandler().addChangeListener(this._onViewControllerChange);
 
         return this;
     }
@@ -114,12 +114,12 @@ class GraphService extends AbstractService
     {
         super.unmount(sessionProvider);
 
-        sessionProvider.state.graphController.getGraphChangeHandler().removeListener(this._onGraphChange);
-        sessionProvider.state.inputController.getChangeHandler().removeListener(this._onInputChange);
-        sessionProvider.state.viewController.getChangeHandler().removeListener(this._onViewChange);
-        this._onGraphChange = null;
-        this._onInputChange = null;
-        this._onViewChange = null;
+        sessionProvider.state.graphController.getChangeHandler().removeChangeListener(this._onGraphControllerChange);
+        sessionProvider.state.inputController.getChangeHandler().removeChangeListener(this._onInputControllerChange);
+        sessionProvider.state.viewController.getChangeHandler().removeChangeListener(this._onViewControllerChange);
+        this._onGraphControllerChange = null;
+        this._onInputControllerChange = null;
+        this._onViewControllerChange = null;
 
         return this;
     }
@@ -141,17 +141,17 @@ class GraphService extends AbstractService
         return this;
     }
 
-    onGraphChange(sessionProvider, graph, hash)
+    onGraphControllerChange(sessionProvider, graphController, hash)
     {
         sessionProvider.setState({ graphHash: hash });
     }
 
-    onViewChange(sessionProvider, viewport, hash)
+    onViewControllerChange(sessionProvider, viewController, hash)
     {
         sessionProvider.setState({ viewHash: hash });
     }
 
-    onInputChange(sessionProvider, input, hash)
+    onInputControllerChange(sessionProvider, inputController, hash)
     {
         sessionProvider.setState({ inputHash: hash });
     }

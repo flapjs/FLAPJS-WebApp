@@ -1,14 +1,15 @@
 import GraphNode from '../model/elements/GraphNode.js';
-import ControllerChangeHandler from './ControllerChangeHandler.js';
 import { stringHash } from '@flapjs/util/MathHelper.js';
+
+import AbstractController from '@flapjs/systems/graph/controller/AbstractController.js';
 
 const DEFAULT_MOVE_MODE_FIRST = true;
 
-class InputController
+class InputController extends AbstractController
 {
     constructor()
     {
-        this._changeHandler = new ControllerChangeHandler(this, target => target.getHashCode());
+        super();
 
         this._trashMode = false;
         this._nodeOnly = false;
@@ -16,22 +17,22 @@ class InputController
         this._handlingInput = false;
 
         /*
-            This is the current target for the event. If this is a multi-stage event,
-            such as dragging, then this will only refer to the first target, the source
-            of the event.
-        */
+         * This is the current target for the event. If this is a multi-stage event,
+         * such as dragging, then this will only refer to the first target, the source
+         * of the event.
+         */
         this._target = {
             source: null,
             type: null
         };
 
         /*
-            This is the active target. It can only be manually set by binding source and
-            type through bindActiveTarget(). This allows future input handling to ignore
-            this target for intersection tests, etc.
-
-            NOTE: You must bind AND unbind the active target.
-        */
+         * This is the active target. It can only be manually set by binding source and
+         * type through bindActiveTarget(). This allows future input handling to ignore
+         * this target for intersection tests, etc.
+         * 
+         * NOTE: You must bind AND unbind the active target.
+         */
         this._activeTarget = {
             source: null,
             type: null,
@@ -39,10 +40,10 @@ class InputController
         };
 
         /*
-            This is the immediate target under the cursor. Regardless of input event, this
-            will always refer to the element directly intersecting the cursor. The active target
-            with the proper options may be ignored as possible candidates.
-        */
+         * This is the immediate target under the cursor. Regardless of input event, this
+         * will always refer to the element directly intersecting the cursor. The active target
+         * with the proper options may be ignored as possible candidates.
+         */
         this._immediateTarget = {
             source: null,
             type: null
@@ -54,6 +55,21 @@ class InputController
         // Although not used here, it is used to connect to components.
         this.onMouseOver = this.onMouseOver.bind(this);
         this.onMouseOut = this.onMouseOut.bind(this);
+    }
+    
+    /** @override */
+    getControlledHashCode(self)
+    {
+        let string;
+        try
+        {
+            string = JSON.stringify(self);
+        }
+        catch(e)
+        {
+            string = `${Math.random()}`;
+        }
+        return stringHash(string);
     }
 
     setSelectionBox(selectionBox)
@@ -80,17 +96,11 @@ class InputController
         return this;
     }
 
-    initialize()
-    {
-        this._changeHandler.startListening();
-    }
-
-    terminate()
-    {
-        this._changeHandler.stopListening();
-    }
-
-    /** @override */
+    /**
+     * This is inherited indirectly.
+     * 
+     * @override
+     */
     onPreInputEvent(pointer)
     {
         this._handlingInput = true;
@@ -99,7 +109,11 @@ class InputController
         return false;
     }
 
-    /** @override */
+    /**
+     * This is inherited indirectly.
+     * 
+     * @override
+     */
     onPostInputEvent(pointer)
     {
         this.updateCurrentTarget(null, null);
@@ -174,25 +188,6 @@ class InputController
     isHandlingInput() { return this._handlingInput; }
 
     getSelectionBox() { return this._selectionBox; }
-    
-    getHashCode()
-    {
-        let string;
-        try
-        {
-            string = JSON.stringify(this);
-        }
-        catch(e)
-        {
-            string = `${Math.random()}`;
-        }
-        return stringHash(string);
-    }
-
-    getChangeHandler()
-    {
-        return this._changeHandler;
-    }
 }
 
 export default InputController;

@@ -16,14 +16,14 @@ class ControllerChangeHandler
         this.update = this.update.bind(this);
     }
 
-    addListener(listener)
+    addChangeListener(listener)
     {
         if (typeof listener !== 'function')
             throw new Error('Cannot add uncallable listener');
         this._listeners.push(listener);
     }
 
-    removeListener(listener)
+    removeChangeListener(listener)
     {
         const i = this._listeners.indexOf(listener);
         if (i >= 0)
@@ -34,16 +34,16 @@ class ControllerChangeHandler
         return false;
     }
 
-    clearListeners() { this._listeners.length = 0; }
-    getListeners() { return this._listeners; }
+    clearChangeListeners() { this._listeners.length = 0; }
+    getChangeListeners() { return this._listeners; }
 
-    startListening()
+    startListeningForChanges()
     {
         this._updateInterval = setInterval(this.update, this._refreshTicks);
         this.update();
     }
 
-    stopListening()
+    stopListeningForChanges()
     {
         clearInterval(this._updateInterval);
     }
@@ -54,11 +54,11 @@ class ControllerChangeHandler
         this.update();
     }
 
-    update()
+    update(forceUpdate = false)
     {
         const target = this._target;
         const targetHash = this._hashFunction(target);
-        if (targetHash !== this._cachedHash)
+        if (forceUpdate || targetHash !== this._cachedHash)
         {
             this._cachedHash = targetHash;
             for (const listener of this._listeners)

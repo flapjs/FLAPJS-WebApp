@@ -23,9 +23,9 @@ class NodeGraphController extends GraphController
     }
 
     /** @override */
-    onGraphEvent(eventName, eventData)
+    emitGraphEvent(eventName, eventData)
     {
-        super.onGraphEvent(eventName, eventData);
+        super.emitGraphEvent(eventName, eventData);
 
         switch (eventName)
         {

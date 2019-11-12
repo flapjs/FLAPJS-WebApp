@@ -9,7 +9,6 @@ import FSAGraphLabeler from './FSAGraphLabeler';
 
 import { SYMBOL_SEPARATOR } from './element/FSAEdge.js';
 
-
 // This really shouldn't be here....
 import GraphLayout from './GraphLayout.js';
 
@@ -40,9 +39,9 @@ class FSAGraphController extends GraphController
     }
 
     /** @override */
-    onGraphEvent(eventName, eventData)
+    emitGraphEvent(eventName, eventData)
     {
-        super.onGraphEvent(eventName, eventData);
+        super.emitGraphEvent(eventName, eventData);
 
         switch (eventName)
         {

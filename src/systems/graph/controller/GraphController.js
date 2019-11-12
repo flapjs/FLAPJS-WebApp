@@ -2,21 +2,21 @@ import { DEFAULT_LABEL_FORMATTER } from './LabelFormatter.js';
 
 import GraphNode from '../model/elements/GraphNode.js';
 import GraphEdge from '../model/elements/GraphEdge.js';
-import ControllerChangeHandler from './ControllerChangeHandler.js';
+import AbstractController from '@flapjs/systems/graph/controller/AbstractController.js';
 
 export const GRAPH_EVENT_CLEAR = 'graph-clear';
+export const EVENT_ON_CHANGE_GRAPH = 'changegraph';
 
-class GraphController
+class GraphController extends AbstractController
 {
     constructor(graph)
     {
+        super();
+
         this._graph = graph;
-        this._graphChangeHandler = new ControllerChangeHandler(graph, target => target.getHashCode(false));
 
         this._labelEditor = null;
         this._labelFormatter = null;
-
-        this._listeners = [];
     }
 
     setLabelEditor(labelEditor)
@@ -31,30 +31,17 @@ class GraphController
         return this;
     }
 
-    addListener(listener)
-    {
-        this._listeners.push(listener);
-        return this;
-    }
-
-    removeListener(listener)
-    {
-        const index = this._listeners.indexOf(listener);
-        if (index >= 0) this._listeners.splice(index, 1);
-    }
-
-    clearListeners() { this._listeners.length = 0; }
-
-    initialize()
-    {
-        this._graphChangeHandler.startListening();
-    }
-
+    /** @override */
     terminate()
     {
-        this._graphChangeHandler.stopListening();
-        this.clearListeners();
+        super.terminate();
         this.clearGraph();
+    }
+
+    /** @override */
+    getControlledHashCode(self)
+    {
+        return self._graph.getHashCode(false);
     }
 
     clearGraph()
@@ -67,19 +54,9 @@ class GraphController
         }
     }
 
-    onGraphEvent(eventName, eventData)
-    {
-        // Do nothing... for now...
-    }
-
     emitGraphEvent(eventName, eventData = {})
     {
-        this.onGraphEvent(eventName, eventData);
-
-        for (const listener of this._listeners)
-        {
-            listener.onGraphEvent(this, eventName, eventData);
-        }
+        this._changeHandler.update();
     }
 
     openLabelEditor(target, defaultLabel = null, callback = null)
@@ -113,9 +90,41 @@ class GraphController
 
     getLabelFormatter() { return this._labelFormatter || DEFAULT_LABEL_FORMATTER; }
     getLabelEditor() { return this._labelEditor; }
-
-    getGraphChangeHandler() { return this._graphChangeHandler; }
     getGraph() { return this._graph; }
+
+    /**
+     * Use getChangeHandler().addChangeListener() instead.
+     * 
+     * @deprecated
+     * @param {Function} listener The listener to listen for the changegraph event.
+     * @returns {this} For method-chaining.
+     */
+    addListener(listener)
+    {
+        this._changeHandler.addChangeListener(listener);
+        return this;
+    }
+
+    /**
+     * Use getChangeHandler().removeChangeListener() instead.
+     * 
+     * @deprecated
+     * @param {Function} listener The listener to remove for the changegraph event.
+     * @returns {this} For method-chaining.
+     */
+    removeListener(listener)
+    {
+        this._changeHandler.removeChangeListener(listener);
+        return this;
+    }
+
+    /**
+     * Use getChangeHandler() instead.
+     * 
+     * @deprecated
+     * @returns {ControllerChangeHandler} The change handler for the graph.
+     */
+    getGraphChangeHandler() { return this.getChangeHandler(); }
 }
 
 export default GraphController;
