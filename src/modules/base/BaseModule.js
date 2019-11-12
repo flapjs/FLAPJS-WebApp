@@ -80,8 +80,8 @@ const MODULE = {
             .setGraph(new IndexedNodeGraph(GraphNode, QuadraticEdge))
             .setGraphParser(NodeGraphParser.JSON)
             .setGraphControllerClass(NodeGraphController)
-            .extendAutoSaveService(session.autoSaveService)
-            .extendUndoService(session.undoService);
+            .enableAutoSaveServiceFeatures(session.autoSaveService)
+            .enableUndoServiceFeatures(session.undoService);
     },
     postload(session)
     {

@@ -46,13 +46,13 @@ class GraphService extends AbstractService
         return this;
     }
 
-    extendAutoSaveService(autoSaveService)
+    enableAutoSaveServiceFeatures(autoSaveService)
     {
         this._autoSaveService = autoSaveService;
         return this;
     }
 
-    extendUndoService(undoService)
+    enableUndoServiceFeatures(undoService)
     {
         this._undoService = undoService;
         return this;
