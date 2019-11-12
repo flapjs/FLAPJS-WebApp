@@ -3,8 +3,8 @@ import { solvePDA } from 'modules/pda/machine/PDAUtils.js';
 import {convertToPDA} from './ConvertCFG.js';
 import CFG, {Rule, PIPE} from '../CFG.js';
 import { EMPTY } from 'modules/re/machine/RE.js';
-import { newStartVariable, eliminateEpsilonVariable, eliminateEpsilonRules } from './ConvertCFGtoChomsky.js';
-import { eliminateUnitRules } from './ConvertCFGtoChomsky.js'
+import { newStartVariable, eliminateEpsilonVariable, eliminateEpsilonRules, convertCFGtoChomsky } from './ConvertCFGtoChomsky.js';
+import { eliminateUnitRules, parseRHS, breakLongRule, convertRulesIntoProperForm } from './ConvertCFGtoChomsky.js'
 import { getConsoleOutput } from '@jest/console';
 import { start } from 'repl';
 
@@ -132,6 +132,24 @@ describe('Testing indicesOf() method of Rule', () => {
     test('Testing the Rule \'A -> A_1A_2A_3A_11A_1A_2\'', () => {
         expect(rule3.indicesOf('A_1')).toEqual([0, 13]);
     }); 
+});
+
+describe('Testing parseRHS() function of ConvertCFGtoChomsky', () => 
+{
+    test('Testing A_1aAB_3Rcb', () => {
+        let string = 'A_1aAB_3Rcb';
+        let result = parseRHS(string);
+        let expectedResult = ['A_1', 'a', 'A', 'B_3', 'R', 'c', 'b'];
+        expect(result).toStrictEqual(expectedResult);
+    });
+
+    test('Testing AA_1A_2A_3A_11A_1A_2', () => 
+    {
+        let string = 'AA_1A_2A_3A_11A_1A_2';
+        let result = parseRHS(string);
+        let expectedResult = ['A', 'A_1', 'A_2', 'A_3', 'A_11', 'A_1', 'A_2'];
+        expect(result).toStrictEqual(expectedResult);
+    });
 });
 
 describe('Testing newStartVariable() function of ConvertCFGtoChomsky', () => {
@@ -346,7 +364,7 @@ describe('Testing eliminateEpsilonRules() function of ConvertCFGtoChomsky', () =
 
     test('Testing the grammar {S -> AA,  A -> epsilon}', () => 
     {
-        debugger;
+        // debugger;
         variables = new Set(['S', 'A']);
         terminals = new Set([EMPTY]);
         startVariable = 'S';
@@ -447,5 +465,41 @@ describe('Testing eliminateUnitRules() functino of ConvertCFGtoChomsky', () =>
         ];
         let expectedResult = new CFG(variables, terminals, rule, startVariable);
         testCFGEqual(result, expectedResult);
+    });
+});
+
+describe('Testing convertRulesIntoProperForm() function of ConvertCFGtoChomsky', () => 
+{
+    test('Testing A -> A_1aAB_3Rcb', () => {
+        let string = 'A_1aAB_3Rcb';
+        let variables = new Set(['A', 'A_1', 'B_3', 'R']);
+        let terminals = new Set(['a', 'b', 'c']);
+        let rule = [new Rule('A', string)];
+        let startVariable = 'A';
+        let cfg = new CFG(variables, terminals, rule, startVariable);
+        let result = convertRulesIntoProperForm(cfg);
+        console.log(result);
+    });
+});
+
+describe('Testing convertCFGtoChomsky() of ConvertCFGtoChomsky', () => 
+{
+    // let's test the example in the book
+    test('Let\'s test the example in the book!', () => 
+    {
+        let variables = new Set(['S', 'A', 'B']);
+        let terminals = new Set(['a', 'b', EMPTY]);
+        let rule = [
+            new Rule('S', 'ASA'),
+            new Rule('S', 'aB'),
+            new Rule('A', 'B'),
+            new Rule('A', 'S'),
+            new Rule('B', 'b'),
+            new Rule('B', EMPTY)
+        ];
+        let startVariable = 'S';
+        let cfg = new CFG(variables, terminals, rule, startVariable);
+        let result = convertCFGtoChomsky(cfg);
+        console.log(result);
     });
 });

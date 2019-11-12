@@ -31,8 +31,8 @@ export function convertCFGtoChomsky(cfg)
     */
     let newCFG = new CFG();
     newCFG.copyFromCFG(cfg);
-    let seperatedCFG = newCFG.separateRulesBySubstitutions();
-    let CFGwithNewStartVariable = newStartVariable(seperatedCFG);
+    // let seperatedCFG = newCFG.separateRulesBySubstitutions();
+    let CFGwithNewStartVariable = newStartVariable(newCFG);
     let CFGwithNoEpsilonRules = eliminateEpsilonRules(CFGwithNewStartVariable);
     let CFGwithNoUnitRules = eliminateUnitRules(CFGwithNoEpsilonRules);
     let ChomksyNormalForm = convertRulesIntoProperForm(CFGwithNoUnitRules);    
@@ -328,7 +328,7 @@ export function eliminateUnitRules(cfg)
  * @param {CFG} cfg the CFG to process
  * @return {CFG} an equivalent CFG in Chomsky normal form.
  */
-function convertRulesIntoProperForm(cfg)
+export function convertRulesIntoProperForm(cfg)
 {
     // so the function is pure
     let newCFG = new CFG();
@@ -339,24 +339,112 @@ function convertRulesIntoProperForm(cfg)
     let originalRules = newCFG._rules.reduce((acc, cur) => 
     {
         let newRule = new Rule(cur.getLHS(), cur.getRHS()); // make deep copy
-        return acc.push(newRule);
+        acc.push(newRule);
+        return acc;
     }, []);
+
+    // then clear the old rules since we don't need them anymore
+    newCFG._rules = [];
 
     // this dict helps us to remember which rules we can use to derive a single terminal
     // so it prevents the variable set from growing too big.
-    let dictOfTerminalRules = Object.create(null); 
+    // let dictOfTerminalRules = Object.create(null); 
 
     for(let rule of originalRules) 
     {
-        let RHS = rule.getRHS();
+        let [newRules, newVariables] = breakLongRule(rule, newCFG.getTerminals(), null);
+        newCFG._rules = newCFG._rules.concat(newRules);
+        for(let temp of newVariables)
+        {
+            newCFG._variables.add(temp);
+        }
     }
     return newCFG;
 }
 
 /**
- * This helper function to convertRulesIntoProperForm will take RHS of a rule 
+ * This helper function of convertRulesIntoProperForm() will break a long rule of
+ * the form: A -> k1k2...kn, n >= 3, into A -> k1A1, A1 -> k2A2, ..., An-2 -> kn-1kn.
+ * It returns an array whose first element are the rules generated in this process,
+ * and second element are the new variables generated in this process.
+ * @param {Rule} rule the rule to break down.
+ * @param {Set} terminals the set of terminals of the CFG.
+ * @param {Object} dict the dictionary of available rules to generate a terminal.
+ * @return {Array} an Array whose first element are the new rules generated in this process,
+ *                 and second element are the new variables generated in this process.
+ */
+export function breakLongRule(rule, terminals, dict = null) 
+{
+    const arrayOfSymbols = parseRHS(rule.getRHS());
+    let LHS = rule.getLHS();
+    let newRules = []; 
+    let newVariables = [];
+    let newTerminalRules = []; // rules of the form A -> a
+
+    if(terminals.has(arrayOfSymbols[0])) // if a terminal
+    {
+        newTerminalRules.push(new Rule(LHS + '(' + (arrayOfSymbols.length + 1) + ')', 
+            arrayOfSymbols[0]));
+        newVariables.push(LHS + '(' + (arrayOfSymbols.length + 1) + ')');
+    }
+    else
+    {
+        newRules.push(new Rule(LHS, arrayOfSymbols[0] + LHS + '(1)'));
+    }
+
+    newRules = arrayOfSymbols.slice(1, arrayOfSymbols.length - 2).reduce((acc, cur, idx) => 
+    {
+        const thisLHS = LHS + '(' + (idx + 1) + ')'; // e.g A2
+        newVariables.push(thisLHS);
+        let thisRHS;
+        if (terminals.has(cur)) // if a terminal
+        {
+            const variableToCur = LHS + '(' + (arrayOfSymbols.length + idx + 1) + ')';
+            newTerminalRules.push(new Rule(variableToCur, cur));
+            newVariables.push(variableToCur);
+            thisRHS = variableToCur + LHS + '(' + (idx + 2) + ')';
+        }
+        else 
+        {
+            thisRHS = cur + LHS + '(' + (idx + 2) + ')'; // e.g k2A2
+        }
+        acc.push(new Rule(thisLHS, thisRHS));
+        return acc;
+    }, newRules);  
+
+    const lastVariable = LHS + '(' + (arrayOfSymbols.length - 2) + ')'; // An - 2
+    let lastRHS = arrayOfSymbols[arrayOfSymbols.length - 2];
+    if(terminals.has(arrayOfSymbols[arrayOfSymbols.length - 2]))
+    {
+        lastRHS = LHS + '(' +  (arrayOfSymbols.length - 1) + ')'; // An-1
+        newTerminalRules.push(new Rule(LHS + '(' +  (arrayOfSymbols.length - 1) + ')',
+            arrayOfSymbols[arrayOfSymbols.length - 2]));
+        newVariables.push(LHS + '(' +  (arrayOfSymbols.length - 1) + ')');
+    }
+    if(terminals.has(arrayOfSymbols[arrayOfSymbols.length - 1]))
+    {
+        lastRHS = lastRHS.concat(LHS + '(' + arrayOfSymbols.length + ')'); // An
+        newTerminalRules.push(new Rule(LHS + '(' + arrayOfSymbols.length + ')', 
+            arrayOfSymbols[arrayOfSymbols.length - 1]));
+        newVariables.push(LHS + '(' + arrayOfSymbols.length + ')');
+    }
+    else
+    {
+        lastRHS = lastRHS.concat(arrayOfSymbols[arrayOfSymbols.length - 1]);
+    }
+
+    newRules.push(new Rule(lastVariable, lastRHS));
+    newVariables.push(lastVariable);
+
+    // then concat newRules with newTerminalRules
+    newRules = newRules.concat(newTerminalRules);
+    return [newRules, newVariables];
+}
+
+/**
+ * This helper function of convertRulesIntoProperForm() will take RHS of a rule 
  * and parse it, returning an array of variables and terminals. This function
- * assumes that a terminal or variable always starts with an alphabetic letter,
+ * assumes that a terminal or variable always starts with exactly 1 alphabetic letter,
  * that is: [a-z][A-Z], it fails to work otherwise. It also assumes that the 
  * input string consists of variable or terminals in the grammar.
  * e.g., 
@@ -366,7 +454,23 @@ function convertRulesIntoProperForm(cfg)
  * @return {Array} an Array of variables and terminals, in the same order as they
  *                 appear in the string.
  */
-function parseRHS(RHS)
+export function parseRHS(RHS)
 {
-
+    let regEx = /[a-z]/i; // case insenstive search for next alphabetic char
+    let indexOfNextSymbol = RHS.slice(1).search(regEx) + 1;
+    let array = [];
+    let string = RHS;
+    while(indexOfNextSymbol >= 0) 
+    {
+        array.push(string.slice(0, indexOfNextSymbol));
+        string = string.slice(indexOfNextSymbol);
+        indexOfNextSymbol = string.slice(1).search(regEx) + 1;
+        if(!indexOfNextSymbol)
+        {
+            array.push(string);
+            break;
+        }
+    }
+    return array;
 }
+
