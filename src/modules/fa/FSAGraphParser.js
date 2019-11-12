@@ -54,7 +54,7 @@ export const JSON = {
 
         return dst;
     },
-    objectify(graph)
+    compose(graph)
     {
         const graphNodes = graph.getNodes() || [];
         const nodeCount = graphNodes.length || 0;

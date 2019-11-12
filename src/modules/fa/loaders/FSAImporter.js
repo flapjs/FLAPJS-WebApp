@@ -42,9 +42,15 @@ class FSAImporter extends SessionImporter
         const machineController = session.machineController;
         const graph = graphController.getGraph();
 
-        this._graphParser.parse(sessionData['graphData'], graph);
+        if ('graphData' in sessionData)
+        {
+            this._graphParser.parse(sessionData['graphData'], graph);
+        }
 
-        loadMachineFromData(graphController, machineController, sessionData['machineData']);
+        if ('machineData' in sessionData)
+        {
+            loadMachineFromData(graphController, machineController, sessionData['machineData']);
+        }
     }
 
     /** @override */

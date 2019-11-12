@@ -21,18 +21,22 @@ const NODE_SPAWN_RADIUS = 64;
 
 class FSAGraphController extends GraphController
 {
-    constructor(app, graph, graphParser)
+    constructor(graph)
     {
         super(graph);
 
-        this._app = app;
+        this.session = null;
 
         this.setLabelFormatter(new FSAGraphLabeler().setGraphController(this));
 
-
         // This really shouldn't be here...
-
         this.shouldAutoLabel = DEFAULT_AUTO_RENAME;
+    }
+
+    setSession(session)
+    {
+        this.session = session;
+        return this;
     }
 
     /** @override */
@@ -52,7 +56,7 @@ class FSAGraphController extends GraphController
                 {
                     this.applyAutoRename();
                 }
-                this._app.getUndoManager().captureEvent();
+                this.session.undoManager.captureEvent();
                 break;
             case GRAPH_EVENT_NODE_EDIT_WHILE_DELETE:
             case GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE:
@@ -64,11 +68,9 @@ class FSAGraphController extends GraphController
                 */
                 break;
             default:
-                this._app.getUndoManager().captureEvent();
+                this.session.undoManager.captureEvent();
         }
     }
-
-    getApp() { return this._app; }
 
     // these really shouldn't be here...
 
@@ -99,7 +101,7 @@ class FSAGraphController extends GraphController
     {
         GraphLayout.applyLayout(this.getGraph());
 
-        this._app.getUndoManager().captureEvent();
+        this.session.undoManager.captureEvent();
     }
 
     applyAutoRename()
@@ -194,7 +196,7 @@ class FSAGraphController extends GraphController
         const newNodeLabel = this.getGraphLabeler().getDefaultNodeLabel();
         node.setNodeLabel(newNodeLabel);
 
-        this._app.getUndoManager().captureEvent();
+        this.session.undoManager.captureEvent();
         return node;
     }
 
@@ -202,7 +204,7 @@ class FSAGraphController extends GraphController
     {
         node.setNodeLabel(newLabel);
         node.setNodeCustom(true);
-        this._app.getUndoManager().captureEvent();
+        this.session.undoManager.captureEvent();
     }
 }
 

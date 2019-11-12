@@ -12,9 +12,9 @@ import * as FSAGraphParser from '@flapjs/modules/fa/FSAGraphParser.js';
 import FSAExporter from '@flapjs/modules/fa/loaders/FSAExporter';
 import { IMAGE_EXPORTERS } from '../base/NodeGraphImageExporters.js';
 import FSAGraph from '@flapjs/modules/fa/graph/FSAGraph.js';
-
-import NodeGraphSaveHandler from '@flapjs/modules/base/NodeGraphSaveHandler.js';
-import SafeUndoNodeGraphEventHandler from '@flapjs/systems/graph/controller/SafeUndoNodeGraphEventHandler.js';
+import FSAGraphController from '@flapjs/modules/fa/graph/FSAGraphController.js';
+import FSAPlaygroundLayer from '@flapjs/modules/fa/components/layers/FSAPlaygroundLayer.jsx';
+import FSAViewportLayer from '@flapjs/modules/fa/components/layers/FSAViewportLayer.jsx';
 
 const MODULE = {
     id: 'fa',
@@ -28,6 +28,8 @@ const MODULE = {
         autoSaveService: AutoSaveService
     },
     renders: {
+        playground: [ FSAPlaygroundLayer ],
+        viewport: [ FSAViewportLayer ],
         drawer: [
             OverviewPanel,
             TestingPanel,
@@ -54,9 +56,12 @@ const MODULE = {
                 session: new FSAExporter(FSAGraphParser.JSON),
                 ...IMAGE_EXPORTERS
             });
-        session.graphService.setGraph(new FSAGraph());
-        session.undoService.setEventHandlerFactory(() => new SafeUndoNodeGraphEventHandler(session.graphController, FSAGraphParser.JSON));
-        session.autoSaveService.setAutoSaveHandler(new NodeGraphSaveHandler(session));
+        session.graphService
+            .setGraph(new FSAGraph())
+            .setGraphParser(FSAGraphParser.JSON)
+            .setGraphControllerClass(FSAGraphController)
+            .enableAutoSaveServiceFeatures(session.autoSaveService)
+            .enableUndoServiceFeatures(session.undoService);
     },
     postload(session)
     {

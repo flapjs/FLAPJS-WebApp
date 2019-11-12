@@ -16,14 +16,13 @@ class FSAExporter extends SessionExporter
     /** @override */
     onExportSession(session, dst)
     {
-        /*
-        const currentModule = session.module;
-        const graphController = currentModule.getGraphController();
-        const machineController = currentModule.getMachineController();
+        const graphController = session.graphController;
         const graph = graphController.getGraph();
-        const graphData = this._graphParser.objectify(graph);
+        const graphData = this._graphParser.compose(graph);
 
         dst['graphData'] = graphData;
+        /*
+        const machineController = currentModule.getMachineController();
         dst['machineData'] = {
             type: machineController.getMachineType(),
             symbols: machineController.getCustomSymbols(),
