@@ -1,13 +1,15 @@
 import SessionImporter from '@flapjs/session/helper/SessionImporter.js';
 
-class FSAJFFImporter extends SessionImporter
+class JFFImporter extends SessionImporter
 {
-    constructor(app, jffGraphParser)
+    constructor(jffGraphParser, fileTypes = [])
     {
         super();
 
-        this._app = app;
         this._graphParser = jffGraphParser;
+        this._prevGraphHash = 0;
+
+        this._fileTypes = fileTypes;
     }
 
     /** @override */
@@ -19,23 +21,21 @@ class FSAJFFImporter extends SessionImporter
     /** @override */
     onPreImportSession(session)
     {
-        const currentModule = session.getCurrentModule();
-        const graphController = currentModule.getGraphController();
+        const graphController = session.graphController;
         const graph = graphController.getGraph();
         this._prevGraphHash = graph.getHashCode(true);
 
         // TODO: this should not be here, this should exist somewhere in graphController
         if (!graph.isEmpty())
         {
-            session.getApp().getUndoManager().captureEvent();
+            session.undoManager.captureEvent();
         }
     }
 
     /** @override */
     onImportSession(session, sessionData)
     {
-        const currentModule = session.getCurrentModule();
-        const graphController = currentModule.getGraphController();
+        const graphController = session.graphController;
         const graph = graphController.getGraph();
 
         this._graphParser.parse(sessionData, graph);
@@ -44,8 +44,7 @@ class FSAJFFImporter extends SessionImporter
     /** @override */
     onPostImportSession(session)
     {
-        const currentModule = session.getCurrentModule();
-        const graphController = currentModule.getGraphController();
+        const graphController = session.graphController;
         const graph = graphController.getGraph();
 
         // Compares the graph hash before and after import, captures event if they are not equal
@@ -53,9 +52,9 @@ class FSAJFFImporter extends SessionImporter
         if (this._prevGraphHash !== nextGraphHash)
         {
             // TODO: this should not be here
-            session.getApp().getUndoManager().captureEvent();
+            session.undoManager.captureEvent();
         }
     }
 }
 
-export default FSAJFFImporter;
+export default JFFImporter;

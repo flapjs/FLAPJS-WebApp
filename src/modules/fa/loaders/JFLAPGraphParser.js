@@ -336,4 +336,5 @@ class JFLAPGraphParser extends Parser
     }
 }
 
+export const INSTANCE = new JFLAPGraphParser();
 export default JFLAPGraphParser;

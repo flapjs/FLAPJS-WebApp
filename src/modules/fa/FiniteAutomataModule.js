@@ -7,14 +7,18 @@ import NotificationService from '@flapjs/services/NotificationService.js';
 import UndoService from '@flapjs/services/UndoService.js';
 import GraphService from '@flapjs/services/GraphService.js';
 import AutoSaveService from '@flapjs/services/AutoSaveService.js';
-import FSAImporter from '@flapjs/modules/fa/loaders/FSAImporter.js';
-import * as FSAGraphParser from '@flapjs/modules/fa/FSAGraphParser.js';
-import FSAExporter from '@flapjs/modules/fa/loaders/FSAExporter';
-import { IMAGE_EXPORTERS } from '../base/NodeGraphImageExporters.js';
 import FSAGraph from '@flapjs/modules/fa/graph/FSAGraph.js';
 import FSAGraphController from '@flapjs/modules/fa/graph/FSAGraphController.js';
 import FSAPlaygroundLayer from '@flapjs/modules/fa/components/layers/FSAPlaygroundLayer.jsx';
 import FSAViewportLayer from '@flapjs/modules/fa/components/layers/FSAViewportLayer.jsx';
+
+import { INSTANCE as FSA_PARSER } from '@flapjs/modules/fa/loaders/FSAGraphParser.js';
+import { INSTANCE as JFF_PARSER } from '@flapjs/modules/fa/loaders/JFLAPGraphParser.js';
+import JFFImporter from '@flapjs/modules/fa/loaders/JFFImporter.js';
+import JFFExporter from '@flapjs/modules/fa/loaders/JFFExporter.js';
+import FSAImporter from '@flapjs/modules/fa/loaders/FSAImporter.js';
+import FSAExporter from '@flapjs/modules/fa/loaders/FSAExporter';
+import { IMAGE_EXPORTERS } from '../base/NodeGraphImageExporters.js';
 
 const MODULE = {
     id: 'fa',
@@ -50,15 +54,19 @@ const MODULE = {
         // This is called after all services have been created, but before they are loaded.
         // This is usually where you setup the session to be loaded correctly (instead of passing args to constructor).
         session.importService
-            .addImporter(new FSAImporter(FSAGraphParser.JSON, ['.json', '.fa.json', '.fsa.json']));
+            .addImporter(
+                new FSAImporter(FSA_PARSER, ['.json', '.fa.json', '.fsa.json']),
+                new JFFImporter(JFF_PARSER, [ '.jff' ])
+            );
         session.exportService
             .setExports({
-                session: new FSAExporter(FSAGraphParser.JSON),
+                session: new FSAExporter(FSA_PARSER),
+                jflap: new JFFExporter(JFF_PARSER),
                 ...IMAGE_EXPORTERS
             });
         session.graphService
             .setGraph(new FSAGraph())
-            .setGraphParser(FSAGraphParser.JSON)
+            .setGraphParser(FSA_PARSER)
             .setGraphControllerClass(FSAGraphController)
             .enableAutoSaveServiceFeatures(session.autoSaveService)
             .enableUndoServiceFeatures(session.undoService);

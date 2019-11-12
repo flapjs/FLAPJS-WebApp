@@ -41,7 +41,7 @@ class ModuleSessionHandler
             }
             catch(e)
             {
-                Logger.error(LOGGER_TAG, 'Module failed setup session.', e);
+                Logger.error(LOGGER_TAG, 'Module failed preload() for session', e);
             }
         }
     }
@@ -62,7 +62,7 @@ class ModuleSessionHandler
             }
             catch(e)
             {
-                Logger.error(LOGGER_TAG, 'Module failed initialize state.', e);
+                Logger.error(LOGGER_TAG, 'Module failed load() for session', e);
             }
         }
     }
@@ -83,7 +83,7 @@ class ModuleSessionHandler
             }
             catch(e)
             {
-                Logger.error(LOGGER_TAG, 'Module failed initialize state.', e);
+                Logger.error(LOGGER_TAG, 'Module failed postload() for session', e);
             }
         }
     }

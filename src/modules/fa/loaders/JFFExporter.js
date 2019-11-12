@@ -2,7 +2,7 @@ import SessionExporter from '@flapjs/session/helper/SessionExporter.js';
 
 import { RunningManIcon as XMLFileIcon } from '@flapjs/components/icons/Icons.js';
 
-class FSAJFFExporter extends SessionExporter
+class JFFExporter extends SessionExporter
 {
     constructor(jffGraphParser)
     {
@@ -13,10 +13,11 @@ class FSAJFFExporter extends SessionExporter
     /** @override */
     onExportSession(session, dst)
     {
-        const currentModule = session.getCurrentModule();
-        const graphController = currentModule.getGraphController();
+        const graphController = session.graphController;
         const graph = graphController.getGraph();
-        dst['graphData'] = this._graphParser.objectify(graph);
+        const graphData = this._graphParser.compose(graph);
+
+        dst['graphData'] = graphData;
     }
 
     /** @override */
@@ -33,4 +34,4 @@ class FSAJFFExporter extends SessionExporter
     getTitle() { return 'file.export.jff.hint'; }
 }
 
-export default FSAJFFExporter;
+export default JFFExporter;

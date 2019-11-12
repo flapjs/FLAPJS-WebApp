@@ -160,4 +160,5 @@ class FSAGraphParser extends Parser
     }
 }
 
+export const INSTANCE = new FSAGraphParser();
 export default FSAGraphParser;
