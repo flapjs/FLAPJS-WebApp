@@ -13,7 +13,7 @@ import FSAPlaygroundLayer from '@flapjs/modules/fa/components/layers/FSAPlaygrou
 import FSAViewportLayer from '@flapjs/modules/fa/components/layers/FSAViewportLayer.jsx';
 
 import { INSTANCE as FSA_PARSER } from '@flapjs/modules/fa/loaders/FSAGraphParser.js';
-import { INSTANCE as JFF_PARSER } from '@flapjs/modules/fa/loaders/JFLAPGraphParser.js';
+import { INSTANCE as JFF_PARSER } from '@flapjs/modules/fa/loaders/JFFGraphParser.js';
 import JFFImporter from '@flapjs/modules/fa/loaders/JFFImporter.js';
 import JFFExporter from '@flapjs/modules/fa/loaders/JFFExporter.js';
 import FSAImporter from '@flapjs/modules/fa/loaders/FSAImporter.js';
