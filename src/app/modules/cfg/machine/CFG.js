@@ -416,7 +416,7 @@ class CFG
     {
         for(let rule of this._rules) 
         {
-            if(this.getVariables.has(rule.RHS()))
+            if(this.getVariables().has(rule.getRHS()))
             {
                 return rule;
             }

@@ -35,7 +35,7 @@ export function convertCFGtoChomsky(cfg)
     let CFGwithNewStartVariable = newStartVariable(seperatedCFG);
     let CFGwithNoEpsilonRules = eliminateEpsilonRules(CFGwithNewStartVariable);
     let CFGwithNoUnitRules = eliminateUnitRules(CFGwithNoEpsilonRules);
-    let ChomksyNormalForm = cleanUp(CFGwithNoUnitRules);    
+    let ChomksyNormalForm = convertRulesIntoProperForm(CFGwithNoUnitRules);    
     return ChomksyNormalForm;
 }
 
@@ -242,9 +242,9 @@ function removePureEpsilonRule(cfg, rule)
 /***************************************************************************
  *                                                                         * 
  *                                                                         *
- *                Step Two: eliminate all unit rules                       *
- *                          i.e. rules of the form:                        *
- *                          A -> B, where B is a variable                  *
+ *              Step Three: eliminate all unit rules                       *
+ *                   i.e. rules of the form:                               *
+ *                   A -> B, where B is a variable                         *
  *                                                                         *
  *                                                                         *
  ***************************************************************************/
@@ -259,7 +259,7 @@ function removePureEpsilonRule(cfg, rule)
  * @param {CFG} cfg the CFG to be processed.
  * @return {CFG} an equivalent CFG free of unit rules.
  */
-function eliminateUnitRules(cfg)
+export function eliminateUnitRules(cfg)
 {
     // to ensure the function is pure
     let newCFG = new CFG();
@@ -269,7 +269,8 @@ function eliminateUnitRules(cfg)
     {
         return cur.toString();
     }); // array of rules in string form
-    let unitRulesEliminated = rules.reduce((acc, cur) => {
+    let unitRulesEliminated = rules.reduce((acc, cur) => 
+    {
         if(!acc[cur])
         {
             acc[cur] = false;
@@ -292,7 +293,7 @@ function eliminateUnitRules(cfg)
             });
 
             // add A -> u unless A -> u is a unit rule previously removed
-            for(let rule in rulesProducedByVariable)
+            for(let rule of rulesProducedByVariable)
             {
                 let ruleToAdd = new Rule(unitRule.getLHS(), rule.getRHS());
                 if(!unitRulesEliminated[ruleToAdd.toString()])
@@ -301,15 +302,71 @@ function eliminateUnitRules(cfg)
                 }
             }
 
+            newCFG.cleanUp(); // remove possibly redundant rules
             unitRulesEliminated[unitRule.toString()] = true; // mark it as processed
         }
-
-        unitRule.newCFG.findUnitRule();
+        unitRule = newCFG.findUnitRule();
     }
     return newCFG;
 }
 
-function cleanUp(cfg)
+/***************************************************************************
+ *                                                                         *
+ *                                                                         *
+ *          Step Four: Convert remaining rules into proper form            *
+ *                                                                         *
+ *                                                                         *
+ ***************************************************************************/
+
+/**
+ * This is the final step in the conversion from a CFG to its Chomsky normal
+ * form, in this step, we convert all the rules in the grammar into proper form.
+ * After previous steps, rules still remaining in this step is of the form:
+ * V -> k1k2...kn, where n >= 2, and each ki is either a variable or terminal.
+ * Note: this function is pure, it does not change the argument, but instead
+ * return a new CFG which has the changes.
+ * @param {CFG} cfg the CFG to process
+ * @return {CFG} an equivalent CFG in Chomsky normal form.
+ */
+function convertRulesIntoProperForm(cfg)
 {
-    return;
+    // so the function is pure
+    let newCFG = new CFG();
+    newCFG.copyFromCFG(cfg);    
+    
+    // we only need to process rules originally in cfg, this is different from
+    // previous steps where we need to potentially process rules we added
+    let originalRules = newCFG._rules.reduce((acc, cur) => 
+    {
+        let newRule = new Rule(cur.getLHS(), cur.getRHS()); // make deep copy
+        return acc.push(newRule);
+    }, []);
+
+    // this dict helps us to remember which rules we can use to derive a single terminal
+    // so it prevents the variable set from growing too big.
+    let dictOfTerminalRules = Object.create(null); 
+
+    for(let rule of originalRules) 
+    {
+        let RHS = rule.getRHS();
+    }
+    return newCFG;
+}
+
+/**
+ * This helper function to convertRulesIntoProperForm will take RHS of a rule 
+ * and parse it, returning an array of variables and terminals. This function
+ * assumes that a terminal or variable always starts with an alphabetic letter,
+ * that is: [a-z][A-Z], it fails to work otherwise. It also assumes that the 
+ * input string consists of variable or terminals in the grammar.
+ * e.g., 
+ *      input: 'A_1aAB_3Rcb'
+ *      output: ['A_1', 'a', 'A', 'B_3', 'R', 'c', 'b']
+ * @param {String} RHS the RHS we want to parse.
+ * @return {Array} an Array of variables and terminals, in the same order as they
+ *                 appear in the string.
+ */
+function parseRHS(RHS)
+{
+
 }
