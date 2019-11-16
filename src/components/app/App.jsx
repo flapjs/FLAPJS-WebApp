@@ -31,6 +31,8 @@ class App extends React.Component
     {
         super(props);
 
+        this.sessionProvider = React.createRef();
+
         Logger.out(LOGGER_TAG, '...constructing app...');
         /**
          * Data should be managed outside of the render function. BEFORE the providers are created.
@@ -46,12 +48,14 @@ class App extends React.Component
     componentDidMount()
     {
         Logger.out(LOGGER_TAG, '...did mount app...');
+        if (this.props.onDidMount) this.props.onDidMount(this);
     }
 
     /** @override */
     componentWillUnmount()
     {
         Logger.out(LOGGER_TAG, '...will unmount app...');
+        if (this.props.onWillUnmount) this.props.onWillUnmount(this);
     }
     
     /** @override */
@@ -68,7 +72,10 @@ class App extends React.Component
         return (
             <div className={Style.container + (props.className || '')}>
                 {/** All service providers. */}
-                <SessionProvider state={currentState} reducer={currentReducer}>
+                <SessionProvider
+                    ref={this.sessionProvider}
+                    state={currentState}
+                    reducer={currentReducer}>
                     <SessionStateConsumer>
                         {
                             session =>
@@ -115,6 +122,8 @@ App.propTypes = {
     session: PropTypes.object,
     reducer: PropTypes.func,
     changeModule: PropTypes.func,
+    onDidMount: PropTypes.func,
+    onWillUnmount: PropTypes.func,
 };
 App.defaultProps = {
     module: null,

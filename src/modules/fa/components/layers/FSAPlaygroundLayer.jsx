@@ -1,37 +1,14 @@
 import React from 'react';
 
-import GraphView from '@flapjs/systems/graph/components/GraphView.jsx';
-
-import FSAGraphLayer from './FSAGraphLayer.jsx';
 import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
+import GraphPlaygroundLayer from '@flapjs/components/graph/GraphPlaygroundLayer.jsx';
+import FSAGraphLayer from './FSAGraphLayer.jsx';
 
 class FSAPlaygroundLayer extends React.Component
 {
     constructor(props)
     {
         super(props);
-
-        this._graphAnimationFrame = this.update.bind(this);
-        this._graphRequestAnimationFrame = null;
-    }
-
-    /** @override */
-    componentDidMount()
-    {
-        this._graphRequestAnimationFrame = requestAnimationFrame(this._graphAnimationFrame);
-    }
-
-    /** @override */
-    componentWillUnmount()
-    {
-        cancelAnimationFrame(this._graphRequestAnimationFrame);
-    }
-
-    update()
-    {
-        // HACK: This will re-render the graph at 60fps REGARDLESS if it has updated.
-        this._graphRequestAnimationFrame = requestAnimationFrame(this._graphAnimationFrame);
-        this.forceUpdate();
     }
 
     /** @override */
@@ -40,18 +17,16 @@ class FSAPlaygroundLayer extends React.Component
         return (
             <SessionStateConsumer>
                 {
-                    state =>
-                        <GraphView
-                            inputController={state.inputController}
-                            viewController={state.viewController}
-                            renderGraph={graphView => 
+                    session =>
+                        <GraphPlaygroundLayer
+                            session={session}
+                            renderGraph={graphView =>
                                 <FSAGraphLayer
                                     inputContext={graphView.getInputContext()}
-                                    inputController={state.inputController}
-                                    graphController={state.graphController}
-                                    editable={true}/>}
-                            renderOverlay={graphView => {}}>
-                        </GraphView>
+                                    inputController={session.inputController}
+                                    graphController={session.graphController}
+                                    editable={true}/>
+                            }/>
                 }
             </SessionStateConsumer>
         );

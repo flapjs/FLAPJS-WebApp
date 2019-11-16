@@ -11,7 +11,6 @@ import OverviewPanel from '@flapjs/modules/fa/components/panels/OverviewPanel.js
 
 import FSAGraphController from '@flapjs/modules/fa/graph/FSAGraphController.js';
 import FSAPlaygroundLayer from '@flapjs/modules/fa/components/layers/FSAPlaygroundLayer.jsx';
-import FSAViewportLayer from '@flapjs/modules/fa/components/layers/FSAViewportLayer.jsx';
 
 import { INSTANCE as FSA_PARSER } from '@flapjs/modules/fa/loaders/FSAGraphParser.js';
 import { INSTANCE as JFF_PARSER } from '@flapjs/modules/fa/loaders/JFFGraphParser.js';
@@ -20,6 +19,7 @@ import JFFExporter from '@flapjs/modules/fa/loaders/JFFExporter.js';
 import FSAImporter from '@flapjs/modules/fa/loaders/FSAImporter.js';
 import FSAExporter from '@flapjs/modules/fa/loaders/FSAExporter';
 import { IMAGE_EXPORTERS } from '../base/NodeGraphImageExporters.js';
+import GraphViewportLayer from '@flapjs/components/graph/GraphViewportLayer.jsx';
 // import FSAMachineController from '@flapjs/modules/fa/FSAMachineController.js';
 
 const MODULE = {
@@ -35,7 +35,7 @@ const MODULE = {
     ],
     renders: {
         playground: [ FSAPlaygroundLayer ],
-        viewport: [ FSAViewportLayer ],
+        viewport: [ GraphViewportLayer ],
         drawer: [
             OverviewPanel,
             TestingPanel,

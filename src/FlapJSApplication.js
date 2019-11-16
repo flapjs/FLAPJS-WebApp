@@ -17,6 +17,8 @@ class FlapJSApplication
         this.moduleSaver = new ModuleSaver();
 
         this.handleChangeModule = this.handleChangeModule.bind(this);
+        this.handleAppDidMount = this.handleAppDidMount.bind(this);
+        this.handleAppWillUnmount = this.handleAppWillUnmount.bind(this);
     }
 
     async loadModuleByID(moduleID)
@@ -63,6 +65,8 @@ class FlapJSApplication
             session: this.moduleManager.getCurrentSession(),
             reducer: this.moduleManager.getCurrentReducer(),
             changeModule: this.handleChangeModule,
+            onDidMount: this.handleAppDidMount,
+            onWillUnmount: this.handleAppWillUnmount,
         };
 
         ReactDOM.render(
@@ -78,6 +82,16 @@ class FlapJSApplication
         this.loadModuleByID(nextModuleID)
             .then(nextModule => this.moduleManager.changeModule(nextModule))
             .then(() => this.render());
+    }
+    
+    handleAppDidMount(app)
+    {
+        this.moduleManager.moduleHandler.didMountSession(app.sessionProvider.current);
+    }
+
+    handleAppWillUnmount(app)
+    {
+        this.moduleManager.moduleHandler.willUnmountSession(app.sessionProvider.current);
     }
 
     getRenderRootElement()

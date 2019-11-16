@@ -1,5 +1,3 @@
-import BasePlaygroundLayer from './BasePlaygroundLayer.jsx';
-import BaseViewportLayer from './BaseViewportLayer.jsx';
 import AboutPanel from './AboutPanel.jsx';
 
 import NodeGraphExporter from './NodeGraphExporter.js';
@@ -15,6 +13,8 @@ import NotificationService from '@flapjs/services/NotificationService.js';
 
 import BaseGraphController from './BaseGraphController.js';
 import { INSTANCE as NODE_PARSER } from '@flapjs/systems/graph/model/parser/NodeGraphParser.js';
+import GraphViewportLayer from '@flapjs/components/graph/GraphViewportLayer.jsx';
+import BasePlaygroundLayer from '@flapjs/modules/base/BasePlaygroundLayer.jsx';
 
 // Theme Manager
 // Hotkeys?
@@ -34,7 +34,7 @@ const MODULE = {
     renders: {
         appbar: [ ],
         playground: [ BasePlaygroundLayer ],
-        viewport: [ BaseViewportLayer ],
+        viewport: [ GraphViewportLayer ],
         drawer: [ AboutPanel ],
     },
     menus: {

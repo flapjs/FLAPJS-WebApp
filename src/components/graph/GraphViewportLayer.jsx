@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { SessionConsumer } from '@flapjs/session/context/SessionContext.jsx';
 
@@ -8,7 +9,7 @@ import ModeTrayWidget, { MODE_MOVE, MODE_ACTION } from '@flapjs/systems/graph/co
 import ZoomWidget from '@flapjs/systems/graph/components/widgets/ZoomWidget.jsx';
 import FocusCenterWidget from '@flapjs/systems/graph/components/widgets/FocusCenterWidget.jsx';
 
-class FSAViewportLayer extends React.Component
+class GraphViewportLayer extends React.Component
 {
     constructor(props)
     {
@@ -45,6 +46,7 @@ class FSAViewportLayer extends React.Component
     /** @override */
     render()
     {
+        const props = this.props;
         return (
             <SessionConsumer>
                 {
@@ -87,6 +89,7 @@ class FSAViewportLayer extends React.Component
                                     viewController={session.viewController}
                                     saveOnExit={true}>
                                 </LabelEditorWidget>
+                                {props.children}
                             </>
                         );
                     }
@@ -95,5 +98,8 @@ class FSAViewportLayer extends React.Component
         );
     }
 }
+GraphViewportLayer.propTypes = {
+    children: PropTypes.node
+};
 
-export default FSAViewportLayer;
+export default GraphViewportLayer;

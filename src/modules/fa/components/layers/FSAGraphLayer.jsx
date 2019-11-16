@@ -5,15 +5,24 @@ import GraphNodeLayer from '@flapjs/systems/graph/components/layers/GraphNodeLay
 import GraphEdgeLayer from '@flapjs/systems/graph/components/layers/GraphEdgeLayer.jsx';
 import SelectionBoxLayer from '@flapjs/systems/graph/components/layers/SelectionBoxLayer.jsx';
 import IndexedGraphStartMarkerLayer from '@flapjs/systems/graph/components/layers/IndexedGraphStartMarkerLayer.jsx';
+import FSANodeInputHandler from '@flapjs/modules/fa/graph/inputhandler/FSANodeInputHandler';
+import FSANodeRenderer from '@flapjs/modules/fa/graph/renderer/FSANodeRenderer.jsx';
+import FSAEdgeRenderer from '@flapjs/modules/fa/graph/renderer/FSAEdgeRenderer.jsx';
 
 class FSAGraphLayer extends React.Component
 {
-    constructor(props) { super(props); }
+    constructor(props)
+    {
+        super(props);
+        
+        this._fsaNodeInputHandler = null;
+    }
 
     /** @override */
     componentDidMount()
     {
         const inputContext = this.props.inputContext;
+        this._fsaNodeInputHandler = new FSANodeInputHandler(this.props.inputController, this.props.graphController);
         inputContext.addInputHandler(this._fsaNodeInputHandler);
     }
 
@@ -22,6 +31,7 @@ class FSAGraphLayer extends React.Component
     {
         const inputContext = this.props.inputContext;
         inputContext.removeInputHandler(this._fsaNodeInputHandler);
+        this._fsaNodeInputHandler = null;
     }
 
     /** @override */
@@ -45,6 +55,7 @@ class FSAGraphLayer extends React.Component
                     color={'red'/*'var(--color-graph-text)'*/} />
                 <GraphNodeLayer
                     nodes={graph.getNodes()}
+                    nodeRenderer={FSANodeRenderer}
                     inputController={inputController}
                     graphController={graphController}
                     inputContext={inputContext}
@@ -54,6 +65,7 @@ class FSAGraphLayer extends React.Component
                     stroke={'black'/*'var(--color-graph-text)'*/}/>
                 <GraphEdgeLayer
                     edges={graph.getEdges()}
+                    edgeRenderer={FSAEdgeRenderer}
                     inputController={inputController}
                     graphController={graphController}
                     inputContext={inputContext}
