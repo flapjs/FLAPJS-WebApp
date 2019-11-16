@@ -10,7 +10,7 @@ import FSAGraphLabeler from './FSAGraphLabeler';
 import { SYMBOL_SEPARATOR } from './element/FSAEdge.js';
 
 // This really shouldn't be here....
-import GraphLayout from './GraphLayout.js';
+import GraphLayout from '@flapjs/systems/graph/util/GraphLayout.js';
 import FSAGraph from '@flapjs/modules/fa/graph/FSAGraph';
 
 export const TRASH_EDITING_NOTIFICATION_TAG = 'tryCreateWhileTrash';
@@ -73,7 +73,6 @@ class FSAGraphController extends GraphController
     }
 
     // these really shouldn't be here...
-
     deleteTargetNodes(targets)
     {
         if (!targets || targets.length <= 0) return;
