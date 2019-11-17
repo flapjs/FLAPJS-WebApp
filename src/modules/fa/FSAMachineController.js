@@ -1,6 +1,6 @@
 import MachineController from '@flapjs/systems/graph/controller/MachineController.js';
 import { convertToDFA, invertDFA } from './machine/FSAUtils.js';
-import GraphLayout from './graph/GraphLayout.js';
+// import GraphLayout from './graph/GraphLayout.js';
 
 import FSAMachineBuilder from './FSAMachineBuilder.js';
 
@@ -46,8 +46,8 @@ class FSAMachineController extends MachineController
     setGraphToMachine(graph, machine)
     {
         this._machineBuilder.attemptBuildGraph(machine, graph);
-        //Auto layout graph
-        GraphLayout.applyLayout(graph);
+        // Auto layout graph
+        // GraphLayout.applyLayout(graph);
     }
 
     convertMachineTo(machineType)

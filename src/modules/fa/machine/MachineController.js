@@ -3,7 +3,7 @@
 // import FSABuilder from './FSABuilder.js';
 import { convertToDFA, invertDFA } from './FSAUtils.js';
 
-import GraphLayout from '../graph/GraphLayout.js';
+// import GraphLayout from '../graph/GraphLayout.js';
 
 class MachineController// extends AbstractMachineController
 {
@@ -69,8 +69,8 @@ class MachineController// extends AbstractMachineController
     setGraphToMachine(graph, machine)
     {
         this._machineBuilder.attemptBuildGraph(machine, graph);
-        //Auto layout graph
-        GraphLayout.applyLayout(graph);
+        // Auto layout graph
+        // GraphLayout.applyLayout(graph);
     }
 
     convertMachineTo(machineType)
