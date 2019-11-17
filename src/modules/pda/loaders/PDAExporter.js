@@ -16,11 +16,9 @@ class PDAExporter extends SessionExporter
     /** @override */
     onExportSession(session, dst)
     {
-        const currentModule = session.getCurrentModule();
-        const graphController = currentModule.getGraphController();
-        // const machineController = currentModule.getMachineController();
+        const graphController = session.graphController;
         const graph = graphController.getGraph();
-        const graphData = this._graphParser.objectify(graph);
+        const graphData = this._graphParser.compose(graph);
 
         dst['graphData'] = graphData;
         /*

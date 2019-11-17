@@ -15,7 +15,10 @@ class ModuleHandler
         session.moduleID = currentModule.id;
         session.module = currentModule;
 
-        currentModule.preload(session);
+        if (typeof currentModule.preload === 'function')
+        {
+            currentModule.preload(session);
+        }
 
         const serviceList = session[SERVICE_LIST_SYMBOL] = [];
 
@@ -37,7 +40,10 @@ class ModuleHandler
             }
         }
         
-        currentModule.load(session);
+        if (typeof currentModule.load === 'function')
+        {
+            currentModule.load(session);
+        }
 
         // Load services...
         // NOTE: This is used as a forward iterator :P (to match the reverse iterator)
