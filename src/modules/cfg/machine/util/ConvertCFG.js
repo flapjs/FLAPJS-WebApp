@@ -1,12 +1,13 @@
+/* eslint-disable jsdoc/require-param */
 import PDA, {EMPTY_SYMBOL} from '@flapjs/modules/pda/machine/PDA.js';
 import { EMPTY } from '@flapjs/modules/re/machine/RE.js';
 
 /**
- * A function for converting a CFG into a PDA based on algorithm
- * from the following video:
+ * A function for converting a CFG into a PDA based on algorithm from the following video:
  * https://www.youtube.com/watch?v=xWWRoiPRAi4&t=748s.
  * 
- * @param {CFG} cfg The cfg instance to convert.
+ * @param {CFG} cfg The cfg to convert.
+ * 
  * @returns {PDA} PDA of CFG.
  */
 export function convertToPDA(cfg)
