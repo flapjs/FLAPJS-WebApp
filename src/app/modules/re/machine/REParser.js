@@ -182,6 +182,35 @@ class REParser
         }
     }
 
+    //Level order left-right traversal to serialize the symbols of the parse tree for exporting (BFS)
+    serializeParseTree()
+    {
+        const nodeList = [];
+        const queue = [];
+        queue.push(this.rootNode);
+
+        //BFS
+        while(queue.length > 0)
+        {
+            let currentNode = queue.shift();
+            if(currentNode != null)
+            {
+                let children = currentNode.getChildren();
+                //Otherwise we will just push [null, null]
+                if(children.length != 0)
+                {
+                    for(let i = 0; i < currentNode.getChildrenLimit(); i++)
+                    {
+                        queue.push(children.length > i ? children[i] : null);
+                    }
+                }
+            }
+            nodeList.push(currentNode == null ? null : currentNode.getSymbol());
+        }
+
+        return nodeList;
+    }
+
     makeParentOf(newParentNode, targetNode)
     {
         let originalParent = targetNode.getParent();
@@ -299,27 +328,27 @@ class REParser
 	 */
     scopeFromSpaceIndexing(regex, spaceIndex)
     {
-        if(spaceIndex == 0) 
+        if(spaceIndex == 0)
         {
             return [[0, 0], [0, 0]];
         }
-        else if(spaceIndex > 0 && spaceIndex <= this.size + 1) 
+        else if(spaceIndex > 0 && spaceIndex <= this.size + 1)
         {
             const index = spaceIndex - 1;
             const scope = this.scopeFromCharAtIndex(regex, index);
             // scope will be null if the character selected is just an operand,
             // so nothing should be highlighted
-            if (!scope) 
+            if (!scope)
             {
                 return [ [spaceIndex, spaceIndex],  [spaceIndex, spaceIndex] ];
             }
-            else 
+            else
             {
                 scope[1][1] += 1;	//Increment last index to account for space indexing in highlighting
                 return scope;
             }
         }
-        else 
+        else
         {
             throw new Error('Invalid index');
         }
@@ -347,21 +376,21 @@ class REParser
         let currentNode = this.indexToNode.get(index);
         let symbol = currentNode.getSymbol();
         //Unary operators
-        if(symbol == KLEENE || symbol == PLUS) 
+        if(symbol == KLEENE || symbol == PLUS)
         {
             let smallest = this.smallestIndexOfChildren(currentNode);
             let largest = this.largestIndexOfChildren(currentNode);
             return [ [smallest, smallest], [largest, largest] ];
         }
         //Binary operators
-        else if(symbol == UNION || symbol == CONCAT) 
+        else if(symbol == UNION || symbol == CONCAT)
         {
             let smallest = this.smallestIndexOfChildren(currentNode);
             let largest = this.largestIndexOfChildren(currentNode);
             return [ [smallest, index - 1], [index + 1, largest] ];
         }
         //Operands
-        else 
+        else
         {
             return null;
         }
@@ -371,7 +400,7 @@ class REParser
     largestIndexOfChildren(node)
     {
         let max = node.getIndex();
-        for (let child of node.getChildren()) 
+        for (let child of node.getChildren())
         {
             max = Math.max(max, this.largestIndexOfChildren(child));
         }
@@ -382,7 +411,7 @@ class REParser
     smallestIndexOfChildren(node)
     {
         let min = node.getIndex();
-        for (let child of node.getChildren()) 
+        for (let child of node.getChildren())
         {
             min = Math.min(min, this.smallestIndexOfChildren(child));
         }

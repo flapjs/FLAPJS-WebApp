@@ -246,6 +246,7 @@ function getDoubleVariableProductionTriTuple(cnf, varMap)
 }
 
 
+/*
 function printParseTable(parseTable, length, varCount)
 {
     let output = "";
@@ -266,3 +267,4 @@ function printParseTable(parseTable, length, varCount)
     }
     console.log(output);
 }
+*/

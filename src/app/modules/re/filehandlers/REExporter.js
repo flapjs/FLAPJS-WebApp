@@ -16,10 +16,11 @@ class REExporter extends SessionExporter
         const machineController = currentModule.getMachineController();
 
         dst['machineData'] = {
-            expression: machineController.getMachineExpression()
+            expression: machineController.getMachineExpression(),
+            parseTree: machineController.getParser().serializeParseTree()
         };
     }
-    
+
     /** @override */
     getIconClass() { return JSONFileIcon; }
     /** @override */
