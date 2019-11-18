@@ -44,12 +44,12 @@ class BasePlaygroundLayer extends React.Component
                         <GraphView
                             inputController={state.inputController}
                             viewController={state.viewController}
-                            renderGraph={graphView => 
+                            renderGraph={graphView =>
                                 <NodeGraphLayer
                                     inputContext={graphView.getInputContext()}
                                     inputController={state.inputController}
                                     graphController={state.graphController}
-                                    editable={true}/>}
+                                    editable={true} />}
                             renderOverlay={graphView => {}}>
                         </GraphView>
                 }

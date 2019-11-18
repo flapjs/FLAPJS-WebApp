@@ -15,6 +15,7 @@
     height: APPBAR_HEIGHT;
     color: white;
     align-items: center;
+    z-index: 1001;
 }
 
 .appbar > * {

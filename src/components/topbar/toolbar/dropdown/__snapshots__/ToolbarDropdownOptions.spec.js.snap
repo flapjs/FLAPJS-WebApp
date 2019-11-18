@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ToolbarDropdownOptions/> rendering renders correctly 1`] = `
+<div
+  className="container"
+  onBlur={[Function]}
+  onFocus={[Function]}
+  onMouseLeave={[Function]}
+  onMouseOver={[Function]}
+>
+  <button>
+    <div />
+  </button>
+</div>
+`;

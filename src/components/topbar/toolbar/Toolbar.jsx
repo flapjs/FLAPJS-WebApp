@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // import Style from './Toolbar.module.css';
 
-import ToolbarDropdown from '@flapjs/components/topbar/toolbar/ToolbarDropdown.jsx';
+import ToolbarDropdown from '@flapjs/components/topbar/toolbar/dropdown/ToolbarDropdown.jsx';
 
 /**
  * A React component that can do anything you want. :D.
@@ -20,7 +20,7 @@ class Toolbar extends React.Component
                     title: 'New',
                     selected: false,
                     key: 'file',
-                    dropdown: [
+                    options: [
                         {
                             id: 3,
                             title: 'DFA',
@@ -55,6 +55,7 @@ class Toolbar extends React.Component
                 }
             ]
         };
+        this.toggleSelected = this.toggleSelected.bind(this);
     }
 
     toggleSelected(id, key) 

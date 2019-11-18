@@ -6,7 +6,9 @@ exports[`<Toolbar/> rendering renders correctly 1`] = `
     list={
       Array [
         Object {
-          "dropdown": Array [
+          "id": 0,
+          "key": "file",
+          "options": Array [
             Object {
               "id": 3,
               "key": "file/new",
@@ -26,8 +28,6 @@ exports[`<Toolbar/> rendering renders correctly 1`] = `
               "title": "PDA",
             },
           ],
-          "id": 0,
-          "key": "file",
           "selected": false,
           "title": "New",
         },

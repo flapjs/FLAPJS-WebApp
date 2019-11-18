@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import Style from './ToolbarDropdown.module.css';
+import Style from './ToolbarDropdown.module.css';
+
+import ToolbarDropdownOptions from '@flapjs/components/topbar/toolbar/dropdown/ToolbarDropdownOptions.jsx';
 
 /**
  * A React component that can do anything you want. :D.
@@ -15,9 +17,10 @@ class ToolbarDropdown extends React.Component
         this.state = {
             listOpen: false,
         };
+        this.node = React.createRef();
         this.handleClick = this.handleClick.bind(this);
     }
-
+    
     /** @override */
     componentDidMount() 
     {
@@ -29,28 +32,21 @@ class ToolbarDropdown extends React.Component
     {
         document.removeEventListener('mousedown', this.handleClick, false);
     }
-
+    
     handleClick(e)
     {
-        if (this.node.contains(e.target)) 
+        if ((this.node.current.contains(e.target) && !this.state.listOpen)) 
         {
-            return;
+            this.setState({
+                listOpen: true
+            });
         }
-        this.handleClickOutside();
-    }
-
-    handleClickOutside() 
-    {
-        this.setState({
-            listOpen: false
-        });
-    }
-
-    toggleList() 
-    {
-        this.setState(prevState => ({
-            listOpen: !prevState.listOpen
-        }));
+        else 
+        {
+            this.setState({
+                listOpen: false
+            });
+        }
     }
 
     /** @override */
@@ -63,28 +59,29 @@ class ToolbarDropdown extends React.Component
             <div
                 id={props.id}
                 style={props.style}
-                ref = {node => this.node = node}
-                className={props.className}
+                ref = {this.node}
+                className={Style.container}
             >
-                <button className="dd-header" onClick={() => this.toggleList()}>
-                    <div className="dd-header-title">{props.title}</div>
+                {/* <button className="dd-header" onClick={e => this.handleClick(e)}> */}
+                <button>
+                    <div>{props.title}</div>
                     {/* {listOpen ? <p>up</p> : <p>down</p>} */}
                 </button>
                 {listOpen && 
-                <ul className="dd-list">
+                // {true && 
+                <ul className={Style.dropdownlist}>
                     {props.list.map((item) => (
                         <li key={item.id}>
                             {
-                                item.dropdown ?
-                                    <ToolbarDropdown
+                                item.options ?
+                                    <ToolbarDropdownOptions
                                         title={item.title}
-                                        list={item.dropdown}
+                                        list={item.options}
                                         toggleItem={props.toggleItem}
                                     />
                                     :
                                     <button
-                                        className="dd-list-item"
-                                        onClick={() => {props.toggleItem(item.id, item.key);}}>
+                                        onMouseDown={() => {props.toggleItem(item.id, item.key);}}>
                                         {item.title}
                                         {item.selected && <p>x</p>}
                                     </button>
@@ -102,12 +99,7 @@ ToolbarDropdown.propTypes = {
     style: PropTypes.object,
     className: PropTypes.string,
     title: PropTypes.string,
-    list: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number,
-        title: PropTypes.string,
-        selected: PropTypes.bool,
-        key: PropTypes.string
-    })),
+    list: PropTypes.array,
     toggleItem: PropTypes.func
 };
 ToolbarDropdown.defaultProps = {
