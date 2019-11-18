@@ -1,0 +1,24 @@
+.container {
+    position: relative;
+}
+
+.container ul,
+.containter li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdownlist {
+    position: absolute;
+    left: 0;
+    padding: 0;
+}
+
+.dropdownlist button {
+    width: 4rem;
+}
+
+.ddListItem {
+    /* intentionally empty */
+}

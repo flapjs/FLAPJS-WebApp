@@ -1,0 +1,9 @@
+.container {
+    position: relative;
+}
+
+.dropdownOptions {
+    position: absolute;
+    top: 0;
+    left: 100%;
+}

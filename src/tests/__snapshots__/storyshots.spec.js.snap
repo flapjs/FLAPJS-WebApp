@@ -464,14 +464,11 @@ exports[`Storyshots StyleInput playground 1`] = `
 
 exports[`Storyshots Toolbar playground 1`] = `
 <div>
-  <div>
-    <button
-      className="dd-header"
-      onClick={[Function]}
-    >
-      <div
-        className="dd-header-title"
-      >
+  <div
+    className="container"
+  >
+    <button>
+      <div>
         File
       </div>
     </button>
@@ -480,14 +477,25 @@ exports[`Storyshots Toolbar playground 1`] = `
 `;
 
 exports[`Storyshots ToolbarDropdown playground 1`] = `
-<div>
-  <button
-    className="dd-header"
-    onClick={[Function]}
-  >
-    <div
-      className="dd-header-title"
-    />
+<div
+  className="container"
+>
+  <button>
+    <div />
+  </button>
+</div>
+`;
+
+exports[`Storyshots ToolbarDropdownOptions playground 1`] = `
+<div
+  className="container"
+  onBlur={[Function]}
+  onFocus={[Function]}
+  onMouseLeave={[Function]}
+  onMouseOver={[Function]}
+>
+  <button>
+    <div />
   </button>
 </div>
 `;

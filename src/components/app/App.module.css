@@ -16,6 +16,7 @@
     color: white;
     align-items: center;
     overflow: auto;
+    z-index: 1001;
 }
 
 .appbar > * {
