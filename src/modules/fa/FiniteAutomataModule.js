@@ -4,6 +4,7 @@ import NotificationService from '@flapjs/services/NotificationService.js';
 import UndoService from '@flapjs/services/UndoService.js';
 import GraphService from '@flapjs/services/GraphService.js';
 import AutoSaveService from '@flapjs/services/AutoSaveService.js';
+import MachineService from '@flapjs/services/MachineService.js';
 
 import AnalysisPanel from '@flapjs/modules/fa/components/panels/AnalysisPanel.jsx';
 import TestingPanel from '@flapjs/modules/fa/components/panels/TestingPanel.jsx';
@@ -20,7 +21,7 @@ import FSAImporter from '@flapjs/modules/fa/loaders/FSAImporter.js';
 import FSAExporter from '@flapjs/modules/fa/loaders/FSAExporter';
 import { IMAGE_EXPORTERS } from '../base/NodeGraphImageExporters.js';
 import GraphViewportLayer from '@flapjs/components/graph/GraphViewportLayer.jsx';
-// import FSAMachineController from '@flapjs/modules/fa/FSAMachineController.js';
+import FSAMachineController from '@flapjs/modules/fa/FSAMachineController.js';
 
 const MODULE = {
     id: 'fa',
@@ -32,6 +33,7 @@ const MODULE = {
         UndoService,
         GraphService,
         AutoSaveService,
+        MachineService,
     ],
     renders: {
         playground: [ FSAPlaygroundLayer ],
@@ -69,9 +71,11 @@ const MODULE = {
         session.graphService
             .setGraphParser(FSA_PARSER)
             .setGraphControllerClass(FSAGraphController)
-            // .setMachineControllerClass(FSAMachineController)
             .enableAutoSaveServiceFeatures(session.autoSaveService)
             .enableUndoServiceFeatures(session.undoService);
+        session.machineService
+            .setMachineControllerClass(FSAMachineController)
+            .enableGraphServiceFeatures(session.graphService);
     },
     postload(session)
     {

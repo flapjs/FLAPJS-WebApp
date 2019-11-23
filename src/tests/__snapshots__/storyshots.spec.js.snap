@@ -154,10 +154,18 @@ exports[`Storyshots App playground 1`] = `
                 <div
                   className="content"
                 >
-                  <h2>
-                    Exporting
-                  </h2>
-                  <ul />
+                  <div
+                    style={
+                      Object {
+                        "display": "unset",
+                      }
+                    }
+                  >
+                    <h2>
+                      Exporting
+                    </h2>
+                    <ul />
+                  </div>
                 </div>
               </div>
               <div

@@ -555,6 +555,11 @@ class FSA
 
     getAlphabet()
     {
+        return Array.from(this._alphabet.keys());
+    }
+
+    UNSAFE_getAlphabet()
+    {
         return this._alphabet.keys();
     }
 

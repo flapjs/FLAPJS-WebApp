@@ -11,12 +11,10 @@ export const ERROR_DUPLICATE_TRANSITION = 'duplicate_transition';
 export const ERROR_MISSING_TRANSITION = 'missing_transition';
 export const ERROR_EMPTY_TRANSITION = 'empty_transition';
 
-class FSABuilder// extends AbstractMachineBuilder
+class FSABuilder
 {
     constructor()
     {
-        // super();
-
         this._machine = new FSA();
     }
 

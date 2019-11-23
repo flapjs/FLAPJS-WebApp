@@ -6,7 +6,7 @@ import Pane from '@flapjs/components/drawer/pane/Pane.jsx';
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
 import { RunningManIcon } from '@flapjs/components/icons/Icons.js';
 
-import TestEquivalenceSection from './TestEquivalenceSection.jsx';
+import TestEquivalenceSection from '../sections/TestEquivalenceSection.jsx';
 
 class AnalysisPanel extends React.Component
 {

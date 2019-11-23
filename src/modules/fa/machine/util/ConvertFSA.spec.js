@@ -53,7 +53,7 @@ describe('Trying to convert a simple state machine', () =>
 
     test('has the expected alphabet', () =>
     {
-        const alphabet = Array.from(dfa.getAlphabet());
+        const alphabet = dfa.getAlphabet();
         expect(alphabet).toHaveLength(2);
         expect(alphabet).toContain('0');
         expect(alphabet).toContain('1');

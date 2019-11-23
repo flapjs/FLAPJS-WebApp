@@ -6,6 +6,13 @@ import Pane from '@flapjs/components/drawer/pane/Pane.jsx';
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
 import { RunningManIcon } from '@flapjs/components/icons/Icons.js';
 
+import RenameAlphabetSymbolSection from '@flapjs/modules/fa/components/sections/RenameAlphabetSymbolSection.jsx';
+import ApplyGraphLayoutSection from '@flapjs/modules/fa/components/sections/ApplyGraphLayoutSection.jsx';
+import OverviewStateListSection from '@flapjs/modules/fa/components/sections/OverviewStateListSection.jsx';
+import OverviewAlphabetListSection from '@flapjs/modules/fa/components/sections/OverviewAlphabetListSection.jsx';
+import OverviewTransitionSection from '@flapjs/modules/fa/components/sections/OverviewTransitionSection.jsx';
+import ChangeDeterminismSection from '@flapjs/modules/fa/components/sections/ChangeDeterminismSection.jsx';
+
 class OverviewPanel extends React.Component
 {
     constructor(props)
@@ -22,29 +29,14 @@ class OverviewPanel extends React.Component
                 <h1>Overview</h1>
             </header>
             <Pane title="Definition">
-                <section>
-                    <h2>States</h2>
-                </section>
-                <section>
-                    <h2>Alphabet</h2>
-                </section>
-                <section>
-                    <h2>Transitions</h2>
-                </section>
-                <section>
-                    <input id="overviewDeterministic" type="checkbox"/>
-                    <label htmlFor="overviewDeterministic">
-                        Deterministic
-                    </label>
-                </section>
+                <ChangeDeterminismSection /> 
+                <OverviewStateListSection />
+                <OverviewAlphabetListSection />
+                <OverviewTransitionSection />
             </Pane>
             <Pane title="Format">
-                <p>
-                    <button>Rename alphabet symbol</button>
-                </p>
-                <p>
-                    <button>Apply layout to graph</button>
-                </p>
+                <RenameAlphabetSymbolSection/>
+                <ApplyGraphLayoutSection/>
             </Pane>
             <Pane title="Automatic">
                 <p>

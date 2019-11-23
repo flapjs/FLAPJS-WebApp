@@ -1,7 +1,7 @@
-import MachineController from '@flapjs/systems/graph/controller/MachineController.js';
-import { convertToDFA, invertDFA } from './machine/FSAUtils.js';
+// import { convertToDFA, invertDFA } from './machine/FSAUtils.js';
 // import GraphLayout from './graph/GraphLayout.js';
 
+import MachineController from '@flapjs/systems/graph/controller/MachineController.js';
 import FSAMachineBuilder from './FSAMachineBuilder.js';
 
 class FSAMachineController extends MachineController
@@ -11,115 +11,10 @@ class FSAMachineController extends MachineController
         super(new FSAMachineBuilder());
     }
 
-    getMachineType()
+    setSession(session)
     {
-        return this._machineBuilder.getMachine().isDeterministic() ? 'DFA' : 'NFA';
-    }
-
-    setMachineType(machineType)
-    {
-        this._machineBuilder.getMachine().setDeterministic(machineType === 'DFA');
-    }
-
-    changeMachineTo(machineType)
-    {
-        const prev = this.getMachineType();
-        if (prev != machineType)
-        {
-            this.setMachineType(machineType);
-        }
-    }
-
-    getFirstGraphNodeByLabel(graph, label)
-    {
-        for(const node of graph.getNodes())
-        {
-            if (node.getNodeLabel() == label)
-            {
-                return node;
-            }
-        }
-
-        return null;
-    }
-
-    setGraphToMachine(graph, machine)
-    {
-        this._machineBuilder.attemptBuildGraph(machine, graph);
-        // Auto layout graph
-        // GraphLayout.applyLayout(graph);
-    }
-
-    convertMachineTo(machineType)
-    {
-        const currentMachineType = this.getMachineType();
-
-        //Already converted machine...
-        if (currentMachineType === machineType) return;
-
-        if (machineType == 'DFA' && currentMachineType == 'NFA')
-        {
-            const result = convertToDFA(this.getMachineBuilder().getMachine());
-            this.setGraphToMachine(this.graphController.getGraph(), result);
-            this.setMachineType(machineType);
-        }
-        else if (machineType == 'NFA' && currentMachineType == 'DFA')
-        {
-            this.changeMachineTo(machineType);
-        }
-        else
-        {
-            throw new Error('Conversion scheme between \'' + currentMachineType + '\' to \'' + machineType + '\' is not supported');
-        }
-    }
-
-    invertMachine()
-    {
-        const machine = this.getMachineBuilder().getMachine();
-        const result = invertDFA(machine, machine);
-
-        //Update final states
-        for(const state of result.getStates())
-        {
-            const src = state.getSource();
-            src.setNodeAccept(machine.isFinalState(state));
-        }
-    }
-
-    getStates()
-    {
-        return this._machineBuilder.getMachine().getStates();
-    }
-
-    countStates()
-    {
-        return this._machineBuilder.getMachine().getStateCount();
-    }
-
-    getFinalStates()
-    {
-        return this._machineBuilder.getMachine().getFinalStates();
-    }
-
-    getTransitions()
-    {
-        return this._machineBuilder.getMachine().getTransitions();
-    }
-
-    getAlphabet()
-    {
-        const machine = this._machineBuilder.getMachine();
-        return Array.from(machine.getAlphabet());
-    }
-
-    isUsedSymbol(symbol)
-    {
-        return !this.isCustomSymbol(symbol);
-    }
-
-    createSymbol(symbol)
-    {
-        this.addCustomSymbol(symbol);
+        this.session = session;
+        return this;
     }
 
     deleteSymbol(symbol)
@@ -129,7 +24,7 @@ class FSAMachineController extends MachineController
         let result = null;
         const targets = [];
 
-        const graph = this.graphController.getGraph();
+        const graph = this.getGraphController().getGraph();
         for(let i = graph.getEdges().length - 1; i >= 0; --i)
         {
             edge = graph.getEdges()[i];
@@ -150,10 +45,12 @@ class FSAMachineController extends MachineController
             }
         }
 
+        /*
         if (targets.length <= 0)
         {
             this.getMachineBuilder().removeCustomSymbol(symbol);
         }
+        */
     }
 
     renameSymbol(prevSymbol, nextSymbol)
@@ -162,7 +59,7 @@ class FSAMachineController extends MachineController
         let result = null;
         const targets = [];
 
-        const graph = this.graphController.getGraph();
+        const graph = this.getGraphController().getGraph();
         const length = graph.getEdges().length;
         for(let i = 0; i < length; ++i)
         {
@@ -175,30 +72,12 @@ class FSAMachineController extends MachineController
             edge.setEdgeLabel(result);
         }
 
+        /*
         if (targets.length <= 0)
         {
             this.getMachineBuilder().renameCustomSymbol(prevSymbol, nextSymbol);
         }
-    }
-
-    getCustomSymbols()
-    {
-        return Array.from(this._machineBuilder.getMachine().getCustomSymbols());
-    }
-
-    isCustomSymbol(symbol)
-    {
-        return this._machineBuilder.isCustomSymbol(symbol);
-    }
-
-    addCustomSymbol(symbol)
-    {
-        this._machineBuilder.getMachine().setCustomSymbol(symbol);
-    }
-
-    clearCustomSymbols()
-    {
-        this._machineBuilder.getMachine().clearCustomSymbols();
+        */
     }
 }
 

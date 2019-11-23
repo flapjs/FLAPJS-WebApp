@@ -52,6 +52,7 @@ class MachineController extends AbstractController
         this._changeHandler.update(this);
     }
 
+    getGraphController() { return this._graphController; }
     getMachineBuilder() { return this._machineBuilder; }
     getMachine() { return this._machineBuilder.getMachine(); }
 }

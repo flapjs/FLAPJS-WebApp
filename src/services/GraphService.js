@@ -17,12 +17,12 @@ class GraphService extends AbstractService
         this.graphParser = null;
         this.graphControllerClass = null;
 
-        this._autoSaveService = null;
-        this._undoService = null;
-
         this.graphController = null;
         this.inputController = new InputController();
         this.viewController = new ViewController();
+
+        this._autoSaveService = null;
+        this._undoService = null;
 
         this._onGraphControllerChange = null;
         this._onInputControllerChange = null;
