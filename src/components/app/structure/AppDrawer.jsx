@@ -80,7 +80,13 @@ function renderPanels(tabbedPanels, tabIndex = 0)
 {
     if (tabIndex >= 0 && tabIndex < tabbedPanels.length)
     {
-        return tabbedPanels[tabIndex];
+        return tabbedPanels.map((e, i) => (
+            <div
+                key={i + ':' + e.type.name}
+                style={{ display: tabIndex === i ? 'unset' : 'none' }}>
+                {e}
+            </div>
+        ));
     }
     else
     {
