@@ -12,7 +12,7 @@ import AppServices from '@flapjs/components/app/structure/AppServices.jsx';
 
 import * as DeprecatedAppHandler from '@flapjs/deprecated/DeprecatedAppHandler.jsx';
 
-import ModuleServices from '@flapjs/session/ModuleServices.jsx';
+import ModuleServices from '@flapjs/session/components/ModuleServices.jsx';
 import { SessionProvider, SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
 
 import Logger from '@flapjs/util/Logger.js';
