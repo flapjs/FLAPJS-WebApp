@@ -1,6 +1,6 @@
 import SessionExporter from '@flapjs/session/helper/SessionExporter.js';
 
-import { RunningManIcon as XMLFileIcon } from '@flapjs/components/icons/Icons.js';
+import { FileXMLIcon } from '@flapjs/components/icons/Icons.js';
 
 class JFFExporter extends SessionExporter
 {
@@ -27,7 +27,7 @@ class JFFExporter extends SessionExporter
     }
 
     /** @override */
-    getIconClass() { return XMLFileIcon; }
+    getIconClass() { return FileXMLIcon; }
     /** @override */
     getLabel() { return 'file.export.jff'; }
     /** @override */

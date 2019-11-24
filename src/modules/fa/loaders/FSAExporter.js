@@ -1,6 +1,6 @@
 import SessionExporter from '@flapjs/session/helper/SessionExporter.js';
 
-import { RunningManIcon as JSONFileIcon } from '@flapjs/components/icons/Icons.js';
+import { FileJSONIcon } from '@flapjs/components/icons/Icons.js';
 
 /**
  * A class that represents a session exporter for the FSA module.
@@ -32,7 +32,7 @@ class FSAExporter extends SessionExporter
     }
 
     /** @override */
-    getIconClass() { return JSONFileIcon; }
+    getIconClass() { return FileJSONIcon; }
 
     /** @override */
     getLabel() { return 'file.export.machine'; }
