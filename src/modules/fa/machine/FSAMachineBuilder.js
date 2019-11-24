@@ -1,7 +1,9 @@
-// import AbstractMachineBuilder from '../AbstractMachineBuilder.js';
-import FSA, { EMPTY_SYMBOL, State } from './FSA.js';
-import FSANode from '../graph/element/FSANode.js';
-import { SYMBOL_SEPARATOR, EMPTY_CHAR } from '../graph/element/FSAEdge.js';
+import AbstractMachineBuilder from '@flapjs/systems/graph/controller/AbstractMachineBuilder.js';
+import { stringHash } from '@flapjs/util/MathHelper';
+
+import FSA, { EMPTY_SYMBOL, State } from '@flapjs/modules/fa/machine/FSA.js';
+import FSANode from '@flapjs/modules/fa/graph/element/FSANode.js';
+import { SYMBOL_SEPARATOR, EMPTY_CHAR } from '@flapjs/modules/fa/graph/element/FSAEdge.js';
 import { getUnreachableNodes } from '@flapjs/systems/graph/util/NodeGraphUtils.js';
 
 export const ERROR_UNREACHABLE_STATE = 'unreachable_state';
@@ -11,10 +13,12 @@ export const ERROR_DUPLICATE_TRANSITION = 'duplicate_transition';
 export const ERROR_MISSING_TRANSITION = 'missing_transition';
 export const ERROR_EMPTY_TRANSITION = 'empty_transition';
 
-class FSABuilder
+class FSAMachineBuilder extends AbstractMachineBuilder
 {
     constructor()
     {
+        super();
+
         this._machine = new FSA();
     }
 
@@ -259,16 +263,12 @@ class FSABuilder
     {
         return this._machine;
     }
+
+    /** @override */
+    getMachineHashCode()
+    {
+        return stringHash(JSON.stringify(this._machine));
+    }
 }
 
-//Representations ->
-//Truth
-
-//MachineBuilder
-//Graph -> Machine (Compile, then return errors)
-//Any changes to graph does not warrant a change to machine
-//Machine Changes -> Graph (Apply them as they happen)
-//Any change to machine does.
-//Machine Conversion -> Graph (Reconstruct the entire graph from machine, then apply layout)
-
-export default FSABuilder;
+export default FSAMachineBuilder;

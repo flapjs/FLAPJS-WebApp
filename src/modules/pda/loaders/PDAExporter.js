@@ -1,6 +1,6 @@
 import SessionExporter from '@flapjs/session/helper/SessionExporter.js';
 
-import { RunningManIcon as JSONFileIcon } from '@flapjs/components/icons/Icons.js';
+import { FileJSONIcon } from '@flapjs/components/icons/Icons.js';
 
 /**
  * A class that represents a session exporter for the PDA module.
@@ -19,18 +19,19 @@ class PDAExporter extends SessionExporter
         const graphController = session.graphService.graphController;
         const graph = graphController.getGraph();
         const graphData = this._graphParser.compose(graph);
-
         dst['graphData'] = graphData;
-        /*
+
+        const machineController = session.machineService.machineController;
+        let machine = machineController.getMachine();
+        let customSymbols = Array.from(machine.getCustomSymbols());
         dst['machineData'] = {
-            symbols: machineController.getCustomSymbols(),
+            symbols: customSymbols,
             statePrefix: graphController.getGraphLabeler().getDefaultNodeLabelPrefix()
         };
-        */
     }
 
     /** @override */
-    getIconClass() { return JSONFileIcon; }
+    getIconClass() { return FileJSONIcon; }
     /** @override */
     getLabel() { return 'file.export.machine'; }
     /** @override */

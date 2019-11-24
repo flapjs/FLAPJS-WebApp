@@ -21,7 +21,7 @@ import FSAImporter from '@flapjs/modules/fa/loaders/FSAImporter.js';
 import FSAExporter from '@flapjs/modules/fa/loaders/FSAExporter';
 import { IMAGE_EXPORTERS } from '../base/NodeGraphImageExporters.js';
 import GraphViewportLayer from '@flapjs/components/graph/GraphViewportLayer.jsx';
-import FSAMachineController from '@flapjs/modules/fa/FSAMachineController.js';
+import FSAMachineController from '@flapjs/modules/fa/machine/FSAMachineController.js';
 
 const MODULE = {
     id: 'fa',

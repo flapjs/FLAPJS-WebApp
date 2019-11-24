@@ -19,16 +19,17 @@ class FSAExporter extends SessionExporter
         const graphController = session.graphService.graphController;
         const graph = graphController.getGraph();
         const graphData = this._graphParser.compose(graph);
-
         dst['graphData'] = graphData;
-        /*
-        const machineController = currentModule.getMachineController();
+
+        const machineController = session.machineService.machineController;
+        let machine = machineController.getMachine();
+        let machineType = machine.isDeterministic() ? 'DFA' : 'NFA';
+        let customSymbols = Array.from(machine.getCustomSymbols());
         dst['machineData'] = {
-            type: machineController.getMachineType(),
-            symbols: machineController.getCustomSymbols(),
+            type: machineType,
+            symbols: customSymbols,
             statePrefix: graphController.getGraphLabeler().getDefaultNodeLabelPrefix()
         };
-        */
     }
 
     /** @override */

@@ -85,15 +85,16 @@ class FSAImporter extends SessionImporter
  */
 export function loadMachineFromData(graphController, machineController, machineData)
 {
+    const machine = machineController.getMachine();
     const machineType = machineData.type;
-    if (machineType) machineController.setMachineType(machineType);
     const customSymbols = machineData.symbols;
+    if (machineType) machine.setDeterministic(machineType === 'DFA');
     if (customSymbols && Array.isArray(customSymbols))
     {
-        machineController.clearCustomSymbols();
+        machine.clearCustomSymbols();
         for (const symbol of customSymbols)
         {
-            machineController.addCustomSymbol(symbol);
+            machine.setCustomSymbol(symbol);
         }
     }
 

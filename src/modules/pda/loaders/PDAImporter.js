@@ -85,15 +85,14 @@ class PDAImporter extends SessionImporter
  */
 export function loadMachineFromData(graphController, machineController, machineData)
 {
-    const machineType = machineData.type;
-    if (machineType) machineController.setMachineType(machineType);
+    const machine = machineController.getMachine();
     const customSymbols = machineData.symbols;
     if (customSymbols && Array.isArray(customSymbols))
     {
-        machineController.clearCustomSymbols();
+        machine.clearCustomSymbols();
         for (const symbol of customSymbols)
         {
-            machineController.addCustomSymbol(symbol);
+            machine.setCustomSymbol(symbol);
         }
     }
 
