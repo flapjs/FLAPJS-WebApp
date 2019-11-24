@@ -68,7 +68,7 @@ class NodalGraphImageExporter extends SessionExporter
 
     processSVGForExport(element, width, height, session)
     {
-        const graphController = session.graphController;
+        const graphController = session.graphService.graphController;
 
         const viewport = session.viewController.getViewportAdapter();
         const offsetX = viewport.getOffsetX();

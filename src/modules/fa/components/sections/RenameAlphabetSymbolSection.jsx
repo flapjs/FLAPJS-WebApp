@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
+import MachineService from '@flapjs/services/MachineService.js';
 
 class RenameAlphabetSymbolSection extends React.Component
 {
@@ -41,11 +41,11 @@ class RenameAlphabetSymbolSection extends React.Component
         const state = this.state;
 
         return (
-            <SessionStateConsumer>
+            <MachineService.CONTEXT.StateConsumer>
                 {
-                    session =>
+                    machineService =>
                     {
-                        const alphabet = session.machineController.getMachine().getAlphabet();
+                        const alphabet = machineService.machineController.getMachine().getAlphabet();
                         const canRenameSymbol = state.newSymbol && (state.oldSymbol || alphabet[0]) != state.newSymbol;
                         return (
                             <fieldset>
@@ -66,7 +66,7 @@ class RenameAlphabetSymbolSection extends React.Component
                                         value={this.state.renameNewSymbol}
                                         onChange={this.handleRenameNewSymbolChange}/>
                                 </p>
-                                <button onClick={e => this.onRenameSymbol(session.machineController)}
+                                <button onClick={e => this.onRenameSymbol(machineService.machineController)}
                                     disabled={!canRenameSymbol}>
                                     Apply
                                 </button>
@@ -74,7 +74,7 @@ class RenameAlphabetSymbolSection extends React.Component
                         );
                     }
                 }
-            </SessionStateConsumer>
+            </MachineService.CONTEXT.StateConsumer>
         );
     }
 }

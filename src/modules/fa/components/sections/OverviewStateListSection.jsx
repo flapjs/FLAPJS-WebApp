@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
+import GraphService from '@flapjs/services/GraphService.js';
 
 class OverviewStateListSection extends React.Component
 {
@@ -15,18 +15,18 @@ class OverviewStateListSection extends React.Component
         return (
             <section>
                 <h2>States</h2>
-                <SessionStateConsumer>
+                <GraphService.CONTEXT.StateConsumer>
                     {
-                        session =>
+                        graphService =>
                         {
-                            return session.graphController.getGraph().getNodes().map(e => (
+                            return graphService.graphController.getGraph().getNodes().map(e => (
                                 <label key={e.getGraphElementID()}>
                                     {e.getNodeLabel()}
                                 </label>
                             ));
                         }
                     }
-                </SessionStateConsumer>
+                </GraphService.CONTEXT.StateConsumer>
             </section>
         );
     }

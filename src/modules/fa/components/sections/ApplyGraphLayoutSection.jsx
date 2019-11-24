@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
+import GraphService from '@flapjs/services/GraphService.js';
 
 class ApplyGraphLayoutSection extends React.Component
 {
@@ -26,9 +26,9 @@ class ApplyGraphLayoutSection extends React.Component
         const state = this.state;
 
         return (
-            <SessionStateConsumer>
+            <GraphService.CONTEXT.StateConsumer>
                 {
-                    session =>
+                    graphService =>
                     {
                         return (
                             <fieldset>
@@ -39,14 +39,14 @@ class ApplyGraphLayoutSection extends React.Component
                                         <option>Tree</option>
                                     </select>
                                 </p>
-                                <button onClick={() => this.onApplyLayout(session.graphController)}>
+                                <button onClick={() => this.onApplyLayout(graphService.graphController)}>
                                     Apply
                                 </button>
                             </fieldset>
                         );
                     }
                 }
-            </SessionStateConsumer>
+            </GraphService.CONTEXT.StateConsumer>
         );
     }
 }

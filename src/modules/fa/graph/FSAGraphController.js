@@ -218,6 +218,8 @@ function formatEdge(graph, edge)
     const edgeDestination = edge.getEdgeTo();
     const edgeLabel = edge.getEdgeLabel().split(SYMBOL_SEPARATOR);
 
+    if (!edgeDestination) return;
+
     //Look for an existing edge with similar from and to
     for (const otherEdge of graph.getEdges())
     {

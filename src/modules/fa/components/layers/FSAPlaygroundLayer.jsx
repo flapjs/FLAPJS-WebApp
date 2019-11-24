@@ -17,13 +17,13 @@ class FSAPlaygroundLayer extends React.Component
         return (
             <GraphService.CONTEXT.StateConsumer>
                 {
-                    service =>
+                    graphService =>
                         <GraphPlaygroundLayer
                             renderGraph={graphView =>
                                 <FSAGraphLayer
                                     inputContext={graphView.getInputContext()}
-                                    inputController={service.inputController}
-                                    graphController={service.graphController}
+                                    inputController={graphService.inputController}
+                                    graphController={graphService.graphController}
                                     editable={true}/>
                             }/>
                 }

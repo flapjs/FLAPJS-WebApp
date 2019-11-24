@@ -24,7 +24,7 @@ class FSAImporter extends SessionImporter
     /** @override */
     onPreImportSession(session)
     {
-        const graphController = session.graphController;
+        const graphController = session.graphService.graphController;
         const graph = graphController.getGraph();
         this._prevGraphHash = graph.getHashCode(true);
 
@@ -38,8 +38,8 @@ class FSAImporter extends SessionImporter
     /** @override */
     onImportSession(session, sessionData)
     {
-        const graphController = session.graphController;
-        const machineController = session.machineController;
+        const graphController = session.graphService.graphController;
+        const machineController = session.machineService.machineController;
         const graph = graphController.getGraph();
 
         if ('graphData' in sessionData)
@@ -56,7 +56,7 @@ class FSAImporter extends SessionImporter
     /** @override */
     onPostImportSession(session)
     {
-        const graphController = session.graphController;
+        const graphController = session.graphService.graphController;
         const graph = graphController.getGraph();
 
         // Compares the graph hash before and after import, captures event if they are not equal

@@ -52,7 +52,27 @@ function createContext(name,
 
         dispatch(action)
         {
-            this.setState(reducer(this.state, action));
+            let result;
+            switch(action.type)
+            {
+                case 'setState':
+                    result = action.value;
+                    break;
+                default:
+                    if (reducer)
+                    {
+                        result = reducer(this.state, action);
+                    }
+                    else
+                    {
+                        result = action;
+                    }
+            }
+    
+            if (result)
+            {
+                this.setState(result);
+            }
         }
 
         /** @override */

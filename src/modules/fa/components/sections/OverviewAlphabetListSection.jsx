@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
+import MachineService from '@flapjs/services/MachineService.js';
 
 class OverviewAlphabetListSection extends React.Component
 {
@@ -15,18 +15,18 @@ class OverviewAlphabetListSection extends React.Component
         return (
             <section>
                 <h2>Alphabet</h2>
-                <SessionStateConsumer>
+                <MachineService.CONTEXT.StateConsumer>
                     {
-                        session =>
+                        machineService =>
                         {
-                            return Array.from(session.machineController.getMachine().getAlphabet()).map(e => (
+                            return Array.from(machineService.machineController.getMachine().getAlphabet()).map(e => (
                                 <label key={e}>
                                     {e}
                                 </label>
                             ));
                         }
                     }
-                </SessionStateConsumer>
+                </MachineService.CONTEXT.StateConsumer>
             </section>
         );
     }

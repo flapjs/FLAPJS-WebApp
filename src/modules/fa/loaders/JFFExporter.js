@@ -13,7 +13,7 @@ class JFFExporter extends SessionExporter
     /** @override */
     onExportSession(session, dst)
     {
-        const graphController = session.graphController;
+        const graphController = session.graphService.graphController;
         const graph = graphController.getGraph();
         const graphData = this._graphParser.compose(graph);
 

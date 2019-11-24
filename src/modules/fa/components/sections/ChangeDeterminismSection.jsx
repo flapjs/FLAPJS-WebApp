@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
+import MachineService from '@flapjs/services/MachineService.js';
 
 class ChangeDeterminismSection extends React.Component
 {
@@ -14,19 +14,19 @@ class ChangeDeterminismSection extends React.Component
     {
         return (
             <section>
-                <SessionStateConsumer>
+                <MachineService.CONTEXT.StateConsumer>
                     {
-                        session =>
+                        machineService =>
                         {
                             return (
                                 <input id="overviewDeterministic"
                                     type="checkbox"
-                                    value={session.machineController.getMachine().isDeterministic()}
-                                    onChange={e => session.machineController.getMachine().setDeterministic(!e.target.value)} />
+                                    value={machineService.machineController.getMachine().isDeterministic()}
+                                    onChange={e => machineService.machineController.getMachine().setDeterministic(!e.target.value)} />
                             );
                         }
                     }
-                </SessionStateConsumer>
+                </MachineService.CONTEXT.StateConsumer>
                 <label htmlFor="overviewDeterministic">
                     Deterministic
                 </label>

@@ -49,7 +49,8 @@ class SessionProvider extends React.Component
                 result = { sessionName: action.value };
                 break;
             case 'setState':
-                return action.value;
+                result = action.value;
+                break;
             default:
                 result = this.props.reducer(this.state, action);
         }

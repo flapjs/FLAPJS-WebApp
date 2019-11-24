@@ -3,7 +3,7 @@ import Style from './TransitionChartSection.module.css';
 
 import { EMPTY_CHAR } from '@flapjs/modules/fa/graph/element/FSAEdge.js';
 import { EMPTY_SYMBOL } from '@flapjs/modules/fa/machine/FSA.js';
-import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
+import MachineService from '@flapjs/services/MachineService.js';
 
 class TransitionChartSection extends React.Component
 {
@@ -126,11 +126,11 @@ class TransitionChartSection extends React.Component
     render()
     {
         return (
-            <SessionStateConsumer>
+            <MachineService.CONTEXT.StateConsumer>
                 {
-                    session =>
+                    machineService =>
                     {
-                        const machineController = session.machineController;
+                        const machineController = machineService.machineController;
                         const machine = machineController.getMachine();
                         const deterministic = machine.isDeterministic();
 
@@ -156,7 +156,7 @@ class TransitionChartSection extends React.Component
                         );
                     }
                 }
-            </SessionStateConsumer>
+            </MachineService.CONTEXT.StateConsumer>
         );
     }
 }

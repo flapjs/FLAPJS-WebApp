@@ -21,7 +21,7 @@ class JFFImporter extends SessionImporter
     /** @override */
     onPreImportSession(session)
     {
-        const graphController = session.graphController;
+        const graphController = session.graphService.graphController;
         const graph = graphController.getGraph();
         this._prevGraphHash = graph.getHashCode(true);
 
@@ -35,7 +35,7 @@ class JFFImporter extends SessionImporter
     /** @override */
     onImportSession(session, sessionData)
     {
-        const graphController = session.graphController;
+        const graphController = session.graphService.graphController;
         const graph = graphController.getGraph();
 
         this._graphParser.parse(sessionData, graph);
@@ -44,7 +44,7 @@ class JFFImporter extends SessionImporter
     /** @override */
     onPostImportSession(session)
     {
-        const graphController = session.graphController;
+        const graphController = session.graphService.graphController;
         const graph = graphController.getGraph();
 
         // Compares the graph hash before and after import, captures event if they are not equal

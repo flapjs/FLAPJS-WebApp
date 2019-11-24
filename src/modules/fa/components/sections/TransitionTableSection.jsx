@@ -173,10 +173,10 @@ class TransitionTableView extends React.Component
         return (
             <MachineService.CONTEXT.StateConsumer>
                 {
-                    service =>
+                    machineService =>
                     {
                         const rowAxis = this.state.rowAxis;
-                        const machineController = service.machineController;
+                        const machineController = machineService.machineController;
                         const machine = machineController.getMachine();
 
                         return (

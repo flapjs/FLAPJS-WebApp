@@ -1,8 +1,8 @@
 import React from 'react';
 
+import GraphService from '@flapjs/services/GraphService.js';
 import GraphPlaygroundLayer from '@flapjs/components/graph/GraphPlaygroundLayer.jsx';
 import NodeGraphLayer from './NodeGraphLayer.jsx';
-import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
 
 class BasePlaygroundLayer extends React.Component
 {
@@ -12,19 +12,19 @@ class BasePlaygroundLayer extends React.Component
     render()
     {
         return (
-            <GraphPlaygroundLayer
-                renderGraph={graphView =>
-                    <SessionStateConsumer>
-                        {
-                            session =>
+            <GraphService.CONTEXT.StateConsumer>
+                {
+                    service =>
+                        <GraphPlaygroundLayer
+                            renderGraph={graphView =>
                                 <NodeGraphLayer
                                     inputContext={graphView.getInputContext()}
-                                    graphController={session.graphController}
-                                    inputController={session.inputController}
+                                    inputController={service.inputController}
+                                    graphController={service.graphController}
                                     editable={true}/>
-                        }
-                    </SessionStateConsumer>
-                }/>
+                            }/>
+                }
+            </GraphService.CONTEXT.StateConsumer>
         );
     }
 }
