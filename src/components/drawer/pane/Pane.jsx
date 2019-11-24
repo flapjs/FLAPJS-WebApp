@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Style from './Pane.module.css';
 
-import { DropdownIcon } from '@flapjs/components/icons/Icons.js';
+import { TinyDownIcon } from '@flapjs/components/icons/Icons.js';
 
 /**
  * A React component that can do anything you want :D.
@@ -47,7 +47,7 @@ class Pane extends React.Component
                         <span className={Style.title}>
                             {props.title}
                         </span>
-                        <DropdownIcon className="icon" />
+                        <TinyDownIcon className="icon" />
                     </button>
                 </header>
                 <main>
