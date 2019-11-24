@@ -1,4 +1,4 @@
-import Importer from '@flapjs/systems/file/import/Importer.js';
+import Importer from '@flapjs/services/import/Importer.js';
 
 class SessionImporter extends Importer
 {
@@ -14,7 +14,7 @@ class SessionImporter extends Importer
 
     onPreImportSession(session)
     {
-        session.undoManager.captureEvent();
+        session.undoService.undoManager.captureEvent();
     }
 
     onImportSession(session, sessionData)
@@ -24,7 +24,7 @@ class SessionImporter extends Importer
 
     onPostImportSession(session)
     {
-        session.undoManager.captureEvent();
+        session.undoService.undoManager.captureEvent();
     }
 
     /** @override */

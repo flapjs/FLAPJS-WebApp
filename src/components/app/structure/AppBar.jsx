@@ -10,7 +10,7 @@ function AppBar(props)
     return (
         <nav className={Style.appbar + ' ' + (props.className || '')}>
             <h2>Flap.js</h2>
-            <TitleInput className={Style.apptitle}></TitleInput>
+            <TitleInput className={Style.apptitle} changeModule={props.changeModule}></TitleInput>
             {props.children}
         </nav>
     );
@@ -18,6 +18,7 @@ function AppBar(props)
 AppBar.propTypes = {
     className: PropTypes.string,
     children: PropTypes.node,
+    changeModule: PropTypes.func.isRequired,
 };
 
 export default AppBar;

@@ -1,45 +1,40 @@
 import AbstractService from './AbstractService.js';
-import AutoSaveManager from '@flapjs/systems/autosave/AutoSaveManager';
-import LocalStorage from '@flapjs/util/storage/LocalStorage';
+import AutoSaveManager from '@flapjs/services/autosave/AutoSaveManager.js';
+import LocalStorage from '@flapjs/util/storage/LocalStorage.js';
 
 class AutoSaveService extends AbstractService
 {
+    static get SERVICE_KEY() { return 'autoSaveService'; }
+
     constructor()
     {
         super();
         this.autoSaveManager = new AutoSaveManager(LocalStorage);
-        this.autoSaveHandler = null;
     }
 
-    setAutoSaveHandler(autoSaveHandler)
+    registerAutoSaveHandler(autoSaveHandler)
     {
-        this.autoSaveHandler = autoSaveHandler;
+        this.autoSaveManager.registerHandler(autoSaveHandler);
         return this;
     }
 
     /** @override */
-    load(session)
+    onSessionLoad(session)
     {
-        super.load(session);
-
-        if (this.autoSaveHandler) this.autoSaveManager.registerHandler(this.autoSaveHandler);
         this.autoSaveManager.initialize();
 
         session.autoSaveManager = this.autoSaveManager;
-        return this;
     }
 
     /** @override */
-    unload(session)
+    onSessionUnload(session)
     {
-        super.unload(session);
-        
-        if (this.autoSaveHandler) this.autoSaveManager.unregisterHandler(this.autoSaveHandler);
         this.autoSaveManager.terminate();
 
         delete session.autoSaveManager;
-        return this;
     }
 }
+AutoSaveService.INSTANCE = new AutoSaveService();
+AutoSaveService.CONTEXT = null;
 
 export default AutoSaveService;

@@ -57,15 +57,15 @@ class TitleInput extends React.Component
             <div className={props.className}>
                 <SessionConsumer>
                     {
-                        (state, dispatch) => (
+                        (session, dispatch) => (
                             <>
                                 {this.renderModuleOptions(
                                     FlapJSModules,
-                                    state.moduleID,
-                                    nextModuleID => dispatch({ type: 'changeModuleByID', value: nextModuleID })
+                                    session.moduleID,
+                                    nextModuleID => props.changeModule(nextModuleID)
                                 )}
                                 {this.renderTitleInput(
-                                    state.sessionName,
+                                    session.sessionName,
                                     newTitle => dispatch({ type: 'changeSessionName', value: newTitle })
                                 )}
                             </>
@@ -79,6 +79,7 @@ class TitleInput extends React.Component
 
 TitleInput.propTypes = {
     className: PropTypes.string,
+    changeModule: PropTypes.func,
 };
 TitleInput.defaultProps = {
 };

@@ -1,45 +1,40 @@
 import AbstractService from './AbstractService.js';
 
-import UndoManager from '@flapjs/systems/undo/UndoManager.js';
+import UndoManager from '@flapjs/services/undo/UndoManager.js';
 
 class UndoService extends AbstractService
 {
+    static get SERVICE_KEY() { return 'undoService'; }
+    
     constructor()
     {
         super();
 
         this.undoManager = new UndoManager();
-        this.eventHandlerFactory = null;
     }
 
     setEventHandlerFactory(eventHandlerFactory)
     {
-        this.eventHandlerFactory = eventHandlerFactory;
+        this.undoManager.setEventHandlerFactory(eventHandlerFactory);
         return this;
     }
 
     /** @override */
-    load(session)
+    onSessionLoad(session)
     {
-        super.load(session);
-
-        if (this.eventHandlerFactory) this.undoManager.setEventHandlerFactory(this.eventHandlerFactory);
-
         session.undoManager = this.undoManager;
-        return this;
     }
 
     /** @override */
-    unload(session)
+    onSessionUnload(session)
     {
-        super.unload(session);
-        
-        if (this.eventHandlerFactory) this.undoManager.setEventHandlerFactory(null);
+        this.undoManager.setEventHandlerFactory(null);
         this.undoManager.clear();
 
         delete session.undoManager;
-        return this;
     }
 }
+UndoService.INSTANCE = new UndoService();
+UndoService.CONTEXT = null;
 
 export default UndoService;

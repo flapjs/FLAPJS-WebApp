@@ -1,9 +1,8 @@
 const MODULE = {
     id: 're',
     version: '1.0.0',
+    services: {},
     renders: {},
-    imports: [],
-    exports: {},
     reducer(state, action)
     {
         switch(action.type)

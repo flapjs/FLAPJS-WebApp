@@ -1,15 +1,36 @@
 import { convertToDFA } from './ConvertFSA.js';
 import { intersectDFA } from './IntersectFSA.js';
 import { invertDFA } from './InvertDFA.js';
-// import FSA from '../FSA.js';
 
+/**
+ * Use isEquivalentFSAWithWitnessString instead.
+ * 
+ * @deprecated
+ * @param {FSA} fsa1 An finite automata.
+ * @param {FSA} fsa2 The other finite automata.
+ * @returns {boolean} Whether the 2 automata are equivalent.
+ */
 export function isEquivalentFSA(fsa1, fsa2)
+{
+    const dfa1 = fsa1.isDeterministic() ? fsa1 : convertToDFA(fsa1);
+    const dfa2 = fsa2.isDeterministic() ? fsa2 : convertToDFA(fsa2);
+    return isEquivalentDFA(dfa1, dfa2).value;
+}
+
+export function isEquivalentFSAWithWitness(fsa1, fsa2)
 {
     const dfa1 = fsa1.isDeterministic() ? fsa1 : convertToDFA(fsa1);
     const dfa2 = fsa2.isDeterministic() ? fsa2 : convertToDFA(fsa2);
     return isEquivalentDFA(dfa1, dfa2);
 }
 
+/*
+* this function returns an object of the form {value:boolean, witnessString:string}
+* where value is true when two DFAs describe the same language and false otherwise.
+* witnessString is a string that shows one string that demonstrates the non-equivalence
+* of the two machines of our interest. witnessString is set to null when two DFAs are 
+* equivalent or when their alphabet are not the same.
+*/
 export function isEquivalentDFA(dfa1, dfa2)
 {
     // L(dfa3) = L(dfa1) && !L(dfa2)
@@ -17,27 +38,44 @@ export function isEquivalentDFA(dfa1, dfa2)
     if (!dfa3) 
     {
         //console.log("dfa1 and dfa2 use different alphabets");
-        return false;
+        return {
+            value: false,
+            witnessString: null // this means the alphabet of two machines are not the same
+        };
     }
     let dfa3acceptssomething = isLanguageNotEmpty(dfa3);
     if (dfa3acceptssomething) 
     {
-        //console.log(`dfa1 accepts ${dfa3acceptssomething} while dfa2 doesn't`)
-        return false;
+        //console.log(`dfa1 accepts ${dfa3acceptssomething} while dfa2 doesn't`);
+        return {
+            value: false,
+            witnessString: dfa3acceptssomething
+        };
     }
     let dfa4 = intersectionOfComplement(dfa2, dfa1);
     if (!dfa4) 
     {
         //console.log("dfa1 and dfa2 use different alphabets");
-        return false;
+        return {
+            value: false,
+            witnessString: null // this means these two DFAs have different alphabet
+        };
     }
     let dfa4acceptssometing = isLanguageNotEmpty(dfa4);
     if (dfa4acceptssometing) 
     {
         //console.log(`dfa2 accepts ${dfa4acceptssomething} while dfa1 doesn't`);
-        return false;
+        return {
+            value: false,
+            witnessString: dfa4acceptssometing
+        };
     }
-    return true;
+
+    // if the user reached this statement, the two DFA's are equal and we should return {true, ''}
+    return {
+        value: true,
+        witnessString: null
+    };
     // L(dfa4) = L(dfa2) && !L(dfa1)
 }
 
@@ -54,7 +92,7 @@ function intersectionOfComplement(dfa1, dfa2)
     return intersectDFA(dfa1, inverted);
 }
 
-function isLanguageNotEmpty(dfa)
+export function isLanguageNotEmpty(dfa)
 {
     //Perform BFS from start state. If a final state can be reached, then the language
     //is not empty, and the path is a witness. Else if no final states are ever reached,

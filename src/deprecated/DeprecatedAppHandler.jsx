@@ -3,7 +3,7 @@ import React from 'react';
 import NotificationView from '@flapjs/deprecated/notification/components/NotificationView.jsx';
 import { NotificationConsumer } from '@flapjs/deprecated/notification/NotificationContext.jsx';
 
-import ExportPanel from '@flapjs/components/drawer/panels/ExportPanel.jsx';
+import ExportPanel from '@flapjs/modules/base/ExportPanel.jsx';
 import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
 
 export function renderAppBar()

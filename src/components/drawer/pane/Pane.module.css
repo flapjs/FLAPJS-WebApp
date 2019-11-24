@@ -23,7 +23,8 @@
     max-width: 60vw;
     max-height: 60vh;
     color: var(--pane-content);
-    border-bottom: 4px solid var(--pane-outline-important);
+
+    /* border-bottom: 4px solid var(--pane-outline-important); */
 }
 
 .dropdown {

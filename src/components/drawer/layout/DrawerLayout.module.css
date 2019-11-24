@@ -50,13 +50,13 @@
 .drawer:global(.left) .content,
 .drawer:global(.right) .content {
     /** It's being blocked by the handle. */
-    margin-left: calc(HANDLE_SIZE / 2);
+    margin-left: calc(HANDLE_SIZE);
 }
 
 .drawer:global(.top) .content,
 .drawer:global(.bottom) .content {
     /** It's being blocked by the handle. */
-    margin-top: calc(HANDLE_SIZE / 2);
+    margin-top: calc(HANDLE_SIZE);
 }
 
 .drawer:global(.left),

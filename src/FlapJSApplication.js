@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom';
 import * as FlapJSModules from './FlapJSModules.js';
 
 import App from './components/app/App.jsx';
-import ModuleManager from './session/ModuleManager.js';
+import ModuleManager, { EVENT_ON_CHANGE_MODULE } from './session/ModuleManager.js';
+import ModuleSaver from './session/ModuleSaver.js';
 import BaseModule from './modules/base/BaseModule.js';
 
 class FlapJSApplication
@@ -13,6 +14,9 @@ class FlapJSApplication
     {
         this.rootElement = rootElement;
         this.moduleManager = new ModuleManager(this, BaseModule);
+        this.moduleSaver = new ModuleSaver();
+
+        this.handleChangeModule = this.handleChangeModule.bind(this);
     }
 
     async loadModuleByID(moduleID)
@@ -25,22 +29,42 @@ class FlapJSApplication
         // eslint-disable-next-line import/namespace
         const moduleHeader = FlapJSModules[moduleID];
         // DEBUG: This is just to slow down module loading. For testing purposes.
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        // await new Promise(resolve => setTimeout(resolve, 3000));
         // Actually go fetch it now...
         return (await moduleHeader.fetch()).default;
     }
-    
-    render(nullFirstRender = false)
-    {
-        if (nullFirstRender)
-        {
-            ReactDOM.render(null, this.rootElement);
-        }
 
+    async start()
+    {
+        // Load the module from storage, if available...
+        if (this.moduleSaver.hasPreviousModuleID())
+        {
+            const prevModuleID = this.moduleSaver.loadFromPreviousModuleID();
+            const prevModule = await this.loadModuleByID(prevModuleID);
+            await this.moduleManager.changeModule(prevModule);
+        }
+        else
+        {
+            await this.moduleManager.changeModule(BaseModule);
+        }
+        
+        // Save the module to storage, if it changes...
+        this.moduleManager.addEventListener(EVENT_ON_CHANGE_MODULE,
+            nextModuleID => this.moduleSaver.saveToPreviousModuleID(nextModuleID));
+
+        // Start the app...
+        this.render();
+    }
+    
+    render()
+    {
         const props = {
             module: this.moduleManager.getCurrentModule(),
-            changeModule: this.moduleManager.changeModule,
-            renderModule: this.moduleManager.renderModuleLayer,
+            session: this.moduleManager.getCurrentSession(),
+            reducer: this.moduleManager.getCurrentReducer(),
+            changeModule: this.handleChangeModule,
+            onDidMount: this.moduleManager.onDidMount,
+            onWillUnmount: this.moduleManager.onWillUnmount,
         };
 
         ReactDOM.render(
@@ -49,6 +73,13 @@ class FlapJSApplication
             ),
             this.rootElement
         );
+    }
+    
+    handleChangeModule(nextModuleID)
+    {
+        this.loadModuleByID(nextModuleID)
+            .then(nextModule => this.moduleManager.changeModule(nextModule))
+            .then(() => this.render());
     }
 
     getRenderRootElement()

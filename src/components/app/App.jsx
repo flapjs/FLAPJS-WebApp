@@ -12,6 +12,9 @@ import AppServices from '@flapjs/components/app/structure/AppServices.jsx';
 
 import * as DeprecatedAppHandler from '@flapjs/deprecated/DeprecatedAppHandler.jsx';
 
+import ModuleServices from '@flapjs/session/components/ModuleServices.jsx';
+import { SessionProvider, SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
+
 import Logger from '@flapjs/util/Logger.js';
 const LOGGER_TAG = 'App';
 
@@ -28,11 +31,14 @@ class App extends React.Component
     {
         super(props);
 
+        /** These are used by ModuleManager to setup the provider's state. */
+        this.sessionProvider = React.createRef();
+
         Logger.out(LOGGER_TAG, '...constructing app...');
         /**
          * Data should be managed outside of the render function. BEFORE the providers are created.
          * 
-         * Data Store => Where data is instantiated, destroyed, and updated
+         * Data Store => Where data is instantiated, destroyed, and updated.
          * Context => The connection points between data and components.
          * 
          * That means, Stores should be created first. Then contexts should take a store as props.
@@ -40,14 +46,17 @@ class App extends React.Component
     }
 
     /** @override */
-    UNSAFE_componentWillMount()
+    componentDidMount()
     {
-        Logger.out(LOGGER_TAG, '...mounting app...');
+        Logger.out(LOGGER_TAG, '...did mount app...');
+        if (this.props.onDidMount) this.props.onDidMount(this);
     }
 
+    /** @override */
     componentWillUnmount()
     {
-        Logger.out(LOGGER_TAG, '...unmounting app...');
+        Logger.out(LOGGER_TAG, '...will unmount app...');
+        if (this.props.onWillUnmount) this.props.onWillUnmount(this);
     }
     
     /** @override */
@@ -55,39 +64,56 @@ class App extends React.Component
     {
         const props = this.props;
 
-        const renderModule = props.renderModule;
+        const currentModule = props.module;
+        const currentState = props.session;
+        const currentReducer = props.reducer;
+        const changeModule = props.changeModule;
 
         Logger.out(LOGGER_TAG, '...rendering app...');
         return (
             <div className={Style.container + (props.className || '')}>
                 {/** All service providers. */}
-                <AppServices app={this}>
-                    {/** The navigation bar at the top. */}
-                    <AppBar>
-                        {DeprecatedAppHandler.renderAppBar()}
-                        {renderModule('appbar')}
-                    </AppBar>
-                    {/** The entire workspace, including drawers, viewports, playgrounds, etc. */}
-                    <AppWorkspace
-                        // The playground the user can edit. This is usually the graph.
-                        renderPlayground={props =>
-                            <AppPlayground {...props}>
-                                {renderModule('playground')}
-                            </AppPlayground>}
-                        // The viewport over the playground. This is usually the overlays.
-                        renderViewport={props =>
-                            <AppViewport {...props}>
-                                {/*DeprecatedAppHandler.renderViewport(this)*/}
-                                {renderModule('viewport')}
-                            </AppViewport>}
-                        // The drawer in the workspace. This is usually the side drawer.
-                        renderDrawer={props =>
-                            <AppDrawer {...props}>
-                                {renderModule('drawer')}
-                                {DeprecatedAppHandler.renderDrawer()}
-                            </AppDrawer>}>
-                    </AppWorkspace>
-                </AppServices>
+                <SessionProvider
+                    ref={this.sessionProvider}
+                    state={currentState}
+                    reducer={currentReducer}>
+                    <SessionStateConsumer>
+                        {
+                            session =>
+                                <ModuleServices
+                                    module={currentModule}
+                                    session={session}>
+                                    <AppServices app={this}>
+                                        {/** The navigation bar at the top. */}
+                                        <AppBar changeModule={changeModule}>
+                                            {DeprecatedAppHandler.renderAppBar()}
+                                            {ModuleServices.renderLayer(currentModule, 'appbar')}
+                                        </AppBar>
+                                        {/** The entire workspace, including drawers, viewports, playgrounds, etc. */}
+                                        <AppWorkspace
+                                            // The playground the user can edit. This is usually the graph.
+                                            renderPlayground={props =>
+                                                <AppPlayground {...props}>
+                                                    {ModuleServices.renderLayer(currentModule, 'playground')}
+                                                </AppPlayground>}
+                                            // The viewport over the playground. This is usually the overlays.
+                                            renderViewport={props =>
+                                                <AppViewport {...props}>
+                                                    {/*DeprecatedAppHandler.renderViewport(this)*/}
+                                                    {ModuleServices.renderLayer(currentModule, 'viewport')}
+                                                </AppViewport>}
+                                            // The drawer in the workspace. This is usually the side drawer.
+                                            renderDrawer={props =>
+                                                <AppDrawer {...props}>
+                                                    {ModuleServices.renderLayer(currentModule, 'drawer')}
+                                                    {DeprecatedAppHandler.renderDrawer()}
+                                                </AppDrawer>}>
+                                        </AppWorkspace>
+                                    </AppServices>
+                                </ModuleServices>
+                        }
+                    </SessionStateConsumer>
+                </SessionProvider>
             </div>
         );
     }
@@ -96,13 +122,17 @@ class App extends React.Component
 App.propTypes = {
     className: PropTypes.string,
     module: PropTypes.object,
+    session: PropTypes.object,
+    reducer: PropTypes.func,
     changeModule: PropTypes.func,
-    renderModule: PropTypes.func
+    onDidMount: PropTypes.func,
+    onWillUnmount: PropTypes.func,
 };
 App.defaultProps = {
     module: null,
+    session: {},
+    reducer: () => ({}),
     changeModule: () => Logger.error(LOGGER_TAG, 'Cannot change module - changeModule() is not defined.'),
-    renderModule: (layerID) => Logger.error(LOGGER_TAG, `Cannot render module layer '${layerID}' - renderModule() is not defined.`)
 };
 
 export default App;

@@ -2,7 +2,7 @@ import SessionExporter from '@flapjs/session/helper/SessionExporter.js';
 
 import { TinyColor } from '@ctrl/tinycolor';
 
-import { RunningManIcon } from '@flapjs/components/icons/Icons.js';
+import { FileJPEGIcon, FilePNGIcon, FileSVGIcon } from '@flapjs/components/icons/Icons.js';
 
 export const IMAGE_TYPE_PNG = 'png';
 export const IMAGE_TYPE_JPG = 'jpg';
@@ -68,7 +68,7 @@ class NodalGraphImageExporter extends SessionExporter
 
     processSVGForExport(element, width, height, session)
     {
-        const graphController = session.graphController;
+        const graphController = session.graphService.graphController;
 
         const viewport = session.viewController.getViewportAdapter();
         const offsetX = viewport.getOffsetX();
@@ -140,10 +140,10 @@ class NodalGraphImageExporter extends SessionExporter
 }
 
 export const IMAGE_EXPORTERS = {
-    ['image-' + IMAGE_TYPE_PNG]: new NodalGraphImageExporter(IMAGE_TYPE_PNG, RunningManIcon, 'file.export.png', 'file.export.png.hint'),
-    ['image-' + IMAGE_TYPE_JPG]: new NodalGraphImageExporter(IMAGE_TYPE_JPG, RunningManIcon, 'file.export.jpg', 'file.export.jpg.hint'),
-    ['image-' + IMAGE_TYPE_SVG]: new NodalGraphImageExporter(IMAGE_TYPE_SVG, RunningManIcon, 'file.export.svg', 'file.export.svg.hint'),
-    ['image-' + IMAGE_TYPE_BW]: new NodalGraphImageExporter(IMAGE_TYPE_BW, RunningManIcon, 'file.export.bw', 'file.export.bw.hint'),
+    ['image-' + IMAGE_TYPE_PNG]: new NodalGraphImageExporter(IMAGE_TYPE_PNG, FilePNGIcon, 'file.export.png', 'file.export.png.hint'),
+    ['image-' + IMAGE_TYPE_JPG]: new NodalGraphImageExporter(IMAGE_TYPE_JPG, FileJPEGIcon, 'file.export.jpg', 'file.export.jpg.hint'),
+    ['image-' + IMAGE_TYPE_SVG]: new NodalGraphImageExporter(IMAGE_TYPE_SVG, FileSVGIcon, 'file.export.svg', 'file.export.svg.hint'),
+    ['image-' + IMAGE_TYPE_BW]: new NodalGraphImageExporter(IMAGE_TYPE_BW, FilePNGIcon, 'file.export.bw', 'file.export.bw.hint'),
 };
 
 export default NodalGraphImageExporter;

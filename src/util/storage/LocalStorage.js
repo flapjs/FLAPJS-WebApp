@@ -1,14 +1,14 @@
 /**
  * A wrapper for a more intuitive use of LocalStorage.
- *
- * @module LocalStorage
  */
-const LocalStorage = {
+class LocalStorage
+{
     clear()
     {
         if (!this.isSupported()) return;
         localStorage.clear();
-    },
+    }
+
     setData(key, value)
     {
         if (!this.isSupported()) return;
@@ -39,12 +39,14 @@ const LocalStorage = {
         {
             localStorage.removeItem(key);
         }
-    },
+    }
+
     getData(key, defaultValue = null)
     {
         if (!this.isSupported()) return defaultValue;
         return localStorage.getItem(key) || defaultValue;
-    },
+    }
+
     setDataAsObject(key, objectValue)
     {
         try
@@ -63,7 +65,8 @@ const LocalStorage = {
             // eslint-disable-next-line no-console
             console.error(e);
         }
-    },
+    }
+
     getDataAsObject(key, defaultValue = null)
     {
         const result = this.getData(key, null);
@@ -84,11 +87,13 @@ const LocalStorage = {
         {
             return defaultValue;
         }
-    },
+    }
+
     isSupported()
     {
         return typeof localStorage !== 'undefined';
     }
-};
+}
 
-export default LocalStorage;
+const INSTANCE = new LocalStorage();
+export default INSTANCE;

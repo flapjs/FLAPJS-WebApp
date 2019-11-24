@@ -1,7 +1,7 @@
 import FSA from '../FSA.js';
 // TODO: add function headers-
 
-// TODO:explain intersected FSA
+// TODO: explain intersected FSA
 export function intersectFSA(fsa1, fsa2, dst = new FSA(true))
 {
     throw new Error('Unsupported operation - not yet implemented');
@@ -12,7 +12,7 @@ export function intersectDFA(dfa1, dfa2, dst = new FSA(true))
     if (!checkSameAlphabet(dfa1, dfa2))
         throw new Error('Mismatched machine alphabet');
 
-    const alphabet = dfa1.getAlphabet();
+    const alphabet = dfa1.UNSAFE_getAlphabet();
     const start1 = dfa1.getStartState();
     const start2 = dfa2.getStartState();
 

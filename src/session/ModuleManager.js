@@ -1,203 +1,95 @@
-import React from 'react';
-import Logger from '@flapjs/util/Logger.js';
+import EventManager from '@flapjs/util/event/EventManager';
+import SessionHandler from './SessionHandler.js';
+import ServiceHandler from './ServiceHandler.js';
 
+import Logger from '@flapjs/util/Logger.js';
 const LOGGER_TAG = 'ModuleManager';
 
-class ModuleManager
-{
-    constructor(application, defaultModule = null)
-    {
-        this.application = application;
-        this.defaultModule = defaultModule;
-        this.currentModule = defaultModule;
+export const EVENT_ON_CHANGE_MODULE = 'changemodule';
 
-        // The context is bound so it can be passed around as a callback...
-        this.changeModule = this.changeModule.bind(this);
-        this.renderModuleLayer = this.renderModuleLayer.bind(this);
+class ModuleManager extends EventManager
+{
+    constructor(application)
+    {
+        super();
+
+        this.application = application;
+        this.currentModule = null;
+        this.currentSession = {};
+
+        this.sessionHandler = new SessionHandler();
+        this.serviceHandler = new ServiceHandler();
+
+        this.onDidMount = this.onDidMount.bind(this);
+        this.onWillUnmount = this.onWillUnmount.bind(this);
     }
 
-    async changeModule(nextModuleID, forceRender = true)
+    onDidMount(app)
     {
-        let nextModule;
-        if (nextModuleID)
+        const sessionProvider = app.sessionProvider.current;
+        this.sessionHandler.didMountSession(sessionProvider, this.currentModule);
+        this.serviceHandler.didMountSession(sessionProvider, this.currentModule);
+    }
+
+    onWillUnmount(app)
+    {
+        const sessionProvider = app.sessionProvider.current;
+        this.serviceHandler.willUnmountSession(sessionProvider, this.currentModule);
+        this.sessionHandler.willUnmountSession(sessionProvider, this.currentModule);
+    }
+
+    async changeModule(nextModule)
+    {
+        if (this.currentModule === nextModule)
         {
-            try
-            {
-                nextModule = await this.application.loadModuleByID(nextModuleID);
-                if (!nextModule) throw new Error('Cannot load null module.');
-            }
-            catch(e)
-            {
-                Logger.error(LOGGER_TAG, 'Failed to load module.', e);
-                return;
-            }
-        }
-        else
-        {
-            nextModule = this.defaultModule;
+            Logger.out(LOGGER_TAG, '...ignoring redundant module change...');
+            return;
         }
 
         if (this.currentModule)
         {
-            this.currentModule = this.defaultModule;
+            Logger.out(LOGGER_TAG, `...destroying session with module '${this.currentModule.id}'...`);
+            this.serviceHandler.destroySession(this.currentSession, this.currentModule);
+            this.sessionHandler.destroySession(this.currentSession, this.currentModule);
+            this.currentSession = {};
         }
 
-        if (forceRender)
-        {
-            // Render to terminated application state...
-            this.application.render(true);
-        }
-        
-        if (nextModule)
-        {
-            this.currentModule = nextModule;
+        this.currentModule = nextModule;
 
-            if (forceRender)
-            {
-                // Render to next application state...
-                this.application.render();
-            }
+        if (this.currentModule)
+        {
+            Logger.out(LOGGER_TAG, `...preparing session for module '${this.currentModule.id}'...`);
+            this.sessionHandler.prepareSessionForModule(this.currentSession, this.currentModule);
+            this.serviceHandler.prepareServicesForModule(this.currentSession, this.currentModule);
+            Logger.out(LOGGER_TAG, `...loading session for module '${this.currentModule.id}'...`);
+            this.sessionHandler.loadSessionForModule(this.currentSession, this.currentModule);
+            this.serviceHandler.loadServicesForModule(this.currentSession, this.currentModule);
         }
+
         // Otherwise, it's already rendered correctly.
-    }
-
-    renderModuleLayer(layerID, layerProps = {}, nested = false)
-    {
-        const currentModule = this.currentModule;
-
-        // NOTE: If it is nested, it must return 'children' in props, even if null.
-        if (nested)
-        {
-            if (!('children' in layerProps)) throw new Error(`Cannot render nested module layer '${layerID}' without children in props.`);
-            const { children, ...componentProps } = layerProps;
-
-            if (!currentModule || !('renders' in currentModule) || !(layerID in currentModule.renders)) return children;
-            return ModuleManager.renderNestedComponentEntries(currentModule.renders[layerID], componentProps, children);
-        }
-        else
-        {
-            if (!currentModule || !('renders' in currentModule)) return null;
-    
-            const renders = currentModule.renders;
-            if (layerID in renders)
-            {
-                const renderLayer = renders[layerID];
-                return ModuleManager.renderComponentEntries(renderLayer, layerProps);
-            }
-    
-            return null;
-        }
-    }
-
-    static renderComponentEntry(componentEntry, componentProps, children = undefined)
-    {
-        // Render entries: { component: ComponentClass, props: {...} }
-        if (typeof componentEntry === 'object')
-        {
-            return React.createElement(componentEntry.component, { ...componentProps, ...componentEntry.props }, children);
-        }
-        // Render entries: ComponentClass
-        else if (typeof componentEntry === 'function')
-        {
-            return React.createElement(componentEntry, componentProps, children);
-        }
-        // Render entries: null / undefined
-        else
-        {
-            return null;
-        }
-    }
-
-    static renderComponentEntries(componentClasses, componentProps = {})
-    {
-        if (Array.isArray(componentClasses))
-        {
-            const result = [];
-            for(const component of componentClasses)
-            {
-                const element = ModuleManager.renderComponentEntry(component, componentProps);
-                if (element)
-                {
-                    result.push(element);
-                }
-            }
-
-            if (result.length <= 1)
-            {
-                return result[0];
-            }
-            else
-            {
-                return result;
-            }
-        }
-        else if (componentClasses)
-        {
-            return ModuleManager.renderComponentEntry(componentClasses, componentProps);
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    static renderNestedComponentEntries(componentClasses, componentProps, children)
-    {
-        if (Array.isArray(componentClasses))
-        {
-            let result = null;
-            for(let i = componentClasses.length - 1; i >= 0; --i)
-            {
-                const componentClass = componentClasses[i];
-                result = ModuleManager.renderComponentEntry(componentClass, componentProps, result || children);
-            }
-            return result || children;
-        }
-        else if (typeof componentClasses === 'function')
-        {
-            return ModuleManager.renderComponentEntry(componentClasses, componentProps, children);
-        }
-        else
-        {
-            return children;
-        }
-    }
-
-    static renderServices(services, serviceProps, children, callback)
-    {
-        let serviceRefs = {};
-        if (typeof services === 'object')
-        {
-            let result = null;
-            for(const serviceKey of Object.keys(services))
-            {
-                const service = services[serviceKey];
-                const ref = React.createRef();
-                serviceRefs[serviceKey] = ref;
-
-                if (result)
-                {
-                    result = React.createElement(service, { ref, ...serviceProps}, result);
-                }
-                else
-                {
-                    result = React.createElement(service, { ref, ...serviceProps }, children);
-                }
-            }
-
-            callback(serviceRefs);
-            return result || children;
-        }
-        else
-        {
-            callback(serviceRefs);
-            return children;
-        }
+        this.emitEvent(EVENT_ON_CHANGE_MODULE, nextModule ? nextModule.id : null);
     }
 
     getCurrentModule()
     {
         return this.currentModule;
+    }
+
+    getCurrentSession()
+    {
+        return this.currentSession;
+    }
+
+    getCurrentReducer()
+    {
+        if (this.currentModule)
+        {
+            return this.currentModule.reducer || undefined;
+        }
+        else
+        {
+            return undefined;
+        }
     }
 }
 

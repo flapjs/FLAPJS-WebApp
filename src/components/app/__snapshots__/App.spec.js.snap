@@ -4,87 +4,13 @@ exports[`<App/> rendering renders correctly 1`] = `
 <div
   className="container"
 >
-  <AppServices
-    app={
-      App {
-        "context": Object {},
-        "props": Object {
-          "changeModule": [Function],
-          "module": null,
-          "renderModule": [Function],
-        },
-        "refs": Object {},
-        "setState": [Function],
-        "state": null,
-        "updater": Updater {
-          "_callbacks": Array [],
-          "_renderer": ReactShallowRenderer {
-            "_context": Object {},
-            "_didScheduleRenderPhaseUpdate": false,
-            "_dispatcher": Object {
-              "readContext": [Function],
-              "useCallback": [Function],
-              "useContext": [Function],
-              "useDebugValue": [Function],
-              "useDeferredValue": [Function],
-              "useEffect": [Function],
-              "useImperativeHandle": [Function],
-              "useLayoutEffect": [Function],
-              "useMemo": [Function],
-              "useReducer": [Function],
-              "useRef": [Function],
-              "useResponder": [Function],
-              "useState": [Function],
-              "useTransition": [Function],
-            },
-            "_element": <App
-              changeModule={[Function]}
-              module={null}
-              renderModule={[Function]}
-            />,
-            "_firstWorkInProgressHook": null,
-            "_forcedUpdate": false,
-            "_instance": [Circular],
-            "_isReRender": false,
-            "_newState": null,
-            "_numberOfReRenders": 0,
-            "_renderPhaseUpdates": null,
-            "_rendered": <div
-              className="container"
-            >
-              <AppServices
-                app={[Circular]}
-              >
-                <AppBar>
-                  <SessionStateConsumer>
-                    [Function]
-                  </SessionStateConsumer>
-                </AppBar>
-                <AppWorkspace
-                  renderDrawer={[Function]}
-                  renderPlayground={[Function]}
-                  renderViewport={[Function]}
-                />
-              </AppServices>
-            </div>,
-            "_rendering": false,
-            "_updater": [Circular],
-            "_workInProgressHook": null,
-          },
-        },
-      }
-    }
+  <SessionProvider
+    reducer={[Function]}
+    state={Object {}}
   >
-    <AppBar>
-      <SessionStateConsumer>
-        <Component />
-      </SessionStateConsumer>
-    </AppBar>
-    <AppWorkspace
-      renderDrawer={[Function]}
-      renderPlayground={[Function]}
-      renderViewport={[Function]}
-    />
-  </AppServices>
+    <SessionStateConsumer>
+      <Component />
+    </SessionStateConsumer>
+  </SessionProvider>
 </div>
 `;

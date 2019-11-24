@@ -1,9 +1,11 @@
 import AbstractService from './AbstractService.js';
 
-import ImportManager from '@flapjs/systems/file/import/ImportManager.js';
+import ImportManager from '@flapjs/services/import/ImportManager.js';
 
 class ImportService extends AbstractService
 {
+    static get SERVICE_KEY() { return 'importService'; }
+    
     constructor()
     {
         super();
@@ -19,32 +21,26 @@ class ImportService extends AbstractService
     }
 
     /** @override */
-    load(session)
+    onSessionLoad(session)
     {
-        super.load(session);
-
         for(const importer of this.importers)
         {
             this.importManager.addImporter(importer, ...importer.getFileTypes());
         }
 
         session.importManager = this.importManager;
-
-        return this;
     }
 
     /** @override */
-    unload(session)
+    onSessionUnload(session)
     {
-        super.unload(session);
-
         this.importManager.clear();
         this.importers.length = 0;
 
         delete session.importManager;
-
-        return this;
     }
 }
+ImportService.INSTANCE = new ImportService();
+ImportService.CONTEXT = null;
 
 export default ImportService;

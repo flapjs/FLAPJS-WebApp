@@ -6,6 +6,9 @@
     outline: none;
     border-radius: 0.5rem;
     cursor: pointer;
+
+    /** DEBUG: This should inherit from its parent instead */
+    color: white;
 }
 
 .icon {
