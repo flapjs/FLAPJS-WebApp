@@ -5,7 +5,7 @@ import ViewController from '@flapjs/services/graph/controller/ViewController.js'
 
 import SafeUndoNodeGraphEventHandler from '@flapjs/services/graph/controller/SafeUndoNodeGraphEventHandler.js';
 import GraphAutoSaveHandler from '@flapjs/services/graph/controller/GraphAutoSaveHandler.js';
-import { createServiceContext } from '@flapjs/services/ServiceContextFactory.js';
+import { createServiceContext } from '@flapjs/services/util/ServiceContextFactory.js';
 
 class GraphService extends AbstractService
 {

@@ -1,5 +1,5 @@
 import AbstractService from './AbstractService.js';
-import { createServiceContext } from '@flapjs/services/ServiceContextFactory.js';
+import { createServiceContext } from '@flapjs/services/util/ServiceContextFactory.js';
 
 class MachineService extends AbstractService
 {
