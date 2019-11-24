@@ -6,6 +6,8 @@ import Pane from '@flapjs/components/drawer/pane/Pane.jsx';
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
 import { RunningManIcon } from '@flapjs/components/icons/Icons.js';
 
+import TestingAutoCheckSection from '@flapjs/modules/fa/components/sections/TestingAutoCheckSection.jsx';
+
 class TestingPanel extends React.Component
 {
     constructor(props)
@@ -35,12 +37,7 @@ class TestingPanel extends React.Component
                 </section>
             </Pane>
             <Pane title="Validation">
-                <p>
-                    <label htmlFor="testingErrorCheck">
-                        Real-time error checking
-                    </label>
-                    <input id="testingErrorCheck" type="checkbox"/>
-                </p>
+                <TestingAutoCheckSection/>
             </Pane>
             </>
         );

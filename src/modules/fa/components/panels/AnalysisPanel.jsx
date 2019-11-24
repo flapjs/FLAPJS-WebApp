@@ -6,7 +6,7 @@ import Pane from '@flapjs/components/drawer/pane/Pane.jsx';
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
 import { PencilIcon } from '@flapjs/components/icons/Icons.js';
 
-import TestEquivalenceSection from '../sections/TestEquivalenceSection.jsx';
+import TestingEquivalenceSection from '../sections/TestingEquivalenceSection.jsx';
 
 class AnalysisPanel extends React.Component
 {
@@ -101,7 +101,7 @@ class AnalysisPanel extends React.Component
                     </ul>
                 </Pane>
                 <Pane title="Equivalence Test">
-                    <TestEquivalenceSection></TestEquivalenceSection>
+                    <TestingEquivalenceSection/>
                 </Pane>
             </>
         );
