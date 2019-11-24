@@ -1,4 +1,4 @@
-import { getFileExtFromName } from '../FileHelper.js';
+import { getFileExtFromName } from '@flapjs/util/file/FileHelper.js';
 import TextUploader from './TextUploader.js';
 
 class ImportManager

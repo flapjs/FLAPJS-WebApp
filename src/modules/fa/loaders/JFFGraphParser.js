@@ -1,4 +1,4 @@
-import Parser from '@flapjs/services/file/Parser.js';
+import Parser from '@flapjs/util/file/Parser.js';
 import FSAGraph from '../graph/FSAGraph.js';
 import { SYMBOL_SEPARATOR } from '../graph/element/FSAEdge.js';
 
