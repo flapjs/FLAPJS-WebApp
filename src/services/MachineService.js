@@ -1,4 +1,5 @@
 import AbstractService from './AbstractService.js';
+import { createServiceContext } from '@flapjs/services/ServiceContextFactory.js';
 
 class MachineService extends AbstractService
 {
@@ -32,10 +33,38 @@ class MachineService extends AbstractService
     }
 
     /** @override */
-    load(session)
+    onServiceLoad(state)
     {
-        super.load(session);
-        
+        state.machineController = this.machineController;
+    }
+
+    /** @override */
+    onServiceMount(provider)
+    {
+        // HACK: This forces everything to re-render every time something either in the
+        // graph, input, or view changes.
+        // This is pretty bad practice. If something depends on one of those 3 things,
+        // they should register themselves with that controller's change handler.
+        this._onMachineControllerChange = this.onMachineControllerChange.bind(this, provider);
+        if (this.machineController) provider.state.machineController.getChangeHandler().addChangeListener(this._onMachineControllerChange);
+    }
+
+    /** @override */
+    onServiceUnmount(provider)
+    {
+        if (this.machineController) provider.state.machineController.getChangeHandler().removeChangeListener(this._onMachineControllerChange);
+        this._onMachineControllerChange = null;
+    }
+
+    /** @override */
+    onServiceUnload(state)
+    {
+        delete state.machineController;
+    }
+
+    /** @override */
+    onSessionLoad(session)
+    {
         if (this.machineControllerClass)
         {
             this.machineController = new (this.machineControllerClass)();
@@ -45,51 +74,21 @@ class MachineService extends AbstractService
 
         if (this.machineController) this.machineController.initialize();
         session.machineController = this.machineController;
-
-        return this;
     }
 
     /** @override */
-    mount(sessionProvider)
+    onSessionUnload(session)
     {
-        super.mount(sessionProvider);
-
-        // HACK: This forces everything to re-render every time something either in the
-        // graph, input, or view changes.
-        // This is pretty bad practice. If something depends on one of those 3 things,
-        // they should register themselves with that controller's change handler.
-        this._onMachineControllerChange = this.onMachineControllerChange.bind(this, sessionProvider);
-        if (this.machineController) sessionProvider.state.machineController.getChangeHandler().addChangeListener(this._onMachineControllerChange);
-
-        return this;
-    }
-
-    /** @override */
-    unmount(sessionProvider)
-    {
-        super.unmount(sessionProvider);
-
-        if (this.machineController) sessionProvider.state.machineController.getChangeHandler().removeChangeListener(this._onMachineControllerChange);
-        this._onMachineControllerChange = null;
-
-        return this;
-    }
-
-    /** @override */
-    unload(session)
-    {
-        super.unload(session);
-
         if (this.machineController) this.machineController.terminate();
         delete session.machineController;
-
-        return this;
     }
 
-    onMachineControllerChange(sessionProvider, machineController, hash)
+    onMachineControllerChange(provider, machineController, hash)
     {
-        sessionProvider.setState({ machineHash: hash });
+        provider.setState({ machineHash: hash });
     }
 }
+MachineService.INSTANCE = new MachineService();
+MachineService.CONTEXT = createServiceContext('MachineService', MachineService.INSTANCE);
 
 export default MachineService;

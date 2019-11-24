@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
+import GraphService from '@flapjs/services/GraphService.js';
 import GraphView from '@flapjs/systems/graph/components/GraphView.jsx';
 
 class GraphPlaygroundLayer extends React.Component
@@ -38,17 +38,17 @@ class GraphPlaygroundLayer extends React.Component
     {
         const props = this.props;
         return (
-            <SessionStateConsumer>
+            <GraphService.CONTEXT.StateConsumer>
                 {
-                    session =>
+                    service =>
                         <GraphView
-                            inputController={session.inputController}
-                            viewController={session.viewController}
+                            inputController={service.inputController}
+                            viewController={service.viewController}
                             renderGraph={props.renderGraph}
                             renderOverlay={props.renderOverlay}>
                         </GraphView>
                 }
-            </SessionStateConsumer>
+            </GraphService.CONTEXT.StateConsumer>
         );
     }
 }

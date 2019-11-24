@@ -5,9 +5,11 @@ import ViewController from '@flapjs/systems/graph/controller/ViewController.js';
 
 import SafeUndoNodeGraphEventHandler from '@flapjs/systems/graph/controller/SafeUndoNodeGraphEventHandler.js';
 import GraphAutoSaveHandler from '@flapjs/systems/graph/controller/GraphAutoSaveHandler.js';
+import { createServiceContext } from '@flapjs/services/ServiceContextFactory.js';
 
 class GraphService extends AbstractService
 {
+    /** @override */
     static get SERVICE_KEY() { return 'graphService'; }
     
     constructor()
@@ -54,10 +56,50 @@ class GraphService extends AbstractService
     }
 
     /** @override */
-    load(session)
+    onServiceLoad(state)
     {
-        super.load(session);
+        state.graphController = this.graphController;
+        state.inputController = this.inputController;
+        state.viewController = this.viewController;
+    }
 
+    /** @override */
+    onServiceMount(provider)
+    {
+        // HACK: This forces everything to re-render every time something either in the
+        // graph, input, or view changes.
+        // This is pretty bad practice. If something depends on one of those 3 things,
+        // they should register themselves with that controller's change handler.
+        this._onGraphControllerChange = this.onGraphControllerChange.bind(this, provider);
+        this._onInputControllerChange = this.onInputControllerChange.bind(this, provider);
+        this._onViewControllerChange = this.onViewControllerChange.bind(this, provider);
+        provider.state.graphController.getChangeHandler().addChangeListener(this._onGraphControllerChange);
+        provider.state.inputController.getChangeHandler().addChangeListener(this._onInputControllerChange);
+        provider.state.viewController.getChangeHandler().addChangeListener(this._onViewControllerChange);
+    }
+
+    /** @override */
+    onServiceUnmount(provider)
+    {
+        provider.state.graphController.getChangeHandler().removeChangeListener(this._onGraphControllerChange);
+        provider.state.inputController.getChangeHandler().removeChangeListener(this._onInputControllerChange);
+        provider.state.viewController.getChangeHandler().removeChangeListener(this._onViewControllerChange);
+        this._onGraphControllerChange = null;
+        this._onInputControllerChange = null;
+        this._onViewControllerChange = null;
+    }
+
+    /** @override */
+    onServiceUnload(state)
+    {
+        delete state.graphController;
+        delete state.inputController;
+        delete state.viewController;
+    }
+
+    /** @override */
+    onSessionLoad(session)
+    {
         if (!this.graphControllerClass) throw new Error('Mising graph controller class - must call setGraphControllerClass() before session load()');
 
         this.graphController = new (this.graphControllerClass)();
@@ -80,49 +122,11 @@ class GraphService extends AbstractService
         {
             throw new Error('Mising graph parser for extended services - must call setGraphParser() before session load()');
         }
-        
-        return this;
     }
 
     /** @override */
-    mount(sessionProvider)
+    onSessionUnload(session)
     {
-        super.mount(sessionProvider);
-
-        // HACK: This forces everything to re-render every time something either in the
-        // graph, input, or view changes.
-        // This is pretty bad practice. If something depends on one of those 3 things,
-        // they should register themselves with that controller's change handler.
-        this._onGraphControllerChange = this.onGraphControllerChange.bind(this, sessionProvider);
-        this._onInputControllerChange = this.onInputControllerChange.bind(this, sessionProvider);
-        this._onViewControllerChange = this.onViewControllerChange.bind(this, sessionProvider);
-        sessionProvider.state.graphController.getChangeHandler().addChangeListener(this._onGraphControllerChange);
-        sessionProvider.state.inputController.getChangeHandler().addChangeListener(this._onInputControllerChange);
-        sessionProvider.state.viewController.getChangeHandler().addChangeListener(this._onViewControllerChange);
-
-        return this;
-    }
-
-    /** @override */
-    unmount(sessionProvider)
-    {
-        super.unmount(sessionProvider);
-
-        sessionProvider.state.graphController.getChangeHandler().removeChangeListener(this._onGraphControllerChange);
-        sessionProvider.state.inputController.getChangeHandler().removeChangeListener(this._onInputControllerChange);
-        sessionProvider.state.viewController.getChangeHandler().removeChangeListener(this._onViewControllerChange);
-        this._onGraphControllerChange = null;
-        this._onInputControllerChange = null;
-        this._onViewControllerChange = null;
-
-        return this;
-    }
-
-    /** @override */
-    unload(session)
-    {
-        super.unload(session);
-
         this._undoService = null;
         this._autoSaveService = null;
 
@@ -133,24 +137,24 @@ class GraphService extends AbstractService
         delete session.graphController;
         delete session.inputController;
         delete session.viewController;
-
-        return this;
     }
 
-    onGraphControllerChange(sessionProvider, graphController, hash)
+    onGraphControllerChange(provider, graphController, hash)
     {
-        sessionProvider.setState({ graphHash: hash });
+        provider.setState({ graphHash: hash });
     }
 
-    onViewControllerChange(sessionProvider, viewController, hash)
+    onViewControllerChange(provider, viewController, hash)
     {
-        sessionProvider.setState({ viewHash: hash });
+        provider.setState({ viewHash: hash });
     }
 
-    onInputControllerChange(sessionProvider, inputController, hash)
+    onInputControllerChange(provider, inputController, hash)
     {
-        sessionProvider.setState({ inputHash: hash });
+        provider.setState({ inputHash: hash });
     }
 }
+GraphService.INSTANCE = new GraphService();
+GraphService.CONTEXT = createServiceContext('GraphService', GraphService.INSTANCE);
 
 export default GraphService;

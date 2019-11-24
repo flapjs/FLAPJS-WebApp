@@ -56,5 +56,7 @@ class NotificationService extends AbstractService
         return this;
     }
 }
+NotificationService.INSTANCE = new NotificationService();
+NotificationService.CONTEXT = null;
 
 export default NotificationService;

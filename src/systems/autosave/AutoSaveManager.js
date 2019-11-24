@@ -57,10 +57,10 @@ class AutoSaveManager
         if (!this._init) return;
 
         clearInterval(this._interval);
+        this._interval = null;
 
         this.unload();
         this._init = false;
-        this._storage = null;
         this.clearHandlers();
     }
 

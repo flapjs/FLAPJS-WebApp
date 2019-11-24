@@ -4,7 +4,7 @@ import Style from './TransitionTableSection.module.css';
 import { EMPTY_CHAR } from '@flapjs/modules/fa/graph/element/FSAEdge.js';
 import { EMPTY_SYMBOL } from '@flapjs/modules/fa/machine/FSA.js';
 
-import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
+import MachineService from '@flapjs/services/MachineService.js';
 
 const SYMBOL_AXIS = 'symbols';
 const STATE_AXIS = 'states';
@@ -171,12 +171,12 @@ class TransitionTableView extends React.Component
     render()
     {
         return (
-            <SessionStateConsumer>
+            <MachineService.CONTEXT.StateConsumer>
                 {
-                    session =>
+                    service =>
                     {
                         const rowAxis = this.state.rowAxis;
-                        const machineController = session.machineController;
+                        const machineController = service.machineController;
                         const machine = machineController.getMachine();
 
                         return (
@@ -196,7 +196,7 @@ class TransitionTableView extends React.Component
                         );
                     }
                 }
-            </SessionStateConsumer>
+            </MachineService.CONTEXT.StateConsumer>
         );
     }
 }

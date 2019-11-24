@@ -65,7 +65,7 @@ export function renderComponentEntries(componentClasses, componentProps = {})
     }
 }
 
-export function renderNestedComponentEntries(componentClasses, componentProps, children)
+export function renderNestedComponentEntries(componentClasses, componentProps, children, refList = undefined)
 {
     if (Array.isArray(componentClasses))
     {
@@ -73,13 +73,31 @@ export function renderNestedComponentEntries(componentClasses, componentProps, c
         for(let i = componentClasses.length - 1; i >= 0; --i)
         {
             const componentClass = componentClasses[i];
-            result = renderComponentEntry(componentClass, componentProps, result || children);
+            if (refList)
+            {
+                let ref = React.createRef();
+                refList.push(ref);
+                result = renderComponentEntry(componentClass, { ref, ...componentProps }, result || children);
+            }
+            else
+            {
+                result = renderComponentEntry(componentClass, componentProps, result || children);
+            }
         }
         return result || children;
     }
     else if (typeof componentClasses === 'function')
     {
-        return renderComponentEntry(componentClasses, componentProps, children);
+        if (refList)
+        {
+            let ref = React.createRef();
+            refList.push(ref);
+            return renderComponentEntry(componentClasses, { ref, ...componentProps }, children, refList);
+        }
+        else
+        {
+            return renderComponentEntry(componentClasses, componentProps, children, refList);
+        }
     }
     else
     {

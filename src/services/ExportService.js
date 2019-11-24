@@ -48,5 +48,7 @@ class ExportService extends AbstractService
         return this;
     }
 }
+ExportService.INSTANCE = new ExportService();
+ExportService.CONTEXT = null;
 
 export default ExportService;

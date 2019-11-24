@@ -39,11 +39,11 @@ class FlexibleOrientationLayout extends React.Component
     {
         if (!this._resizeTimeout)
         {
-            this.setState({ resize: true });
+            if (!this.state.resize) this.setState({ resize: true });
             this._resizeTimeout = setTimeout(() =>
             {
                 this._resizeTimeout = null;
-                this.setState({ resize: false });
+                if (this.state.resize) this.setState({ resize: false });
             },
             this.props.resizeDelay);
         }

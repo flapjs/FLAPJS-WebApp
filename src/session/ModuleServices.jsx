@@ -3,18 +3,28 @@ import PropTypes from 'prop-types';
 
 import * as ComponentRenderer from './ComponentRenderer.jsx';
 
-function ModuleServices(props)
+class ModuleServices extends React.Component
 {
-    const currentModule = props.module;
-    if (!currentModule || !('services' in currentModule)) return props.children;
+    constructor(props)
+    {
+        super(props);
+    }
 
-    const providers = getComponentEntriesFromServices(currentModule.services);
-    const providerProps = { session: props.session };
-    return (
-        <>
-        {ComponentRenderer.renderNestedComponentEntries(providers, providerProps, props.children)}
-        </>
-    );
+    /** @override */
+    render()
+    {
+        const props = this.props;
+        const currentModule = props.module;
+        if (!currentModule || !('services' in currentModule)) return props.children;
+    
+        let providers = getComponentEntriesFromServices(currentModule.services, props.session);
+        let providerProps = { session: props.session };
+        return (
+            <>
+            {ComponentRenderer.renderNestedComponentEntries(providers, providerProps, props.children)}
+            </>
+        );
+    }
 }
 ModuleServices.propTypes = {
     children: PropTypes.node,
@@ -33,14 +43,14 @@ ModuleServices.renderLayer = function(currentModule, layerID)
     return ComponentRenderer.renderComponentEntries(layers, layerProps) || null;
 };
 
-function getComponentEntriesFromServices(services)
+function getComponentEntriesFromServices(services, session)
 {
     const providers = [];
     if (Array.isArray(services))
     {
         for(const service of services)
         {
-            if (service.CONTEXT && service.CONTEXT.Provider)
+            if (service.CONTEXT)
             {
                 providers.push(service.CONTEXT.Provider);
             }
@@ -48,7 +58,7 @@ function getComponentEntriesFromServices(services)
     }
     else if (typeof services === 'function')
     {
-        if (services.CONTEXT && services.CONTEXT.Provider)
+        if (services.CONTEXT)
         {
             providers.push(services.CONTEXT.Provider);
         }

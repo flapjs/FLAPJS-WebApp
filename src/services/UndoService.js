@@ -40,5 +40,7 @@ class UndoService extends AbstractService
         return this;
     }
 }
+UndoService.INSTANCE = new UndoService();
+UndoService.CONTEXT = null;
 
 export default UndoService;

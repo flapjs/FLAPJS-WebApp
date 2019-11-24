@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
+import GraphService from '@flapjs/services/GraphService.js';
 import GraphPlaygroundLayer from '@flapjs/components/graph/GraphPlaygroundLayer.jsx';
 import FSAGraphLayer from './FSAGraphLayer.jsx';
 
@@ -15,20 +15,19 @@ class FSAPlaygroundLayer extends React.Component
     render()
     {
         return (
-            <SessionStateConsumer>
+            <GraphService.CONTEXT.StateConsumer>
                 {
-                    session =>
+                    service =>
                         <GraphPlaygroundLayer
-                            session={session}
                             renderGraph={graphView =>
                                 <FSAGraphLayer
                                     inputContext={graphView.getInputContext()}
-                                    inputController={session.inputController}
-                                    graphController={session.graphController}
+                                    inputController={service.inputController}
+                                    graphController={service.graphController}
                                     editable={true}/>
                             }/>
                 }
-            </SessionStateConsumer>
+            </GraphService.CONTEXT.StateConsumer>
         );
     }
 }

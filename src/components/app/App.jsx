@@ -31,6 +31,7 @@ class App extends React.Component
     {
         super(props);
 
+        /** These are used by ModuleManager to setup the provider's state. */
         this.sessionProvider = React.createRef();
 
         Logger.out(LOGGER_TAG, '...constructing app...');
@@ -79,7 +80,9 @@ class App extends React.Component
                     <SessionStateConsumer>
                         {
                             session =>
-                                <ModuleServices module={currentModule} session={session}>
+                                <ModuleServices
+                                    module={currentModule}
+                                    session={session}>
                                     <AppServices app={this}>
                                         {/** The navigation bar at the top. */}
                                         <AppBar changeModule={changeModule}>

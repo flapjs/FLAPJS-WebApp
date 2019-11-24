@@ -48,5 +48,7 @@ class ImportService extends AbstractService
         return this;
     }
 }
+ImportService.INSTANCE = new ImportService();
+ImportService.CONTEXT = null;
 
 export default ImportService;
