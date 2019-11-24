@@ -109,10 +109,6 @@ class GraphService extends AbstractService
         this.inputController.initialize();
         this.graphController.initialize();
 
-        session.graphController = this.graphController;
-        session.inputController = this.inputController;
-        session.viewController = this.viewController;
-
         if (this.graphParser)
         {
             if (this._undoService) this._undoService.undoManager.setEventHandlerFactory(() => new SafeUndoNodeGraphEventHandler(this.graphController, this.graphParser));
@@ -133,10 +129,6 @@ class GraphService extends AbstractService
         this.graphController.terminate();
         this.inputController.terminate();
         this.viewController.terminate();
-
-        delete session.graphController;
-        delete session.inputController;
-        delete session.viewController;
     }
 
     onGraphControllerChange(provider, graphController, hash)
