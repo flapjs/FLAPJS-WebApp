@@ -1,7 +1,7 @@
 import ViewportAdapter from '../input/ViewportAdapter.js';
 import InputAdapter from '../input/InputAdapter.js';
 
-import AbstractController from '@flapjs/systems/graph/controller/AbstractController.js';
+import AbstractController from '@flapjs/services/graph/controller/AbstractController.js';
 
 const SMOOTH_OFFSET_DAMPING = 0.4;
 const MIN_SCALE = 0.1;

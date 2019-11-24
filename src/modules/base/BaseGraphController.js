@@ -1,11 +1,11 @@
-import GraphController from '@flapjs/systems/graph/controller/GraphController.js';
+import GraphController from '@flapjs/services/graph/controller/GraphController.js';
 
-import IndexedNodeGraph from '@flapjs/systems/graph/model/IndexedNodeGraph.js';
-import GraphNode from '@flapjs/systems/graph/model/elements/GraphNode.js';
-import QuadraticEdge from '@flapjs/systems/graph/model/elements/QuadraticEdge.js';
+import IndexedNodeGraph from '@flapjs/services/graph/model/IndexedNodeGraph.js';
+import GraphNode from '@flapjs/services/graph/model/elements/GraphNode.js';
+import QuadraticEdge from '@flapjs/services/graph/model/elements/QuadraticEdge.js';
 
-import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE } from '@flapjs/systems/graph/controller/inputhandler/GraphNodeInputHandler.js';
-import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE } from '@flapjs/systems/graph/controller/inputhandler/GraphEdgeInputHandler.js';
+import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE } from '@flapjs/services/graph/controller/inputhandler/GraphNodeInputHandler.js';
+import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE } from '@flapjs/services/graph/controller/inputhandler/GraphEdgeInputHandler.js';
 
 // import { WARNING_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
 

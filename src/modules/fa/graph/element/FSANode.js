@@ -1,4 +1,4 @@
-import GraphNode from '@flapjs/systems/graph/model/elements/GraphNode.js';
+import GraphNode from '@flapjs/services/graph/model/elements/GraphNode.js';
 
 class FSANode extends GraphNode
 {

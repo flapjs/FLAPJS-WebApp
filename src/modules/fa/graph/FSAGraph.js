@@ -1,4 +1,4 @@
-import IndexedNodeGraph from '@flapjs/systems/graph/model/IndexedNodeGraph.js';
+import IndexedNodeGraph from '@flapjs/services/graph/model/IndexedNodeGraph.js';
 
 import FSANode from './element/FSANode.js';
 import FSAEdge from './element/FSAEdge.js';

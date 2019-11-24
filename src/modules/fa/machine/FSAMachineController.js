@@ -1,7 +1,7 @@
 // import { convertToDFA, invertDFA } from './machine/FSAUtils.js';
 // import GraphLayout from './graph/GraphLayout.js';
 
-import MachineController from '@flapjs/systems/graph/controller/MachineController.js';
+import MachineController from '@flapjs/services/graph/controller/MachineController.js';
 import FSAMachineBuilder from './FSAMachineBuilder.js';
 
 class FSAMachineController extends MachineController

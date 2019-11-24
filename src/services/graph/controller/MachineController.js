@@ -1,4 +1,4 @@
-import AbstractController from '@flapjs/systems/graph/controller/AbstractController.js';
+import AbstractController from '@flapjs/services/graph/controller/AbstractController.js';
 
 class MachineController extends AbstractController
 {

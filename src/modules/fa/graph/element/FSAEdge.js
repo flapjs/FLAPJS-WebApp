@@ -1,4 +1,4 @@
-import QuadraticEdge from '@flapjs/systems/graph/model/elements/QuadraticEdge.js';
+import QuadraticEdge from '@flapjs/services/graph/model/elements/QuadraticEdge.js';
 
 export const SYMBOL_SEPARATOR = ' ';
 export const EMPTY_CHAR = '\u03B5';

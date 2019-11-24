@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import LabelEditorWidget from '@flapjs/systems/graph/components/widgets/LabelEditorWidget.jsx';
-import TrashCanWidget from '@flapjs/systems/graph/components/widgets/TrashCanWidget.jsx';
-import ModeTrayWidget, { MODE_MOVE, MODE_ACTION } from '@flapjs/systems/graph/components/widgets/ModeTrayWidget.jsx';
-import ZoomWidget from '@flapjs/systems/graph/components/widgets/ZoomWidget.jsx';
-import FocusCenterWidget from '@flapjs/systems/graph/components/widgets/FocusCenterWidget.jsx';
+import LabelEditorWidget from '@flapjs/services/graph/components/widgets/LabelEditorWidget.jsx';
+import TrashCanWidget from '@flapjs/services/graph/components/widgets/TrashCanWidget.jsx';
+import ModeTrayWidget, { MODE_MOVE, MODE_ACTION } from '@flapjs/services/graph/components/widgets/ModeTrayWidget.jsx';
+import ZoomWidget from '@flapjs/services/graph/components/widgets/ZoomWidget.jsx';
+import FocusCenterWidget from '@flapjs/services/graph/components/widgets/FocusCenterWidget.jsx';
 import GraphService from '@flapjs/services/GraphService.js';
 
 class GraphViewportLayer extends React.Component

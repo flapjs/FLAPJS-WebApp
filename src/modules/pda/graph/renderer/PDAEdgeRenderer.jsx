@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import EdgeRenderer, { DIRECTED_FORWARD } from '@flapjs/systems/graph/components/renderer/EdgeRenderer.jsx';
+import EdgeRenderer, { DIRECTED_FORWARD } from '@flapjs/services/graph/components/renderer/EdgeRenderer.jsx';
 
 import { LINE_SEPARATOR } from '../element/PDAEdge.js';
 

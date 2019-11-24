@@ -2,7 +2,7 @@ import { DEFAULT_LABEL_FORMATTER } from './LabelFormatter.js';
 
 import GraphNode from '../model/elements/GraphNode.js';
 import GraphEdge from '../model/elements/GraphEdge.js';
-import AbstractController from '@flapjs/systems/graph/controller/AbstractController.js';
+import AbstractController from '@flapjs/services/graph/controller/AbstractController.js';
 
 export const GRAPH_EVENT_CLEAR = 'graph-clear';
 export const EVENT_ON_CHANGE_GRAPH = 'changegraph';

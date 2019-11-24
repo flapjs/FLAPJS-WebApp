@@ -1,14 +1,14 @@
-import GraphController from '@flapjs/systems/graph/controller/GraphController.js';
+import GraphController from '@flapjs/services/graph/controller/GraphController.js';
 
-import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE, GRAPH_EVENT_NODE_DELETE, GRAPH_EVENT_NODE_DELETE_ALL } from '@flapjs/systems/graph/controller/inputhandler/GraphNodeInputHandler.js';
-import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE, GRAPH_EVENT_EDGE_DELETE } from '@flapjs/systems/graph/controller/inputhandler/GraphEdgeInputHandler.js';
-import { GRAPH_EVENT_START_MARKER_CHANGE } from '@flapjs/systems/graph/controller/inputhandler/IndexedGraphStartMarkerInputHandler.js';
+import { GRAPH_EVENT_NODE_EDIT_WHILE_DELETE, GRAPH_EVENT_NODE_DELETE, GRAPH_EVENT_NODE_DELETE_ALL } from '@flapjs/services/graph/controller/inputhandler/GraphNodeInputHandler.js';
+import { GRAPH_EVENT_EDGE_EDIT_WHILE_DELETE, GRAPH_EVENT_EDGE_DELETE } from '@flapjs/services/graph/controller/inputhandler/GraphEdgeInputHandler.js';
+import { GRAPH_EVENT_START_MARKER_CHANGE } from '@flapjs/services/graph/controller/inputhandler/IndexedGraphStartMarkerInputHandler.js';
 
 // import { WARNING_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
 import PDAGraphLabeler from './PDAGraphLabeler.js';
 
 // This really shouldn't be here....
-import GraphLayout from '@flapjs/systems/graph/util/GraphLayout.js';
+import GraphLayout from '@flapjs/services/graph/util/GraphLayout.js';
 import PDAGraph from '@flapjs/modules/pda/graph/PDAGraph.js';
 
 export const TRASH_EDITING_NOTIFICATION_TAG = 'tryCreateWhileTrash';

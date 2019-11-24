@@ -1,10 +1,10 @@
-import AbstractMachineBuilder from '@flapjs/systems/graph/controller/AbstractMachineBuilder.js';
+import AbstractMachineBuilder from '@flapjs/services/graph/controller/AbstractMachineBuilder.js';
 import { stringHash } from '@flapjs/util/MathHelper';
 
 import FSA, { EMPTY_SYMBOL, State } from '@flapjs/modules/fa/machine/FSA.js';
 import FSANode from '@flapjs/modules/fa/graph/element/FSANode.js';
 import { SYMBOL_SEPARATOR, EMPTY_CHAR } from '@flapjs/modules/fa/graph/element/FSAEdge.js';
-import { getUnreachableNodes } from '@flapjs/systems/graph/util/NodeGraphUtils.js';
+import { getUnreachableNodes } from '@flapjs/services/graph/util/NodeGraphUtils.js';
 
 export const ERROR_UNREACHABLE_STATE = 'unreachable_state';
 export const ERROR_DUPLICATE_STATE = 'duplicate_state';

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import GraphService from '@flapjs/services/GraphService.js';
-import GraphView from '@flapjs/systems/graph/components/GraphView.jsx';
+import GraphView from '@flapjs/services/graph/components/GraphView.jsx';
 
 class GraphPlaygroundLayer extends React.Component
 {
@@ -62,4 +62,3 @@ GraphPlaygroundLayer.defaultProps = {
 };
 
 export default GraphPlaygroundLayer;
-

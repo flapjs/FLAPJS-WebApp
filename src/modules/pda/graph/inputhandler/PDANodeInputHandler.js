@@ -1,5 +1,5 @@
-import AbstractInputHandler from '@flapjs/systems/graph/input/AbstractInputHandler.js';
-import { EVENT_SOURCE_NODE } from '@flapjs/systems/graph/components/renderer/NodeRenderer.jsx';
+import AbstractInputHandler from '@flapjs/services/graph/input/AbstractInputHandler.js';
+import { EVENT_SOURCE_NODE } from '@flapjs/services/graph/components/renderer/NodeRenderer.jsx';
 
 export const GRAPH_EVENT_NODE_ACCEPT_CHANGE = 'node-accept-change';
 

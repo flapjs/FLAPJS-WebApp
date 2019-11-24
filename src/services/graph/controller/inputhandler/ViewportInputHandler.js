@@ -1,4 +1,4 @@
-import AbstractInputHandler from '@flapjs/systems/graph/input/AbstractInputHandler.js';
+import AbstractInputHandler from '@flapjs/services/graph/input/AbstractInputHandler.js';
 
 class ViewportInputHandler extends AbstractInputHandler
 {

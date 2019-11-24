@@ -1,4 +1,4 @@
-import AbstractGraphLabeler from '@flapjs/systems/graph/controller/AbstractGraphLabeler.js';
+import AbstractGraphLabeler from '@flapjs/services/graph/controller/AbstractGraphLabeler.js';
 
 import
 {

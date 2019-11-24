@@ -1,7 +1,7 @@
 import GraphNode from '../model/elements/GraphNode.js';
 import { stringHash } from '@flapjs/util/MathHelper.js';
 
-import AbstractController from '@flapjs/systems/graph/controller/AbstractController.js';
+import AbstractController from '@flapjs/services/graph/controller/AbstractController.js';
 
 const DEFAULT_MOVE_MODE_FIRST = true;
 

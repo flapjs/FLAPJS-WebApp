@@ -1,4 +1,4 @@
-import NodeGraphParser from '@flapjs/systems/graph/model/parser/NodeGraphParser.js';
+import NodeGraphParser from '@flapjs/services/graph/model/parser/NodeGraphParser.js';
 
 import SemanticVersion from '@flapjs/util/SemanticVersion.js';
 import FSAGraph from '../graph/FSAGraph.js';

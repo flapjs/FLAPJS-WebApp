@@ -1,4 +1,4 @@
-import ControllerChangeHandler from '@flapjs/systems/graph/controller/ControllerChangeHandler';
+import ControllerChangeHandler from '@flapjs/services/graph/controller/ControllerChangeHandler';
 import EventManager from '@flapjs/util/event/EventManager.js';
 
 class AbstractController extends EventManager

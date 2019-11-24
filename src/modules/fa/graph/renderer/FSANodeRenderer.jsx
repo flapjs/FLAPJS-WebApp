@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import NodeRenderer from '@flapjs/systems/graph/components/renderer/NodeRenderer.jsx';
+import NodeRenderer from '@flapjs/services/graph/components/renderer/NodeRenderer.jsx';
 
 class FSANodeRenderer extends React.Component
 {

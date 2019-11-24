@@ -12,7 +12,7 @@ import ImportService from '@flapjs/services/ImportService.js';
 import NotificationService from '@flapjs/services/NotificationService.js';
 
 import BaseGraphController from './BaseGraphController.js';
-import { INSTANCE as NODE_PARSER } from '@flapjs/systems/graph/model/parser/NodeGraphParser.js';
+import { INSTANCE as NODE_PARSER } from '@flapjs/services/graph/model/parser/NodeGraphParser.js';
 import GraphViewportLayer from '@flapjs/components/graph/GraphViewportLayer.jsx';
 import BasePlaygroundLayer from '@flapjs/modules/base/BasePlaygroundLayer.jsx';
 
