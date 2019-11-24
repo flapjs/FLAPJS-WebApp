@@ -20,24 +20,18 @@ class UndoService extends AbstractService
     }
 
     /** @override */
-    load(session)
+    onSessionLoad(session)
     {
-        super.load(session);
-
         session.undoManager = this.undoManager;
-        return this;
     }
 
     /** @override */
-    unload(session)
+    onSessionUnload(session)
     {
-        super.unload(session);
-        
         this.undoManager.setEventHandlerFactory(null);
         this.undoManager.clear();
 
         delete session.undoManager;
-        return this;
     }
 }
 UndoService.INSTANCE = new UndoService();

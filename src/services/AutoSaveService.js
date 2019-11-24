@@ -19,25 +19,19 @@ class AutoSaveService extends AbstractService
     }
 
     /** @override */
-    load(session)
+    onSessionLoad(session)
     {
-        super.load(session);
-
         this.autoSaveManager.initialize();
 
         session.autoSaveManager = this.autoSaveManager;
-        return this;
     }
 
     /** @override */
-    unload(session)
+    onSessionUnload(session)
     {
-        super.unload(session);
-
         this.autoSaveManager.terminate();
 
         delete session.autoSaveManager;
-        return this;
     }
 }
 AutoSaveService.INSTANCE = new AutoSaveService();

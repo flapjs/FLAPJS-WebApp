@@ -34,7 +34,7 @@ class ServiceHandler
 
         // Load services...
         // NOTE: This is used as a forward iterator :P (to match the reverse iterator)
-        if (serviceList.length > 0) serviceList.reduce((prev, current) => current.load(session), serviceList[0]);
+        if (serviceList.length > 0) serviceList.reduce((prev, current) => current.onSessionLoad(session), serviceList[0]);
     }
 
     didMountSession(sessionProvider)
@@ -43,7 +43,7 @@ class ServiceHandler
 
         // Mount services...
         // NOTE: This is used as a forward iterator :P (to match the reverse iterator)
-        if (serviceList.length > 0) serviceList.reduce((prev, current) => current.mount(sessionProvider), serviceList[0]);
+        if (serviceList.length > 0) serviceList.reduce((prev, current) => current.onSessionMount(sessionProvider), serviceList[0]);
     }
 
     willUnmountSession(sessionProvider)
@@ -52,7 +52,7 @@ class ServiceHandler
 
         // Unmount services...
         // NOTE: This is used as a reverse iterator :P
-        if (serviceList.length > 0) serviceList.reduceRight((prev, current) => current.unmount(sessionProvider), serviceList[serviceList.length - 1]);
+        if (serviceList.length > 0) serviceList.reduceRight((prev, current) => current.onSessionUnmount(sessionProvider), serviceList[serviceList.length - 1]);
     }
 
     destroySession(session)
@@ -61,7 +61,7 @@ class ServiceHandler
 
         // Unload services...
         // NOTE: This is used as a reverse iterator :P
-        if (serviceList.length > 0) serviceList.reduceRight((prev, current) => current.unload(session), serviceList[serviceList.length - 1]);
+        if (serviceList.length > 0) serviceList.reduceRight((prev, current) => current.onSessionUnload(session), serviceList[serviceList.length - 1]);
         serviceList.length = 0;
     }
 }

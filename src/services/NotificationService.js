@@ -15,45 +15,29 @@ class NotificationService extends AbstractService
     }
 
     /** @override */
-    load(session)
+    onSessionLoad(session)
     {
-        super.load(session);
-
         session.notificationManager = this.notificationManager;
-        
-        return this;
     }
 
     /** @override */
-    mount(sessionProvider)
+    onSessionMount(sessionProvider)
     {
-        super.mount(sessionProvider);
-
         DefaultNotifications.initialize(this.notificationManager);
-
-        return this;
     }
 
     /** @override */
-    unmount(sessionProvider)
+    onSessionUnmount(sessionProvider)
     {
-        super.unmount(sessionProvider);
-
         DefaultNotifications.terminate(this.notificationManager);
-
-        return this;
     }
 
     /** @override */
-    unload(session)
+    onSessionUnload(session)
     {
-        super.unload(session);
-
         this.notificationManager.clearNotifications();
 
         delete session.notificationManager;
-
-        return this;
     }
 }
 NotificationService.INSTANCE = new NotificationService();

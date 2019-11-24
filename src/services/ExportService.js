@@ -21,31 +21,23 @@ class ExportService extends AbstractService
     }
 
     /** @override */
-    load(session)
+    onSessionLoad(session)
     {
-        super.load(session);
-
         for(const exportType of Object.keys(this.exports))
         {
             this.exportManager.registerExporter(this.exports[exportType], exportType);
         }
 
         session.exportManager = this.exportManager;
-
-        return this;
     }
 
     /** @override */
-    unload(session)
+    onSessionUnload(session)
     {
-        super.unload(session);
-
         this.exportManager.clear();
         this.exports = {};
 
         delete session.exportManager;
-
-        return this;
     }
 }
 ExportService.INSTANCE = new ExportService();
