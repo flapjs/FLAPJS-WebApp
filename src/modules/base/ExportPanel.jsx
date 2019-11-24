@@ -1,10 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import ExportTab from './ExportTab.jsx';
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
 import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
-
 import SessionExporter from '@flapjs/session/helper/SessionExporter.js';
+import { DownloadIcon } from '@flapjs/components/icons/Icons.js';
 
 class ExportPanel extends React.Component
 {
@@ -48,6 +48,20 @@ class ExportPanel extends React.Component
         );
     }
 }
-ExportPanel.Tab = ExportTab;
+ExportPanel.Tab = Tab;
+
+function Tab(props)
+{
+    const { onClick, ...otherProps } = props;
+    return (
+        <IconButton
+            onClick={onClick}
+            iconClass={DownloadIcon}
+            {...otherProps}/>
+    );
+}
+Tab.propTypes = {
+    onClick: PropTypes.func.isRequired
+};
 
 export default ExportPanel;

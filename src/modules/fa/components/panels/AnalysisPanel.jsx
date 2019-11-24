@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Pane from '@flapjs/components/drawer/pane/Pane.jsx';
 
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
-import { RunningManIcon } from '@flapjs/components/icons/Icons.js';
+import { PencilIcon } from '@flapjs/components/icons/Icons.js';
 
 import TestEquivalenceSection from '../sections/TestEquivalenceSection.jsx';
 
@@ -115,7 +115,7 @@ function Tab(props)
     return (
         <IconButton
             onClick={onClick}
-            iconClass={RunningManIcon}
+            iconClass={PencilIcon}
             {...otherProps}/>
     );
 }

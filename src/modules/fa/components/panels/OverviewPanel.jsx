@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Pane from '@flapjs/components/drawer/pane/Pane.jsx';
 
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
-import { RunningManIcon } from '@flapjs/components/icons/Icons.js';
+import { PageContentIcon } from '@flapjs/components/icons/Icons.js';
 
 import RenameAlphabetSymbolSection from '@flapjs/modules/fa/components/sections/RenameAlphabetSymbolSection.jsx';
 import ApplyGraphLayoutSection from '@flapjs/modules/fa/components/sections/ApplyGraphLayoutSection.jsx';
@@ -82,7 +82,7 @@ function Tab(props)
     return (
         <IconButton
             onClick={onClick}
-            iconClass={RunningManIcon}
+            iconClass={PageContentIcon}
             {...otherProps}/>
     );
 }
