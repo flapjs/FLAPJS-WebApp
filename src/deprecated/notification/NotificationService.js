@@ -1,4 +1,4 @@
-import AbstractService from './AbstractService.js';
+import AbstractService from '../../services/AbstractService.js';
 
 import NotificationManager from '@flapjs/deprecated/notification/NotificationManager.js';
 import * as DefaultNotifications from '@flapjs/deprecated/notification/DefaultNotifications.jsx';

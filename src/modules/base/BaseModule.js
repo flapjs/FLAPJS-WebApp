@@ -9,7 +9,6 @@ import UndoService from '@flapjs/services/UndoService.js';
 import GraphService from '@flapjs/services/GraphService.js';
 import ExportService from '@flapjs/services/ExportService.js';
 import ImportService from '@flapjs/services/ImportService.js';
-import NotificationService from '@flapjs/services/NotificationService.js';
 
 import BaseGraphController from './BaseGraphController.js';
 import { INSTANCE as NODE_PARSER } from '@flapjs/services/graph/model/parser/NodeGraphParser.js';
@@ -26,7 +25,6 @@ const MODULE = {
     services: [
         ExportService,
         ImportService,
-        NotificationService,
         UndoService,
         GraphService,
         AutoSaveService,
@@ -76,21 +74,16 @@ const MODULE = {
             .setGraphControllerClass(BaseGraphController)
             .enableAutoSaveServiceFeatures(session.autoSaveService)
             .enableUndoServiceFeatures(session.undoService);
-    },
-    postload(session)
-    {
-        // This is called after all services have been created AND loaded, but before they are rendered.
-        // This is usually where you load the state for the services or session.
+        
         session.graphController.getGraph().createNode();
-        session.notificationService.notificationManager.pushNotification('Welcome to Flap.js!');
     },
     unload(session)
     {
     },
-    onSessionDidMount(sessionProvider)
+    onSessionMount(sessionProvider)
     {
     },
-    onSessionWillUnmount(sessionProvider)
+    onSessionUnmount(sessionProvider)
     {
     }
 };
