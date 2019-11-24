@@ -9,7 +9,8 @@ export function createServiceContext(name, service)
         service.onServiceLoad && service.onServiceLoad.bind(service),
         service.onServiceUnload && service.onServiceUnload.bind(service),
         service.onServiceMount && service.onServiceMount.bind(service),
-        service.onServiceUnmount && service.onServiceUnmount.bind(service)
+        service.onServiceUnmount && service.onServiceUnmount.bind(service),
+        service.setProvider.bind(service)
     );
 }
 
@@ -18,7 +19,8 @@ function createContext(name,
     loadCallback,
     unloadCallback,
     mountCallback,
-    unmountCallback)
+    unmountCallback,
+    providerCallback)
 {
     // Behold...the generic service context...
     const StateContext = React.createContext();
@@ -32,6 +34,7 @@ function createContext(name,
             super(props);
 
             this.state = this.props.state;
+            if (providerCallback) providerCallback(this);
             if (loadCallback) loadCallback(this.state);
             
             this.dispatch = this.dispatch.bind(this);
@@ -146,6 +149,6 @@ function createContext(name,
         Provider: ContextProvider,
         Consumer: ContextConsumer,
         StateConsumer: StateConsumer,
-        DispatchConsumer: DispatchContext,
+        DispatchConsumer: DispatchConsumer,
     };
 }

@@ -22,9 +22,19 @@ class AbstractService
     static get SERVICE_KEY() { return 'abstractService'; }
 
     /** Services must have a no-args constructor. */
-    constructor() {}
+    constructor()
+    {
+        this.provider = null;
+    }
+
+    setProvider(provider)
+    {
+        this.provider = provider;
+        return this;
+    }
 
     // These callbacks will only be called if Class.CONTEXT is defined.
+    reducer(state, action) {}
 
     /**
      * Called by ModuleManager (if CONTEXT is defined) to handle to set up the state of the service provider.

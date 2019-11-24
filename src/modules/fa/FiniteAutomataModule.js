@@ -1,6 +1,6 @@
 import ExportService from '@flapjs/services/ExportService.js';
 import ImportService from '@flapjs/services/ImportService.js';
-import NotificationService from '@flapjs/services/NotificationService.js';
+import NotificationService from '@flapjs/services/notification/NotificationService.js';
 import UndoService from '@flapjs/services/UndoService.js';
 import GraphService from '@flapjs/services/GraphService.js';
 import AutoSaveService from '@flapjs/services/AutoSaveService.js';
@@ -12,6 +12,7 @@ import OverviewPanel from '@flapjs/modules/fa/components/panels/OverviewPanel.js
 
 import FSAGraphController from '@flapjs/modules/fa/graph/FSAGraphController.js';
 import FSAPlaygroundLayer from '@flapjs/modules/fa/components/layers/FSAPlaygroundLayer.jsx';
+import NotificationList from '@flapjs/services/notification/components/NotificationList.jsx';
 
 import { INSTANCE as FSA_PARSER } from '@flapjs/modules/fa/loaders/FSAGraphParser.js';
 import { INSTANCE as JFF_PARSER } from '@flapjs/modules/fa/loaders/JFFGraphParser.js';
@@ -37,7 +38,7 @@ const MODULE = {
     ],
     renders: {
         playground: [ FSAPlaygroundLayer ],
-        viewport: [ GraphViewportLayer ],
+        viewport: [ GraphViewportLayer, NotificationList ],
         drawer: [
             OverviewPanel,
             TestingPanel,
@@ -52,7 +53,6 @@ const MODULE = {
                 throw new Error(`Unsupported action ${action}.`);
         }
     },
-    preload(session) { },
     load(session)
     {
         // This is called after all services have been created, but before they are loaded.
@@ -76,13 +76,8 @@ const MODULE = {
         session.machineService
             .setMachineControllerClass(FSAMachineController)
             .enableGraphServiceFeatures(session.graphService);
-    },
-    postload(session)
-    {
-        // This is called after all services have been created AND loaded, but before they are rendered.
-        // This is usually where you load the state for the services or session.
-        session.graphController.getGraph().createNode();
-        session.notificationService.notificationManager.pushNotification('Welcome to Flap.js!');
+        
+        session.notificationService.notificationManager.pushNotification('BOOM');
     },
     unload(session)
     {

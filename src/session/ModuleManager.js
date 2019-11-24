@@ -1,5 +1,5 @@
 import EventManager from '@flapjs/util/event/EventManager';
-import ModuleHandler from './ModuleHandler.js';
+import SessionHandler from './SessionHandler.js';
 import ServiceHandler from './ServiceHandler.js';
 
 import Logger from '@flapjs/util/Logger.js';
@@ -17,7 +17,7 @@ class ModuleManager extends EventManager
         this.currentModule = null;
         this.currentSession = {};
 
-        this.moduleHandler = new ModuleHandler();
+        this.sessionHandler = new SessionHandler();
         this.serviceHandler = new ServiceHandler();
 
         this.onDidMount = this.onDidMount.bind(this);
@@ -27,15 +27,15 @@ class ModuleManager extends EventManager
     onDidMount(app)
     {
         const sessionProvider = app.sessionProvider.current;
-        this.moduleHandler.didMountSession(sessionProvider);
-        this.serviceHandler.didMountSession(sessionProvider);
+        this.sessionHandler.didMountSession(sessionProvider, this.currentModule);
+        this.serviceHandler.didMountSession(sessionProvider, this.currentModule);
     }
 
     onWillUnmount(app)
     {
         const sessionProvider = app.sessionProvider.current;
-        this.serviceHandler.willUnmountSession(sessionProvider);
-        this.moduleHandler.willUnmountSession(sessionProvider);
+        this.serviceHandler.willUnmountSession(sessionProvider, this.currentModule);
+        this.sessionHandler.willUnmountSession(sessionProvider, this.currentModule);
     }
 
     async changeModule(nextModule)
@@ -49,8 +49,8 @@ class ModuleManager extends EventManager
         if (this.currentModule)
         {
             Logger.out(LOGGER_TAG, `...destroying session with module '${this.currentModule.id}'...`);
-            this.serviceHandler.destroySession(this.currentSession);
-            this.moduleHandler.destroySession(this.currentSession);
+            this.serviceHandler.destroySession(this.currentSession, this.currentModule);
+            this.sessionHandler.destroySession(this.currentSession, this.currentModule);
             this.currentSession = {};
         }
 
@@ -59,10 +59,10 @@ class ModuleManager extends EventManager
         if (this.currentModule)
         {
             Logger.out(LOGGER_TAG, `...preparing session for module '${this.currentModule.id}'...`);
-            this.moduleHandler.prepareSessionForModule(this.currentSession, this.currentModule);
+            this.sessionHandler.prepareSessionForModule(this.currentSession, this.currentModule);
             this.serviceHandler.prepareServicesForModule(this.currentSession, this.currentModule);
             Logger.out(LOGGER_TAG, `...loading session for module '${this.currentModule.id}'...`);
-            this.moduleHandler.loadSessionForModule(this.currentSession, this.currentModule);
+            this.sessionHandler.loadSessionForModule(this.currentSession, this.currentModule);
             this.serviceHandler.loadServicesForModule(this.currentSession, this.currentModule);
         }
 
