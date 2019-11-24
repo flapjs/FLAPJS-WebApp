@@ -1,7 +1,7 @@
 .editor_container {
     position: absolute;
     display: none;
-    padding: 0.5em;
+    padding: 0.5em 0;
     background: var(--color-background-lite);
     border-radius: 0.5em;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
@@ -24,4 +24,16 @@
 
 .tray_container {
     /** Not sure what goes here */
+}
+
+.menu_item {
+    width: 100%;
+    text-align: center;
+    font-size: 1em;
+    padding: 3px 0;
+    margin: 0 0;
+}
+
+.menu_item:hover {
+    background: var(--color-background-hover);
 }

@@ -85,6 +85,8 @@ class BaseViewportLayer extends React.Component
                                 <LabelEditorWidget ref={ref => session.graphController.setLabelEditor(ref)}
                                     labelFormatter={session.graphController.getLabelFormatter()}
                                     viewController={session.viewController}
+                                    inputController={inputController}
+                                    graphController={session.graphController}
                                     saveOnExit={true}>
                                 </LabelEditorWidget>
                             </>

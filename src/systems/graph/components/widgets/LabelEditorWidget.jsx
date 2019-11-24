@@ -8,6 +8,16 @@ import GraphEdge from '../../model/elements/GraphEdge.js';
 
 import PatternInput from './pattern/PatternInput.jsx';
 
+// Taken from EdgeRenderer and NodeRenderer
+const EVENT_SOURCE_FORWARD_ENDPOINT = 'forward-endpoint';
+const EVENT_SOURCE_EDGE = 'edge';
+const EVENT_SOURCE_LABEL = 'label';
+const GRAPH_EVENT_EDGE_DELETE = 'edge-delete';
+
+const EVENT_SOURCE_NODE = 'node';
+const GRAPH_EVENT_NODE_DELETE = 'node-delete';
+
+
 class LabelEditorWidget extends React.Component
 {
     constructor(props)
@@ -26,6 +36,9 @@ class LabelEditorWidget extends React.Component
 
         this.onInputSubmit = this.onInputSubmit.bind(this);
         this.onInputBlur = this.onInputBlur.bind(this);
+        this.createOptions = this.createOptions.bind(this);
+        this.menuItemHandler = this.menuItemHandler.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     openEditor(graphElement, defaultValue = null, onSubmit = null, onCancel = null)
@@ -37,21 +50,30 @@ class LabelEditorWidget extends React.Component
         this._targetOnSubmit = onSubmit;
         this._targetOnCancel = onCancel;
 
-        if (graphElement instanceof GraphNode)
+        if(this.inputComponent) 
         {
-            const formatter = this.props.labelFormatter.getNodeLabelFormatter();
-            this.inputComponent.setFormatter(formatter);
-        }
-        else if (graphElement instanceof GraphEdge)
-        {
-            const formatter = this.props.labelFormatter.getEdgeLabelFormatter();
-            this.inputComponent.setFormatter(formatter);
+            if (graphElement instanceof GraphNode)
+            {
+                const formatter = this.props.labelFormatter.getNodeLabelFormatter();
+                this.inputComponent.setFormatter(formatter);
+            }
+            else if (graphElement instanceof GraphEdge)
+            {
+                const formatter = this.props.labelFormatter.getEdgeLabelFormatter();
+                this.inputComponent.setFormatter(formatter);
+            }
         }
 
-        this.setState({ open: true }, () =>
+        const currentTargetType = this.props.inputController.getCurrentTargetType();
+        const currentTargetSource = this.props.inputController.getCurrentTargetSource();
+
+        this.setState({ open: true, currentTargetType: currentTargetType, currentTargetSource: currentTargetSource }, () =>
         {
-            this.inputComponent.resetValue(defaultValue || '');
-            this.inputComponent.focus();
+            if(this.inputComponent) 
+            {
+                this.inputComponent.resetValue(defaultValue || '');
+                this.inputComponent.focus();
+            }
         });
     }
 
@@ -63,7 +85,7 @@ class LabelEditorWidget extends React.Component
 
         this.inputComponent.setFormatter(null);
 
-        this.setState({ open: false });
+        this.setState({ open: false, currentTargetType: null, currentTargetSource: null });
     }
 
     isEditorOpen()
@@ -97,6 +119,59 @@ class LabelEditorWidget extends React.Component
         this.closeEditor();
     }
 
+    createOptions() 
+    {
+        // add different options based on the current type of graph here
+        return ['Delete' /*"... more to be implemented based on node type"*/];
+    }
+
+    menuItemHandler(e) 
+    {
+        // Implement more for different items
+        switch(e.target.innerText) 
+        {
+            case 'Delete':
+                this.handleDelete();
+                break;
+            default:
+                break;
+        }
+    }
+
+    handleDelete() 
+    {
+        const currentTargetType = this.state.currentTargetType;
+        const currentTargetSource = this.state.currentTargetSource;
+        const graphController = this.props.graphController;
+
+        if (currentTargetType === EVENT_SOURCE_EDGE ||
+            currentTargetType === EVENT_SOURCE_FORWARD_ENDPOINT ||
+            currentTargetType === EVENT_SOURCE_LABEL) 
+        {
+            graphController.getGraph().deleteEdge(currentTargetSource);
+            graphController.emitGraphEvent(GRAPH_EVENT_EDGE_DELETE, {target: currentTargetSource});
+
+            this.setState({
+                currentTargetType: null,
+                currentTargetSource: null
+            });
+
+            this.closeEditor();
+        }
+        else if (currentTargetType === EVENT_SOURCE_NODE)
+        {
+            graphController.getGraph().deleteNode(currentTargetSource);
+            graphController.emitGraphEvent(GRAPH_EVENT_NODE_DELETE, { target: currentTargetSource });
+            
+            this.setState({
+                currentTargetType: null,
+                currentTargetSource: null
+            });
+
+            this.closeEditor();
+        }
+    }
+
     /** @override */
     render()
     {
@@ -105,6 +180,8 @@ class LabelEditorWidget extends React.Component
         const target = this._target;
         const targetStyle = this.props.style || {};
         const viewController = this.props.viewController;
+
+        const options = this.createOptions();
 
         if (viewController)
         {
@@ -140,7 +217,24 @@ class LabelEditorWidget extends React.Component
                 <PatternInput ref={ref => this.inputComponent = ref}
                     submitOnBlur={this.props.saveOnExit}
                     onSubmit={this.onInputSubmit}
-                    onBlur={this.onInputBlur} />
+                    onBlur={this.onInputBlur}
+                />
+                <div>
+                    {
+                        options.map((item, ind) => 
+                        {
+                            return <div className={Style.menu_item}
+                                key={ind}
+                                onClick={this.menuItemHandler}
+                                onKeyDown={this.handleClick}
+                                role="button"
+                                tabIndex={0}
+                            >
+                                {item}
+                            </div>;
+                        })
+                    }
+                </div>
                 <div className={Style.tray_container}>
                     {this.props.children}
                 </div>
@@ -156,6 +250,8 @@ LabelEditorWidget.propTypes = {
     // TODO: fix type.
     viewController: PropTypes.object.isRequired,
     labelFormatter: PropTypes.any,
+    inputController: PropTypes.any,
+    graphController: PropTypes.any,
     saveOnExit: PropTypes.bool,
 };
 
