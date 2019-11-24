@@ -1,5 +1,5 @@
 import AbstractService from './AbstractService.js';
-import AutoSaveManager from '@flapjs/systems/autosave/AutoSaveManager.js';
+import AutoSaveManager from '@flapjs/services/autosave/AutoSaveManager.js';
 import LocalStorage from '@flapjs/util/storage/LocalStorage.js';
 
 class AutoSaveService extends AbstractService

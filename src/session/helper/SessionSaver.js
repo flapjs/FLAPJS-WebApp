@@ -1,4 +1,4 @@
-import AbstractAutoSaveHandler from '@flapjs/systems/autosave/AbstractAutoSaveHandler.js';
+import AbstractAutoSaveHandler from '@flapjs/services/autosave/AbstractAutoSaveHandler.js';
 
 import Logger from '@flapjs/util/Logger.js';
 const LOGGER_TAG = 'SessionSaver';

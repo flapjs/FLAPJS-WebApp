@@ -1,6 +1,6 @@
 import AbstractService from './AbstractService.js';
 
-import ExportManager from '@flapjs/systems/file/export/ExportManager.js';
+import ExportManager from '@flapjs/services/file/export/ExportManager.js';
 
 class ExportService extends AbstractService
 {
