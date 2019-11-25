@@ -1,6 +1,6 @@
 import ExportService from '@flapjs/services/ExportService.js';
 import ImportService from '@flapjs/services/ImportService.js';
-import NotificationService from '@flapjs/services/notification/NotificationService.js';
+import NotificationService from '@flapjs/services/NotificationService.js';
 import UndoService from '@flapjs/services/UndoService.js';
 import GraphService from '@flapjs/services/GraphService.js';
 import AutoSaveService from '@flapjs/services/AutoSaveService.js';
@@ -23,6 +23,8 @@ import FSAExporter from '@flapjs/modules/fa/loaders/FSAExporter';
 import { IMAGE_EXPORTERS } from '../base/NodeGraphImageExporters.js';
 import GraphViewportLayer from '@flapjs/components/graph/GraphViewportLayer.jsx';
 import FSAMachineController from '@flapjs/modules/fa/machine/FSAMachineController.js';
+// import FSAErrorChecker from '@flapjs/modules/fa/tester/FSAErrorChecker.js';
+import FSAValidator from '@flapjs/modules/fa/machine/FSAValidator.js';
 
 const MODULE = {
     id: 'fa',
@@ -75,9 +77,10 @@ const MODULE = {
             .enableUndoServiceFeatures(session.undoService);
         session.machineService
             .setMachineControllerClass(FSAMachineController)
+            .setMachineValidatorClass(FSAValidator)
             .enableGraphServiceFeatures(session.graphService);
         
-        session.notificationService.notificationManager.pushNotification('BOOM');
+        session.notificationService.notificationManager.pushNotification('Welcome to Flap.js');
     },
     unload(session)
     {

@@ -1,6 +1,6 @@
 import ExportService from '@flapjs/services/ExportService.js';
 import ImportService from '@flapjs/services/ImportService.js';
-import NotificationService from '@flapjs/services/notification/NotificationService.js';
+import NotificationService from '@flapjs/services/NotificationService.js';
 import UndoService from '@flapjs/services/UndoService.js';
 import GraphService from '@flapjs/services/GraphService.js';
 import AutoSaveService from '@flapjs/services/AutoSaveService.js';

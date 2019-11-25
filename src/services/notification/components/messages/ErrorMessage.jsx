@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Style from './InfoMessage.module.css';
+import Style from './ErrorMessage.module.css';
 import DefaultMessageStyle from './DefaultMessage.module.css';
 
 import LocaleString from '@flapjs/util/localization/LocaleString.jsx';
 
-class InfoMessage extends React.Component
+class ErrorMessage extends React.Component
 {
     constructor(props)
     {
@@ -33,14 +33,14 @@ class InfoMessage extends React.Component
         );
     }
 }
-InfoMessage.propTypes = {
+ErrorMessage.propTypes = {
     children: PropTypes.node,
     notification: PropTypes.object.isRequired,
     content: PropTypes.string,
     onClose: PropTypes.func,
 };
-InfoMessage.defaultProps = {
+ErrorMessage.defaultProps = {
     content: '',
 };
 
-export default InfoMessage;
+export default ErrorMessage;

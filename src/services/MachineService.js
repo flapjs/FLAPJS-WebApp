@@ -12,6 +12,9 @@ class MachineService extends AbstractService
         this.machineControllerClass = null;
         this.machineController = null;
 
+        this.machineValidatorClass = null;
+        this.machineValidator = null;
+
         this._graphService = null;
 
         this._onGraphControllerChange = null;
@@ -26,6 +29,12 @@ class MachineService extends AbstractService
         return this;
     }
 
+    setMachineValidatorClass(machineValidatorClass)
+    {
+        this.machineValidatorClass = machineValidatorClass;
+        return this;
+    }
+
     enableGraphServiceFeatures(graphService)
     {
         this._graphService = graphService;
@@ -36,6 +45,7 @@ class MachineService extends AbstractService
     onServiceLoad(state)
     {
         state.machineController = this.machineController;
+        state.machineValidator = this.machineValidator;
     }
 
     /** @override */
@@ -60,6 +70,7 @@ class MachineService extends AbstractService
     onServiceUnload(state)
     {
         delete state.machineController;
+        delete state.machineValidator;
     }
 
     /** @override */
@@ -72,8 +83,17 @@ class MachineService extends AbstractService
             this.machineController.setSession(session);
         }
 
+        if (this.machineValidatorClass)
+        {
+            this.machineValidator = new (this.machineValidatorClass)();
+            this.machineValidator.setGraphController(this._graphService.graphController);
+            this.machineValidator.setMachineController(this.machineController);
+            this.machineValidator.setSession(session);
+        }
+
         if (this.machineController) this.machineController.initialize();
         session.machineController = this.machineController;
+        session.machineValidator = this.machineValidator;
     }
 
     /** @override */
@@ -86,6 +106,7 @@ class MachineService extends AbstractService
     onMachineControllerChange(provider, machineController, hash)
     {
         provider.setState({ machineHash: hash });
+        if (this.machineValidator) this.machineValidator.validate(machineController);
     }
 }
 MachineService.INSTANCE = new MachineService();

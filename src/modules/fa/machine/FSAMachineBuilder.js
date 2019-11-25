@@ -20,6 +20,20 @@ class FSAMachineBuilder extends AbstractMachineBuilder
         super();
 
         this._machine = new FSA();
+
+        /**
+         * You should not use this. This should be replaced with something else.
+         * 
+         * @deprecated
+         */
+        this._errors = [];
+
+        /**
+         * You should not use this. This should be replaced with something else.
+         * 
+         * @deprecated
+         */
+        this._warnings = [];
     }
 
     /** @override */
@@ -72,6 +86,11 @@ class FSAMachineBuilder extends AbstractMachineBuilder
     /** @override */
     attemptBuildMachine(graph, dst, errors = [], warnings = [])
     {
+        // FIXME: We should really find a different way to compute errors and warnings
+        // This is currently only used by the machine builder
+        this._errors = errors;
+        this._warnings = warnings;
+
         errors.length = 0;
         warnings.length = 0;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './NotificationList.module.css';
 
-import NotificationService from '../NotificationService.js';
+import NotificationService from '@flapjs/services/NotificationService.js';
 import InfoMessage from './messages/InfoMessage.jsx';
 
 class NotificationList extends React.Component
@@ -27,7 +27,7 @@ class NotificationList extends React.Component
                                     <MessageComponent
                                         key={notification.id}
                                         notification={notification}
-                                        textContent={notification.content}
+                                        content={notification.content}
                                         onClose={notification => dispatch({ type: 'close', notification })}
                                         { ...notification.props } />
                                 );

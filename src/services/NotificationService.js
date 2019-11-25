@@ -1,7 +1,7 @@
-import AbstractService from '../AbstractService.js';
+import AbstractService from './AbstractService.js';
 import { createServiceContext } from '@flapjs/services/util/ServiceContextFactory.js';
 
-import NotificationManager from './NotificationManager.js';
+import NotificationManager from './notification/NotificationManager.js';
 
 class NotificationService extends AbstractService
 {

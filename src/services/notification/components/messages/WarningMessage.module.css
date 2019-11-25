@@ -1,0 +1,4 @@
+.container {
+    border-top: 0.4em solid var(--color-surface-warning-dark);
+    background: var(--color-surface-warning);
+}

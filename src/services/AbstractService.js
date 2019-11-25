@@ -24,12 +24,12 @@ class AbstractService
     /** Services must have a no-args constructor. */
     constructor()
     {
-        this.provider = null;
+        this._provider = null;
     }
 
     setProvider(provider)
     {
-        this.provider = provider;
+        this._provider = provider;
         return this;
     }
 
@@ -104,6 +104,8 @@ class AbstractService
      * @param {object} session The session state.
      */
     onSessionUnload(session) {}
+
+    getProvider() { return this._provider; }
 }
 /** The singleton instance for this service. */
 AbstractService.INSTANCE = new AbstractService();
