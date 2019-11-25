@@ -1,8 +1,5 @@
 import React from 'react';
 
-import NotificationView from '@flapjs/deprecated/notification/components/NotificationView.jsx';
-import { NotificationConsumer } from '@flapjs/deprecated/notification/NotificationContext.jsx';
-
 import ExportPanel from '@flapjs/modules/base/ExportPanel.jsx';
 import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
 
@@ -43,10 +40,6 @@ export function renderDrawer()
 export function renderViewport()
 {
     return (
-        <NotificationConsumer>
-            {context =>
-                <NotificationView notificationManager={context.getNotificationManager()} />
-            }
-        </NotificationConsumer>
+        null
     );
 }

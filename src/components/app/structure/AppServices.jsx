@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import DeprecatedServiceProviders from '@flapjs/deprecated/DeprecatedServiceProviders.jsx';
-
 import { ThemeProvider } from '@flapjs/components/theme/ThemeContext.jsx';
 import { LocalizationProvider } from '@flapjs/util/localization/LocalizationContext.jsx';
 import { DrawerProvider } from '@flapjs/components/drawer/context/DrawerContext.jsx';
@@ -19,15 +17,11 @@ class AppServices extends React.Component
     {
         const props = this.props;
 
-        const app = props.app;
-
         return (
             <LocalizationProvider localeCode="en">
                 <ThemeProvider source={() => document.getElementById('root')}>
                     <DrawerProvider>
-                        <DeprecatedServiceProviders app={app}>
-                            {props.children}
-                        </DeprecatedServiceProviders>
+                        {props.children}
                     </DrawerProvider>
                 </ThemeProvider>
             </LocalizationProvider>
@@ -35,8 +29,7 @@ class AppServices extends React.Component
     }
 }
 AppServices.propTypes = {
-    children: PropTypes.node.isRequired,
-    app: PropTypes.object.isRequired,
+    children: PropTypes.node.isRequired
 };
 
 export default AppServices;
