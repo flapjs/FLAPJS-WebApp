@@ -1,14 +1,15 @@
 import SessionImporter from '@flapjs/session/loaders/SessionImporter.js';
 
-class NodeGraphImporter extends SessionImporter
+/**
+ * A class that represents a session importer for the RE module.
+ */
+class REImporter extends SessionImporter
 {
-    constructor(jsonGraphParser, fileTypes = [])
+    constructor(fileTypes = [])
     {
         super();
 
-        this._graphParser = jsonGraphParser;
-        this._prevGraphHash = 0;
-
+        this._prevExpression = '';
         this._fileTypes = fileTypes;
     }
 
@@ -21,12 +22,11 @@ class NodeGraphImporter extends SessionImporter
     /** @override */
     onPreImportSession(session)
     {
-        const graphController = session.graphService.graphController;
-        const graph = graphController.getGraph();
-        this._prevGraphHash = graph.getHashCode(true);
+        const machineController = session.machineService.machineController;
+        this._prevExpression = machineController.getMachine().getExpression();
 
         // TODO: this should not be here, this should exist somewhere in graphController
-        if (!graph.isEmpty())
+        if (!this._prevExpression)
         {
             session.undoManager.captureEvent();
         }
@@ -35,21 +35,20 @@ class NodeGraphImporter extends SessionImporter
     /** @override */
     onImportSession(session, sessionData)
     {
-        const graphController = session.graphService.graphController;
-        const graph = graphController.getGraph();
+        const machineController = session.machineService.machineController;
 
-        this._graphParser.parse(sessionData['graphData'], graph);
+        const machineExpression = sessionData['machineData']['expression'];
+        if (machineExpression) machineController.getMachine().setExpression(machineExpression);
     }
 
     /** @override */
     onPostImportSession(session)
     {
-        const graphController = session.graphService.graphController;
-        const graph = graphController.getGraph();
+        const machineController = session.machineService.machineController;
 
         // Compares the graph hash before and after import, captures event if they are not equal
-        const nextGraphHash = graph.getHashCode(true);
-        if (this._prevGraphHash !== nextGraphHash)
+        const nextExpression = machineController.getMachine().getExpression();
+        if (this._prevExpression !== nextExpression)
         {
             // TODO: this should not be here
             session.undoManager.captureEvent();
@@ -63,4 +62,4 @@ class NodeGraphImporter extends SessionImporter
     }
 }
 
-export default NodeGraphImporter;
+export default REImporter;

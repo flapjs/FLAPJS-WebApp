@@ -7,7 +7,7 @@ import { GRAPH_EVENT_START_MARKER_CHANGE } from '@flapjs/services/graph/controll
 // import { WARNING_LAYOUT_ID } from 'session/manager/notification/NotificationManager.js';
 import FSAGraphLabeler from './FSAGraphLabeler';
 
-import { SYMBOL_SEPARATOR } from './element/FSAEdge.js';
+import { SYMBOL_SEPARATOR } from './elements/FSAEdge.js';
 
 // This really shouldn't be here....
 import GraphLayout from '@flapjs/services/graph/util/GraphLayout.js';
@@ -17,7 +17,6 @@ export const TRASH_EDITING_NOTIFICATION_TAG = 'tryCreateWhileTrash';
 
 const DEFAULT_AUTO_RENAME = true;
 const NODE_SPAWN_RADIUS = 64;
-
 
 class FSAGraphController extends GraphController
 {

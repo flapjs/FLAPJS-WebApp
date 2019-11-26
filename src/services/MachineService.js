@@ -79,8 +79,12 @@ class MachineService extends AbstractService
         if (this.machineControllerClass)
         {
             this.machineController = new (this.machineControllerClass)();
-            this.machineController.setGraphController(this._graphService.graphController);
             this.machineController.setSession(session);
+
+            if (this._graphService)
+            {
+                this.machineController.setGraphController(this._graphService.graphController);
+            }
         }
 
         if (this.machineValidatorClass)
@@ -101,6 +105,7 @@ class MachineService extends AbstractService
     {
         if (this.machineController) this.machineController.terminate();
         delete session.machineController;
+        delete session.machineValidator;
     }
 
     onMachineControllerChange(provider, machineController, hash)

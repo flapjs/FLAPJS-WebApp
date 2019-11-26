@@ -103,7 +103,7 @@ class ExportManager
                 result))
             .catch(err =>
             {
-                throw new Error('Failed to export target to data:' + err.message);
+                throw new Error('Failed to export target to data: ' + err.message);
             });
     }
 

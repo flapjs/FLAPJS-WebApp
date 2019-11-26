@@ -1,5 +1,5 @@
-import SessionExporter from '@flapjs/session/helper/SessionExporter.js';
-
+import SessionExporter from '@flapjs/session/loaders/SessionExporter.js';
+import { INSTANCE as FSA_PARSER } from '@flapjs/modules/fa/loaders/FSAGraphParser.js';
 import { FileJSONIcon } from '@flapjs/components/icons/Icons.js';
 
 /**
@@ -7,10 +7,9 @@ import { FileJSONIcon } from '@flapjs/components/icons/Icons.js';
  */
 class FSAExporter extends SessionExporter
 {
-    constructor(jsonGraphParser)
+    constructor()
     {
         super('.fsa.json');
-        this._graphParser = jsonGraphParser;
     }
 
     /** @override */
@@ -18,7 +17,7 @@ class FSAExporter extends SessionExporter
     {
         const graphController = session.graphService.graphController;
         const graph = graphController.getGraph();
-        const graphData = this._graphParser.compose(graph);
+        const graphData = FSA_PARSER.compose(graph);
         dst['graphData'] = graphData;
 
         const machineController = session.machineService.machineController;

@@ -44,11 +44,15 @@ class Exporter
 
     /**
      * The label for the exporter.
+     * 
+     * @returns {string} The label.
      */
     getLabel() { return 'Export'; }
 
     /**
      * The hint for the exporter.
+     * 
+     * @returns {string} The hint.
      */
     getTitle() { return 'Export'; }
 }

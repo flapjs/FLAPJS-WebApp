@@ -1,6 +1,6 @@
-import Parser from '@flapjs/util/file/Parser.js';
+import AbstractParser from '@flapjs/util/loader/AbstractParser.js';
 import FSAGraph from '../graph/FSAGraph.js';
-import { SYMBOL_SEPARATOR } from '../graph/element/FSAEdge.js';
+import { SYMBOL_SEPARATOR } from '../graph/elements/FSAEdge.js';
 
 export const VERSION = '1.0.0';
 
@@ -8,9 +8,10 @@ export const VERSION = '1.0.0';
  * A class that parses and composes an FSAGraph into JFLAP-supported XML data. This is usually used with
  * an exporter to save to a .jff file to actually import into JFLAP.
  */
-class JFLAPGraphParser extends Parser
+class JFFGraphParser extends AbstractParser
 {
     constructor() { super(); }
+
     /**
      * @override
      * @param  {object} data          The graph data to parse.
@@ -336,5 +337,5 @@ class JFLAPGraphParser extends Parser
     }
 }
 
-export const INSTANCE = new JFLAPGraphParser();
-export default JFLAPGraphParser;
+export const INSTANCE = new JFFGraphParser();
+export default JFFGraphParser;

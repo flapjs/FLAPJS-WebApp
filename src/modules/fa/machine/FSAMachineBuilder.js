@@ -2,8 +2,8 @@ import AbstractMachineBuilder from '@flapjs/services/graph/controller/AbstractMa
 import { stringHash } from '@flapjs/util/MathHelper';
 
 import FSA, { EMPTY_SYMBOL, State } from '@flapjs/modules/fa/machine/FSA.js';
-import FSANode from '@flapjs/modules/fa/graph/element/FSANode.js';
-import { SYMBOL_SEPARATOR, EMPTY_CHAR } from '@flapjs/modules/fa/graph/element/FSAEdge.js';
+import FSANode from '@flapjs/modules/fa/graph/elements/FSANode.js';
+import { SYMBOL_SEPARATOR, EMPTY_CHAR } from '@flapjs/modules/fa/graph/elements/FSAEdge.js';
 import { getUnreachableNodes } from '@flapjs/services/graph/util/NodeGraphUtils.js';
 
 export const ERROR_UNREACHABLE_STATE = 'unreachable_state';

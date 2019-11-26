@@ -1,4 +1,4 @@
-import SessionExporter from '@flapjs/session/helper/SessionExporter.js';
+import SessionExporter from '@flapjs/session/loaders/SessionExporter.js';
 
 import { RunningManIcon } from '@flapjs/components/icons/Icons.js';
 

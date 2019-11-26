@@ -1,7 +1,7 @@
-import AbstractParser from './AbstractParser.js';
-import NodeGraph from '../NodeGraph.js';
+import AbstractParser from '@flapjs/util/loader/AbstractParser.js';
 import SemanticVersion from '@flapjs/util/SemanticVersion.js';
 
+import NodeGraph from '../NodeGraph.js';
 import GraphNode from '../elements/GraphNode';
 import GraphEdge from '../elements/GraphEdge.js';
 import QuadraticEdge from '../elements/QuadraticEdge.js';

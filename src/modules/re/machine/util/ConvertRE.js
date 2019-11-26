@@ -10,27 +10,24 @@ import
     PLUS
 } from '../RE.js';
 
-import REParser from '../REParser.js';
+import { INSTANCE as RE_PARSER } from '@flapjs/modules/re/loaders/REParser.js';
+import AST from '@flapjs/services/expression/model/AST.js';
 
 // Return NFA representation of the input regular expression
 // Construction of NFA is done using Thompson's algorithm
 export function convertToNFA(re)
 {
-    const prevExpression = re.getExpression();
-    re.setExpression(prevExpression.replace(/\s/g, ''));
-    re.insertConcatSymbols();
-    const parser = new REParser();
-    parser.parseRegex(re);         //Create parse tree and add terminals to re's terminal set
-    const nfa = ASTtoNFA(parser.rootNode, re);
-    re.setExpression(prevExpression);
+    // Create parse tree and add terminals to re's terminal set
+    const ast = RE_PARSER.parse(re);
+    const nfa = ASTToNFA(ast, re);
     return nfa;
 }
 
-function ASTtoNFA(astNode, re)
+function ASTToNFA(astNode, re)
 {
     //Base case, terminal nodes are characters in the alphabet OR
     //the EmptySet or Sigma
-    if (astNode.isTerminal())
+    if (astNode instanceof AST.Terminal)
     {
         switch (astNode.getSymbol())
         {
@@ -45,15 +42,15 @@ function ASTtoNFA(astNode, re)
     switch (astNode.getSymbol())
     {
         case KLEENE:
-            return kleene(ASTtoNFA(astNode._children[0], re));
+            return kleene(ASTToNFA(astNode._children[0], re));
         case PLUS:
-            return plus(ASTtoNFA(astNode._children[0], re));
+            return plus(ASTToNFA(astNode._children[0], re));
         case CONCAT:
-            return concat(ASTtoNFA(astNode._children[0], re), ASTtoNFA(astNode._children[1], re));
+            return concat(ASTToNFA(astNode._children[0], re), ASTToNFA(astNode._children[1], re));
         case UNION:
-            return or(ASTtoNFA(astNode._children[0], re), ASTtoNFA(astNode._children[1], re));
+            return or(ASTToNFA(astNode._children[0], re), ASTToNFA(astNode._children[1], re));
         case '(':
-            return ASTtoNFA(astNode._children[0], re);
+            return ASTToNFA(astNode._children[0], re);
         default:
             throw new Error('You\'ve got a weird node in the AST tree with symbol ' + astNode.getSymbol());
     }

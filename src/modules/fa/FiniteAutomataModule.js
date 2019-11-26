@@ -15,7 +15,6 @@ import FSAPlaygroundLayer from '@flapjs/modules/fa/components/layers/FSAPlaygrou
 import NotificationList from '@flapjs/services/notification/components/NotificationList.jsx';
 
 import { INSTANCE as FSA_PARSER } from '@flapjs/modules/fa/loaders/FSAGraphParser.js';
-import { INSTANCE as JFF_PARSER } from '@flapjs/modules/fa/loaders/JFFGraphParser.js';
 import JFFImporter from '@flapjs/modules/fa/loaders/JFFImporter.js';
 import JFFExporter from '@flapjs/modules/fa/loaders/JFFExporter.js';
 import FSAImporter from '@flapjs/modules/fa/loaders/FSAImporter.js';
@@ -61,13 +60,13 @@ const MODULE = {
         // This is usually where you setup the session to be loaded correctly (instead of passing args to constructor).
         session.importService
             .addImporter(
-                new FSAImporter(FSA_PARSER, ['.json', '.fa.json', '.fsa.json']),
-                new JFFImporter(JFF_PARSER, [ '.jff' ])
+                new FSAImporter(['.json', '.fa.json', '.fsa.json']),
+                new JFFImporter([ '.jff' ])
             );
         session.exportService
             .setExports({
-                session: new FSAExporter(FSA_PARSER),
-                jflap: new JFFExporter(JFF_PARSER),
+                session: new FSAExporter(),
+                jflap: new JFFExporter(),
                 ...IMAGE_EXPORTERS
             });
         session.graphService

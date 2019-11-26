@@ -1,7 +1,7 @@
-// import { convertToDFA, invertDFA } from './machine/FSAUtils.js';
-// import GraphLayout from './graph/GraphLayout.js';
+import { convertToDFA, invertDFA } from './FSAUtils.js';
+import GraphLayout from '@flapjs/services/graph/util/GraphLayout.js';
 
-import MachineController from '@flapjs/services/graph/controller/MachineController.js';
+import MachineController from '@flapjs/services/machine/controller/MachineController.js';
 import FSAMachineBuilder from './FSAMachineBuilder.js';
 
 class FSAMachineController extends MachineController
@@ -9,12 +9,59 @@ class FSAMachineController extends MachineController
     constructor()
     {
         super(new FSAMachineBuilder());
-    }
 
+        // TODO: This is not yet used by anything...
+        this.session = null;
+    }
+    
     setSession(session)
     {
         this.session = session;
         return this;
+    }
+
+    setGraphToMachine(graph, machine)
+    {
+        this.getMachineBuilder().attemptBuildGraph(machine, graph);
+        
+        //Auto layout graph
+        GraphLayout.applyLayout(graph);
+    }
+
+    convertMachineTo(machineType)
+    {
+        const currentMachineType = this.getMachine().isDeterministic() ? 'DFA' : 'NFA';
+
+        //Already converted machine...
+        if (currentMachineType === machineType) return;
+
+        if (machineType == 'DFA' && currentMachineType == 'NFA')
+        {
+            const result = convertToDFA(this.getMachine());
+            this.setGraphToMachine(this._graphController.getGraph(), result);
+            this.getMachine().setDeterministic(true);
+        }
+        else if (machineType == 'NFA' && currentMachineType == 'DFA')
+        {
+            this.getMachine().setDeterministic(false);
+        }
+        else
+        {
+            throw new Error('Conversion scheme between \'' + currentMachineType + '\' to \'' + machineType + '\' is not supported');
+        }
+    }
+
+    invertMachine()
+    {
+        const machine = this.getMachineBuilder().getMachine();
+        const result = invertDFA(machine, machine);
+
+        //Update final states
+        for(const state of result.getStates())
+        {
+            const src = state.getSource();
+            src.setNodeAccept(machine.isFinalState(state));
+        }
     }
 
     deleteSymbol(symbol)

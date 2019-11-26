@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './TransitionChartSection.module.css';
 
-import { EMPTY_CHAR } from '@flapjs/modules/fa/graph/element/FSAEdge.js';
+import { EMPTY_CHAR } from '@flapjs/modules/fa/graph/elements/FSAEdge.js';
 import { EMPTY_SYMBOL } from '@flapjs/modules/fa/machine/FSA.js';
 import MachineService from '@flapjs/services/MachineService.js';
 

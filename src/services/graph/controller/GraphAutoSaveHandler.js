@@ -1,4 +1,4 @@
-import SessionSaver from '@flapjs/session/helper/SessionSaver.js';
+import SessionSaver from '@flapjs/session/loaders/SessionSaver.js';
 
 class GraphAutoSaveHandler extends SessionSaver
 {

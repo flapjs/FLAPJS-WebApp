@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import IconButton from '@flapjs/components/icons/IconButton.jsx';
 import { SessionStateConsumer } from '@flapjs/session/context/SessionContext.jsx';
-import SessionExporter from '@flapjs/session/helper/SessionExporter.js';
+import SessionExporter from '@flapjs/session/loaders/SessionExporter.js';
 import { DownloadIcon } from '@flapjs/components/icons/Icons.js';
 
 class ExportPanel extends React.Component

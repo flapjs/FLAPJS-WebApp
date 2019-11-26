@@ -1,4 +1,4 @@
-import SessionImporter from '@flapjs/session/helper/SessionImporter.js';
+import SessionImporter from '@flapjs/session/loaders/SessionImporter.js';
 
 /**
  * A class that represents a session importer for the PDA module.

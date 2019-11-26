@@ -1,13 +1,12 @@
-import SessionExporter from '@flapjs/session/helper/SessionExporter.js';
-
+import SessionExporter from '@flapjs/session/loaders/SessionExporter.js';
 import { FileXMLIcon } from '@flapjs/components/icons/Icons.js';
+import { INSTANCE as JFF_PARSER } from '@flapjs/modules/fa/loaders/JFFGraphParser.js';
 
 class JFFExporter extends SessionExporter
 {
-    constructor(jffGraphParser)
+    constructor()
     {
         super('.jff');
-        this._graphParser = jffGraphParser;
     }
 
     /** @override */
@@ -15,7 +14,7 @@ class JFFExporter extends SessionExporter
     {
         const graphController = session.graphService.graphController;
         const graph = graphController.getGraph();
-        const graphData = this._graphParser.compose(graph);
+        const graphData = JFF_PARSER.compose(graph);
 
         dst['graphData'] = graphData;
     }

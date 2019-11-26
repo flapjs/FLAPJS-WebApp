@@ -1,4 +1,5 @@
-import {
+import
+{
     EMPTY,
     CONCAT,
     UNION,
@@ -6,110 +7,9 @@ import {
     SIGMA,
     EMPTY_SET,
     PLUS
-} from './RE.js';
+} from '@flapjs/modules/re/machine/RE.js';
 
-/**
- * An Abstract Syntax Tree is used for parsing languages, in this case we use them
- * for parsing regular expressions.
- */
-class ASTNode
-{
-    constructor(symbol, isTerminal, parentNode, index)
-    {
-        this._symbol = symbol;				// Character/String to represent symbol from language
-        this._isTerminal = isTerminal;		// Boolean, true if it is a terminal
-        this._parent = parentNode;
-        this._children = [];
-        this._childrenLimit = 2;			// By default, ASTNodes can have up to 2 children(binary operators)
-        this._index = index;				// Index of the symbol in the original String we are parsing
-    }
-
-    addChild(childNode)
-    {
-        if (this.hasRoomForChildren())
-        {
-            this._children.push(childNode);
-            this._isTerminal = false;
-        }
-        else
-        {
-            throw new Error('Trying to add more than 2 children to an ASTNode');
-        }
-    }
-
-    replaceChild(originalChild, newChild)
-    {
-        if (this._children.includes(originalChild))
-        {
-            let index = this._children.indexOf(originalChild);
-            this._children[index] = newChild;
-        }
-        else
-        {
-            throw new Error('The child to replace isn\'t a child already');
-        }
-    }
-
-    hasRoomForChildren()
-    {
-        return this._children.length < this._childrenLimit;
-    }
-
-    getChildrenLimit()
-    {
-        return this._childrenLimit;
-    }
-
-    setChildrenLimit(newChildrenLimit)
-    {
-        this._childrenLimit = newChildrenLimit;
-    }
-
-    isTerminal()
-    {
-        return this._isTerminal;
-    }
-
-    setTerminal(isTerminal)
-    {
-        this._isTerminal = isTerminal;
-    }
-
-    getSymbol()
-    {
-        return this._symbol;
-    }
-
-    setSymbol(newSymbol)
-    {
-        this._symbol = newSymbol;
-    }
-
-    getParent()
-    {
-        return this._parent;
-    }
-
-    setParent(parentNode)
-    {
-        this._parent = parentNode;
-    }
-
-    getChildren()
-    {
-        return this._children;
-    }
-
-    getIndex()
-    {
-        return this._index;
-    }
-
-    setIndex(index)
-    {
-        this._index = index;
-    }
-}
+import AST from '@flapjs/services/expression/model/AST.js';
 
 class REParser
 {
@@ -117,10 +17,30 @@ class REParser
     {
         this.rootNode = null;
         this.size = 0;
-        this.indexToNode = new Map();	// Map of indicies of the regex characters to their ASTNode
-        this.closedParensIndicies = [];			// Indicies of the closed parenthesis in the regex
+
+        // Map of indicies of the regex characters to their ASTNode
+        this.indexToNode = new Map();
+        // Indicies of the closed parenthesis in the regex
+        this.closedParensIndicies = [];
     }
 
+    /**
+     * Used by external loaders to properly parse an RE expression.
+     * 
+     * @param {RE} re The regular expression machine.
+     * 
+     * @returns {AbstractNode} The root of the AST.
+     */
+    parse(re)
+    {
+        const previousExpression = re.getExpression();
+        re.setExpression(previousExpression.replace(/\s/g, ''));
+        re.insertConcatSymbols();
+        this.parseRegex(re);
+        re.setExpression(previousExpression);
+        return this.rootNode;
+    }
+    
     parseRegex(regex)
     {
         this.rootNode = null;
@@ -203,13 +123,13 @@ class REParser
     {
         if (!currNode)
         {
-            currNode = new ASTNode('(', false, null, index);
+            currNode = new AST.Scope('(', index);
             this.indexToNode.set(index, currNode);
             this.rootNode = currNode;
         }
         else
         {
-            let newNode = new ASTNode('(', false, currNode, index);
+            let newNode = new AST.Scope('(', index);
             this.indexToNode.set(index, newNode);
             currNode.addChild(newNode);
             currNode = newNode;
@@ -219,7 +139,7 @@ class REParser
 
     createUnaryOperNode(currNode, index, symbol)
     {
-        let newNode = new ASTNode(symbol, false, currNode.getParent(), index);
+        let newNode = new AST.Unary(symbol, index).setParent(currNode.getParent());
         this.indexToNode.set(index, newNode);
         this.makeParentOf(newNode, currNode);
         currNode = newNode;
@@ -228,9 +148,9 @@ class REParser
 
     createBinaryOperNode(currNode, index, symbol)
     {
-        if(!currNode.getParent())
+        if (!currNode.getParent())
         {
-            let newNode = new ASTNode(symbol, false, null, index);
+            let newNode = new AST.Binary(symbol, index);
             this.indexToNode.set(index, newNode);
             this.makeParentOf(newNode, currNode);
             currNode = newNode;
@@ -240,29 +160,29 @@ class REParser
             //Special cases where the newly created node should be the parent of
             //the PARENT of the currNode are based off of symbol, so whenever
             //we add a new binary operator, this is something you should MODIFY
-            let makeParentOfParent = 0;
+            let makeParentOfParent = false;
             const originalParent = currNode.getParent();
             const parentSym = originalParent.getSymbol();
-            switch(symbol)
+            switch (symbol)
             {
                 case CONCAT:
-                    if(parentSym == CONCAT) makeParentOfParent = 1;
+                    if (parentSym == CONCAT) makeParentOfParent = true;
                     break;
                 case UNION:
-                    if(parentSym != '(') makeParentOfParent = 1;
+                    if (parentSym != '(') makeParentOfParent = true;
                     break;
             }
-            if(makeParentOfParent)
+            if (makeParentOfParent)
             {
                 let grandparent = originalParent.getParent();
-                let newNode = new ASTNode(symbol, false, grandparent, index);
+                let newNode = new AST.Binary(symbol, index).setParent(grandparent);
                 this.indexToNode.set(index, newNode);
                 this.makeParentOf(newNode, originalParent);
                 currNode = newNode;
             }
             else
             {
-                let newNode = new ASTNode(symbol, false, originalParent, index);
+                let newNode = new AST.Binary(symbol, index).setParent(originalParent);
                 this.indexToNode.set(index, newNode);
                 this.makeParentOf(newNode, currNode);
                 currNode = newNode;
@@ -275,13 +195,13 @@ class REParser
     {
         if (!currNode)
         {
-            currNode = new ASTNode(symbol, true, null, index);
+            currNode = new AST.Terminal(symbol, index);
             this.indexToNode.set(index, currNode);
             this.rootNode = currNode;
         }
         else
         {
-            let symbolNode = new ASTNode(symbol, true, currNode, index);
+            let symbolNode = new AST.Terminal(symbol, index);
             this.indexToNode.set(index, symbolNode);
             currNode.addChild(symbolNode);
             currNode = symbolNode;
@@ -290,20 +210,23 @@ class REParser
     }
 
     /**
-     * @param {Regex}  regex 	The regular expression to parse and do scope highlighting on.
-     * @param {number} spaceIndex Is the index of the space between the characters in the regex
-     * E.g.   A U B
-     *       0 1 2 3
      * A cursor can only be clicked on a spaceIndex, hence its use.
-     * @returns {Array} [[start1_spaceIndex, end1_spaceIndex], [start2_spaceIndex, end2_spaceIndex]] of the scope
+     * 
+     * @example
+     * e.g.   A U B
+     *       0 1 2 3
+     * 
+     * @param {Regex}  regex 	The regular expression to parse and do scope highlighting on.
+     * @param {number} spaceIndex Is the index of the space between the characters in the regex.
+     * @returns {Array} [[start1_spaceIndex, end1_spaceIndex], [start2_spaceIndex, end2_spaceIndex]] of the scope.
      */
     scopeFromSpaceIndexing(regex, spaceIndex)
     {
-        if(spaceIndex == 0) 
+        if (spaceIndex == 0) 
         {
             return [[0, 0], [0, 0]];
         }
-        else if(spaceIndex > 0 && spaceIndex <= this.size + 1) 
+        else if (spaceIndex > 0 && spaceIndex <= this.size + 1) 
         {
             const index = spaceIndex - 1;
             const scope = this.scopeFromCharAtIndex(regex, index);
@@ -311,7 +234,7 @@ class REParser
             // so nothing should be highlighted
             if (!scope) 
             {
-                return [ [spaceIndex, spaceIndex],  [spaceIndex, spaceIndex] ];
+                return [[spaceIndex, spaceIndex], [spaceIndex, spaceIndex]];
             }
             else 
             {
@@ -326,20 +249,21 @@ class REParser
     }
 
     /**
-     * @param {Regex}  regex 	The regular expression to parse and do scope highlighting on.
-     * @param {number} index  	Is the index of the characters in the regex
-     *  Scope in this context is considered as the operands for a selected operator
-     *	For an operand 	-> there is no scope, return null
-     *  For a unary operator -> return [[start_index, start_index], [end_index, end_index]]
+     * Scope in this context is considered as the operands for a selected operator.
+     * For an operand 	    -> there is no scope, return null.
+     * For a unary operator -> return [[start_index, start_index], [end_index, end_index]]
      *							start_index is index of beginning index of the sole operand and
-     *							end_index is the index of the end
+     *							end_index is the index of the end.
      * For a binary operator -> return [[start1_index, end1_index], [start2_index, end2_index]]
      *							start1_index and end1_index correspond to the first operand
-     *							start2_index and end2_index correspond to the second operand
+     *							start2_index and end2_index correspond to the second operand.
      * Finding the start and end indicies relies on the parse tree made, where operands of an
      * operator are descendants in the subtree where the operator is the root node, so earliest
      * and latest parts of the operands will be the terminal nodes with the least and highest index.
-     * @returns {Array} [[start1_spaceIndex, end1_spaceIndex], [start2_spaceIndex, end2_spaceIndex]] of the scope
+     * 
+     * @param {Regex}  regex 	The regular expression to parse and do scope highlighting on.
+     * @param {number} index  	Is the index of the characters in the regex.
+     * @returns {Array} [[start1_spaceIndex, end1_spaceIndex], [start2_spaceIndex, end2_spaceIndex]] of the scope.
      */
     scopeFromCharAtIndex(regex, index)
     {
@@ -347,18 +271,18 @@ class REParser
         let currentNode = this.indexToNode.get(index);
         let symbol = currentNode.getSymbol();
         //Unary operators
-        if(symbol == KLEENE || symbol == PLUS) 
+        if (symbol == KLEENE || symbol == PLUS) 
         {
             let smallest = this.smallestIndexOfChildren(currentNode);
             let largest = this.largestIndexOfChildren(currentNode);
-            return [ [smallest, smallest], [largest, largest] ];
+            return [[smallest, smallest], [largest, largest]];
         }
         //Binary operators
-        else if(symbol == UNION || symbol == CONCAT) 
+        else if (symbol == UNION || symbol == CONCAT) 
         {
             let smallest = this.smallestIndexOfChildren(currentNode);
             let largest = this.largestIndexOfChildren(currentNode);
-            return [ [smallest, index - 1], [index + 1, largest] ];
+            return [[smallest, index - 1], [index + 1, largest]];
         }
         //Operands
         else 
@@ -367,7 +291,10 @@ class REParser
         }
     }
 
-    // Return child with the largest index
+    /**
+     * @param {ASTNode} node The root node.
+     * @returns {ASTNode} The child with the largest index.
+     */
     largestIndexOfChildren(node)
     {
         let max = node.getIndex();
@@ -378,7 +305,10 @@ class REParser
         return max;
     }
 
-    // Return child with the smallest index
+    /**
+     * @param {ASTNode} node The root node.
+     * @returns {ASTNode} The child with the smallest index.
+     */
     smallestIndexOfChildren(node)
     {
         let min = node.getIndex();
@@ -391,4 +321,5 @@ class REParser
 
 }
 
+export const INSTANCE = new REParser();
 export default REParser;

@@ -1,17 +1,16 @@
-import SessionImporter from '@flapjs/session/helper/SessionImporter.js';
+import SessionImporter from '@flapjs/session/loaders/SessionImporter.js';
+import { INSTANCE as FSA_PARSER } from '@flapjs/modules/fa/loaders/FSAGraphParser.js';
 
 /**
  * A class that represents a session importer for the FSA module.
  */
 class FSAImporter extends SessionImporter
 {
-    constructor(jsonGraphParser, fileTypes = [])
+    constructor(fileTypes = [])
     {
         super();
 
-        this._graphParser = jsonGraphParser;
         this._prevGraphHash = 0;
-
         this._fileTypes = fileTypes;
     }
 
@@ -44,7 +43,7 @@ class FSAImporter extends SessionImporter
 
         if ('graphData' in sessionData)
         {
-            this._graphParser.parse(sessionData['graphData'], graph);
+            FSA_PARSER.parse(sessionData['graphData'], graph);
         }
 
         if ('machineData' in sessionData)

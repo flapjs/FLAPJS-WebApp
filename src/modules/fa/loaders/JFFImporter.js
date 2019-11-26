@@ -1,12 +1,12 @@
-import SessionImporter from '@flapjs/session/helper/SessionImporter.js';
+import SessionImporter from '@flapjs/session/loaders/SessionImporter.js';
+import { INSTANCE as JFF_PARSER } from '@flapjs/modules/fa/loaders/JFFGraphParser.js';
 
 class JFFImporter extends SessionImporter
 {
-    constructor(jffGraphParser, fileTypes = [])
+    constructor(fileTypes = [])
     {
         super();
 
-        this._graphParser = jffGraphParser;
         this._prevGraphHash = 0;
 
         this._fileTypes = fileTypes;
@@ -38,7 +38,7 @@ class JFFImporter extends SessionImporter
         const graphController = session.graphService.graphController;
         const graph = graphController.getGraph();
 
-        this._graphParser.parse(sessionData, graph);
+        JFF_PARSER.parse(sessionData, graph);
     }
 
     /** @override */
