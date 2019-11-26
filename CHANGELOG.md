@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.4] - 2019-10-27
+### Added
+- Equivalence test for Finite Automata with witness string
+
+### Fixed
+- Too large workspace widget
+
 ## [0.4.3] - 2019-06-04
 ### Added
 - The new Bab's tutorial

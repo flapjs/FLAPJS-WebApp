@@ -7,6 +7,9 @@
   padding: 0;
   cursor: pointer;
   font: inherit;
+
+  /** BUGFIX: So we don't get huge icons. */
+  max-width: 20vw;
 }
 :local(.icon_button) * {
   pointer-events: none;

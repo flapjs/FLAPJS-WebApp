@@ -75,7 +75,11 @@ class MachineController
         this._machine.setExpression(string);
         if (this._machine.validate())
         {
+            const previousExpression = this._machine.getExpression();
+            this._machine.setExpression(previousExpression.replace(/\s/g, ''));
+            this._machine.insertConcatSymbols();
             this._parser.parseRegex(this._machine);
+            this._machine.setExpression(previousExpression);
         }
     }
 
@@ -97,6 +101,11 @@ class MachineController
     getExpressionChangeHandler()
     {
         return this._expressionChangeHandler;
+    }
+
+    getParser()
+    {
+        return this._parser;
     }
 }
 

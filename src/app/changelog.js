@@ -1,3 +1,13 @@
+//Version 0.4.4
+const changeLog = `
+### Added
+- Equivalence test for Finite Automata with witness string
+
+### Fixed
+- Too large workspace widget
+`.split('\n');
+
+/*
 //Version 0.4.3
 const changeLog = `
 ### Added
@@ -12,7 +22,6 @@ const changeLog = `
 - Weird collapse for menu screen.
 `.split('\n');
 
-/*
 //Version 0.4.2
 const changeLog = `
 ### Added
