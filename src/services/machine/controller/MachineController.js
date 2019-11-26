@@ -52,7 +52,9 @@ class MachineController extends AbstractController
         this._changeHandler.update(this);
     }
 
+    // TODO: This really shouldn't have access to graph controller. Separation of concerns please.
     getGraphController() { return this._graphController; }
+    
     getMachineBuilder() { return this._machineBuilder; }
     getMachine() { return this._machineBuilder.getMachine(); }
 }
