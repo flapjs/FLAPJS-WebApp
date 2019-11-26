@@ -1,7 +1,7 @@
 import IndexedNodeGraph from '@flapjs/services/graph/model/IndexedNodeGraph.js';
 
-import PDANode from './element/PDANode.js';
-import PDAEdge from './element/PDAEdge.js';
+import PDANode from './elements/PDANode.js';
+import PDAEdge from './elements/PDAEdge.js';
 
 class PDAGraph extends IndexedNodeGraph
 {

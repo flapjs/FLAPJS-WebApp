@@ -7,7 +7,7 @@ import
     SYMBOL_SEPARATOR,
     READ_SEPARATOR,
     POP_SEPARATOR
-} from './element/PDAEdge.js';
+} from './elements/PDAEdge.js';
 
 const DEFAULT_NODE_LABEL_PREFIX = 'q';
 

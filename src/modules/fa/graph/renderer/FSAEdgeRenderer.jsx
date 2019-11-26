@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import EdgeRenderer, { DIRECTED_FORWARD } from '@flapjs/services/graph/components/renderer/EdgeRenderer.jsx';
 
-import { SYMBOL_SEPARATOR } from '../element/FSAEdge.js';
+import { SYMBOL_SEPARATOR } from '../elements/FSAEdge.js';
 
 class FSAEdgeRenderer extends React.Component
 {

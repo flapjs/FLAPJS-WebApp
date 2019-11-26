@@ -1,6 +1,6 @@
 import AbstractGraphLabeler from '@flapjs/services/graph/controller/AbstractGraphLabeler.js';
 
-import { SYMBOL_SEPARATOR, EMPTY_CHAR } from './element/FSAEdge.js';
+import { SYMBOL_SEPARATOR, EMPTY_CHAR } from './elements/FSAEdge.js';
 
 const DEFAULT_NODE_LABEL_PREFIX = 'q';
 
