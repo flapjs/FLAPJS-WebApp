@@ -37,7 +37,7 @@ class LabelEditorWidget extends React.Component
         this.onInputSubmit = this.onInputSubmit.bind(this);
         this.onInputBlur = this.onInputBlur.bind(this);
         this.createOptions = this.createOptions.bind(this);
-        this.menuItemHandler = this.menuItemHandler.bind(this);
+        this.optionItemHandler = this.optionItemHandler.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
     }
 
@@ -122,19 +122,34 @@ class LabelEditorWidget extends React.Component
     createOptions() 
     {
         // add different options based on the current type of graph here
-        return ['Delete' /*"... more to be implemented based on node type"*/];
+        return ['Delete', /*"... more to be implemented based on node type"*/];
     }
 
-    menuItemHandler(e) 
+    // TODO: write a method to ren
+
+    optionItemHandler(option)
     {
         // Implement more for different items
-        switch(e.target.innerText) 
+        switch(option)
         {
             case 'Delete':
                 this.handleDelete();
                 break;
             default:
-                break;
+                throw new Error(`Unsupported option: ${option}`);
+        }
+    }
+
+    optionItemRenderer(option)
+    {
+        // Implement more for different items
+        switch(option)
+        {
+            case 'Delete':
+                // TODO: implement localization
+                return 'Delete';
+            default:
+                throw new Error(`Unsupported option: ${option}`);
         }
     }
 
@@ -183,6 +198,8 @@ class LabelEditorWidget extends React.Component
 
         const options = this.createOptions();
 
+        // options = convert
+
         if (viewController)
         {
             const viewportAdapter = viewController.getViewportAdapter();
@@ -223,14 +240,17 @@ class LabelEditorWidget extends React.Component
                     {
                         options.map((item, ind) => 
                         {
+                            // restyle div to be a button
                             return <div className={Style.menu_item}
                                 key={ind}
-                                onClick={this.menuItemHandler}
+                                onClick={() => this.optionItemHandler(item)}
                                 onKeyDown={this.handleClick}
                                 role="button"
                                 tabIndex={0}
                             >
-                                {item}
+                                {
+                                    this.optionItemRenderer(item)
+                                }
                             </div>;
                         })
                     }

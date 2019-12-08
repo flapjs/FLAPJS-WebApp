@@ -86,6 +86,8 @@ class GraphViewportLayer extends React.Component
                                 <LabelEditorWidget ref={ref => graphService.graphController && graphService.graphController.setLabelEditor(ref)}
                                     labelFormatter={graphService.graphController.getLabelFormatter()}
                                     viewController={graphService.viewController}
+                                    inputController={inputController}
+                                    graphController={graphService.graphController}
                                     saveOnExit={true}>
                                 </LabelEditorWidget>
                                 {props.children}

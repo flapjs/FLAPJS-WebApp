@@ -36,4 +36,5 @@
 
 .menu_item:hover {
     background: var(--color-background-hover);
+    cursor: pointer;
 }
