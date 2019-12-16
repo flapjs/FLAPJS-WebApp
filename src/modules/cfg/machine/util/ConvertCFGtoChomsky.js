@@ -339,32 +339,137 @@ export function convertRulesIntoProperForm(cfg)
     let newCFG = new CFG();
     newCFG.copyFromCFG(cfg);    
     
-    // we only need to process rules originally in cfg, this is different from
-    // previous steps where we need to potentially process rules we added
-    let originalRules = newCFG._rules.reduce((acc, cur) => 
+    let mapOfRules = Object.create(null); // we create a hashmap where key is LHS
+    let mapOfTerminals = Object.create(null); // we keep track of variables that generate a specific terminal
+    for(let rule of newCFG._rules) // build both maps
     {
-        let newRule = new Rule(cur.getLHS(), cur.getRHS()); // make deep copy
-        acc.push(newRule);
-        return acc;
-    }, []);
+        if(!mapOfRules[rule.getLHS()]){
+            mapOfRules[rule.getLHS()] = [rule.getRHS()];
+        }
+        else
+        {
+            mapOfRules[rule.getLHS()].push(rule.getRHS());
+        }
+
+        let RHS = parseRHS(rule.getRHS());
+        if(RHS.length == 1) // just a terminal because we don't have unit rule anymore
+        {
+            // then we add it to mapOfTerminals so in the future we don't need to create a 
+            // variable only to derive this terminal
+            if(!mapOfTerminals[RHS[0]])
+            {
+               mapOfTerminals[RHS[0]] = rule.getLHS(); 
+            } // else don't change it
+        }
+    }
 
     // then clear the old rules since we don't need them anymore
     newCFG._rules = [];
 
-    // this dict helps us to remember which rules we can use to derive a single terminal
-    // so it prevents the variable set from growing too big.
-    // let dictOfTerminalRules = Object.create(null); 
-
-    for(let rule of originalRules) 
+    for(let variable in mapOfRules)
     {
-        let [newRules, newVariables] = breakLongRule(rule, newCFG.getTerminals(), null);
-        newCFG._rules = newCFG._rules.concat(newRules);
-        for(let temp of newVariables)
-        {
-            newCFG._variables.add(temp);
-        }
+        let newVariableNumbering = 1; // e.g. if 'variable' is A, then the new variable would be A(1)
+        for (let rules of mapOfRules[variable]) {
+            let arrayOfSymbols = parseRHS(rules);
+            let rulesToAdd = [];
+            let variablesToAdd = [];
+
+            for (let i = 0; i < arrayOfSymbols.length; ++i) 
+            {
+               /**
+                 * Variable naming:
+                 * For example, in a rule like A -> a1a2a3...ak
+                 * tempVariable -- A where A -> A1A2
+                 * tempVariable1 -- A1 where A1 -> a1
+                 * tempVariable2 -- A2 where A2 -> a3...ak
+                 */
+                let tempVariable, tempVariable1, tempVariable2;
+
+                // if we are dealing with the first symbol, tempVariable should be 'variable'
+                if(i == 0) 
+                {
+                    tempVariable = variable;
+                }
+                else
+                {
+                    tempVariable = buildFormattedVariable(variable, newVariableNumbering - 1);
+                }
+
+                // takes care of tempVariable1
+                if (newCFG._terminals.has(arrayOfSymbols[i])) // if the current symbol is terminal
+                {
+                    if (!mapOfTerminals[arrayOfSymbols[i]]) 
+                    {
+                        // add a new unit rule to derive arrayOfSymbols[i]
+                        tempVariable1 = buildFormattedVariable(variable, newVariableNumbering++);
+                        rulesToAdd.push(new Rule(tempVariable1, arrayOfSymbols[i]));
+                        mapOfTerminals[arrayOfSymbols[i]] = tempVariablel;
+                    }
+                    else // use the entry in the map instead
+                    {
+                        tempVariable1 = mapOfTerminals[arrayOfSymbols[i]];
+                    }
+                }
+                else
+                {
+                    tempVariable1 = arrayOfSymbols[i];
+                }
+
+                // takes care of tempVariable2 when the next symbol is the last symbol
+                if(i == arrayOfSymbols.length - 2)
+                {
+                    if (newCFG._terminals.has(arrayOfSymbols[i+1])) // if the last symbol is terminal
+                    {
+                        if (!mapOfTerminals[arrayOfSymbols[i+1]]) {
+                            // add a new unit rule to derive arrayOfSymbols[i+1]
+                            tempVariable2 = buildFormattedVariable(variable, newVariableNumbering++);
+                            rulesToAdd.push(new Rule(tempVariable2, arrayOfSymbols[i+1]));
+                            mapOfTerminals[arrayOfSymbols[i+1]] = tempVariable2;
+                        }
+                        else // use the entry in the map instead
+                        {
+                            tempVariable2 = mapOfTerminals[arrayOfSymbols[i+1]];
+                        }
+                    }
+                    else {
+                        tempVariable2 = arrayOfSymbols[i+1];
+                    }
+                }
+                else 
+                {
+                    tempVariable2 = buildFormattedVariable(variable, newVariableNumbering++);
+                }
+                rulesToAdd.push(new Rule(tempVariable, tempVariable1 + tempVariable2));
+                variablesToAdd.push(tempVariable1);
+                variablesToAdd.push(tempVariable2);
+
+                if(i == arrayOfSymbols.length - 2) break; // short circuit
+            }
+            newCFG._rules = [...newCFG._rules, ...rulesToAdd];
+            variablesToAdd.forEach(elem => {
+                newCFG._variables.add(elem);
+            });
+        } 
     }
     return newCFG;
+}
+
+function buildFormattedVariable(variable, numbering, delimiter = ['(', ')'])
+{
+    if(delimiter.length > 2) 
+    {
+        console.log('Please pass in only 1 or 2 delimiters');
+        return null;
+    }
+
+    if(delimiter.length == 1)
+    {
+        return variable + delimiter[0] + numbering;
+    }
+    else
+    {
+        return variable + delimiter[0] + numbering + delimiter[1];
+    }
 }
 
 /**
@@ -438,7 +543,7 @@ export function breakLongRule(rule, terminals, dict = null)
     {
         lastRHS = lastRHS.concat(arrayOfSymbols[arrayOfSymbols.length - 1]);
     }
-
+  
     newRules.push(new Rule(lastVariable, lastRHS));
     newVariables.push(lastVariable);
 
@@ -481,3 +586,32 @@ export function parseRHS(RHS)
     return array;
 }
 
+/**
+ * The recursive version of breakLongRule
+ */
+export function breakLongRule2(ruleToBreak, lhs, variables, newSymindex) 
+{
+    // we will eventually return an array, whose first element is an 
+    // array of new variables to add to the old grammar, and the second
+    // element is an array of new rules to add to the old grammar
+    let rulesToAdd = [], variablesToAdd = [];
+    let newVariable = '', newRHS = '';
+    // base case is when the array only have two symbols, in 
+    // this case we are just returning
+    if (symbolsIntheRule.len === 2) 
+    {
+        newVariable += lhs + '(' + (newSymindex++) + ')';
+        variablesToAdd.push(newVariable);
+        
+        // now check separately if last 2 symbols are variables or terminals
+        if(variables.has(symbolsIntheRule[0])) 
+        {
+            newRHS += symbolsIntheRule[0];
+        }
+        else
+        {
+            variablesToAdd.push(lhs + '(' + (newSymindex++) + ')');
+            newRHS += variablesToadd[variablesToAdd.length - 1];
+        }
+    }
+}
