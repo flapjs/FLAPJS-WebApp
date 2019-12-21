@@ -341,42 +341,57 @@ export function convertRulesIntoProperForm(cfg)
     
     let mapOfRules = Object.create(null); // we create a hashmap where key is LHS
     let mapOfTerminals = Object.create(null); // we keep track of variables that generate a specific terminal
+    let unitTerminalRules = []; 
     for(let rule of newCFG._rules) // build both maps
     {
-        if(!mapOfRules[rule.getLHS()]){
+        if(newCFG._terminals.has(rule.getRHS())) // if a unit terminal rule
+        {
+            // then we add it to mapOfTerminals so in the future we don't need to create a 
+            // variable only to derive this terminal
+            if(!mapOfTerminals[rule.getRHS()])
+            {
+                mapOfTerminals[rule.getRHS()] = rule.getLHS(); 
+            }
+
+            // we don't need to add this to the set of rules to be converted as well,
+            // since a unit terminal rule already complies with Chomsky normal form
+            // but we do need to remember them so we can add them back to the CFG in the end
+            unitTerminalRules.push(rule);
+            continue;
+        }
+
+        if (!mapOfRules[rule.getLHS()])
+        {
             mapOfRules[rule.getLHS()] = [rule.getRHS()];
         }
         else
         {
             mapOfRules[rule.getLHS()].push(rule.getRHS());
         }
-
-        let RHS = parseRHS(rule.getRHS());
-        if(RHS.length == 1) // just a terminal because we don't have unit rule anymore
-        {
-            // then we add it to mapOfTerminals so in the future we don't need to create a 
-            // variable only to derive this terminal
-            if(!mapOfTerminals[RHS[0]])
-            {
-               mapOfTerminals[RHS[0]] = rule.getLHS(); 
-            } // else don't change it
-        }
     }
 
-    // then clear the old rules since we don't need them anymore
+    /*
+    console.log('mapOfRules: ');
+    console.log(mapOfRules);
+    console.log('mapOfTerminals: ');
+    console.log(mapOfTerminals);
+    */
+
+    // clear the old rules, they will now be accessed from mapOfRules
     newCFG._rules = [];
 
     for(let variable in mapOfRules)
     {
         let newVariableNumbering = 1; // e.g. if 'variable' is A, then the new variable would be A(1)
-        for (let rules of mapOfRules[variable]) {
+        for (let rules of mapOfRules[variable]) 
+        {
             let arrayOfSymbols = parseRHS(rules);
             let rulesToAdd = [];
             let variablesToAdd = [];
 
             for (let i = 0; i < arrayOfSymbols.length; ++i) 
             {
-               /**
+                /**
                  * Variable naming:
                  * For example, in a rule like A -> a1a2a3...ak
                  * tempVariable -- A where A -> A1A2
@@ -386,7 +401,7 @@ export function convertRulesIntoProperForm(cfg)
                 let tempVariable, tempVariable1, tempVariable2;
 
                 // if we are dealing with the first symbol, tempVariable should be 'variable'
-                if(i == 0) 
+                if(i === 0) 
                 {
                     tempVariable = variable;
                 }
@@ -403,7 +418,7 @@ export function convertRulesIntoProperForm(cfg)
                         // add a new unit rule to derive arrayOfSymbols[i]
                         tempVariable1 = buildFormattedVariable(variable, newVariableNumbering++);
                         rulesToAdd.push(new Rule(tempVariable1, arrayOfSymbols[i]));
-                        mapOfTerminals[arrayOfSymbols[i]] = tempVariablel;
+                        mapOfTerminals[arrayOfSymbols[i]] = tempVariable1;
                     }
                     else // use the entry in the map instead
                     {
@@ -416,11 +431,12 @@ export function convertRulesIntoProperForm(cfg)
                 }
 
                 // takes care of tempVariable2 when the next symbol is the last symbol
-                if(i == arrayOfSymbols.length - 2)
+                if(i === arrayOfSymbols.length - 2)
                 {
                     if (newCFG._terminals.has(arrayOfSymbols[i+1])) // if the last symbol is terminal
                     {
-                        if (!mapOfTerminals[arrayOfSymbols[i+1]]) {
+                        if (!mapOfTerminals[arrayOfSymbols[i+1]]) 
+                        {
                             // add a new unit rule to derive arrayOfSymbols[i+1]
                             tempVariable2 = buildFormattedVariable(variable, newVariableNumbering++);
                             rulesToAdd.push(new Rule(tempVariable2, arrayOfSymbols[i+1]));
@@ -431,7 +447,8 @@ export function convertRulesIntoProperForm(cfg)
                             tempVariable2 = mapOfTerminals[arrayOfSymbols[i+1]];
                         }
                     }
-                    else {
+                    else 
+                    {
                         tempVariable2 = arrayOfSymbols[i+1];
                     }
                 }
@@ -443,14 +460,17 @@ export function convertRulesIntoProperForm(cfg)
                 variablesToAdd.push(tempVariable1);
                 variablesToAdd.push(tempVariable2);
 
-                if(i == arrayOfSymbols.length - 2) break; // short circuit
+                if(i == arrayOfSymbols.length - 2) break; // won't need another iteration if we are at the end
             }
             newCFG._rules = [...newCFG._rules, ...rulesToAdd];
-            variablesToAdd.forEach(elem => {
+            variablesToAdd.forEach(elem => 
+            {
                 newCFG._variables.add(elem);
             });
         } 
     }
+    // we add back the unit terminal rules
+    newCFG._rules = [...newCFG._rules, ...unitTerminalRules];
     return newCFG;
 }
 
@@ -458,7 +478,7 @@ function buildFormattedVariable(variable, numbering, delimiter = ['(', ')'])
 {
     if(delimiter.length > 2) 
     {
-        console.log('Please pass in only 1 or 2 delimiters');
+        //console.log('Please pass in only 1 or 2 delimiters');
         return null;
     }
 
@@ -473,86 +493,6 @@ function buildFormattedVariable(variable, numbering, delimiter = ['(', ')'])
 }
 
 /**
- * This helper function of convertRulesIntoProperForm() will break a long rule of
- * the form: A -> k1k2...kn, n >= 3, into A -> k1A1, A1 -> k2A2, ..., An-2 -> kn-1kn.
- * It returns an array whose first element are the rules generated in this process,
- * and second element are the new variables generated in this process.
- * 
- * @param {Rule} rule The rule to break down.
- * @param {Set} terminals The set of terminals of the CFG.
- * @param {object} dict The dictionary of available rules to generate a terminal.
- * @returns {Array} An Array whose first element are the new rules generated in this process,
- *                 and second element are the new variables generated in this process.
- */
-export function breakLongRule(rule, terminals, dict = null) 
-{
-    const arrayOfSymbols = parseRHS(rule.getRHS());
-    let LHS = rule.getLHS();
-    let newRules = []; 
-    let newVariables = [];
-    let newTerminalRules = []; // rules of the form A -> a
-
-    if(terminals.has(arrayOfSymbols[0])) // if a terminal
-    {
-        newTerminalRules.push(new Rule(LHS + '(' + (arrayOfSymbols.length + 1) + ')', 
-            arrayOfSymbols[0]));
-        newVariables.push(LHS + '(' + (arrayOfSymbols.length + 1) + ')');
-    }
-    else
-    {
-        newRules.push(new Rule(LHS, arrayOfSymbols[0] + LHS + '(1)'));
-    }
-
-    newRules = arrayOfSymbols.slice(1, arrayOfSymbols.length - 2).reduce((acc, cur, idx) => 
-    {
-        const thisLHS = LHS + '(' + (idx + 1) + ')'; // e.g A2
-        newVariables.push(thisLHS);
-        let thisRHS;
-        if (terminals.has(cur)) // if a terminal
-        {
-            const variableToCur = LHS + '(' + (arrayOfSymbols.length + idx + 1) + ')';
-            newTerminalRules.push(new Rule(variableToCur, cur));
-            newVariables.push(variableToCur);
-            thisRHS = variableToCur + LHS + '(' + (idx + 2) + ')';
-        }
-        else 
-        {
-            thisRHS = cur + LHS + '(' + (idx + 2) + ')'; // e.g k2A2
-        }
-        acc.push(new Rule(thisLHS, thisRHS));
-        return acc;
-    }, newRules);  
-
-    const lastVariable = LHS + '(' + (arrayOfSymbols.length - 2) + ')'; // An - 2
-    let lastRHS = arrayOfSymbols[arrayOfSymbols.length - 2];
-    if(terminals.has(arrayOfSymbols[arrayOfSymbols.length - 2]))
-    {
-        lastRHS = LHS + '(' +  (arrayOfSymbols.length - 1) + ')'; // An-1
-        newTerminalRules.push(new Rule(LHS + '(' +  (arrayOfSymbols.length - 1) + ')',
-            arrayOfSymbols[arrayOfSymbols.length - 2]));
-        newVariables.push(LHS + '(' +  (arrayOfSymbols.length - 1) + ')');
-    }
-    if(terminals.has(arrayOfSymbols[arrayOfSymbols.length - 1]))
-    {
-        lastRHS = lastRHS.concat(LHS + '(' + arrayOfSymbols.length + ')'); // An
-        newTerminalRules.push(new Rule(LHS + '(' + arrayOfSymbols.length + ')', 
-            arrayOfSymbols[arrayOfSymbols.length - 1]));
-        newVariables.push(LHS + '(' + arrayOfSymbols.length + ')');
-    }
-    else
-    {
-        lastRHS = lastRHS.concat(arrayOfSymbols[arrayOfSymbols.length - 1]);
-    }
-  
-    newRules.push(new Rule(lastVariable, lastRHS));
-    newVariables.push(lastVariable);
-
-    // then concat newRules with newTerminalRules
-    newRules = newRules.concat(newTerminalRules);
-    return [newRules, newVariables];
-}
-
-/**
  * This helper function of convertRulesIntoProperForm() will take RHS of a rule 
  * and parse it, returning an array of variables and terminals. This function
  * assumes that a terminal or variable always starts with exactly 1 alphabetic letter,
@@ -563,7 +503,7 @@ export function breakLongRule(rule, terminals, dict = null)
  *      output: ['A_1', 'a', 'A', 'B_3', 'R', 'c', 'b'].
  *
  * @param {string} RHS The RHS we want to parse.
- * @return {Array} An Array of variables and terminals, in the same order as they
+ * @returns {Array} An Array of variables and terminals, in the same order as they
  *                 appear in the string.
  */
 export function parseRHS(RHS)
@@ -584,34 +524,4 @@ export function parseRHS(RHS)
         }
     }
     return array;
-}
-
-/**
- * The recursive version of breakLongRule
- */
-export function breakLongRule2(ruleToBreak, lhs, variables, newSymindex) 
-{
-    // we will eventually return an array, whose first element is an 
-    // array of new variables to add to the old grammar, and the second
-    // element is an array of new rules to add to the old grammar
-    let rulesToAdd = [], variablesToAdd = [];
-    let newVariable = '', newRHS = '';
-    // base case is when the array only have two symbols, in 
-    // this case we are just returning
-    if (symbolsIntheRule.len === 2) 
-    {
-        newVariable += lhs + '(' + (newSymindex++) + ')';
-        variablesToAdd.push(newVariable);
-        
-        // now check separately if last 2 symbols are variables or terminals
-        if(variables.has(symbolsIntheRule[0])) 
-        {
-            newRHS += symbolsIntheRule[0];
-        }
-        else
-        {
-            variablesToAdd.push(lhs + '(' + (newSymindex++) + ')');
-            newRHS += variablesToadd[variablesToAdd.length - 1];
-        }
-    }
 }
