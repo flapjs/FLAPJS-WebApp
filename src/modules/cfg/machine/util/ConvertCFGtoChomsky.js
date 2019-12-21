@@ -510,6 +510,10 @@ export function parseRHS(RHS)
 {
     let regEx = /[a-z]/i; // case insenstive search for next alphabetic char
     let indexOfNextSymbol = RHS.slice(1).search(regEx) + 1;
+    if(indexOfNextSymbol === 0) 
+    { // meaning the RHS only contains one symbol
+        return [RHS];
+    }
     let array = [];
     let string = RHS;
     while(indexOfNextSymbol >= 0) 
