@@ -91,6 +91,7 @@ class OptionPanel extends React.Component
                                     <option value="ucsd">UC San Diego</option>
                                     <option value="duke">Duke University</option>
                                     <option value="mit">MIT</option>
+                                    <option value="dartmouth">Dartmouth</option>
                                 </select>
                                 {
                                     !this.state.customTheme &&
